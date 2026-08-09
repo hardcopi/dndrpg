@@ -1,0 +1,21 @@
+{
+  "spell_key": "mass_healing_word",
+  "name": "Mass Healing Word",
+  "level": 3,
+  "school": "Evocation",
+  "classes": [
+    "Cleric"
+  ],
+  "resolution": "heal",
+  "damage_dice": "1d4",
+  "target_kind": "all_allies",
+  "casting_time": "1 bonus action",
+  "range_text": "60 feet",
+  "components": "V",
+  "duration": "Instantaneous",
+  "description": "As you call out words of restoration, up to six creatures of your choice regain hit points.",
+  "concentration": false,
+  "duration_rounds": 0,
+  "reaches_back_rank": true,
+  "source": "5e SRD"
+}

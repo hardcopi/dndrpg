@@ -1,0 +1,24 @@
+{
+  "spell_key": "call_lightning",
+  "name": "Call Lightning",
+  "level": 3,
+  "school": "Conjuration",
+  "classes": [
+    "Druid"
+  ],
+  "resolution": "save",
+  "save_ability": "dex",
+  "save_effect": "half",
+  "damage_dice": "3d10",
+  "damage_type": "lightning",
+  "target_kind": "enemy",
+  "reaches_back_rank": true,
+  "casting_time": "1 action",
+  "range_text": "120 feet",
+  "components": "V, S",
+  "duration": "Concentration, up to 10 minutes",
+  "concentration": true,
+  "duration_rounds": 10,
+  "description": "A storm cloud appears overhead. When you cast the spell, choose a point you can see; a bolt of lightning flashes down. Each creature there must make a Dexterity saving throw.",
+  "source": "5e SRD"
+}

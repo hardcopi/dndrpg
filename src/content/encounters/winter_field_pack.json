@@ -1,0 +1,15 @@
+{
+  "encounter_key": "winter_field_pack",
+  "name": "The Thorn Brake",
+  "description": "The herd has been facing this corner for three days. Coming out of the thorn: two big ones in front and two smaller behind, and all four of them thin.",
+  "difficulty": "hard",
+  "monsters": [
+    {"monster": "dire_wolf", "quantity": 2, "rank": "front"},
+    {"monster": "wolf", "quantity": 2, "rank": "front"}
+  ],
+  "allow_flee": true,
+  "allow_parley": false,
+  "ambush": true,
+  "place": {"location": "winter_field"},
+  "victory_flag": "winter_field_cleared"
+}

@@ -1,0 +1,1238 @@
+{
+    "npc_key": "captain_elowen",
+    "start": "briefing",
+    "nodes": {
+        "briefing": [
+            {
+                "conditions": [
+                    {
+                        "flag": "quarry_fate",
+                        "equals": "ash"
+                    }
+                ],
+                "once": true,
+                "expression": 6,
+                "text": "Reed does not stand up. \"I have eleven men and a town with no granary. If you have come for work, there is none. If you have come to be told it was not your fault, there is none of that either.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "quarry_fate",
+                        "equals": "steel"
+                    }
+                ],
+                "once": true,
+                "expression": 2,
+                "text": "\"East gate shuts at dusk now. Nobody argued.\" She signs a chit without reading it. \"Turns out the council only needed the quarry emptied once to stop having opinions about it.\"",
+                "choices": [
+                    {
+                        "label": "That's a lot of authority for one road.",
+                        "next": "after_steel"
+                    },
+                    {
+                        "label": "Nothing today.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "quarry_fate",
+                        "equals": "pact"
+                    }
+                ],
+                "once": true,
+                "expression": 5,
+                "text": "\"Two of my watchmen resigned this week and one of them spat on my boots doing it.\" Reed sounds almost cheerful about it. \"And the quarry sent down eleven tons of dressed stone for the bridge, which we did not have to pay for. Ask me in a year.\"",
+                "choices": [
+                    {
+                        "label": "Do you regret it?",
+                        "next": "after_pact"
+                    },
+                    {
+                        "label": "Nothing today.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_watch_payroll",
+                        "stage": "the_standing_order"
+                    }
+                ],
+                "expression": 5,
+                "text": "Reed hears the whole of it standing up, at the well, in the middle of the market, and does not interrupt once.\n\n\"Fourteen quarters,\" she says at the end. \"A house account at Greyhythe. Four days before, every time, and always exactly what is short.\"\n\nShe looks across the square at two of her own men leaning on the well.\n\n\"I signed for that money twelve times with my own hand,\" says Captain Elowen Reed. \"So whatever this is, I am in the middle of it, and I have been for over a year, and I did not have to be bought — I only had to be pleased that the roll was met.\"",
+                "choices": [
+                    {
+                        "label": "Send it back. Make the council find it.",
+                        "next": "payroll_refused"
+                    },
+                    {
+                        "label": "Say nothing. A watch of twenty-six beats a watch of eighteen.",
+                        "next": "payroll_kept"
+                    },
+                    {
+                        "label": "Your men should hear it from you, not from a rumour.",
+                        "next": "payroll_told"
+                    },
+                    {
+                        "label": "Take a day with it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_watch_payroll",
+                        "status": "active"
+                    }
+                ],
+                "expression": 1,
+                "text": "\"Ashe,\" says Reed. \"Second desk, counting house. He has never once volunteered anything to me in six years and he has never once refused to answer either, and I have only recently understood that those are the same policy.\"",
+                "choices": [
+                    {
+                        "label": "I'll go and ask him.",
+                        "end": true
+                    },
+                    {
+                        "label": "Why not go yourself?",
+                        "next": "payroll_why_not_her"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "watch_payroll_fate",
+                        "equals": "refused"
+                    }
+                ],
+                "once": true,
+                "expression": 5,
+                "text": "\"Twenty-two men,\" says Reed. \"No night patrol west of the High Street. And every coin of what I pay them comes out of a vote I sat through.\" She rubs her eyes with the heel of her hand, which you have not seen her do. \"Ask me in a year whether it was worth four men. I shall have an answer by then and I do not have one now.\"",
+                "choices": [
+                    {
+                        "label": "It was worth it.",
+                        "next": "payroll_aftermath"
+                    },
+                    {
+                        "label": "Nothing today.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "watch_payroll_fate",
+                        "equals": "kept"
+                    }
+                ],
+                "once": true,
+                "expression": 1,
+                "text": "The quarter day comes and the money is there and Reed signs for it, and does not look up while she does, and that is the whole of it.\n\n\"Twenty-six men, paid on the day,\" she says afterwards. \"I wrote a note of it in my own book. Not the day book. Mine.\" She caps the ink. \"So there is one honest account of this in Rivermark and it is in a drawer in my own house, which I am aware is not the same as honesty.\"",
+                "choices": [
+                    {
+                        "label": "You did the arithmetic anyone would have done.",
+                        "next": "payroll_aftermath"
+                    },
+                    {
+                        "label": "Nothing today.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "watch_payroll_fate",
+                        "equals": "told"
+                    }
+                ],
+                "once": true,
+                "expression": 5,
+                "text": "\"Six of them have stopped calling me Captain when I am out of the room,\" Reed says. \"Ballow said the sentence — then who is it we work for, and how would we know — and every man in that guardroom has been carrying it about since.\" She squares her shoulders. \"They kept the money. I would have kept the money. That is not the part that will do the damage.\"",
+                "choices": [
+                    {
+                        "label": "What is?",
+                        "next": "payroll_aftermath"
+                    },
+                    {
+                        "label": "Nothing today.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "aldric_absolution",
+                        "stage": "the_name"
+                    },
+                    {
+                        "companion": "aldric",
+                        "status": "active"
+                    }
+                ],
+                "expression": 3,
+                "text": "Reed looks past you at Aldric, who has been standing in her doorway for some time without coming in. \"Brother. You have the face of a man about to make my afternoon complicated.\"",
+                "choices": [
+                    {
+                        "label": "He has something to say. Let him say it.",
+                        "next": "the_confession"
+                    },
+                    {
+                        "label": "He's here about the raids. Nothing else.",
+                        "next": "the_raids"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "quarry_pact",
+                        "status": "active"
+                    }
+                ],
+                "expression": 3,
+                "text": "\"You're going east, then.\" She turns the muster roll face down. \"I am not going to tell you what to do down there, because if I tell you and it goes wrong, it was my order. Do you see how that works.\"",
+                "choices": [
+                    {
+                        "label": "You want it done and you want it deniable.",
+                        "next": "deniable"
+                    },
+                    {
+                        "label": "What do you actually know about the warren?",
+                        "next": "the_warren"
+                    },
+                    {
+                        "label": "I'll go.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "hills_fate"
+                    }
+                ],
+                "once": true,
+                "expression": 4,
+                "text": "\"The road is quiet,\" Reed says, \"and I have stopped being able to pretend that is the end of it.\" She turns the map round so it faces you. \"There is a hole in that hill with a warlord in it and a town that has argued about it for eleven years. I would like it settled while I still have eleven men.\"",
+                "choices": [
+                    {
+                        "label": "Then I'll go east and settle it.",
+                        "effects": [
+                            {
+                                "start_quest": "quarry_pact"
+                            }
+                        ],
+                        "next": "the_warren"
+                    },
+                    {
+                        "label": "Who's paying them, though?",
+                        "next": "name_marrow"
+                    },
+                    {
+                        "label": "Later.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "teeth_in_the_hills",
+                        "status": "active"
+                    },
+                    {
+                        "flag": "hills_pattern"
+                    }
+                ],
+                "expression": 4,
+                "text": "\"Say it,\" Reed says, before you have opened your mouth. \"You have the look of somebody who has counted something twice.\"",
+                "choices": [
+                    {
+                        "label": "Every wagon they hit was carrying granary grain.",
+                        "next": "the_pattern_report"
+                    },
+                    {
+                        "label": "Nothing yet.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "teeth_in_the_hills",
+                        "status": "active"
+                    }
+                ],
+                "text": "\"The road, then. Four caravans, all inside two miles of the quarry cut.\" She taps the map twice in the same place. \"I have walked it. There is nothing special about that stretch except that it is where they always are.\"",
+                "choices": [
+                    {
+                        "label": "Who else walks those hills?",
+                        "next": "the_warden_hint"
+                    },
+                    {
+                        "label": "I'll go and look.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "ledger_and_lie",
+                        "status": "active"
+                    },
+                    {
+                        "has_item": "the_ledger"
+                    }
+                ],
+                "expression": 3,
+                "text": "Reed's eyes go to the book under your arm before they get to your face. \"That is the mill's ledger. That is the actual mill ledger, in this room, on a Tuesday.\"",
+                "choices": [
+                    {
+                        "label": "Take it.",
+                        "next": "she_takes_it"
+                    },
+                    {
+                        "label": "First you tell me what happens to Sera Vance.",
+                        "check": {
+                            "skill": "insight",
+                            "dc": 13,
+                            "on_success": "what_happens_to_sera",
+                            "on_failure": "she_wont_say"
+                        }
+                    },
+                    {
+                        "label": "Not yet.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "ledger_and_lie",
+                        "status": "active"
+                    }
+                ],
+                "expression": 3,
+                "text": "\"Still looking? Good. Nobody else in this town will.\"",
+                "choices": [
+                    {
+                        "label": "Who keeps the mill's books?",
+                        "next": "the_ledger"
+                    },
+                    {
+                        "label": "There's a man at the granary you should be looking at.",
+                        "next": "name_marrow"
+                    },
+                    {
+                        "label": "Nothing yet.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "ledger_fate"
+                    }
+                ],
+                "once": true,
+                "expression": 5,
+                "text": "\"The mill business is closed,\" Reed says, in the voice of somebody closing it. \"There is a road east of here that is not.\"",
+                "choices": [
+                    {
+                        "label": "Tell me about the road.",
+                        "effects": [
+                            {
+                                "start_quest": "teeth_in_the_hills"
+                            }
+                        ],
+                        "next": "the_raids"
+                    },
+                    {
+                        "label": "You have been holding a piece of paper this whole conversation.",
+                        "conditions": [
+                            {
+                                "level_at_least": 2
+                            }
+                        ],
+                        "next": "the_watch_roll"
+                    },
+                    {
+                        "label": "Later.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "expression": 1,
+                "text": "\"You'll be the ones off the west road.\" Reed does not get up. \"I have two problems and one of them is quiet enough that I'd rather ask about it quietly.\"",
+                "choices": [
+                    {
+                        "label": "The quiet one first.",
+                        "next": "the_ledger_offer"
+                    },
+                    {
+                        "label": "What's the loud one?",
+                        "next": "the_raids"
+                    },
+                    {
+                        "label": "You have been holding a piece of paper this whole conversation.",
+                        "conditions": [
+                            {
+                                "level_at_least": 2
+                            }
+                        ],
+                        "next": "the_watch_roll"
+                    },
+                    {
+                        "label": "Not interested.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_ledger_offer": [
+            {
+                "expression": 3,
+                "text": "\"The mill's accounts do not add up. Six caravans paid for grain that was never carted, over two years, all in the same neat hand.\" She pushes a scrap of paper across. \"I would like to know whose hand before I make it a matter for the watch.\"",
+                "choices": [
+                    {
+                        "label": "I'll look into it.",
+                        "effects": [
+                            {
+                                "start_quest": "ledger_and_lie"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "Who keeps the books?",
+                        "effects": [
+                            {
+                                "start_quest": "ledger_and_lie"
+                            }
+                        ],
+                        "next": "the_ledger"
+                    },
+                    {
+                        "label": "Ask your own watchmen.",
+                        "next": "her_own_men"
+                    }
+                ]
+            }
+        ],
+        "her_own_men": [
+            {
+                "expression": 6,
+                "text": "\"Three of my eleven have wives working the granary loft,\" Reed says. \"One of them has a brother carting for it. I can ask my own men anything I like and I will get eleven versions of the same shrug.\"",
+                "choices": [
+                    {
+                        "label": "Then I'll do it.",
+                        "effects": [
+                            {
+                                "start_quest": "ledger_and_lie"
+                            }
+                        ],
+                        "next": "the_ledger"
+                    },
+                    {
+                        "label": "Still not my problem.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_ledger": [
+            {
+                "expression": 2,
+                "text": "\"Sera Vance. She has kept them since her father died, and she keeps them alone, which is the part that has been bothering me for a year.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_sera"
+                    },
+                    {
+                        "quest_stage": {
+                            "quest": "ledger_and_lie",
+                            "stage": "confront_sera"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa: \"One clerk, two years, and nobody looked. That's not a thief. That's a town that didn't want to know.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Then I'll ask her myself.",
+                        "end": true
+                    },
+                    {
+                        "label": "You already know it's not her idea.",
+                        "check": {
+                            "skill": "insight",
+                            "dc": 13,
+                            "on_success": "she_admits_it",
+                            "on_failure": "she_wont_say"
+                        }
+                    }
+                ]
+            }
+        ],
+        "she_admits_it": [
+            {
+                "expression": 4,
+                "text": "Reed is quiet for a moment. \"A mill clerk does not benefit from grain that never moves. Somebody who buys grain does.\" She taps the desk. \"I can arrest a clerk. Bring me the book and I will have the beginning of a reason to touch anybody else.\"",
+                "choices": [
+                    {
+                        "label": "I'll get the book.",
+                        "end": true
+                    },
+                    {
+                        "label": "Say the name.",
+                        "next": "she_wont_say"
+                    }
+                ]
+            }
+        ],
+        "she_wont_say": [
+            {
+                "expression": 6,
+                "text": "\"No,\" Reed says. \"I have a rank and eleven men and no evidence, and the moment I say a name out loud in this room it is a rumour with a captain's seal on it. Bring me something written down.\"",
+                "choices": [
+                    {
+                        "label": "Understood.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "what_happens_to_sera": [
+            {
+                "expression": 4,
+                "text": "Reed does not lie to you, which is its own answer. \"She is named on every false entry and nobody else is. She will be held, and tried at the spring assize, and she will be found to have done it, because she did.\" A beat. \"If you want a different answer you will have to bring me a different book.\"",
+                "choices": [
+                    {
+                        "label": "Then take it.",
+                        "next": "she_takes_it"
+                    },
+                    {
+                        "label": "Keep it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "she_takes_it": [
+            {
+                "expression": 2,
+                "text": "Reed takes the book without a word and locks it in her desk. She turns the key twice and then puts her hand flat on the lid for a moment, which is the only part of this she will remember.",
+                "on_enter": [
+                    {
+                        "take_item": "the_ledger"
+                    },
+                    {
+                        "quest_stage": {
+                            "quest": "ledger_and_lie",
+                            "stage": "gave_it_to_reed"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera does not look at either of you. She looks at the desk."
+                    },
+                    {
+                        "companion": "aldric",
+                        "conditions": [
+                            {
+                                "companion": "aldric",
+                                "approval_at_least": 10
+                            }
+                        ],
+                        "text": "Aldric, quietly: \"That was the right thing. It is allowed to feel like this.\""
+                    },
+                    {
+                        "companion": "kessa",
+                        "conditions": [
+                            {
+                                "companion": "kessa",
+                                "approval_at_least": 10
+                            }
+                        ],
+                        "text": "Kessa snorts. \"That was easier than it should have been.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "name_marrow": [
+            {
+                "conditions": [
+                    {
+                        "flag": "knows_paymaster"
+                    }
+                ],
+                "expression": 4,
+                "text": "\"Marrow.\" Reed says it flatly, the way you say a word you have been not saying. \"Yes. I know. I have known for eleven months and I have not been able to do one single thing with it.\"",
+                "choices": [
+                    {
+                        "label": "Then let me push him where you can't.",
+                        "check": {
+                            "skill": "persuasion",
+                            "dc": 16,
+                            "on_success": "she_gives_you_room",
+                            "on_failure": "she_puts_a_watch_on_you"
+                        }
+                    },
+                    {
+                        "label": "Bring the ledger and it's over.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "grain_stamp_seen"
+                    }
+                ],
+                "expression": 3,
+                "text": "You put the stamped tally on her desk. Reed turns it over twice. \"Eighteen sacks, granary mark, and Mara Hearthstone never ordered them.\" She sets it down. \"That is a stick. Bring me a book.\"",
+                "choices": [
+                    {
+                        "label": "It's a start.",
+                        "next": "she_wont_say"
+                    },
+                    {
+                        "label": "Fine. A book.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "expression": 6,
+                "text": "\"Which man,\" Reed says, \"and written down where.\" She waits exactly long enough. \"That is not me being difficult. That is the whole of my job.\"",
+                "choices": [
+                    {
+                        "label": "I'll get it in writing.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "she_gives_you_room": [
+            {
+                "expression": 2,
+                "text": "\"All right.\" Reed sits back. \"You are not the watch and I have not instructed you. If you were to go and stand on the weighing floor and be extremely annoying, no report would cross my desk about it for at least a day.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "reed_looks_away"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "A day is plenty.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "she_puts_a_watch_on_you": [
+            {
+                "expression": 7,
+                "text": "\"No.\" Reed stands. \"You are asking me to authorise a person with a sword to lean on a taxpayer. Corwin — go with them. Stay with them.\" A watchman detaches himself from the wall. \"He is not there for your protection.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "watch_on_you"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera, under her breath: \"Brilliant. Now we do everything with an audience.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_raids": [
+            {
+                "expression": 3,
+                "text": "\"Four caravans in six weeks. Goblins out of the eastern hills, and gnolls with them, which is new and which I do not like.\" She flattens the map. \"Make the road safe. I do not much mind how.\"",
+                "choices": [
+                    {
+                        "label": "I'll take it.",
+                        "effects": [
+                            {
+                                "start_quest": "teeth_in_the_hills"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "Who else walks those hills?",
+                        "effects": [
+                            {
+                                "start_quest": "teeth_in_the_hills"
+                            }
+                        ],
+                        "next": "the_warden_hint"
+                    },
+                    {
+                        "label": "Later.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_warden_hint": [
+            {
+                "conditions": [
+                    {
+                        "companion": "ilse",
+                        "status": "active"
+                    }
+                ],
+                "text": "Reed looks past you at Ilse for slightly too long. \"You have her,\" she says. \"Right.\" She puts the pin back in the map without marking anything. \"Thornwood has counted every goblin on that hill for two years and this office has never once asked her for the number, which I would like on the record as something I inherited.\" Back to you. \"Then you do not need the introduction. Ask her about the ground between the cut and the second ford, and bring me what she says.\"",
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse, evenly, to the map rather than to Reed: \"Eleven in the spring, thirty by midsummer, and forty-one the week the wagons started going over. The number has been available.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "She is already asked.",
+                        "next": "briefing"
+                    },
+                    {
+                        "label": "Understood.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "expression": 1,
+                "text": "\"Ilse Thornwood. Warden, of a sort — the post is older than the town and nobody has got round to abolishing it.\" Reed shrugs. \"She has counted every goblin on that hill for two years and she has never once been asked.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_ilse"
+                    },
+                    {
+                        "quest_stage": {
+                            "quest": "teeth_in_the_hills",
+                            "stage": "find_the_warden"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "I'll find her.",
+                        "end": true,
+                        "conditions": [
+                            {
+                                "not": {
+                                    "companion": "ilse"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "label": "She is at my camp. I will ask her.",
+                        "conditions": [
+                            {
+                                "companion": "ilse",
+                                "status": "camp"
+                            }
+                        ],
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_pattern_report": [
+            {
+                "expression": 4,
+                "text": "Reed listens to all of it without moving. Then: \"Six weeks. Four wagons. All of them contracted to the granary and none of them anything else.\" She puts both hands on the desk. \"Say the rest of it.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "knows_paymaster"
+                    },
+                    {
+                        "quest_stage": {
+                            "quest": "teeth_in_the_hills",
+                            "stage": "the_pattern"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"They were told which wagon. Twice they let one pass and went back up the slope. Goblins do not do that hungry.\""
+                    },
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa: \"Somebody's paying them. That's not a raid, that's a contract.\""
+                    },
+                    {
+                        "companion": "sera",
+                        "conditions": [
+                            {
+                                "companion": "sera",
+                                "approval_at_least": 5
+                            }
+                        ],
+                        "text": "Sera has gone the colour of the wall."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Somebody in Rivermark is paying them to hit those wagons.",
+                        "next": "she_believes_you"
+                    },
+                    {
+                        "label": "That's as far as I've got.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "she_believes_you": [
+            {
+                "expression": 5,
+                "text": "\"I have thought so since the second one,\" Reed says. \"I have thought so and said nothing, because the alternative was standing up in council and accusing the man who lends the council money.\" She looks tired for exactly one second. \"Finish it. Whichever way finishes it.\"",
+                "choices": [
+                    {
+                        "label": "Then it's the quarry next.",
+                        "effects": [
+                            {
+                                "start_quest": "quarry_pact"
+                            }
+                        ],
+                        "next": "the_warren"
+                    },
+                    {
+                        "label": "I'll think about it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_warren": [
+            {
+                "expression": 3,
+                "text": "\"Old winding shaft, east side of the cut. It goes down further than anyone alive has been.\" Reed's finger stops on the map. \"They came up out of it four years ago in one week. Not a trickle. All at once, in the middle of winter, into the worst ground on the hill.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "quarry_pact",
+                            "stage": "the_warren_mouth"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"Nothing walks its whole tribe into a winter for no reason. I have been saying that for two years to a shed.\""
+                    },
+                    {
+                        "companion": "aldric",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "companion": "ilse",
+                                    "status": "active"
+                                }
+                            }
+                        ],
+                        "text": "Aldric: \"In one week. In winter. Something was behind them.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "I want that in writing before I go.",
+                        "check": {
+                            "skill": "persuasion",
+                            "dc": 13,
+                            "on_success": "she_writes_it",
+                            "on_failure": "no_writ"
+                        }
+                    },
+                    {
+                        "label": "Understood.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "she_writes_it": [
+            {
+                "expression": 2,
+                "text": "Reed writes four lines, seals it, and hands it over. \"That says you act under the watch's authority east of the gate. It is worth exactly as much as I am, which this month is not nothing.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "reed_writ_given"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Good enough.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "no_writ": [
+            {
+                "expression": 6,
+                "text": "\"No.\" Reed puts the pen down. \"The second I sign that, everything you do out there is mine. Go east as a private person doing a private thing, and if it goes badly I will be able to keep my post and go on being useful to this town.\"",
+                "choices": [
+                    {
+                        "label": "That's cold.",
+                        "next": "deniable"
+                    },
+                    {
+                        "label": "Understood.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "deniable": [
+            {
+                "expression": 5,
+                "text": "\"It is,\" Reed agrees. \"I have eleven men, a council that owes money to the wrong person, and one road. I keep this town by spending what I have got and I have got very little. You are the most expendable useful thing that has walked through that door in two years, and I am telling you so to your face, which is more than most would.\"",
+                "interjections": [
+                    {
+                        "companion": "kessa",
+                        "conditions": [
+                            {
+                                "companion": "kessa",
+                                "approval_at_least": 10
+                            }
+                        ],
+                        "text": "Kessa, approving: \"That's the first officer I've liked in nine years.\""
+                    },
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric: \"You could have lied to us.\" Reed: \"Yes.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "I'll go east.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_confession": [
+            {
+                "expression": 4,
+                "text": "Aldric says it in fourteen words with no adjectives in them. A name, a fever, a date, and the amount of the draught. Reed writes it all down, reads it back to him, and asks him twice whether he wants it written down. He says yes both times.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "aldric_absolution",
+                            "stage": "confessed"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera, afterwards, in the street: \"He just handed a woman with a seal the only thing anybody could ever hurt him with. On purpose.\""
+                    },
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa, afterwards: \"That took more than a fight would have.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "What happens to him?",
+                        "next": "no_law_for_it"
+                    }
+                ]
+            }
+        ],
+        "no_law_for_it": [
+            {
+                "expression": 1,
+                "text": "\"Nothing,\" Reed says. \"Rivermark has no law that covers it and I am not going to invent one on a Tuesday. His order has a rule about it. I have a town.\" She blots the page. \"He can have a copy if he wants one. Most people do, eventually.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "after_steel": [
+            {
+                "expression": 4,
+                "text": "\"It is,\" Reed says. \"I noticed. Nobody has voted on anything since the quarry, and things get done, and I have started to enjoy that, which is the part I would like somebody to keep an eye on.\"",
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "conditions": [
+                            {
+                                "companion": "ilse",
+                                "status": "active"
+                            }
+                        ],
+                        "text": "Ilse says nothing, and does not come further into the room."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "after_pact": [
+            {
+                "expression": 5,
+                "text": "\"Every day,\" Reed says, \"and never for longer than a minute. There is a goblin factor with a tooth on a wire who comes to the east gate on market day and I have to be seen to talk to him, and last month he corrected my arithmetic. In front of two carters.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_watch_roll": [
+            {
+                "expression": 1,
+                "text": "Reed looks at the paper in her own hand as though somebody else has put it there.\n\n\"The watch roll,\" she says. \"Twenty-six men, two hundred and ninety gold a quarter, met in full and on the day for fourteen quarters.\" She folds it once. \"I have fought this council over the price of lamp oil. Twice. In one year.\"\n\nShe puts the folded roll on the well-head between you.\n\n\"And I have never once had to fight them over the watch,\" she says. \"It took me fourteen quarters to find that remarkable, and I would very much like to know what it is that I am not fighting about.\"",
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera, immediately: \"Then the money is not coming from the vote. Ask what the vote is.\""
+                    },
+                    {
+                        "companion": "kessa",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "companion": "sera",
+                                    "status": "active"
+                                }
+                            }
+                        ],
+                        "text": "Kessa: \"I've been paid by four people who weren't the ones handing it over. It's never nothing.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "I'll find out where the money comes from.",
+                        "effects": [
+                            {
+                                "start_quest": "the_watch_payroll"
+                            }
+                        ],
+                        "next": "payroll_why_not_her"
+                    },
+                    {
+                        "label": "The council found it. That is what a council is for.",
+                        "next": "payroll_not_the_council"
+                    },
+                    {
+                        "label": "Leave it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "payroll_not_the_council": [
+            {
+                "expression": 5,
+                "text": "\"The council could not find eleven gold for the bridge in nine years,\" says Reed. \"I have sat through every one of those votes. They are not a body that finds things.\"\n\nShe picks the roll back up.\n\n\"Somebody is finding it. Every quarter, on time, without being asked, and without ever once wanting to be thanked for it in public.\" She looks at you. \"I have been a watchman for nineteen years. I have never once met a man who paid for something and did not want the thanks.\"",
+                "choices": [
+                    {
+                        "label": "All right. I'll find out.",
+                        "effects": [
+                            {
+                                "start_quest": "the_watch_payroll"
+                            }
+                        ],
+                        "next": "payroll_why_not_her"
+                    },
+                    {
+                        "label": "Leave it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "payroll_why_not_her": [
+            {
+                "expression": 1,
+                "text": "\"Because the moment the captain of the watch walks into the counting house and asks who is paying her men, that is the whole town's business by supper,\" says Reed. \"And if the answer is a dull one I have insulted the council for nothing, and if it is not a dull one I have told whoever it is that I have started looking.\"\n\nShe hands you the folded roll.\n\n\"Ashe. Second desk. He will not offer you anything and he will not refuse you anything either. That is a man waiting to be asked a question, and I have been careful for six years not to be the one who asks it.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_watch_payroll",
+                            "stage": "ask_the_clerk"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "I'll ask him.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "payroll_refused": [
+            {
+                "expression": 5,
+                "text": "She sends it back on the quarter day, in front of the council, with her name on the refusal, and tells them to find it.\n\nThey find about half.\n\nFour men leave the watch inside the month — two to the granary, which pays better and always did, one to the stone yard, one to a brother at Greyhythe. The night patrol on the west side is dropped because there is nobody to walk it.\n\n\"I will take a smaller watch that is mine,\" says Captain Elowen Reed, \"over a whole one that is somebody else's.\" She says it the way a woman says a thing she has said to herself four hundred times in a fortnight and is still checking.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_watch_payroll",
+                            "stage": "refused_the_money"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric: \"She has made the town poorer and herself honest. Both of those are real and only one of them feeds anybody.\""
+                    },
+                    {
+                        "companion": "ilse",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "companion": "aldric",
+                                    "status": "active"
+                                }
+                            }
+                        ],
+                        "text": "Ilse: \"She gave back a thing she needed because she did not know whose it was. There are not four people in this valley who would.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "You were right.",
+                        "next": "payroll_aftermath"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "payroll_kept": [
+            {
+                "expression": 1,
+                "text": "Reed is quiet for a while.\n\n\"Twenty-six,\" she says at last, \"or eighteen. That is the whole of the decision and everything else is how I feel about it.\"\n\nShe writes a note of the arrangement in her own book, in her own hand, and does not put it in the day book where it would be read.\n\n\"There,\" she says, closing it. \"Now it is written down, and it is written down in a drawer, and I am going to have to live in the difference between those.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_watch_payroll",
+                            "stage": "let_it_stand"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera: \"That is the right answer and she will never forgive herself for it. I have watched a person do that before.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Twenty-six.",
+                        "next": "payroll_aftermath"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "payroll_told": [
+            {
+                "expression": 5,
+                "text": "She does it herself, in the guardroom, with you standing at the back because you would not let her do it alone and she would not let you do it for her.\n\nIt takes four minutes and there is no shouting.\n\nThey keep the money. Every one of them keeps the money. Six of them stop calling her Captain when she is out of the room, and Ballow — twenty-two years in, on the west gate for the last four of them — says the sentence that the rest of them are carrying about:\n\n\"Then who is it we work for, serjeant, and how would we know.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_watch_payroll",
+                            "stage": "told_the_watch"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa, afterwards: \"You've just given twenty-six armed men a thing to think about. I hope you meant to.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "They had a right to know.",
+                        "next": "payroll_aftermath"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "payroll_aftermath": [
+            {
+                "expression": 5,
+                "text": "\"What I keep coming back to,\" says Reed, \"is that nobody ever asked me for anything.\"\n\nShe turns her cup on the table.\n\n\"Not one instruction. Not one favour. Fourteen quarters of a stranger paying my men and never once sending word that a cart was to go through a gate unlooked-at.\" She sets the cup down. \"So either they have not needed to ask yet, or I have been doing what they wanted the whole time without being told, and I cannot for the life of me work out which of those is worse.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

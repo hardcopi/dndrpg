@@ -1,0 +1,30 @@
+{
+  "spell_key": "shatter",
+  "name": "Shatter",
+  "level": 2,
+  "higher_level": {
+    "dice_per_level": "1d8"
+  },
+  "school": "Evocation",
+  "classes": [
+    "Bard",
+    "Sorcerer",
+    "Warlock",
+    "Wizard"
+  ],
+  "resolution": "save",
+  "save_ability": "con",
+  "save_effect": "half",
+  "damage_dice": "3d8",
+  "damage_type": "thunder",
+  "target_kind": "all_enemies",
+  "casting_time": "1 action",
+  "range_text": "60 feet",
+  "components": "V, S, M",
+  "duration": "Instantaneous",
+  "description": "A sudden loud ringing noise, painfully intense, erupts from a point of your choice within range.",
+  "concentration": false,
+  "duration_rounds": 0,
+  "reaches_back_rank": true,
+  "source": "5e SRD"
+}

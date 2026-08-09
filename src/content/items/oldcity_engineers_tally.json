@@ -1,0 +1,17 @@
+{
+    "item_key": "oldcity_engineers_tally",
+    "name": "The Engineers' Tally Board",
+    "item_type": "misc",
+    "rarity": "common",
+    "weight": 2,
+    "value_gp": 0,
+    "icon": "book",
+    "description": "Loads of dressed stone in, loads of dressed stone out, ruled in two neat columns by somebody who rules neat columns. The columns do not agree, and the difference has been going one way for eleven weeks.",
+    "properties": {
+        "quest_item": true,
+        "readable": true
+    },
+    "place": {
+        "location": "oldcity_works_depot"
+    }
+}

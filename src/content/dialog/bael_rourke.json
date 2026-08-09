@@ -1,0 +1,534 @@
+{
+    "npc_key": "bael_rourke",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "flag": "office_taken"
+                    },
+                    {
+                        "not": {
+                            "flag": "works_alarmed"
+                        }
+                    }
+                ],
+                "text": "The office is empty and the shutter is still open. Down on the muster floor somebody is shouting for a stretcher and somebody else is shouting about a barrow, and the second man is louder. Rourke's good coat is still on the nail. He never wore it underground once.",
+                "choices": [
+                    {
+                        "label": "Take the room.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_overseers_office",
+                                    "stage": "took_the_office"
+                                }
+                            }
+                        ],
+                        "next": "the_room_is_yours"
+                    },
+                    {
+                        "label": "Get out before the bell.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "works_alarmed"
+                    }
+                ],
+                "text": "Rourke is not in the office. Rourke is on the muster floor with his arm strapped, arguing about a barrow, because there is a barrow that has not come up and that is a real problem and the rest of it is not.",
+                "choices": [
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_survey",
+                        "stage": "the_rack"
+                    }
+                ],
+                "text": "\"The rack,\" Rourke says, following your eye, and takes the whole roll out and drops it on the desk without ceremony. \"Field books, sections, and the fair sheets. That is what the chainmen give me and what I cost the faces off.\" He is already turning back to the shutter. \"Have a look if you like. Don't take it out on the floor; the damp gets in the paper and then nobody can read the sections and I am the one who is shouted at.\"",
+                "choices": [
+                    {
+                        "label": "Take the fair sheets.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_survey",
+                                    "stage": "in_hand"
+                                }
+                            },
+                            {
+                                "give_item": "the_valley_survey",
+                                "quantity": 1
+                            }
+                        ],
+                        "next": "he_does_not_notice"
+                    },
+                    {
+                        "label": "Read them here.",
+                        "next": "sheet_six_here"
+                    },
+                    {
+                        "label": "Leave it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "office_fate",
+                        "equals": "talked"
+                    }
+                ],
+                "text": "Rourke has the shutter open and a stool out for you, which is a thing that has apparently now been decided. \"Number four's better,\" he says, before anything else. \"Moved the man. Told you.\" He is so pleased about it that it takes a moment to remember what you came for.",
+                "choices": [
+                    {
+                        "label": "Where do the six faces point?",
+                        "next": "the_aim_point"
+                    },
+                    {
+                        "label": "What's in the rack?",
+                        "next": "the_rack_explained"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "office_fate",
+                        "equals": "took"
+                    }
+                ],
+                "once": true,
+                "text": "The office has a boarded pane and somebody else's tally on the desk, and the shutter is still open on the works, because the works do not stop for a shutter. Below, the barrows go past, full, and come back empty, and go past again.",
+                "choices": [
+                    {
+                        "label": "What's in the rack?",
+                        "next": "the_rack_explained"
+                    },
+                    {
+                        "label": "Get out.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "office_fate",
+                        "equals": "out"
+                    }
+                ],
+                "text": "Rourke watches you come up the ladder a second time and says nothing at all until your head is through the hatch. \"Twice,\" he says. \"Everyone saw it twice. You want to make your mind up about my office, because a man who keeps looking at a door is a man who is going to open it eventually and I would rather know which day.\"",
+                "choices": [
+                    {
+                        "label": "It's about the works, not the office.",
+                        "next": "he_is_delighted"
+                    },
+                    {
+                        "label": "What's in the rack?",
+                        "next": "the_rack_explained"
+                    },
+                    {
+                        "label": "Back down the ladder.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "office_open"
+                    }
+                ],
+                "text": "Rourke has the shutter open and one boot on the sill, watching a barrow run. \"Number four's slow,\" he says, to you, as though you had been standing there all morning discussing it. \"Been slow since Tuesday. It's the man, not the face. I'll move him tomorrow and he'll be quicker and he'll never know why.\"",
+                "choices": [
+                    {
+                        "label": "Where do the six faces point?",
+                        "next": "the_aim_point"
+                    },
+                    {
+                        "label": "What's in the rack?",
+                        "next": "the_rack_explained"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_overseers_office",
+                        "stage": "the_strongbox"
+                    }
+                ],
+                "text": "\"That,\" says Rourke, seeing where you are looking, \"is bolted through the floor and through the joist under it, and there is eleven pound in it, and it is the wages for Friday.\" He is amused. \"You are the fourth person to look at it that way this year and the other three worked here.\"",
+                "choices": [
+                    {
+                        "label": "Ask him to show you the whole office.",
+                        "check": {
+                            "skill": "persuasion",
+                            "dc": 13,
+                            "on_success": "he_is_delighted",
+                            "on_failure": "he_gets_wary"
+                        }
+                    },
+                    {
+                        "label": "Take the office off him.",
+                        "effects": [
+                            {
+                                "start_combat": "the_office_wardens"
+                            }
+                        ],
+                        "next": "he_says_a_number"
+                    },
+                    {
+                        "label": "Back down the ladder.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_overseers_office",
+                                    "stage": "stayed_out"
+                                }
+                            }
+                        ],
+                        "next": "everybody_saw"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_overseers_office",
+                        "status": "active"
+                    }
+                ],
+                "text": "The ladder comes up through the platform and the office is one plank room with a shutter open on the whole works. The man at the desk is big, bearded and grey with rock dust in the beard, and he is already talking before you are properly through the hatch. \"If it's about the pump gallery the answer is Thursday. If it's about the canteen the answer is not me.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_rourke"
+                    },
+                    {
+                        "quest_stage": {
+                            "quest": "the_overseers_office",
+                            "stage": "the_strongbox"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "It's about neither. Show me the works.",
+                        "next": "he_is_delighted"
+                    },
+                    {
+                        "label": "Say nothing. Look at the room.",
+                        "next": "the_rack_explained"
+                    }
+                ]
+            },
+            {
+                "text": "A plank room above the headings with the shutter thrown open and the whole works laid out below it. The overseer is leaning on the sill with a tally in his hand and does not turn round. \"Number four's slow,\" he says, to nobody. Then he does turn round. \"You're not mine. I know all of mine.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_rourke"
+                    },
+                    {
+                        "start_quest": "the_overseers_office"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "I'm looking at the works.",
+                        "next": "he_is_delighted"
+                    },
+                    {
+                        "label": "Wrong hut. Sorry.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "he_is_delighted": [
+            {
+                "text": "It turns out that nobody has ever asked Bael Rourke about the works with any interest whatever, and that he has been waiting eleven years for it. He shows you the prop pattern. He shows you the pump schedule and the reason the launder is on the left. He explains the cost of a bucket of sand and why there is one on every landing and why the man who moves one gets docked. He came up through the faces and he will tell you that within four minutes, and he does.",
+                "interjections": [
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa, after twenty minutes: \"He's still going.\" Rourke, not stopping: \"There's another sixty foot of it, love.\""
+                    },
+                    {
+                        "companion": "sera",
+                        "text": "Sera: \"He is not hiding anything. He is showing off. Those look identical from outside and they are not the same at all.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Where do the six faces point?",
+                        "next": "the_aim_point"
+                    },
+                    {
+                        "label": "What's in the rack?",
+                        "next": "the_rack_explained"
+                    },
+                    {
+                        "label": "Let him talk himself out.",
+                        "conditions": [
+                            {
+                                "quest": "the_overseers_office",
+                                "status": "active"
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_overseers_office",
+                                    "stage": "talked_your_way_in"
+                                }
+                            }
+                        ],
+                        "next": "he_leaves_you_in_it"
+                    }
+                ]
+            }
+        ],
+        "the_aim_point": [
+            {
+                "text": "He unrolls a section on the desk and puts a thumb on it. \"All six converge. There. Under the old quarry floor, where it came down.\" He taps it twice. \"That is a hundred and ten foot of cutting to reach a point about the size of this room, and I have costed it four times and it does not pay and I have said so on paper.\" He rolls it up again. \"And here I am, cutting it, on time, and I shall go on cutting it, because that is the instruction.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "rourke_named_the_point"
+                    },
+                    {
+                        "start_quest": "the_thing_under_the_quarry"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"That is directly under the deep warren. You have taken the floor out from under three thousand people.\" Rourke: \"Two thousand eight hundred. I had it counted. I'm not proud of it and I had it counted.\""
+                    },
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric: \"What is at the point?\" Rourke, honestly: \"Rock, brother. Until it isn't.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "What's at the point?",
+                        "next": "the_hand_crew"
+                    },
+                    {
+                        "label": "Back.",
+                        "next": "he_is_delighted"
+                    }
+                ]
+            }
+        ],
+        "the_hand_crew": [
+            {
+                "text": "\"Old workings,\" Rourke says, and something goes out of him for the first time. \"Past the pumps. There's a crew of four down there on hand tools — no picks, no powder, no barrows. They take about an inch a week and they're told to take an inch a week.\" He puts the tally down. \"I've been down twice. I don't go now. It's not a thing I could put on a return and I'd not know how to word it.\"",
+                "choices": [
+                    {
+                        "label": "Word it badly.",
+                        "next": "the_wrong_sound"
+                    },
+                    {
+                        "label": "Back.",
+                        "next": "he_is_delighted"
+                    }
+                ]
+            }
+        ],
+        "the_wrong_sound": [
+            {
+                "text": "\"The stone gives back the wrong sound,\" Rourke says. \"That's all. Any face-man will tell you a face has a note and you learn it in a week. That one hasn't got a note.\" He picks the tally back up because his hands want something. \"Fessick's on it. He's the oldest man I've got and the best hands and he asked for it, which I have never once understood.\"",
+                "choices": [
+                    {
+                        "label": "Back.",
+                        "next": "he_is_delighted"
+                    }
+                ]
+            }
+        ],
+        "the_rack_explained": [
+            {
+                "text": "\"Working paper,\" Rourke says. \"Field books from the chainmen, sections, and the fair sheets they're drawn up into.\" He is entirely indifferent to it. \"The strongbox has the wages and the strongbox is bolted down. That lot's just paper. If somebody wanted it they'd be welcome and they'd be carrying about nine pound of damp paper up two hundred stairs for nothing.\"",
+                "on_enter": [
+                    {
+                        "start_quest": "the_survey"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera does not move and does not look at the rack again for the rest of the conversation, which is how you know."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Where do the faces point?",
+                        "next": "the_aim_point"
+                    },
+                    {
+                        "label": "Back.",
+                        "next": "he_is_delighted"
+                    }
+                ]
+            }
+        ],
+        "he_leaves_you_in_it": [
+            {
+                "text": "In the end it is a barrow that saves you the trouble. Number four stops, somebody shouts, and Rourke swears and goes down the ladder two rungs at a time, and you are alone in the overseer's office of the Deepworks for four minutes with the shutter open and the whole works too busy to look up.",
+                "on_enter": [
+                    {
+                        "set_flag": "office_open"
+                    },
+                    {
+                        "start_quest": "the_survey"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "The rack.",
+                        "next": "the_rack_explained"
+                    },
+                    {
+                        "label": "Go down after him.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "he_gets_wary": [
+            {
+                "text": "Rourke stops mid-sentence and looks at you for slightly too long. \"You've asked me three things about the paper and nothing about the props,\" he says. \"Everybody asks about the props. They're the interesting bit.\" He shuts the section on the desk, unhurried, and does not send for anybody, and does not need to: he is standing between you and the only ladder, and he came up through the faces.",
+                "choices": [
+                    {
+                        "label": "Take the office off him.",
+                        "effects": [
+                            {
+                                "start_combat": "the_office_wardens"
+                            }
+                        ],
+                        "next": "he_says_a_number"
+                    },
+                    {
+                        "label": "Go back down the ladder.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_overseers_office",
+                                    "stage": "stayed_out"
+                                }
+                            }
+                        ],
+                        "next": "everybody_saw"
+                    },
+                    {
+                        "label": "Ask him about the props.",
+                        "next": "he_is_delighted"
+                    }
+                ]
+            }
+        ],
+        "he_says_a_number": [
+            {
+                "text": "He does not shout. He leans out of the shutter and says a number, in a voice pitched to carry over three shifts and a chain-pump, and the number is how many wardens come up the ladder behind you. Then he steps back from the hatch and takes his coat off the nail, because it is a good coat and this is going to be untidy.",
+                "choices": [
+                    {
+                        "label": "Draw.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "everybody_saw": [
+            {
+                "text": "You go back down the ladder. The platform is where it is and the shutter faces the works for exactly this reason: a hundred and ninety people saw you go up and a hundred and ninety saw you come down, and by the second bell there will be a version of it in the canteen with your face in it.",
+                "choices": [
+                    {
+                        "label": "Get off the ladder.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "he_does_not_notice": [
+            {
+                "text": "He does not notice. He is at the shutter with his back to you, counting a barrow run, and you walk out of the overseer's office of the Deepworks with three years of somebody's work under your coat, past a hundred and ninety people who are being paid by the day and have no reason on earth to look up.",
+                "choices": [
+                    {
+                        "label": "Down the ladder.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_room_is_yours": [
+            {
+                "text": "It is his office in the sense that his name is chalked on the hatch and it is yours in the sense that you are standing in it and he is not. The shutter faces the works. A hundred and ninety people are still working, because the bell has not gone, because the bell is Coyle's and Coyle is in her hut writing all of this down in the day book, in the same hand, at the same speed.",
+                "on_enter": [
+                    {
+                        "set_flag": "office_open"
+                    },
+                    {
+                        "start_quest": "the_survey"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "The rack.",
+                        "next": "the_rack_explained"
+                    },
+                    {
+                        "label": "Get out.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "sheet_six_here": [
+            {
+                "text": "You get as far as sheet six and Rourke says, without turning round, \"That's the valuation. That's not mine, that's downriver's — they send it up so I can cost the haulage against it.\" He is still watching number four. \"There's a town on that sheet somewhere. Rivermark. I've never been.\"",
+                "choices": [
+                    {
+                        "label": "Take it.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_survey",
+                                    "stage": "in_hand"
+                                }
+                            },
+                            {
+                                "give_item": "the_valley_survey",
+                                "quantity": 1
+                            }
+                        ],
+                        "next": "he_does_not_notice"
+                    },
+                    {
+                        "label": "Put it back.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

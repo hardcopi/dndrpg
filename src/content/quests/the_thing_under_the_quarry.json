@@ -1,0 +1,95 @@
+{
+    "quest_key": "the_thing_under_the_quarry",
+    "title": "The Thing Under the Quarry",
+    "description": "Six faces cut at a costed rate toward one point. Go and stand at the point.",
+    "on_job_board": false,
+    "required_level": 5,
+    "rewards": {
+        "xp": 700,
+        "gold": 120,
+        "item": "pit_wardens_coat"
+    },
+    "stages": {
+        "past_the_pumps": {
+            "title": "Past the pumps",
+            "objective": "The old workings are along the launder, past the pump gallery.",
+            "journal": "Everything the Deepworks does is aimed at one place, and the place is not on the plank floor or under the lamps. It is past the pumps, along the launder, in the workings that were there before the Concern's timber was.",
+            "target": {
+                "location": "pump_gallery"
+            }
+        },
+        "the_face": {
+            "title": "Four inches",
+            "objective": "The cutting is nearly through. Decide what to do about the last of it.",
+            "journal": "The hole the quarry made when it fell, three years of water in the bottom, and one face cut at very carefully with hand tools and no picks. The rock is the wrong colour and gives the wrong sound. There is a chalk line on the floor and no footprints past it, and there are about four inches of stone left.",
+            "target": {
+                "location": "the_undercut"
+            }
+        },
+        "cut_it_out": {
+            "title": "The last four inches",
+            "journal": "We took the face down ourselves and what was behind it had been waiting for those four inches for three years. It is dead now, or the part of it in that chamber is. I do not know what it was. Nobody who paid to have it dug up knows what it was either — that is the thing I cannot put down. Three years, two hundred men and a whole valley bought, to find out.",
+            "resolution": "cut_it_out",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "undercut_fate",
+                    "value": "cut"
+                },
+                {
+                    "set_flag": "saw_what_it_is"
+                },
+                {
+                    "xp": 200
+                },
+                {
+                    "approval": {
+                        "kessa": 12,
+                        "ilse": -4,
+                        "sera": 6,
+                        "aldric": -4
+                    }
+                }
+            ]
+        },
+        "brought_it_down": {
+            "title": "Brought down",
+            "journal": "We knocked the props and put forty feet of old quarry on top of the cut face. It will take them a year and a half to get back to where they were this morning, and it has cost them nothing they cannot afford, and every man who dug it will dig it again for the same one and threepence. But they are a year and a half further from it, whatever it is, and Ilse says a season is worth buying and she has never once been wrong about that.",
+            "resolution": "brought_it_down",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "undercut_fate",
+                    "value": "down"
+                },
+                {
+                    "approval": {
+                        "ilse": 18,
+                        "aldric": 10,
+                        "kessa": 6,
+                        "sera": -8
+                    }
+                }
+            ]
+        },
+        "left_it_cutting": {
+            "title": "Left cutting",
+            "journal": "I stood at the chalk line, looked at four inches of the wrong-coloured stone, and went back along the launder. They will be through it inside the month. Somebody will be standing there when they are, and it will be a man on one and threepence a day who was told to keep cutting.",
+            "resolution": "left_it_cutting",
+            "terminal": true,
+            "outcome": "neutral",
+            "effects": [
+                {
+                    "set_flag": "undercut_fate",
+                    "value": "left"
+                },
+                {
+                    "approval": {
+                        "ilse": -10,
+                        "kessa": -8
+                    }
+                }
+            ]
+        }
+    }
+}

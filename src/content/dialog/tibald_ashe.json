@@ -1,0 +1,529 @@
+{
+    "npc_key": "tibald_ashe",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "quest": "the_anvil_debt",
+                        "stage": "the_assignments"
+                    }
+                ],
+                "text": "The clerk at the second desk has been watching you come across the floor since the door. He is a narrow man of about fifty with ink to the second knuckle and no expression whatever, and when you put Brenna Coalwright's note down in front of him he reads all of it, both sides, before he says a single word.\n\n\"Tibald Ashe,\" he says. \"You will want to know whether the fourth assignment is any good.\"",
+                "choices": [
+                    {
+                        "label": "Is it?",
+                        "next": "the_fourth_assignment"
+                    },
+                    {
+                        "label": "You knew what this was before you read it.",
+                        "next": "he_knew"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_watch_payroll",
+                        "stage": "ask_the_clerk"
+                    }
+                ],
+                "text": "\"The watch roll.\" Ashe says it before you have finished asking, and puts down the pen he was using, which for a clerk is a considerable act. \"I have been waiting fourteen months for somebody to come across this floor and say those two words to me.\"",
+                "choices": [
+                    {
+                        "label": "Then say it.",
+                        "next": "the_shortfall"
+                    },
+                    {
+                        "label": "Waiting for whom?",
+                        "next": "waiting_for_whom"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_seers_coin",
+                        "stage": "sit_for_a_reading"
+                    }
+                ],
+                "text": "\"Two silver a week to a fortune-teller,\" Ashe repeats, in the voice of a man reading a weight off a slate. \"That is not the town's money. If it were the town's money I would know the vote it came out of, because I write the votes down.\" A very small pause. \"It is not the first of these you have asked me about, and it will not be the last.\"",
+                "choices": [
+                    {
+                        "label": "Then whose money is it?",
+                        "next": "the_copyist"
+                    },
+                    {
+                        "label": "How many of these are there?",
+                        "next": "how_many"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "copyist_found"
+                    }
+                ],
+                "text": "\"He has given notice,\" says Ashe, without looking up. \"The boy upstairs. Not on my account and not on yours — the work has stopped coming, that is all. Post arrived on the Tuesday with the money in it and no letter to copy, and then no post at all.\"\n\nHe turns a page.\n\n\"Eleven days after you went up those stairs,\" he says. \"I have written the date in my own book because I could not think of anywhere else it belonged.\"",
+                "choices": [
+                    {
+                        "label": "Does he know why?",
+                        "next": "he_does_not_know_why"
+                    },
+                    {
+                        "label": "What else is on your books?",
+                        "next": "the_town_account"
+                    },
+                    {
+                        "label": "Nothing today.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "ashe_helped"
+                    }
+                ],
+                "text": "\"The smith,\" Ashe says, by way of hello. \"She came in. She said thank you to four of us in turn because she did not know which one of us it had been.\" He turns a page. \"I did not tell her. It seemed a small enough thing to keep.\"",
+                "choices": [
+                    {
+                        "label": "Why did you do it?",
+                        "next": "why_he_did_it"
+                    },
+                    {
+                        "label": "What else is on your books?",
+                        "next": "the_town_account"
+                    },
+                    {
+                        "label": "Nothing today.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "The clerk at the second desk finishes his line before he looks up, which takes some time, and is not rudeness — you can see him decide that stopping mid-figure would cost more than making you wait. \"Tibald Ashe. This is the town's account, not a bank. If you want money kept, the nearest people who will do that are at Greyhythe.\"",
+                "choices": [
+                    {
+                        "label": "What is on the town's account?",
+                        "next": "the_town_account"
+                    },
+                    {
+                        "label": "Nothing today.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "he_does_not_know_why": [
+            {
+                "text": "\"He is entirely untroubled,\" says Ashe. \"He assumes the arrangement is finished, because arrangements finish. He asked me whether I knew of any other copying work and I said I would ask about, and I shall.\"\n\nHe squares his pen against the edge of the desk.\n\n\"A year and seven months of somebody else's instructions through his hand,\" he says, \"and he could not tell you one thing about them that he has not already told you, because there is nothing else in them. That is not a man who was careful. That is a job that was built so that carefulness would not be needed.\"",
+                "choices": [
+                    {
+                        "label": "Thank you.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_town_account": [
+            {
+                "text": "\"Tolls, tariffs, the market rents, the fines. Out of it: the watch, the wells, the lamp oil, the road, the parish dole and the bridge that we have been not repairing since I was thirty.\" Ashe sets his pen down flat and square. \"Every figure on that list is public and I will read any of it to anybody who asks. Nobody asks. In nineteen years two people have asked and one of them was the previous captain of the watch.\"",
+                "choices": [
+                    {
+                        "label": "Who was the other?",
+                        "next": "the_other_one"
+                    },
+                    {
+                        "label": "Thank you.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_other_one": [
+            {
+                "text": "\"A young man with a very good coat, three summers ago, who asked to see the market rents and the toll book and the list of holdings west of the river.\" Ashe considers. \"He was extremely polite. He read for two days, he took nothing away, and he thanked me by name on the way out, which I had not given him.\"",
+                "choices": [
+                    {
+                        "label": "Did you get his?",
+                        "next": "no_name"
+                    },
+                    {
+                        "label": "Thank you.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "no_name": [
+            {
+                "text": "\"He gave me one. It was not written anywhere and I have no reason at all to remember it, and I do not.\" Ashe picks the pen back up. \"That has bothered me for three years. I am extremely good at names.\"",
+                "choices": [
+                    {
+                        "label": "Thank you.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "he_knew": [
+            {
+                "text": "\"She has been in three times,\" Ashe says. \"The first time I told her it was a matter for a lawyer, which was true and was also the sort of thing a man says when he does not want an afternoon spoiled. The second time I read it properly. The third time she did not ask me anything, she only stood there, and I have been thinking about it ever since.\"",
+                "choices": [
+                    {
+                        "label": "So is the fourth assignment any good?",
+                        "next": "the_fourth_assignment"
+                    }
+                ]
+            }
+        ],
+        "the_fourth_assignment": [
+            {
+                "text": "\"No.\" He turns the note over and puts two fingers on it. \"An assignment of a secured debt wants two witnesses in this town and has done since before either of us. The first three have them. The fourth does not, and the fourth is the one that moved it out of the reach of anybody who could be argued with.\" He looks up. \"Which means that as far as Rivermark's book is concerned, that debt is still owned by a corn factor in Greyhythe. Who died in the winter. Whose estate is a thicket.\"",
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera: \"Say that out loud in front of witnesses and it is a fact. Say it in a back room and it is an opinion.\""
+                    },
+                    {
+                        "companion": "kessa",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "companion": "sera",
+                                    "status": "active"
+                                }
+                            }
+                        ],
+                        "text": "Kessa: \"So the man taking her forty gold a quarter has no right to it.\" A beat. \"And has been taking it anyway.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Then strike it. Out loud, where people can hear you.",
+                        "next": "he_strikes_it"
+                    },
+                    {
+                        "label": "Who would I have to argue with to buy the note outright?",
+                        "next": "buying_it"
+                    },
+                    {
+                        "label": "You said that quickly for a man who has sat on it three years.",
+                        "check": {
+                            "skill": "insight",
+                            "dc": 12,
+                            "on_success": "why_he_did_it",
+                            "on_failure": "he_says_nothing"
+                        }
+                    }
+                ]
+            }
+        ],
+        "he_strikes_it": [
+            {
+                "text": "He does it there, standing, with the floor listening. He reads the fourth assignment aloud, states that it is unwitnessed and therefore not effective against the security, writes the finding in the margin of the town's own copy in his own hand, and calls two clerks over to sign under it. It takes four minutes. Nobody raises their voice at any point.\n\n\"That is all it ever was,\" says Tibald Ashe. \"Four minutes, and somebody willing to be the one who did it.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_anvil_debt",
+                            "stage": "voided_the_note"
+                        }
+                    },
+                    {
+                        "set_flag": "ashe_helped"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric, on the steps outside: \"He has just made an enemy he will never meet.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Will this come back on you?",
+                        "next": "come_back_on_him"
+                    },
+                    {
+                        "label": "Thank you.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "come_back_on_him": [
+            {
+                "text": "\"Very likely,\" Ashe says, already back at his line. \"Not soon, and not loudly. That is not how it is done.\" The pen moves. \"I am fifty-one, I have no children, and I have written this town's arithmetic down honestly for nineteen years. I would prefer that to be the sentence rather than the other one.\"",
+                "choices": [
+                    {
+                        "label": "Which other one?",
+                        "next": "the_other_sentence"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_other_sentence": [
+            {
+                "text": "\"That I noticed, and wrote it down, and left it written down.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "buying_it": [
+            {
+                "text": "\"Nobody,\" Ashe says. \"That is the odd part. Small accounts a long way from home are a nuisance to whoever has them — they cost more to collect than they are worth, unless the collecting is the point. Offer a hundred and twenty and a clerk somewhere will take it inside the month to be rid of the line.\" He does not add anything. He does not need to; it is all there in how flatly he said it.",
+                "choices": [
+                    {
+                        "label": "Then I'll buy it.",
+                        "conditions": [
+                            {
+                                "gold_at_least": 120
+                            }
+                        ],
+                        "next": "he_writes_the_transfer"
+                    },
+                    {
+                        "label": "No. Strike it instead.",
+                        "next": "he_strikes_it"
+                    },
+                    {
+                        "label": "I'll think about it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "he_writes_the_transfer": [
+            {
+                "text": "It takes nineteen days and two letters and at no point does anybody argue. The paper comes back assigned to you, witnessed twice, entirely correct.\n\nAshe hands it over without any expression at all. \"There,\" he says. \"Now it is a small account a long way from home, and you are the one a long way from it.\" He returns to his figures. \"She will still pay forty a quarter. To you. Whether you ask for it or not, she will bring it, on the day, because that is what fourteen years does to a person.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_anvil_debt",
+                            "stage": "bought_the_note"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa says nothing the whole way back up the High Street, which is not a thing Kessa does."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "why_he_did_it": [
+            {
+                "text": "\"Because it is arithmetic,\" Ashe says, \"and because for nineteen years I have written down what people tell me and gone home.\" He squares the pen against the edge of the desk. \"I am not brave. I want that understood. I have simply reached the age where the things I did not say are heavier to carry about than the things I did.\"",
+                "choices": [
+                    {
+                        "label": "Then strike the fourth assignment.",
+                        "conditions": [
+                            {
+                                "quest": "the_anvil_debt",
+                                "stage": "the_assignments"
+                            }
+                        ],
+                        "next": "he_strikes_it"
+                    },
+                    {
+                        "label": "That is braver than you think.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "he_says_nothing": [
+            {
+                "text": "\"I read what is in front of me and I say what it says,\" Ashe replies, and goes back to his line, and that is a door closing.",
+                "choices": [
+                    {
+                        "label": "Then strike it.",
+                        "conditions": [
+                            {
+                                "quest": "the_anvil_debt",
+                                "stage": "the_assignments"
+                            }
+                        ],
+                        "next": "he_strikes_it"
+                    },
+                    {
+                        "label": "Leave it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "waiting_for_whom": [
+            {
+                "text": "\"Anybody,\" Ashe says. \"The captain signs the roll and the roll is met and nobody has ever asked me out of what. I am not permitted to volunteer it. I am permitted to answer it.\" He almost smiles and does not quite manage. \"That is not a rule anybody wrote. It is a rule I made, because the alternative was to say nothing at all, and I could not get comfortable in that one.\"",
+                "choices": [
+                    {
+                        "label": "Then I am asking.",
+                        "next": "the_shortfall"
+                    }
+                ]
+            }
+        ],
+        "the_shortfall": [
+            {
+                "text": "He turns the ledger round so that you can read it, which he does not have to do.\n\n\"The watch roll is two hundred and ninety gold a quarter. The town's account can find about two hundred of it and has not been able to find more since spring. The rest arrives four days before each quarter day, from a house account at Greyhythe, and it has arrived on time fourteen times.\" He puts one finger on a column. \"It comes with a letter of instruction. The instruction each time is that the letter is not to be kept. So I do not keep it. I have not been told I may not remember it.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_watch_payroll",
+                            "stage": "the_standing_order"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera: \"Fourteen quarters. Nobody keeps a thing like that up for fourteen quarters as a favour.\""
+                    },
+                    {
+                        "companion": "aldric",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "companion": "sera",
+                                    "status": "active"
+                                }
+                            }
+                        ],
+                        "text": "Aldric: \"Somebody has been buying the watch a quarter at a time, and doing it kindly, which is the part I cannot get past.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "What do you remember?",
+                        "next": "what_he_remembers"
+                    },
+                    {
+                        "label": "Reed has to be told.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "what_he_remembers": [
+            {
+                "text": "\"That it is the same hand every time. That the hand is a hired copyist's, not a principal's — the letters are formed to be read quickly rather than to be admired.\" Ashe closes the ledger. \"And that the sum is never round. It is always exactly what is short. Which means somebody is being told, every quarter, what Rivermark's watch costs and what Rivermark can afford, four days before Rivermark works it out.\"",
+                "choices": [
+                    {
+                        "label": "Told by whom?",
+                        "next": "not_by_me"
+                    },
+                    {
+                        "label": "Reed has to be told.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "not_by_me": [
+            {
+                "text": "\"Not by me,\" says Tibald Ashe, and for the first time there is an edge on it. \"I have gone through that four times. The figure is on the market rent board a fortnight before quarter day, in public, where anybody may stand and copy it, and about eleven people do, every quarter, because rents follow it.\" The edge goes. \"Nobody had to be bought. It was only ever a matter of being the one who bothered to read.\"",
+                "choices": [
+                    {
+                        "label": "Thank you.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "how_many": [
+            {
+                "text": "\"Standing payments through this floor that are nobody's business of mine? Six.\" Ashe does not have to look them up. \"A fortune-teller. A gateman. A weigher. A copyist. And two I will not name, because naming them would be a kindness to you and an unkindness to them, and one of them is a widow.\"",
+                "choices": [
+                    {
+                        "label": "Who pays them?",
+                        "next": "the_copyist"
+                    },
+                    {
+                        "label": "Leave it there.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_copyist": [
+            {
+                "text": "\"A copyist in a room above this one. He is paid by the letter, he has never met whoever engages him, and his instructions come down the river with the ordinary post.\" Ashe squares his pen. \"He is not hiding. He is at a desk between nine and six and he will tell you all of it, because none of it is a secret to him. That is the thing about work of this kind: it is never done by anybody who knows what it is.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_seers_coin",
+                            "stage": "follow_the_coin"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Take me up to him.",
+                        "next": "the_room_above"
+                    },
+                    {
+                        "label": "Not yet.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_room_above": [
+            {
+                "text": "The room above is one desk, one window and a man of about thirty who is delighted to be interrupted and answers everything.\n\nHe is paid by the letter. He has never met his employer. His instructions arrive by post with the money for the payments folded inside, already counted. There are five other standing payments on the list; he can recite them and does. He has been doing it for a year and seven months and has never once wondered about it, and when you ask him why not he looks honestly puzzled and says: it is a very steady wage, and everything I am asked to write is true.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_seers_coin",
+                            "stage": "traced_the_hand"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse, going back down the stair: \"Nobody in that room did anything wrong. That is what I keep getting stuck on.\""
+                    },
+                    {
+                        "companion": "sera",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "companion": "ilse",
+                                    "status": "active"
+                                }
+                            }
+                        ],
+                        "text": "Sera: \"He has never met them, he is paid by the letter, and every word is true. That is exactly how I would set it up.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Go back down.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

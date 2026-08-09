@@ -1,0 +1,75 @@
+{
+    "quest_key": "paper_town",
+    "title": "Paper Town",
+    "description": "Follow one man's wages backwards and see how far out of the valley they go before anyone's name is on them.",
+    "giver": "alder_pyke",
+    "on_job_board": false,
+    "required_level": 3,
+    "rewards": {
+        "xp": 250,
+        "gold": 40
+    },
+    "stages": {
+        "whose_wages": {
+            "title": "Who pays the chainman",
+            "objective": "Ask Alder Pyke who actually pays him.",
+            "journal": "Pyke draws one and threepence a day at the Rivermark counting house. The counting house is not paying it. It is honouring a note for somebody who is.",
+            "target": {
+                "location": "granary_row"
+            }
+        },
+        "the_note": {
+            "title": "The note of hand",
+            "objective": "The wages are drawn at the counting house. Go and read what they are drawn on.",
+            "journal": "The counting house keeps the notes it has honoured for a year before it burns them. Pyke's are in the tray with the rest, and there will be one with a mark on it instead of a name.",
+            "target": {
+                "location": "counting_house"
+            }
+        },
+        "followed_it": {
+            "title": "A name, and a river",
+            "journal": "The note is drawn on a house downriver at Greyhythe and signed by its factor, and the factor's name is Ludo Corse. I have asked eleven people in Rivermark whether they have heard of him. None of them has. Six of them are, one way or another, working for him.",
+            "resolution": "followed_it",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "paper_town_fate",
+                    "value": "followed"
+                },
+                {
+                    "set_flag": "knows_corse_name"
+                },
+                {
+                    "xp": 100
+                },
+                {
+                    "approval": {
+                        "sera": 10,
+                        "ilse": 6,
+                        "aldric": 4,
+                        "kessa": -3
+                    }
+                }
+            ]
+        },
+        "let_it_lie": {
+            "title": "Somebody's money",
+            "journal": "Somebody downriver is paying a chainman one and threepence a day to walk lines in a valley they do not live in. That is not a crime, it is not my business, and I have put the tray back where I found it.",
+            "resolution": "let_it_lie",
+            "terminal": true,
+            "outcome": "neutral",
+            "effects": [
+                {
+                    "set_flag": "paper_town_fate",
+                    "value": "lie"
+                },
+                {
+                    "approval": {
+                        "kessa": 4,
+                        "sera": -4
+                    }
+                }
+            ]
+        }
+    }
+}

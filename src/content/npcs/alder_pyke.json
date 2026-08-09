@@ -1,0 +1,13 @@
+{
+    "npc_key": "alder_pyke",
+    "name": "Alder Pyke",
+    "role": "Chainman",
+    "description": "An old man with a hundred-foot chain over one shoulder and a plumb-bob in his coat pocket. He walks lines and paints marks for whoever is paying, and he has never once been told why.",
+    "sprite_key": "alder_pyke",
+    "image_url": "assets/images/npcs/miner.png",
+    "is_quest_giver": true,
+    "dialog": "alder_pyke",
+    "place": {
+        "location": "granary_row"
+    }
+}

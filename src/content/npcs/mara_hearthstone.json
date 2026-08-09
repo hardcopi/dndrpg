@@ -1,0 +1,13 @@
+{
+    "npc_key": "mara_hearthstone",
+    "name": "Mara Hearthstone",
+    "role": "Innkeeper",
+    "description": "Runs the Golden Flagon. Flour on the apron, ledger in her head, and no patience for a story told twice.",
+    "sprite_key": "mara_hearthstone",
+    "image_url": "assets/images/npcs/innkeeper.png",
+    "is_quest_giver": true,
+    "dialog": "mara_hearthstone",
+    "place": {
+        "location": "flagon_common_room"
+    }
+}

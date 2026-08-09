@@ -1,0 +1,106 @@
+{
+    "quest_key": "the_drovers_road",
+    "title": "The Drovers' Road",
+    "description": "Escort work: sixty beasts from the fold at the drovers' rest to the fen road head, two days, paid on arrival. The drove is honest. The direction is not.",
+    "giver": "street_drover",
+    "on_job_board": true,
+    "required_level": 2,
+    "rewards": {
+        "xp": 300,
+        "gold": 100
+    },
+    "stages": {
+        "take_the_work": {
+            "title": "Take the work",
+            "objective": "Find Tull Barrow at the fold and take the escort.",
+            "journal": "Tull Barrow wants four swords for two days to walk sixty head from the fold to the fen road head. It is ordinary work at an ordinary price and there is no reason at all for him to be paying it, because nobody robs cattle: they are slow, loud, and impossible to sell twice.",
+            "target": {
+                "location": "drovers_rest"
+            }
+        },
+        "where_the_drove_is_going": {
+            "title": "Where the drove is going",
+            "objective": "Work out where sixty head are actually being walked to, and why.",
+            "journal": "The market is east. We are going west. Barrow is walking his whole herd out of the valley and not coming back, because the common grazing on Winter Field was bought in the spring by somebody who has not fenced it, stocked it, or come to look at it, and who has simply stopped renewing the commoners' rights one name at a time as they fall due.",
+            "target": {
+                "location": "fen_road_head"
+            }
+        },
+        "walked_them_out": {
+            "title": "Walked out",
+            "journal": "We walked them to the fen road head and Nesh Gray's people took them across the causeway in three lots, which is a thing I did not know could be done and would rather not have watched. Barrow paid us at the horn-post and shook hands and went west. He is the fourth this year. Nobody in Rivermark has counted.",
+            "resolution": "walked_them_out",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "drove_fate",
+                    "value": "out"
+                },
+                {
+                    "set_flag": "grazing_bought_known"
+                },
+                {
+                    "xp": 100
+                },
+                {
+                    "approval": {
+                        "sera": 6,
+                        "kessa": 4,
+                        "ilse": -8,
+                        "aldric": -4
+                    }
+                }
+            ]
+        },
+        "turned_them_back": {
+            "title": "Turned east",
+            "journal": "We turned the drove round at the fen road head and walked it into Rivermark market instead, which took a day longer and cost him the price he had been promised for them on the other side. He got a worse price and a hearing at the town's own weighing floor, and by dusk there were three other holders in the room asking who had bought the common and when. That is not a victory. It is a room full of people who now know.",
+            "resolution": "turned_them_back",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "drove_fate",
+                    "value": "back"
+                },
+                {
+                    "set_flag": "grazing_bought_known"
+                },
+                {
+                    "set_flag": "commons_question_raised"
+                },
+                {
+                    "xp": 120
+                },
+                {
+                    "approval": {
+                        "ilse": 14,
+                        "aldric": 10,
+                        "sera": -6,
+                        "kessa": 2
+                    }
+                }
+            ]
+        },
+        "lost_the_drove": {
+            "title": "Lost on the field",
+            "journal": "It went wrong at the thorn brake on Winter Field in the dark and we lost eleven head and both of the far dogs, and after that the herd would not be held. Barrow did not blame anybody. He counted what was left twice, said the number out loud, and started walking. He is not going to make the crossing with what he has.",
+            "resolution": "lost_the_drove",
+            "terminal": true,
+            "outcome": "failure",
+            "effects": [
+                {
+                    "set_flag": "drove_fate",
+                    "value": "lost"
+                },
+                {
+                    "approval": {
+                        "kessa": -6,
+                        "ilse": -6,
+                        "aldric": -4,
+                        "sera": -4
+                    }
+                }
+            ]
+        }
+    }
+}

@@ -1,0 +1,111 @@
+{
+    "quest_key": "the_sluice",
+    "title": "The Sluice",
+    "description": "The fen is four thousand acres of standing water because a gate was opened forty years ago and never shut. The gate is greased. Somebody is still paying for that.",
+    "giver": "gubb_wrayne",
+    "on_job_board": false,
+    "required_level": 4,
+    "rewards": {
+        "xp": 500,
+        "gold": 160
+    },
+    "stages": {
+        "the_gate_is_up": {
+            "title": "The gate is up",
+            "objective": "Get down to the sluice and look at the ironwork.",
+            "journal": "Two stone piers, a paved apron, an oak gate in an iron frame, and a screw-jack that has been greased this month. It is the first square corner west of the causeway and every part of it has been maintained continuously for forty years.",
+            "target": {
+                "location": "sluice_gate"
+            }
+        },
+        "who_pays_the_keeper": {
+            "title": "Who pays the keeper",
+            "objective": "Find out who has been paying the sluice-keeper, and for what.",
+            "journal": "Gubb Wrayne keeps the gate. He cannot write, so he keeps his accounts in notches and coin-rubbings: forty years of quarterly wages, every one paid, none late. He has never met anyone who pays him. The money is left in the same place on the same day and he has never once waited up to see who leaves it, because he was told at the start that if he ever did, the wage would stop.",
+            "target": {
+                "location": "sluice_gate"
+            }
+        },
+        "shut_the_sluice": {
+            "title": "Shut",
+            "journal": "It took four of us on the screw and most of an afternoon and the gate came down as sweetly as if it had been shut last week, because it has been maintained by a man who has nothing else to do. The fen will take two years to drain and about a hundred people are going to discover that ground they have been using was not theirs. Wrayne watched us do it and did not stop us and did not help, and asked afterwards whether he should still expect his wage.",
+            "resolution": "shut_the_sluice",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "sluice_fate",
+                    "value": "shut"
+                },
+                {
+                    "set_flag": "fen_draining"
+                },
+                {
+                    "give_item": "sluice_ledger",
+                    "quantity": 1
+                },
+                {
+                    "xp": 200
+                },
+                {
+                    "approval": {
+                        "ilse": 10,
+                        "sera": 10,
+                        "kessa": 8,
+                        "aldric": -6
+                    }
+                }
+            ]
+        },
+        "left_it_open": {
+            "title": "Left open",
+            "journal": "Four thousand acres, a village under it, a road across it and about forty people living off it, and one gate that could undo all of that in an afternoon. I left the gate where it has been since before I was born. Wrayne greased the screw while we were still standing there, which he does every month, and it is very hard to explain why that was the thing that decided it.",
+            "resolution": "left_it_open",
+            "terminal": true,
+            "outcome": "neutral",
+            "effects": [
+                {
+                    "set_flag": "sluice_fate",
+                    "value": "open"
+                },
+                {
+                    "approval": {
+                        "aldric": 8,
+                        "ilse": 6,
+                        "sera": -4
+                    }
+                }
+            ]
+        },
+        "took_the_keepers_wage": {
+            "title": "The wage, taken",
+            "journal": "The quarter's coin is left in a slot in the west pier on the second day after the quarter, in a purse, with no writing on it. We waited two nights and nobody came, and on the third morning it was there. We took it, left Wrayne his share, and put the purse back empty. Somebody now knows that somebody is watching the sluice. That is a message I sent without meaning to and cannot take back.",
+            "resolution": "took_the_keepers_wage",
+            "terminal": true,
+            "outcome": "neutral",
+            "effects": [
+                {
+                    "set_flag": "sluice_fate",
+                    "value": "kept"
+                },
+                {
+                    "set_flag": "sluice_wage_intercepted"
+                },
+                {
+                    "give_gold": 180
+                },
+                {
+                    "give_item": "sluice_ledger",
+                    "quantity": 1
+                },
+                {
+                    "approval": {
+                        "sera": 10,
+                        "kessa": 6,
+                        "aldric": -10,
+                        "ilse": -6
+                    }
+                }
+            ]
+        }
+    }
+}

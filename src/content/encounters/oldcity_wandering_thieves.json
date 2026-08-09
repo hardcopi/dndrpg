@@ -1,0 +1,16 @@
+{
+    "encounter_key": "oldcity_wandering_thieves",
+    "name": "A Crew Coming Back",
+    "description": "Four of them along the wall-top with a sack between two, on their way home and not pleased to be seen doing it.",
+    "difficulty": "medium",
+    "is_random": true,
+    "region": "old_city",
+    "monsters": [
+        {
+            "monster": "bandit",
+            "quantity": 4
+        }
+    ],
+    "allow_flee": true,
+    "allow_parley": false
+}

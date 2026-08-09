@@ -1,0 +1,24 @@
+{
+  "spell_key": "barkskin",
+  "name": "Barkskin",
+  "level": 2,
+  "school": "Transmutation",
+  "classes": [
+    "Druid",
+    "Ranger"
+  ],
+  "resolution": "buff",
+  "target_kind": "ally",
+  "reaches_back_rank": true,
+  "effect": {
+    "ac": 2
+  },
+  "casting_time": "1 action",
+  "range_text": "Touch",
+  "components": "V, S, M",
+  "duration": "Concentration, up to 1 hour",
+  "concentration": true,
+  "duration_rounds": 10,
+  "description": "You touch a willing creature. Until the spell ends, the target's skin takes on a rough, bark-like appearance, and its armour class is toughened against the blows it takes.",
+  "source": "5e SRD"
+}

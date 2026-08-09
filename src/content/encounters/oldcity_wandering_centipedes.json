@@ -1,0 +1,16 @@
+{
+    "encounter_key": "oldcity_wandering_centipedes",
+    "name": "Out Of The Wall",
+    "description": "They come out of a joint in the old stonework in a rope, one behind another, and keep coming.",
+    "difficulty": "medium",
+    "is_random": true,
+    "region": "old_city",
+    "monsters": [
+        {
+            "monster": "giant_centipede",
+            "quantity": 6
+        }
+    ],
+    "allow_flee": true,
+    "allow_parley": false
+}

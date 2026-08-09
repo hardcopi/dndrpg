@@ -1,0 +1,402 @@
+{
+    "npc_key": "street_almoner",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "flag": "almoner_list_fate",
+                        "equals": "fed"
+                    }
+                ],
+                "once": true,
+                "text": "The parish box is behind him on the step and it is full, which it has never been in your sight or, from the way he keeps glancing at it, in his. \"Eighty-one people eat until the middle of winter,\" says Dagen Wyke. \"I have written your name in the front of the book, where the benefactors go, and there are four names in there and two of them are dead.\"",
+                "choices": [
+                    {
+                        "label": "And after the middle of winter?",
+                        "next": "after_winter"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "almoner_list_fate",
+                        "equals": "recorded"
+                    }
+                ],
+                "once": true,
+                "text": "\"It is in the watch day book,\" says Wyke. \"Thirty-six names, the date, and Reed's own hand.\" He is standing rather straighter than he was. \"It fed nobody. I have thought about that every day. And I have also thought that when they come for the next thirty-six, there will already be a page.\"",
+                "choices": [
+                    {
+                        "label": "Do you think there will be a next thirty-six?",
+                        "next": "next_thirty_six"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "almoner_list_fate",
+                        "equals": "work"
+                    }
+                ],
+                "once": true,
+                "text": "Wyke has the book open on his knee and is drawing a line through names, one at a time, with a ruler. He does it very carefully. \"Twenty-two,\" he says. \"Off my list, into wages.\" The ruler moves. \"I have been an almoner nineteen years and I have wanted nothing in the world so much as to draw these lines, and I have never once felt worse doing anything.\"",
+                "choices": [
+                    {
+                        "label": "They are eating.",
+                        "next": "they_are_eating"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_almoners_list",
+                        "stage": "the_west_gate"
+                    }
+                ],
+                "text": "\"You have been to Ballow,\" says Wyke, reading it off you. \"Then you know what I know, which is not enough to accuse anybody of anything and is a great deal too much to go home with.\"",
+                "choices": [
+                    {
+                        "label": "I'll pay the dole. Seventy-five gold, into the box.",
+                        "conditions": [
+                            {
+                                "gold_at_least": 75
+                            }
+                        ],
+                        "next": "into_the_box"
+                    },
+                    {
+                        "label": "Take the list to Reed. Get it written down.",
+                        "next": "to_the_day_book"
+                    },
+                    {
+                        "label": "They don't need alms. They need work.",
+                        "next": "into_wages"
+                    },
+                    {
+                        "label": "I need to think about it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_almoners_list",
+                        "status": "active"
+                    }
+                ],
+                "text": "\"West gate,\" says Wyke, before you can ask. \"Whoever has stood on that gate has watched every one of them walk in. I have never spoken to the watch in my life about anything and I would not know how to begin.\"",
+                "choices": [
+                    {
+                        "label": "I'll go and ask.",
+                        "end": true
+                    },
+                    {
+                        "label": "Why won't you go yourself?",
+                        "next": "why_not_himself"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "west_holdings_recorded"
+                    }
+                ],
+                "text": "\"Alms for the parish,\" says Wyke, and then, seeing you: \"You. Yes.\" He touches the book under his arm. \"It is written down. I keep telling myself that as though it were a meal.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "\"Alms for the granary families. Hollis weighs the grain; someone must weigh the cost.\" A thin man of about sixty with a box on a strap and a book under his arm, and the book is very much fatter than the box.",
+                "choices": [
+                    {
+                        "label": "What's in the book?",
+                        "next": "the_book"
+                    },
+                    {
+                        "label": "Here — a copper for the box.",
+                        "next": "a_copper"
+                    },
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "a_copper": [
+            {
+                "text": "It goes into the box and he says the words he has said for nineteen years and does not perform them at all, which is somehow more affecting than if he had.",
+                "choices": [
+                    {
+                        "label": "What's in the book?",
+                        "next": "the_book"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_book": [
+            {
+                "text": "\"Who is being fed,\" says Dagen Wyke. \"Every parish keeps one. It is not a secret; it is nailed to the church door on quarter days, because a man on the dole is on it in public or he is a man being given money in the dark, and the second one ruins people.\"\n\nHe hands it over without being asked, which tells you a good deal about him.\n\nEighty-one names in a hand that gets smaller down the page to save paper. And then, because the entries carry dates, the thing he has plainly been unable to stop seeing: forty of them added since Candlemas.",
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric reads it over your shoulder for a long time. \"Forty in eight months. In a year with no plague and no fire and a good harvest.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Forty in eight months.",
+                        "next": "forty_names"
+                    },
+                    {
+                        "label": "Give it back.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "forty_names": [
+            {
+                "text": "\"Forty,\" Wyke agrees. \"And here is the part I have not said to anybody, because I do not know what saying it would be.\"\n\nHe turns the book round and runs a finger down the last column, which is the address each of them gave when they came on.\n\n\"Thirty-six of the forty gave a holding west of the river. Not a street in this town. A holding.\" He closes the book. \"A bad year takes farms in no particular order, sir. It takes the thin soil and the old men and the widows. It does not take thirty-six farms off one road and leave the rest of the parish alone.\"",
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"Off one road.\" She says it the way she says a track. \"That is not weather. Weather does not read a map.\""
+                    },
+                    {
+                        "companion": "sera",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "companion": "ilse",
+                                    "status": "active"
+                                }
+                            }
+                        ],
+                        "text": "Sera: \"They all sold, then. Nobody walks off a holding they still own.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "I'll find out what happened on that road.",
+                        "effects": [
+                            {
+                                "start_quest": "the_almoners_list"
+                            }
+                        ],
+                        "next": "he_hands_it_over"
+                    },
+                    {
+                        "label": "Farms fail. That is what farms do.",
+                        "next": "farms_fail"
+                    },
+                    {
+                        "label": "Give it back.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "farms_fail": [
+            {
+                "text": "\"They do,\" says Wyke. \"I have buried the people off failed farms for nineteen years and I know exactly what one looks like coming through that gate. It comes at night, with nothing, in ones.\"\n\nHe puts the book back under his arm.\n\n\"These came in daylight. In families. With their tools. A man who has lost his land does not bring his tools, because his tools have been sold. A man who has *sold* his land brings his tools, because he means to work with them somewhere else.\" He looks down the High Street. \"Every one of the thirty-six brought their tools.\"",
+                "choices": [
+                    {
+                        "label": "All right. I'll find out what happened.",
+                        "effects": [
+                            {
+                                "start_quest": "the_almoners_list"
+                            }
+                        ],
+                        "next": "he_hands_it_over"
+                    },
+                    {
+                        "label": "Then they will be all right.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "he_hands_it_over": [
+            {
+                "text": "\"Take it,\" says Wyke, and gives you the book, which is nineteen years of his handwriting. \"Copy what you need and bring it back. I have nothing else to give anybody today and I would rather give you something.\"\n\nHe adjusts the strap of the empty box.\n\n\"Go to the west gate,\" he says. \"Ballow has been on it four years. He has watched every one of them walk in and I should very much like to know what a man who watches for a living thought about it.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_almoners_list",
+                            "stage": "read_the_list"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "I'll go.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "why_not_himself": [
+            {
+                "text": "\"Because I have been the parish almoner for nineteen years, and the day I am seen asking the watch questions about who owns what, I am not the almoner any more — I am a man with a position on something.\" Wyke says it without any self-pity at all. \"Then the box stops filling. It is not a large box. It does not take much.\"",
+                "choices": [
+                    {
+                        "label": "I'll go and ask.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "into_the_box": [
+            {
+                "text": "Seventy-five gold goes into a box that has never held more than nine at once, and Dagen Wyke has to sit down on the step, and then has to stand up again because of what sitting down on the step looks like.\n\n\"That is bread until the middle of winter,\" he says. \"For eighty-one people. I want to be very exact with you, because you have been exact with me: it is bread until the middle of winter, and it is not a single acre back, and in the spring there will be more names and I shall have to come and find you.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_almoners_list",
+                            "stage": "fed_them"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa: \"Seventy-five gold.\" She is quiet a moment. \"That's the most useful anything I've watched anyone do with money.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Then come and find me.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "to_the_day_book": [
+            {
+                "text": "Reed reads the list standing up, at the well, with the market going on round her, and then takes it inside and copies all thirty-six names into the watch day book with the date and the road and the words *given as last address*.\n\nThat is the whole of her power and she says so, without bitterness, while she is writing.\n\n\"A man may sell his land,\" says Captain Elowen Reed. \"A man may buy it. Neither of them has to tell me why.\" She blots the page. \"But there is a page now, and pages are read later by people who are not me.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_almoners_list",
+                            "stage": "named_the_pattern"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric: \"Nineteen years he has carried that book about and never once thought to add up his own column. Do not be hard on him. Nobody adds up their own column.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "It's a start.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "into_wages": [
+            {
+                "text": "It takes eleven days and a good deal of standing in yards. The granary takes nine. The stone yard takes six. The quay takes four, and Mott Wenn takes three more on his own say-so and does not tell anybody he is paying two of them out of his own carrying money.\n\nTwenty-two names come off Dagen Wyke's list.\n\nHe rules a line through each one, slowly, with a ruler, and does not look pleased.\n\n\"They eat,\" he says. \"Say it back to me. I need somebody else to say it.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_almoners_list",
+                            "stage": "found_them_work"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"Four acres and a roof, and now a wage. That road only runs one way and everybody on it knows.\""
+                    },
+                    {
+                        "companion": "sera",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "companion": "ilse",
+                                    "status": "active"
+                                }
+                            }
+                        ],
+                        "text": "Sera: \"It is the right answer. It is also the answer somebody was waiting for.\" She does not elaborate."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "They eat.",
+                        "next": "they_are_eating"
+                    },
+                    {
+                        "label": "Say it yourself.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "they_are_eating": [
+            {
+                "text": "\"They are eating,\" Wyke repeats, and rules another line. \"And every one of them owned four acres and a roof at Candlemas and now owns a wage, and I have never in nineteen years seen that go the other way round.\"\n\nHe caps the ink.\n\n\"You did what could be done,\" he says. \"I would like it recorded that I said so, in case I am unpleasant about it later, which I expect I shall be.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "after_winter": [
+            {
+                "text": "\"After the middle of winter, there is no more bread.\" Wyke says it as a fact, because it is one. \"I am not asking. You have done a great deal more than anybody has done for that box in my time, and a box is a box: it is a thing you fill again.\"\n\nHe looks down the High Street toward the west gate.\n\n\"What I should like,\" he says, \"is for there to be fewer names. I do not know anybody who can do that. I am not certain there is anybody.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "next_thirty_six": [
+            {
+                "text": "\"There is a road,\" says Wyke, \"and it has more farms on it, and every one of the thirty-six sold to somebody, and not one of them will say who.\" He touches the book. \"So yes. I think there will be a next thirty-six, and I think it will be quiet, and I think it will be entirely lawful, and I think that is what has been keeping me awake rather than any of the rest of it.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

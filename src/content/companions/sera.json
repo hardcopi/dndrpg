@@ -1,0 +1,46 @@
+{
+    "companion_key": "sera",
+    "name": "Sera Vance",
+    "title": "the Ledger-Keeper",
+    "description": "Kept two sets of books for a man she is afraid of. The neat one was the lie.",
+    "race": "Human",
+    "class": "Rogue",
+    "background": "Guild Artisan",
+    "alignment": "Neutral",
+    "level": 1,
+    "abilities": {
+        "strength": 9,
+        "dexterity": 16,
+        "constitution": 12,
+        "intelligence": 15,
+        "wisdom": 12,
+        "charisma": 13
+    },
+    "sprite_key": "merchant",
+    "combat_rank": "back",
+    "npc_key": "sera",
+    "personal_quest": "sera_leash",
+    "recruit": {
+        "location": "market_square",
+        "conditions": [
+            {
+                "flag": "sera_spared"
+            }
+        ]
+    },
+    "approval": {
+        "leave_at": -25,
+        "hostile_at": -55,
+        "romance_at": 30
+    },
+    "romanceable": true,
+    "gear": [
+        "shortsword",
+        "thieves_tools",
+        "leather_armor"
+    ],
+    "spells": [],
+    "feats": [
+        "alert"
+    ]
+}

@@ -1,0 +1,64 @@
+{
+    "npc_key": "wren_tallow",
+    "name": "Wren Tallow",
+    "role": "Camp Outfitter",
+    "description": "Brought a cart up the hill nine years ago meaning to sell it out and go home, and has been restocking it ever since. Prices are what they are because the next shop is a day and a half away and she knows exactly how far that is.",
+    "sprite_key": "wren_tallow",
+    "is_merchant": true,
+    "dialog": "wren_tallow",
+    "shop": [
+        {
+            "item": "potion_healing",
+            "stock": 6,
+            "markup_pct": 140
+        },
+        {
+            "item": "potion_healing_greater",
+            "stock": 1,
+            "markup_pct": 150
+        },
+        {
+            "item": "antitoxin",
+            "stock": 3,
+            "markup_pct": 130
+        },
+        {
+            "item": "oil_of_embers",
+            "stock": 3,
+            "markup_pct": 130
+        },
+        {
+            "item": "deepworks_lamp",
+            "stock": 4,
+            "markup_pct": 125
+        },
+        {
+            "item": "thieves_tools",
+            "stock": 2,
+            "markup_pct": 130
+        },
+        {
+            "item": "oilskin_hood",
+            "stock": 2,
+            "markup_pct": 120
+        },
+        {
+            "item": "dart",
+            "stock": 10,
+            "markup_pct": 120
+        },
+        {
+            "item": "sling",
+            "stock": 2,
+            "markup_pct": 120
+        },
+        {
+            "item": "quarterstaff",
+            "stock": 3,
+            "markup_pct": 115
+        }
+    ],
+    "place": {
+        "location": "uv_camp"
+    }
+}

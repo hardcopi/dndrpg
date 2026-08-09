@@ -1,0 +1,83 @@
+{
+    "quest_key": "sera_what_she_is_for",
+    "title": "What She Is For",
+    "description": "A house downriver bought the mill's paper out of the wreck, found seventy-one delivery dockets counted in a fair hand, and has written to ask for the hand. It is honest work, it is well paid, and there is a clause in it forbidding anyone to ask her for a false entry.",
+    "companion": "sera",
+    "giver": "sera",
+    "on_job_board": false,
+    "required_level": 4,
+    "rewards": {
+        "xp": 350
+    },
+    "stages": {
+        "the_letter": {
+            "title": "The letter at the Flagon",
+            "objective": "Sera has been offered a post. She has never asked anybody what to do and she is asking.",
+            "journal": "A letter came for Sera at the Golden Flagon — for her, by name, at an inn she has slept at eleven times. Clerk of accounts at the landing at Greyhythe: forty gold a year, a room over the counting-floor, a twenty-gold bond returned at the year's end, and a line at the bottom saying that neither the house nor any officer of it may require of the clerk any account, entry or copy other than the true one. Nobody signed it. It carries a seal in black wax, a plumb and a square cut small like a mason's, which is a strange thing for a counting-house to put on its post. Sera says she has seen it before and cannot tell me where, and that this is not a sentence she has ever had to say.",
+            "target": {
+                "location": "flagon_common_room"
+            }
+        },
+        "she_took_the_post": {
+            "title": "Downriver on the tide",
+            "journal": "She took it. It was the best offer she has ever had and it was the one that was best for her, and she costed the alternative before she went and told me I had not said the cheap one. She left the dockets behind — seventy-one of them, counted, with the shut weeks marked in the margin and a note on the front saying which four matter. She was an hour early for the boat.",
+            "resolution": "she_took_the_post",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "sera_post_fate",
+                    "value": "took"
+                },
+                {
+                    "companion_leaves": "sera"
+                },
+                {
+                    "approval": {
+                        "aldric": 6,
+                        "ilse": 4,
+                        "kessa": -2
+                    }
+                }
+            ]
+        },
+        "she_stayed": {
+            "title": "She stayed",
+            "journal": "She stayed. She keeps the figure current the way she used to keep the other one — forty gold a year, a room, and a bond — except that it has stopped being what she is worth and started being what she turned down, and she says those are very different columns and she did not expect to prefer the second one.",
+            "resolution": "she_stayed",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "sera_post_fate",
+                    "value": "stayed"
+                },
+                {
+                    "approval": {
+                        "sera": 20,
+                        "kessa": 4,
+                        "aldric": 2
+                    }
+                }
+            ]
+        },
+        "she_took_the_retainer": {
+            "title": "Eight lines on the first of the month",
+            "journal": "She wrote back and took a retainer, and stayed. Eight gold a month for eight lines a month: where we have been, what we were paid, and who we spoke to. She reads every account aloud before it is sealed and says the arrangement starts immediately or not at all. She did not take it for the eight gold. She took it to be on the inside of somebody's post, and she says that when they stop paying her they will start paying somebody else in this valley, and that a man who has just started being paid buys a coat.",
+            "resolution": "she_took_the_retainer",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "sera_post_fate",
+                    "value": "retained"
+                },
+                {
+                    "approval": {
+                        "sera": 12,
+                        "kessa": -6,
+                        "aldric": -6,
+                        "ilse": -4
+                    }
+                }
+            ]
+        }
+    }
+}

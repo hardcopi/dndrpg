@@ -1,0 +1,56 @@
+{
+  "resistances": [],
+  "immunities": [],
+  "vulnerabilities": [],
+  "condition_immunities": [],
+  "source": "5e SRD",
+  "monster_key": "worg",
+  "name": "Worg",
+  "size": "Large",
+  "type": "monstrosity",
+  "alignment": "neutral evil",
+  "armor_class": 13,
+  "hit_points": 26,
+  "hit_dice": "4d10+4",
+  "speed": "50 ft.",
+  "strength": 16,
+  "dexterity": 13,
+  "constitution": 13,
+  "intelligence": 7,
+  "wisdom": 11,
+  "charisma": 8,
+  "challenge_rating": 0.5,
+  "experience_points": 100,
+  "traits": {
+    "Keen Hearing and Smell": "The worg has advantage on Wisdom (Perception) checks that rely on hearing or smell."
+  },
+  "actions": [
+    {
+      "name": "Bite",
+      "type": "melee",
+      "bonus": 5,
+      "damage": "2d6+3",
+      "damage_type": "piercing",
+      "note": "If the target is a creature, it must succeed on a DC 13 Strength saving throw or be knocked prone.",
+      "save": {
+        "ability": "str",
+        "dc": 13
+      },
+      "on_fail": {
+        "condition": "prone",
+        "rounds": 1
+      }
+    }
+  ],
+  "saves": {
+    "str": 5
+  },
+  "rank_pref": "front",
+  "sprite_key": "black_wolf",
+  "loot": [
+    {
+      "item": "dried_fen_root",
+      "chance": 25
+    }
+  ]
+}

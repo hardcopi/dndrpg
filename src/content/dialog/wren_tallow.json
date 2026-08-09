@@ -1,0 +1,93 @@
+{
+    "npc_key": "wren_tallow",
+    "start": "hail",
+    "nodes": {
+        "hail": [
+            {
+                "once": true,
+                "text": "The cart has been a shop for so long that the wheels have sunk to the axle and somebody has built steps up to it. Wren Tallow sits in the doorway of it with a lamp in pieces on a cloth across her knees.\n\n\"You'll want to hear the prices before you look at the stock,\" she says. \"Everybody does it the other way round and everybody is disappointed. Nearest shop that isn't mine is a day and a half. That's the whole of my pricing and I'll not pretend otherwise.\"",
+                "choices": [
+                    {
+                        "label": "Let's see it, then.",
+                        "effects": [
+                            {
+                                "open_shop": "wren_tallow"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "A day and a half is a day and a half.",
+                        "next": "the_walk"
+                    },
+                    {
+                        "label": "Not today.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "\"Back up, then.\" Wren does not look up from the lamp. \"Stock's the same as it was. It always is, until somebody comes up with something I can put on the shelf.\"",
+                "choices": [
+                    {
+                        "label": "Let's trade.",
+                        "effects": [
+                            {
+                                "open_shop": "wren_tallow"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "Why are you still here?",
+                        "next": "still_here"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_walk": [
+            {
+                "text": "\"It is. And a day and a half back, carrying whatever you bought.\" She seats a pin and turns the lamp over. \"I have watched four people work that out standing where you are, and go down the hill for a cheaper flask. Two of them came back up for mine at twice what I'd have charged, because by then they'd already spent the week.\"\n\n\"I'm not proud of the arithmetic. I just do it before you do.\"",
+                "choices": [
+                    {
+                        "label": "Show me the stock.",
+                        "effects": [
+                            {
+                                "open_shop": "wren_tallow"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "still_here": [
+            {
+                "text": "\"Came up with a cartload meaning to sell it out and go home before the frost.\" She holds the lamp to the light and looks through the gauze at nothing. \"Sold it out in nine days. Went down for another. Sold that.\"\n\n\"That was the ninth year of it, in the spring. There's no story in me, if that's what you're after. I'm the only one here who never had to be talked into staying.\"",
+                "choices": [
+                    {
+                        "label": "Let's trade.",
+                        "effects": [
+                            {
+                                "open_shop": "wren_tallow"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

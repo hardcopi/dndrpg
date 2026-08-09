@@ -1,0 +1,17 @@
+{
+    "npc_key": "market_jester",
+    "start": "hail",
+    "nodes": {
+        "hail": [
+            {
+                "text": "A copper for a joke? No? The joke's free then: everything here costs copper.",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

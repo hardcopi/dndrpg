@@ -1,0 +1,11 @@
+{
+  "item_key": "sluice_ledger",
+  "name": "The Sluice-Keeper's Quarters",
+  "description": "Forty years of quarterly wages, recorded by a man who cannot write and keeps his accounts in notches and coin-rubbings. Every quarter paid, none of them late, and not one name anywhere in it.",
+  "item_type": "misc",
+  "rarity": "uncommon",
+  "weight": 1,
+  "value_gp": 0,
+  "properties": {"quest_item": true, "readable": true},
+  "icon": "book"
+}

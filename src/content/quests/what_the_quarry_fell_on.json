@@ -1,0 +1,79 @@
+{
+    "quest_key": "what_the_quarry_fell_on",
+    "title": "What the Quarry Fell On",
+    "description": "The bottom of the goblin warren is gone. Something took it out, in courses, and put a staircase where it was.",
+    "giver": "wenna_coyle",
+    "on_job_board": false,
+    "required_level": 4,
+    "rewards": {
+        "xp": 400,
+        "gold": 80,
+        "item": "deepworks_lamp"
+    },
+    "stages": {
+        "the_floor_of_the_warren": {
+            "title": "Down what replaced the floor",
+            "objective": "The warren's floor did not fall in. Go and see what took it out.",
+            "journal": "Ilse has been saying for two years that something is taking the bottom of the warren floor by floor. She was right about the fact and wrong about the verb. Nothing is taking it. Somebody is buying it out, a course at a time, and paying men to carry it away.",
+            "target": {
+                "location": "spoil_stair"
+            }
+        },
+        "the_works": {
+            "title": "Walk the works",
+            "objective": "Nobody has stopped you yet. Walk it, and count what you see.",
+            "journal": "Sawn treads. A handrail. A bucket of sand on every landing in case of fire. Below that, a plank floor the size of the market square, a bell, a board of numbered pegs, a canteen and two hundred people working in shifts. There is nothing hidden about any of it. It is simply eleven miles from anybody who would object.",
+            "target": {
+                "location": "the_headings"
+            }
+        },
+        "walked_the_works": {
+            "title": "Two hundred people",
+            "journal": "I walked the whole of it and was stopped once, politely, by a woman with a water clock who wanted to know my peg number. Six faces being cut at a costed rate toward one point under the old quarry. Nobody down there knows what is at the point. Nobody down there has asked. They are paid by the day, and the day is the only unit anybody in that hole thinks in.",
+            "resolution": "walked_the_works",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "quarry_fell_fate",
+                    "value": "walked"
+                },
+                {
+                    "set_flag": "deepworks_known"
+                },
+                {
+                    "xp": 150
+                },
+                {
+                    "approval": {
+                        "ilse": 14,
+                        "sera": 8,
+                        "aldric": 6,
+                        "kessa": 4
+                    }
+                }
+            ]
+        },
+        "turned_back": {
+            "title": "Back up the stair",
+            "journal": "I got as far as the muster floor, watched a bell ring and forty people change direction, and went back up the stair. I have not told Ilse what is under her warren. I am not sure which part of it I am afraid of.",
+            "resolution": "turned_back",
+            "terminal": true,
+            "outcome": "neutral",
+            "effects": [
+                {
+                    "set_flag": "quarry_fell_fate",
+                    "value": "back"
+                },
+                {
+                    "set_flag": "deepworks_known"
+                },
+                {
+                    "approval": {
+                        "ilse": -6,
+                        "kessa": -4
+                    }
+                }
+            ]
+        }
+    }
+}

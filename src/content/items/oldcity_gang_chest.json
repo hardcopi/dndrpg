@@ -1,0 +1,13 @@
+{
+    "item_key": "oldcity_gang_chest",
+    "name": "The Gang's Chest",
+    "item_type": "treasure",
+    "rarity": "common",
+    "weight": 30,
+    "value_gp": 126,
+    "icon": "coin",
+    "description": "Six hundred copper, three hundred and thirty silver, ninety gold, under a pair of floorboards that lift together. There is one key and Jimmy Able has it.",
+    "place": {
+        "location": "oldcity_thieves_den"
+    }
+}

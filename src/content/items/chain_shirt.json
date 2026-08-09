@@ -1,0 +1,17 @@
+{
+  "item_key": "chain_shirt",
+  "name": "Chain Shirt",
+  "description": "Rings under a leather shell. Warden issue, twenty years out of date.",
+  "item_type": "armor",
+  "rarity": "common",
+  "weight": 20,
+  "value_gp": 50,
+  "armor_bonus": 13,
+  "armor_type": "medium",
+  "properties": {
+    "dex_bonus": true,
+    "dex_bonus_max": 2
+  },
+  "icon": "armor",
+  "place": { "location": "warren_mouth" }
+}

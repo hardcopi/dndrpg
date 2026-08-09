@@ -1,0 +1,28 @@
+{
+  "spell_key": "burning_hands",
+  "name": "Burning Hands",
+  "level": 1,
+  "higher_level": {
+    "dice_per_level": "1d6"
+  },
+  "school": "Evocation",
+  "classes": [
+    "Sorcerer",
+    "Wizard"
+  ],
+  "resolution": "save",
+  "save_ability": "dex",
+  "save_effect": "half",
+  "damage_dice": "3d6",
+  "damage_type": "fire",
+  "target_kind": "all_enemies",
+  "reaches_back_rank": false,
+  "casting_time": "1 action",
+  "range_text": "Self (15-foot cone)",
+  "components": "V, S",
+  "duration": "Instantaneous",
+  "description": "A thin sheet of flames shoots forth from your outstretched fingertips.",
+  "concentration": false,
+  "duration_rounds": 0,
+  "source": "5e SRD"
+}

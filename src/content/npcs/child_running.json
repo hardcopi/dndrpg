@@ -1,0 +1,10 @@
+{
+    "npc_key": "child_running",
+    "name": "A child",
+    "role": "Child",
+    "sprite_key": "child_1",
+    "is_ambient": true,
+    "place": {
+        "location": "market_square"
+    }
+}

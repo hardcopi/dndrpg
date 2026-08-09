@@ -1,0 +1,14 @@
+{
+  "item_key": "the_ledger",
+  "name": "The Mill Ledger",
+  "description": "Two years of grain tallies in one careful hand. Six caravans are entered twice and paid once.",
+  "item_type": "misc",
+  "rarity": "uncommon",
+  "weight": 3,
+  "value_gp": 0,
+  "properties": {
+    "quest_item": true,
+    "readable": true
+  },
+  "icon": "book"
+}

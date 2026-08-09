@@ -1,0 +1,11 @@
+{
+    "npc_key": "market_sweeper",
+    "name": "A sweeper",
+    "role": "Townsfolk",
+    "sprite_key": "sweeper",
+    "is_ambient": true,
+    "dialog": "market_sweeper",
+    "place": {
+        "location": "market_square"
+    }
+}

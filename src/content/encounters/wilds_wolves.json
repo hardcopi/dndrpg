@@ -1,0 +1,16 @@
+{
+  "encounter_key": "wilds_wolves",
+  "name": "Wolves on the Wind",
+  "description": "Grey shapes slide out of the gorse on both sides of the path — a hunting pair, patient and thin.",
+  "difficulty": "easy",
+  "is_random": true,
+  "region": "quarry_wilds",
+  "monsters": [
+    {
+      "monster": "wolf",
+      "quantity": 2
+    }
+  ],
+  "allow_flee": true,
+  "allow_parley": false
+}

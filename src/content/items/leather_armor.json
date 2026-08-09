@@ -1,0 +1,15 @@
+{
+  "item_key": "leather_armor",
+  "name": "Leather Armor",
+  "description": "Boiled hide. Quiet, and cheap to replace.",
+  "item_type": "armor",
+  "rarity": "common",
+  "weight": 10,
+  "value_gp": 10,
+  "armor_bonus": 11,
+  "armor_type": "light",
+  "properties": {
+    "dex_bonus": true
+  },
+  "icon": "armor"
+}

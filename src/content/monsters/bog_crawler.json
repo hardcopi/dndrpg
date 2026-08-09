@@ -1,0 +1,68 @@
+{
+ "resistances": [
+  "poison"
+ ],
+ "immunities": [],
+ "vulnerabilities": [],
+ "condition_immunities": [
+  "prone"
+ ],
+ "source": "Rivermark",
+ "monster_key": "bog_crawler",
+ "name": "Bog Crawler",
+ "size": "Medium",
+ "type": "beast",
+ "alignment": "unaligned",
+ "armor_class": 13,
+ "hit_points": 22,
+ "hit_dice": "4d8+4",
+ "speed": "20 ft., swim 30 ft.",
+ "strength": 13,
+ "dexterity": 14,
+ "constitution": 13,
+ "intelligence": 2,
+ "wisdom": 10,
+ "charisma": 4,
+ "challenge_rating": 1,
+ "experience_points": 200,
+ "traits": {
+  "Peat-Blind": "The crawler hunts by pressure in the water and is not troubled by darkness or by mist.",
+  "Amphibious": "It can breathe air and water."
+ },
+ "actions": [
+  {
+   "name": "Claws",
+   "type": "melee",
+   "bonus": 4,
+   "damage": "1d8+2",
+   "damage_type": "slashing"
+  },
+  {
+   "name": "Drag Under",
+   "type": "melee",
+   "bonus": 4,
+   "damage": "1d6+2",
+   "damage_type": "bludgeoning",
+   "note": "On a hit against a target standing in water, the target must succeed on a DC 12 Strength save or be knocked prone.",
+   "save": {
+    "ability": "str",
+    "dc": 12
+   },
+   "on_fail": {
+    "condition": "prone",
+    "rounds": 1
+   }
+  }
+ ],
+ "saves": {
+  "str": 3
+ },
+ "rank_pref": "front",
+ "sprite_key": "bog_crawler",
+ "loot": [
+  {
+   "item": "fen_root_bundle",
+   "chance": 30
+  }
+ ]
+}

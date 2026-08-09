@@ -1,0 +1,29 @@
+{
+  "encounter_key": "warlord_hall",
+  "name": "The Warlord's Hall",
+  "description": "Nakka Skarn puts her guard between herself and the door, and then draws anyway.",
+  "difficulty": "deadly",
+  "monsters": [
+    {
+      "monster": "bugbear",
+      "quantity": 2,
+      "rank": "front"
+    },
+    {
+      "monster": "gnoll",
+      "quantity": 2,
+      "rank": "front"
+    },
+    {
+      "monster": "goblin",
+      "quantity": 2,
+      "rank": "back"
+    }
+  ],
+  "allow_flee": false,
+  "allow_parley": false,
+  "victory_flag": "warlord_hall_taken",
+  "defeat_flag": "warlord_hall_lost",
+  "ambush": true,
+  "place": { "location": "warlord_hall" }
+}

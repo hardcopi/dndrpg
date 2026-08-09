@@ -1,0 +1,96 @@
+{
+    "quest_key": "oldcity_the_missing_children",
+    "title": "The Missing Children",
+    "description": "Four gone off the streets above in eleven days, and the Watch have run out of ways to say they are looking into it.",
+    "giver": "sella_carrow",
+    "on_job_board": true,
+    "rewards": {
+        "xp": 400,
+        "gold": 150
+    },
+    "stages": {
+        "ask_the_watch": {
+            "title": "Ask the Watch",
+            "objective": "Speak to Officer Bram at the guard house.",
+            "journal": "Sella Carrow's daughter Nell went off Cobble Row eleven days ago and is the fourth this month. The Watch keep the only door into the Old City and keep saying they are looking into it.",
+            "target": {
+                "location": "oldcity_guardhouse"
+            }
+        },
+        "into_the_dark": {
+            "title": "Into the dark",
+            "objective": "Search the Old City for the children.",
+            "journal": "Bram will not send men past the lit causeways — he has seven and he is not losing any of them in the dark for a fourth time. The door is open to anyone fool enough to use it. Whatever is taking them is off the shored channels.",
+            "target": {
+                "location": "oldcity_drop_hole"
+            }
+        },
+        "found_the_girl": {
+            "title": "One found",
+            "objective": "Look for the others, and get them out.",
+            "journal": "Nell Carrow, alive, in a cupboard-sized cave off the east crawlways with a crack of daylight in the roof. She got out of the pot. She says there are two boys who did not, and that the thing that keeps them has a dog.",
+            "target": {
+                "location": "oldcity_ogres_lair"
+            }
+        },
+        "found_the_boys": {
+            "title": "The pen",
+            "objective": "Get the boys out of the cave.",
+            "journal": "A cave off the ledge below the drop hole, a cauldron in the middle of it and a ring of small shoes around that. Two boys behind driven stakes at the back. An ogre in mail and a warg in a collar between them and the way out.",
+            "target": {
+                "location": "oldcity_ogres_lair"
+            }
+        },
+        "brought_them_up": {
+            "title": "Brought them up",
+            "journal": "Three of them up the spiral stair and out into a street full of ordinary noise, which two of them had stopped expecting to hear again. The fourth child was never going to be found; the shoes in the ring outnumber the children anybody has reported missing, and most of those names were never given to the Watch at all.\n\nSella Carrow paid what she had said she would pay, which was more than she had.",
+            "resolution": "brought_them_up",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "oldcity_children",
+                    "value": "all"
+                },
+                {
+                    "xp": 250
+                },
+                {
+                    "give_gold": 60
+                }
+            ]
+        },
+        "brought_the_girl": {
+            "title": "Brought the girl up",
+            "journal": "Nell Carrow went up the stair on somebody's shoulders and her mother did not let go of her for a long time afterward.\n\nThe boys are still down there, and everybody standing at the top of that stair knows it, and nobody says so.",
+            "resolution": "brought_the_girl",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "oldcity_children",
+                    "value": "girl"
+                },
+                {
+                    "xp": 120
+                },
+                {
+                    "give_gold": 30
+                }
+            ]
+        },
+        "left_them": {
+            "title": "Left them",
+            "journal": "You came back up without them and told Sella Carrow so yourself, which was more than the Watch had managed in eleven days. She thanked you for that, which was worse than if she had not.",
+            "resolution": "left_them",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "oldcity_children",
+                    "value": "none"
+                },
+                {
+                    "xp": 40
+                }
+            ]
+        }
+    }
+}

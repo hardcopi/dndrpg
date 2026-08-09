@@ -1,0 +1,18 @@
+{
+    "encounter_key": "oldcity_toad_pool",
+    "name": "What Is In The Pool",
+    "description": "The skin on the water breaks in one piece, which means it was never a skin.",
+    "difficulty": "medium",
+    "ambush": true,
+    "monsters": [
+        {
+            "monster": "giant_toad",
+            "quantity": 1
+        }
+    ],
+    "allow_flee": true,
+    "allow_parley": false,
+    "place": {
+        "location": "oldcity_toads_grotto"
+    }
+}

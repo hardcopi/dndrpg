@@ -1,0 +1,16 @@
+{
+  "item_key": "quarterstaff",
+  "name": "Quarterstaff",
+  "description": "A walking stick that has been in more fights than most swords.",
+  "item_type": "weapon",
+  "rarity": "common",
+  "weight": 4,
+  "value_gp": 1,
+  "damage_dice": "1d6",
+  "damage_type": "bludgeoning",
+  "properties": {
+    "versatile": "1d8",
+    "simple": true
+  },
+  "icon": "weapon"
+}

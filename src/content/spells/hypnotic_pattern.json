@@ -1,0 +1,28 @@
+{
+  "spell_key": "hypnotic_pattern",
+  "name": "Hypnotic Pattern",
+  "level": 3,
+  "school": "Illusion",
+  "classes": [
+    "Bard",
+    "Sorcerer",
+    "Warlock",
+    "Wizard"
+  ],
+  "resolution": "debuff",
+  "save_ability": "wis",
+  "save_effect": "negate",
+  "target_kind": "all_enemies",
+  "reaches_back_rank": true,
+  "effect": {
+    "condition": "incapacitated"
+  },
+  "casting_time": "1 action",
+  "range_text": "120 feet",
+  "components": "S, M",
+  "duration": "Concentration, up to 1 minute",
+  "concentration": true,
+  "duration_rounds": 10,
+  "description": "You create a twisting pattern of colours that weaves through the air. Each creature in the area that sees the pattern must make a Wisdom saving throw or become charmed and incapacitated.",
+  "source": "5e SRD"
+}

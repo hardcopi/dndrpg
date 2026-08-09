@@ -1,0 +1,247 @@
+{
+    "npc_key": "inn_sleeper",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "flag": "room_fate",
+                        "equals": "work"
+                    }
+                ],
+                "once": true,
+                "text": "He is doing kegs, and he does them the way a man does a thing he has done ten thousand times: without looking, and slightly faster than seems safe.\n\n\"Step's done,\" says Corbin Waite. \"Yard gate wanted a shim, so that is done too. She has not asked me for either of them, which I have decided is her way of not saying anything.\"",
+                "choices": [
+                    {
+                        "label": "Will you go back on the water?",
+                        "next": "back_on_the_water"
+                    },
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "room_fate",
+                        "equals": "paid"
+                    }
+                ],
+                "once": true,
+                "text": "The corner table is empty and wiped down. There is a river man's knife on the bar — short, thick-backed, worn to nothing at the heel from nineteen years of sharpening — and Mara has not moved it.",
+                "choices": [
+                    {
+                        "label": "Leave it where it is.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "room_fate",
+                        "equals": "road"
+                    }
+                ],
+                "once": true,
+                "text": "The corner table is empty. Somebody else has the fire seat within the hour and is welcome to it.",
+                "choices": [
+                    {
+                        "label": "Leave it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "a_room_for_the_night",
+                        "stage": "what_he_needs"
+                    }
+                ],
+                "text": "Corbin Waite has both hands round the bowl and has not started on it yet, which is a thing hungry men do — they wait until they are certain nobody is going to take it away.\n\n\"You will want me to move on,\" he says. \"That is all right. I have been working up to it.\"",
+                "choices": [
+                    {
+                        "label": "Eat first. Nobody is moving you.",
+                        "next": "he_eats"
+                    },
+                    {
+                        "label": "What are you waiting for?",
+                        "next": "what_he_waits_for"
+                    },
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "a_room_for_the_night",
+                        "status": "active"
+                    }
+                ],
+                "text": "You have to say it twice, and the second time with a hand flat on the table rather than on him, and he comes up off his arms all at once like a man surfacing.\n\nHe is about fifty. His hands are ruined in the particular way a pole ruins hands. Four coppers are set out in a neat row on the table in front of him.\n\n\"I have not had anything I did not pay for,\" he says immediately. \"I want that said first.\"",
+                "choices": [
+                    {
+                        "label": "Nobody said you had. What is your name?",
+                        "next": "his_name"
+                    },
+                    {
+                        "label": "You have been asleep on this table for two days.",
+                        "next": "two_days"
+                    }
+                ]
+            },
+            {
+                "text": "He does not stir. There is a small ale in front of him with two thirds of it left, four coppers set out in a neat row beside it, and he is breathing perfectly well.",
+                "choices": [
+                    {
+                        "label": "Leave him be.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "two_days": [
+            {
+                "text": "\"Two days,\" he repeats, and thinks about it, and you can see him genuinely not have known. \"Right. Well. That is a market week, and that is her fire seat, and I have had a table off her on a market week.\"\n\nHe starts trying to stand and does not entirely manage it on the first go.",
+                "choices": [
+                    {
+                        "label": "Sit down. What is your name?",
+                        "next": "his_name"
+                    }
+                ]
+            }
+        ],
+        "his_name": [
+            {
+                "text": "\"Corbin Waite.\" He says it the way a man gives a name to a clerk. \"Flat boats out of Greyhythe. Nineteen years.\"\n\nHe looks at the four coppers.\n\n\"Nine days ago,\" he says, \"I put the pole down at the Greyhythe landing and did not pick it up again. I have not got a reason for you. I have been asked for one twice by people who were kind about it, and I did not have one either time.\"\n\nMara has appeared at the end of the bar with a bowl of something and is standing there pretending to do accounts.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "a_room_for_the_night",
+                            "stage": "what_he_needs"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric sits down across from him without being invited, which is the most tactful thing Aldric does."
+                    },
+                    {
+                        "companion": "kessa",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "companion": "aldric",
+                                    "status": "active"
+                                }
+                            }
+                        ],
+                        "text": "Kessa pushes the bowl across the table with one finger and goes back to the bar without saying anything."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Eat that.",
+                        "next": "he_eats"
+                    },
+                    {
+                        "label": "Why walk uphill?",
+                        "next": "uphill"
+                    }
+                ]
+            }
+        ],
+        "he_eats": [
+            {
+                "text": "He eats the way a man eats who has stopped noticing that he has not: fast at first, and then very slowly, and then he puts the spoon down halfway through and sits with his hands round the bowl.\n\n\"I have not eaten since Rivermark,\" he says, and then hears it. \"Since before Rivermark. I did not know that until you asked.\"",
+                "choices": [
+                    {
+                        "label": "Why walk uphill?",
+                        "next": "uphill"
+                    },
+                    {
+                        "label": "What do you want to happen next?",
+                        "next": "what_he_wants"
+                    }
+                ]
+            }
+        ],
+        "uphill": [
+            {
+                "text": "Corbin Waite considers it seriously, which is more than most people would.\n\n\"Because the road goes up,\" he says. \"That is not clever. I have been on flat water nineteen years and every place I have ever stopped has been level with every other place, and I wanted to be somewhere that was not.\"\n\nHe turns the bowl a little.\n\n\"And there is no water here,\" he says. \"There is the river down the stair, and that is a different river up here, and I can sit in this room and not hear it.\"",
+                "choices": [
+                    {
+                        "label": "What happened on the water?",
+                        "next": "what_happened"
+                    },
+                    {
+                        "label": "What do you want to happen next?",
+                        "next": "what_he_wants"
+                    }
+                ]
+            }
+        ],
+        "what_happened": [
+            {
+                "text": "\"Nothing,\" says Corbin Waite. \"That is the honest answer, it is a poor one, and I am sorry for it.\"\n\nHe thinks about it anyway.\n\n\"Nobody drowned. Nobody cheated me. I had a good boat and a good master and thirty-one shillings a month, and on the ninth of the month I made the landing at Greyhythe and put the pole in the rack, and my hands would not go back to it.\" He looks at his hands as though they belong to somebody he is annoyed with. \"Nineteen years. And they would not.\"",
+                "choices": [
+                    {
+                        "label": "That happens to people.",
+                        "next": "what_he_wants"
+                    }
+                ]
+            }
+        ],
+        "what_he_waits_for": [
+            {
+                "text": "\"For it to come back,\" says Corbin. \"The wanting to. I thought that if I sat still somewhere warm it would come back on its own, the way a cramp goes.\"\n\nHe looks at the door, which is the thing Mara said he does.\n\n\"It has been nine days,\" he says. \"I am beginning to think a man has to go and fetch it.\"",
+                "choices": [
+                    {
+                        "label": "Eat first.",
+                        "next": "he_eats"
+                    },
+                    {
+                        "label": "What do you want to happen next?",
+                        "next": "what_he_wants"
+                    }
+                ]
+            }
+        ],
+        "what_he_wants": [
+            {
+                "text": "\"A bed,\" says Corbin Waite, after a while, \"which I cannot pay for. Or something to do with my hands, which I would rather, and which I have not asked her for — because a man who asks for work off a table he has been asleep on for two days is asking for charity with extra steps.\"\n\nHe puts the four coppers back in his pocket, having decided something.\n\n\"Or the boat down,\" he says. \"There is one Thursday. That is not what I want. That is what I have got.\"\n\nMara is still at the end of the bar, still not doing accounts.",
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse, quietly, so that only you hear it: \"He said the one he wants second. People do that.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Go and talk to Mara.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "back_on_the_water": [
+            {
+                "text": "\"Spring boats,\" says Corbin. \"I have told her twice and she has not written it down anywhere, so we shall see which of us is right.\"\n\nHe sets the keg on its chocks and gets the angle right first time.\n\n\"It came back,\" he says, not looking up. \"About the fourth day. I was carrying a crate up the area steps and I caught myself walking the load the way you walk one on a deck, and I stood there like a fool.\" He straightens. \"I would not have got that on a boat going down. You do not find a thing by going back to where you lost it.\"",
+                "choices": [
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

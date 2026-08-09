@@ -1,0 +1,17 @@
+{
+    "item_key": "oldcity_warg_collar",
+    "name": "Spiked Collar of the Warg",
+    "item_type": "misc",
+    "rarity": "uncommon",
+    "weight": 3,
+    "value_gp": 120,
+    "icon": "amulet",
+    "description": "Heavy leather, iron-spiked, and cut on the inside face with a design that will not stay in the eye — the lines seem to have been done in the wrong order. Whatever it was made to keep off, it kept off. The warg that wore it was not the thing being protected.",
+    "properties": {
+        "quest_item": false,
+        "cursed_looking": true
+    },
+    "place": {
+        "location": "oldcity_ogres_lair"
+    }
+}

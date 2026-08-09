@@ -1,0 +1,395 @@
+{
+    "npc_key": "sib_marrell",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "flag": "night_soil_fate",
+                        "equals": "killed"
+                    }
+                ],
+                "once": true,
+                "text": "Sib Marrell is not sitting on the step. Sib Marrell is halfway down a grating on the High Street with a rope round his middle and his boy on the other end of it, shouting up about the state of the brickwork, which is the sound of Rivermark working properly.",
+                "choices": [
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "night_soil_fate",
+                        "equals": "people"
+                    }
+                ],
+                "once": true,
+                "text": "\"Neighbours,\" says Sib Marrell, and shakes his head at the water. \"Twenty years I have been down there and I have known there were folk in the tunnels for nineteen of them, and the one week I get frightened it turns out to have been folk.\"\n\nHe spits into the river without much force.\n\n\"I have started leaving the Granary Row grating on the latch,\" he says. \"That is not for telling anybody.\"",
+                "choices": [
+                    {
+                        "label": "It's not for telling anybody.",
+                        "next": "not_for_telling"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "night_soil_fate",
+                        "equals": "sealed"
+                    }
+                ],
+                "once": true,
+                "text": "\"Nine of them bricked and barred and I can work over the top of them in my shirt-sleeves,\" says Sib Marrell. He does not sound pleased about it. \"Eleven gold and two days. Twenty years I have been asking that council for a new ladder and they found eleven gold in a fortnight for brick.\"\n\nHe looks along the quay.\n\n\"Wait till it rains,\" he says. \"That is not a threat, that is a drain. A drain that will not take water is a wall, and the water still comes.\"",
+                "choices": [
+                    {
+                        "label": "Where will it go?",
+                        "next": "where_it_goes"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "night_soil",
+                        "stage": "what_is_down_there"
+                    },
+                    {
+                        "flag": "conduit_crawler_beaten"
+                    }
+                ],
+                "text": "Sib Marrell looks at the state of you, and at what is on your boots, and gets up off the step for the first time in a week.\n\n\"Well,\" he says. \"Go on then.\"",
+                "choices": [
+                    {
+                        "label": "It's dead. It was forty feet of something that shouldn't be forty feet of anything.",
+                        "next": "the_crawler_is_dead"
+                    },
+                    {
+                        "label": "It wasn't only that. There are people down there.",
+                        "next": "the_people"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "night_soil",
+                        "stage": "what_is_down_there"
+                    }
+                ],
+                "text": "\"You have been down,\" says Sib Marrell, reading it off your boots without any pleasure at all. \"Right. And?\"",
+                "choices": [
+                    {
+                        "label": "There are people living down there. That's what's been moving the gratings.",
+                        "next": "the_people"
+                    },
+                    {
+                        "label": "There's something in the conduit and it isn't people.",
+                        "next": "not_yet_dead"
+                    },
+                    {
+                        "label": "Brick the gratings. Then nothing comes up them.",
+                        "next": "the_bricking"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "night_soil",
+                        "stage": "into_the_drains"
+                    }
+                ],
+                "text": "\"I said I would not take you and I meant it,\" says Sib. \"There is a hatch in every cellar between the market and the quay and half of them have not been opened in my life. Find one and go in it and it is nothing to do with me.\"\n\nHe scratches his jaw.\n\n\"The Flagon's,\" he says, after a while. \"Hearthstone's. Her north wall is not a wall. I have known that for eleven years and I have never once said it to her.\"",
+                "choices": [
+                    {
+                        "label": "Why tell me now?",
+                        "next": "why_now"
+                    },
+                    {
+                        "label": "I'll find it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "night_soil",
+                        "status": "active"
+                    }
+                ],
+                "text": "There is a man sitting on the bottom step of the river stair where the wind takes the smell off him, which is where nightmen sit, and he has been there most of a week, which is not where nightmen sit at all.\n\n\"Sib Marrell,\" he says, without being asked. \"And before you start — the pits are in arrears, yes, I know what week it is, and no.\"",
+                "choices": [
+                    {
+                        "label": "Why not?",
+                        "next": "why_not"
+                    },
+                    {
+                        "label": "The council sent me.",
+                        "next": "the_council_sent_me"
+                    }
+                ]
+            },
+            {
+                "text": "A man sits on the bottom step of the river stair, downwind of everything, doing nothing at all with great determination.\n\n\"Nightman,\" he says. \"I would not come closer if I were you and I would not shake hands with me at any price.\"",
+                "choices": [
+                    {
+                        "label": "You're not working.",
+                        "next": "why_not"
+                    },
+                    {
+                        "label": "Fair enough.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_council_sent_me": [
+            {
+                "text": "\"Council,\" says Sib Marrell, with feeling. \"The council has put a notice on a board. The council has not put its own arm down a grating on Granary Row at two in the morning, and if it would care to, I shall hold the lamp.\"",
+                "choices": [
+                    {
+                        "label": "What's down there?",
+                        "next": "why_not"
+                    }
+                ]
+            }
+        ],
+        "why_not": [
+            {
+                "text": "Sib Marrell takes his time, and when he starts he does not look at you, which for a man who has been waiting a week to say it is about right.\n\n\"Twenty years,\" he says. \"Man and boy and my father before me. I have been down every grating in this town and I have met everything that lives in them — rats, and rats, and the eels, and once a dog that had been down there long enough to have opinions.\"\n\nHe rubs his hands on his knees.\n\n\"The gratings are being *moved*,\" he says. \"That is the whole of it. Not broken. Not shifted by the water. Lifted, and put back, and put back *square*. Three of them, on my round, over about a fortnight.\"\n\n\"And?\"\n\n\"And there is nothing in this town with hands that ought to be under it,\" says Sib Marrell.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "night_soil",
+                            "stage": "find_the_nightman"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa: \"Put back square.\" She looks at the nearest grating. \"That's the bit, isn't it. Not that it moved. That somebody tidied.\""
+                    },
+                    {
+                        "companion": "ilse",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "companion": "kessa",
+                                    "status": "active"
+                                }
+                            }
+                        ],
+                        "text": "Ilse: \"Nothing hides a track it does not know it is leaving. Whatever moved those knows it is being looked for.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Take me down.",
+                        "next": "he_will_not_take_you"
+                    },
+                    {
+                        "label": "Have you told the watch?",
+                        "next": "not_the_watch"
+                    }
+                ]
+            }
+        ],
+        "he_will_not_take_you": [
+            {
+                "text": "\"No,\" says Sib Marrell. \"And I will not send my boy, and I have said that to his face and he has not spoken to me since Tuesday.\"\n\nHe stands up, which takes a while.\n\n\"Find your own hatch,\" he says. \"There is one in every cellar on this side of the town and I am not going to be the man who put you in one.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "night_soil",
+                            "stage": "into_the_drains"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Which one would you use?",
+                        "next": "which_hatch"
+                    },
+                    {
+                        "label": "I'll find one.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "which_hatch": [
+            {
+                "text": "He thinks about it for long enough that you can watch him decide to be helpful against his own better judgement.\n\n\"The Flagon's,\" he says. \"Hearthstone's cellar. Her north wall is not a wall, and it has not been a wall for eleven years, and I have never once told her because what would she do with it.\"\n\nHe sits back down on the step.\n\n\"Behind the grain sacks,\" he says. \"Where the sump is. Get a lamp you can put in your teeth.\"",
+                "choices": [
+                    {
+                        "label": "Why tell me at all?",
+                        "next": "why_now"
+                    },
+                    {
+                        "label": "Thank you.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "why_now": [
+            {
+                "text": "\"Because in nine more days the pits go over,\" says Sib Marrell, \"and then it is not my week off, it is a fever in the Row, and I have seen one of those and you have not.\"\n\nHe looks at the water.\n\n\"And because I am fifty-three and frightened,\" he says, \"and I have been sitting on this step for six days working out how to say that to somebody, and it turns out you just say it.\"",
+                "choices": [
+                    {
+                        "label": "I'll go and look.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "not_the_watch": [
+            {
+                "text": "\"No,\" says Sib, and there is something careful in it. \"And I would take it kindly if you did not either, not yet.\"\n\nHe turns his hat over.\n\n\"Watch goes down a grating, watch finds whatever is down a grating, and then there are men with staves in the tunnels for a fortnight.\" He stops. \"That is all I am saying. Twenty years is a long time to be underneath a town and not learn who else is.\"",
+                "choices": [
+                    {
+                        "label": "Take me down.",
+                        "next": "he_will_not_take_you"
+                    },
+                    {
+                        "label": "Who else is?",
+                        "next": "he_will_not_say"
+                    }
+                ]
+            }
+        ],
+        "he_will_not_say": [
+            {
+                "text": "\"Go and see,\" says Sib Marrell. \"I am not going to put words in your mouth about people who have never done me any harm, and I am not going to pretend to you that I have not known.\"",
+                "choices": [
+                    {
+                        "label": "Take me down.",
+                        "next": "he_will_not_take_you"
+                    }
+                ]
+            }
+        ],
+        "not_yet_dead": [
+            {
+                "text": "\"Then it is still down there,\" says Sib Marrell, \"and so am I not.\" He sits back down on the step. \"Come back when it is one or the other. I am not being hard. I have got a boy and a bad chest and no other trade.\"",
+                "choices": [
+                    {
+                        "label": "I'll go back down.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_crawler_is_dead": [
+            {
+                "text": "You tell him what it was and where it was and how long it was, and Sib Marrell listens to the whole thing with his hat in his hands.\n\n\"On the crown of the vault,\" he repeats. \"Above the lamp.\"\n\n\"Above the lamp.\"\n\n\"Twenty years,\" says Sib Marrell, \"and I have never once looked up.\"\n\nThe nightmen are back down the gratings inside the week. He does not thank you — he shakes your hand, which given his trade is a considerably bigger thing, and which he clearly knows.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "night_soil",
+                            "stage": "killed_it"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Look up more often.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_people": [
+            {
+                "text": "\"I know,\" says Sib Marrell.\n\nHe says it straight away, and then has to sit with having said it.\n\n\"I have known since I was thirty-one. There are folk in the flood tunnels and there have been folk in the flood tunnels since my father's time, and they have never once taken anything off me nor stopped me working.\" He turns the hat over. \"And this month they started coming up my gratings, and I got frightened, and I did not once think to ask why they had started.\"\n\n\"The gates shut at dusk,\" you tell him. \"They always have. The drains are the only door they have got.\"\n\nSib Marrell puts the hat on.\n\n\"Right,\" he says. \"Then I have wasted a week of the town's pits being frightened of my neighbours, and I shall go and say so to the council in those words, and they will not like it, and that is the council's affair.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "night_soil",
+                            "stage": "it_was_people"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric: \"He said 'my neighbours' without deciding to. That is the whole thing settled, whatever the council does.\""
+                    },
+                    {
+                        "companion": "ilse",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "companion": "aldric",
+                                    "status": "active"
+                                }
+                            }
+                        ],
+                        "text": "Ilse: \"Nobody will do anything about Undertown now. That is the best outcome available and I want it written down that I know how thin it is.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Say it in those words.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_bricking": [
+            {
+                "text": "It costs the council eleven gold and takes two days.\n\nNine gratings on the High Street and Granary Row, bricked and barred. The nightmen work over the top of them in perfect safety and Sib Marrell gets his round back and does not look happy about any of it.\n\n\"A drain that will not take water is a wall,\" he says, on the second day, watching the mason. \"And the water still comes. I have said that to three men in a good coat and every one of them has told me it is not the season.\"\n\nThe first hard rain of the autumn comes up through the cellars of everything between the market and the quay. Undertown loses the whole of its eastern side in a night.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "night_soil",
+                            "stage": "bricked_the_gratings"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Leave it there.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "not_for_telling": [
+            {
+                "text": "\"Good,\" says Sib Marrell. \"Because there is a girl of about nine who used to come up that one and now does not have to knock at Hearthstone's back door for what she is after, and I would rather that arrangement went on being nobody's business.\"",
+                "choices": [
+                    {
+                        "label": "Nobody's business.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "where_it_goes": [
+            {
+                "text": "\"Where it always goes,\" says Sib Marrell. \"Down, till it cannot, and then up somebody's cellar steps.\" He looks along the quay at the neat new brickwork. \"Mine is on the high side. That is the only reason I am talking to you about it and not shouting.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

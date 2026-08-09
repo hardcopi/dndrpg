@@ -1,0 +1,15 @@
+{
+  "item_key": "mace",
+  "name": "Mace",
+  "description": "Plain iron head on an ash haft. Aldric has never called it a weapon.",
+  "item_type": "weapon",
+  "rarity": "common",
+  "weight": 4,
+  "value_gp": 5,
+  "damage_dice": "1d6",
+  "damage_type": "bludgeoning",
+  "properties": {
+    "simple": true
+  },
+  "icon": "mace"
+}

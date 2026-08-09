@@ -1,0 +1,13 @@
+{
+    "npc_key": "aggie_slate",
+    "name": "Aggie Slate",
+    "role": "The Bench",
+    "description": "Sits the plank at the north end of the Low Court. Undertown chose her for it and has twice tried to make her stop.",
+    "sprite_key": "aggie_slate",
+    "image_url": "assets/images/npcs/warlock.png",
+    "is_quest_giver": true,
+    "dialog": "aggie_slate",
+    "place": {
+        "location": "low_court"
+    }
+}

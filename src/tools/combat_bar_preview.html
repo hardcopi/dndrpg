@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<!--
+  The combat action bar, every slot and every state, with no fight running.
+
+  The bar is only reachable three clicks into a live encounter on somebody's
+  own turn, and half of what is worth looking at — a closed slot, a spent
+  bonus action, a tooltip that has to say why — needs the fight to be in a
+  particular state to appear at all. That is a slow way to judge an icon.
+
+  This draws the real markup against the real stylesheet and the real sprite,
+  pulled from the running site, so anything wrong here is wrong in the game.
+  It is a drawing bench and nothing more: no engine, no session, no fetch. The
+  tooltip logic is a transcription of showTip() rather than an import, because
+  ui-combat.js is an IIFE that expects window.Game and a board to draw on.
+
+  Open at /tools/combat_bar_preview.html
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Combat bar — every slot, every state</title>
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <style>
+    body { padding: 1.5rem; background: var(--bg-inset); }
+    h2 { color: var(--gold); font-size: 0.9rem; margin: 1.4rem 0 0.5rem; }
+    .note { color: var(--text-dim); font-size: 0.78rem; margin: 0 0 1rem; max-width: 62ch; }
+    .bench { max-width: 900px; }
+  </style>
+</head>
+<body class="game-page">
+  <div class="bench">
+    <h2>Every slot, available</h2>
+    <p class="note">Party-side slots first, then the bonus action in accent, then
+      the three past the divider that end or leave the fight.</p>
+    <div class="cbt-bar"><div class="cbt-actions" id="bar-all"></div></div>
+
+    <h2>The turn already spent</h2>
+    <p class="note">Closed, not hidden — the position a player learned has to keep
+      meaning the same thing. Hover one: the reason is in the danger colour.</p>
+    <div class="cbt-bar"><div class="cbt-actions" id="bar-spent"></div></div>
+
+    <h2>A barbarian, two rages left</h2>
+    <div class="cbt-bar"><div class="cbt-actions" id="bar-barb"></div></div>
+  </div>
+
+  <script>
+  // The same sprite game.php inlines, fetched rather than copied, so an icon
+  // edited once is edited everywhere.
+  //
+  // Complained about loudly on failure, because the failure is silent
+  // otherwise: this fetched /game.php at first, got the login page — that
+  // page requires a session and a preview harness has none — found no sprite
+  // in it, and drew a bar of blank squares with no error anywhere. A missing
+  // static file answers 200 with the homepage on this vhost, so "it fetched"
+  // proves nothing; the symbol count does.
+  function complain(what) {
+    document.body.insertAdjacentHTML('afterbegin',
+      `<p class="note" style="color:var(--danger)">${what} — the icons below will be blank.</p>`);
+  }
+  fetch('/assets/icons.svg').then((r) => r.text()).then((text) => {
+    const svg = new DOMParser().parseFromString(text, 'image/svg+xml').querySelector('svg');
+    const n = svg ? svg.querySelectorAll('symbol').length : 0;
+    if (!n) return complain('No symbols found in /assets/icons.svg');
+    document.body.appendChild(document.importNode(svg, true));
+  }).catch((e) => complain(`Could not read /assets/icons.svg (${e})`));
+
+  const esc = (s) => String(s ?? '').replace(/[&<>"']/g,
+    (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+  function slotHtml(b) {
+    if (b.sep) return '<span class="act-sep" aria-hidden="true"></span>';
+    const cls = ['act-slot', b.bonus ? 'is-bonus' : '', b.ok ? '' : 'is-closed'].filter(Boolean).join(' ');
+    return `<button type="button" class="${cls}" data-act="${esc(b.key)}"
+      ${b.ok ? '' : 'disabled'}
+      data-label="${esc(b.label)}" data-why="${esc(b.why)}" aria-label="${esc(b.label)}">
+      <svg class="act-icon" aria-hidden="true"><use href="#${esc(b.icon)}"></use></svg>
+      ${b.count != null ? `<span class="act-count" aria-hidden="true">${esc(b.count)}</span>` : ''}
+    </button>`;
+  }
+
+  const ROGUE = [
+    { key: 'attack', label: 'Attack', icon: 'i-attack', why: 'Strike at 5 ft — flanking' },
+    { key: 'cast', label: 'Cast', icon: 'i-cast', why: 'Knows no spells' },
+    { key: 'item', label: 'Item', icon: 'i-potion', why: 'Drink something' },
+    { key: 'dash', label: 'Dash', icon: 'i-dash', why: 'Move again — another 30 ft this turn' },
+    { key: 'dodge', label: 'Dodge', icon: 'i-shield', why: 'Attacks against you have disadvantage' },
+    { key: 'disengage', label: 'Disengage', icon: 'i-disengage', why: 'Move without giving anybody a free swing at you' },
+    { key: 'bonus', label: 'Cunning: Dash', icon: 'i-dash', bonus: true, why: 'Your speed again, as a bonus action.' },
+    { key: 'bonus', label: 'Cunning: Disengage', icon: 'i-disengage', bonus: true, why: 'Move without drawing an opportunity attack.' },
+    { key: 'help', label: 'Help', icon: 'i-help', why: 'Give them advantage on their next attack' },
+    { sep: true },
+    { key: 'flee', label: 'Flee', icon: 'i-flee', why: 'Break off — DC 12' },
+    { key: 'parley', label: 'Parley', icon: 'i-parley', why: 'Try talking' },
+    { key: 'end_turn', label: 'End turn', icon: 'i-hourglass', why: 'Pass to the next in the order' },
+  ];
+
+  const SPENT = ROGUE.map((b) => (b.sep ? b : {
+    ...b,
+    ok: b.key === 'end_turn',
+    why: b.key === 'end_turn' ? b.why
+       : b.key === 'bonus' ? 'Bonus action already spent this turn'
+       : 'Action already spent this turn',
+  }));
+
+  const BARB = [
+    { key: 'attack', label: 'Attack', icon: 'i-attack', why: 'Select an enemy first' },
+    { key: 'dash', label: 'Dash', icon: 'i-dash', why: 'Move again — another 30 ft this turn' },
+    { key: 'dodge', label: 'Dodge', icon: 'i-shield', why: 'Attacks against you have disadvantage' },
+    { key: 'bonus', label: 'Rage', icon: 'i-rage', bonus: true, count: 2, why: 'Resist physical damage and hit harder while it lasts.' },
+    { sep: true },
+    { key: 'end_turn', label: 'End turn', icon: 'i-hourglass', why: 'Pass to the next in the order' },
+  ];
+
+  for (const [id, spec] of [['bar-all', ROGUE], ['bar-spent', SPENT], ['bar-barb', BARB]]) {
+    const box = document.getElementById(id);
+    box.innerHTML = spec.map((b) => slotHtml(b.sep ? b : { ok: true, ...b })).join('')
+      + '<div class="act-tip" role="tooltip" aria-hidden="true"></div>';
+
+    const tip = box.querySelector('.act-tip');
+    box.querySelectorAll('[data-act]').forEach((b) => {
+      const show = () => {
+        tip.innerHTML = `<span class="act-tip-name">${esc(b.dataset.label)}</span>
+          <span class="act-tip-why ${b.disabled ? 'is-blocked' : ''}">${esc(b.dataset.why)}</span>`;
+        tip.classList.add('is-on');
+        const boxRect = box.getBoundingClientRect();
+        const at = b.getBoundingClientRect();
+        const want = at.left - boxRect.left + at.width / 2 - tip.offsetWidth / 2;
+        tip.style.left = `${Math.max(0, Math.min(want, boxRect.width - tip.offsetWidth))}px`;
+      };
+      b.addEventListener('mouseenter', show);
+      b.addEventListener('focus', show);
+      b.addEventListener('mouseleave', () => tip.classList.remove('is-on'));
+      b.addEventListener('blur', () => tip.classList.remove('is-on'));
+    });
+  }
+  </script>
+</body>
+</html>

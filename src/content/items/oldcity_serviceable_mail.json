@@ -1,0 +1,15 @@
+{
+    "item_key": "oldcity_serviceable_mail",
+    "name": "Serviceable Mail",
+    "item_type": "armor",
+    "rarity": "common",
+    "weight": 55,
+    "value_gp": 35,
+    "armor_bonus": 6,
+    "armor_type": "heavy",
+    "icon": "armor",
+    "description": "Off one of the dusty ones, and better kept than the man who last wore it. Whatever came for him did not come through the mail.",
+    "place": {
+        "location": "oldcity_spider_lair"
+    }
+}

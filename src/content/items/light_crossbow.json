@@ -1,0 +1,18 @@
+{
+  "item_key": "light_crossbow",
+  "name": "Light Crossbow",
+  "description": "Steel prod, walnut stock. Slower than a bow and forgiving of a shaking hand.",
+  "item_type": "weapon",
+  "rarity": "common",
+  "weight": 5,
+  "value_gp": 25,
+  "damage_dice": "1d8",
+  "damage_type": "piercing",
+  "properties": {
+    "ranged": "80/320",
+    "two_handed": true,
+    "loading": true,
+    "simple": true
+  },
+  "icon": "bow"
+}

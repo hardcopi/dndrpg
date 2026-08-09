@@ -1,0 +1,13 @@
+{
+  "encounter_key": "undertown_slick",
+  "name": "The Wet Patch",
+  "description": "There is a slick on the brick that your lamp went over twice on the way in, and it is not in the same place now.",
+  "difficulty": "medium",
+  "is_random": true,
+  "region": "undertown",
+  "monsters": [
+    { "monster": "grey_ooze", "quantity": 1 }
+  ],
+  "allow_flee": true,
+  "allow_parley": false
+}

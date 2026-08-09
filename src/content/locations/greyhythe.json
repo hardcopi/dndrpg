@@ -1,0 +1,145 @@
+{
+    "region_key": "greyhythe",
+    "module": "rivermark",
+    "name": "Greyhythe",
+    "region_type": "town",
+    "description": "The river port eleven miles downstream of Rivermark: a common wharf, a private one, and a road out that goes on going.",
+    "sort_order": 60,
+    "locations": {
+        "towpath_end": {
+            "name": "The Towpath",
+            "type": "gate",
+            "map_pos": [10, 30],
+            "allow_camp": true,
+            "description": "The river stair from Rivermark comes down onto eleven miles of towpath, and the towpath ends here, at a stone bollard worn smooth by three generations of rope. Greyhythe begins without a wall or a gate: the path simply becomes a street, and the street has cobbles, and somebody has been paying to keep them.",
+            "first_visit": "Woodsmoke, tar, wet rope and river. After the quarry road it smells like somewhere that gets things.",
+            "ambience": [
+                "A horse goes by on the towpath, hauling something you cannot see.",
+                "The bollard is worn into a saddle by rope.",
+                "The cobbles are new. Somebody is paying for cobbles.",
+                "Gulls, this far up, which means fish, which means a market."
+            ],
+            "exits": [
+                {"to": "river_stair", "label": "Back up the river stair to Rivermark"},
+                {"to": "the_hythe", "label": "Into the town"}
+            ]
+        },
+        "the_hythe": {
+            "name": "The Hythe",
+            "type": "square",
+            "map_pos": [28, 22],
+            "description": "The common wharf, which is what Greyhythe was before it was anything else: a shelving bank, a row of rings, and four hundred years of people landing things on it and arguing about the price. Half of it is idle. The stone of the other landing, further down, is better cut and busier, and everyone here has an opinion about that which they will give you for nothing.",
+            "first_visit": "A working quay in the middle of the afternoon with half its berths empty. That is not a thing a river town does by choice.",
+            "ambience": [
+                "A ring is used, once, all afternoon.",
+                "Two men mend a net that has been mended a great many times.",
+                "Somebody looks downriver at the other landing and says nothing.",
+                "The tide is out and the mud smells of everything the river carries."
+            ],
+            "exits": [
+                {"to": "towpath_end", "label": "Back to the towpath"},
+                {"to": "salt_house", "label": "Up the lane to the Salt House"},
+                {"to": "corse_landing", "label": "Down the bank to the new landing"},
+                {"to": "packet_stair", "label": "Along to the packet stair"}
+            ]
+        },
+        "salt_house": {
+            "name": "The Salt House",
+            "type": "building",
+            "map_pos": [22, 54],
+            "inn_cost": 8,
+            "description": "A boarding house in a building that was a salt store and has never entirely stopped being one — the walls sweat white in wet weather and the beds are dry all year, which is the whole of its reputation. Bargemen, hauliers and the sort of clerk who is between postings. Nobody asks your business, and everybody hears it.",
+            "ambience": [
+                "The wall by the stair is furred white and gets scraped every spring.",
+                "Somebody is asleep on a settle with their boots on the fender.",
+                "A haulier argues about a bed and takes it anyway.",
+                "The salt keeps the damp out and the sheets stiff."
+            ],
+            "exits": [
+                {"to": "the_hythe", "label": "Down to the hythe"},
+                {"to": "packet_stair", "label": "Along the back lane to the packet stair"}
+            ]
+        },
+        "corse_landing": {
+            "name": "The New Landing",
+            "type": "site",
+            "map_pos": [50, 38],
+            "description": "Forty yards of dressed stone quay, a crane, a bonded shed, and a fence of iron standards with a gate in it that is open, because there is no reason to shut it. Everything on this quay is stacked square, tallied twice and carried by men who are paid weekly. It is the most orderly thing you have seen since you left Rivermark, and the least explicable, because there is not enough trade in this valley to need it.",
+            "first_visit": "Somebody built a port for a river that does not carry this much. Which means they intend it to.",
+            "ambience": [
+                "The crane turns. Something heavy goes into the shed.",
+                "A tally is called, repeated back, and chalked.",
+                "The gate stands open. There is nothing to steal that could be carried.",
+                "Every crate is stacked with its mark outward, and every mark is the same."
+            ],
+            "exits": [
+                {"to": "the_hythe", "label": "Back up to the common wharf"},
+                {"to": "tally_shed", "label": "Into the bonded shed"},
+                {"to": "factors_house", "label": "Up the steps to the factor's house"}
+            ]
+        },
+        "tally_shed": {
+            "name": "The Bonded Shed",
+            "type": "building",
+            "map_pos": [64, 58],
+            "description": "Cool, dry, enormous, and half empty. Salt, iron, lamp oil, sawn timber, rope, sailcloth, and eleven hundred yards of chain in coils — every one of them a thing you would want if you were going to put two hundred men underground and keep them there. There is a desk by the door with a book open on it, and the book is the point of the room.",
+            "ambience": [
+                "The chain coils sweat and are wiped down by somebody paid to do it.",
+                "Lamp oil in ranks, dated, the oldest at the front.",
+                "The book on the desk is open and nobody is standing over it.",
+                "Nothing here is for sale. It is all going somewhere."
+            ],
+            "exits": [
+                {"to": "corse_landing", "label": "Out onto the quay"}
+            ]
+        },
+        "packet_stair": {
+            "name": "The Packet Stair",
+            "type": "site",
+            "map_pos": [40, 66],
+            "description": "Where the river stops being local. A boat goes downstream from these steps on the second and the fifth, carrying whoever has paid, and comes back a week later with a different set of people and the same barrels. Beyond the bend the water widens and the hills stop, and everybody in Greyhythe can tell you exactly what is down there and not one of them has been.",
+            "ambience": [
+                "The steps are green below the sixth one and dry above it.",
+                "A rope is coiled on the bollard the way somebody was taught to.",
+                "Downstream the hills give out and the sky gets bigger.",
+                "The sailing board is chalked for the second and the fifth."
+            ],
+            "exits": [
+                {"to": "the_hythe", "label": "Back along the bank"},
+                {"to": "salt_house", "label": "Up the back lane to the Salt House"}
+            ]
+        },
+        "factors_house": {
+            "name": "The Factor's House",
+            "type": "building",
+            "map_pos": [80, 26],
+            "description": "A merchant's house of the plainer kind, well kept, with a step that is washed and a door that is answered. Nothing in the hall is expensive and nothing in it is cheap. There is a desk in the front room facing the window, so that whoever sits at it can see the whole of the new landing and be seen sitting there, and there is one chair on the other side of it, which is always empty and always waiting.",
+            "first_visit": "The door is answered before you have finished knocking. \"He is expecting somebody,\" the girl says, \"and you will do.\"",
+            "ambience": [
+                "The window gives onto the landing, and the landing goes on working.",
+                "A clock somewhere in the house, keeping the same time as everything else.",
+                "The chair on your side of the desk has been sat in a great deal.",
+                "Nothing in the room is expensive. Nothing in it is cheap."
+            ],
+            "exits": [
+                {"to": "corse_landing", "label": "Out and down to the quay"},
+                {"to": "the_long_room", "label": "Through to the long room"}
+            ]
+        },
+        "the_long_room": {
+            "name": "The Long Room",
+            "type": "room",
+            "map_pos": [92, 50],
+            "description": "The whole back of the house, thrown into one room and given over to paper. Presses to the ceiling, each drawer labelled by year and by hundred; a great table with a cloth on it; a lamp on a gimbal so it can be carried without being set down. This is where the Concern keeps what it knows, and it keeps a great deal, and the astonishing thing about the room is that it is not locked.",
+            "ambience": [
+                "The presses go up past the reach of the lamp.",
+                "Every drawer is labelled by year and by hundred, in one hand.",
+                "The table cloth is green and has ink on it from the same corner every time.",
+                "The door was not locked. Nobody has ever needed it to be."
+            ],
+            "exits": [
+                {"to": "factors_house", "label": "Back through to the front room"}
+            ]
+        }
+    }
+}

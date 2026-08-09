@@ -1,0 +1,12 @@
+{
+    "npc_key": "street_seer",
+    "name": "Nan Vetch",
+    "role": "Fortune-teller",
+    "description": "Reads the water and the weather for coppers on the High Street. Came up out of the fen thirty years ago and has never gone back to look.",
+    "sprite_key": "sorcerer",
+    "is_quest_giver": true,
+    "dialog": "street_seer",
+    "place": {
+        "location": "high_street"
+    }
+}

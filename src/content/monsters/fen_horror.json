@@ -1,0 +1,65 @@
+{
+  "resistances": [
+    "cold"
+  ],
+  "immunities": [],
+  "vulnerabilities": [
+    "fire"
+  ],
+  "condition_immunities": [
+    "prone"
+  ],
+  "source": "Rivermark",
+  "monster_key": "fen_horror",
+  "name": "Fen Horror",
+  "size": "Large",
+  "type": "aberration",
+  "alignment": "unaligned",
+  "armor_class": 14,
+  "hit_points": 60,
+  "hit_dice": "8d10+16",
+  "speed": "10 ft., swim 40 ft.",
+  "strength": 17,
+  "dexterity": 14,
+  "constitution": 15,
+  "intelligence": 3,
+  "wisdom": 12,
+  "charisma": 5,
+  "challenge_rating": 3,
+  "experience_points": 700,
+  "traits": {
+    "Peat-Held": "Peat water preserves what it takes. The horror has been in the black pools long enough to be part of them and does not leave the water willingly.",
+    "Hold Breath": "It can hold its breath for an hour."
+  },
+  "actions": [
+    {
+      "name": "Tendril",
+      "type": "ranged",
+      "bonus": 5,
+      "damage": "1d10+3",
+      "damage_type": "bludgeoning",
+      "note": "Reach 15 ft. On a hit the target is grappled and pulled 10 feet toward the water."
+    },
+    {
+      "name": "Bite",
+      "type": "melee",
+      "bonus": 5,
+      "damage": "2d8+3",
+      "damage_type": "piercing"
+    }
+  ],
+  "saves": {
+    "con": 4
+  },
+  "loot": [
+    {
+      "gold": "3d8"
+    },
+    {
+      "item": "amulet_of_warding",
+      "chance": 40
+    }
+  ],
+  "rank_pref": "front",
+  "sprite_key": "tentacled"
+}

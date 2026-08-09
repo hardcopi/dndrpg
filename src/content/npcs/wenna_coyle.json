@@ -1,0 +1,13 @@
+{
+    "npc_key": "wenna_coyle",
+    "name": "Wenna Coyle",
+    "role": "Timekeeper",
+    "description": "Dry, warm and precise in a hut where nothing else is any of those. She knows where two hundred people were standing at any hour of the last three years, and considers that an ordinary thing to know.",
+    "sprite_key": "wenna_coyle",
+    "image_url": "assets/images/npcs/warlock.png",
+    "is_quest_giver": true,
+    "dialog": "wenna_coyle",
+    "place": {
+        "location": "timekeepers_hut"
+    }
+}

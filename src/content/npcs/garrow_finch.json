@@ -1,0 +1,11 @@
+{
+    "npc_key": "garrow_finch",
+    "name": "Garrow Finch",
+    "role": "Debt Factor",
+    "description": "Buys other people's debts at a discount and collects them at full price. Polite about it.",
+    "sprite_key": "skulker",
+    "dialog": "garrow_finch",
+    "place": {
+        "location": "flagon_common_room"
+    }
+}

@@ -1,0 +1,118 @@
+{
+    "quest_key": "the_fen_wardens",
+    "title": "The Fen Wardens",
+    "description": "Six platforms on driven piles, out of sight of the causeway, and a stack of new faggot bundles bigger than anything the camp could use. Rivermark calls them smugglers. They are also the only reason the fen road exists.",
+    "giver": "nesh_gray",
+    "on_job_board": false,
+    "required_level": 4,
+    "rewards": {
+        "xp": 500,
+        "gold": 180
+    },
+    "stages": {
+        "the_stilt_camp": {
+            "title": "The stilt camp",
+            "objective": "Get into the camp without the planks coming up.",
+            "journal": "Nesh Gray's camp is six platforms and about a dozen people, and every plank walk between them can be pulled up in four seconds. They have practised that against the watch. They watched us come the whole way in.",
+            "target": {
+                "location": "stilt_camp"
+            }
+        },
+        "one_run": {
+            "title": "One run",
+            "objective": "Gray will show you the work if you do a night of it. Do a night of it.",
+            "journal": "The run goes west across the black pools by punt at two in the morning: salt out, wool out, iron in, and a fifth of everything left at the fen road head for whoever is walking out of the valley that week with more than they can carry. They mend the causeway themselves, out of the takings, because there is nobody to ask and it is the road they live on.",
+            "target": {
+                "location": "black_pools"
+            }
+        },
+        "ran_with_them": {
+            "title": "Ran with them",
+            "journal": "One night, two punts and eleven miles of water, and I have never been so cold or so useless. What crosses the fen is not what Rivermark thinks crosses the fen: it is people. Four families this month, walking west with what they could carry, off ground that was bought out from under them. Gray does not charge those. She charges the salt to pay for them.",
+            "resolution": "ran_with_them",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "wardens_fate",
+                    "value": "ran"
+                },
+                {
+                    "set_flag": "fen_road_known"
+                },
+                {
+                    "set_flag": "grazing_bought_known"
+                },
+                {
+                    "give_item": "fen_waders",
+                    "quantity": 1
+                },
+                {
+                    "xp": 200
+                },
+                {
+                    "approval": {
+                        "ilse": 16,
+                        "kessa": 10,
+                        "aldric": 6,
+                        "sera": -6
+                    }
+                }
+            ]
+        },
+        "turned_them_in": {
+            "title": "Turned in",
+            "journal": "Reed took the camp in the second week of the month with eleven of the watch and two boats borrowed from the quay, and it went cleanly, and she was pleased with it. The fen road has had nothing spent on it since. Eleven weeks later the causeway is under at four points and the west of the valley is a place you cannot get to.",
+            "resolution": "turned_them_in",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "wardens_fate",
+                    "value": "turned"
+                },
+                {
+                    "set_flag": "fen_road_closing"
+                },
+                {
+                    "give_gold": 250
+                },
+                {
+                    "approval": {
+                        "sera": 6,
+                        "kessa": -8,
+                        "ilse": -18,
+                        "aldric": -10
+                    }
+                }
+            ]
+        },
+        "bought_the_road": {
+            "title": "The road, bought",
+            "journal": "We paid the season's toll for the causeway in one payment, on Rivermark's behalf and mostly out of our own purse, and had it agreed in front of both camps that the fen road is open to anyone with legitimate business and no questions asked at either end. It is a bad deal. It is also a road, in a season when four other things in this valley have quietly stopped being anybody's.",
+            "resolution": "bought_the_road",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "wardens_fate",
+                    "value": "bought"
+                },
+                {
+                    "set_flag": "fen_road_open_paid"
+                },
+                {
+                    "take_gold": 250
+                },
+                {
+                    "xp": 150
+                },
+                {
+                    "approval": {
+                        "aldric": 14,
+                        "ilse": 12,
+                        "sera": 8,
+                        "kessa": -4
+                    }
+                }
+            ]
+        }
+    }
+}

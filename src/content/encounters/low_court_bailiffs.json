@@ -1,0 +1,14 @@
+{
+  "encounter_key": "low_court_bailiffs",
+  "name": "The Court Rises",
+  "description": "Nobody draws steel. Four of them put themselves between you and the passage north, the way people do when they have agreed beforehand who stands where.",
+  "difficulty": "medium",
+  "monsters": [
+    { "monster": "bandit", "quantity": 4 }
+  ],
+  "allow_flee": true,
+  "allow_parley": true,
+  "parley_node": "aggie_slate:sit_down_again",
+  "victory_quest_stage": "the_undertown_court:refused_the_court",
+  "place": { "location": "low_court" }
+}

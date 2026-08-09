@@ -1,0 +1,1095 @@
+[1mrpg verification — 2026-07-28 18:33[0m
+php:   NOT FOUND
+mysql: mysql  Ver 15.1 Distrib 10.11.16-MariaDB, for Linux (x86_64) using  EditLine wrapper
+python:Python 3.14.4
+
+[1m── lint_php ─────────────────────────────────[0m
+checked 28 files, 15 classes
+0 errors, 0 warnings
+
+[1m── lint_js ─────────────────────────────────[0m
+checked 8 files against 53 API routes
+0 errors, 0 warnings
+
+[1m── content_valid ─────────────────────────────────[0m
+warning  content/monsters/wolf.json: $.sprite_key
+         sprite_key 'wolf' has no assets/images/monsters/wolf_bust.png
+warning  content/monsters/wolf.json: $.sprite_key
+         sprite_key 'wolf' is not listed in assets/images/monsters/busts.json; assuming one expression
+
+2 warning(s)
+content/ is valid: 68 files across 8 kinds
+
+[1m── content_trace ─────────────────────────────────[0m
+
+=== Quests and their endings ==========================================
+
+  aldric_absolution  — The Thing Brother Aldric Did
+        the_letter
+          <- dialog/aldric.json:the_order[1] choice 0
+          <- dialog/aldric.json:the_letter_glimpsed choice 0
+          <- dialog/aldric.json:the_letter_opened on_enter
+        the_name
+          <- dialog/aldric.json:the_true_version on_enter
+    END confessed [confessed]
+          <- dialog/captain_elowen.json:the_confession on_enter
+    END buried [buried]
+          <- dialog/aldric.json:the_burning_at_the_ford on_enter
+
+  cellar_rats  — Something in the Cellar
+        into_the_cellar
+          <- dialog/mara_hearthstone.json:cellar_terms[1] choice 0
+          <- dialog/mara_hearthstone.json:cellar_terms[1] choice 1
+        the_grain
+          <- dialog/mara_hearthstone.json:greeting[6] choice 1
+          <- dialog/mara_hearthstone.json:she_shrugs on_enter
+    END exterminated [exterminated]
+          <- dialog/mara_hearthstone.json:greeting[6] choice 0
+    END source_found [source_found]
+          <- dialog/mara_hearthstone.json:the_sump on_enter
+
+  ilse_deep_warren  — The Deep Warren
+        the_lower_shaft
+          <- dialog/ilse.json:the_deep[0] choice 0
+          <- dialog/ilse.json:the_deep[1] choice 0
+        the_ledge
+          <- dialog/ilse.json:the_shaft_plan on_enter
+    END sealed_the_shaft [sealed_the_shaft]
+          <- dialog/ilse.json:greeting[6] choice 0
+          <- dialog/ilse.json:the_shaft_plan choice 0
+    END sounded_the_deep [sounded_the_deep]
+          <- dialog/ilse.json:greeting[6] choice 1
+          <- dialog/ilse.json:the_shaft_plan choice 1
+
+  kessa_debt  — What Kessa Owes
+        finch_comes
+          <- dialog/garrow_finch.json:greeting[6] on_enter
+          <- dialog/garrow_finch.json:greeting[7] on_enter
+        terms
+          <- dialog/garrow_finch.json:the_paper on_enter
+          <- dialog/garrow_finch.json:the_terms on_enter
+    END paid [paid]
+          <- dialog/garrow_finch.json:he_takes_the_money[0] on_enter
+          <- dialog/garrow_finch.json:he_takes_sixty[0] on_enter
+    END fought [fought]
+          <- dialog/garrow_finch.json:call_them_off on_enter
+    END sold_her [sold_her]
+          <- dialog/garrow_finch.json:the_fee choice 0
+
+  ledger_and_lie  — The Ledger and the Lie
+        look_into_it
+          <- dialog/captain_elowen.json:the_ledger_offer choice 0
+          <- dialog/captain_elowen.json:the_ledger_offer choice 1
+          <- dialog/captain_elowen.json:her_own_men choice 0
+        confront_sera
+          <- dialog/captain_elowen.json:the_ledger on_enter
+        the_paymaster
+          <- dialog/sera.json:the_real_fear on_enter
+          <- dialog/sera.json:names_hollis on_enter
+          <- dialog/sera.json:she_calls_the_yard on_enter
+          <- dialog/sera.json:the_paymaster_lead on_enter
+    END burned_the_book [burned_the_book]
+          <- dialog/sera.json:burn_it on_enter
+    END gave_it_to_reed [gave_it_to_reed]
+          <- dialog/captain_elowen.json:she_takes_it on_enter
+    END sold_it_back [sold_it_back]
+          <- dialog/hollis_marrow.json:the_offer choice 0
+          <- dialog/hollis_marrow.json:he_pays_more on_enter
+
+  quarry_pact  — The Quarry Pact
+        east_gate
+          <- dialog/captain_elowen.json:briefing[5] choice 0
+          <- dialog/captain_elowen.json:she_believes_you choice 0
+        the_warren_mouth
+          <- dialog/captain_elowen.json:the_warren on_enter
+          <- dialog/nakka.json:come_to_the_hall on_enter
+        the_warlords_hall
+          <- dialog/nakka.json:hail[4] on_enter
+          <- dialog/nakka.json:gate_hail[0] on_enter
+          <- dialog/nakka.json:gate_hail[1] choice 0
+          <- dialog/nakka.json:gate_hail[2] choice 0
+          <- dialog/nakka.json:the_gate_opens on_enter
+    END steel [steel]
+          <- dialog/nakka.json:hail[0] on_enter
+    END pact [pact]
+          <- dialog/nakka.json:the_pact on_enter
+    END ash [ash]
+          <- dialog/hollis_marrow.json:the_ash_offer[0] choice 0
+          <- dialog/hollis_marrow.json:he_pays_the_six on_enter
+
+  sera_leash  — Sera's Leash
+        the_second_book
+          <- dialog/sera.json:recruit_offer on_enter
+        the_loft_stair
+          <- dialog/sera.json:the_leash_offer on_enter
+    END cut_the_leash [cut_the_leash]
+          <- dialog/sera.json:the_hatch choice 0
+          <- dialog/sera.json:she_goes_first choice 0
+    END held_the_leash [held_the_leash]
+          <- dialog/sera.json:the_hatch choice 1
+          <- dialog/sera.json:she_goes_first choice 1
+
+  teeth_in_the_hills  — Teeth in the Hills
+        walk_the_road
+          <- dialog/captain_elowen.json:briefing[10] choice 0
+          <- dialog/captain_elowen.json:the_raids choice 0
+          <- dialog/captain_elowen.json:the_raids choice 1
+        find_the_warden
+          <- dialog/captain_elowen.json:the_warden_hint on_enter
+          <- dialog/ilse.json:greeting[11] on_enter
+        the_pattern
+          <- dialog/captain_elowen.json:the_pattern_report on_enter
+          <- dialog/nakka.json:the_manifest on_enter
+    END ambushed_the_raiders [ambushed_the_raiders]
+          <- dialog/nakka.json:raid_halt[0] choice 2
+          <- dialog/nakka.json:raid_halt[1] choice 2
+          <- dialog/nakka.json:the_manifest choice 2
+          <- dialog/nakka.json:she_calls_it_on on_enter
+    END escorted_the_caravan [escorted_the_caravan]
+          <- dialog/nakka.json:the_manifest choice 0
+          <- dialog/nakka.json:the_manifest choice 1
+          <- dialog/nakka.json:she_walks_away on_enter
+    END turned_the_road [turned_the_road]
+          <- dialog/nakka.json:raid_halt[0] choice 1
+
+=== Dialogue nodes and what reaches them ==============================
+
+  aldric  start='greeting'  24 nodes, 39 variants
+       after_burying
+          <- greeting[2] choice 0 (next)
+       after_confession
+          <- greeting[1] choice 0 (next)
+       greeting
+          <- (start)
+          <- the_order[0] choice 0 (next)
+          <- the_order[2] choice 2 (next)
+          <- he_deflects choice 1 (next)
+          <- he_is_grateful choice 0 (next)
+          <- the_others choice 0 (next)
+       he_cannot
+          <- greeting[7] choice 1 (next)
+          <- greeting[8] choice 1 (next)
+          <- the_honest_answer choice 0 (next)
+       he_could_still
+          <- after_burying choice 0 (next)
+       he_deflects
+          <- the_order[2] choice 0 (check)
+       he_is_grateful
+          <- greeting[5] choice 1 (next)
+          <- the_order[1] choice 1 (next)
+          <- the_order[2] choice 1 (next)
+          <- the_letter_glimpsed choice 1 (next)
+          <- he_deflects choice 0 (next)
+       he_knows_that
+          <- greeting[9] choice 1 (next)
+       he_will_stay
+          <- greeting[6] choice 2 (next)
+       his_terms
+          <- the_recruit choice 0 (next)
+       romance_one
+          <- greeting[10] choice 0 (next)
+       romance_two
+          <- greeting[3] choice 0 (next)
+          <- romance_one choice 0 (next)
+       that_is_not_why
+          <- greeting[6] choice 0 (next)
+          <- greeting[6] choice 1 (next)
+       the_burning_at_the_ford
+          <- greeting[4] choice 1 (next)
+          <- the_true_version choice 1 (next)
+       the_honest_answer
+          <- greeting[7] choice 0 (next)
+       the_letter_glimpsed
+          <- the_order[2] choice 0 (check)
+       the_letter_opened
+          <- greeting[5] choice 0 (next)
+          <- the_order[1] choice 0 (next)
+          <- the_letter_glimpsed choice 0 (next)
+       the_order
+          <- greeting[11] choice 1 (next)
+          <- greeting[13] choice 0 (next)
+       the_others
+          <- greeting[11] choice 2 (next)
+       the_recruit
+          <- greeting[12] choice 1 (next)
+       the_sera_argument
+          <- greeting[9] choice 0 (next)
+       the_summons_version
+          <- the_letter_opened choice 1 (next)
+       the_true_version
+          <- the_letter_opened choice 0 (next)
+          <- the_summons_version choice 0 (next)
+       toward_reed
+          <- greeting[4] choice 0 (next)
+          <- the_true_version choice 0 (next)
+
+  captain_elowen  start='briefing'  23 nodes, 36 variants
+       after_pact
+          <- briefing[2] choice 0 (next)
+       after_steel
+          <- briefing[1] choice 0 (next)
+       briefing
+          <- (start)
+       deniable
+          <- briefing[4] choice 0 (next)
+          <- no_writ choice 0 (next)
+       her_own_men
+          <- the_ledger_offer choice 2 (next)
+       name_marrow
+          <- briefing[5] choice 1 (next)
+          <- briefing[9] choice 1 (next)
+       no_law_for_it
+          <- the_confession choice 0 (next)
+       no_writ
+          <- the_warren choice 0 (check)
+       she_admits_it
+          <- the_ledger choice 1 (check)
+       she_believes_you
+          <- the_pattern_report choice 0 (next)
+       she_gives_you_room
+          <- name_marrow[0] choice 0 (check)
+       she_puts_a_watch_on_you
+          <- name_marrow[0] choice 0 (check)
+       she_takes_it
+          <- briefing[8] choice 0 (next)
+          <- what_happens_to_sera choice 0 (next)
+       she_wont_say
+          <- briefing[8] choice 1 (check)
+          <- the_ledger choice 1 (check)
+          <- she_admits_it choice 1 (next)
+          <- name_marrow[1] choice 0 (next)
+       she_writes_it
+          <- the_warren choice 0 (check)
+       the_confession
+          <- briefing[3] choice 0 (next)
+       the_ledger
+          <- briefing[9] choice 0 (next)
+          <- the_ledger_offer choice 1 (next)
+          <- her_own_men choice 0 (next)
+       the_ledger_offer
+          <- briefing[11] choice 0 (next)
+       the_pattern_report
+          <- briefing[6] choice 0 (next)
+       the_raids
+          <- briefing[3] choice 1 (next)
+          <- briefing[10] choice 0 (next)
+          <- briefing[11] choice 1 (next)
+       the_warden_hint
+          <- briefing[7] choice 0 (next)
+          <- the_raids choice 1 (next)
+       the_warren
+          <- briefing[4] choice 1 (next)
+          <- briefing[5] choice 0 (next)
+          <- she_believes_you choice 0 (next)
+       what_happens_to_sera
+          <- briefing[8] choice 1 (check)
+
+  garrow_finch  start='greeting'  11 nodes, 20 variants
+       call_them_off
+          <- greeting[4] choice 2 (next)
+          <- the_terms choice 1 (check)
+          <- he_holds_at_ninety choice 1 (next)
+          <- the_fee choice 2 (next)
+       greeting
+          <- (start)
+       he_holds_at_ninety
+          <- the_paper choice 1 (check)
+          <- the_paper choice 2 (check)
+       he_takes_sixty
+          <- the_paper choice 1 (check)
+          <- the_paper choice 2 (check)
+       he_takes_the_money
+          <- greeting[3] choice 0 (next)
+          <- greeting[4] choice 0 (next)
+          <- the_paper choice 0 (next)
+          <- the_terms choice 0 (next)
+          <- he_holds_at_ninety choice 0 (next)
+          <- the_fee choice 1 (next)
+          <- he_walks_away choice 0 (next)
+       he_walks_away
+          <- the_terms choice 1 (check)
+       the_fee
+          <- greeting[4] choice 1 (next)
+          <- the_terms choice 2 (next)
+          <- he_takes_the_money[1] choice 1 (next)
+          <- he_holds_at_ninety choice 2 (next)
+       the_other_book
+          <- greeting[1] choice 0 (next)
+       the_paper
+          <- greeting[5] choice 0 (next)
+          <- greeting[6] choice 0 (next)
+          <- greeting[7] choice 0 (next)
+       the_terms
+          <- greeting[5] choice 1 (next)
+          <- greeting[6] choice 1 (next)
+          <- the_paper choice 3 (next)
+       the_yard_door
+          <- the_fee choice 0 (next)
+
+  hollis_marrow  start='greeting'  22 nodes, 36 variants
+       greeting
+          <- (start)
+       he_did_not_say_that
+          <- greeting[0] choice 0 (next)
+       he_gives_a_name
+          <- greeting[7] choice 1 (check)
+          <- the_wagons[0] choice 1 (check)
+          <- the_spoiled_grain choice 0 (next)
+          <- the_lie_shows choice 0 (next)
+       he_is_untroubled
+          <- greeting[5] choice 0 (next)
+          <- greeting[6] choice 1 (check)
+          <- greeting[7] choice 1 (check)
+          <- greeting[9] choice 1 (check)
+          <- the_wagons[0] choice 1 (check)
+       he_pays_more
+          <- the_offer choice 1 (check)
+       he_pays_the_six
+          <- the_ash_offer[0] choice 1 (check)
+       he_recalculates
+          <- greeting[4] choice 2 (check)
+          <- the_offer choice 1 (check)
+       lawful_instrument
+          <- greeting[1] choice 0 (next)
+       no_out
+          <- greeting[3] choice 0 (next)
+       no_proof_now
+          <- greeting[2] choice 0 (next)
+          <- the_wagons[0] choice 0 (next)
+          <- the_wagons[1] choice 0 (next)
+          <- he_gives_a_name choice 0 (next)
+       not_finished
+          <- he_is_untroubled choice 1 (next)
+       not_selling
+          <- greeting[4] choice 1 (next)
+          <- greeting[6] choice 0 (next)
+          <- the_offer choice 2 (next)
+       the_ash_offer
+          <- greeting[3] choice 1 (next)
+          <- greeting[4] choice 2 (check)
+          <- he_gives_a_name choice 1 (next)
+       the_burning
+          <- the_offer choice 0 (next)
+          <- he_pays_more choice 0 (next)
+       the_lie_shows
+          <- greeting[6] choice 1 (check)
+       the_loft_taunt
+          <- no_proof_now choice 1 (next)
+       the_offer
+          <- greeting[4] choice 0 (next)
+       the_offer_withdrawn
+          <- the_ash_offer[0] choice 1 (check)
+          <- the_ash_offer[0] choice 2 (next)
+       the_price_of_bread
+          <- greeting[10] choice 0 (next)
+          <- greeting[11] choice 0 (next)
+       the_road_west
+          <- the_ash_offer[0] choice 0 (next)
+          <- he_pays_the_six choice 0 (next)
+       the_spoiled_grain
+          <- greeting[9] choice 0 (next)
+          <- greeting[9] choice 1 (check)
+       the_wagons
+          <- greeting[5] choice 1 (next)
+          <- greeting[7] choice 0 (next)
+          <- greeting[8] choice 0 (next)
+          <- the_price_of_bread choice 0 (next)
+          <- not_selling choice 0 (next)
+
+  ilse  start='greeting'  18 nodes, 33 variants
+       after_steel_argument
+          <- greeting[0] choice 0 (next)
+       after_steel_quiet
+          <- greeting[0] choice 1 (next)
+       greeting
+          <- (start)
+          <- the_count choice 2 (next)
+          <- the_deep[0] choice 1 (next)
+          <- the_deep[1] choice 1 (next)
+          <- the_recruit[1] choice 1 (next)
+          <- she_agrees_deal choice 0 (next)
+          <- she_concedes_nothing choice 0 (next)
+          <- not_this_year choice 0 (next)
+          <- the_others choice 0 (next)
+       not_this_year
+          <- greeting[5] choice 0 (next)
+          <- greeting[5] choice 1 (next)
+       romance_one
+          <- greeting[8] choice 0 (next)
+          <- greeting[8] choice 1 (next)
+       romance_two
+          <- greeting[3] choice 0 (next)
+          <- romance_one choice 0 (next)
+       she_agrees_deal
+          <- the_rest_of_it choice 0 (next)
+       she_concedes_nothing
+          <- the_rest_of_it choice 1 (next)
+       she_was_right
+          <- greeting[2] choice 0 (next)
+       she_will_stay_for_that
+          <- after_steel_argument choice 0 (next)
+          <- after_steel_quiet choice 0 (next)
+       the_count
+          <- greeting[10] choice 0 (next)
+          <- greeting[11] choice 0 (next)
+          <- greeting[12] choice 0 (next)
+          <- greeting[13] choice 0 (next)
+          <- the_recruit[1] choice 0 (next)
+       the_deep
+          <- greeting[10] choice 1 (next)
+          <- the_count choice 0 (next)
+       the_others
+          <- greeting[4] choice 0 (next)
+          <- greeting[10] choice 2 (next)
+       the_recruit
+          <- greeting[11] choice 1 (next)
+          <- the_count choice 1 (next)
+       the_rest_of_it
+          <- greeting[9] choice 0 (next)
+          <- greeting[9] choice 1 (next)
+       the_seal
+          <- greeting[6] choice 0 (next)
+          <- the_shaft_plan choice 0 (next)
+       the_shaft_plan
+          <- greeting[7] choice 0 (next)
+          <- the_deep[0] choice 0 (next)
+          <- the_deep[1] choice 0 (next)
+       what_she_wants
+          <- the_recruit[0] choice 0 (next)
+
+  kessa  start='greeting'  19 nodes, 31 variants
+       about_sera
+          <- greeting[6] choice 0 (next)
+          <- greeting[6] choice 1 (next)
+       back_to_it
+          <- the_debt_talk[2] choice 0 (next)
+          <- about_sera choice 1 (next)
+          <- kessa_concedes choice 0 (next)
+          <- kessa_digs_in choice 0 (next)
+       greeting
+          <- (start)
+          <- the_debt_talk[0] choice 0 (next)
+          <- the_debt_talk[1] choice 0 (next)
+          <- the_debt_talk[2] choice 1 (next)
+          <- the_debt_talk[3] choice 0 (next)
+          <- back_to_it choice 0 (next)
+          <- the_others choice 0 (next)
+       kessa_concedes
+          <- about_sera choice 0 (check)
+       kessa_digs_in
+          <- about_sera choice 0 (check)
+       not_generous
+          <- greeting[2] choice 0 (next)
+       right_and_finished
+          <- greeting[1] choice 0 (next)
+       romance_one
+          <- greeting[4] choice 0 (next)
+          <- greeting[4] choice 1 (next)
+       romance_two
+          <- greeting[3] choice 0 (next)
+          <- romance_one choice 0 (next)
+       she_admits_the_debt
+          <- the_pitch choice 1 (check)
+       she_joins
+          <- the_pitch choice 0 (next)
+          <- she_admits_the_debt choice 0 (next)
+          <- she_shuts_it_down choice 0 (next)
+       she_shuts_it_down
+          <- the_pitch choice 1 (check)
+       terms_agreed
+          <- she_joins choice 0 (next)
+          <- what_she_wont_do choice 0 (next)
+       the_debt_talk
+          <- greeting[7] choice 0 (next)
+       the_others
+          <- greeting[7] choice 1 (next)
+       the_pitch
+          <- greeting[8] choice 0 (next)
+          <- greeting[9] choice 0 (next)
+       what_she_wants
+          <- who_is_finch choice 1 (next)
+       what_she_wont_do
+          <- she_joins choice 1 (next)
+       who_is_finch
+          <- greeting[5] choice 0 (next)
+
+  mara_hearthstone  start='greeting'  21 nodes, 33 variants
+       about_town
+          <- greeting[8] choice 1 (next)
+          <- greeting[10] choice 1 (next)
+       after_pact
+          <- greeting[2] choice 0 (next)
+       after_steel
+          <- greeting[1] choice 0 (next)
+       came_back
+          <- greeting[0] choice 0 (next)
+       carters_blame
+          <- about_town[0] choice 0 (next)
+       cellar_terms
+          <- greeting[9] choice 0 (next)
+          <- greeting[10] choice 0 (next)
+       greeting
+          <- (start)
+          <- they_come_back choice 0 (next)
+          <- about_town[0] choice 1 (next)
+          <- about_town[1] choice 1 (next)
+          <- carters_blame choice 0 (next)
+          <- the_argument choice 1 (next)
+          <- who_drinks_here choice 1 (next)
+          <- the_warden choice 0 (next)
+       sera_talk
+          <- greeting[3] choice 0 (next)
+          <- greeting[3] choice 1 (next)
+       she_agrees
+          <- who_has_a_key choice 1 (next)
+          <- the_sump choice 1 (next)
+          <- the_grain_talk choice 2 (next)
+          <- she_talks choice 0 (next)
+       she_is_frightened
+          <- she_shuts_up choice 1 (next)
+       she_pays_up
+          <- greeting[6] choice 0 (next)
+       she_shrugs
+          <- cellar_terms[0] choice 1 (next)
+          <- cellar_terms[1] choice 1 (next)
+       she_shuts_up
+          <- the_grain_talk choice 0 (check)
+       she_talks
+          <- the_grain_talk choice 0 (check)
+          <- the_grain_talk choice 1 (next)
+       the_argument
+          <- about_town[1] choice 0 (next)
+       the_grain_talk
+          <- greeting[7] choice 0 (next)
+          <- greeting[7] choice 1 (next)
+       the_sump
+          <- greeting[5] choice 0 (next)
+       the_warden
+          <- who_drinks_here choice 0 (next)
+       they_come_back
+          <- greeting[8] choice 0 (next)
+       who_drinks_here
+          <- greeting[4] choice 1 (next)
+          <- greeting[10] choice 2 (next)
+          <- the_argument choice 0 (next)
+       who_has_a_key
+          <- she_shrugs choice 1 (next)
+          <- the_sump choice 0 (next)
+
+  nakka  start='hail'  26 nodes, 45 variants
+       come_to_the_hall
+          <- the_manifest choice 1 (next)
+       gate_hail
+          <- hail[5] choice 0 (next)
+       hail
+          <- (start)
+       no_more_talking
+          <- the_choice choice 1 (check)
+       raid_halt
+          <- hail[6] choice 0 (next)
+       scouts_hold
+          <- hail[7] choice 0 (next)
+       she_calls_it_on
+          <- raid_halt[1] choice 0 (check)
+          <- raid_halt[1] choice 1 (check)
+       she_ends_it
+          <- scouts_hold choice 1 (check)
+          <- scouts_hold choice 2 (check)
+       she_lets_the_wagon_pass
+          <- the_manifest choice 0 (next)
+       she_lets_you_go
+          <- scouts_hold choice 0 (next)
+       she_stands_aside
+          <- scouts_hold choice 2 (check)
+       she_takes_the_wagon
+          <- raid_halt[0] choice 1 (next)
+       she_walks_away
+          <- raid_halt[1] choice 1 (check)
+       she_wont_come_down
+          <- truce_terms[0] choice 0 (check)
+       the_arithmetic
+          <- hail[1] choice 0 (next)
+       the_choice
+          <- the_hall[0] choice 2 (next)
+          <- the_hall[1] choice 2 (next)
+          <- the_hall[2] choice 2 (next)
+          <- the_paymaster_named[0] choice 1 (next)
+          <- the_paymaster_named[1] choice 1 (next)
+          <- the_paymaster_named[2] choice 1 (next)
+          <- truce_terms[0] choice 2 (next)
+          <- truce_terms[1] choice 1 (next)
+          <- she_wont_come_down choice 2 (next)
+       the_deep_after
+          <- hail[2] choice 0 (next)
+       the_gate_holds
+          <- gate_hail[2] choice 1 (check)
+          <- gate_hail[3] choice 1 (check)
+       the_gate_opens
+          <- gate_hail[2] choice 1 (check)
+          <- gate_hail[3] choice 0 (next)
+          <- gate_hail[3] choice 1 (check)
+       the_hall
+          <- hail[3] choice 0 (next)
+          <- hail[4] choice 0 (next)
+          <- gate_hail[0] choice 0 (next)
+          <- gate_hail[1] choice 0 (next)
+          <- gate_hail[2] choice 0 (next)
+          <- the_gate_opens choice 0 (next)
+       the_manifest
+          <- raid_halt[0] choice 0 (next)
+          <- raid_halt[1] choice 0 (check)
+       the_pact
+          <- truce_terms[0] choice 0 (check)
+          <- truce_terms[0] choice 1 (next)
+          <- she_wont_come_down choice 0 (next)
+       the_paymaster_named
+          <- the_hall[0] choice 0 (next)
+          <- the_hall[1] choice 0 (next)
+          <- the_hall[2] choice 0 (next)
+       the_pushed_out
+          <- scouts_hold choice 1 (check)
+          <- scouts_hold choice 3 (next)
+          <- she_stands_aside choice 0 (next)
+       truce_terms
+          <- the_hall[0] choice 1 (next)
+          <- the_hall[1] choice 1 (next)
+          <- the_hall[2] choice 1 (next)
+          <- the_paymaster_named[0] choice 0 (next)
+          <- the_paymaster_named[1] choice 0 (next)
+          <- the_paymaster_named[2] choice 0 (next)
+          <- the_choice choice 1 (check)
+       what_is_down_there
+          <- the_pushed_out choice 0 (next)
+
+  sera  start='greeting'  27 nodes, 36 variants
+       ash_together
+          <- greeting[0] choice 0 (next)
+       burn_it
+          <- she_folds choice 1 (next)
+          <- hand_it_over choice 1 (next)
+          <- sell_it_hint choice 1 (next)
+       greeting
+          <- (start)
+          <- the_others choice 0 (next)
+          <- the_thing_about_ilse choice 0 (next)
+       hand_it_over
+          <- greeting[7] choice 1 (next)
+          <- the_second_book_told choice 1 (next)
+       leash_cut
+          <- the_hatch choice 0 (next)
+          <- she_goes_first choice 0 (next)
+       leash_held
+          <- the_hatch choice 1 (next)
+          <- she_goes_first choice 1 (next)
+       name_from_the_cell
+          <- greeting[1] choice 0 (next)
+       names_hollis
+          <- the_real_fear choice 0 (next)
+       not_interested_in_sorry
+          <- greeting[1] choice 1 (next)
+       recruit_offer
+          <- greeting[6] choice 0 (next)
+          <- greeting[6] choice 1 (next)
+       sell_it_hint
+          <- she_folds choice 2 (next)
+          <- hand_it_over choice 2 (next)
+       she_bolts
+          <- the_confrontation choice 0 (check)
+          <- the_confrontation choice 2 (check)
+       she_calls_the_yard
+          <- the_confrontation choice 1 (check)
+       she_folds
+          <- the_confrontation choice 0 (check)
+          <- the_confrontation choice 1 (check)
+          <- two_books choice 1 (next)
+          <- the_real_fear choice 1 (next)
+          <- names_hollis choice 0 (next)
+          <- the_second_book_told choice 0 (next)
+       she_goes_first
+          <- greeting[2] choice 1 (next)
+       the_confrontation
+          <- greeting[8] choice 0 (next)
+       the_hatch
+          <- greeting[2] choice 0 (next)
+          <- the_leash_offer choice 0 (next)
+       the_leash_offer
+          <- greeting[5] choice 0 (next)
+          <- recruit_offer choice 0 (next)
+       the_others
+          <- greeting[5] choice 1 (next)
+       the_paymaster_lead
+          <- she_bolts choice 0 (next)
+          <- she_bolts choice 1 (next)
+       the_real_fear
+          <- the_confrontation choice 2 (check)
+          <- the_confrontation choice 3 (next)
+          <- two_books choice 0 (next)
+       the_second_book_told
+          <- greeting[7] choice 0 (next)
+          <- names_hollis choice 1 (next)
+       the_thing_about_ilse
+          <- greeting[4] choice 0 (next)
+       to_reed_then
+          <- she_folds choice 0 (next)
+          <- hand_it_over choice 0 (next)
+       two_books
+          <- greeting[8] choice 1 (next)
+       why_now
+          <- name_from_the_cell choice 1 (next)
+       yes_it_does
+          <- greeting[3] choice 0 (next)
+
+  tobin  start='greeting'  4 nodes, 13 variants
+       greeting
+          <- (start)
+          <- the_rumours[0] choice 0 (next)
+          <- the_rumours[1] choice 1 (next)
+          <- the_rumours[2] choice 0 (next)
+          <- the_rumours[3] choice 0 (next)
+          <- the_rumours[4] choice 0 (next)
+          <- the_credit choice 0 (next)
+       no_use_for_that
+          <- greeting[0] choice 0 (next)
+       the_credit
+          <- the_rumours[1] choice 0 (next)
+       the_rumours
+          <- greeting[1] choice 1 (next)
+          <- greeting[2] choice 1 (next)
+          <- greeting[3] choice 1 (next)
+          <- greeting[4] choice 1 (next)
+          <- greeting[5] choice 1 (next)
+
+=== Flags: set by / read by ===========================================
+
+  aldric_disappointed
+      set      set_flag       dialog/aldric.json:that_is_not_why on_enter
+      set      set_flag       dialog/aldric.json:he_will_stay on_enter
+      read     dialog/aldric.json:greeting[8] variant
+
+  aldric_fate
+      set      set_flag       quests/aldric_absolution.json:confessed effects
+      set      set_flag       quests/aldric_absolution.json:buried effects
+      read     dialog/aldric.json:greeting[1] variant
+      read     dialog/aldric.json:greeting[2] variant
+
+  aldric_letter_seen
+      set      set_flag       dialog/aldric.json:the_letter_glimpsed on_enter
+      read     dialog/aldric.json:the_order[1] variant
+
+  aldric_secret_known
+      set      set_flag       dialog/aldric.json:the_true_version on_enter
+      set      set_flag       quests/aldric_absolution.json:confessed effects
+      set      set_flag       quests/aldric_absolution.json:buried effects
+      read     dialog/aldric.json:the_order[0] variant
+
+  caravan_saved
+      set      set_flag       quests/teeth_in_the_hills.json:escorted_the_caravan effects
+      read     dialog/tobin.json:greeting[3] variant
+
+  cellar_cleared
+      set      set_flag       quests/cellar_rats.json:exterminated effects
+      set      set_flag       quests/cellar_rats.json:source_found effects
+      read     dialog/mara_hearthstone.json:greeting[7] variant
+      read     dialog/mara_hearthstone.json:greeting[8] variant
+      read     dialog/tobin.json:the_rumours[3] variant
+
+  cellar_rats_beaten
+      set      victory_flag   encounters/cellar_rats_swarm.json victory_flag
+      read     dialog/mara_hearthstone.json:greeting[6] variant
+
+  cellar_stirges_beaten
+      set      victory_flag   encounters/cellar_stirges.json victory_flag
+      read     dialog/mara_hearthstone.json:greeting[5] variant
+
+  deep_known
+      set      set_flag       dialog/ilse.json:the_deep[1] on_enter
+      set      set_flag       dialog/nakka.json:the_pushed_out on_enter
+      set      set_flag       dialog/nakka.json:what_is_down_there on_enter
+      set      set_flag       quests/ilse_deep_warren.json:sealed_the_shaft effects
+      set      set_flag       quests/ilse_deep_warren.json:sounded_the_deep effects
+      read     dialog/ilse.json:the_deep[0] variant
+      read     dialog/nakka.json:the_deep_after[2] variant
+
+  deep_shaft_cleared
+      set      victory_flag   encounters/deep_shaft.json victory_flag
+      read     dialog/ilse.json:greeting[5] variant
+
+  deep_shaft_fate
+      set      set_flag       quests/ilse_deep_warren.json:sealed_the_shaft effects
+      set      set_flag       quests/ilse_deep_warren.json:sounded_the_deep effects
+      read     dialog/nakka.json:the_deep_after[0] variant
+      read     dialog/nakka.json:the_deep_after[1] variant
+
+  finch_backed_off
+      set      set_flag       dialog/garrow_finch.json:he_walks_away on_enter
+      read     dialog/garrow_finch.json:greeting[3] variant
+
+  finch_knows_you_are_short
+      set      set_flag       dialog/garrow_finch.json:he_holds_at_ninety on_enter
+      read     dialog/garrow_finch.json:greeting[4] variant
+
+  goblins_spared
+      set      increment_flag dialog/nakka.json:she_lets_you_go on_enter
+      set      increment_flag dialog/nakka.json:she_stands_aside on_enter
+      set      increment_flag dialog/nakka.json:raid_halt[0] choice 1
+      set      increment_flag dialog/nakka.json:she_lets_the_wagon_pass on_enter
+      set      increment_flag dialog/nakka.json:she_walks_away on_enter
+      read     dialog/nakka.json:the_hall[0] variant
+
+  grain_stamp_seen
+      set      set_flag       dialog/sera.json:the_paymaster_lead on_enter
+      set      set_flag       quests/cellar_rats.json:source_found effects
+      read     dialog/captain_elowen.json:name_marrow[1] variant
+      read     dialog/hollis_marrow.json:greeting[9] variant
+
+  granary_knives_beaten
+      set      victory_flag   encounters/granary_knives.json victory_flag
+      read     dialog/hollis_marrow.json:greeting[5] variant
+
+  hills_fate
+      set      set_flag       quests/teeth_in_the_hills.json:ambushed_the_raiders effects
+      set      set_flag       quests/teeth_in_the_hills.json:escorted_the_caravan effects
+      set      set_flag       quests/teeth_in_the_hills.json:turned_the_road effects
+      read     dialog/captain_elowen.json:briefing[5] variant
+      read     dialog/tobin.json:greeting[4] variant
+
+  hills_pattern
+      set      set_flag       dialog/nakka.json:the_manifest on_enter
+      set      set_flag       quests/teeth_in_the_hills.json:escorted_the_caravan effects
+      set      set_flag       quests/teeth_in_the_hills.json:turned_the_road effects
+      read     dialog/captain_elowen.json:briefing[6] variant
+      read     dialog/hollis_marrow.json:the_wagons[0] variant
+      read     dialog/mara_hearthstone.json:about_town[0] variant
+      read     dialog/nakka.json:truce_terms[0] choice 1
+      read     dialog/nakka.json:she_wont_come_down choice 0
+
+  hollis_coin_taken
+      set      set_flag       quests/ledger_and_lie.json:sold_it_back effects
+      set      set_flag       quests/quarry_pact.json:ash effects
+      read     dialog/hollis_marrow.json:greeting[3] variant
+
+  hollis_rattled
+      set      set_flag       dialog/hollis_marrow.json:the_spoiled_grain on_enter
+      set      set_flag       dialog/hollis_marrow.json:the_lie_shows on_enter
+      set      set_flag       dialog/hollis_marrow.json:the_loft_taunt[0] on_enter
+      set      set_flag       dialog/hollis_marrow.json:he_recalculates on_enter
+      read     dialog/nakka.json:the_paymaster_named[1] variant
+
+  hollis_warned
+      set      set_flag       dialog/sera.json:she_bolts on_enter
+      set      set_flag       dialog/sera.json:she_calls_the_yard on_enter
+      read     dialog/hollis_marrow.json:greeting[6] variant
+
+  ilse_count_heard
+      set      set_flag       dialog/ilse.json:the_count on_enter
+      read     dialog/ilse.json:the_recruit[0] variant
+
+  ilse_stayed_after_steel
+      set      set_flag       dialog/ilse.json:she_will_stay_for_that on_enter
+      read     dialog/ilse.json:greeting[4] variant
+
+  kessa_debt_fate
+      set      set_flag       quests/kessa_debt.json:paid effects
+      set      set_flag       quests/kessa_debt.json:fought effects
+      set      set_flag       quests/kessa_debt.json:sold_her effects
+      read     dialog/garrow_finch.json:greeting[0] variant
+      read     dialog/garrow_finch.json:greeting[1] variant
+      read     dialog/garrow_finch.json:greeting[2] variant
+      read     dialog/kessa.json:greeting[0] variant
+      read     dialog/kessa.json:the_debt_talk[0] variant
+      read     dialog/kessa.json:the_debt_talk[1] variant
+
+  kessa_debt_known
+      set      set_flag       dialog/kessa.json:she_admits_the_debt on_enter
+      set      set_flag       dialog/kessa.json:the_debt_talk[3] on_enter
+      read     dialog/kessa.json:the_debt_talk[2] variant
+
+  knows_paymaster
+      set      set_flag       dialog/captain_elowen.json:the_pattern_report on_enter
+      set      set_flag       dialog/hollis_marrow.json:he_gives_a_name on_enter
+      set      set_flag       dialog/nakka.json:the_manifest on_enter
+      set      set_flag       dialog/sera.json:names_hollis on_enter
+      set      set_flag       dialog/sera.json:the_paymaster_lead on_enter
+      set      set_flag       dialog/sera.json:name_from_the_cell on_enter
+      read     dialog/captain_elowen.json:name_marrow[0] variant
+      read     dialog/hollis_marrow.json:greeting[4] variant
+      read     dialog/nakka.json:raid_halt[0] variant
+      read     dialog/nakka.json:gate_hail[2] choice 0
+      read     dialog/nakka.json:gate_hail[3] choice 0
+      read     dialog/nakka.json:the_paymaster_named[0] variant
+
+  ledger_fate
+      set      set_flag       quests/ledger_and_lie.json:burned_the_book effects
+      set      set_flag       quests/ledger_and_lie.json:gave_it_to_reed effects
+      set      set_flag       quests/ledger_and_lie.json:sold_it_back effects
+      read     dialog/aldric.json:greeting[6] variant
+      read     dialog/aldric.json:greeting[7] variant
+      read     dialog/captain_elowen.json:briefing[10] variant
+
+  mara_knows_marrow
+      set      set_flag       dialog/mara_hearthstone.json:she_talks on_enter
+      read     dialog/hollis_marrow.json:greeting[10] variant
+
+  mara_wary
+      set      set_flag       dialog/mara_hearthstone.json:she_shuts_up on_enter
+      read     dialog/mara_hearthstone.json:greeting[4] variant
+
+  met_aldric
+      set      set_flag       dialog/aldric.json:greeting[13] on_enter
+      set      set_flag       dialog/mara_hearthstone.json:who_drinks_here on_enter
+      read     dialog/aldric.json:greeting[12] variant
+      read     companions/aldric.json recruit
+
+  met_garrow
+      set      set_flag       dialog/garrow_finch.json:greeting[7] on_enter
+      set      set_flag       dialog/kessa.json:who_is_finch on_enter
+      read     dialog/garrow_finch.json:greeting[6] variant
+
+  met_hollis
+      set      set_flag       dialog/hollis_marrow.json:greeting[11] on_enter
+      read     dialog/tobin.json:the_rumours[1] variant
+
+  met_ilse
+      set      set_flag       dialog/captain_elowen.json:the_warden_hint on_enter
+      set      set_flag       dialog/ilse.json:greeting[13] on_enter
+      set      set_flag       dialog/mara_hearthstone.json:the_warden on_enter
+      set      set_flag       dialog/tobin.json:the_rumours[4] on_enter
+      read     dialog/ilse.json:greeting[11] variant
+      read     dialog/ilse.json:greeting[12] variant
+      read     companions/ilse.json recruit
+
+  met_kessa
+      set      set_flag       dialog/kessa.json:greeting[9] on_enter
+      set      set_flag       dialog/mara_hearthstone.json:who_drinks_here on_enter
+      read     dialog/kessa.json:greeting[8] variant
+      read     companions/kessa.json recruit
+
+  met_nakka
+      set      set_flag       dialog/nakka.json:hail[7] on_enter
+      set      set_flag       dialog/nakka.json:scouts_hold on_enter
+      set      set_flag       dialog/nakka.json:raid_halt[0] on_enter
+      set      set_flag       dialog/nakka.json:raid_halt[1] on_enter
+      set      set_flag       dialog/nakka.json:gate_hail[3] on_enter
+      read     dialog/nakka.json:gate_hail[2] variant
+
+  met_sera
+      set      set_flag       dialog/captain_elowen.json:the_ledger on_enter
+      set      set_flag       dialog/sera.json:greeting[9] on_enter
+      read     dialog/tobin.json:the_rumours[2] variant
+
+  nakka_dismissed_you
+      set      set_flag       dialog/nakka.json:she_ends_it on_enter
+      set      set_flag       dialog/nakka.json:the_gate_holds on_enter
+      read     dialog/nakka.json:the_hall[1] variant
+
+  nakka_named_him
+      set      set_flag       dialog/nakka.json:the_paymaster_named[0] on_enter
+      read     dialog/nakka.json:truce_terms[0] variant
+
+  nakka_owes_you
+      set      set_flag       dialog/nakka.json:she_takes_the_wagon on_enter
+      read     dialog/nakka.json:gate_hail[0] variant
+
+  quarry_fate
+      set      set_flag       quests/quarry_pact.json:steel effects
+      set      set_flag       quests/quarry_pact.json:pact effects
+      set      set_flag       quests/quarry_pact.json:ash effects
+      read     dialog/aldric.json:greeting[0] variant
+      read     dialog/captain_elowen.json:briefing[0] variant
+      read     dialog/captain_elowen.json:briefing[1] variant
+      read     dialog/captain_elowen.json:briefing[2] variant
+      read     dialog/hollis_marrow.json:greeting[0] variant
+      read     dialog/hollis_marrow.json:greeting[1] variant
+      read     dialog/hollis_marrow.json:greeting[2] variant
+      read     dialog/ilse.json:greeting[0] variant
+      read     dialog/ilse.json:greeting[1] variant
+      read     dialog/ilse.json:greeting[2] variant
+      read     dialog/kessa.json:greeting[1] variant
+      read     dialog/kessa.json:greeting[2] variant
+      read     dialog/mara_hearthstone.json:greeting[0] variant
+      read     dialog/mara_hearthstone.json:greeting[1] variant
+      read     dialog/mara_hearthstone.json:greeting[2] variant
+      read     dialog/nakka.json:hail[2] variant
+      read     dialog/sera.json:greeting[0] variant
+
+  reed_absolute
+      set      set_flag       quests/quarry_pact.json:steel effects
+      read     dialog/tobin.json:the_rumours[0] variant
+
+  reed_looks_away
+      set      set_flag       dialog/captain_elowen.json:she_gives_you_room on_enter
+      read     dialog/hollis_marrow.json:greeting[7] variant
+
+  reed_writ_given
+      set      set_flag       dialog/captain_elowen.json:she_writes_it on_enter
+      read     dialog/nakka.json:gate_hail[1] variant
+
+  sera_arrested
+      set      set_flag       quests/ledger_and_lie.json:gave_it_to_reed effects
+      read     dialog/mara_hearthstone.json:greeting[3] variant
+      read     dialog/sera.json:greeting[1] variant
+
+  sera_leash_fate
+      set      set_flag       quests/sera_leash.json:cut_the_leash effects
+      set      set_flag       quests/sera_leash.json:held_the_leash effects
+      read     dialog/sera.json:greeting[3] variant
+      read     dialog/sera.json:greeting[4] variant
+
+  sera_second_book_known
+      set      set_flag       dialog/hollis_marrow.json:the_lie_shows on_enter
+      set      set_flag       dialog/sera.json:the_second_book_told on_enter
+      set      set_flag       dialog/sera.json:name_from_the_cell on_enter
+      read     dialog/hollis_marrow.json:the_loft_taunt[0] variant
+
+  sera_spared
+      set      set_flag       quests/ledger_and_lie.json:burned_the_book effects
+      set      set_flag       quests/ledger_and_lie.json:sold_it_back effects
+      read     dialog/sera.json:greeting[6] variant
+      read     companions/sera.json recruit
+
+  town_standing
+      set      set_flag       quests/quarry_pact.json:steel effects
+      set      set_flag       quests/quarry_pact.json:pact effects
+      set      set_flag       quests/quarry_pact.json:ash effects
+      read     dialog/tobin.json:greeting[0] variant
+
+  warlord_dead
+      set      set_flag       quests/quarry_pact.json:steel effects
+      read     dialog/tobin.json:greeting[1] variant
+
+  warlord_hall_lost
+      set      defeat_flag    encounters/warlord_hall.json defeat_flag
+      read     dialog/nakka.json:hail[1] variant
+
+  warlord_hall_taken
+      set      victory_flag   encounters/warlord_hall.json victory_flag
+      read     dialog/nakka.json:hail[0] variant
+
+  warren_gate_forced
+      set      victory_flag   encounters/warren_gate.json victory_flag
+      read     dialog/nakka.json:hail[4] variant
+
+  warren_truce
+      set      set_flag       quests/quarry_pact.json:pact effects
+      read     dialog/tobin.json:greeting[2] variant
+
+  watch_on_you
+      set      set_flag       dialog/captain_elowen.json:she_puts_a_watch_on_you on_enter
+      read     dialog/hollis_marrow.json:greeting[8] variant
+
+=== Companions ========================================================
+  aldric   Human Cleric     rank=back  sprite=cleric     quest=aldric_absolution
+           recruit on Golden Flagon Inn if [{"flag": "met_aldric"}]
+  ilse     Elf Ranger     rank=back  sprite=ranger     quest=ilse_deep_warren
+           recruit on Rivermark if [{"flag": "met_ilse"}]
+  kessa    Half-Orc Barbarian  rank=front sprite=barbarian  quest=kessa_debt
+           recruit on Golden Flagon Inn if [{"flag": "met_kessa"}]
+  sera     Human Rogue      rank=back  sprite=rogue      quest=sera_leash
+           recruit on Rivermark if [{"flag": "sera_spared"}]
+
+=== Findings ==========================================================
+  none — every ending is reachable and every flag is both set and read.
+
+[33mSKIPPED the four PHP harnesses — no php on PATH.[0m
+
+[1m═══ 4 passed, 0 failed ═══[0m

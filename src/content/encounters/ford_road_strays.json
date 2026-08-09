@@ -1,0 +1,13 @@
+{
+  "encounter_key": "ford_road_strays",
+  "name": "Off the Winter Field",
+  "description": "Two grey shapes working the hedge line, out of the common grazing and onto the road, hungrier than they were last month.",
+  "difficulty": "easy",
+  "is_random": true,
+  "region": "ford_road",
+  "monsters": [
+    {"monster": "wolf", "quantity": 2}
+  ],
+  "allow_flee": true,
+  "allow_parley": false
+}

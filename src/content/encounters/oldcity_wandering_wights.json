@@ -1,0 +1,16 @@
+{
+    "encounter_key": "oldcity_wandering_wights",
+    "name": "Tormented Of The Old City",
+    "description": "Three figures standing in a doorway at the wrong height, in clothes three hundred years out of fashion, waiting for the street to be the way they remember it.",
+    "difficulty": "deadly",
+    "is_random": true,
+    "region": "old_city",
+    "monsters": [
+        {
+            "monster": "wight",
+            "quantity": 2
+        }
+    ],
+    "allow_flee": true,
+    "allow_parley": false
+}

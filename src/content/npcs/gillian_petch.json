@@ -1,0 +1,13 @@
+{
+    "npc_key": "gillian_petch",
+    "name": "Gillian Petch",
+    "role": "Landing Clerk",
+    "description": "Young, pleased with the post, and genuinely good at it. She will show you the book if you ask, because nobody has ever told her not to, and because there is nothing in it.",
+    "sprite_key": "gillian_petch",
+    "image_url": "assets/images/npcs/sweeper.png",
+    "is_quest_giver": true,
+    "dialog": "gillian_petch",
+    "place": {
+        "location": "corse_landing"
+    }
+}

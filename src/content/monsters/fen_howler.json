@@ -1,0 +1,64 @@
+{
+  "resistances": [],
+  "immunities": [],
+  "vulnerabilities": [],
+  "condition_immunities": [],
+  "source": "Rivermark",
+  "monster_key": "fen_howler",
+  "name": "Fen Howler",
+  "size": "Large",
+  "type": "beast",
+  "alignment": "unaligned",
+  "armor_class": 13,
+  "hit_points": 45,
+  "hit_dice": "6d10+12",
+  "speed": "40 ft.",
+  "strength": 18,
+  "dexterity": 13,
+  "constitution": 15,
+  "intelligence": 4,
+  "wisdom": 13,
+  "charisma": 6,
+  "challenge_rating": 2,
+  "experience_points": 450,
+  "traits": {
+    "Drives the Herd": "Cattle and horses within sight of the howler will not stand. Herds bunch and face it, which is how drovers know it is there before they see it.",
+    "Keen Hearing": "Advantage on Wisdom (Perception) checks that rely on hearing."
+  },
+  "actions": [
+    {
+      "name": "Bite",
+      "type": "melee",
+      "bonus": 6,
+      "damage": "2d8+4",
+      "damage_type": "piercing"
+    },
+    {
+      "name": "Call",
+      "type": "melee",
+      "bonus": 6,
+      "damage": "1d6",
+      "damage_type": "thunder",
+      "note": "A flat carrying note rather than a howl. Anything within earshot that is not the howler's own kind must succeed on a DC 12 Wisdom save or be frightened until the end of its next turn.",
+      "save": {
+        "ability": "wis",
+        "dc": 12
+      },
+      "on_fail": {
+        "condition": "frightened",
+        "rounds": 1
+      }
+    }
+  ],
+  "saves": {
+    "con": 4
+  },
+  "rank_pref": "front",
+  "sprite_key": "howler",
+  "loot": [
+    {
+      "item": "fen_root_bundle",
+      "chance": 40
+    }
+  ]
+}

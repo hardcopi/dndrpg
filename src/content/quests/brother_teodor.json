@@ -1,0 +1,109 @@
+{
+    "quest_key": "brother_teodor",
+    "title": "Brother Teodor",
+    "description": "Infirmarer at Arden for thirty-one years, and in one of his own beds for the last two. He wrote a letter four winters ago and did not send it until he could no longer walk.",
+    "giver": "brother_teodor",
+    "on_job_board": false,
+    "required_level": 4,
+    "rewards": {
+        "xp": 500,
+        "gold": 100
+    },
+    "stages": {
+        "the_end_cell": {
+            "title": "The end cell",
+            "objective": "Get past the infirmary door to the man in the end cell.",
+            "journal": "Off the infirmary there is a door kept shut for quiet. Behind it is a bed, a stool, a shutter set open a hand's width, a cup that is filled and not drunk, and a writing-board with a half-finished sheet on it in ink that has been dry for a long time.",
+            "target": {
+                "location": "teodors_cell"
+            }
+        },
+        "the_unfinished_sheet": {
+            "title": "The unfinished sheet",
+            "objective": "Find out what he has been failing to write for four years.",
+            "journal": "He wrote one letter in the fourth winter and held it for three years and eight months before he let it go, and he can tell you the day he let it go, and the reason: he had stopped being able to walk as far as the gate, so there was no longer any version of the future in which he delivered it himself. The sheet on the board is the second letter. He has started it eleven times.",
+            "target": {
+                "location": "teodors_cell"
+            }
+        },
+        "he_said_it_again": {
+            "title": "Said out loud",
+            "journal": "He said it out loud, in the cell, with the door open, which he insisted on — the door open, so it is not a confession. What he says is not what the priory's record says and it is not what the man carrying his letter says either. Teodor gave the order at the ford. Teodor gave it, and a brother refused it, and Teodor has spent four winters trying to write down the fact that the brother was right and he cannot make the sentence come out.",
+            "resolution": "he_said_it_again",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "teodor_fate",
+                    "value": "spoke"
+                },
+                {
+                    "set_flag": "teodor_account"
+                },
+                {
+                    "set_flag": "priory_refusal_known"
+                },
+                {
+                    "xp": 200
+                },
+                {
+                    "approval": {
+                        "aldric": 16,
+                        "ilse": 8,
+                        "sera": 4
+                    }
+                }
+            ]
+        },
+        "wrote_it_down": {
+            "title": "Written",
+            "journal": "He could not hold a pen for long enough, so I held it and he talked, and it took most of an afternoon and two starts. Eleven lines, signed with his own mark, witnessed by the almoner because the prior would not come in. It is not an apology. He was very clear that it is not an apology. It is a record of an order and who gave it, and it will outlast everybody in that house.",
+            "resolution": "wrote_it_down",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "teodor_fate",
+                    "value": "written"
+                },
+                {
+                    "set_flag": "teodor_account"
+                },
+                {
+                    "set_flag": "priory_refusal_known"
+                },
+                {
+                    "give_item": "ford_record_copy",
+                    "quantity": 1
+                },
+                {
+                    "xp": 250
+                },
+                {
+                    "approval": {
+                        "aldric": 20,
+                        "sera": 10,
+                        "ilse": 8
+                    }
+                }
+            ]
+        },
+        "he_would_not": {
+            "title": "He would not",
+            "journal": "He would not. He was courteous about it for about twenty minutes and then he simply stopped answering and looked at the shutter, and the almoner came and stood in the doorway until we left. He is eighty-one and he has said what he is going to say, and he said it once, four winters ago, to one person, in a letter.",
+            "resolution": "he_would_not",
+            "terminal": true,
+            "outcome": "neutral",
+            "effects": [
+                {
+                    "set_flag": "teodor_fate",
+                    "value": "silent"
+                },
+                {
+                    "approval": {
+                        "aldric": -4,
+                        "sera": -4
+                    }
+                }
+            ]
+        }
+    }
+}

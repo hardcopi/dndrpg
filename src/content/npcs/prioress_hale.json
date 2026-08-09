@@ -1,0 +1,13 @@
+{
+    "npc_key": "prioress_hale",
+    "name": "Ottilie Hale",
+    "role": "Prior of Arden",
+    "description": "Eleven brothers, twelve beds, and a house that owns more land on paper than it can afford to walk. She runs a hospice and calls it the whole of the rule.",
+    "sprite_key": "ottilie_hale",
+    "image_url": "assets/images/npcs/cleric.png",
+    "is_quest_giver": true,
+    "dialog": "prioress_hale",
+    "place": {
+        "location": "priory_cloister"
+    }
+}

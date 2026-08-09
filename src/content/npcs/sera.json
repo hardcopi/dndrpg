@@ -1,0 +1,12 @@
+{
+    "npc_key": "sera",
+    "name": "Sera Vance",
+    "role": "Ledger-Keeper",
+    "description": "Keeps the mill's books, and has kept them alone since her father died. Neat hands, bad sleep.",
+    "sprite_key": "sera_vance",
+    "image_url": "assets/images/npcs/merchant.png",
+    "dialog": "sera",
+    "place": {
+        "location": "market_square"
+    }
+}

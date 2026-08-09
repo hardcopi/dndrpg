@@ -1,0 +1,58 @@
+{
+ "resistances": [],
+ "immunities": [],
+ "vulnerabilities": [],
+ "condition_immunities": [],
+ "source": "Rivermark Chronicles",
+ "monster_key": "warden_serjeant",
+ "name": "Serjeant of the Works",
+ "size": "Medium",
+ "type": "humanoid (human)",
+ "alignment": "lawful neutral",
+ "armor_class": 16,
+ "hit_points": 45,
+ "hit_dice": "7d8+14",
+ "speed": "30 ft.",
+ "strength": 16,
+ "dexterity": 12,
+ "constitution": 14,
+ "intelligence": 11,
+ "wisdom": 12,
+ "charisma": 12,
+ "challenge_rating": 3,
+ "experience_points": 700,
+ "traits": {
+  "Counted Out": "Names the party's numbers aloud before engaging, and does not stop naming them. Allies within earshot cannot be frightened."
+ },
+ "actions": [
+  {
+   "name": "Broadsword",
+   "type": "melee",
+   "bonus": 5,
+   "damage": "1d10+3",
+   "damage_type": "slashing"
+  },
+  {
+   "name": "Second Cut",
+   "type": "melee",
+   "bonus": 5,
+   "damage": "1d6+3",
+   "damage_type": "slashing"
+  }
+ ],
+ "saves": {
+  "str": 5,
+  "con": 4
+ },
+ "rank_pref": "front",
+ "sprite_key": "warden_serjeant",
+ "loot": [
+  {
+   "gold": "4d8"
+  },
+  {
+   "item": "oldcity_serviceable_mail",
+   "chance": 35
+  }
+ ]
+}

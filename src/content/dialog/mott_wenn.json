@@ -1,0 +1,412 @@
+{
+    "npc_key": "mott_wenn",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "quest": "tobins_consignment",
+                        "status": "active"
+                    },
+                    {
+                        "not": {
+                            "quest": "tobins_consignment",
+                            "stage": "go_and_look"
+                        }
+                    }
+                ],
+                "text": "\"Still there,\" says Mott Wenn, jerking his chin at the crates without getting off the bollard. \"Twelve hundredweight of salt going nobody's. Fourth day. I have stopped walking round it and started walking over it.\"",
+                "choices": [
+                    {
+                        "label": "Show me the quay book again.",
+                        "next": "the_quay_book"
+                    },
+                    {
+                        "label": "Nothing today.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "tobins_consignment",
+                        "stage": "go_and_look"
+                    }
+                ],
+                "text": "The crates are stacked on the landing above the tide-line, four of them, coopered properly and lashed under a tarpaulin against the weather. A big man in his forties is sitting on a bollard beside them eating something out of a cloth and watching the river work.\n\n\"Brassscale's salt,\" he says, without being asked. \"Or it says Brassscale on the paper. Mott Wenn. I carried it up. I carry everything up.\"",
+                "choices": [
+                    {
+                        "label": "Is there paper with it?",
+                        "next": "the_quay_book"
+                    },
+                    {
+                        "label": "Who put it on the boat?",
+                        "next": "who_put_it_on"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "root_and_ash",
+                        "status": "active"
+                    },
+                    {
+                        "flag": "fenroot_offered"
+                    }
+                ],
+                "text": "\"They are still down there,\" Mott says, tipping his head at the water. \"Boat has three days of business at the low landing and then it goes back. Hundred gold for the root and they will not haggle and they will not come up the steps.\"",
+                "choices": [
+                    {
+                        "label": "A hundred gold. Done.",
+                        "conditions": [
+                            {
+                                "gold_at_least": 100
+                            }
+                        ],
+                        "next": "buys_the_root"
+                    },
+                    {
+                        "label": "Not today.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "root_and_ash",
+                        "status": "active"
+                    }
+                ],
+                "text": "\"Fen goods.\" Mott Wenn says it the way you say a word you have been asked not to say. \"There is a boat comes up out of the low water four, five times a year. Reeds, wildfowl, eel skins, and root. They tie at the bottom step and they do not come up it, and nobody down there has ever set foot in this town in nine years of me carrying for them.\"",
+                "choices": [
+                    {
+                        "label": "Can they get fen-root?",
+                        "next": "the_root"
+                    },
+                    {
+                        "label": "Why won't they come up?",
+                        "next": "why_not_up"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "night_soil",
+                        "status": "active"
+                    }
+                ],
+                "text": "\"Nightman you want is Sib Marrell,\" says Mott, pointing with the cloth. \"Sitting on the bottom step where the smell blows off him. Been sat there most of a week, which for Sib is the same as a man setting himself on fire in the market square.\"",
+                "choices": [
+                    {
+                        "label": "Thanks.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "tobin_named"
+                    }
+                ],
+                "text": "\"There has been another,\" says Mott Wenn, and jerks his chin at three crates under a tarpaulin. \"Lime this time. Same copperplate, same name, and this one has *Brassscale* chalked on the end of the crate.\"\n\nHe turns his hand over.\n\n\"Which nobody did on the last lot,\" he says. \"He signed the book once and now his name is on the outside of the boxes. I do not know what that is. I only know it was not there before.\"",
+                "choices": [
+                    {
+                        "label": "Has anyone come for it?",
+                        "next": "nobody_yet"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "osric_told"
+                    }
+                ],
+                "text": "\"The boat came back up on the Friday,\" says Mott Wenn, \"and the old woman in it asked after the apothecary by name, which she has never done in nine years.\"\n\nHe scratches his neck.\n\n\"I said he was well. She said good, and sat back down.\" He looks at the water. \"That is the entire conversation and I have thought about it about forty times.\"",
+                "choices": [
+                    {
+                        "label": "Did she give a name?",
+                        "next": "no_name_given"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "consignment_fate",
+                        "equals": "refused"
+                    }
+                ],
+                "text": "\"Two of them, a handcart, and about nine minutes,\" Mott says. \"No paper, no argument, no hurry. Went downriver with it.\" He turns his hand over. \"I have thought about it every day since and the part that gets me is that they knew which crates. They did not look. They came up the stair and went to it.\"",
+                "choices": [
+                    {
+                        "label": "You could have stopped them.",
+                        "next": "could_have_stopped"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "A big man is sitting on a bollard at the top of the landing steps with a cloth on his knee, watching the river do the work.\n\n\"Mott Wenn,\" he says. \"If it comes off a boat, I carry it up. If it goes on a boat, I carry it down. That is the whole of it and it has kept me nine years and my father twenty-six.\"",
+                "choices": [
+                    {
+                        "label": "What comes up this stair?",
+                        "next": "what_comes_up"
+                    },
+                    {
+                        "label": "Nothing today.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "nobody_yet": [
+            {
+                "text": "\"Not yet,\" says Mott. \"Fourth day. They came on the fifth last time.\" He settles on the bollard. \"I shall be here. I am always here. That is not vigilance, that is the job, and I would rather you did not make it into vigilance because I have got a wife who would hear about it.\"",
+                "choices": [
+                    {
+                        "label": "Fair enough.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "no_name_given": [
+            {
+                "text": "\"Never has,\" says Mott Wenn. \"Nine years and I have carried up their goods and taken down their money and I do not know one name off that boat.\"\n\nHe shrugs.\n\n\"Mind, they know mine,\" he says. \"They have always known mine. I had put that down to somebody telling them, and it has only just now occurred to me to wonder who.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "what_comes_up": [
+            {
+                "text": "\"Salt, lime, lamp oil, iron, glass, and paper — a very great deal of paper, in wrapped bundles, going up to the counting house.\" Mott chews. \"Down: grain, stone, hides, and men who have decided they have had enough of it here.\" He nods at the water. \"More paper up than there used to be. That is not a complaint. Paper is the best carry there is. It never breaks and nobody blames you for the weather.\"",
+                "choices": [
+                    {
+                        "label": "Do you read any of it?",
+                        "next": "cannot_read"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "cannot_read": [
+            {
+                "text": "\"Not a word of it,\" says Mott Wenn cheerfully. \"Never learned and never wanted. But I have carried every crate that has come off a boat onto this landing for nine years and I can tell you what was in each of them, whose name was chalked on the end, and what day it came.\" He taps his temple with two fingers. \"Reading is for people who are going to forget.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "who_put_it_on": [
+            {
+                "text": "\"Greyhythe. Carriage paid there, which is the odd part — a man who is playing a trick on you does not pay the carriage first.\" Mott shrugs. \"Bargeman had it on the manifest and off it in ten minutes and never asked me a thing about it, and bargemen ask about everything, because it is a dull job.\"",
+                "choices": [
+                    {
+                        "label": "Is there paper with it?",
+                        "next": "the_quay_book"
+                    }
+                ]
+            }
+        ],
+        "the_quay_book": [
+            {
+                "text": "The bill of lading is in the tarpaulin, in a clerk's copperplate so even it could be printed. Twelve hundredweight of coarse salt, carriage paid at Greyhythe, invoiced to the consignee — and the consignee is a name.\n\nMott Wenn has never heard it, and Mott Wenn has carried up everything that has come off a boat here for nine years.\n\nThe quay book is worse. The same name is on eleven other bills going back to spring: salt, lime, lamp oil, rope, two hundred feet of pine board. Every one of them landed. Not one of them signed for by anybody of that name.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "tobins_consignment",
+                            "stage": "the_quay_book"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera goes back four pages and then eight. \"Eleven consignments and a name nobody has met. That is not a mistake, that is an address.\""
+                    },
+                    {
+                        "companion": "kessa",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "companion": "sera",
+                                    "status": "active"
+                                }
+                            }
+                        ],
+                        "text": "Kessa: \"Lime, oil, rope and boards.\" She counts them off. \"That's not a shop. That's a job.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Where did the other eleven go?",
+                        "next": "where_they_went"
+                    },
+                    {
+                        "label": "I'll take this back to Tobin.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "where_they_went": [
+            {
+                "text": "\"Collected,\" says Mott. \"Handcart, two men, after dark, no paper. Same two most times. Ordinary sort — one of them has a bad shoulder and carries left.\" He works his jaw. \"I never stopped them because nobody ever told me to stop anybody, and because a man who comes for a thing at night with a cart and no hurry is a man who is entitled to it. You can tell. Thieves hurry.\"",
+                "choices": [
+                    {
+                        "label": "Where do they take it?",
+                        "next": "down_the_stair"
+                    },
+                    {
+                        "label": "I'll take this back to Tobin.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "down_the_stair": [
+            {
+                "text": "\"Down.\" Mott points at the water with his chin. \"Not on a boat. Along the quay and out of the light, and the next time I see that cart it is coming back empty about an hour after, and it is not wet, and there is nowhere along that quay you can put twelve hundredweight of anything in an hour.\"\n\nHe finishes the last of whatever was in the cloth.\n\n\"I have stopped thinking about it,\" he says. \"I want you to know I got quite a long way first.\"",
+                "choices": [
+                    {
+                        "label": "I'll take this back to Tobin.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "could_have_stopped": [
+            {
+                "text": "\"With what,\" says Mott, without heat. \"There is one of me and this stair is two hundred feet from the nearest person who could shout for the watch, and the two of them were not doing anything.\" He looks at the river. \"And if I am honest with you, which I would rather be, I did not want to be the man who found out what happens next.\"",
+                "choices": [
+                    {
+                        "label": "Fair enough.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_root": [
+            {
+                "text": "\"They can. They will not like being asked and they will charge you like a wounded bear for it.\" Mott scratches his neck. \"Fen-root is not cut, it is dug, and it is dug in the drowned ground, and the men who dig it have to stand in that to do it. Four times the price and no haggling — that is not greed. That is the price of standing there.\"\n\nHe looks at you.\n\n\"Hundred gold. And they will not come up the steps, so you go down, and you go down alone, and you do not ask them anything.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "root_and_ash",
+                            "stage": "the_quay_dealer"
+                        }
+                    },
+                    {
+                        "set_flag": "fenroot_offered"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "A hundred gold. Done.",
+                        "conditions": [
+                            {
+                                "gold_at_least": 100
+                            }
+                        ],
+                        "next": "buys_the_root"
+                    },
+                    {
+                        "label": "Why won't they come up?",
+                        "next": "why_not_up"
+                    },
+                    {
+                        "label": "I'll come back.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "why_not_up": [
+            {
+                "text": "\"Ask the apothecary,\" says Mott Wenn, and then looks as though he wishes he had not. \"That is not me being clever. That is me having carried a crate up to Root and Ash nine years running and having watched a grown man not come to his own door on the day the fen boat is in.\"",
+                "choices": [
+                    {
+                        "label": "Can they get fen-root?",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "flag": "fenroot_offered"
+                                }
+                            }
+                        ],
+                        "next": "the_root"
+                    },
+                    {
+                        "label": "A hundred gold. Done.",
+                        "conditions": [
+                            {
+                                "flag": "fenroot_offered"
+                            },
+                            {
+                                "gold_at_least": 100
+                            }
+                        ],
+                        "next": "buys_the_root"
+                    },
+                    {
+                        "label": "I'll come back.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "buys_the_root": [
+            {
+                "text": "You go down forty steps to where the water is and they do not get out of the boat. A woman of about sixty takes the coin, counts it under a cloth, and hands up a hand of black root split and dried over smoke, tied with grass. She does not say anything at all. Nobody in the boat says anything at all. There are four of them and every one of them is looking at the town over your shoulder the whole time, at the roofs, the way you look at weather.\n\nOsric Fen puts it straight into the mortar and gives you thirty gold back out of the drawer and is ashamed that it is not the hundred.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "root_and_ash",
+                            "stage": "bought_it_up"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse, at the top of the steps: \"They were counting the roofs. I have done that. You do it when you are working out whether a place has got bigger since the last time.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Go back up.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

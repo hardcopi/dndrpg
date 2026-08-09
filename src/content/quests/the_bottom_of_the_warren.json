@@ -1,0 +1,110 @@
+{
+    "quest_key": "the_bottom_of_the_warren",
+    "title": "The Bottom of the Warren",
+    "description": "The lowest gallery the goblins still hold has a hole in it thirty feet across, and the edges of the hole are cut square. Nothing falls square.",
+    "giver": "nakka",
+    "on_job_board": false,
+    "required_level": 4,
+    "rewards": {
+        "xp": 500,
+        "gold": 150
+    },
+    "stages": {
+        "the_hollow_gallery": {
+            "title": "The hollow gallery",
+            "objective": "Get down to the lowest gallery the warren still holds.",
+            "journal": "Below the shaft there is one more level and the goblins are propping it. The floor rings hollow for the whole width of the gallery, which means there is a void under a floor that was cut solid.",
+            "target": {
+                "location": "broken_floor"
+            }
+        },
+        "the_edge_is_cut": {
+            "title": "The edge is cut",
+            "objective": "Look at the edge of the hole.",
+            "journal": "Thirty feet across, and every foot of the rim is dressed. Stone that falls breaks along its bedding and leaves a shelf. This does not have a shelf. Somebody took this floor out from underneath, working upward, and stopped when they came through.",
+            "target": {
+                "location": "broken_floor"
+            }
+        },
+        "sounded_the_floor": {
+            "title": "Sounded",
+            "journal": "We went down on the goblins' rope as far as the first landing and there is a landing, which is the part that has stayed with me. Not a cave. A landing, cut square, with a stair going down off it and the stair swept. There is air moving up it and the air is warm and it smells of lamp-oil and rock dust. We came back up. The rope is still there.",
+            "resolution": "sounded_the_floor",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "warren_floor_fate",
+                    "value": "sounded"
+                },
+                {
+                    "set_flag": "deepworks_found"
+                },
+                {
+                    "set_flag": "deep_known"
+                },
+                {
+                    "xp": 200
+                },
+                {
+                    "approval": {
+                        "ilse": 16,
+                        "sera": 8,
+                        "kessa": 6,
+                        "aldric": -4
+                    }
+                }
+            ]
+        },
+        "shored_it": {
+            "title": "Shored",
+            "journal": "We spent two days on it with the warren's own timber and a great deal of advice from goblins who have been mining longer than Rivermark has been a town. The gallery will hold now, which buys them the level, which buys them the winter. It also means nothing else comes up through it, and the rope is on our side of the hole.",
+            "resolution": "shored_it",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "warren_floor_fate",
+                    "value": "shored"
+                },
+                {
+                    "set_flag": "deepworks_found"
+                },
+                {
+                    "set_flag": "broken_floor_shored"
+                },
+                {
+                    "xp": 150
+                },
+                {
+                    "approval": {
+                        "ilse": 18,
+                        "aldric": 12,
+                        "kessa": 8
+                    }
+                }
+            ]
+        },
+        "let_it_go": {
+            "title": "Left propped",
+            "journal": "Eleven props holding up a floor with a hole in it, and it is not our floor. We came back up and told Nakka what we had seen from the edge, which was: a great deal of nothing, moving air, and an edge cut square. She said thank you, which she does not often do, and went back to counting days on a slate.",
+            "resolution": "let_it_go",
+            "terminal": true,
+            "outcome": "neutral",
+            "effects": [
+                {
+                    "set_flag": "warren_floor_fate",
+                    "value": "abandoned"
+                },
+                {
+                    "set_flag": "deepworks_found"
+                },
+                {
+                    "approval": {
+                        "kessa": 2,
+                        "ilse": -4,
+                        "sera": -6
+                    }
+                }
+            ]
+        }
+    }
+}

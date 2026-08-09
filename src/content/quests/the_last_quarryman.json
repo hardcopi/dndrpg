@@ -1,0 +1,99 @@
+{
+    "quest_key": "the_last_quarryman",
+    "title": "The Last Quarryman",
+    "description": "Nineteen men were on the east quarry the day it fell. Eighteen of them were on the rim. Dorn Ackley was not, and he built his house on the spoil heap afterwards, facing north.",
+    "giver": "dorn_ackley",
+    "on_job_board": true,
+    "required_level": 3,
+    "rewards": {
+        "xp": 400,
+        "gold": 100
+    },
+    "stages": {
+        "the_cottage_on_the_spoil": {
+            "title": "The cottage on the spoil",
+            "objective": "Find the man who was below the fall and get him to talk about it.",
+            "journal": "There is a cottage on the spoil heap above the old quarry, built out of offcuts by somebody who knew how to lay stone. The door faces north. The quarry is south. He has not turned round in eleven years.",
+            "target": {
+                "location": "quarrymans_hut"
+            }
+        },
+        "what_he_heard": {
+            "title": "What he heard",
+            "objective": "Hear his account of the day it fell.",
+            "journal": "Ackley says the fall did not start at the face. He was below it, in the sump gallery, and it came up at him from underneath — the floor first, then the face, in that order, with a count of about four between them. Every account the town has says the face went and took the floor with it. He has told nobody, because eighteen men on the rim all saw the face go and he was the only one who was not looking at it.",
+            "target": {
+                "location": "quarrymans_hut"
+            }
+        },
+        "he_went_down": {
+            "title": "He went back",
+            "journal": "He came with us as far as the old adit and stood in the entry and told us where the water used to run and where it runs now, and the difference is thirty feet of new fall in the wrong direction. Then he sat down on the spoil and could not get up for a while, and we walked him home, and he asked us not to tell anyone he had gone.",
+            "resolution": "he_went_down",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "quarryman_fate",
+                    "value": "went"
+                },
+                {
+                    "set_flag": "quarry_fell_upward"
+                },
+                {
+                    "xp": 150
+                },
+                {
+                    "approval": {
+                        "ilse": 10,
+                        "aldric": 12,
+                        "kessa": 4
+                    }
+                }
+            ]
+        },
+        "he_told_it_sitting": {
+            "title": "Told from the bench",
+            "journal": "He told it from the bench outside his own door, facing north, in about eleven minutes, and did not stop once. I have the account and I do not have the place. He would not go and I did not push him, and I think that was the right call and I am not certain.",
+            "resolution": "he_told_it_sitting",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "quarryman_fate",
+                    "value": "told"
+                },
+                {
+                    "set_flag": "quarry_fell_upward"
+                },
+                {
+                    "approval": {
+                        "aldric": 8,
+                        "ilse": 6,
+                        "sera": 4,
+                        "kessa": -2
+                    }
+                }
+            ]
+        },
+        "left_him_alone": {
+            "title": "Left on the spoil",
+            "journal": "He asked us to go and we went. Eleven years is a long time to sit facing the wrong way and he has got good at it, and I decided that was his to keep.",
+            "resolution": "left_him_alone",
+            "terminal": true,
+            "outcome": "neutral",
+            "effects": [
+                {
+                    "set_flag": "quarryman_fate",
+                    "value": "left"
+                },
+                {
+                    "approval": {
+                        "aldric": 6,
+                        "kessa": 4,
+                        "ilse": -2,
+                        "sera": -4
+                    }
+                }
+            ]
+        }
+    }
+}

@@ -1,0 +1,15 @@
+{
+  "encounter_key": "stilt_camp_stand",
+  "name": "The Planks Come Down",
+  "description": "Six platforms, seven people, and every plank walk between them pulled up in about four seconds. They have practised this against the watch and it works just as well against you.",
+  "difficulty": "hard",
+  "monsters": [
+    {"monster": "bandit", "quantity": 4, "rank": "front"},
+    {"monster": "kobold", "quantity": 2, "rank": "back"}
+  ],
+  "allow_flee": true,
+  "allow_parley": true,
+  "parley_node": "nesh_gray:stand_down",
+  "victory_flag": "stilt_camp_taken",
+  "defeat_flag": "stilt_camp_lost"
+}

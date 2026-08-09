@@ -1,0 +1,13 @@
+{
+  "encounter_key": "fen_crawl",
+  "name": "Something Under the Withies",
+  "description": "The water on the left of the causeway changes shape twice and then stops pretending.",
+  "difficulty": "medium",
+  "is_random": true,
+  "region": "hollow_fen",
+  "monsters": [
+    {"monster": "bog_crawler", "quantity": 2}
+  ],
+  "allow_flee": true,
+  "allow_parley": false
+}

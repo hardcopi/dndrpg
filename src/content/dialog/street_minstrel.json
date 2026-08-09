@@ -1,0 +1,17 @@
+{
+    "npc_key": "street_minstrel",
+    "start": "hail",
+    "nodes": {
+        "hail": [
+            {
+                "text": "Requests taken, except the one about the goblin king. Wrote it, regret it.",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

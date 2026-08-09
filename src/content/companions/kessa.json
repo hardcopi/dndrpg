@@ -1,0 +1,46 @@
+{
+  "companion_key": "kessa",
+  "name": "Kessa Dunmar",
+  "title": "the Debt-Bound",
+  "description": "Half-orc mercenary. Owes money to people who do not forget, and says so before you ask.",
+  "race": "Half-Orc",
+  "class": "Barbarian",
+  "background": "Soldier",
+  "alignment": "Chaotic Neutral",
+  "level": 1,
+  "abilities": {
+    "strength": 16,
+    "dexterity": 13,
+    "constitution": 15,
+    "intelligence": 9,
+    "wisdom": 11,
+    "charisma": 12
+  },
+  "sprite_key": "kessa",
+  "combat_rank": "front",
+  "npc_key": "kessa",
+  "personal_quest": "kessa_debt",
+  "recruit": {
+    "location": "flagon_common_room",
+    "conditions": [
+      {
+        "flag": "met_kessa"
+      }
+    ]
+  },
+  "approval": {
+    "leave_at": -40,
+    "hostile_at": -70,
+    "romance_at": 30
+  },
+  "romanceable": true,
+  "gear": [
+    "greataxe",
+    "leather_armor",
+    "potion_healing"
+  ],
+  "spells": [],
+  "feats": [
+    "savage_attacker"
+  ]
+}

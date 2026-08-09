@@ -1,0 +1,18 @@
+{
+    "encounter_key": "oldcity_web_gate",
+    "name": "The Web Gate",
+    "description": "Four of them come down the sheets at once, from four different recesses, in complete silence.",
+    "difficulty": "hard",
+    "ambush": true,
+    "monsters": [
+        {
+            "monster": "giant_spider",
+            "quantity": 3
+        }
+    ],
+    "allow_flee": true,
+    "allow_parley": false,
+    "place": {
+        "location": "oldcity_spider_ante"
+    }
+}

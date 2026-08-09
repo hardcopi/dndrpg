@@ -1,0 +1,16 @@
+{
+  "item_key": "antitoxin",
+  "name": "Antitoxin",
+  "description": "A cloudy phial of crushed charcoal and fen herbs. Drunk before a fight turns bad, it steadies the blood against poison for a while.",
+  "item_type": "misc",
+  "rarity": "common",
+  "weight": 0.1,
+  "value_gp": 40,
+  "properties": {
+    "use_effect": {
+      "boon": { "save_advantage_vs": "poison" },
+      "rounds": 10
+    }
+  },
+  "icon": "potion"
+}

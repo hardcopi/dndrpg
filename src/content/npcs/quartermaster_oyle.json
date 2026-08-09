@@ -1,0 +1,73 @@
+{
+    "npc_key": "quartermaster_oyle",
+    "name": "Quartermaster Oyle",
+    "role": "Watch Quartermaster",
+    "description": "Runs the stores out of a locked chest behind the braziers and keeps a second ledger for what the Watch are not supposed to be selling. Has never once been down past the torches and says so cheerfully.",
+    "sprite_key": "quartermaster_oyle",
+    "image_url": "assets/images/npcs/merchant.png",
+    "is_merchant": true,
+    "dialog": "quartermaster_oyle",
+    "shop": [
+        {
+            "item": "potion_healing",
+            "stock": 4,
+            "markup_pct": 130
+        },
+        {
+            "item": "thieves_tools",
+            "stock": 1,
+            "markup_pct": 120
+        },
+        {
+            "item": "deepworks_lamp",
+            "stock": 2,
+            "markup_pct": 115
+        },
+        {
+            "item": "leather_armor",
+            "stock": 1
+        },
+        {
+            "item": "shortsword",
+            "stock": 2
+        },
+        {
+            "item": "mace",
+            "stock": 1
+        },
+        {
+            "item": "shortbow",
+            "stock": 1,
+            "markup_pct": 110
+        },
+        {
+            "item": "light_crossbow",
+            "stock": 1
+        },
+        {
+            "item": "sling",
+            "stock": 2
+        },
+        {
+            "item": "dart",
+            "stock": 6
+        },
+        {
+            "item": "quarterstaff",
+            "stock": 2
+        },
+        {
+            "item": "antitoxin",
+            "stock": 2,
+            "markup_pct": 115
+        },
+        {
+            "item": "oil_of_embers",
+            "stock": 2,
+            "markup_pct": 115
+        }
+    ],
+    "place": {
+        "location": "oldcity_guardhouse"
+    }
+}

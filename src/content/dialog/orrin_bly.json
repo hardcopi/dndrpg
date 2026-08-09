@@ -1,0 +1,314 @@
+{
+    "npc_key": "orrin_bly",
+    "start": "hail",
+    "nodes": {
+        "hail": [
+            {
+                "conditions": [
+                    {
+                        "quest": "uv_bottom_of_the_stair",
+                        "status": "active"
+                    },
+                    {
+                        "flag": "uv_deepest",
+                        "at_least": 5
+                    }
+                ],
+                "text": "Bly has the slate on his knees and the chalk in his fist and he does not write anything, which for him is the same as standing up.\n\n\"How deep,\" he says.",
+                "choices": [
+                    {
+                        "label": "Five. And there is no six.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "uv_bottom_of_the_stair",
+                                    "stage": "told_him"
+                                }
+                            }
+                        ],
+                        "next": "the_five"
+                    },
+                    {
+                        "label": "Not yet.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "uv_bottom_of_the_stair",
+                        "resolution": "told_him"
+                    }
+                ],
+                "once": true,
+                "text": "Bly is not writing. The slate is face-down on the block beside him and he is sitting with his hands on his knees looking at the Mouth, which is a thing he has spent nine years next to and, as far as anybody here has seen, never once simply looked at.\n\n\"Five,\" he says, when he notices you. \"I have had a night with it.\"\n\n\"It is a hole in a hillside with five floors in it. That is a smaller thing than I have been sitting beside. I do not yet know whether I am glad.\"",
+                "choices": [
+                    {
+                        "label": "You could go down it now.",
+                        "next": "could_go_down"
+                    },
+                    {
+                        "label": "Leave him with it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "uv_where_they_were_left",
+                        "resolution": "told_her"
+                    }
+                ],
+                "once": true,
+                "text": "Bly writes you down, and then does not go back to the slate.\n\n\"Dessa Kell came down off the heap,\" he says. \"First time in eleven weeks she's come down before dark. Went straight past the fire and into the long tent and asked Marda for the bunk.\"\n\nHe looks at the Mouth rather than at you.\n\n\"I've had eleven weeks of her sat up there where I could see her, and I never once went up. I want you to know that I know that.\"",
+                "choices": [
+                    {
+                        "label": "You could go up now.",
+                        "next": "could_go_up"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "uv_where_they_were_left",
+                        "resolution": "let_her_believe"
+                    }
+                ],
+                "once": true,
+                "text": "Bly writes you down and rules his line and then stops with the chalk on it.\n\n\"Dessa Kell's gone down to the road,\" he says. \"Told the fire she'd had her answer. Fourth gallery, marker at the head of it, past it and quick.\"\n\nHe puts the chalk down.\n\n\"Nobody marks anything down there. I have four hundred and some entries on these slates and not one of them mentions a marker.\" A pause. \"But she's gone down to the road, and she was not going to do that on anything I had.\"",
+                "choices": [
+                    {
+                        "label": "Say nothing.",
+                        "next": "says_nothing_back"
+                    },
+                    {
+                        "label": "It was what she needed.",
+                        "next": "what_she_needed"
+                    }
+                ]
+            },
+            {
+                "once": true,
+                "text": "There is a man sitting on a cut block a little back from the stair head with a slate across his knees, out of the way of anybody going in or out. He has been there long enough that the block is worn where he sits.\n\nHe writes down four of you, and the hour, and then looks up.\n\n\"Not stopping you,\" he says. \"Not authorised to stop anybody. I only write it down.\"",
+                "choices": [
+                    {
+                        "label": "Who reads it?",
+                        "next": "who_reads"
+                    },
+                    {
+                        "label": "Why bother, then?",
+                        "next": "why_bother"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "Bly turns the slate over and writes the hour and the number of you, the way he does every time.\n\n\"On you go,\" he says.",
+                "choices": [
+                    {
+                        "label": "How deep does it go?",
+                        "conditions": [
+                            {
+                                "level_at_least": 5
+                            },
+                            {
+                                "not": {
+                                    "quest": "uv_bottom_of_the_stair",
+                                    "status": "active"
+                                }
+                            },
+                            {
+                                "not": {
+                                    "quest": "uv_bottom_of_the_stair",
+                                    "status": "completed"
+                                }
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "start_quest": "uv_bottom_of_the_stair"
+                            }
+                        ],
+                        "next": "how_deep",
+                        "reoffer": true
+                    },
+                    {
+                        "label": "What's the deepest on your slate?",
+                        "next": "the_four"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "could_go_down": [
+            {
+                "text": "\"I could.\" He picks the slate up and turns it the right way round without opening it. \"I have been able to the whole time. It was never the winch and it was never my knee.\"\n\n\"What it was, was that I did not know how far it went, and a man will not start a thing he cannot see the end of. I have had that excuse nine years and you took it off me on a Tuesday.\"\n\nBly rules a line, out of habit, under nothing.\n\n\"Somebody has to write it down, mind. Somebody has to be up here writing it down.\"",
+                "choices": [
+                    {
+                        "label": "Somebody does.",
+                        "end": true
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "could_go_up": [
+            {
+                "text": "\"There's nobody up there now,\" says Bly, which is an answer to a different question and both of you know it.\n\nHe squares the slate on his knees.\n\n\"I write them down so that somebody has. That is what I decided it was for, and I have not moved off this block in nine years on the strength of it, and I am not certain today that it was enough of a thing to decide.\"",
+                "choices": [
+                    {
+                        "label": "It was written down. That part lasts.",
+                        "end": true
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "says_nothing_back": [
+            {
+                "text": "He lets it sit, and then picks the chalk back up.\n\n\"No,\" says Bly. \"No, I don't suppose there's anything to say to it.\"\n\nHe writes the hour in the column, the way he does.\n\n\"I'll not put it on the slate. What she was told. That's between whoever told her and the slate isn't for that.\"",
+                "choices": [
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "what_she_needed": [
+            {
+                "text": "\"Maybe.\" Bly turns the slate over and looks at the four, which is still a four. \"I've thought about it. Eleven weeks I've thought about going up there with something that would get her off the heap, and I never did, and the reason I never did is that I'd have had to make it up.\"\n\n\"So I'm the last man here who gets to say a word about it. I only wanted you to know I noticed.\"",
+                "choices": [
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "who_reads": [
+            {
+                "text": "\"Nobody.\" He says it without any weight on it, as a fact he settled with himself years ago. \"There's no company here, no Crown officer, no guild. There is a hole and there are people who go into it.\"\n\n\"So there is nobody to send the slate to. It just gets kept.\"",
+                "choices": [
+                    {
+                        "label": "Then why keep it?",
+                        "next": "why_bother"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "why_bother": [
+            {
+                "text": "\"Because I was in the fourth crew that went down and the second that came up, and for eleven days after that I could not have told you the name of one of the men I went down with.\" Bly rules his line. \"Not one. I knew their faces and I could not get the names.\"\n\n\"So now they are written down before anybody goes anywhere. That is the whole of my reasoning and I have never needed a better one.\"",
+                "choices": [
+                    {
+                        "label": "What's the deepest on it?",
+                        "next": "the_four"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_four": [
+            {
+                "text": "He does not have to look.\n\n\"Four. Entered six years ago by a woman named Sarrow, who came up on her own and sat exactly where you are standing for about an hour before she said the number.\"\n\n\"She did not go down again. She did not say why not, and I did not ask, and I have had six years to decide whether that was manners or cowardice.\"",
+                "choices": [
+                    {
+                        "label": "Has nobody beaten it?",
+                        "conditions": [
+                            {
+                                "level_at_least": 5
+                            },
+                            {
+                                "not": {
+                                    "quest": "uv_bottom_of_the_stair",
+                                    "status": "active"
+                                }
+                            },
+                            {
+                                "not": {
+                                    "quest": "uv_bottom_of_the_stair",
+                                    "status": "completed"
+                                }
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "start_quest": "uv_bottom_of_the_stair"
+                            }
+                        ],
+                        "next": "how_deep",
+                        "reoffer": true
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "how_deep": [
+            {
+                "text": "\"That is the column I have left room under for nine years,\" Bly says. \"Deepest is a four. I have room ruled for a five, a six and a seven, because when I ruled it I did not know how many I would want.\"\n\nHe holds the slate out sideways so you can see the empty rows.\n\n\"I would like to know whether there is a bottom to it. Not what is at the bottom — I have heard enough of what people think is at the bottom. Whether it stops. A hole that stops is a hole. A hole that keeps offering is something else and I would like to know which I have been sitting next to.\"",
+                "choices": [
+                    {
+                        "label": "We'll find the bottom of it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_five": [
+            {
+                "text": "Bly rules the line under the four with the edge of the slate, which takes him longer than it needs to, and writes the five beneath it.\n\n\"And below the fifth,\" he says, \"it does not offer.\"\n\n\"No. Right.\"\n\nHe sits with the slate on his knees and does not write anything else for a while. The cold comes up the stair the way it always does.\n\n\"Then it is a hole,\" says Orrin Bly. \"Nine years. It is a hole, and it has a bottom, and everybody who went into it went into a thing that had a bottom the whole time.\"",
+                "choices": [
+                    {
+                        "label": "Is that better or worse?",
+                        "next": "better_or_worse"
+                    },
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "better_or_worse": [
+            {
+                "text": "\"Better,\" he says, straight away, and then sits with it a moment longer. \"Better. A thing with a bottom is a thing somebody could have got to. Sarrow was one floor off. Kell's brother might have been standing on it.\"\n\nHe wipes the chalk dust off the slate with his sleeve, carefully, around the writing.\n\n\"I'll want the rest of it. What the fifth was like, and what was on it. But not tonight, if it's all the same. Tonight I have a five on my slate and I would like to look at it.\"",
+                "choices": [
+                    {
+                        "label": "Goodnight, Bly.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

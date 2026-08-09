@@ -1,0 +1,14 @@
+{
+  "encounter_key": "sump_drain_rats",
+  "name": "The Rats' Road",
+  "description": "The gap behind the Flagon's north wall is a road, and the traffic on it does not care for the lamp.",
+  "difficulty": "easy",
+  "monsters": [
+    { "monster": "giant_rat", "quantity": 4 }
+  ],
+  "allow_flee": true,
+  "allow_parley": false,
+  "victory_flag": "sump_rats_beaten",
+  "ambush": true,
+  "place": { "location": "sump_drain" }
+}

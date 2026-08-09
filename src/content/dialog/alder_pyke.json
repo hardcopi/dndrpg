@@ -1,0 +1,974 @@
+{
+    "npc_key": "alder_pyke",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "flag": "survey_fate",
+                        "equals": "warned"
+                    }
+                ],
+                "text": "Pyke is sitting on the granary steps with the chain coiled beside him and nothing to do with it. \"Forty-one people,\" he says. \"I counted. I count things.\" He turns the plumb-bob over in his fingers. \"Nobody's sent word from downriver. I keep expecting a letter and there isn't one, and I've worked out why — there's nothing to say. I stopped being paid and that's the whole of the punishment there is.\"",
+                "choices": [
+                    {
+                        "label": "You did the right thing.",
+                        "next": "no_such_thing"
+                    },
+                    {
+                        "label": "I'll find you work.",
+                        "next": "no_such_thing"
+                    },
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "survey_fate",
+                        "equals": "burned"
+                    }
+                ],
+                "once": true,
+                "text": "\"Started again,\" Pyke says, dragging the chain out straight along the lane. \"Whole valley. From the ford.\" He is not upset. He is a man with three years of guaranteed work. \"Somebody down there lost a great deal of paper. I'm sorry for whoever's answering for it, but I'm not going to pretend I'm sorry about the rest.\"",
+                "choices": [
+                    {
+                        "label": "Do they know who did it?",
+                        "next": "they_are_asking"
+                    },
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "survey_fate",
+                        "equals": "sold"
+                    }
+                ],
+                "once": true,
+                "text": "Pyke looks at you the way a man looks at somebody who has moved up a floor. \"Coyle's had word you're on the books,\" he says. \"Not from me. It came down with the wages.\" He winds the chain. \"I'll tell you what I'd tell anybody, which is that they pay on the day and they've never once short-changed me. Whatever else. They pay on the day.\"",
+                "choices": [
+                    {
+                        "label": "That's all it takes, is it.",
+                        "next": "no_such_thing"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_survey",
+                        "stage": "in_hand"
+                    }
+                ],
+                "text": "Pyke sees what is under your arm before he sees you. He does not say anything for a moment, and then he says, \"That's not a working copy. That's the fair one. That's got the totals in.\" He wipes his hands on his coat, twice, which is not something you have seen him do. \"I've dragged chain for about a third of that. I've never seen the sheet.\"",
+                "choices": [
+                    {
+                        "label": "Read it to me. All of it.",
+                        "next": "he_reads_it"
+                    },
+                    {
+                        "label": "Nothing. I wanted somebody to see me holding it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_polite_man",
+                        "status": "completed"
+                    }
+                ],
+                "text": "\"You went, then,\" Pyke says, pleased in a small way. \"How was he? He's always been very decent with me. Asked after my knee. He'd have no reason to know about my knee.\"",
+                "choices": [
+                    {
+                        "label": "He answered everything I asked him.",
+                        "next": "that_is_him"
+                    },
+                    {
+                        "label": "How many marks have you painted for him, Pyke?",
+                        "next": "how_many"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "paper_town_fate",
+                        "equals": "followed"
+                    }
+                ],
+                "text": "\"Corse,\" Pyke says, when you say it. \"Ludo Corse. That'll be him. Never met a man less worth the trouble of finding out about.\" He straightens the chain over his shoulder. \"He's been up twice in three years. Perfectly civil both times. Paid on the day.\"",
+                "choices": [
+                    {
+                        "label": "Where would I find him?",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "quest": "the_polite_man"
+                                }
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "start_quest": "the_polite_man"
+                            }
+                        ],
+                        "next": "the_address"
+                    },
+                    {
+                        "label": "How many marks have you painted for him?",
+                        "next": "how_many"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "paper_town",
+                        "stage": "the_note"
+                    },
+                    {
+                        "has_item": "wages_note"
+                    }
+                ],
+                "text": "You put the note on the step beside him. Pyke reads it at arm's length, the way men his age do, and hands it back. \"That's mine,\" he says. \"Fourteen days at one and threepence. What about it?\"",
+                "choices": [
+                    {
+                        "label": "There's no name on it. There's a mark.",
+                        "next": "read_the_note"
+                    },
+                    {
+                        "label": "Nothing. Sorry.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "paper_town",
+                        "stage": "the_note"
+                    }
+                ],
+                "text": "\"Still at it,\" Pyke observes. \"The counting house keeps every note it honours for a year before it burns them, in the tray under the long desk. Mine'll be in there with everybody's. I don't know why you want it. It's a receipt.\"",
+                "choices": [
+                    {
+                        "label": "I'll go and look.",
+                        "end": true
+                    },
+                    {
+                        "label": "Who signs them?",
+                        "next": "he_does_not_know"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "paper_town",
+                        "status": "active"
+                    }
+                ],
+                "text": "\"Wages,\" Pyke says, when you ask again, and sighs, and sits down on the step to do it properly. \"Right. I'm paid at the counting house. The counting house is not paying me — it's honouring a note for somebody who is. That's how everybody in this town is paid who isn't paid in bread.\"",
+                "choices": [
+                    {
+                        "label": "Then I want to see the note.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "paper_town",
+                                    "stage": "the_note"
+                                }
+                            }
+                        ],
+                        "next": "the_tray"
+                    },
+                    {
+                        "label": "Leave it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "paper_town_fate",
+                        "equals": "lie"
+                    }
+                ],
+                "once": true,
+                "text": "\"You put it back, then,\" Pyke says, and is neither pleased nor otherwise about it. \"Good. There's four hundred of those notes in that tray and every one of them's somebody's fortnight, and none of them are anybody's business.\" He drags the chain out straight. \"Mine'll be burnt by the spring like all the rest.\"",
+                "choices": [
+                    {
+                        "label": "How many marks have you painted this year?",
+                        "next": "how_many"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "same_mark_fate",
+                        "equals": "counting"
+                    },
+                    {
+                        "not": {
+                            "quest": "paper_town"
+                        }
+                    }
+                ],
+                "text": "Pyke sees the bob in your hand before he sees your face and laughs at you, comfortably, the way an old man laughs at somebody young enough to still be interested in something. \"Still collecting,\" he says. \"How many's that now? Go on. I want to hear the number said out loud by somebody who isn't me.\"",
+                "choices": [
+                    {
+                        "label": "Who pays you, Pyke?",
+                        "effects": [
+                            {
+                                "start_quest": "paper_town"
+                            }
+                        ],
+                        "next": "whose_wages"
+                    },
+                    {
+                        "label": "How many have you painted?",
+                        "next": "how_many"
+                    },
+                    {
+                        "label": "Nothing. Carry on.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "same_mark_fate",
+                        "equals": "let_alone"
+                    },
+                    {
+                        "not": {
+                            "quest": "paper_town"
+                        }
+                    }
+                ],
+                "text": "Pyke has the chain half out along the lane and one end of it under his boot. \"You're back,\" he says, mildly surprised. \"Nobody comes back. They ask about the mark, I tell them what it is, and that's the last I see of them.\" He straightens up. \"So either you've thought of a better question or you're at a loose end.\"",
+                "choices": [
+                    {
+                        "label": "Who pays you, Pyke?",
+                        "effects": [
+                            {
+                                "start_quest": "paper_town"
+                            }
+                        ],
+                        "next": "whose_wages"
+                    },
+                    {
+                        "label": "Nothing. Carry on.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_same_mark",
+                        "status": "completed"
+                    },
+                    {
+                        "not": {
+                            "quest": "paper_town"
+                        }
+                    }
+                ],
+                "text": "Pyke has the chain half out along the lane and one end of it under his boot. \"Come to watch a man drag a chain,\" he says. \"It's the most interesting thing on this street and that is a poor look-out for the street.\"",
+                "choices": [
+                    {
+                        "label": "Who pays you, Pyke?",
+                        "effects": [
+                            {
+                                "start_quest": "paper_town"
+                            }
+                        ],
+                        "next": "whose_wages"
+                    },
+                    {
+                        "label": "Nothing. Carry on.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_same_mark",
+                        "status": "active"
+                    }
+                ],
+                "text": "The chain is a hundred feet of flat iron links, and he has it over one shoulder like a man who has carried it a very long way. The plumb-bob is out of his pocket and turning slowly on its line, and the flat of the brass has the mark stamped into it: a bob hanging inside a square.",
+                "choices": [
+                    {
+                        "label": "That mark. What is it?",
+                        "next": "the_mark"
+                    },
+                    {
+                        "label": "Later.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "quarry_fell_fate",
+                        "equals": "walked"
+                    }
+                ],
+                "text": "\"You went down it,\" Pyke says, and stops coiling, which is a thing he does not do. \"Two hundred, you say. Under my ground. I chained the top of that two summers ago and there were six of them stood about with a theodolite and I took them for a road party.\" He shakes his head slowly. \"Two hundred men. There isn't two hundred men in Rivermark.\"",
+                "choices": [
+                    {
+                        "label": "There is now. They're just not above ground.",
+                        "next": "of_course_i_knew"
+                    },
+                    {
+                        "label": "How many marks have you painted?",
+                        "next": "how_many"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "quarry_fell_fate",
+                        "equals": "back"
+                    }
+                ],
+                "once": true,
+                "text": "\"You got as far as the stair and came up again,\" Pyke says, and does not think any the less of you, because he has spent forty-three years not going down holes. \"Sensible. There's nothing at the bottom of a hole that wants finding by somebody who isn't paid to find it.\" He coils. \"That is the single most useful sentence my father ever said to me and I have never once tested it.\"",
+                "choices": [
+                    {
+                        "label": "Somebody's paying two hundred men to find it.",
+                        "next": "of_course_i_knew"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "deepworks_known"
+                    }
+                ],
+                "text": "\"Down at the head of the valley,\" Pyke says, when you mention it, and nods, and does not stop coiling. \"That's the works. I chained the ground over it two summers ago. Took a week. I've never been down and I don't want to be — I'm sixty-one and I like a sky.\"",
+                "choices": [
+                    {
+                        "label": "You knew it was there.",
+                        "next": "of_course_i_knew"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "An old man on the granary steps with a hundred feet of chain over one shoulder, eating bread out of a cloth. He nods at you the way tradesmen nod at anybody who might be about to become work. \"Chainman,\" he says, around the bread. \"Pyke. If you want a boundary walked it's a shilling and I'll want a boy.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_pyke"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "What does a chainman do?",
+                        "next": "what_a_chainman_does"
+                    },
+                    {
+                        "label": "I've seen your mark in two places now.",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "quest": "the_same_mark"
+                                }
+                            },
+                            {
+                                "any": [
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "grain_stamp_seen"
+                                            },
+                                            {
+                                                "flag": "mark_seen_paper"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "grain_stamp_seen"
+                                            },
+                                            {
+                                                "flag": "mark_seen_book"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "grain_stamp_seen"
+                                            },
+                                            {
+                                                "flag": "mark_seen_plate"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "grain_stamp_seen"
+                                            },
+                                            {
+                                                "flag": "mark_seen_stone"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "mark_seen_paper"
+                                            },
+                                            {
+                                                "flag": "mark_seen_book"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "mark_seen_paper"
+                                            },
+                                            {
+                                                "flag": "mark_seen_plate"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "mark_seen_paper"
+                                            },
+                                            {
+                                                "flag": "mark_seen_stone"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "mark_seen_book"
+                                            },
+                                            {
+                                                "flag": "mark_seen_plate"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "mark_seen_book"
+                                            },
+                                            {
+                                                "flag": "mark_seen_stone"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "mark_seen_plate"
+                                            },
+                                            {
+                                                "flag": "mark_seen_stone"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "start_quest": "the_same_mark"
+                            },
+                            {
+                                "quest_stage": {
+                                    "quest": "the_same_mark",
+                                    "stage": "asked_the_chainman"
+                                }
+                            }
+                        ],
+                        "next": "the_mark"
+                    },
+                    {
+                        "label": "Nothing. Enjoy your bread.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "what_a_chainman_does": [
+            {
+                "text": "\"Drags a chain,\" Pyke says. \"Hundred feet, that's a chain. Somebody sights a line, I walk it, I call the count, somebody writes it down. Then I paint a mark on whatever's at the end so the next man knows where I stopped.\" He finishes the bread. \"Forty-three years. My father did it. It is not interesting and I am not going to pretend it is.\"",
+                "choices": [
+                    {
+                        "label": "Who wants lines walked in Rivermark?",
+                        "next": "he_does_not_know"
+                    },
+                    {
+                        "label": "Fair enough.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_mark": [
+            {
+                "text": "He holds the bob still so you can see the flat of it. \"That's a survey mark,\" he says. \"Bob in a square. Means a line was measured from here and the measurement's good.\" He lets it swing again. \"I paint about forty a season. There'll be one on the granary corner behind you now if you look, and I put it there in the spring, and nobody has looked at it since including me.\"",
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera has gone very still. \"Forty a season,\" she says. \"For how many seasons?\""
+                    },
+                    {
+                        "companion": "ilse",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "companion": "sera",
+                                    "status": "active"
+                                }
+                            }
+                        ],
+                        "text": "Ilse: \"There is one cut into stone forty feet under the warren. Did you paint that one?\" Pyke, comfortably: \"Not me. I don't go down holes.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Who tells you where to walk?",
+                        "next": "he_does_not_know"
+                    },
+                    {
+                        "label": "I'm going to start writing down where I see it.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_same_mark",
+                                    "stage": "started_counting"
+                                }
+                            }
+                        ],
+                        "next": "he_gives_you_the_bob"
+                    },
+                    {
+                        "label": "Then it's a maker's mark and I'm wasting your afternoon.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_same_mark",
+                                    "stage": "let_it_alone"
+                                }
+                            }
+                        ],
+                        "next": "no_harm_done"
+                    }
+                ]
+            }
+        ],
+        "he_does_not_know": [
+            {
+                "text": "\"A boy brings a paper on a Monday with the lines on it,\" Pyke says. \"I walk them. I hand the count in at the counting house on a Friday and I'm paid at the counting house on a Friday.\" He shrugs, entirely untroubled. \"I've never asked. In forty-three years no man has ever told a chainman anything and no chainman has ever wanted to be told. You'd be surprised how restful it is.\"",
+                "choices": [
+                    {
+                        "label": "Doesn't it bother you?",
+                        "next": "it_does_not"
+                    },
+                    {
+                        "label": "No. I don't think I would be.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "it_does_not": [
+            {
+                "text": "\"I'm sixty-one,\" Pyke says, \"and I'm paid on the day, in coin, by people who have never once argued about a count. Do you know how rare that is? Marrow argues. The council argues. The priory argued for two years about a hedge.\" He picks up the chain. \"Whoever it is, they pay on the day. That's the only fact about them I have ever needed.\"",
+                "choices": [
+                    {
+                        "label": "One day it might not be.",
+                        "end": true
+                    },
+                    {
+                        "label": "Fair enough.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "he_gives_you_the_bob": [
+            {
+                "text": "Pyke thinks that is the funniest thing he has heard all week, and then, because he is a generous man and it costs him nothing, he takes a spare bob out of his coat and puts it in your hand. \"There. Now you've got the mark and I don't have to lend you mine every time you want to compare one.\" He is still smiling when you leave. He goes on painting them.",
+                "choices": [
+                    {
+                        "label": "Thank you.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "no_harm_done": [
+            {
+                "text": "\"No harm in it,\" Pyke says. \"Everybody notices the marks eventually. Nobody's ever come back twice.\" He shoulders the chain and goes off up the lane to walk somebody's line, and you stand there for a moment with the perfectly reasonable answer you asked for.",
+                "choices": [
+                    {
+                        "label": "Let him go.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "whose_wages": [
+            {
+                "text": "\"Counting house,\" he says. \"Friday. One and threepence a day and the boy's tuppence out of that.\" He sees that you are waiting for more and is puzzled that there would be more. \"That's it. That's the whole of it. I'm not on anybody's household — I'd have to eat at their table if I were, and I'd rather not.\"",
+                "choices": [
+                    {
+                        "label": "The counting house doesn't pay you. It honours a note. Whose?",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "paper_town",
+                                    "stage": "the_note"
+                                }
+                            }
+                        ],
+                        "next": "the_tray"
+                    },
+                    {
+                        "label": "Leave it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_tray": [
+            {
+                "text": "\"Under the long desk,\" Pyke says. \"They keep every note they've honoured for a year and then they burn them, and nobody minds you looking because there's nothing in them. It's a receipt for a chainman's fortnight.\" He goes back to the chain. \"You'll want the one with my name spelt wrong. They all spell it wrong.\"",
+                "choices": [
+                    {
+                        "label": "I'll go and look.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "read_the_note": [
+            {
+                "text": "Pyke turns it over again, and this time he actually reads it, and something goes out of his face and does not entirely come back. \"Huh,\" he says. \"No. There's initials and there's the bob-and-square. That's not — a house signs. A house always signs.\" He hands it back. \"I've had a hundred of these. I've never once turned one over.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "pyke_turned_it_over"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera: \"A note that isn't signed is honoured because the counting house knows the mark. Which means they've seen it enough times to know it.\""
+                    },
+                    {
+                        "companion": "aldric",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "companion": "sera",
+                                    "status": "active"
+                                }
+                            }
+                        ],
+                        "text": "Aldric: \"Forty-three years, and the first time you look at the back of one, there is no name on it.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Ask the counting house whose mark it is.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "paper_town",
+                                    "stage": "followed_it"
+                                }
+                            }
+                        ],
+                        "next": "the_name"
+                    },
+                    {
+                        "label": "Put it back in the tray.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "paper_town",
+                                    "stage": "let_it_lie"
+                                }
+                            }
+                        ],
+                        "next": "put_it_back"
+                    }
+                ]
+            }
+        ],
+        "the_name": [
+            {
+                "text": "The clerk does not have to look it up. \"Corse,\" he says, the way a man says a word he has written four hundred times and never once said aloud. \"Ludo Corse, factor, at Greyhythe. It's a good mark. We honour it same-day.\" He goes back to what he was doing. Outside, Pyke is dragging the chain up the lane and calling the count to nobody.",
+                "on_enter": [
+                    {
+                        "set_flag": "knows_corse_name"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa: \"Have you heard of him?\" The clerk, without looking up: \"No. Why would I? He pays.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Take the name.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "put_it_back": [
+            {
+                "text": "You put the note back in the tray with the rest, and in eleven months a clerk will burn it along with four hundred others, and Pyke will be paid on the Friday, and that will be that.",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_address": [
+            {
+                "text": "\"Down the river stair and eleven miles of towpath,\" Pyke says. \"Greyhythe. Ask for the factor's house — there's only the one and it's above the new landing.\" He considers. \"Take him something. He'll not want it and he'll be pleased you thought of it. That's the only advice I've got about the man and I've had three years to come up with better.\"",
+                "choices": [
+                    {
+                        "label": "Thank you.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "how_many": [
+            {
+                "text": "Pyke does the sum, honestly, standing there, because he has never had cause to do it before. \"Forty a season. Three years.\" His lips move. \"Call it three hundred and some.\" He looks up the lane, where there is a mark on the granary corner that he put there in the spring. \"That's a lot of line for a valley this size. I'll grant you that's a lot of line.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "pyke_did_the_sum"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "What gets measured that much?",
+                        "next": "of_course_i_knew"
+                    },
+                    {
+                        "label": "Nothing. Thank you, Pyke.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "of_course_i_knew": [
+            {
+                "text": "\"Ground somebody's buying,\" Pyke says, without hesitating, because it is the ordinary answer and he has given it before. \"You measure what you're buying. You measure it again before you pay. That's all a survey is — it's a man not wanting to be cheated.\" He coils the chain. \"They've measured this valley about as thoroughly as I've ever measured anything.\"",
+                "choices": [
+                    {
+                        "label": "Who has?",
+                        "next": "he_does_not_know"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "that_is_him": [
+            {
+                "text": "\"That's him,\" Pyke agrees. \"He'll answer anything. My boy asked him once what he did and he sat down on a crate and told him for a quarter of an hour, and the boy came away none the wiser and very pleased.\" He winds the chain. \"I've thought about that since. I couldn't tell you why.\"",
+                "choices": [
+                    {
+                        "label": "How many marks have you painted for him?",
+                        "next": "how_many"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "he_reads_it": [
+            {
+                "text": "He reads it standing up in the lane, in the rain, out loud, because he can read a survey and you cannot. Weirs. Seams. Roofs. He gets to sheet six and stops, and goes back a line, and reads that line again, and then says, quite steadily: \"That's not how you enter a town. You enter a town as a place. That's entered as a cost.\" Then, after a while: \"Under clearance.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "pyke_read_it_out"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric has taken his hat off, which is a thing he does at gravesides and has not done anywhere else since you met him."
+                    },
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"Say the figure.\" Pyke says the figure. Nobody says anything for a while after that."
+                    },
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa: \"Who do we hit.\" Pyke, still looking at the sheet: \"Nobody. That's the trouble with it. There's nobody in it at all.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Read it out again. Louder. On the steps, where the town can hear.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_survey",
+                                    "stage": "warned_the_town"
+                                }
+                            }
+                        ],
+                        "next": "the_reading"
+                    },
+                    {
+                        "label": "Burn it. Here. Now.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_survey",
+                                    "stage": "burned_the_survey"
+                                }
+                            }
+                        ],
+                        "next": "the_burning"
+                    },
+                    {
+                        "label": "Roll it up. I'm keeping it.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_survey",
+                                    "stage": "took_the_survey"
+                                }
+                            }
+                        ],
+                        "next": "he_lets_you_keep_it"
+                    }
+                ]
+            }
+        ],
+        "the_reading": [
+            {
+                "text": "It takes an hour. People stop because a man is shouting on the granary steps and stay because of what he is shouting. Reed comes, and listens, and writes. Marrow's people come out onto the weighing floor and stand there. At the end a woman asks what the town is supposed to do about it, and Pyke says he does not know, he is a chainman, and gets down off the steps and coils his chain, and that is the end of his employment in this valley.",
+                "choices": [
+                    {
+                        "label": "Stay with him.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_burning": [
+            {
+                "text": "He does not argue. He holds the sheets while you get the tinder going, which is the part you did not expect, and he stands and watches nine sheets and three years and about four hundred days of somebody's wages go up in the rain. \"They'll do it again,\" he says. \"They'll want a chainman.\" A pause. \"I'll take the work. I want you to know that now, so it isn't a thing you find out later.\"",
+                "choices": [
+                    {
+                        "label": "I know.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "he_lets_you_keep_it": [
+            {
+                "text": "\"Right,\" Pyke says, and helps you roll it, and ties it, and hands it back. \"Then you've got a thing that eleven hundred people are in and none of them know it.\" He shoulders the chain. \"Mind how you carry that. Paper's the only part of this anybody's ever taken seriously.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "no_such_thing": [
+            {
+                "text": "\"There isn't a right thing,\" Pyke says. \"There's a chain and a line and a count, and after that it's all somebody else's arithmetic.\" He looks at the coil in his lap. \"I've been forty-three years being the man who doesn't ask. Turns out that was a job as well and I was very good at it.\"",
+                "choices": [
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "they_are_asking": [
+            {
+                "text": "\"There's a man been up from downriver asking who was on the works that week,\" Pyke says. \"Polite. Bought me a drink. Wrote down what I told him, which was nothing, and thanked me for it and paid for the drink.\" He drags the chain out straight. \"He'll be back. That sort always comes back on a Tuesday.\"",
+                "choices": [
+                    {
+                        "label": "What did you tell him?",
+                        "next": "no_such_thing"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

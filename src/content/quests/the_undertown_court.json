@@ -1,0 +1,126 @@
+{
+    "quest_key": "the_undertown_court",
+    "title": "The Undertown Court",
+    "description": "There is a court under the market square. It has a bench, a rule, and sixty people who abide by it, and it has heard about you. Rilk says it would rather you came than were fetched.",
+    "giver": "street_cutpurse",
+    "on_job_board": false,
+    "required_level": 3,
+    "rewards": {
+        "xp": 500
+    },
+    "stages": {
+        "go_down_with_rilk": {
+            "title": "Go down with Rilk",
+            "objective": "Rilk is offering to walk you in. Decide whether to let him.",
+            "journal": "Rilk stands at the east gate looking at hands and has never had a night's trouble from the watch, which I had put down to luck. It is not luck. He goes home through a grating. He says the Low Court has my name and would like it explained, and that people who make the Court come and get them do not enjoy the walk.",
+            "target": {
+                "location": "east_gate"
+            }
+        },
+        "stand_before_the_bench": {
+            "title": "The bench",
+            "objective": "Aggie Slate sits the plank. Find out what the charge is.",
+            "journal": "A scaffold plank across two barrels, worn smooth in the middle, and about sixty people who have stopped what they were doing. Aggie Slate has sat that plank eleven years. The Court's whole law is three lines long and the third line is that it is read out to your face before anything else happens.",
+            "target": {
+                "location": "low_court"
+            }
+        },
+        "stood_trial": {
+            "title": "Tried",
+            "journal": "I stood up in front of sixty people in a brick room and answered for what I had done down there, and the Court took an hour over it, and the finding was not what I would have given myself in either direction. I paid what they set. Aggie Slate filed a notch in a piece of slate and gave it to me, which means the book is closed and that I may come and go, and she made a point of saying that the second part is the smaller half.",
+            "resolution": "stood_trial",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "undertown_court_fate",
+                    "value": "tried"
+                },
+                {
+                    "give_item": "court_slate",
+                    "quantity": 1
+                },
+                {
+                    "approval": {
+                        "aldric": 12,
+                        "ilse": 10,
+                        "kessa": 4,
+                        "sera": -4
+                    }
+                }
+            ]
+        },
+        "bought_the_bench": {
+            "title": "Paid off",
+            "journal": "A hundred and twenty gold, handed over in front of everybody, which is how they do it — there is no such thing down there as a bribe taken quietly, because the whole point of the Court is that it happens in the room. It went into the Court's box. The finding was recorded as bought. Aggie Slate says the record matters more than the money and that in eleven years exactly four people have chosen it, and that she can tell me what happened to all four.",
+            "resolution": "bought_the_bench",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "undertown_court_fate",
+                    "value": "bought"
+                },
+                {
+                    "take_gold": 120
+                },
+                {
+                    "approval": {
+                        "sera": 8,
+                        "kessa": -4,
+                        "aldric": -8,
+                        "ilse": -8
+                    }
+                }
+            ]
+        },
+        "refused_the_court": {
+            "title": "Walked out",
+            "journal": "I told sixty people living in a drain that they had no standing to try anybody and I walked out through the ones who tried to stop me. Nobody died. Two of them will not use that arm properly again. Undertown is shut to me now in the way a town is shut to you — nothing barred, everything simply not there when I arrive.",
+            "resolution": "refused_the_court",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "undertown_court_fate",
+                    "value": "refused"
+                },
+                {
+                    "set_flag": "undertown_closed"
+                },
+                {
+                    "approval": {
+                        "kessa": -6,
+                        "aldric": -14,
+                        "ilse": -14,
+                        "sera": 2
+                    }
+                }
+            ]
+        },
+        "sat_the_bench": {
+            "title": "On the plank",
+            "journal": "The charge against me was dropped in about four minutes once it was said out loud, and then Aggie Slate asked me to sit the plank for the next case, because the next case was one of theirs against one of theirs and the Court's rule is that the bench must be a stranger when it can get one. I sat on a scaffold plank for two hours and decided something about a stolen lamp and a broken hand, and I have thought about it more since than about anything else I did that month.",
+            "resolution": "sat_the_bench",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "undertown_court_fate",
+                    "value": "bench"
+                },
+                {
+                    "set_flag": "sat_the_low_bench"
+                },
+                {
+                    "give_item": "court_slate",
+                    "quantity": 1
+                },
+                {
+                    "approval": {
+                        "ilse": 14,
+                        "aldric": 10,
+                        "kessa": 8,
+                        "sera": 4
+                    }
+                }
+            ]
+        }
+    }
+}

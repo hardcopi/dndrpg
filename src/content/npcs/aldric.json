@@ -1,0 +1,12 @@
+{
+    "npc_key": "aldric",
+    "name": "Brother Aldric",
+    "role": "Cleric",
+    "description": "A cleric with no house and a borrowed sun-disc. Treats anyone who asks and does not ask why.",
+    "sprite_key": "aldric",
+    "is_quest_giver": true,
+    "dialog": "aldric",
+    "place": {
+        "location": "flagon_common_room"
+    }
+}

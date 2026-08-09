@@ -1,0 +1,110 @@
+{
+    "quest_key": "harrow_farm",
+    "title": "Harrow Farm",
+    "description": "Sten Harrow has had four letters in nine months. Each one offers more than the last. None of them are signed with a name, and none of them are for the land.",
+    "giver": "market_farmer",
+    "on_job_board": true,
+    "required_level": 2,
+    "rewards": {
+        "xp": 300,
+        "gold": 90
+    },
+    "stages": {
+        "the_letters": {
+            "title": "The letters",
+            "objective": "Get Sten Harrow to show you what he has been reading on the porch after dark.",
+            "journal": "There is a lamp on the porch table at Harrow Steading that is trimmed and never lit while anyone is watching. Sten Harrow has four letters in the house and reads them out there because the house is not big enough to read them in.",
+            "target": {
+                "location": "harrow_steading"
+            }
+        },
+        "what_they_are_buying": {
+            "title": "What they are buying",
+            "objective": "Read the letters properly and find out what is actually being offered for.",
+            "journal": "Four offers, nine months, each better than the last, three in a clerk's hand and the fourth in another. What they want is not the two hundred acres. It is the water right on the mill race, which Harrow holds and has never once thought about, because the mill it used to turn burned down four years ago.",
+            "target": {
+                "location": "mill_ruin"
+            }
+        },
+        "held_the_farm": {
+            "title": "The farm holds",
+            "journal": "The fourth letter sets a date by which the offer lapses, which is a threat written by somebody who has never farmed: a lapsing offer means nothing at all to a man whose ground feeds him. We had the letters read out in front of two of his neighbours and got the water right entered as common to the three holdings, which cannot be bought from one man because it is no longer one man's. Harrow has not slept better. He has slept at all, which is new.",
+            "resolution": "held_the_farm",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "harrow_fate",
+                    "value": "held"
+                },
+                {
+                    "set_flag": "mill_race_right_common"
+                },
+                {
+                    "xp": 100
+                },
+                {
+                    "approval": {
+                        "aldric": 12,
+                        "ilse": 8,
+                        "kessa": 6,
+                        "sera": 4
+                    }
+                }
+            ]
+        },
+        "they_sold": {
+            "title": "Sold and gone",
+            "journal": "I told him to take the fourth offer and he took it, and it was a very good price, and I still think it was the right advice. The Harrows went downriver in a hired cart with the dog on the tail-board. The ground is being worked by somebody else already, which was fast.",
+            "resolution": "they_sold",
+            "terminal": true,
+            "outcome": "neutral",
+            "effects": [
+                {
+                    "set_flag": "harrow_fate",
+                    "value": "sold"
+                },
+                {
+                    "set_flag": "harrow_gone"
+                },
+                {
+                    "approval": {
+                        "sera": 8,
+                        "kessa": -6,
+                        "ilse": -10,
+                        "aldric": -8
+                    }
+                }
+            ]
+        },
+        "took_the_brokers_fee": {
+            "title": "The finder's fee",
+            "journal": "There is a fee for bringing in a signature and it is paid the same day, in coin, by a man who does not haggle and does not stay. Harrow signed because I told him it was the best he would get, which was true, and because I told him I had no interest in it, which was not.",
+            "resolution": "took_the_brokers_fee",
+            "terminal": true,
+            "outcome": "neutral",
+            "effects": [
+                {
+                    "set_flag": "harrow_fate",
+                    "value": "brokered"
+                },
+                {
+                    "set_flag": "harrow_gone"
+                },
+                {
+                    "set_flag": "sold_to_the_polite_man"
+                },
+                {
+                    "give_gold": 220
+                },
+                {
+                    "approval": {
+                        "sera": 12,
+                        "kessa": -12,
+                        "ilse": -16,
+                        "aldric": -20
+                    }
+                }
+            ]
+        }
+    }
+}

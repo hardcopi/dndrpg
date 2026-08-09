@@ -1,0 +1,16 @@
+{
+    "encounter_key": "oldcity_wandering_rats",
+    "name": "The Channel Rats",
+    "description": "The ledge ahead is moving, and it is moving toward you.",
+    "difficulty": "easy",
+    "is_random": true,
+    "region": "old_city",
+    "monsters": [
+        {
+            "monster": "giant_rat",
+            "quantity": 6
+        }
+    ],
+    "allow_flee": true,
+    "allow_parley": false
+}

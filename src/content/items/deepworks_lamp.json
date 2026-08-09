@@ -1,0 +1,13 @@
+{
+  "item_key": "deepworks_lamp",
+  "name": "Caged Shaft Lamp",
+  "description": "A brass lamp inside a gauze cage, issued against a peg number and returned at the end of shift. It burns eleven hours, it will not fire a gas seam, and it has somebody else's number scratched off the base.",
+  "item_type": "misc",
+  "rarity": "common",
+  "weight": 3,
+  "value_gp": 18,
+  "properties": {
+    "light": true
+  },
+  "icon": "lantern"
+}

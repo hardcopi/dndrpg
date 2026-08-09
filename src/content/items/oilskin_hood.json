@@ -1,0 +1,15 @@
+{
+  "item_key": "oilskin_hood",
+  "name": "Drainman's Oilskin",
+  "description": "A hooded cape of waxed canvas, stiff as board and proof against anything that falls. The nightmen wear them and nobody else will, because of what the wearing of one says about your week.",
+  "item_type": "armor",
+  "rarity": "common",
+  "weight": 4,
+  "value_gp": 15,
+  "armor_bonus": 0,
+  "armor_type": "cloak",
+  "properties": {
+    "quiet_underground": true
+  },
+  "icon": "cloak"
+}

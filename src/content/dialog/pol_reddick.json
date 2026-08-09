@@ -1,0 +1,358 @@
+{
+    "npc_key": "pol_reddick",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "flag": "short_measure_fate",
+                        "equals": "stone"
+                    }
+                ],
+                "once": true,
+                "text": "There is a new stone on the floor with a lead seal on it and a paper from Greyhythe nailed up beside it, and Pol Reddick weighs against it with the beam turned outward so the whole floor can see the swing. \"Eleven years,\" he says, \"and I never once thought to ask what the stone was weighed against. Nobody did. That is not an excuse, I have looked at it from every side and it is not one.\"",
+                "choices": [
+                    {
+                        "label": "You did say so, once.",
+                        "next": "he_did_say_so"
+                    },
+                    {
+                        "label": "Good luck to you.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "short_measure_fate",
+                        "equals": "silence"
+                    }
+                ],
+                "once": true,
+                "text": "Pol Reddick weighs, and calls the figure, and chalks it, and does not look up when you come onto the floor. On the third sack he says, to the sack, \"Second of the month,\" and that is the whole of the conversation you are going to have with him now.",
+                "choices": [
+                    {
+                        "label": "Second of the month.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "a_short_measure",
+                        "stage": "the_weighing_floor"
+                    },
+                    {
+                        "flag": "stone_recut_known"
+                    }
+                ],
+                "text": "\"Go on, then,\" says Pol, not unkindly. \"Say it to Nell, or to Reed, or to whoever you were going to say it to. I have been waiting eight months for somebody to make me stop, and I could not work out how to be the one who did it.\"",
+                "choices": [
+                    {
+                        "label": "Come with me and say it yourself.",
+                        "next": "he_will_come"
+                    },
+                    {
+                        "label": "How much have you been paid?",
+                        "next": "four_silver"
+                    },
+                    {
+                        "label": "Nothing. Cut me in and I say nothing.",
+                        "next": "cut_me_in"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "a_short_measure",
+                        "status": "active"
+                    }
+                ],
+                "text": "The weighing floor is a long shed with the tall doors open at both ends and one stone in the middle of it on an iron beam, and a man in his fifties calling figures off it in a voice that has been doing that for a very long time.\n\n\"Nell Quist,\" says Pol Reddick, before you have got the name out. \"Nine sacks a week and every one of them weighed on this floor by me. And the stone says they are right, and I will show you it say so, and after that I do not know what to tell you.\"",
+                "choices": [
+                    {
+                        "label": "Show me.",
+                        "next": "the_weighing"
+                    },
+                    {
+                        "label": "You have had this conversation before.",
+                        "next": "before"
+                    }
+                ]
+            },
+            {
+                "text": "\"Weighing floor,\" says the man on the beam, without stopping. \"If you have brought something, it goes on the stone. If you have not, mind the doors, the carts come through both ways and they do not stop for anybody's afternoon.\"",
+                "choices": [
+                    {
+                        "label": "Mind the doors.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "before": [
+            {
+                "text": "Pol Reddick puts down the tally and looks at you properly for the first time.\n\n\"Four times,\" he says. \"Since Candlemas. Four people who write things down.\" He picks the tally back up. \"All right. Come and watch it done.\"",
+                "choices": [
+                    {
+                        "label": "Show me.",
+                        "next": "the_weighing"
+                    }
+                ]
+            }
+        ],
+        "the_weighing": [
+            {
+                "text": "He does it properly, and slowly, and lets you handle everything.\n\nThe beam is true. The stone is the town's, with the town's mark cut in it. The sack goes up and the beam swings and settles and Pol calls the figure, and the figure is right, and there is nothing whatever wrong with any part of what you have just watched.\n\nThe sacks themselves are new — good sound canvas, better than the ones stacked against the far wall with the town's grain in them. On the corner of each, in black stamp, a small clean mark: a plumb-line crossed by a square.\n\n\"Came with the spring contract,\" says Pol, when you turn one over. \"Whole new run of them. Excellent sacks. We had been mending the old ones with sailcloth for six years.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "a_short_measure",
+                            "stage": "the_weighing_floor"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa, bored, prodding the sack pile: \"They're sacks.\""
+                    },
+                    {
+                        "companion": "ilse",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "companion": "kessa",
+                                    "status": "active"
+                                }
+                            }
+                        ],
+                        "text": "Ilse runs her thumb over the stamp on the corner and says nothing at all, which with Ilse can mean two entirely different things."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Whose mark is that on the sacks?",
+                        "next": "whose_mark"
+                    },
+                    {
+                        "label": "When was this stone put on this floor?",
+                        "check": {
+                            "skill": "investigation",
+                            "dc": 12,
+                            "on_success": "the_stone_itself",
+                            "on_failure": "he_shrugs"
+                        }
+                    },
+                    {
+                        "label": "You have known something for eight months.",
+                        "check": {
+                            "skill": "insight",
+                            "dc": 13,
+                            "on_success": "he_folds",
+                            "on_failure": "he_shrugs"
+                        }
+                    },
+                    {
+                        "label": "The scales are honest. That's all I needed.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "whose_mark": [
+            {
+                "conditions": [
+                    {
+                        "flag": "mark_seen_brick"
+                    }
+                ],
+                "text": "You have the corner of the sack in your hand before you have decided to pick it up.\n\nA plumb-line crossed by a square. Small, clean, black on the canvas.\n\nPol Reddick turns it over and looks at it as though it has been there the whole time, which it has.\n\n\"Sack-maker's, I should think,\" he says. \"Or the yard that carted them. Everything comes stamped these days; there is a mark on the lamp oil and a mark on the nails.\" He goes back to the beam. \"They are good sacks. I have not thought about it and I do not propose to start.\"",
+                "choices": [
+                    {
+                        "label": "When was this stone put on this floor?",
+                        "check": {
+                            "skill": "investigation",
+                            "dc": 12,
+                            "on_success": "the_stone_itself",
+                            "on_failure": "he_shrugs"
+                        }
+                    },
+                    {
+                        "label": "That's fair.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "Pol turns the corner over and looks at it as though it has been there the whole time, which it has.\n\n\"Sack-maker's, I should think,\" he says. \"Or the yard that carted them. Everything comes stamped these days; there is a mark on the lamp oil and a mark on the nails.\" He goes back to the beam. \"They are good sacks. I have not thought about it and I do not propose to start.\"",
+                "choices": [
+                    {
+                        "label": "When was this stone put on this floor?",
+                        "check": {
+                            "skill": "investigation",
+                            "dc": 12,
+                            "on_success": "the_stone_itself",
+                            "on_failure": "he_shrugs"
+                        }
+                    },
+                    {
+                        "label": "That's fair.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_stone_itself": [
+            {
+                "text": "The stone has the town's mark on it and the town's mark is crisp, and everything else on this floor is worn to a shine. It is not eleven years old. It is not one year old.\n\n\"Spring,\" Pol says, very quietly, when you say so. \"The old one chipped and the council had it recut. Same mason who does the mile-posts. Came back in a fortnight.\"\n\n\"And what did you check it against?\"\n\nPol Reddick looks at the stone for a long moment.\n\n\"There is nothing to check it against,\" he says. \"That is what it is for.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "stone_recut_known"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera, flatly: \"Every sack of anything weighed in this town since the spring. Not the baker's. Everybody's.\""
+                    },
+                    {
+                        "companion": "aldric",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "companion": "sera",
+                                    "status": "active"
+                                }
+                            }
+                        ],
+                        "text": "Aldric has gone rather still. \"There is no crime here at all,\" he says. \"There is a stone.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "You knew.",
+                        "next": "he_folds"
+                    },
+                    {
+                        "label": "Take it to Nell.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "he_folds": [
+            {
+                "text": "\"I knew in the third week,\" Pol says. \"I weighed my own barley on it at home and again here and it came out different, and I said so, out loud, on this floor, to the reeve's man.\"\n\nHe puts the tally down flat.\n\n\"And he said: weigh. And a fortnight after that there was four silver a week for me, on the second of the month, in a paper, in the same place. Nobody has ever said a word to me about it since. There is nothing to refuse, because nobody has ever asked me for anything.\"\n\n\"I am fifty-six,\" he says. \"I have got a stone, a beam, and eleven years. If I stop weighing I am a man of fifty-six with none of those.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "stone_recut_known"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Come with me and say it to Nell.",
+                        "next": "he_will_come"
+                    },
+                    {
+                        "label": "Cut me in and I say nothing.",
+                        "next": "cut_me_in"
+                    },
+                    {
+                        "label": "Keep weighing. I'll take it from here.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "he_will_come": [
+            {
+                "text": "\"Yes,\" says Pol Reddick, and takes his apron off, which takes him a while, and hangs it on the nail where it has hung for eleven years. \"Yes. All right.\"\n\nHe stands looking at the beam for a moment.\n\n\"I would have gone on doing it,\" he says. \"I want that said by me and not about me afterwards. I would have gone on doing it until I died on this floor, if nobody had come and stood in front of me and made me put it into a sentence.\"",
+                "choices": [
+                    {
+                        "label": "Then let's go.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "four_silver": [
+            {
+                "text": "\"Four silver a week, on the second of the month, in a paper, under the loose board by the north door.\" Pol says it in the voice he calls the weights in. \"Two hundred and eight silver since Candlemas. It has bought a roof and a winter's coal and a physician for my wife twice, and I have not enjoyed one coin of it, and I would like that to be worth something and I know quite well that it is not.\"",
+                "choices": [
+                    {
+                        "label": "Come with me and say it to Nell.",
+                        "next": "he_will_come"
+                    },
+                    {
+                        "label": "Cut me in and I say nothing.",
+                        "next": "cut_me_in"
+                    }
+                ]
+            }
+        ],
+        "cut_me_in": [
+            {
+                "text": "Pol Reddick looks at you for a long time and then, slowly, with his whole face, becomes enormously relieved.\n\n\"There is no cutting in,\" he says. \"That is the thing nobody believes. There is nobody to ask. There is a loose board by the north door with four silver in it on the second of the month, and it has been four silver since Candlemas, and if there were two of us it would still be four silver.\" He takes a breath. \"But there is nothing to stop me putting half of it in your hand. And then there would be two of us, and I have not been able to say any of this out loud to anybody for eight months.\"\n\nForty gold a year, and a man's whole weight of gratitude that you do not want and cannot give back.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "a_short_measure",
+                            "stage": "took_the_difference"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric does not say anything on the way out and does not walk beside you."
+                    },
+                    {
+                        "companion": "kessa",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "companion": "aldric",
+                                    "status": "active"
+                                }
+                            }
+                        ],
+                        "text": "Kessa: \"He's not paying you to keep quiet. He's paying you to be in it with him.\" She spits. \"That's worse and I can't tell you why.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Second of the month.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "he_shrugs": [
+            {
+                "text": "\"The stone is the stone,\" says Pol Reddick, and goes back to the beam, and calls the next figure. \"Mind the doors on your way out.\"",
+                "choices": [
+                    {
+                        "label": "Leave it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "he_did_say_so": [
+            {
+                "text": "\"In the third week,\" Pol agrees. \"On this floor. To the reeve's man.\" He turns the beam out for the next sack. \"And then I took four silver a week for eight months, and I do not get to have the first part without the second one. Nell knows. She weighed her own cake in front of me on the Tuesday and made me watch her do it, and neither of us said anything, and that is where it will stay.\"",
+                "choices": [
+                    {
+                        "label": "Good luck to you.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

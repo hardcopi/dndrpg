@@ -1,0 +1,91 @@
+{
+    "quest_key": "the_dig",
+    "title": "The Dig",
+    "description": "Two hundred people underground and not one guard on the stair. Find out what is holding them there instead.",
+    "giver": "wenna_coyle",
+    "on_job_board": false,
+    "required_level": 4,
+    "rewards": {
+        "xp": 300,
+        "gold": 50
+    },
+    "stages": {
+        "get_counted": {
+            "title": "Nobody stops anybody",
+            "objective": "There is no gate and no guard. Work out what is doing the job instead.",
+            "journal": "There is no gate on the Deepworks and nobody on the stair. What there is, is a bell, a painted line, and a board with a hundred numbered pegs in it. You are not kept out of this place. You are kept accounted for inside it, which turns out to work better.",
+            "target": {
+                "location": "muster_yard"
+            }
+        },
+        "the_board": {
+            "title": "The board of pegs",
+            "objective": "Wenna Coyle keeps the pegs and the hours. Get a number, or explain why you have not got one.",
+            "journal": "The timekeeper's hut is warm, dry and better lit than anywhere else down here, and its window faces the muster line, and the window was positioned. Wenna Coyle can tell you where any one of two hundred people was standing at any hour of the last three years, and considers that an ordinary thing to be able to do.",
+            "target": {
+                "location": "timekeepers_hut"
+            }
+        },
+        "signed_on": {
+            "title": "Peg one hundred and four",
+            "journal": "I am peg one hundred and four. I gave a name, was not asked for a second one, and was issued a lamp against the number. Nobody down here has looked at me since. Being counted is the same as being invisible, and it cost me nothing, and that is exactly how they get two hundred of us.",
+            "resolution": "signed_on",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "dig_fate",
+                    "value": "signed"
+                },
+                {
+                    "set_flag": "counted_in"
+                },
+                {
+                    "give_item": "deepworks_lamp",
+                    "quantity": 1
+                },
+                {
+                    "approval": {
+                        "sera": 10,
+                        "ilse": 4,
+                        "kessa": -4
+                    }
+                }
+            ]
+        },
+        "walked_in_unasked": {
+            "title": "Uncounted",
+            "journal": "I did not give a name and I did not take a peg, and Coyle wrote that down too, on a separate sheet, in the same hand. She was not annoyed. She said the works have a column for everything and it is better for everybody if the thing is in the right column.",
+            "resolution": "walked_in_unasked",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "dig_fate",
+                    "value": "unasked"
+                },
+                {
+                    "set_flag": "coyle_noted_us"
+                },
+                {
+                    "approval": {
+                        "kessa": 8,
+                        "ilse": 6,
+                        "sera": -6
+                    }
+                }
+            ]
+        },
+        "never_counted": {
+            "title": "Out before the bell",
+            "journal": "I went back up the stair before the bell went. Whatever the works are, they are not a thing you find out by standing in the doorway of, and I have stood in the doorway of it twice now.",
+            "resolution": "never_counted",
+            "terminal": true,
+            "outcome": "neutral",
+            "effects": [
+                {
+                    "set_flag": "dig_fate",
+                    "value": "never"
+                }
+            ]
+        }
+    }
+}

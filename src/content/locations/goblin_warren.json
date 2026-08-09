@@ -1,0 +1,117 @@
+{
+    "region_key": "goblin_warren",
+    "module": "rivermark",
+    "name": "Goblin Warren",
+    "region_type": "dungeon",
+    "description": "A damp network of quarry tunnels claimed by goblins and worse things.",
+    "sort_order": 30,
+    "locations": {
+        "warren_mouth": {
+            "name": "The Warren Mouth",
+            "type": "room",
+            "map_pos": [20, 25],
+            "random_encounter_pct": 10,
+            "description": "The quarry's old cutting floor, roofed over with hide and scavenged timber where the goblins have walled themselves in. A crude gate of cart-iron and sharpened stakes bars the way down, and the gate has keepers. Daylight gives up a few paces in; everything after that is theirs.",
+            "first_visit": "The hide flap swallows the daylight behind you. Smoke, wet stone, and small quick sounds from the dark ahead.",
+            "ambience": [
+                "Water finds its way down the worked stone, tick by tick.",
+                "Goblin voices scrap over something, deeper in.",
+                "The gate's iron scraps have been wired into teeth.",
+                "A cook-fire's smoke crawls along the ceiling seams."
+            ],
+            "exits": [
+                {"to": "warren_approach", "label": "Out to the quarry"},
+                {"to": "deep_shaft", "label": "Down past the gate"},
+                {"to": "warren_nests", "label": "Along the low gallery, where the noise is"}
+            ]
+        },
+        "deep_shaft": {
+            "name": "The Deep Shaft",
+            "type": "room",
+            "map_pos": [50, 50],
+            "random_encounter_pct": 10,
+            "description": "The quarry's main shaft drops in worked ledges into standing dark, rope-ladders and plank bridges strung where the old stairs failed. The goblins mine nothing here now — they keep things instead: stores, prisoners, and whatever the ledge-nests are hiding from the warlord below. One wrong plank is a long time falling.",
+            "first_visit": "The shaft opens under your feet like a throat. Somewhere far down, water; somewhere nearer, breathing.",
+            "ambience": [
+                "A rope-ladder creaks with no one on it.",
+                "A dropped pebble takes too long to land.",
+                "Something shifts on a ledge overhead.",
+                "The dark below has a draught, and the draught has a smell."
+            ],
+            "exits": [
+                {"to": "warren_mouth", "label": "Up toward the gate"},
+                {"to": "warlord_hall", "label": "Down to the warlord's hall"},
+                {"to": "warren_nests", "label": "Across the plank bridge to the nest ledges"},
+                {"to": "warren_stores", "label": "Along the ledge to the stores"},
+                {"to": "broken_floor", "label": "Down the far side, where the props are"}
+            ]
+        },
+        "warlord_hall": {
+            "name": "The Warlord's Hall",
+            "type": "room",
+            "map_pos": [80, 72],
+            "description": "The quarry masters cut themselves a vaulted store-hall at the bottom of the works, and the warren's master has filled it with trophies, fire, and teeth. Every raid in the valley ends its story here, nailed to a beam or heaped by the throne. Whatever rules the goblins holds court at the far end, and it has been expecting visitors.",
+            "first_visit": "Fire-light and a hall of stolen things — and at the end of it, the reason the valley has gone wrong, looking back at you.",
+            "ambience": [
+                "The fire-pit spits green from something in the coals.",
+                "Trophies of a dozen raids hang in the smoke.",
+                "The hall holds its breath around you."
+            ],
+            "exits": [
+                {"to": "deep_shaft", "label": "Back up the shaft"},
+                {"to": "broken_floor", "label": "Out the low end, toward the props"}
+            ]
+        },
+        "warren_nests": {
+            "name": "The Nest Ledges",
+            "type": "room",
+            "map_pos": [30, 62],
+            "description": "Two galleries the quarrymen cut for spoil, stacked one above the other, and every foot of both of them is bedding. Hide, sacking, straw, stripped cart-canvas, laid in bays with a hand's width of walkway between. It is warm, it is loud, and the noise is the wrong noise for a warren: it is the noise of a great many things that are too small to be quiet and too many to be hushed.",
+            "first_visit": "You get four paces in before you understand what you are looking at. The bays are not stores. They are beds, and they are small, and there are a great many of them.",
+            "ambience": [
+                "Something small runs the length of the upper gallery and is caught at the end of it.",
+                "Bedding in bays, laid out square, with a hand's width of walkway between.",
+                "Somebody is singing four notes over and over further in and not stopping.",
+                "The air here is warm and used and smells of milk and smoke."
+            ],
+            "exits": [
+                {"to": "warren_mouth", "label": "Up the low gallery to the mouth"},
+                {"to": "deep_shaft", "label": "Out across the plank bridge to the shaft"}
+            ]
+        },
+        "warren_stores": {
+            "name": "The Stores",
+            "type": "room",
+            "map_pos": [58, 22],
+            "description": "The old powder-and-tool store, dry because it was cut dry, and the only room in the warren with a door that still works. Sacked salt, bar iron in bundles, cut timber, and along the back wall a row of crates that did not come from any wagon burned on the east road: sound, planed, straw-packed, and opened carefully from the top rather than smashed.",
+            "ambience": [
+                "Salt in sacks, stacked off the floor on battens. Somebody was taught to do that.",
+                "Bar iron in bundles of ten, tied with wire, none of it worked yet.",
+                "The crates along the back are planed pine and the straw in them is clean.",
+                "The door still hangs true. It is the only door in the warren that does."
+            ],
+            "exits": [
+                {"to": "deep_shaft", "label": "Out along the ledge to the shaft"}
+            ]
+        },
+        "broken_floor": {
+            "name": "The Broken Floor",
+            "type": "room",
+            "map_pos": [86, 44],
+            "random_encounter_pct": 15,
+            "description": "The lowest gallery the goblins still hold, and it is holding nothing much. The floor here is a shell of worked stone over a void, and half of it has gone into the void: a hole thirty feet across with the edges cut, not broken. Somebody took this floor out from underneath. The goblins have propped the rest with quarry timber and the props are good, and there are not enough of them, and they know it.",
+            "first_visit": "Your first step onto the gallery rings hollow, and the second one rings hollow, and then the floor simply stops and there is a great deal of nothing under a great deal of stone.",
+            "ambience": [
+                "The floor rings hollow underfoot for the whole width of the gallery.",
+                "The edge of the hole is cut square. Nothing falls square.",
+                "Air comes up out of the void, moving, and it is warmer than it should be.",
+                "A prop takes up weight somewhere behind you with a single flat crack."
+            ],
+            "exits": [
+                {"to": "deep_shaft", "label": "Back up the far side to the shaft"},
+                {"to": "warlord_hall", "label": "Up the low end to the hall"},
+                {"to": "spoil_stair", "label": "Down through the broken floor, on the goblins' rope", "conditions": [{"flag":"warren_floor_fate"}], "hidden": true}
+            ]
+        }
+    }
+}

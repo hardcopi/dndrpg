@@ -1,0 +1,67 @@
+{
+    "quest_key": "oldcity_the_cutters_trove",
+    "title": "The Cutter's Trove",
+    "description": "A gem cutter's workshop, sealed the day the City came down on it, and everything still on the bench.",
+    "giver": "jimmy_able",
+    "on_job_board": false,
+    "required_level": 2,
+    "rewards": {
+        "xp": 350
+    },
+    "stages": {
+        "the_rumour": {
+            "title": "The rumour",
+            "objective": "Find the workshop the thieves will not go near.",
+            "journal": "Jimmy Able says there is a cutter's shop south of the low channel, sealed since the fall, everything still in it. He also says nobody in his gang will go and get it, and he says that part more carefully.",
+            "target": {
+                "location": "oldcity_spider_ante"
+            }
+        },
+        "past_the_webs": {
+            "title": "What is in the way",
+            "objective": "Get through the webs to the sealed door.",
+            "journal": "The reason nobody goes: two caves of web between the channel and the door, the first one full of egg-cases and the second one furnished for keeping rather than catching. There is something in the second one considerably larger than the four in the first.",
+            "target": {
+                "location": "oldcity_spider_lair"
+            }
+        },
+        "opened_the_workshop": {
+            "title": "The workshop",
+            "objective": "Take what is worth taking.",
+            "journal": "Air that had not been breathed in three hundred years came out past us when the door gave. Wheels still clamped to the bench, trays graded rough to fine, a strongbox of old coin underneath, and the finished stones set into the wall plaster at chest height because the ceiling was the thing he did not trust. He was right about the ceiling.",
+            "target": {
+                "location": "oldcity_gem_cutters"
+            }
+        },
+        "took_the_trove": {
+            "title": "Took it",
+            "journal": "All of it, up the stair, past a Watch officer who looked at the weight we were carrying and decided he had questions he would rather not have the answers to.",
+            "resolution": "took_the_trove",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "oldcity_trove",
+                    "value": "taken"
+                },
+                {
+                    "xp": 200
+                }
+            ]
+        },
+        "left_it_sealed": {
+            "title": "Left it",
+            "journal": "We put the door back as well as it would go. It is three hundred years of somebody's working life and it has kept this long; it will keep until somebody comes for it who is not us.",
+            "resolution": "left_it_sealed",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "oldcity_trove",
+                    "value": "left"
+                },
+                {
+                    "xp": 120
+                }
+            ]
+        }
+    }
+}

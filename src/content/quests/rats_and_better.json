@@ -1,0 +1,93 @@
+{
+    "quest_key": "rats_and_better",
+    "title": "Rats, and Better",
+    "description": "Four sacks of grain nobody ordered were stacked against the north wall of Mara Hearthstone's cellar. They did not come down the stairs, because the stairs come up in her tap room and she is behind it.",
+    "giver": "mara_hearthstone",
+    "on_job_board": false,
+    "required_level": 3,
+    "rewards": {
+        "xp": 500,
+        "gold": 80
+    },
+    "stages": {
+        "the_way_in": {
+            "title": "Find the way in",
+            "objective": "Work out how four sacks got into a locked cellar.",
+            "journal": "Mara has thought about it for a month and has got as far as: it was not the door. There is a gap behind the north wall where the drain goes through, and it is not a gap any more, it is a way, and somebody has been widening it a course of brick at a time for years.",
+            "target": {
+                "location": "flagon_cellar"
+            }
+        },
+        "the_grain_stair": {
+            "title": "The grain stair",
+            "objective": "Follow it back to wherever the grain comes down.",
+            "journal": "A brick stair under Granary Row up to a loading hatch, swept cleaner than anywhere else in Undertown. Grain comes down here in quantity and goes out along the conduit into half the cellars between the market and the quay, and none of it has crossed the weighing floor. It is not theft from the granary. The granary is where it starts. It is a way of moving grain in this town without any of it being weighed, taxed, tallied or seen.",
+            "target": {
+                "location": "grain_stair"
+            }
+        },
+        "shut_the_route": {
+            "title": "Shut",
+            "journal": "Two days' work and eleven gold of brick and the hatch is a wall and the gap behind Mara's north wall is a wall. Nothing comes down the grain stair now. Nothing came down it to Undertown either, and that turned out to be a great deal of what Undertown had been eating, which nobody mentioned to me while I was laying the brick.",
+            "resolution": "shut_the_route",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "grain_route_fate",
+                    "value": "shut"
+                },
+                {
+                    "approval": {
+                        "aldric": 6,
+                        "sera": 4,
+                        "ilse": -10,
+                        "kessa": -4
+                    }
+                }
+            ]
+        },
+        "told_the_watch": {
+            "title": "The watch takes the stair",
+            "journal": "Reed put four men on the hatch for a fortnight and took nine people at the bottom of it, and every one of the nine lives in the tunnels and was carrying somebody else's grain for a cut of it. They are in the lockup. The granary's books show nothing, because the granary's books were never the point, and the man whose hatch it is has an excellent explanation involving a former employee. Reed knows exactly what she has caught and exactly what she has not.",
+            "resolution": "told_the_watch",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "grain_route_fate",
+                    "value": "watch"
+                },
+                {
+                    "approval": {
+                        "aldric": 8,
+                        "ilse": -12,
+                        "kessa": -8,
+                        "sera": -2
+                    }
+                }
+            ]
+        },
+        "kept_the_route": {
+            "title": "Kept open",
+            "journal": "The route stays. Undertown goes on eating and I take eighty gold a season for making sure the hatch is not looked at, which I arranged with Aggie Slate in about six minutes and with Mara in rather longer. Mara's four sacks stop. Everybody at this table is better off and I have become one of the reasons nothing in this town gets weighed.",
+            "resolution": "kept_the_route",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "grain_route_fate",
+                    "value": "kept"
+                },
+                {
+                    "give_gold": 80
+                },
+                {
+                    "approval": {
+                        "ilse": 6,
+                        "kessa": 8,
+                        "sera": 6,
+                        "aldric": -10
+                    }
+                }
+            ]
+        }
+    }
+}

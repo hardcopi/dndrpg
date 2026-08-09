@@ -1,0 +1,71 @@
+{
+  "resistances": [],
+  "immunities": [
+    "bludgeoning, piercing and slashing from nonmagical attacks that aren't silvered"
+  ],
+  "vulnerabilities": [],
+  "condition_immunities": [],
+  "source": "5e SRD",
+  "monster_key": "wererat",
+  "name": "Wererat",
+  "size": "Medium",
+  "type": "humanoid (human, shapechanger)",
+  "alignment": "lawful evil",
+  "armor_class": 12,
+  "hit_points": 33,
+  "hit_dice": "6d8+6",
+  "speed": "30 ft.",
+  "strength": 10,
+  "dexterity": 15,
+  "constitution": 12,
+  "intelligence": 11,
+  "wisdom": 10,
+  "charisma": 8,
+  "challenge_rating": 2,
+  "experience_points": 450,
+  "traits": {
+    "Shapechanger": "The wererat can use its action to polymorph into a rat-humanoid hybrid or into a giant rat, or back into its true form, which is humanoid. Its statistics are the same in each form.",
+    "Keen Smell": "The wererat has advantage on Wisdom (Perception) checks that rely on smell."
+  },
+  "actions": [
+    {
+      "name": "Bite",
+      "type": "melee",
+      "bonus": 4,
+      "damage": "1d4+2",
+      "damage_type": "piercing",
+      "note": "Rat or hybrid form only. If the target is humanoid it must succeed on a DC 11 Constitution saving throw or be cursed with wererat lycanthropy."
+    },
+    {
+      "name": "Shortsword",
+      "type": "melee",
+      "bonus": 4,
+      "damage": "1d6+2",
+      "damage_type": "piercing",
+      "note": "Humanoid or hybrid form only."
+    },
+    {
+      "name": "Hand Crossbow",
+      "type": "ranged",
+      "bonus": 4,
+      "damage": "1d6+2",
+      "damage_type": "piercing",
+      "range": "30/120",
+      "note": "Humanoid or hybrid form only."
+    }
+  ],
+  "saves": {
+    "dex": 2
+  },
+  "loot": [
+    {
+      "gold": "2d8"
+    },
+    {
+      "item": "potion_healing",
+      "chance": 20
+    }
+  ],
+  "rank_pref": "front",
+  "sprite_key": "ratman"
+}

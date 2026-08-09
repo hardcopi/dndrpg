@@ -1,0 +1,56 @@
+{
+ "resistances": [],
+ "immunities": [],
+ "vulnerabilities": [
+  "radiant"
+ ],
+ "condition_immunities": [
+  "blinded"
+ ],
+ "source": "Rivermark Chronicles",
+ "monster_key": "pale_crawler",
+ "name": "Launder Crawler",
+ "size": "Medium",
+ "type": "aberration",
+ "alignment": "unaligned",
+ "armor_class": 13,
+ "hit_points": 27,
+ "hit_dice": "5d8+5",
+ "speed": "30 ft., climb 30 ft.",
+ "strength": 14,
+ "dexterity": 15,
+ "constitution": 13,
+ "intelligence": 3,
+ "wisdom": 10,
+ "charisma": 5,
+ "challenge_rating": 1,
+ "experience_points": 200,
+ "traits": {
+  "Water-Born": "Came up the launder with the pump water. Nobody has asked from where."
+ },
+ "actions": [
+  {
+   "name": "Claws",
+   "type": "melee",
+   "bonus": 4,
+   "damage": "1d6+2",
+   "damage_type": "slashing"
+  },
+  {
+   "name": "Latch",
+   "type": "melee",
+   "bonus": 4,
+   "damage": "1d8+2",
+   "damage_type": "piercing"
+  }
+ ],
+ "saves": {},
+ "rank_pref": "front",
+ "sprite_key": "pale_crawler",
+ "loot": [
+  {
+   "item": "fen_root_bundle",
+   "chance": 30
+  }
+ ]
+}

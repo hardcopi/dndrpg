@@ -1,0 +1,16 @@
+{
+  "encounter_key": "strongroom_clerk",
+  "name": "Still at the Desk",
+  "description": "Something stands up out of the silt between you and the racks, unhurried, with a brass-cornered ledger weight still tied to its wrist.",
+  "difficulty": "hard",
+  "monsters": [
+    { "monster": "drowned_clerk", "quantity": 1, "rank": "front" },
+    { "monster": "grey_ooze", "quantity": 1, "rank": "front" }
+  ],
+  "allow_flee": true,
+  "allow_parley": false,
+  "victory_flag": "strongroom_cleared",
+  "victory_quest_stage": "what_the_water_left:the_boxes",
+  "ambush": true,
+  "place": { "location": "drowned_counting_room" }
+}

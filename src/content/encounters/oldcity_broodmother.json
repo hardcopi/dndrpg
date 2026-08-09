@@ -1,0 +1,24 @@
+{
+    "encounter_key": "oldcity_broodmother",
+    "name": "The Broodmother",
+    "description": "The webs move all at once in every direction, and then she is simply there, between you and the way back.",
+    "difficulty": "deadly",
+    "ambush": true,
+    "monsters": [
+        {
+            "monster": "broodmother_spider",
+            "quantity": 1
+        },
+        {
+            "monster": "giant_spider",
+            "quantity": 1
+        }
+    ],
+    "allow_flee": true,
+    "allow_parley": false,
+    "victory_flag": "oldcity_broodmother_down",
+    "victory_quest_stage": "oldcity_the_cutters_trove:opened_the_workshop",
+    "place": {
+        "location": "oldcity_spider_lair"
+    }
+}

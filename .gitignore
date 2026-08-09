@@ -1,0 +1,30 @@
+# Local-only database credentials. CLAUDE.md: this file is excluded from both
+# pull.sh and deploy.sh so production credentials never land on this machine and
+# dev credentials never reach production. It must not be committed either.
+src/app/config/database.php
+
+# Database dumps taken before a rebuild. Snapshots of somebody's save, not code.
+backups/
+*.sql.gz
+backup.sql
+
+__pycache__/
+*.pyc
+.DS_Store
+
+# The tile renderer's art, kept on disk and versioned by nothing.
+#
+# CLAUDE.md records these as dead weight: the world became a location graph on
+# 2026-08-01, the DOM tile renderer went with it, and these four directories
+# (~36MB) are referenced by no page, no stylesheet and no route. `anim` is named
+# only by tools/slice_assets.py, which is the tool that CUT them — it is the
+# producer, not a consumer.
+#
+# Ignored rather than deleted. They are somebody's art and the cost of keeping
+# them on disk is a directory listing; the cost of putting them in every clone
+# of the repo forever is 36MB and a first push that looks like a mistake. If
+# they are ever wanted, they are exactly where they were left.
+src/assets/images/tiles/
+src/assets/images/decor/
+src/assets/images/buildings/
+src/assets/images/anim/

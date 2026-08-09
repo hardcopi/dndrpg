@@ -1,0 +1,13 @@
+{
+    "npc_key": "joss_frayle",
+    "name": "Joss Frayle",
+    "role": "Carter",
+    "description": "He hauls stone on the west road eleven months of the year and stops at the ford twice, in the same two weeks, and puts a river-stone against the standing stone, and goes on.",
+    "sprite_key": "joss_frayle",
+    "image_url": "assets/images/npcs/fighter.png",
+    "is_quest_giver": true,
+    "dialog": "joss_frayle",
+    "place": {
+        "location": "the_ford"
+    }
+}

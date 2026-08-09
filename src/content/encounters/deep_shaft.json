@@ -1,0 +1,22 @@
+{
+  "encounter_key": "deep_shaft",
+  "name": "What Came Up the Shaft",
+  "description": "Whatever is below sends its leavings up. These reached the ledge first.",
+  "difficulty": "deadly",
+  "monsters": [
+    {
+      "monster": "ogre",
+      "quantity": 1,
+      "rank": "front"
+    },
+    {
+      "monster": "wererat",
+      "quantity": 2,
+      "rank": "front"
+    }
+  ],
+  "allow_flee": true,
+  "allow_parley": false,
+  "victory_flag": "deep_shaft_cleared",
+  "place": { "location": "deep_shaft" }
+}

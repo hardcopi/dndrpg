@@ -1,0 +1,79 @@
+{
+    "quest_key": "sera_leash",
+    "title": "Sera's Leash",
+    "description": "Hollis Marrow did not keep Sera writing with money. He kept a second book, in her hand, that would hang her. She wants it and she does not want to be the one who takes it.",
+    "companion": "sera",
+    "giver": "sera",
+    "on_job_board": false,
+    "required_level": 2,
+    "rewards": {
+        "xp": 200,
+        "item": "thieves_tools"
+    },
+    "stages": {
+        "the_second_book": {
+            "title": "The book in the loft",
+            "objective": "There is a second ledger in the granary loft, in Sera's hand, and it is the one that matters.",
+            "journal": "Marrow keeps a second book. Everything false in the mill's accounts is written out fair in it, in Sera's hand, dated and initialled. It is not evidence against him. It is a rope with her name on it. Sera says there is a stamp in the corner of every page of it that is not in her hand — a plumb-bob hanging inside a square — and that she asked once what it was and was told to get on.",
+            "target": {
+                "location": "high_street"
+            },
+            "effects": [
+                {
+                    "set_flag": "mark_seen_book"
+                }
+            ]
+        },
+        "the_loft_stair": {
+            "title": "The loft stair",
+            "objective": "Get into the granary loft without Marrow's people counting you in.",
+            "journal": "The loft stair is inside the weighing floor and the weighing floor has a man on it from dawn. Sera says the grain hatch on the north side has not been oiled since her father's time, which is the closest she comes to volunteering.",
+            "target": {
+                "location": "granary_row"
+            }
+        },
+        "cut_the_leash": {
+            "title": "The leash cut",
+            "journal": "We took the second book out of the loft and put it in the weighing-floor furnace, and Sera stood there until the boards of it went. She is not grateful. She is something more useful than grateful — she is out of reasons to lie to me.",
+            "resolution": "cut_the_leash",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "sera_leash_fate",
+                    "value": "cut"
+                },
+                {
+                    "approval": {
+                        "sera": 25,
+                        "aldric": 4,
+                        "kessa": 2
+                    }
+                }
+            ]
+        },
+        "held_the_leash": {
+            "title": "The leash, in my hand",
+            "journal": "I took the second book and I kept it. Sera understood the arrangement before I had finished explaining it, which tells you how many times it has been explained to her. She does exactly what she is told now. She is never going to sleep in a room I am in.",
+            "resolution": "held_the_leash",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "sera_leash_fate",
+                    "value": "held"
+                },
+                {
+                    "give_item": "the_ledger",
+                    "quantity": 1
+                },
+                {
+                    "approval": {
+                        "sera": -20,
+                        "aldric": -20,
+                        "ilse": -12,
+                        "kessa": -8
+                    }
+                }
+            ]
+        }
+    }
+}

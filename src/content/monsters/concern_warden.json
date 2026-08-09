@@ -1,0 +1,56 @@
+{
+ "resistances": [],
+ "immunities": [],
+ "vulnerabilities": [],
+ "condition_immunities": [],
+ "source": "Rivermark Chronicles",
+ "monster_key": "concern_warden",
+ "name": "Pit Warden",
+ "size": "Medium",
+ "type": "humanoid (human)",
+ "alignment": "lawful neutral",
+ "armor_class": 14,
+ "hit_points": 22,
+ "hit_dice": "4d8+4",
+ "speed": "30 ft.",
+ "strength": 13,
+ "dexterity": 13,
+ "constitution": 13,
+ "intelligence": 10,
+ "wisdom": 11,
+ "charisma": 10,
+ "challenge_rating": 1,
+ "experience_points": 200,
+ "traits": {
+  "Paid Weekly": "Wardens do not rout while a serjeant of the works is standing. It is in the terms."
+ },
+ "actions": [
+  {
+   "name": "Weighted Baton",
+   "type": "melee",
+   "bonus": 4,
+   "damage": "1d8+2",
+   "damage_type": "bludgeoning"
+  },
+  {
+   "name": "Crossbow",
+   "type": "ranged",
+   "bonus": 4,
+   "damage": "1d8+1",
+   "damage_type": "piercing",
+   "range": "80/320"
+  }
+ ],
+ "saves": {},
+ "rank_pref": "front",
+ "sprite_key": "concern_warden",
+ "loot": [
+  {
+   "gold": "3d6"
+  },
+  {
+   "item": "pit_belt",
+   "chance": 25
+  }
+ ]
+}

@@ -1,0 +1,64 @@
+{
+    "quest_key": "passage_downriver",
+    "title": "Passage Downriver",
+    "description": "A boat leaves the packet stair on the second and the fifth. Everybody in Greyhythe can tell you what is down there and not one of them has been.",
+    "giver": "osgar_tull",
+    "on_job_board": false,
+    "required_level": 5,
+    "rewards": {
+        "xp": 200
+    },
+    "stages": {
+        "the_second_and_the_fifth": {
+            "title": "The second and the fifth",
+            "objective": "Osgar Tull takes the packet down. Find out what it costs and what he carries.",
+            "journal": "Osgar Tull has taken the packet down on the second and the fifth for nineteen years. He will carry anything that pays, and he will remember everyone he carried, which is a different service and is priced separately.",
+            "target": {
+                "location": "packet_stair"
+            }
+        },
+        "booked_passage": {
+            "title": "Booked",
+            "journal": "Sixty gold and my name in Tull's book. He asked whether I wanted the name in it, said the price was the same either way, and wrote what I told him. Downriver the hills give out and the water widens and there is a great deal of country that has never heard of Rivermark. That is where this has been going the whole time.",
+            "resolution": "booked_passage",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "passage_fate",
+                    "value": "booked"
+                },
+                {
+                    "set_flag": "passage_booked"
+                },
+                {
+                    "take_gold": 60
+                },
+                {
+                    "approval": {
+                        "sera": 8,
+                        "kessa": 6
+                    }
+                }
+            ]
+        },
+        "not_yet": {
+            "title": "Not on this one",
+            "journal": "Tull says the boat goes on the second and the fifth whether I am on it or not, and that in nineteen years he has never once had to persuade anybody twice. I am not finished up here.",
+            "resolution": "not_yet",
+            "terminal": true,
+            "outcome": "neutral",
+            "effects": [
+                {
+                    "set_flag": "passage_fate",
+                    "value": "waiting"
+                },
+                {
+                    "approval": {
+                        "ilse": 6,
+                        "aldric": 4
+                    }
+                }
+            ]
+        }
+    }
+}

@@ -1,0 +1,11 @@
+{
+    "npc_key": "market_jester",
+    "name": "A jester",
+    "role": "Townsfolk",
+    "sprite_key": "jester",
+    "is_ambient": true,
+    "dialog": "market_jester",
+    "place": {
+        "location": "market_square"
+    }
+}

@@ -1,0 +1,332 @@
+{
+    "npc_key": "prioress_hale",
+    "start": "hail",
+    "nodes": {
+        "hail": [
+            {
+                "conditions": [
+                    {
+                        "flag": "priory_fate",
+                        "equals": "heard"
+                    }
+                ],
+                "once": true,
+                "text": "\"You came back,\" Ottilie Hale says. \"People generally do not. They ask the question, they get the answer they were not expecting, and they go down the track thinking about it and that is the last we see of them.\"\n\nShe is weeding a bed that does not need weeding.",
+                "expression": 3,
+                "choices": [
+                    {
+                        "label": "You said 'would not', not 'cannot'.",
+                        "next": "would_not"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "priory_fate",
+                        "equals": "priory"
+                    }
+                ],
+                "once": true,
+                "text": "\"Then that is where it stands,\" the prior says. She looks tired rather than relieved, which is not the reaction you had expected to have earned. \"Thank you. I mean that and I would rather you had not.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_order_that_threw_him_out",
+                        "stage": "what_the_house_is_for"
+                    }
+                ],
+                "text": "She finds you in the infirmary doorway, which is where everyone who has been shown this house ends up standing.\n\n\"Twelve beds,\" Ottilie Hale says. \"Six made up because six is what we can feed. That is the house. Everything else in it is the arrangement that keeps that room open, and I would sell the chapel roof before I shut it.\"",
+                "choices": [
+                    {
+                        "label": "About the brother you put out.",
+                        "next": "the_brother"
+                    },
+                    {
+                        "label": "This isn't what I was told this order was.",
+                        "next": "not_what_i_was_told"
+                    },
+                    {
+                        "label": "Later.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_order_that_threw_him_out",
+                        "stage": "the_gate"
+                    }
+                ],
+                "text": "The woman crossing the cloister does not stop what she is doing to look at you and does not pretend not to have seen you, which is a difficult combination and appears to be deliberate.\n\n\"Ottilie Hale. I am prior here.\" She has a basket of something under one arm. \"You have not come for a bed, because you are standing up. So you have come to look, and you may.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_hale"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "What is this house for?",
+                        "next": "what_the_house_is_for"
+                    },
+                    {
+                        "label": "I've come about a brother you put out four winters ago.",
+                        "next": "the_brother"
+                    },
+                    {
+                        "label": "Just to look.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "A square of grass, a covered walk, herb beds weeded to the edge, and eleven men crossing at intervals that have nothing to do with the sun.\n\nThe woman with the basket stops in front of you rather than beside you.\n\n\"Ottilie Hale,\" she says. \"Prior. The gate is open and the bell is answered and nobody here will ask you what you want, so you will have to say it yourself.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_hale"
+                    },
+                    {
+                        "start_quest": "the_order_that_threw_him_out"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric has stopped at the arch and has not come through it. He is not going to, and nobody in the cloister has looked at him, and that is also deliberate."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "What is this house for?",
+                        "next": "what_the_house_is_for"
+                    },
+                    {
+                        "label": "The gate door is new pine in an old frame.",
+                        "next": "the_gate_door"
+                    },
+                    {
+                        "label": "Nothing. I'll look.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_gate_door": [
+            {
+                "text": "\"It is,\" the prior agrees. \"The old one was oak and it went to Ellery at the ford for eleven months of flour.\" She says it without any performance at all. \"The alms slot is stopped with rag because we have nothing to put in it and it is worse to have an open slot and nothing in it than to have no slot.\"\n\nShe shifts the basket.\n\n\"You may write all of that down. Most people who come up here are hoping for something more interesting.\"",
+                "choices": [
+                    {
+                        "label": "What is this house for?",
+                        "next": "what_the_house_is_for"
+                    },
+                    {
+                        "label": "I've come about a brother.",
+                        "next": "the_brother"
+                    }
+                ]
+            }
+        ],
+        "what_the_house_is_for": [
+            {
+                "text": "She takes you to the infirmary and does not explain anything on the way.\n\nTwelve beds down one wall. Six made up. Both hearths in. A door straight out to the yard so that nobody has to be carried through the cloister, which is the single most thought-about piece of architecture in the building. Somebody at the far end coughing on a count that has clearly been going on for weeks.\n\n\"That,\" Ottilie Hale says. \"We take anyone. We have taken anyone for a hundred and forty years. The reason there are eight fewer relics in the reliquary than there were in spring is linen and lamp oil.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_order_that_threw_him_out",
+                            "stage": "what_the_house_is_for"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric is not in the room. He came as far as the cloister door and stopped, and stayed there for the whole of it, where he could hear."
+                    },
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa: \"Eleven men and a hospice.\" She sounds annoyed about it. \"I had a whole thing worked out for the walk up here.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "About the brother you put out.",
+                        "next": "the_brother"
+                    },
+                    {
+                        "label": "This isn't what I was told.",
+                        "next": "not_what_i_was_told"
+                    },
+                    {
+                        "label": "Nothing. I've seen what I came to see.",
+                        "next": "asked_nothing"
+                    }
+                ]
+            }
+        ],
+        "not_what_i_was_told": [
+            {
+                "text": "\"No,\" she says. \"It never is. We are told about ourselves fairly regularly and I have stopped correcting any of it, because a house that spends its time explaining itself is a house that has stopped washing sheets.\"\n\nShe puts the basket down.\n\n\"You will have had it from somebody who was put out, or from somebody who heard it from somebody who was. Those are the only two ways anyone ever hears about us at all.\"",
+                "choices": [
+                    {
+                        "label": "About the brother you put out.",
+                        "next": "the_brother"
+                    },
+                    {
+                        "label": "Then I'll take what I've seen instead.",
+                        "next": "took_their_side"
+                    }
+                ]
+            }
+        ],
+        "the_brother": [
+            {
+                "text": "Ottilie Hale does not pretend not to know which one.\n\n\"Four winters ago,\" she says. \"Yes. He was put out of this house and it was done properly, in chapter, and it is in the book.\"\n\nShe looks at you steadily.\n\n\"He was not put out for what he did to a sick woman. He was put out for refusing an instruction, in front of the house, at the ford.\"\n\nA pause that goes on slightly too long.\n\n\"I will not tell you what the instruction was.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "priory_refusal_known"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "From the cloister door, Aldric says nothing at all, and keeps saying nothing, for the rest of the conversation."
+                    },
+                    {
+                        "companion": "sera",
+                        "text": "Sera: \"'Will not'. Not 'cannot'.\" The prior does not look away. \"No,\" she agrees. \"Will not.\""
+                    },
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"You have just told us there is something to be told.\" Hale: \"Yes. I am aware of what I have done.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "'Will not' is a strange word to choose.",
+                        "next": "would_not"
+                    },
+                    {
+                        "label": "Then I'll take that as it stands.",
+                        "next": "heard_them_out"
+                    },
+                    {
+                        "label": "Then I'll take your account of him and be done.",
+                        "next": "took_their_side"
+                    }
+                ]
+            }
+        ],
+        "would_not": [
+            {
+                "text": "\"It is exactly the word I chose,\" the prior says. \"I chose it four winters ago and I have used it consistently since, and one day somebody is going to notice that I have never once said the other one.\"\n\nShe picks the basket back up.\n\n\"You have noticed. Good. The house writes everything down and keeps it in order and dusts it weekly, and Ovid is in the writing room, and I have not told her to refuse anybody.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "priory_points_at_record"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Then that's what I'll do.",
+                        "next": "heard_them_out"
+                    },
+                    {
+                        "label": "You could just tell me.",
+                        "next": "she_will_not"
+                    }
+                ]
+            }
+        ],
+        "she_will_not": [
+            {
+                "text": "\"I could,\" Ottilie Hale agrees. \"And then it would be a prior's word about a man who is not here to answer, told to four armed strangers on a lawn.\"\n\nShe starts walking.\n\n\"The book does not have a temper and cannot be argued with and will still say the same thing in eighty years. Go and read the book.\"",
+                "choices": [
+                    {
+                        "label": "I will.",
+                        "next": "heard_them_out"
+                    }
+                ]
+            }
+        ],
+        "asked_nothing": [
+            {
+                "text": "\"As you like,\" the prior says, and goes back to the herb bed, and does not ask what you came for, because this house does not.\n\nYou walked the cloister, stood in the infirmary door, and watched eleven men keep the hours in a building that is an arrangement for keeping one room open. You did not ask the question you came up the track with.\n\nYou still have only his account of them, and now you have also seen them, and the two of those together are heavier than either was on its own.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_order_that_threw_him_out",
+                            "stage": "asked_nothing"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric is at the gate with the horses. \"Did you ask,\" he says, on the track, about a mile down. It is the only thing he says."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Down the track.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "heard_them_out": [
+            {
+                "text": "You asked the question you came up the track with and got an answer to a different one, which is the priory's whole way of doing business and is not, you are increasingly certain, dishonesty.\n\nThey did not expel him for what he did to a sick woman. They expelled him for refusing an instruction, in front of the house, at the ford, and the prior will not say what the instruction was, and says 'will not' rather than 'cannot', and looks at you while she does it.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_order_that_threw_him_out",
+                            "stage": "heard_them_out"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Go and find the writing room.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "took_their_side": [
+            {
+                "text": "\"Then thank you,\" Ottilie Hale says, and she means it, and she looks tired rather than relieved.\n\n\"You are the first person in four winters to hear this house's version of the fourth winter and not go straight down the track to check it against his. I do not know whether that is a compliment to us or a failure on your part, and I am not going to work it out in front of you.\"\n\nShe goes back to the herb bed.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_order_that_threw_him_out",
+                            "stage": "took_their_side"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric is not at the cloister door any more. He is at the gate, with the horses, and he does not say anything on the way down."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Go down the track.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

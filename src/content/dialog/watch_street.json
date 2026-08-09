@@ -1,0 +1,17 @@
+{
+    "npc_key": "watch_street",
+    "start": "hail",
+    "nodes": {
+        "hail": [
+            {
+                "text": "Keep to the street after dark. The lamps are there for a reason.",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

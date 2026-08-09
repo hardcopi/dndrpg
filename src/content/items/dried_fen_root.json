@@ -1,0 +1,13 @@
+{
+  "item_key": "dried_fen_root",
+  "name": "Dried Fen-Root",
+  "description": "A hand of black root, split and dried over smoke, tied with grass. It smells of iron and low water. Osric Fen will pay for it and will not say what he wants it for, which is not the same as not knowing.",
+  "item_type": "misc",
+  "rarity": "uncommon",
+  "weight": 1,
+  "value_gp": 25,
+  "properties": {
+    "quest_item": true
+  },
+  "icon": "potion"
+}

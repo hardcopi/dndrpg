@@ -1,0 +1,14 @@
+{
+  "encounter_key": "pump_gallery_crawlers",
+  "name": "Out of the Launder",
+  "description": "The pump crew's sticks are stacked by the door because the pump crew are not here. Three long pale shapes come up out of the launder in the order they always come up in.",
+  "difficulty": "medium",
+  "monsters": [
+    { "monster": "pale_crawler", "quantity": 3 }
+  ],
+  "allow_flee": true,
+  "allow_parley": false,
+  "victory_flag": "pump_gallery_cleared",
+  "ambush": true,
+  "place": { "location": "pump_gallery" }
+}

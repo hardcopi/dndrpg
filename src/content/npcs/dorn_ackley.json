@@ -1,0 +1,13 @@
+{
+    "npc_key": "dorn_ackley",
+    "name": "Dorn Ackley",
+    "role": "Quarryman",
+    "description": "The last man out of the east quarry when it went, and the only one who was below the fall rather than above it. He built his house facing north.",
+    "sprite_key": "dorn_ackley",
+    "image_url": "assets/images/npcs/miner.png",
+    "is_quest_giver": true,
+    "dialog": "dorn_ackley",
+    "place": {
+        "location": "quarrymans_hut"
+    }
+}

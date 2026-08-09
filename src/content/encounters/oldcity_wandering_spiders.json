@@ -1,0 +1,16 @@
+{
+    "encounter_key": "oldcity_wandering_spiders",
+    "name": "Down From The Ceiling",
+    "description": "One line of silk, then three more, and they are between you and the lit ground.",
+    "difficulty": "medium",
+    "is_random": true,
+    "region": "old_city",
+    "monsters": [
+        {
+            "monster": "giant_spider",
+            "quantity": 2
+        }
+    ],
+    "allow_flee": true,
+    "allow_parley": false
+}

@@ -1,0 +1,56 @@
+{
+ "resistances": [],
+ "immunities": [],
+ "vulnerabilities": [],
+ "condition_immunities": [],
+ "source": "5e SRD",
+ "monster_key": "giant_toad",
+ "name": "Giant Toad",
+ "size": "Large",
+ "type": "beast",
+ "alignment": "unaligned",
+ "armor_class": 11,
+ "hit_points": 39,
+ "hit_dice": "6d10+6",
+ "speed": "20 ft., swim 40 ft.",
+ "strength": 15,
+ "dexterity": 13,
+ "constitution": 13,
+ "intelligence": 2,
+ "wisdom": 10,
+ "charisma": 3,
+ "challenge_rating": 1,
+ "experience_points": 200,
+ "traits": {
+  "Amphibious": "The toad can breathe air and water."
+ },
+ "actions": [
+  {
+   "name": "Bite",
+   "type": "melee",
+   "bonus": 4,
+   "damage": "1d10+2",
+   "damage_type": "piercing",
+   "note": "Plus 1d10 poison damage. The target is grappled (escape DC 13) and restrained, and the toad cannot bite another target while it holds one.",
+   "save": {
+    "ability": "str",
+    "dc": 13
+   },
+   "on_fail": {
+    "condition": "grappled",
+    "repeat_save": true
+   }
+  }
+ ],
+ "saves": {
+  "str": 4
+ },
+ "rank_pref": "front",
+ "sprite_key": "giant_toad",
+ "loot": [
+  {
+   "item": "antitoxin",
+   "chance": 25
+  }
+ ]
+}

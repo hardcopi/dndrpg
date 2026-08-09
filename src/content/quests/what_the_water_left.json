@@ -1,0 +1,98 @@
+{
+    "quest_key": "what_the_water_left",
+    "title": "What the Water Left",
+    "description": "The Fennow bank stood on the corner of Granary Row and failed the year of the second flood. Its strongroom is still down there under the water, and so are the boxes, and so are the names cut into the plates on the boxes.",
+    "giver": "dov_mudlark",
+    "on_job_board": false,
+    "required_level": 2,
+    "rewards": {
+        "xp": 350
+    },
+    "stages": {
+        "find_the_strongroom": {
+            "title": "Find the strongroom",
+            "objective": "Get into the drowned counting room.",
+            "journal": "Dov says there is a room off the low conduit that is not a drain — a proper room, with a cornice, under two feet of water, and an iron door at the back standing open. Dov has been in as far as the door twice and no further, and Dov goes everywhere.",
+            "target": {
+                "location": "drowned_counting_room"
+            }
+        },
+        "the_boxes": {
+            "title": "The boxes",
+            "objective": "Find out what is still in the strongroom.",
+            "journal": "Forty-odd iron deposit boxes on racks, chest-deep, each with a brass plate and a name cut into it, and every one of them still shut. And a man, or what forty years of standing water leaves of one, who has never once come out past the door.",
+            "target": {
+                "location": "drowned_counting_room"
+            }
+        },
+        "took_the_silver": {
+            "title": "Taken",
+            "journal": "Two hundred and fifty gold in plate, coin and one very good ring, out of eleven boxes belonging to eleven people who are mostly dead. I told myself the whole way up the conduit that a bank that has been shut forty years has no depositors, only heirs, and that heirs who have not come for it in forty years are not coming. That is true. It also took me the whole way up the conduit.",
+            "resolution": "took_the_silver",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "strongroom_fate",
+                    "value": "took"
+                },
+                {
+                    "give_gold": 250
+                },
+                {
+                    "approval": {
+                        "kessa": 6,
+                        "sera": 6,
+                        "aldric": -12,
+                        "ilse": -6
+                    }
+                }
+            ]
+        },
+        "returned_the_boxes": {
+            "title": "Given back",
+            "journal": "Nine of the forty-one names still have somebody in Rivermark answering to them. Three of those are on Dagen Wyke's list. I carried nine boxes up a drain and gave them to people who had been told all their lives that the money was gone, and one of them, a woman of about seventy, sat down on the step and would not open hers, and said she would rather have the box.",
+            "resolution": "returned_the_boxes",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "strongroom_fate",
+                    "value": "returned"
+                },
+                {
+                    "give_gold": 60
+                },
+                {
+                    "approval": {
+                        "aldric": 14,
+                        "ilse": 10,
+                        "kessa": 6,
+                        "sera": -4
+                    }
+                }
+            ]
+        },
+        "took_the_book": {
+            "title": "The deposit book",
+            "journal": "I left the boxes and took the book, because the book is the thing that was worth carrying. Two hundred and six depositors, what each of them lodged, and the last eleven entries: one week, all withdrawals, all to the bank's own partners, all dated before the flood. The Fennow did not fail in the water. It was emptied first and the water arrived in time to be blamed.",
+            "resolution": "took_the_book",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "strongroom_fate",
+                    "value": "ledger"
+                },
+                {
+                    "give_item": "fennow_ledger",
+                    "quantity": 1
+                },
+                {
+                    "approval": {
+                        "sera": 12,
+                        "ilse": 8,
+                        "aldric": 4
+                    }
+                }
+            ]
+        }
+    }
+}

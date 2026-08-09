@@ -1,0 +1,12 @@
+{
+  "item_key": "potion_healing",
+  "name": "Potion of Healing",
+  "description": "A red liquid that glimmers when agitated. Restores 2d4+2 hit points.",
+  "item_type": "potion",
+  "rarity": "common",
+  "weight": 0.5,
+  "value_gp": 50,
+  "properties": { "heals": "2d4+2" },
+  "icon": "potion",
+  "place": { "location": "warren_mouth" }
+}

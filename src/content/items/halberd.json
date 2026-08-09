@@ -1,0 +1,18 @@
+{
+  "item_key": "halberd",
+  "name": "Halberd",
+  "description": "An axe, a spike and a hook on six feet of pole. It keeps people at arm's length and then some.",
+  "item_type": "weapon",
+  "rarity": "common",
+  "weight": 6,
+  "value_gp": 20,
+  "damage_dice": "1d10",
+  "damage_type": "slashing",
+  "properties": {
+    "reach": true,
+    "heavy": true,
+    "two_handed": true,
+    "martial": true
+  },
+  "icon": "weapon"
+}

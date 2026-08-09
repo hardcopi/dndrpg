@@ -1,0 +1,19 @@
+{
+ "encounter_key": "cellar_rats_swarm",
+ "name": "Something in the Cellar",
+ "description": "Four grey shapes come off the grain sacks at once. They are not frightened of light.",
+ "difficulty": "easy",
+ "monsters": [
+  {
+   "monster": "giant_rat",
+   "quantity": 4
+  }
+ ],
+ "allow_flee": true,
+ "allow_parley": false,
+ "victory_flag": "cellar_rats_beaten",
+ "ambush": true,
+ "place": {
+  "location": "flagon_cellar"
+ }
+}

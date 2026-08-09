@@ -1,0 +1,47 @@
+{
+  "companion_key": "ilse",
+  "name": "Ilse Thornwood",
+  "title": "Warden of the East Hills",
+  "description": "Walks the hills between Rivermark and the quarry. Has watched the goblins come up and knows they were pushed.",
+  "race": "Elf",
+  "subrace": "Wood Elf",
+  "class": "Ranger",
+  "background": "Outlander",
+  "alignment": "Chaotic Good",
+  "level": 1,
+  "abilities": {
+    "strength": 12,
+    "dexterity": 16,
+    "constitution": 13,
+    "intelligence": 11,
+    "wisdom": 15,
+    "charisma": 10
+  },
+  "sprite_key": "ranger",
+  "combat_rank": "back",
+  "npc_key": "ilse",
+  "personal_quest": "ilse_deep_warren",
+  "recruit": {
+    "location": "wardens_camp",
+    "conditions": [
+      {
+        "flag": "met_ilse"
+      }
+    ]
+  },
+  "approval": {
+    "leave_at": -35,
+    "hostile_at": -65,
+    "romance_at": 30
+  },
+  "romanceable": true,
+  "gear": [
+    "shortbow",
+    "shortsword",
+    "leather_armor"
+  ],
+  "spells": [],
+  "feats": [
+    "archery"
+  ]
+}

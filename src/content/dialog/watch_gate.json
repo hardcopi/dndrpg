@@ -1,0 +1,17 @@
+{
+    "npc_key": "watch_gate",
+    "start": "hail",
+    "nodes": {
+        "hail": [
+            {
+                "text": "Road's been quiet since the wilds opened up. Too quiet, the captain says.",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

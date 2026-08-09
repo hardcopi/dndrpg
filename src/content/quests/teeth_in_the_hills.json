@@ -1,0 +1,114 @@
+{
+    "quest_key": "teeth_in_the_hills",
+    "title": "Teeth in the Hills",
+    "description": "Four caravans in six weeks, all on the same stretch of the east road. Reed calls it bad luck. Nobody who has counted the wagons calls it that.",
+    "giver": "captain_elowen",
+    "on_job_board": true,
+    "required_level": 2,
+    "rewards": {
+        "xp": 350,
+        "gold": 120
+    },
+    "stages": {
+        "walk_the_road": {
+            "title": "Walk the east road",
+            "objective": "Find where the raids happen and what they take.",
+            "journal": "Reed wants the east road made safe. Four caravans in six weeks, all inside two miles of the quarry cut.",
+            "target": {
+                "location": "quarry_road"
+            }
+        },
+        "find_the_warden": {
+            "title": "Find the hill warden",
+            "objective": "Somebody watches these hills for a living. Find her.",
+            "journal": "There is a warden in the eastern hills. Tobin says she comes in for salt and leaves before dark, and that she knows the ground better than the watch does.",
+            "target": {
+                "location": "wardens_camp"
+            }
+        },
+        "the_pattern": {
+            "title": "Count the wagons",
+            "objective": "Work out which caravans get hit, and which do not.",
+            "journal": "The raids are not random. Every wagon that was hit carried grain contracted to the Rivermark granary. Every wagon that got through carried anything else. The gear the raiders left in the cut is not goblin work. A jack, a helm and two shoulder-plates, all human-made, and all four punched on the inside with the same stamp: a plumb-bob hanging inside a square.",
+            "target": {
+                "location": "broken_hills"
+            },
+            "effects": [
+                {
+                    "set_flag": "mark_seen_plate"
+                }
+            ]
+        },
+        "ambushed_the_raiders": {
+            "title": "The road, taken back",
+            "journal": "We set on the raiding party in the cut and left none of them standing. The road is quiet. The warren now knows exactly how many of us there are and what we did to the ones who came out.",
+            "resolution": "ambushed_the_raiders",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "hills_fate",
+                    "value": "ambush"
+                },
+                {
+                    "approval": {
+                        "kessa": 12,
+                        "aldric": -4,
+                        "ilse": -14
+                    }
+                }
+            ]
+        },
+        "escorted_the_caravan": {
+            "title": "One wagon through",
+            "journal": "We walked the next grain wagon through the cut ourselves. The raiders came for it, saw us, and went back up the slope — which told me the thing I wanted. They were sent for that wagon. Somebody in Rivermark told them which one it was.",
+            "resolution": "escorted_the_caravan",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "hills_fate",
+                    "value": "escort"
+                },
+                {
+                    "set_flag": "hills_pattern"
+                },
+                {
+                    "set_flag": "caravan_saved"
+                },
+                {
+                    "xp": 100
+                },
+                {
+                    "approval": {
+                        "aldric": 10,
+                        "ilse": 8,
+                        "sera": -4,
+                        "kessa": -2
+                    }
+                }
+            ]
+        },
+        "turned_the_road": {
+            "title": "The road moved",
+            "journal": "We had the carters take the northern ford instead. Nothing has been raided since. Nothing has come down out of the hills either, and the warren has been eating its own stores for eleven days.",
+            "resolution": "turned_the_road",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "hills_fate",
+                    "value": "reroute"
+                },
+                {
+                    "set_flag": "hills_pattern"
+                },
+                {
+                    "approval": {
+                        "sera": 8,
+                        "kessa": -8,
+                        "ilse": -6,
+                        "aldric": 2
+                    }
+                }
+            ]
+        }
+    }
+}

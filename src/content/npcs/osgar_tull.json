@@ -1,0 +1,13 @@
+{
+    "npc_key": "osgar_tull",
+    "name": "Osgar Tull",
+    "role": "Bargemaster",
+    "description": "Takes the packet downriver on the second and the fifth and has done for nineteen years. He will carry anything that pays and remember everyone he carried, which is a different service and is priced separately.",
+    "sprite_key": "osgar_tull",
+    "image_url": "assets/images/npcs/barbarian.png",
+    "is_quest_giver": true,
+    "dialog": "osgar_tull",
+    "place": {
+        "location": "packet_stair"
+    }
+}

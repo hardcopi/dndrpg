@@ -1,0 +1,90 @@
+{
+    "quest_key": "the_overseers_office",
+    "title": "The Overseer's Office",
+    "description": "A hut on a platform with a shutter that opens on the whole works, so that a man can watch every barrow and be seen watching it.",
+    "on_job_board": false,
+    "required_level": 5,
+    "rewards": {
+        "xp": 500,
+        "gold": 100
+    },
+    "stages": {
+        "the_ladder": {
+            "title": "Up the ladder",
+            "objective": "Bael Rourke runs the works from a hut above the headings. Get into it.",
+            "journal": "Bael Rourke came up through the headings and has the hands to prove it. He runs two hundred people on time and under cost and is extremely proud of the first half of that. His office is up a ladder and its shutter faces the works, which means everybody can see who is standing in it.",
+            "target": {
+                "location": "overseers_office"
+            }
+        },
+        "the_strongbox": {
+            "title": "The strongbox and the rack",
+            "objective": "The strongbox is bolted through the joist. The rack beside it is not locked at all.",
+            "journal": "There is a strongbox in Rourke's office bolted through the floor and through the joist, and there are eleven pounds in it, and it is the only thing in the room anybody has ever thought to secure. The rolled paper in the rack next to it is working paper. Nobody at the works has ever considered it worth anything.",
+            "target": {
+                "location": "overseers_office"
+            }
+        },
+        "talked_your_way_in": {
+            "title": "Asked, and shown",
+            "journal": "Rourke showed me the office because I asked to see it. He is proud of the works and nobody has ever been proud of them at him before. He walked me through the props, the pump schedule and the cost of a bucket of sand, and left me alone in the room for four minutes to go and shout at somebody about a barrow.",
+            "resolution": "talked_your_way_in",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "office_fate",
+                    "value": "talked"
+                },
+                {
+                    "set_flag": "office_open"
+                },
+                {
+                    "approval": {
+                        "sera": 12,
+                        "aldric": 6,
+                        "ilse": 4
+                    }
+                }
+            ]
+        },
+        "took_the_office": {
+            "title": "Taken",
+            "journal": "Rourke leaned out of the shutter and said a number, and the number was how many wardens came up the ladder. It is his office now in the sense that his name is on the door and it is mine in the sense that I am standing in it and he is not. He was paid weekly and so were they. I keep thinking about that.",
+            "resolution": "took_the_office",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "office_fate",
+                    "value": "took"
+                },
+                {
+                    "set_flag": "office_open"
+                },
+                {
+                    "set_flag": "works_alarmed"
+                },
+                {
+                    "approval": {
+                        "kessa": 12,
+                        "aldric": -10,
+                        "sera": -8,
+                        "ilse": -4
+                    }
+                }
+            ]
+        },
+        "stayed_out": {
+            "title": "Left on the ladder",
+            "journal": "I went up as far as the platform, looked in at the shutter, and came down again. Everybody on the floor below saw me do both. That is what the platform is for.",
+            "resolution": "stayed_out",
+            "terminal": true,
+            "outcome": "neutral",
+            "effects": [
+                {
+                    "set_flag": "office_fate",
+                    "value": "out"
+                }
+            ]
+        }
+    }
+}

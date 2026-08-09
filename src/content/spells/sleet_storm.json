@@ -1,0 +1,27 @@
+{
+  "spell_key": "sleet_storm",
+  "name": "Sleet Storm",
+  "level": 3,
+  "school": "Conjuration",
+  "classes": [
+    "Druid",
+    "Sorcerer",
+    "Wizard"
+  ],
+  "resolution": "debuff",
+  "save_ability": "dex",
+  "save_effect": "negate",
+  "target_kind": "all_enemies",
+  "reaches_back_rank": true,
+  "effect": {
+    "condition": "prone"
+  },
+  "casting_time": "1 action",
+  "range_text": "150 feet",
+  "components": "V, S, M",
+  "duration": "Concentration, up to 1 minute",
+  "concentration": true,
+  "duration_rounds": 10,
+  "description": "Freezing rain and sleet fall in the area, and the ground there is slick. A creature that moves must succeed on a Dexterity saving throw or fall prone.",
+  "source": "5e SRD"
+}

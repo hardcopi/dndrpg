@@ -1,0 +1,217 @@
+{
+    "region_key": "rivermark",
+    "module": "rivermark",
+    "name": "Rivermark",
+    "region_type": "town",
+    "description": "A modest trade town of cobbled streets, the Golden Flagon inn, and a watchful eastern gate.",
+    "sort_order": 10,
+    "locations": {
+        "market_square": {
+            "name": "Market Square",
+            "type": "square",
+            "map_pos": [41, 24],
+            "description": "Stall canvas snaps in the river wind, and the cobbles are slick with fish-water and trodden straw. Everything Rivermark buys or sells passes through this square eventually, along with everything it only whispers. The town watch keeps a post at the well, close enough to see the whole market and far enough not to hear most of it.",
+            "first_visit": "The square opens up before you all at once — noise and colour after the quiet of the streets, hawkers calling weights and prices over one another.",
+            "ambience": [
+                "A fishmonger argues weights with a farmer, neither expecting to win.",
+                "Two children chase a hoop between the stalls, apologising to nobody.",
+                "A watchman leans on the well, watching hands rather than faces.",
+                "Somewhere behind the stalls, a mule expresses a strong opinion.",
+                "The river wind turns the stall canvas over with a crack."
+            ],
+            "exits": [
+                {"to": "high_street", "label": "Down the High Street"},
+                {"to": "counting_house", "label": "North along the river"},
+                {"to": "tobins_goods", "label": "Into Tobin's Goods"},
+                {"to": "the_anvil", "label": "Into the Anvil"}
+            ]
+        },
+        "counting_house": {
+            "name": "The Counting House",
+            "type": "building",
+            "map_pos": [27, 13],
+            "description": "A narrow stone building on the river quay, where Rivermark's ledgers are kept and its tariffs argued. The clerks write in a hand nobody else can read, which may be the point. The smell is ink, wax, and old paper — the smell of money that has already been counted.",
+            "ambience": [
+                "A clerk's pen scratches on, indifferent to visitors.",
+                "Coin is counted somewhere out of sight, unhurried.",
+                "The river slaps at the quay stones below the window."
+            ],
+            "exits": [
+                {"to": "market_square", "label": "Back to the market square"},
+                {"to": "granary_row", "label": "Along the quay to Granary Row"},
+                {"to": "river_stair", "label": "Down the steps to the water"}
+            ]
+        },
+        "river_stair": {
+            "name": "The River Stair",
+            "type": "street",
+            "map_pos": [41, 6],
+            "description": "Forty worn steps from the quay down to the water, and a stone landing at the bottom with iron rings set into it. Everything Rivermark did not grow arrives here, off the flat-bottomed boats that work up from the estuary, and everything the town cannot account for leaves the same way. The steps are cut with a tide-scale nobody has painted in a generation; the river reads it anyway.",
+            "first_visit": "The town noise falls away behind the quay wall and there is only water — brown, patient, moving faster than it looks.",
+            "ambience": [
+                "A boat knocks its fenders against the landing, twice, and settles.",
+                "Somebody counts sacks off a gangplank in a language you half know.",
+                "The river goes by at the foot of the steps, carrying a hat.",
+                "A porter sits on a bollard eating, watching the water do the work.",
+                "Gulls argue over the tide-line and lose interest at the same moment."
+            ],
+            "exits": [
+                {"to": "counting_house", "label": "Up the steps to the Counting House"},
+                {"to": "granary_row", "label": "Along the quay to Granary Row"},
+                {"to": "towpath_end", "label": "Down the stair to the towpath"}
+            ]
+        },
+        "tobins_goods": {
+            "name": "Tobin's Goods",
+            "type": "building",
+            "map_pos": [20, 30],
+            "description": "A trade-goods shop off the market square: rope and salt in the back, the good stock behind the counter. Tobin knows what everything costs, including favours, and files both under the same arithmetic.",
+            "ambience": [
+                "Rope, tar and salt argue over which of them you smell first.",
+                "Tobin dusts a shelf that was not dusty.",
+                "A price is chalked out and rewritten a copper higher."
+            ],
+            "exits": [
+                {"to": "market_square", "label": "Out to the market square"}
+            ]
+        },
+        "the_anvil": {
+            "name": "The Anvil",
+            "type": "building",
+            "map_pos": [62, 20],
+            "description": "Rivermark's smithy. The forge never quite goes out, and neither does the smith's opinion of guild prices. Blades, tools and horseshoes hang in ranks; the good steel is under the counter, and Brenna decides who has earned a look at it.",
+            "ambience": [
+                "The forge breathes in and out like something sleeping.",
+                "Hammer-blows fall in threes, then stop for judgement.",
+                "Quench-steam hisses up and is gone."
+            ],
+            "exits": [
+                {"to": "market_square", "label": "Out to the market square"}
+            ]
+        },
+        "high_street": {
+            "name": "The High Street",
+            "type": "street",
+            "map_pos": [46, 39],
+            "description": "The spine of Rivermark, running from the market down toward the inn and the east road. Shopfronts and house doors stand shoulder to shoulder, and everyone who wants to be seen — and a few who ought not to be — walks it twice a day. Word travels this street faster than anything on wheels.",
+            "ambience": [
+                "A minstrel tunes the same string a fourth time, hopefully.",
+                "A drover walks his mule through, apologising to shopfronts.",
+                "Someone greets someone else a shade too warmly.",
+                "A shutter closes exactly when you glance up at it."
+            ],
+            "exits": [
+                {"to": "market_square", "label": "Up to the market square"},
+                {"to": "flagon_common_room", "label": "Into the Golden Flagon"},
+                {"to": "root_ash", "label": "Into Root & Ash"},
+                {"to": "granary_row", "label": "Down Granary Row"},
+                {"to": "east_gate", "label": "East toward the gate"},
+                {"to": "west_gate", "label": "West toward the lesser gate"}
+            ]
+        },
+        "west_gate": {
+            "name": "The West Gate",
+            "type": "gate",
+            "map_pos": [7, 45],
+            "description": "The lesser gate, and it knows it. A timber arch in a stretch of wall the town stopped repairing when the trade went east, propped on one side and patched on the other with quarry stone that does not match. Beyond it the ford road runs out through wet fields toward the farms and the burnt mill. One watchman stands here, and the posting is what the watch gives a man it has stopped expecting anything from.",
+            "first_visit": "The arch is lower than you expect and the road beyond it is mud rather than metalling. Nobody stops you. Nobody has stopped anyone here in a long time.",
+            "ambience": [
+                "The gate leaf hangs open on one hinge and has clearly hung that way for years.",
+                "A farm cart comes in empty and goes out emptier.",
+                "Wind off the flats brings the smell of standing water.",
+                "The watchman on the arch shifts his weight and does not look up.",
+                "Somebody has chalked a tally on the gatepost and given up halfway."
+            ],
+            "exits": [
+                {"to": "high_street", "label": "Back up the High Street"},
+                {"to": "ford_lane", "label": "Out along the ford lane"}
+            ]
+        },
+        "root_ash": {
+            "name": "Root & Ash",
+            "type": "building",
+            "map_pos": [22, 42],
+            "description": "The apothecary on the main street — drying herbs overhead, stoppered bottles in ranks, and a ledger of who owes what for their remedies. Osric measures words the way he measures powders: exactly, and never one grain more than asked for.",
+            "ambience": [
+                "Dried herbs whisper against each other in the draught.",
+                "Something in a stoppered jar settles, slowly.",
+                "Osric grinds a pestle in patient circles."
+            ],
+            "exits": [
+                {"to": "high_street", "label": "Out to the High Street"}
+            ]
+        },
+        "granary_row": {
+            "name": "Granary Row",
+            "type": "street",
+            "map_pos": [62, 44],
+            "description": "Warehouses and grain-lofts crowd the lane behind the quay, tall and windowless. By day it is carts, sacks and tally-marks; after dark the row belongs to whoever wants it badly enough. Half of Rivermark's wealth sleeps in these lofts, which is why some of Rivermark never quite sleeps at all.",
+            "ambience": [
+                "Grain sifts somewhere behind boarded doors.",
+                "A tally-man chalks sacks without looking up.",
+                "Rats debate in the gap between two warehouses.",
+                "A loft door stands open exactly one inch."
+            ],
+            "exits": [
+                {"to": "high_street", "label": "Back to the High Street"},
+                {"to": "counting_house", "label": "Along the quay to the Counting House"},
+                {"to": "river_stair", "label": "Along the quay to the river stair"},
+                {"to": "grain_stair", "label": "Down the loading hatch", "hidden": true}
+            ]
+        },
+        "flagon_common_room": {
+            "name": "The Golden Flagon",
+            "type": "building",
+            "map_pos": [27, 58],
+            "inn_cost": 5,
+            "job_board": true,
+            "description": "The warm heart of Rivermark: hearth-light on scrubbed tables, the job board by the door, and rooms upstairs for the weary. Mara Hearthstone runs it with flour on her apron and a ledger in her head, and most of what matters in town is agreed at these tables before it is ever said anywhere official.",
+            "first_visit": "The door swings shut behind you and the road noise dies. Woodsmoke, bread, and someone laughing at the far table — whatever else Rivermark is, this room is on your side.",
+            "ambience": [
+                "The hearth pops and settles a log.",
+                "Mara counts something under her breath — mugs, or debts.",
+                "A traveller sleeps sitting up, dignity mostly intact.",
+                "Someone pins a fresh notice to the job board.",
+                "Two locals argue quietly about a third."
+            ],
+            "exits": [
+                {"to": "high_street", "label": "Out to the High Street"},
+                {"to": "flagon_cellar", "label": "Down to the cellar"}
+            ]
+        },
+        "flagon_cellar": {
+            "name": "The Flagon Cellar",
+            "type": "room",
+            "map_pos": [10, 67],
+            "hidden_until_visited": true,
+            "description": "Cool dark under the Golden Flagon — grain sacks, kegs on their chocks, and a low sump where the river seeps in. Something has been at the stores, and not politely. The lamplight does not reach the corners, and the corners know it.",
+            "first_visit": "The stairs give onto darkness that smells of grain, damp stone — and something sour underneath that has no business in a larder.",
+            "ambience": [
+                "Something moves behind the grain sacks, then thinks better of it.",
+                "The river seeps and drips in the sump.",
+                "A keg creaks against its chocks.",
+                "Your lamp gutters in air that should be still."
+            ],
+            "exits": [
+                {"to": "flagon_common_room", "label": "Up the stairs to the common room"},
+                {"to": "sump_drain", "label": "Through the gap behind the north wall", "hidden": true}
+            ]
+        },
+        "east_gate": {
+            "name": "The East Gate",
+            "type": "gate",
+            "map_pos": [87, 41],
+            "description": "Rivermark's one good gate, watched by men who know every face that belongs and study the ones that do not. Beyond the arch the quarry road runs east into open country. The watch asks few questions of those leaving; it saves them all for those coming back.",
+            "ambience": [
+                "The gate-watch compares a face to a memory, unhurried.",
+                "A cart rumbles through the arch, tarps drawn tight.",
+                "Wind off the hills carries dust and distance.",
+                "A cutpurse studies the crowd, and the watch studies him."
+            ],
+            "exits": [
+                {"to": "high_street", "label": "Back up the High Street"},
+                {"to": "quarry_road", "label": "Through the east gate"}
+            ]
+        }
+    }
+}

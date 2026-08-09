@@ -1,0 +1,8 @@
+{
+    "module_key": "undervault",
+    "name": "The Undervault",
+    "blurb": "Somebody cut a stair into the hillside and stopped writing things down. What is under it goes further than anyone has walked, and it is not the same twice — the diggings shift, the passages close behind you, and every crew that comes back up describes a different place. There is no story down there. There is a way down, and a way further down, and whatever is standing between you and it.",
+    "start_location_key": "uv_camp",
+    "attribution": "Dungeon levels are generated at play, in the manner of the random dungeon tables in the 1979 Dungeon Masters Guide (Appendix A). No text from that work is used. Rules content from the System Reference Document 5.1 and 5.2, CC-BY 4.0.",
+    "sort_order": 30
+}

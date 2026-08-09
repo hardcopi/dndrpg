@@ -1,0 +1,13 @@
+{
+  "item_key": "longsword_fine",
+  "name": "Longsword +1",
+  "description": "Old City steel, older than the drowning, and it has not taken a nick since. The balance does half the work of the swing.",
+  "item_type": "weapon",
+  "rarity": "rare",
+  "weight": 3,
+  "value_gp": 500,
+  "damage_dice": "1d8",
+  "damage_type": "slashing",
+  "properties": { "versatile": "1d10", "attack_bonus": 1, "damage_bonus": 1 },
+  "icon": "weapon"
+}

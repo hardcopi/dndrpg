@@ -1,0 +1,13 @@
+{
+    "npc_key": "corrin_dale",
+    "name": "Corrin Dale",
+    "role": "Indentured Digger",
+    "description": "Signed for three years and a cottage. He is in his fourth year, and can explain exactly how that happened, in order, without once saying he was cheated.",
+    "sprite_key": "corrin_dale",
+    "image_url": "assets/images/npcs/prisoner_2.png",
+    "is_quest_giver": true,
+    "dialog": "corrin_dale",
+    "place": {
+        "location": "deepworks_canteen"
+    }
+}

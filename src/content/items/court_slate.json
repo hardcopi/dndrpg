@@ -1,0 +1,14 @@
+{
+  "item_key": "court_slate",
+  "name": "Court Slate",
+  "description": "A palm of roofing slate with a notch filed in one edge and a hole drilled in the other. It means the Low Court has had its business with you and closed the book. Down there it is worth more than money, and up here it is worth nothing at all, which is roughly the whole of Undertown's opinion of Rivermark.",
+  "item_type": "misc",
+  "rarity": "uncommon",
+  "weight": 0,
+  "value_gp": 0,
+  "properties": {
+    "quest_item": true,
+    "safe_passage": "undertown"
+  },
+  "icon": "amulet"
+}

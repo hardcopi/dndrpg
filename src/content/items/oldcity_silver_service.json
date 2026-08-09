@@ -1,0 +1,16 @@
+{
+    "item_key": "oldcity_silver_service",
+    "name": "Burgled Silver",
+    "item_type": "treasure",
+    "rarity": "common",
+    "weight": 12,
+    "value_gp": 90,
+    "icon": "coin",
+    "description": "A dozen pieces of household silver, each wrapped separately and none of them from the same household. Plates, a pair of goblets, cutlery settings with three different monograms. Somewhere up in the City twelve people have reported the same night.",
+    "properties": {
+        "stolen": true
+    },
+    "place": {
+        "location": "oldcity_thieves_den"
+    }
+}

@@ -1,0 +1,78 @@
+{
+    "quest_key": "the_polite_man",
+    "title": "The Polite Man",
+    "description": "The name on the note keeps house eleven miles downriver. Go and look at him, and take note of everything he tells you, because he will tell you everything.",
+    "giver": "ludo_corse",
+    "on_job_board": false,
+    "required_level": 4,
+    "rewards": {
+        "xp": 350,
+        "gold": 60
+    },
+    "stages": {
+        "go_downriver": {
+            "title": "Greyhythe",
+            "objective": "Ludo Corse keeps house at Greyhythe. Go and look at him.",
+            "journal": "Ludo Corse, factor, of Greyhythe. Pyke says he has been down twice in three years, was perfectly civil both times, and paid on the day.",
+            "target": {
+                "location": "factors_house"
+            }
+        },
+        "the_chair": {
+            "title": "The chair on your side of the desk",
+            "objective": "Sit down. Ask him whatever you like.",
+            "journal": "He answered the door himself, put me in the chair, and asked whether I had eaten. There is a chair on my side of the desk and it is worn through at the arms, which means a great many people have sat in it, which means a great many people have come here to ask him something.",
+            "target": {
+                "location": "factors_house"
+            }
+        },
+        "asked_everything": {
+            "title": "Everything, honestly",
+            "journal": "I asked him what he buys and he told me. I asked him who he buys it for and he told me. I asked him what the mark on the note was and he said it was the house's mark and had been since his grandfather. He did not lie once and I came out into the street knowing nothing I could say aloud to Reed. That is not an accident. That is a method, and he has been using it on better people than me for a long time.",
+            "resolution": "asked_everything",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "polite_man_fate",
+                    "value": "asked"
+                },
+                {
+                    "set_flag": "met_corse"
+                },
+                {
+                    "xp": 100
+                },
+                {
+                    "approval": {
+                        "sera": 12,
+                        "aldric": 6,
+                        "ilse": 4,
+                        "kessa": -6
+                    }
+                }
+            ]
+        },
+        "asked_nothing": {
+            "title": "Nothing worth asking",
+            "journal": "I sat in the chair for a quarter of an hour and could not think of a question that would not have made me look like a fool. He was very kind about it. He said most people find the second visit easier.",
+            "resolution": "asked_nothing",
+            "terminal": true,
+            "outcome": "neutral",
+            "effects": [
+                {
+                    "set_flag": "polite_man_fate",
+                    "value": "nothing"
+                },
+                {
+                    "set_flag": "met_corse"
+                },
+                {
+                    "approval": {
+                        "kessa": 2,
+                        "sera": -6
+                    }
+                }
+            ]
+        }
+    }
+}

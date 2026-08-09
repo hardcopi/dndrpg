@@ -1,0 +1,155 @@
+{
+    "npc_key": "bram_ockley",
+    "start": "hail",
+    "nodes": {
+        "hail": [
+            {
+                "once": true,
+                "text": "Seven guards, one brazier and a pot of something that has been on the coals since the start of the watch. The officer is the one with the key at his elbow and the look of a man doing sums about you.\n\n\"You're not Works and you're not mine,\" he says. \"So you're down here for the money or you're down here for the children. Which is it, and don't say both, because it's never both.\"",
+                "choices": [
+                    {
+                        "label": "The children.",
+                        "next": "the_children"
+                    },
+                    {
+                        "label": "The money.",
+                        "next": "the_money"
+                    },
+                    {
+                        "label": "Nothing. We're leaving.",
+                        "end": true
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "jimmy_able",
+                        "text": "Jimmy: \"That man has wanted my block cleared for years and never once come down to do it himself. I respect a man who knows the price of his own convictions.\"",
+                        "once": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "oldcity_the_missing_children",
+                        "status": "active"
+                    }
+                ],
+                "once": true,
+                "text": "The officer looks up from a roster he has read four times.\n\n\"She got to you, then.\" He does not need to say who. \"Right. Before you ask: no, I'm not sending men past the torches. I've seven. I had nine in the spring.\"\n\nHe puts the roster down.\n\n\"The door's open. It's always been open, that's the joke of it — sign says keep out and there's not a lock on it that works. Anyone who wants to go down can go down. Almost nobody wants to.\"",
+                "choices": [
+                    {
+                        "label": "What's past the torches?",
+                        "next": "past_the_torches"
+                    },
+                    {
+                        "label": "Then we'll go.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "oldcity_the_missing_children",
+                                    "stage": "into_the_dark"
+                                }
+                            }
+                        ],
+                        "next": "then_well_go"
+                    }
+                ]
+            },
+            {
+                "text": "\"Back up, then,\" Bram says. \"Or down. It's all one to me and the door doesn't lock.\"",
+                "choices": [
+                    {
+                        "label": "What's past the torches?",
+                        "next": "past_the_torches"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_children": [
+            {
+                "text": "\"Four,\" he says, immediately, which tells you he has the number ready. \"Eleven days. And before you ask what we've done about it — we've walked both causeways every watch since the second one and found nothing, because there's nothing on the causeways. Whatever's doing it is off them, in the dark, and I've seven men.\"\n\nHe taps the roster.\n\n\"I lost two down here in the spring going off the lit ground. I'm not spending another five to get told the same thing.\"",
+                "choices": [
+                    {
+                        "label": "What's past the torches?",
+                        "next": "past_the_torches"
+                    },
+                    {
+                        "label": "Then let us go.",
+                        "next": "let_us_go"
+                    }
+                ]
+            }
+        ],
+        "the_money": [
+            {
+                "text": "\"Honest, at least.\" He almost approves. \"There's money down there. Old coin, mostly, and every so often somebody comes up with a handful and buys drinks with it and three more go down the week after and don't come up.\"\n\nHe shrugs.\n\n\"I'll not stop you. I'll not come looking either.\"",
+                "choices": [
+                    {
+                        "label": "What's past the torches?",
+                        "next": "past_the_torches"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "past_the_torches": [
+            {
+                "text": "\"Two causeways, both shored, both lit, both patrolled — that's ours. Everything else is the old streets and they're black.\n\n\"North channel heads at a standing pool that stinks worse than the flow does, which takes doing. There's goblins east of it; they came down about a month back and they've sent for more, and there'll be a proper problem there by midsummer.\n\n\"There's a gang living in a block south of the north channel. Thieves. I know exactly where they are and exactly who they are and I've seven men, so we have an arrangement where I pretend I don't.\n\n\"And both channels run east and drop down a hole, and past the hole there's a ledge, and nobody who has gone along that ledge has told me what's on the end of it.\"",
+                "choices": [
+                    {
+                        "label": "Then let us go.",
+                        "conditions": [
+                            {
+                                "quest": "oldcity_the_missing_children",
+                                "status": "active"
+                            }
+                        ],
+                        "next": "let_us_go"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "let_us_go": [
+            {
+                "text": "\"I'm not stopping you. I want that in the record — I never stopped anybody.\" He looks at the door, and then at you. \"If you find them, bring them to the bottom of that stair and not one step further, and shout. There'll be someone on it.\"\n\n\"And if you find what took them, I'd sooner you didn't bring that.\"",
+                "choices": [
+                    {
+                        "label": "Understood.",
+                        "end": true
+                    }
+                ],
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "oldcity_the_missing_children",
+                            "stage": "into_the_dark"
+                        }
+                    }
+                ]
+            }
+        ],
+        "then_well_go": [
+            {
+                "text": "\"Then go,\" Bram says, and goes back to the roster, and does not read it.",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

@@ -1,0 +1,23 @@
+{
+  "spell_key": "light",
+  "name": "Light",
+  "level": 0,
+  "school": "Evocation",
+  "classes": [
+    "Bard",
+    "Cleric",
+    "Sorcerer",
+    "Wizard"
+  ],
+  "resolution": "buff",
+  "target_kind": "ally",
+  "concentration": false,
+  "duration_rounds": 0,
+  "casting_time": "1 action",
+  "range_text": "Touch",
+  "components": "V, M",
+  "duration": "1 hour",
+  "description": "You touch one object. Until the spell ends, the object sheds bright light in a 20-foot radius and dim light for an additional 20 feet.",
+  "reaches_back_rank": true,
+  "source": "5e SRD"
+}

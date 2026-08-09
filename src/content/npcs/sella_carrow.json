@@ -1,0 +1,12 @@
+{
+    "npc_key": "sella_carrow",
+    "name": "Sella Carrow",
+    "role": "Waiting at the Stair",
+    "description": "She has been at the bottom of the stair since the day before yesterday, asking each shift the same question and getting the same answer. She has stopped crying, which the Watch find harder.",
+    "sprite_key": "sella_carrow",
+    "is_quest_giver": true,
+    "dialog": "sella_carrow",
+    "place": {
+        "location": "oldcity_stair"
+    }
+}

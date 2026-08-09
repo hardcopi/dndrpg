@@ -1,0 +1,18 @@
+{
+  "item_key": "longbow",
+  "name": "Longbow",
+  "description": "A stave taller than the archer, of laminated yew. It wants a strong back.",
+  "item_type": "weapon",
+  "rarity": "common",
+  "weight": 1,
+  "value_gp": 50,
+  "damage_dice": "1d8",
+  "damage_type": "piercing",
+  "properties": {
+    "ranged": "150/600",
+    "two_handed": true,
+    "heavy": true,
+    "martial": true
+  },
+  "icon": "bow"
+}

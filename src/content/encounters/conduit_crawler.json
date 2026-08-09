@@ -1,0 +1,14 @@
+{
+  "encounter_key": "conduit_crawler",
+  "name": "What Was Lifting the Gratings",
+  "description": "It comes off the crown of the vault, where it has been the whole time, in the one direction nobody carries a lamp.",
+  "difficulty": "hard",
+  "monsters": [
+    { "monster": "carrion_crawler", "quantity": 1, "rank": "front" },
+    { "monster": "giant_rat", "quantity": 2 }
+  ],
+  "allow_flee": true,
+  "allow_parley": false,
+  "victory_flag": "conduit_crawler_beaten",
+  "place": { "location": "low_conduit" }
+}

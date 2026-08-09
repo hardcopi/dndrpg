@@ -1,0 +1,18 @@
+{
+    "item_key": "uv_delvers_pick",
+    "name": "Delver's Pick",
+    "description": "A short pick with a hardened point and a shaft cut down to swing in a passage where a full one would foul the roof. Thrown on the heap for a cracked eye, which somebody has since bound with wire and thrown away again.",
+    "item_type": "weapon",
+    "rarity": "common",
+    "weight": 4,
+    "value_gp": 5,
+    "damage_dice": "1d6",
+    "damage_type": "piercing",
+    "properties": {
+        "simple": true
+    },
+    "icon": "weapon",
+    "place": {
+        "location": "uv_spoil"
+    }
+}

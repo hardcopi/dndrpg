@@ -1,0 +1,90 @@
+{
+    "quest_key": "kessa_the_house_that_bought_her",
+    "title": "The House That Bought Her",
+    "description": "Kessa's paper was one of forty-one bought out of one estate in one week, and every last one of them was signed with a mark instead of a name. Somebody is not buying cheap debt. Somebody is buying people who cannot read what they are bound by.",
+    "companion": "kessa",
+    "giver": "kessa",
+    "on_job_board": false,
+    "required_level": 4,
+    "rewards": {
+        "xp": 350
+    },
+    "stages": {
+        "the_office": {
+            "title": "The counting house on the high street",
+            "objective": "Ask the office that bought the forty-one papers for the list of names.",
+            "journal": "Kessa paid a clerk two silver to read her the Ninth Free's estate book, which is the first time in her life she has paid a man to read. Forty-one papers left that room in one week — Ninth Free, Cardun's, two more off the Kell road — all bought by one office at a quarter on the gold, and every one of them signed with a mark instead of a name. The receipt carried no name, only an office and a seal in black wax: a plumb and a square, cut like a mason's, which makes no sense whatever for a man buying debt. The office is a counting house on the high street with its plate on the door. Kessa wants the list. Not the money. The names.",
+            "target": {
+                "location": "counting_house"
+            }
+        },
+        "took_the_favour": {
+            "title": "Entered as a service owed",
+            "journal": "The house does not take coin for a courtesy. It copied out all forty-one names in a very good hand and entered one line in its own book instead: the date, the service given, the service owed, and a blank where the day would be. Kessa has the list inside her shirt and takes it out four times an evening to look at a thing she cannot read. I have spent this act getting a number off her back and I have put a blank one on ours, and she asked me to, and she knows she asked me to.",
+            "resolution": "took_the_favour",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "kessa_house_fate",
+                    "value": "favour"
+                },
+                {
+                    "set_flag": "kessa_names_known"
+                },
+                {
+                    "set_flag": "house_favour_owed"
+                },
+                {
+                    "approval": {
+                        "kessa": 18,
+                        "sera": -6,
+                        "aldric": -4,
+                        "ilse": 2
+                    }
+                }
+            ]
+        },
+        "took_the_book": {
+            "title": "Taken off the shelf",
+            "journal": "We took the register. Forty-one entries, forty-one crosses, and a column of purchase prices that runs from nine gold to a hundred and four. Nobody owes anybody a favour. The office knows exactly who has it, and was neither angry nor surprised, and said that what happens next would be somebody else's letter.",
+            "resolution": "took_the_book",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "kessa_house_fate",
+                    "value": "taken"
+                },
+                {
+                    "set_flag": "kessa_names_known"
+                },
+                {
+                    "approval": {
+                        "kessa": 14,
+                        "sera": 8,
+                        "aldric": -8,
+                        "ilse": 4
+                    }
+                }
+            ]
+        },
+        "let_it_lie": {
+            "title": "Settled is settled",
+            "journal": "We walked out of the counting house without the list. Kessa's own paper is settled, which is what she went in for and more than anybody else on that page has got. She has stopped turning the stool round to face the door. She has also stopped asking me about the road, and she says both of those are nothing.",
+            "resolution": "let_it_lie",
+            "terminal": true,
+            "outcome": "neutral",
+            "effects": [
+                {
+                    "set_flag": "kessa_house_fate",
+                    "value": "lie"
+                },
+                {
+                    "approval": {
+                        "kessa": -6,
+                        "aldric": 2
+                    }
+                }
+            ]
+        }
+    }
+}

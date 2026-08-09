@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<!--
+  The character sheet, and the bag in it, with no game running.
+
+  The sheet is behind a session, a party and a character who has actually
+  picked things up, and the parts worth judging are the awkward ones: a bag
+  with one thing in it, a bag with thirty, a stack you might want to split, a
+  party big enough that "hand to" is a row of names. Arranging that in the
+  game to look at a layout is slow.
+
+  Nothing here is transcribed. `UI.openCharacterSheet()` is the function the
+  game calls and it draws the real markup against the real stylesheet; what is
+  faked is `character/sheet`, which the fixture answers in the shape the API
+  actually returns.
+
+  The write routes are refused rather than faked -- `inventory/give` moves rows
+  between two characters and a bench that pretended to would be teaching a
+  layout against a world that cannot happen. Press one and the error banner
+  says so, which at least proves the button is wired to the route it claims.
+
+    /tools/sheet_preview.html            a working bag
+    /tools/sheet_preview.html?n=30       a bag that has to scroll
+    /tools/sheet_preview.html?n=1        one item, and the empty slots
+
+  A drawing bench. It reads nothing and writes nothing.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Character sheet — the bag</title>
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <style>
+    body { margin: 0; padding: 0.8rem; background: var(--bg-inset); }
+    .bench-note {
+      color: var(--text-dim); font-size: 0.75rem; margin: 0 0 0.6rem;
+      font-family: var(--mono);
+    }
+  </style>
+</head>
+<body class="game-page">
+  <p class="bench-note" id="note"></p>
+  <div id="error-banner" class="error-banner hidden" role="alert"></div>
+  <div id="modal-root" class="modal-backdrop hidden"></div>
+
+  <script>
+  const Q = new URLSearchParams(location.search);
+  const N = Math.max(1, Math.min(60, parseInt(Q.get('n'), 10) || 9));
+
+  const esc = (s) => String(s ?? '').replace(/[&<>"']/g,
+    (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+  const PARTY = [
+    { id: 1, name: 'Wren Kingsley', current_hp: 34, max_hp: 38 },
+    { id: 2, name: 'Sera of the Low Quarter', current_hp: 7, max_hp: 31 },
+    { id: 3, name: 'Brother Aldric', current_hp: 30, max_hp: 30 },
+    { id: 4, name: 'Tessaly Vane', current_hp: 26, max_hp: 26 },
+  ];
+
+  /* Real column names, taken from what InventoryService::list() selects — a
+     fixture that invented one would prove the bag works against data that
+     never arrives. */
+  const KIT = [
+    { name: 'Longsword', item_type: 'weapon', rarity: 'common', quantity: 1,
+      is_equipped: 1, damage_dice: '1d8', damage_type: 'slashing', weight: 3, value_gp: 15,
+      description: 'A straight blade of good Rivermark steel, kept sharp.' },
+    { name: 'Warded Shield', item_type: 'armor', rarity: 'rare', quantity: 1,
+      is_equipped: 1, armor_bonus: 2, armor_type: 'shield', weight: 6, value_gp: 300,
+      description: 'The boss is chased with a ward that warms when struck.' },
+    { name: 'Chain Shirt', item_type: 'armor', rarity: 'common', quantity: 1,
+      armor_bonus: 3, armor_type: 'medium', weight: 20, value_gp: 50,
+      description: 'Interlocking rings, worn over a padded jerkin.' },
+    { name: 'Potion of Healing', item_type: 'potion', rarity: 'common', quantity: 5,
+      weight: 0.5, value_gp: 50, properties: '{"heals":"2d4+2"}',
+      description: 'Red, and it tastes of nothing at all.' },
+    { name: 'Scroll of Bless', item_type: 'scroll', rarity: 'uncommon', quantity: 2,
+      weight: 0, value_gp: 75, description: 'One casting, and then it is ash.' },
+    { name: 'Rope, hempen (50 ft)', item_type: 'misc', rarity: 'common', quantity: 1,
+      weight: 10, value_gp: 1, description: 'Fifty feet of it, coiled and tied.' },
+    { name: 'Signet of the Quarry Guild', item_type: 'treasure', rarity: 'uncommon',
+      quantity: 1, weight: 0, value_gp: 120, slot: 'ring',
+      description: 'A guild mark, worn on the finger of whoever speaks for them.' },
+    { name: 'Antitoxin', item_type: 'misc', rarity: 'common', quantity: 3,
+      weight: 0.5, value_gp: 50, properties: '{"use_effect":"cure_poison"}',
+      description: 'Chalky, and worth every copper the hour you need it.' },
+    { name: 'Torch', item_type: 'misc', rarity: 'common', quantity: 8,
+      weight: 1, value_gp: 1, description: 'Pitch-soaked, an hour of light each.' },
+  ];
+
+  // Padded out by repeating the kit, so `?n=30` is a real bag rather than one
+  // item thirty times.
+  const inventory = Array.from({ length: N }, (_, i) => {
+    const base = KIT[i % KIT.length];
+    return { ...base, id: i + 1, item_id: (i % KIT.length) + 1,
+             name: i < KIT.length ? base.name : `${base.name} (${Math.floor(i / KIT.length) + 1})`,
+             is_equipped: i < KIT.length ? (base.is_equipped || 0) : 0 };
+  });
+
+  const CHARACTER = {
+    id: 1, name: 'Wren Kingsley', race: 'Human', class: 'Fighter', level: 4,
+    background: 'Soldier', alignment: 'Lawful Neutral',
+    current_hp: 34, max_hp: 38, armor_class: 18, speed: 30, proficiency_bonus: 2,
+    gold: 84, combat_rank: 'front',
+    strength: 16, dexterity: 13, constitution: 15,
+    intelligence: 10, wisdom: 12, charisma: 8,
+    modifiers: { strength: 3, dexterity: 1, constitution: 2,
+                 intelligence: 0, wisdom: 1, charisma: -1 },
+    xp_progress: { xp: 2900, next_level: 5, earned: 200, needed: 3800, percent: 5 },
+  };
+
+  window.Game = {
+    esc,
+    fmtMod: (n) => (Number(n) >= 0 ? '+' : '') + Number(n || 0),
+    hpPct: (hp, max) => (max ? Math.max(0, Math.min(100, Math.round((hp / max) * 100))) : 0),
+    hpBand: (hp, max) => (hp / max > 0.5 ? 'ok' : hp / max > 0.25 ? 'mid' : 'low'),
+    classArtUrl: () => '/assets/images/npcs/fighter_bust.png',
+    log: (m) => console.log('[bench] log:', m),
+    showError: (m) => {
+      const b = document.getElementById('error-banner');
+      b.textContent = m;
+      b.classList.remove('hidden');
+    },
+    mergeCharacter: () => {},
+    refreshAll: async () => {},
+    setActiveCharacter: async () => {},
+    reducedMotion: () => true,
+    sleep: (ms) => new Promise((r) => setTimeout(r, ms)),
+    TILE_CACHE_VER: 'bench',
+    state: { mode: 'explore', character: CHARACTER, party: PARTY, companions: [], log: [] },
+  };
+
+  window.API = {
+    get: async (route) => {
+      if (route.startsWith('character/sheet')) {
+        return { ok: true, character: CHARACTER, inventory, spells: [], spell_slots: [] };
+      }
+      throw new Error('bench: no fixture for ' + route);
+    },
+    post: async (route) => { throw new Error('bench: ' + route + ' is not wired up here'); },
+  };
+  </script>
+  <script src="/assets/js/ui-panels.js"></script>
+  <script>
+  /* The bag's glyphs are <use href="#i-attack"> against the sprite game.php
+     inlines. Fetched here rather than copied, so a symbol renamed in
+     assets/icons.svg goes blank on this bench exactly as it would in the
+     game. */
+  fetch('/assets/icons.svg').then((r) => r.text()).then((text) => {
+    const svg = new DOMParser().parseFromString(text, 'image/svg+xml').querySelector('svg');
+    if (svg) document.body.appendChild(document.importNode(svg, true));
+  }).catch(() => {
+    document.getElementById('note').textContent += ' · icons.svg unreadable, tiles will be bare';
+  });
+
+  document.getElementById('note').textContent =
+    `bench · character sheet · ${N} item(s) in the bag`;
+  UI.openCharacterSheet(1);
+  </script>
+</body>
+</html>

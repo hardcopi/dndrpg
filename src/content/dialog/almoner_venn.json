@@ -1,0 +1,378 @@
+{
+    "npc_key": "almoner_venn",
+    "start": "hail",
+    "nodes": {
+        "hail": [
+            {
+                "conditions": [
+                    {
+                        "flag": "reliquary_fate",
+                        "equals": "stopped"
+                    }
+                ],
+                "once": true,
+                "text": "The cards are still in the shelf-spaces and there are still eight of them and there will not be a ninth.\n\n\"We are short by midwinter,\" Brother Venn says. \"Everybody in that room knew it while they were agreeing to it, including me, and I agreed to it anyway.\" He straightens a card that does not need straightening. \"I have not worked out yet whether I am grateful.\"",
+                "choices": [
+                    {
+                        "label": "You will be or you won't.",
+                        "next": "grateful_or_not"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "cartulary_held"
+                    }
+                ],
+                "text": "\"He came for the press on the Thursday,\" Venn says. \"I told him the lot had gone. He asked, very politely, who to.\"\n\nHe looks at you.\n\n\"I told him. I want you to know that I told him, and that I did not have to, and that I did it because he asked me a straight question and I have not got anything left but that.\"",
+                "choices": [
+                    {
+                        "label": "You did right.",
+                        "next": "you_did_right"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "priory_paper_sold"
+                    }
+                ],
+                "text": "There are eleven cards in the shelf-spaces now, and the fourth press of the cartulary is gone off the writing-room wall, and the infirmary is in linen and lamp oil until spring.\n\n\"Eighty gold,\" Brother Venn says. \"For old paper. I have not been able to stop saying that phrase.\"",
+                "choices": [
+                    {
+                        "label": "It kept the beds.",
+                        "next": "it_kept_the_beds"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_reliquary",
+                        "stage": "what_else_he_offered_for"
+                    }
+                ],
+                "text": "Brother Venn is in the reliquary with the lamp, doing what he does most evenings, which is standing in front of eight small cards.\n\n\"You will want to know what else he asked for,\" he says. \"I have been waiting three days for somebody to ask me that, and I could not work out how to raise it myself.\"",
+                "choices": [
+                    {
+                        "label": "What else did he ask for?",
+                        "next": "the_old_paper"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_reliquary",
+                        "stage": "eight_empty_shelves"
+                    }
+                ],
+                "text": "Seventeen shelf-spaces cut into stone, nine things standing in them, and eight small cards in a careful hand where the others were.\n\nThe man with the lamp does not hide the lamp.\n\n\"Venn,\" he says. \"Almoner. I buy the flour, the linen and the lamp oil for a house with no income, and I keep the receipts where the relics were, because I am not going to have it said afterwards that we were robbed.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_venn"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Who's buying?",
+                        "next": "who_is_buying"
+                    },
+                    {
+                        "label": "Does the prior know?",
+                        "next": "does_she_know"
+                    },
+                    {
+                        "label": "Nothing. I'll go.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "A stone cupboard of a room with a grille for a window and shelves cut into the wall. Nine reliquaries. Seventeen spaces. Eight small cards.\n\nA man with a lamp is standing in front of them the way other men stand in front of a fire.",
+                "on_enter": [
+                    {
+                        "set_flag": "met_venn"
+                    },
+                    {
+                        "start_quest": "the_reliquary"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric reads two of the cards and puts the lamp down. \"They are receipts,\" he says, to nobody. \"He has written receipts and put them on the shelves.\""
+                    },
+                    {
+                        "companion": "sera",
+                        "text": "Sera: \"Eight, and they are dated. Whoever this is has been coming back roughly every five weeks since spring.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Eight of them are gone.",
+                        "next": "who_is_buying"
+                    },
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "grateful_or_not": [
+            {
+                "text": "\"Yes,\" Venn says. \"That is very likely how it will go.\" He almost smiles. \"I shall know in about eleven weeks, when the oil runs out.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "you_did_right": [
+            {
+                "text": "\"I do not know that I did,\" Venn says. \"I know that I did the thing I would still be able to say out loud afterwards. Those are not the same and I have started to notice that they are not.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "it_kept_the_beds": [
+            {
+                "text": "\"It kept the beds,\" Venn agrees. \"Six of them, until spring, in linen. That is a real thing that is really happening in a real room forty paces from here.\"\n\nHe puts the lamp down.\n\n\"I say that to myself at least twice a day, and it is true every time, and it has stopped working.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "does_she_know": [
+            {
+                "text": "\"The prior knows,\" Venn says immediately. \"In chapter, minuted, with the price. I am an almoner, not a thief, and I have gone out of my way to be dull about this.\"\n\nHe touches a card.\n\n\"What she does not know is the other question he asked, because I have not been able to work out how to raise it, because raising it means admitting I did not understand it at the time.\"",
+                "choices": [
+                    {
+                        "label": "Then tell me instead.",
+                        "next": "the_old_paper"
+                    },
+                    {
+                        "label": "Who is he?",
+                        "next": "who_is_buying"
+                    }
+                ]
+            }
+        ],
+        "who_is_buying": [
+            {
+                "text": "\"An agent,\" Venn says. \"For a house. He has never said which house and I have never asked, and I am aware of how that sounds.\"\n\nHe sets the lamp on the shelf.\n\n\"He pays well, pays on the day, does not haggle, and thanks me each time by name. Every five weeks since spring. He is the most courteous man I have ever done business with and I dread the sound of his horse on the flags.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_reliquary",
+                            "stage": "what_else_he_offered_for"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa: \"Does he come alone?\" Venn: \"No. He waits in the chapel with three men who put their coats down before they sit.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "What else has he asked for?",
+                        "next": "the_old_paper"
+                    },
+                    {
+                        "label": "That's enough for tonight.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_old_paper": [
+            {
+                "text": "\"On the third visit,\" Brother Venn says, \"he asked whether the house had any old paper it wanted rid of.\"\n\nHe says it the way a man repeats a phrase he has been turning over.\n\n\"The deeds. The boundary rolls. The cartulary. He offered a price for the lot that I thought was generous, because I have never once in my life thought of the cartulary as being worth anything at all. It is a hundred and forty years of leases. Nobody reads it. Ovid dusts it.\"\n\nHe looks up.\n\n\"He offered more for the paper than for the relics.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "priory_paper_offer"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera has gone completely still. \"More for the paper,\" she says. \"Say the figure.\" Venn says the figure. Sera does not say anything else for a while."
+                    },
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric: \"Every boundary this house has ever held is in that press. Including the ford.\""
+                    },
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"A boundary roll tells you where a thing begins. Somebody wanting all of them at once is not interested in any one of them.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Put this to the prior. Now, in front of him.",
+                        "next": "stopped"
+                    },
+                    {
+                        "label": "I'll buy the fourth press myself. Name the price and I'll beat it.",
+                        "next": "bought"
+                    },
+                    {
+                        "label": "It's your house, your paper and your winter. Sell it.",
+                        "next": "sold"
+                    },
+                    {
+                        "label": "Is he here now?",
+                        "next": "he_is_here"
+                    }
+                ]
+            }
+        ],
+        "he_is_here": [
+            {
+                "text": "\"He is in the chapel,\" Venn says. \"With the three. They have sat through two offices and neither of the offices was for them.\"\n\nHe picks the lamp up and his hand is not entirely steady.\n\n\"He is expecting the press. I said Thursday, and it is Thursday.\"",
+                "choices": [
+                    {
+                        "label": "Then we'll go and tell him it isn't for sale.",
+                        "effects": [
+                            {
+                                "start_combat": "reliquary_agents"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "Then we go to the prior first.",
+                        "next": "stopped"
+                    },
+                    {
+                        "label": "Then I'll outbid him before he stands up.",
+                        "next": "bought"
+                    }
+                ]
+            }
+        ],
+        "stopped": [
+            {
+                "text": "It is put to the prior in front of Venn, which is not kind and is necessary, and Ottilie Hale listens to the whole of it standing up.\n\nThen she stops the sale. No more relics and — specifically, in writing, in chapter, minuted — no paper. Not the deeds, not the boundary rolls, not the cartulary, not for any price, not ever.\n\nThe house will be short by midwinter. Everybody in the room knew that while they were agreeing to it.\n\nBrother Venn shakes your hand afterwards and cannot look at you.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_reliquary",
+                            "stage": "stopped_the_sale"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric: \"They will be cold and they will be hungry and they will still have their own history in their own building.\" A pause. \"I would not have been able to decide that. I am glad it was not mine to decide.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Take his hand.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "bought": [
+            {
+                "conditions": [
+                    {
+                        "gold_at_least": 90
+                    }
+                ],
+                "text": "Ninety gold for a decade of a small house's leases and boundary rolls, which is an absurd amount of money for it and about a third of what it is worth to the person who wanted it.\n\nVenn takes the coin like a man being let off something.\n\nOn the Thursday the agent is told the lot has gone. He asks, very politely, who to. Venn tells him — and tells you afterwards that he told him, and that he did not have to, and that he did it because he was asked a straight question and it is the last thing he has left.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_reliquary",
+                            "stage": "bought_the_paper"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera has the press open before it is off the cart. \"Do not let this out of the party,\" she says. \"Not to a clerk, not to the watch, not to anyone who asks nicely.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Get it on the cart.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "\"You have not got it,\" Venn says, without any unkindness at all, because he has spent nine months doing sums about smaller amounts than this. \"He is paying eighty and he would go higher, and if you offer him ninety with nothing behind it he will simply wait until you have gone.\"",
+                "choices": [
+                    {
+                        "label": "Then we go to the prior.",
+                        "next": "stopped"
+                    },
+                    {
+                        "label": "I'll come back with it.",
+                        "end": true
+                    },
+                    {
+                        "label": "Then sell it, and God help the lot of us.",
+                        "next": "sold"
+                    }
+                ]
+            }
+        ],
+        "sold": [
+            {
+                "text": "It is their house, their paper and their winter, and you say so, and it goes through in the second week: three more reliquaries and the fourth press of the cartulary, for eighty gold.\n\nIt keeps the infirmary in linen and lamp oil until spring, which is a real thing happening in a real room forty paces from where the sale is agreed.\n\nThe agent collects it himself and is extremely polite about the whole thing, and thanks Brother Venn by name, and Brother Venn shuts the writing-room door afterwards and stands behind it for a while.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_reliquary",
+                            "stage": "let_it_sell"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse watches the cart go down the track. \"That is every boundary this house has ever held,\" she says, \"going downhill on somebody else's wheels.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Watch it go.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

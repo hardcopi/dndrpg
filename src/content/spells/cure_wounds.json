@@ -1,0 +1,29 @@
+{
+  "spell_key": "cure_wounds",
+  "name": "Cure Wounds",
+  "level": 1,
+  "higher_level": {
+    "dice_per_level": "1d8"
+  },
+  "school": "Evocation",
+  "casting_time": "1 action",
+  "range_text": "Touch",
+  "components": "V, S",
+  "duration": "Instantaneous",
+  "description": "A creature you touch regains a number of hit points equal to 1d8 + your spellcasting ability modifier. This spell has no effect on undead or constructs.",
+  "damage_dice": "1d8",
+  "damage_type": "healing",
+  "resolution": "heal",
+  "concentration": false,
+  "duration_rounds": 0,
+  "target_kind": "ally",
+  "reaches_back_rank": false,
+  "source": "5e SRD",
+  "classes": [
+    "Bard",
+    "Cleric",
+    "Druid",
+    "Paladin",
+    "Ranger"
+  ]
+}

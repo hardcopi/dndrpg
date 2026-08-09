@@ -1,0 +1,52 @@
+name: rpg-dev
+
+services:
+  web:
+    image: nginx:1.24-alpine          # matches hermes (nginx/1.24.0)
+    ports:
+      - "8081:80"          # 8080 is held by the llama-server container
+    volumes:
+      - ./src:/var/www/html
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - php
+    restart: unless-stopped
+
+  php:
+    build: ./docker/php               # php:8.4-fpm + prod's extension set
+    volumes:
+      - ./src:/var/www/html
+    environment:
+      # app/config/database.php reads all of these via getenv().
+      DB_HOST: db
+      DB_PORT: "3306"
+      DB_NAME: rpg_5e
+      DB_USERNAME: web
+      DB_PASSWORD: devpassword
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  db:
+    image: mysql:8.0                  # matches hermes (8.0.46)
+    ports:
+      - "3307:3306"                   # 3307 on the host to avoid clashing with any local mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootdev
+      MYSQL_DATABASE: rpg_5e
+      MYSQL_USER: web
+      MYSQL_PASSWORD: devpassword
+    volumes:
+      - dbdata:/var/lib/mysql
+      - ./src/sql:/sql:ro                        # the project's own SQL files
+      - ./docker/initdb:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-prootdev"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+volumes:
+  dbdata:

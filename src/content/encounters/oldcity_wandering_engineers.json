@@ -1,0 +1,16 @@
+{
+    "encounter_key": "oldcity_wandering_engineers",
+    "name": "Surveying, Apparently",
+    "description": "Four Works men with a rule and a lamp, a long way from any shoring, and none of them can say whose gang they are on.",
+    "difficulty": "easy",
+    "is_random": true,
+    "region": "old_city",
+    "monsters": [
+        {
+            "monster": "city_engineer",
+            "quantity": 4
+        }
+    ],
+    "allow_flee": true,
+    "allow_parley": false
+}

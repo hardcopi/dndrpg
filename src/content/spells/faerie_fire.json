@@ -1,0 +1,26 @@
+{
+  "spell_key": "faerie_fire",
+  "name": "Faerie Fire",
+  "level": 1,
+  "school": "Evocation",
+  "classes": [
+    "Bard",
+    "Druid"
+  ],
+  "resolution": "debuff",
+  "save_ability": "dex",
+  "save_effect": "negate",
+  "target_kind": "all_enemies",
+  "concentration": true,
+  "duration_rounds": 10,
+  "effect": {
+    "condition": "blinded"
+  },
+  "casting_time": "1 action",
+  "range_text": "60 feet",
+  "components": "V",
+  "duration": "Concentration, up to 1 minute",
+  "description": "Each object in a 20-foot cube within range is outlined in blue, green, or violet light.",
+  "reaches_back_rank": true,
+  "source": "5e SRD"
+}

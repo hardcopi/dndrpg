@@ -1,0 +1,23 @@
+{
+  "spell_key": "fire_bolt",
+  "name": "Fire Bolt",
+  "level": 0,
+  "school": "Evocation",
+  "casting_time": "1 action",
+  "range_text": "120 feet",
+  "components": "V, S",
+  "duration": "Instantaneous",
+  "description": "You hurl a mote of fire at a creature or object within range. Make a ranged spell attack against the target. On a hit, the target takes 1d10 fire damage. A flammable object hit by this spell ignites if it isn't being worn or carried.",
+  "damage_dice": "1d10",
+  "damage_type": "fire",
+  "resolution": "attack",
+  "concentration": false,
+  "duration_rounds": 0,
+  "target_kind": "enemy",
+  "reaches_back_rank": true,
+  "source": "5e SRD",
+  "classes": [
+    "Sorcerer",
+    "Wizard"
+  ]
+}

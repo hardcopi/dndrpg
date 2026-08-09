@@ -1,0 +1,14 @@
+{
+  "encounter_key": "broken_floor_gremlins",
+  "name": "Up Through the Floor",
+  "description": "They come up the inside of the hole, hand over hand on cut stone, four of them, and they are not interested in the goblins at all.",
+  "difficulty": "medium",
+  "monsters": [
+    {"monster": "deep_gremlin", "quantity": 4, "rank": "front"}
+  ],
+  "allow_flee": true,
+  "allow_parley": false,
+  "ambush": true,
+  "place": {"location": "broken_floor"},
+  "victory_flag": "broken_floor_held"
+}

@@ -1,0 +1,74 @@
+{
+ "resistances": [
+  "necrotic"
+ ],
+ "immunities": [
+  "poison"
+ ],
+ "vulnerabilities": [],
+ "condition_immunities": [
+  "exhaustion",
+  "poisoned"
+ ],
+ "source": "Rivermark Chronicles",
+ "monster_key": "drowned_man",
+ "name": "One of the Drowned",
+ "size": "Medium",
+ "type": "undead",
+ "alignment": "neutral evil",
+ "armor_class": 12,
+ "hit_points": 52,
+ "hit_dice": "8d8+16",
+ "speed": "20 ft., swim 30 ft.",
+ "strength": 16,
+ "dexterity": 10,
+ "constitution": 15,
+ "intelligence": 5,
+ "wisdom": 8,
+ "charisma": 6,
+ "challenge_rating": 3,
+ "experience_points": 700,
+ "traits": {
+  "Held by the Water": "Peat water does not let go of what it takes. Away from the fen it fails inside a day; in it, it does not fail at all.",
+  "Undead Fortitude": "If reduced to 0 hit points by damage other than radiant, it makes a DC 5 + damage Constitution save and drops to 1 hit point on a success."
+ },
+ "actions": [
+  {
+   "name": "Grasp",
+   "type": "melee",
+   "bonus": 5,
+   "damage": "2d6+3",
+   "damage_type": "bludgeoning"
+  },
+  {
+   "name": "Pull Down",
+   "type": "melee",
+   "bonus": 5,
+   "damage": "1d8+3",
+   "damage_type": "cold",
+   "note": "On a hit in water the target must make a DC 13 Strength save or be grappled and dragged under.",
+   "save": {
+    "ability": "str",
+    "dc": 13
+   },
+   "on_fail": {
+    "condition": "grappled",
+    "repeat_save": true
+   }
+  }
+ ],
+ "saves": {
+  "con": 4
+ },
+ "rank_pref": "front",
+ "sprite_key": "drowned_man",
+ "loot": [
+  {
+   "gold": "3d8"
+  },
+  {
+   "item": "oldcity_silver_ring",
+   "chance": 30
+  }
+ ]
+}

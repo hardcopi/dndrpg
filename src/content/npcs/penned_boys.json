@@ -1,0 +1,11 @@
+{
+    "npc_key": "penned_boys",
+    "name": "The Penned Boys",
+    "role": "Captives",
+    "description": "Two of them, behind driven stakes at the back of the cave, keeping very still and very quiet because they have learned what the alternative gets them.",
+    "sprite_key": "penned_boys",
+    "dialog": "penned_boys",
+    "place": {
+        "location": "oldcity_ogres_lair"
+    }
+}

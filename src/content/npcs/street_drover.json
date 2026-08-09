@@ -1,0 +1,11 @@
+{
+    "npc_key": "street_drover",
+    "name": "A drover",
+    "role": "Townsfolk",
+    "sprite_key": "barbarian",
+    "is_ambient": true,
+    "dialog": "street_drover",
+    "place": {
+        "location": "high_street"
+    }
+}

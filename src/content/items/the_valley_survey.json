@@ -1,0 +1,14 @@
+{
+  "item_key": "the_valley_survey",
+  "name": "The Valley Survey",
+  "description": "Nine sheets of good paper, rolled, tied and unlocked: every field, road, weir, seam and roof between the ford and Greyhythe, measured, valued and totalled. Rivermark is on sheet six. It is not drawn as a town. It is entered in the margin as a cost, against the head 'clearance', with a figure beside it and the figure has been revised downward twice.",
+  "item_type": "misc",
+  "rarity": "rare",
+  "weight": 2,
+  "value_gp": 0,
+  "properties": {
+    "quest_item": true,
+    "readable": true
+  },
+  "icon": "scroll"
+}

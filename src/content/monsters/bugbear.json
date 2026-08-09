@@ -1,0 +1,59 @@
+{
+  "resistances": [],
+  "immunities": [],
+  "vulnerabilities": [],
+  "condition_immunities": [],
+  "source": "5e SRD",
+  "monster_key": "bugbear",
+  "name": "Bugbear",
+  "size": "Medium",
+  "type": "humanoid (goblinoid)",
+  "alignment": "chaotic evil",
+  "armor_class": 16,
+  "hit_points": 27,
+  "hit_dice": "5d8+5",
+  "speed": "30 ft.",
+  "strength": 15,
+  "dexterity": 14,
+  "constitution": 13,
+  "intelligence": 8,
+  "wisdom": 11,
+  "charisma": 9,
+  "challenge_rating": 1,
+  "experience_points": 200,
+  "traits": {
+    "Brute": "A melee weapon deals one extra die of its damage when the bugbear hits with it (included in the attack).",
+    "Surprise Attack": "If the bugbear surprises a creature and hits it with an attack during the first round of combat, the attack deals an extra 2d6 damage."
+  },
+  "actions": [
+    {
+      "name": "Morningstar",
+      "type": "melee",
+      "bonus": 4,
+      "damage": "2d8+2",
+      "damage_type": "piercing"
+    },
+    {
+      "name": "Javelin",
+      "type": "ranged",
+      "bonus": 4,
+      "damage": "1d6+2",
+      "damage_type": "piercing",
+      "range": "30/120"
+    }
+  ],
+  "saves": {
+    "dex": 2
+  },
+  "loot": [
+    {
+      "gold": "3d6"
+    },
+    {
+      "item": "oil_of_embers",
+      "chance": 25
+    }
+  ],
+  "rank_pref": "front",
+  "sprite_key": "bugbear"
+}

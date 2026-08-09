@@ -1,0 +1,17 @@
+{
+    "npc_key": "watch_relief",
+    "start": "hail",
+    "nodes": {
+        "hail": [
+            {
+                "text": "Half a shift left. Then bread, and a chair, and nobody talking to me.",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

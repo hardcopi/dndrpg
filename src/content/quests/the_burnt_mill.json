@@ -1,0 +1,91 @@
+{
+    "quest_key": "the_burnt_mill",
+    "title": "The Burnt Mill",
+    "description": "Everybody in Rivermark can tell you the mill burned. Nobody can tell you which year, and nobody has been out to look since it happened.",
+    "giver": "wick_lorrimer",
+    "on_job_board": true,
+    "required_level": 2,
+    "rewards": {
+        "xp": 300,
+        "gold": 90
+    },
+    "stages": {
+        "go_and_look": {
+            "title": "Go and look",
+            "objective": "Walk out to the mill on the ford road and see what is actually there.",
+            "journal": "The mill is a fact in every conversation in Rivermark and nobody has walked the two miles. Three walls, a wheel-pit full of black water, and a race that still runs perfectly well past a building that has not needed it in four years.",
+            "target": {
+                "location": "mill_ruin"
+            }
+        },
+        "the_counting_loft": {
+            "title": "Where it started",
+            "objective": "Work out where the fire began.",
+            "journal": "Every charred beam-end in the wall points inward. A kiln fire spreads out from the kiln and takes the floor above it; this one started high on the river side, in the counting loft, where the mill kept its paper and no fire was ever lit.",
+            "target": {
+                "location": "mill_ruin"
+            }
+        },
+        "found_the_cause": {
+            "title": "It started in the loft",
+            "journal": "It started in the counting loft, on the river side, where the mill kept its books and nobody ever struck a light. The stones are scorched in a corner that had no lamp, no flue and no reason. I have written it down. It does not tell me who, and I have stopped expecting it to.",
+            "resolution": "found_the_cause",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "mill_fate",
+                    "value": "cause"
+                },
+                {
+                    "set_flag": "mill_fire_was_set"
+                },
+                {
+                    "xp": 100
+                },
+                {
+                    "approval": {
+                        "sera": 10,
+                        "aldric": 6,
+                        "ilse": 4
+                    }
+                }
+            ]
+        },
+        "made_it_a_shelter": {
+            "title": "A roof on the road",
+            "journal": "We cleared the roof-fall out of the south end, put hurdles across the gap and a slate over the fire-back, and told the drovers at the fold that there was a dry wall two miles up the road. Four of them used it inside a week. It is not an answer to anything. It is a room.",
+            "resolution": "made_it_a_shelter",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "mill_fate",
+                    "value": "shelter"
+                },
+                {
+                    "set_flag": "mill_is_shelter"
+                },
+                {
+                    "approval": {
+                        "aldric": 14,
+                        "kessa": 6,
+                        "ilse": 6,
+                        "sera": -2
+                    }
+                }
+            ]
+        },
+        "left_the_mill": {
+            "title": "Left standing",
+            "journal": "Three walls and running water. I went out, I looked, I came back, and I am now one more person in Rivermark who can say that the mill burned.",
+            "resolution": "left_the_mill",
+            "terminal": true,
+            "outcome": "neutral",
+            "effects": [
+                {
+                    "set_flag": "mill_fate",
+                    "value": "left"
+                }
+            ]
+        }
+    }
+}

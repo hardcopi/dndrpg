@@ -1,0 +1,11 @@
+{
+    "npc_key": "watch_street",
+    "name": "A watchman",
+    "role": "Town Watch",
+    "sprite_key": "fighter",
+    "is_ambient": true,
+    "dialog": "watch_street",
+    "place": {
+        "location": "high_street"
+    }
+}

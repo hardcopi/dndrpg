@@ -1,0 +1,23 @@
+{
+  "encounter_key": "warren_gate",
+  "name": "The Warren Gate",
+  "description": "A barricade of quarry timber, a bugbear behind it, and four goblins who have done this before.",
+  "difficulty": "hard",
+  "monsters": [
+    {
+      "monster": "bugbear",
+      "quantity": 1,
+      "rank": "front"
+    },
+    {
+      "monster": "goblin",
+      "quantity": 4
+    }
+  ],
+  "allow_flee": true,
+  "allow_parley": true,
+  "parley_node": "nakka:gate_hail",
+  "victory_flag": "warren_gate_forced",
+  "ambush": true,
+  "place": { "location": "warren_mouth" }
+}

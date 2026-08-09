@@ -1,0 +1,13 @@
+{
+    "npc_key": "cully_tench",
+    "name": "Cully Tench",
+    "role": "Fen-Runner",
+    "description": "Poles a punt for anyone who pays and for some who do not. He was born on the causeway and has never been further east than the fen road head, which he will tell you is far enough.",
+    "sprite_key": "cully_tench",
+    "image_url": "assets/images/npcs/prisoner_2.png",
+    "is_quest_giver": true,
+    "dialog": "cully_tench",
+    "place": {
+        "location": "fen_causeway"
+    }
+}

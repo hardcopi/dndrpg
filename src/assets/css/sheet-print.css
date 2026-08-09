@@ -1,0 +1,966 @@
+/*
+ * The printed character sheet.
+ *
+ * This stylesheet is not part of the game's UI and deliberately shares nothing
+ * with style.css. The app is a dark room lit by gold; a character sheet is a
+ * piece of paper. Loading the app's palette here would mean fighting every one
+ * of its variables back to black-on-white, and the first person to change a
+ * token in style.css would change how somebody's printout looks.
+ *
+ * Everything is sized in inches and points rather than pixels or rems. A
+ * browser prints 1in as one inch of paper and renders it as 96 CSS px on
+ * screen, so one set of numbers gives a preview that is the same size and shape
+ * as the sheet that comes out of the printer. That is the whole trick to the
+ * "looks right on screen, breaks across pages" failure: there is no separate
+ * screen layout to break.
+ *
+ * The look is the official 5e sheet's, rebuilt rather than copied: heavy
+ * rounded boxes, the label UNDER the box in small letterspaced caps, a narrow
+ * column of tall ability boxes on the left, three columns underneath a header
+ * band. None of the trade dress is reproduced — no logo, no typeface, no
+ * ornament — because this project ships SRD content only and a character sheet
+ * layout is where that line is easiest to cross by accident.
+ */
+
+/* ------------------------------------------------------------------------ */
+/* Paper                                                                     */
+/* ------------------------------------------------------------------------ */
+
+/*
+ * US Letter portrait with a half-inch of margin, which is about as tight as a
+ * consumer printer will go without clipping. The page box is set here rather
+ * than left to the print dialogue so the layout below can rely on knowing how
+ * much room it has: 8.5in less two 0.45in margins is 7.6in, and .sheet-page is
+ * exactly that wide.
+ */
+@page {
+  size: letter portrait;
+  margin: 0.45in;
+}
+
+:root {
+  --ink: #1a1a1a;
+  --ink-soft: #565656;
+  --rule: #b4b4b4;
+  --fill: #ececec;          /* the tint inside a heading strip */
+  --line: 1.1pt solid var(--ink);
+  --line-thin: 0.6pt solid var(--ink);
+  --radius: 5pt;
+
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+  --sans: "Helvetica Neue", Helvetica, Arial, "Liberation Sans", sans-serif;
+}
+
+html {
+  /* Not inherited by the printer, but it makes the on-screen preview honest. */
+  background: #2b2f36;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: #2b2f36;
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 9.5pt;
+  line-height: 1.28;
+  /*
+   * Every tinted strip, filled proficiency dot and shaded table header on this
+   * sheet carries meaning — a filled dot is a proficiency and an empty one is
+   * not — so backgrounds must survive the printer's default of dropping them.
+   */
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/*
+ * One physical page. Sized in inches so the screen preview is literally the
+ * paper: 7.6in wide, and tall enough to show where the fold falls.
+ *
+ * min-height rather than height, because a long equipment list should push the
+ * page taller and spill onto a second sheet rather than be cut off at 10.1in
+ * with no sign that anything is missing.
+ */
+.sheet-page {
+  width: 7.6in;
+  min-height: 10.1in;
+  margin: 0.35in auto;
+  padding: 0;
+  background: #fff;
+  box-shadow: 0 0.05in 0.3in rgba(0, 0, 0, 0.45);
+  box-sizing: border-box;
+}
+
+.sheet-page + .sheet-page {
+  break-before: page;
+  page-break-before: always;
+}
+
+/* ------------------------------------------------------------------------ */
+/* The screen-only chrome                                                    */
+/* ------------------------------------------------------------------------ */
+
+/*
+ * The toolbar exists on screen and nowhere else. `display: none` in the print
+ * block rather than `visibility: hidden` — a hidden element still occupies
+ * space, and a 0.5in transparent band at the top of page one would push the
+ * bottom of the sheet onto page two.
+ */
+.sheet-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.6rem 1rem;
+  background: #1e2229;
+  border-bottom: 1px solid #3a424e;
+  color: #e6e9ee;
+  font-family: var(--sans);
+  font-size: 11px;
+}
+
+.sheet-toolbar .spacer { flex: 1; }
+
+.sheet-toolbar .who {
+  color: #98a1ae;
+  font-size: 11px;
+}
+
+.sheet-toolbar .who strong { color: #e6e9ee; }
+
+.sheet-toolbar button,
+.sheet-toolbar a.tb {
+  font: inherit;
+  font-weight: 600;
+  padding: 0.35rem 0.8rem;
+  border-radius: 4px;
+  border: 1px solid #4d5766;
+  background: #272c34;
+  color: #e6e9ee;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.sheet-toolbar button.primary {
+  background: #d8b45c;
+  border-color: #8a6f2e;
+  color: #14161a;
+}
+
+.sheet-toolbar button:hover,
+.sheet-toolbar a.tb:hover { background: #313842; }
+.sheet-toolbar button.primary:hover { background: #f0cf7a; }
+
+.sheet-hint {
+  max-width: 7.6in;
+  margin: 0.9rem auto -0.1rem;
+  padding: 0 0.1in;
+  color: #98a1ae;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+/* ------------------------------------------------------------------------ */
+/* Boxes and labels — the vocabulary the whole sheet is built from           */
+/* ------------------------------------------------------------------------ */
+
+/*
+ * A box is a heavy rounded rectangle with its caption underneath in small
+ * letterspaced caps. That inversion — label below, not above — is most of what
+ * makes a page of statistics read as a character sheet rather than as a form.
+ */
+.box {
+  border: var(--line);
+  border-radius: var(--radius);
+  padding: 4pt 5pt;
+  background: #fff;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.box-label,
+.field-label {
+  display: block;
+  margin-top: 1.5pt;
+  text-align: center;
+  font-size: 6.6pt;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  font-weight: 700;
+}
+
+/* A box and its caption, kept together so neither strands at a page break. */
+.slab {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+/*
+ * A titled panel: the caption sits in a tinted strip along the top instead of
+ * under the box, which is how the official sheet marks the tall sections —
+ * Attacks & Spellcasting, Features & Traits, Equipment.
+ *
+ * A panel may break across pages; a box may not.
+ *
+ * That asymmetry is the whole of the pagination behaviour and it was wrong the
+ * first time. Panels were `break-inside: avoid` like everything else, and a
+ * character carrying thirty items had their entire Equipment panel refuse to
+ * split — so it was pushed off page one wholesale and printed alone in the
+ * middle of an otherwise blank page two. A box is a fixed thing three lines
+ * tall and should never be sliced; a panel is a list, and a list that is too
+ * long for the page is supposed to continue on the next one.
+ *
+ * What must not break is a row: `break-inside: avoid` on the list items below
+ * keeps a spell's name with its description and a weapon's name with its
+ * damage, which is the only place a break actually costs the reader anything.
+ */
+.panel {
+  border: var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  break-inside: auto;
+}
+
+/* A heading stranded at the foot of a page is a heading for nothing. */
+.panel > .panel-head {
+  break-after: avoid;
+  page-break-after: avoid;
+  padding: 2.5pt 5pt;
+  background: var(--fill);
+  border-bottom: var(--line-thin);
+  font-size: 7pt;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.panel > .panel-body { padding: 4.5pt 5.5pt; }
+
+/*
+ * The long boxes on the right-hand column caption themselves at the bottom, in
+ * a strip, so a mostly-blank box still says what it is for.
+ */
+.panel.foot-label > .panel-head {
+  order: 2;
+  border-bottom: 0;
+  border-top: var(--line-thin);
+}
+
+.panel.foot-label { display: flex; flex-direction: column; }
+.panel.foot-label > .panel-body { order: 1; }
+
+/*
+ * A blank the player fills in with a pen. Real elements with a bottom border
+ * rather than a repeating gradient: a printer that decides a background image
+ * is decoration drops the gradient and leaves an empty white rectangle, and a
+ * write-in box with no lines in it is not obviously a write-in box.
+ */
+.rules { display: block; }
+
+.rules .rule {
+  display: block;
+  height: 13pt;
+  border-bottom: 0.5pt solid var(--rule);
+}
+
+.rules .rule:last-child { border-bottom: 0; }
+
+.mono-num {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+/* ------------------------------------------------------------------------ */
+/* Header band                                                               */
+/* ------------------------------------------------------------------------ */
+
+.sheet-top {
+  display: grid;
+  grid-template-columns: 2.45in 1fr;
+  gap: 7pt;
+  padding: 0.22in 0.22in 0;
+  align-items: stretch;
+}
+
+.name-block {
+  display: flex;
+  align-items: center;
+  gap: 7pt;
+  border: var(--line);
+  border-radius: var(--radius);
+  padding: 6pt 8pt;
+}
+
+.name-block .portrait {
+  width: 0.62in;
+  height: 0.62in;
+  flex: 0 0 auto;
+  object-fit: cover;
+  object-position: center top;
+  border: var(--line-thin);
+  border-radius: 3pt;
+  background: #f4f4f4;
+}
+
+.name-block .who { min-width: 0; }
+
+.name-block .char-name {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 20pt;
+  line-height: 1.05;
+  font-weight: 600;
+  letter-spacing: 0.005em;
+  overflow-wrap: anywhere;
+}
+
+.name-block .char-name-label {
+  display: block;
+  margin-top: 1pt;
+  font-size: 6.4pt;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  font-weight: 700;
+}
+
+/*
+ * Six identification fields in two rows of three, the way the official sheet
+ * arranges them. They share one rounded outline and are divided by hairlines,
+ * which is cheaper to read than six separate boxes.
+ */
+.header-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border: var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.header-grid .field {
+  padding: 3pt 6pt 2.5pt;
+  border-right: var(--line-thin);
+  border-bottom: var(--line-thin);
+  min-height: 0.34in;
+}
+
+.header-grid .field:nth-child(3n) { border-right: 0; }
+.header-grid .field:nth-child(n + 4) { border-bottom: 0; }
+
+.header-grid .field-value {
+  display: block;
+  min-height: 12pt;
+  font-size: 10pt;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.header-grid .field-label { text-align: left; margin-top: 0.5pt; }
+
+/* ------------------------------------------------------------------------ */
+/* The three columns                                                         */
+/* ------------------------------------------------------------------------ */
+
+/*
+ * 1.16 / 1 / 1. The left column carries the ability spine, the six saves and
+ * all eighteen skills, and it is the only one whose contents are the same
+ * length for every character — so it is the one that can be sized exactly. At
+ * an even third "Animal Handling" and "Proficiency Bonus" both wrapped, and a
+ * wrapped label doubles the height of its row for the sake of one word.
+ *
+ * Fixed fractions rather than auto, because a column that sizes to its content
+ * moves every time somebody picks up a longsword.
+ */
+.sheet-cols {
+  display: grid;
+  grid-template-columns: 1.16fr 1fr 1fr;
+  gap: 7pt;
+  padding: 6pt 0.22in 0.22in;
+  align-items: start;
+}
+
+.col { display: flex; flex-direction: column; gap: 6pt; }
+
+/* --- Left column: abilities, saves, skills ------------------------------- */
+
+/*
+ * The ability spine and the lists beside it. The spine is a fixed 0.62in so
+ * that six boxes line up down the page regardless of whether a modifier is one
+ * character wide or three.
+ */
+.ability-row {
+  display: grid;
+  grid-template-columns: 0.74in 1fr;
+  gap: 6pt;
+  align-items: start;
+}
+
+.ability-col { display: flex; flex-direction: column; gap: 5pt; }
+
+.ability-box {
+  border: var(--line);
+  border-radius: var(--radius);
+  padding: 3pt 0 0;
+  text-align: center;
+  break-inside: avoid;
+}
+
+.ability-box .abbr {
+  display: block;
+  font-size: 6.6pt;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.ability-box .score {
+  display: block;
+  font-size: 18pt;
+  font-weight: 600;
+  line-height: 1.05;
+  font-variant-numeric: tabular-nums;
+}
+
+/*
+ * The modifier hangs off the bottom of the box in its own small rounded
+ * capsule, overlapping the border. That is the one piece of the official
+ * sheet's geometry that is doing real work: it separates "the score" from "the
+ * number you actually add", which is the mistake every new player makes.
+ */
+.ability-box .mod {
+  display: block;
+  width: 0.42in;
+  margin: 2pt auto -7.5pt;
+  padding: 0.5pt 0;
+  border: var(--line-thin);
+  border-radius: 8pt;
+  background: #fff;
+  font-size: 9.5pt;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* The negative margin above pulls the capsule out; this restores the gap. */
+.ability-col .ability-box { margin-bottom: 6.5pt; }
+.ability-col .ability-box:last-child { margin-bottom: 0; }
+
+.mini-row {
+  display: grid;
+  grid-template-columns: 0.42in 1fr;
+  align-items: center;
+  gap: 5pt;
+  border: var(--line);
+  border-radius: var(--radius);
+  padding: 3pt 5pt;
+}
+
+.mini-row .mini-value {
+  text-align: center;
+  font-size: 11.5pt;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.mini-row .mini-label {
+  font-size: 6.8pt;
+  font-weight: 700;
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+/* An empty capsule for something the player writes in — inspiration. */
+.mini-row .mini-blank {
+  height: 13pt;
+  border: var(--line-thin);
+  border-radius: 3pt;
+  background: #fff;
+}
+
+/*
+ * Saves and skills. One row per line: a proficiency bubble, the modifier, the
+ * name, and for a skill the ability it keys off.
+ */
+.stat-list { list-style: none; margin: 0; padding: 0; }
+
+.stat-list li {
+  display: grid;
+  break-inside: avoid;
+  grid-template-columns: 8pt 0.29in 1fr auto;
+  align-items: baseline;
+  gap: 3.5pt;
+  padding: 1.4pt 0;
+  font-size: 8.4pt;
+}
+
+.stat-list li + li { border-top: 0.35pt solid #e4e4e4; }
+
+.bub {
+  width: 7pt;
+  height: 7pt;
+  align-self: center;
+  border: 0.7pt solid var(--ink);
+  border-radius: 50%;
+  background: #fff;
+}
+
+.bub.on { background: var(--ink); }
+
+/* Expertise: the filled bubble inside a ring, which is how a doubled
+   proficiency is marked on a paper sheet. A second bubble would read as a
+   second proficiency, and the skill only has one — the bonus is counted twice,
+   the proficiency is not. */
+.bub.dbl {
+  box-shadow: 0 0 0 0.7pt #fff, 0 0 0 1.4pt var(--ink);
+  margin: 0 1.4pt;
+}
+
+.stat-list .val {
+  text-align: right;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.stat-list .abil {
+  font-size: 6.2pt;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+/* The proficient rows carry a little more weight, so the list scans. */
+.stat-list li.is-prof .nm { font-weight: 700; }
+
+.passive-row .mini-value { font-size: 12pt; }
+
+.prof-list { margin: 0; padding: 0; list-style: none; font-size: 8.2pt; }
+.prof-list li { padding: 1pt 0; break-inside: avoid; }
+.prof-list li strong { font-size: 7pt; letter-spacing: 0.05em; text-transform: uppercase; }
+
+/* --- Middle column: defences, attacks, equipment ------------------------- */
+
+.defence-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6pt;
+}
+
+.defence-row .box {
+  text-align: center;
+  padding: 4pt 2pt 2.5pt;
+}
+
+/* Three captions in a third of the page each; "Armor Class" only just fits. */
+.defence-row .box-label {
+  font-size: 6pt;
+  letter-spacing: 0.02em;
+}
+
+.defence-row .big {
+  display: block;
+  font-size: 17pt;
+  font-weight: 700;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+.hp-box { text-align: center; }
+
+.hp-box .hp-max {
+  font-size: 7pt;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  border-bottom: 0.5pt solid var(--rule);
+  padding-bottom: 2pt;
+  margin-bottom: 3pt;
+  display: block;
+  font-weight: 700;
+}
+
+.hp-box .hp-current {
+  display: block;
+  font-size: 21pt;
+  font-weight: 700;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+.hp-temp { text-align: center; }
+.hp-temp .blank-line { display: block; height: 19pt; }
+
+.dice-saves {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 6pt;
+}
+
+.hitdice-box { text-align: center; }
+
+.hitdice-box .total {
+  display: block;
+  font-size: 6.6pt;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  font-weight: 700;
+}
+
+.hitdice-box .dice {
+  display: block;
+  font-size: 13pt;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+/*
+ * Death saves print as six empty circles the player pens in. They are never
+ * derived from the save — the game has no dying state that persists between
+ * sessions, and printing three filled failures onto a sheet somebody carries
+ * around would be printing a moment as if it were a fact.
+ */
+.death-saves .ds-row {
+  display: grid;
+  grid-template-columns: 0.58in 1fr;
+  align-items: center;
+  gap: 4pt;
+  padding: 1.6pt 0;
+}
+
+.death-saves .ds-label {
+  font-size: 6pt;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  font-weight: 700;
+}
+
+.death-saves .ds-bubbles { display: flex; gap: 4.5pt; }
+
+.death-saves .bub { width: 8.5pt; height: 8.5pt; }
+
+.atk-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 8.2pt;
+}
+
+.atk-table th {
+  font-size: 6.2pt;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  font-weight: 700;
+  text-align: left;
+  padding: 0 2pt 2pt;
+  border-bottom: 0.5pt solid var(--rule);
+}
+
+.atk-table th.n, .atk-table td.n { text-align: right; }
+
+.atk-table tr { break-inside: avoid; }
+
+.atk-table td {
+  padding: 2.4pt 2pt;
+  border-bottom: 0.35pt solid #e4e4e4;
+  vertical-align: top;
+}
+
+.atk-table tr:last-child td { border-bottom: 0; }
+
+.atk-table .wname { font-weight: 600; }
+.atk-table .eq {
+  font-size: 6pt;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  font-weight: 700;
+}
+.atk-table .props { color: var(--ink-soft); font-size: 6.6pt; }
+
+/*
+ * The caster's one-line summary under the attack table. Its own rule rather
+ * than `.props`, which is scoped to inside the table — the paragraph sits
+ * outside it and inherited the 9.5pt body size, which read as a sentence
+ * somebody had left in by mistake.
+ */
+.atk-note {
+  margin: 4pt 0 0;
+  color: var(--ink-soft);
+  font-size: 6.8pt;
+  line-height: 1.35;
+}
+.atk-table .bonus { font-weight: 700; font-variant-numeric: tabular-nums; }
+
+.coin-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 4pt;
+  margin-bottom: 4.5pt;
+}
+
+.coin {
+  border: var(--line-thin);
+  border-radius: 3pt;
+  padding: 2pt 0 1pt;
+  text-align: center;
+}
+
+.coin .amt {
+  display: block;
+  height: 11pt;
+  font-size: 9.5pt;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.coin .cn {
+  display: block;
+  font-size: 5.8pt;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  font-weight: 700;
+}
+
+.gear-list { margin: 0; padding: 0; list-style: none; font-size: 8.2pt; }
+
+.gear-list li {
+  display: grid;
+  break-inside: avoid;
+  grid-template-columns: 1fr auto;
+  gap: 5pt;
+  padding: 1.6pt 0;
+  border-bottom: 0.35pt solid #ededed;
+}
+
+.gear-list li:last-child { border-bottom: 0; }
+.gear-list .qty { color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+.gear-list .worn { font-weight: 700; }
+
+.gear-foot {
+  margin-top: 3pt;
+  padding-top: 2.5pt;
+  border-top: 0.5pt solid var(--rule);
+  font-size: 6.6pt;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  font-weight: 700;
+  text-align: right;
+}
+
+/* --- Right column: the written-in boxes and features --------------------- */
+
+.trait-list { margin: 0; padding: 0; list-style: none; font-size: 8.2pt; }
+
+.trait-list li {
+  break-inside: avoid;
+  padding: 2.2pt 0;
+  border-bottom: 0.35pt solid #ededed;
+}
+
+.trait-list li:last-child { border-bottom: 0; }
+.trait-list .fname { font-weight: 700; }
+
+.trait-list .fsrc {
+  font-size: 6.2pt;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  font-weight: 700;
+  margin-left: 3.5pt;
+}
+
+.trait-list .fdetail { display: block; color: var(--ink-soft); font-size: 7.4pt; }
+
+/* ------------------------------------------------------------------------ */
+/* Page two: spellcasting                                                    */
+/* ------------------------------------------------------------------------ */
+
+.spell-top {
+  display: grid;
+  grid-template-columns: 2.45in 1fr;
+  gap: 7pt;
+  padding: 0.22in 0.22in 0;
+}
+
+.spell-head-fields {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 7pt;
+}
+
+.spell-head-fields .box { text-align: center; }
+
+.spell-head-fields .big {
+  display: block;
+  font-size: 17pt;
+  font-weight: 700;
+  line-height: 1.15;
+  font-variant-numeric: tabular-nums;
+}
+
+/*
+ * Spell levels in two columns, cantrips first. Two rather than the official
+ * three: this campaign stops at 3rd-level slots, so there are at most four
+ * blocks to place and three columns would leave a conspicuous gap.
+ */
+.spell-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8pt;
+  padding: 8pt 0.22in 0.22in;
+  align-items: start;
+}
+
+/*
+ * The same rule as the panels: a level's block may run onto the next page, but
+ * its heading may not be the last thing on this one. A Wizard at 6th level can
+ * know a dozen spells of one level, and refusing to split that block would move
+ * all twelve to a fresh page and leave half of this one empty.
+ */
+.spell-level { break-inside: auto; }
+.spell-level-head { break-after: avoid; page-break-after: avoid; }
+
+.spell-level + .spell-level { margin-top: 8pt; }
+
+.spell-level-head {
+  display: grid;
+  grid-template-columns: 0.36in 1fr auto;
+  align-items: center;
+  gap: 5pt;
+  border: var(--line);
+  border-radius: var(--radius);
+  padding: 2.5pt 5pt;
+  margin-bottom: 3.5pt;
+}
+
+.spell-level-head .lvl {
+  text-align: center;
+  font-size: 13pt;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.spell-level-head .lvl-label {
+  font-size: 6.2pt;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  font-weight: 700;
+}
+
+.slot-dots { display: flex; align-items: center; gap: 4pt; }
+
+.slot-dots .bub { width: 8.5pt; height: 8.5pt; }
+
+.slot-dots .slots-label {
+  font-size: 6pt;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  font-weight: 700;
+  margin-right: 1pt;
+}
+
+.spell-list { margin: 0; padding: 0; list-style: none; }
+
+.spell-list li {
+  display: grid;
+  break-inside: avoid;
+  grid-template-columns: 8pt 1fr;
+  align-items: baseline;
+  gap: 5pt;
+  padding: 2.2pt 3pt;
+  border-bottom: 0.35pt solid #e4e4e4;
+  font-size: 8.2pt;
+}
+
+.spell-list li:last-child { border-bottom: 0; }
+.spell-list .sname { font-weight: 700; }
+
+.spell-list .smeta {
+  display: block;
+  color: var(--ink-soft);
+  font-size: 7.2pt;
+}
+
+/*
+ * The "prepared" tick box, level with the spell's name rather than centred in
+ * the row. A spell entry is one line of name and three of small print, so
+ * centring put the box beside the description and it read as belonging to the
+ * prose instead of to the spell.
+ */
+.spell-list .prep {
+  width: 7pt;
+  height: 7pt;
+  align-self: start;
+  margin-top: 1.5pt;
+  border: 0.7pt solid var(--ink);
+  border-radius: 1pt;
+  background: #fff;
+}
+
+.spell-empty {
+  padding: 2.5pt 3pt;
+  color: var(--ink-soft);
+  font-size: 7.4pt;
+  font-style: italic;
+}
+
+/* ------------------------------------------------------------------------ */
+/* Footer                                                                    */
+/* ------------------------------------------------------------------------ */
+
+.sheet-foot {
+  padding: 0 0.22in 0.16in;
+  font-size: 6.2pt;
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
+  display: flex;
+  justify-content: space-between;
+  gap: 8pt;
+}
+
+/* ------------------------------------------------------------------------ */
+/* Print                                                                     */
+/* ------------------------------------------------------------------------ */
+
+@media print {
+  html, body { background: #fff; }
+
+  .no-print { display: none !important; }
+
+  /*
+   * The page IS the paper now, so it loses the margin, the shadow and the
+   * fixed min-height. Keeping min-height would be harmless on page one and
+   * fatal on a page whose content ends early: 10.1in of forced height plus the
+   * printer's own margin can round up to a second, blank, sheet.
+   */
+  .sheet-page {
+    width: auto;
+    min-height: 0;
+    margin: 0;
+    box-shadow: none;
+  }
+
+  /*
+   * The inch of padding inside .sheet-page duplicated the @page margin, which
+   * on paper reads as an inch and a half of white and squeezes the columns.
+   * The page box owns the margin; the page content owns none.
+   */
+  .sheet-top,
+  .spell-top { padding: 0 0 0; }
+  .sheet-cols { padding: 6pt 0 0; }
+  .spell-cols { padding: 7pt 0 0; }
+  .sheet-foot { padding: 6pt 0 0; }
+
+  a { color: inherit; text-decoration: none; }
+}

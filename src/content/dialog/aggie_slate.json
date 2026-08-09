@@ -1,0 +1,894 @@
+{
+    "npc_key": "aggie_slate",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "flag": "undertown_closed"
+                    }
+                ],
+                "text": "The plank is across the barrels and there is nobody on it. The bays along the walls are curtained and every curtain is shut. Somewhere behind one of them a child is told, once, to be quiet, and is.\n\nNobody is going to speak to you down here again.",
+                "choices": [
+                    {
+                        "label": "Go.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "rats_and_better",
+                        "stage": "the_grain_stair"
+                    }
+                ],
+                "text": "\"You have been up the grain stair,\" says Aggie Slate. She does not get off the plank. \"Then you know what comes down it, and you know that about a third of what comes down it stops here, and you know that nobody here loads a sack that is not already coming.\"\n\nShe folds her hands.\n\n\"So. You are going up those steps in a minute to a woman who keeps an inn, or to a watch captain, or to nobody. And I would rather find out which one in this room than out of it.\"",
+                "choices": [
+                    {
+                        "label": "It stays open. I'll see the hatch isn't looked at.",
+                        "next": "the_arrangement"
+                    },
+                    {
+                        "label": "I haven't decided.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_sealed_arch",
+                        "stage": "find_the_arch"
+                    }
+                ],
+                "text": "\"You have been up to the arch,\" says Aggie. \"Sit down and tell me what you made of it, and take your time, because I have been carrying that wall about in my head for nineteen years and I would like it looked at properly.\"",
+                "choices": [
+                    {
+                        "label": "It was bricked from the far side.",
+                        "next": "the_far_face"
+                    },
+                    {
+                        "label": "I couldn't tell you anything you don't know.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_sealed_arch",
+                        "stage": "the_far_side"
+                    }
+                ],
+                "text": "Aggie Slate has been waiting on the plank and has plainly not been doing anything else.\n\n\"Well,\" she says. \"There it is. Now what do you do with a wall.\"",
+                "choices": [
+                    {
+                        "label": "I take it down.",
+                        "next": "through_the_wall"
+                    },
+                    {
+                        "label": "I leave it, and I write down where it is.",
+                        "next": "left_standing"
+                    },
+                    {
+                        "label": "I take a rubbing of that brick and go and ask a mason.",
+                        "next": "the_rubbing"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "sealed_arch_fate",
+                        "equals": "opened"
+                    }
+                ],
+                "once": true,
+                "text": "\"Eleven days,\" says Aggie Slate. \"You had it open eleven days and then it was shut again, in the same grey brick, and the joints struck smooth on the far side.\"\n\nShe looks at her hands.\n\n\"Nineteen years I have been asking people to go and look at that wall,\" she says. \"You are the first one who did, and all you got for it was proof that somebody is still there.\"",
+                "choices": [
+                    {
+                        "label": "That's not nothing.",
+                        "next": "not_nothing"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "sealed_arch_fate",
+                        "equals": "rubbing"
+                    }
+                ],
+                "once": true,
+                "text": "\"A mason's mark,\" says Aggie. \"That is what the smith told you, and it is a perfectly good answer, and it is the answer I would have given.\" She turns her hands over. \"And I have been sitting on this plank since you told me thinking about how neat it is. A mason's mark says: I cut this, and I am proud of it, and if you want more like it you know where to come.\"\n\nA pause.\n\n\"On the far side of a wall,\" she says, \"that nobody is ever supposed to see.\"",
+                "choices": [
+                    {
+                        "label": "Some men sign everything.",
+                        "next": "some_men_sign"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "undertown_court_fate",
+                        "equals": "bench"
+                    }
+                ],
+                "text": "\"The bench,\" says Aggie Slate, by way of hello, and moves along the plank about eight inches, which is an invitation and a joke and neither.\n\n\"Nobody has asked after that lamp business since,\" she says. \"That is what a finding is for. It stops people asking.\"",
+                "choices": [
+                    {
+                        "label": "Was I right?",
+                        "next": "were_you_right"
+                    },
+                    {
+                        "label": "Is there anything down here that needs doing?",
+                        "next": "the_arch_offer"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "undertown_court_fate",
+                        "equals": "tried"
+                    }
+                ],
+                "once": true,
+                "text": "\"Slate-carrier,\" says Aggie, which is apparently what they call it. \"Come and go. Nobody will stop you and nobody will do you a favour either — that is what the notch means and I would rather you had it right.\"",
+                "choices": [
+                    {
+                        "label": "Is there anything down here that needs doing?",
+                        "next": "the_arch_offer"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "undertown_court_fate",
+                        "equals": "bought"
+                    }
+                ],
+                "text": "Aggie Slate is perfectly civil, and there is a distance in it that was not there before the money.\n\n\"Recorded as bought,\" she says. \"That is not a punishment. It is only the true description. You may come and go.\"\n\nShe does not move along the plank.",
+                "choices": [
+                    {
+                        "label": "You said four others had chosen it.",
+                        "next": "the_other_four"
+                    },
+                    {
+                        "label": "Is there anything down here that needs doing?",
+                        "next": "the_arch_offer"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_undertown_court",
+                        "status": "active"
+                    }
+                ],
+                "text": "The room stops.\n\nSixty people, more or less, in a brick vault the size of the market square above it, and every one of them has put down whatever they were doing at the same moment. Nobody moves toward you. That is somehow much worse.\n\nAt the north end there is a scaffold plank across two barrels, worn smooth in the middle, and a woman of about sixty sits on it with her hands in her lap.\n\n\"Come to the front,\" says Aggie Slate. \"You will not be able to hear it from back there and it is no good to anybody if you cannot hear it.\"",
+                "choices": [
+                    {
+                        "label": "Hear what?",
+                        "next": "the_charge"
+                    },
+                    {
+                        "label": "I'm not standing trial in a drain.",
+                        "next": "not_in_a_drain"
+                    }
+                ]
+            },
+            {
+                "text": "The lamps are lit and the washing is up on its line, and a woman of about sixty is sitting on a scaffold plank across two barrels, doing nothing in the manner of somebody whose job it is to be available.\n\n\"Aggie Slate,\" she says. \"You are the ones with the lamp who have been up and down my conduit for a week. Sit down or do not, but do not stand in the middle of the floor, because people have to get past.\"",
+                "choices": [
+                    {
+                        "label": "What is this place?",
+                        "next": "what_this_place_is"
+                    },
+                    {
+                        "label": "What is the plank for?",
+                        "next": "the_plank"
+                    },
+                    {
+                        "label": "Nothing. Passing through.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "what_this_place_is": [
+            {
+                "text": "\"Undertown,\" says Aggie Slate. \"Which is a word people up there use and we use back at them, so it has stuck.\"\n\nShe nods along the bays.\n\n\"Sixty-one of us this month. Some have been down here two years and some were born here. My mother came down in the year of the second flood and did not go back up, and I have been up perhaps forty times in my life and did not care for it.\"\n\nShe says all of this without any drama at all, which is what makes it land.\n\n\"We are not hiding,\" she says. \"Every soul up there knows we are here. It is only that there is no arrangement about it, and where there is no arrangement people make one, and this is ours.\"",
+                "choices": [
+                    {
+                        "label": "What is the plank for?",
+                        "next": "the_plank"
+                    },
+                    {
+                        "label": "Why can't you come up?",
+                        "next": "the_gates"
+                    },
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_gates": [
+            {
+                "text": "\"We can come up,\" says Aggie. \"We cannot come *back*. Gates shut at dusk and the watch does not open them for people who have no address, and there is no lodging in this town for a man with no address either.\"\n\nShe turns a hand over.\n\n\"So a woman who works up there goes up in the morning through a grating and comes down at night through a grating, and Marrell leaves the Granary Row one on the latch and pretends he forgets.\" A pause. \"That is the whole conspiracy. Everything else people up there believe about us they made up in the Flagon.\"",
+                "choices": [
+                    {
+                        "label": "What is the plank for?",
+                        "next": "the_plank"
+                    },
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_plank": [
+            {
+                "text": "\"It is the bench,\" says Aggie Slate, \"and I sit it, and I have sat it eleven years, and twice I have tried to make them let somebody else.\"\n\nShe sees your face and is not offended by it.\n\n\"There is no watch down here,\" she says. \"There is no magistrate and there is nowhere to put anybody. So when one of us does a thing to another of us, either it is settled in this room in front of everybody, or it is settled in a tunnel by whoever is bigger.\" She smooths her skirt. \"I have seen the second one. My whole law is three lines long and the third line is that it is read to your face before anything else happens, and that is because of the second one.\"",
+                "choices": [
+                    {
+                        "label": "What are the other two lines?",
+                        "next": "the_three_lines"
+                    },
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_three_lines": [
+            {
+                "text": "\"One,\" says Aggie Slate. \"Whatever is done is done in this room, where everybody can see it.\n\n\"Two. The bench is a stranger where a stranger can be got, and where one cannot, the bench is whoever has least to gain.\n\n\"Three. It is read to your face first.\"\n\nShe folds her hands.\n\n\"There is nothing in it about right and wrong,\" she says, \"and people up there always notice that and always think it is a lack. It is not a lack. Right and wrong is what the room is for. Those three are so that there is a room.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_charge": [
+            {
+                "conditions": [
+                    {
+                        "flag": "flood_gate_fate",
+                        "equals": "opened"
+                    }
+                ],
+                "text": "Aggie Slate reads it to your face, which is the third line.\n\n\"That on a day this month you wound up the eastern flood gate,\" she says, \"and that the water went where it was being kept from going, and that the two lowest bays of this room stood in four foot of it for two days.\"\n\nShe does not raise her voice at any point.\n\n\"Meg Corrow lost her whole winter store, which was eleven weeks of her working up there in the mornings. Nobody drowned. The charge is not about drowning.\"\n\nShe folds her hands.\n\n\"You did not know we were here,\" she says. \"That is not a defence and it is not an accusation either. It is the finding I would have to write. So. There are three doors and I shall name all three, because that is what the bench is for.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_undertown_court",
+                            "stage": "stand_before_the_bench"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "I'll stand it. Give the finding.",
+                        "next": "the_verdict"
+                    },
+                    {
+                        "label": "Name a figure and I'll pay it now.",
+                        "conditions": [
+                            {
+                                "gold_at_least": 120
+                            }
+                        ],
+                        "next": "paid_it_off"
+                    },
+                    {
+                        "label": "You have no standing to try anybody.",
+                        "next": "no_standing"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "strongroom_fate",
+                        "equals": "took"
+                    }
+                ],
+                "text": "Aggie Slate reads it to your face, which is the third line.\n\n\"That you went into the drowned counting room off the low conduit,\" she says, \"and came out of it with eleven boxes, and that three of the names on those boxes have people still living in this town, and that not one of those three has had a farthing.\"\n\nNobody in the room makes a sound.\n\n\"That silver has stood in the dark for forty years,\" she says, \"and every soul down here could have taken it and did not, and I am not going to stand here and tell you it was virtue, because it was not — it was that thing in the doorway. But it did not get taken, and the not-taking became a rule about six years before I ever sat this plank.\"\n\nShe folds her hands.\n\n\"Three doors,\" she says. \"I shall name all three, because that is what the bench is for.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_undertown_court",
+                            "stage": "stand_before_the_bench"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "I'll stand it. Give the finding.",
+                        "next": "the_verdict"
+                    },
+                    {
+                        "label": "Name a figure and I'll pay it now.",
+                        "conditions": [
+                            {
+                                "gold_at_least": 120
+                            }
+                        ],
+                        "next": "paid_it_off"
+                    },
+                    {
+                        "label": "You have no standing to try anybody.",
+                        "next": "no_standing"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "night_soil_fate",
+                        "equals": "sealed"
+                    }
+                ],
+                "text": "Aggie Slate reads it to your face, which is the third line.\n\n\"That on your word nine gratings between the market and the quay were bricked and barred,\" she says, \"and that those nine gratings were the doors of about forty people, and that the rain has not come yet.\"\n\nA long silence in a room with sixty people in it.\n\n\"You did that to make a nightman safe,\" she says, \"and he is safe, and I have known Sib Marrell thirty years and I am glad of it. Both of those are in the finding. I am not in the business of leaving out the part that is to your credit.\"\n\nShe folds her hands.\n\n\"Three doors,\" she says.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_undertown_court",
+                            "stage": "stand_before_the_bench"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "I'll stand it. Give the finding.",
+                        "next": "the_verdict"
+                    },
+                    {
+                        "label": "Name a figure and I'll pay it now.",
+                        "conditions": [
+                            {
+                                "gold_at_least": 120
+                            }
+                        ],
+                        "next": "paid_it_off"
+                    },
+                    {
+                        "label": "You have no standing to try anybody.",
+                        "next": "no_standing"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "weir_gremlins_beaten"
+                    }
+                ],
+                "text": "Aggie Slate reads it to your face, which is the third line.\n\n\"That you came through the weir chamber this month,\" she says, \"and that four who take a toll on that ledge did not come back off it.\"\n\nShe lets that sit.\n\n\"I shall be straight with you, because the room can hear me. That toll is a disgrace, I have been trying to stop it two years, and I have not managed it. Nobody in this room is going to weep for them.\" She folds her hands. \"And they were ours, and they were killed in our tunnels by somebody from up there, and if the bench lets that pass without one word said in this room, then the next time it will not be four toll-takers.\"\n\n\"Three doors,\" she says. \"I shall name all three, because that is what the bench is for.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_undertown_court",
+                            "stage": "stand_before_the_bench"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "I'll stand it. Give the finding.",
+                        "next": "the_verdict"
+                    },
+                    {
+                        "label": "Name a figure and I'll pay it now.",
+                        "conditions": [
+                            {
+                                "gold_at_least": 120
+                            }
+                        ],
+                        "next": "paid_it_off"
+                    },
+                    {
+                        "label": "You have no standing to try anybody.",
+                        "next": "no_standing"
+                    }
+                ]
+            },
+            {
+                "text": "Aggie Slate does not read a charge, and the room notices before you do.\n\n\"There is not one,\" she says. \"That is what I have had to tell them for a week and they have not liked it. You have been up and down this town's tunnels with a lamp and a sword and you have not taken anything off anybody, and the whole of what is in front of this bench is that you are here at all.\"\n\nShe folds her hands.\n\n\"So I shall put it to you instead of at you. Every soul in this room lives under a town that could decide about them at any time and has never once had to say so out loud. You are the first person from up there who has ever come down and stood in front of them.\" A pause. \"Which makes you, this evening, either a stranger being looked over — or the only bench we are ever likely to get, because our own rule says the bench should be a stranger and in eleven years we have never had one.\"\n\n\"Three doors,\" she says. \"I shall name all three, because that is what the bench is for.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_undertown_court",
+                            "stage": "stand_before_the_bench"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Then let them look me over. Give the finding.",
+                        "next": "the_verdict"
+                    },
+                    {
+                        "label": "I'll sit your plank.",
+                        "next": "the_bench_offer"
+                    },
+                    {
+                        "label": "Here's a hundred and twenty gold for the box, and we're done.",
+                        "conditions": [
+                            {
+                                "gold_at_least": 120
+                            }
+                        ],
+                        "next": "paid_it_off"
+                    },
+                    {
+                        "label": "You have no standing over anybody.",
+                        "next": "no_standing"
+                    }
+                ]
+            }
+        ],
+        "the_bench_offer": [
+            {
+                "text": "Aggie Slate gets off the plank, which takes her a moment, and stands beside it.\n\n\"Then sit,\" she says.\n\nThe case is one of theirs against one of theirs. A lamp, taken. A hand, broken in the taking. Both of them are here and both of them talk and neither of them is lying and neither of them is right, and about halfway through you understand why the second line of Aggie Slate's law is what it is: there is not one person in that room who could decide it and be believed afterwards.\n\nIt takes two hours on a scaffold plank.\n\nYou give a finding. The room takes it. The woman whose hand it was does not agree with it and takes it anyway, which is the part that stays with you, and Aggie Slate files a notch into a palm of slate and hands it up without any ceremony at all.\n\n\"There,\" she says. \"Now go up and think about that for about a year.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_undertown_court",
+                            "stage": "sat_the_bench"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric watched the whole two hours from the back of the room and has not said a word. On the stair he says: \"You were fair. I want you to know that I was watching for whether you would be, and that I am ashamed of having watched for it.\""
+                    },
+                    {
+                        "companion": "ilse",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "companion": "aldric",
+                                    "status": "active"
+                                }
+                            }
+                        ],
+                        "text": "Ilse: \"Sixty people, and the only bench they can trust is somebody who does not live there. I have been the warden of a wood nobody would come into. That is the same problem and I never solved it either.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Take the slate.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "not_in_a_drain": [
+            {
+                "text": "\"No,\" Aggie agrees. \"You are not. You are standing in a room, in front of the people it happened to, which is more than anybody up there would give any of us.\"\n\nShe does not move.\n\n\"You may walk out. Nobody will touch you on the way and I shall say so out loud now so that it is said.\" A pause. \"And then it will have happened in a tunnel instead of in this room, which is the thing my whole law is for, and I shall have to explain to sixty people why the bench let it.\"",
+                "choices": [
+                    {
+                        "label": "All right. Read it.",
+                        "next": "the_charge"
+                    },
+                    {
+                        "label": "Then I walk out.",
+                        "next": "no_standing"
+                    }
+                ]
+            }
+        ],
+        "the_verdict": [
+            {
+                "text": "It takes an hour.\n\nPeople stand up and say things. Meg Corrow says a good deal less than she is entitled to. A man of about twenty says something extremely unhelpful and is told to sit down by three separate people. You are asked four questions and you answer all four, and one of the answers is worse than you expected it to sound out loud.\n\nThe finding, when it comes, is not what you would have given yourself in either direction. It is smaller than you feared and it costs more than money.\n\nAggie Slate files a notch into a palm of roofing slate with a rasp, in front of everybody, and hands it over.\n\n\"The book is closed,\" she says. \"You may come and go. That is the smaller half of it and I want you to know which half it is.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_undertown_court",
+                            "stage": "stood_trial"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric, afterwards, on the stair: \"That was a court. I have stood in three that were not, and they had roofs and seals and a bishop.\""
+                    },
+                    {
+                        "companion": "kessa",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "companion": "aldric",
+                                    "status": "active"
+                                }
+                            }
+                        ],
+                        "text": "Kessa: \"You could have walked out of that any time you liked.\" A beat. \"I've never seen anyone not.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Which is the bigger half?",
+                        "next": "the_bigger_half"
+                    },
+                    {
+                        "label": "Take the slate.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_bigger_half": [
+            {
+                "text": "\"That sixty people watched somebody from up there stand still and be answered to,\" says Aggie Slate. \"There is not one of them who has ever seen that. Half of them did not believe it would happen when I told them it would.\"\n\nShe puts the rasp away.\n\n\"Whatever else you do in this valley,\" she says, \"you have made my next eleven years a good deal easier, and you did it by standing on a floor for an hour.\"",
+                "choices": [
+                    {
+                        "label": "Take the slate.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "paid_it_off": [
+            {
+                "text": "\"Then it is done here, in front of everybody,\" says Aggie Slate, \"because there is no such thing down here as a quiet one. The whole point of this room is that it happens in this room.\"\n\nA hundred and twenty gold, counted out on the plank, into the Court's box.\n\n\"Recorded as bought,\" she says, and writes it, and reads out what she has written.\n\nMeg Corrow gets her winter store back and rather more, and does not look at you.\n\n\"Four people have chosen that door in eleven years,\" says Aggie Slate, quite pleasantly. \"I can tell you what happened to all four, if you have a use for it.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_undertown_court",
+                            "stage": "bought_the_bench"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Tell me.",
+                        "next": "the_other_four"
+                    },
+                    {
+                        "label": "I have no use for it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_other_four": [
+            {
+                "text": "\"Two of them never came back down, which is the sensible one.\" Aggie counts on her fingers. \"One of them came back twice and found that nobody would take her money the second time, and went away angry, and I hear she is at Greyhythe.\"\n\n\"And the fourth?\"\n\n\"The fourth is Wat Fenner,\" says Aggie Slate, \"who paid, and then came back the next week and asked to stand it properly, and stood it, and has been on that gate ever since.\" She smooths her skirt. \"So it is not a door that only goes one way. I only mind that people know which one they went through.\"",
+                "choices": [
+                    {
+                        "label": "Understood.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "no_standing": [
+            {
+                "text": "You say it in a brick room to sixty people who live in it, and you hear yourself say it, and it is exactly as true and as useless as it sounded in your head.\n\nAggie Slate does not argue.\n\nFour of them put themselves between you and the passage north, the way people do when they have agreed beforehand who stands where. None of them draws anything. That is not mercy; it is that nobody down here owns four weapons.\n\n\"Nobody touches them,\" says Aggie Slate, from the plank, in the flat voice of a woman giving an instruction she knows will not be obeyed.",
+                "choices": [
+                    {
+                        "label": "Go through them.",
+                        "effects": [
+                            {
+                                "start_combat": "low_court_bailiffs"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "Wait.",
+                        "next": "sit_down_again"
+                    }
+                ]
+            }
+        ],
+        "sit_down_again": [
+            {
+                "text": "\"Stop,\" says Aggie Slate, from the plank, and to your considerable surprise everybody does.\n\nThe four of them stay exactly where they are and take their hands off things.\n\n\"There are two ways out of this room,\" she says, \"and I am obliged to tell you both, because that is the whole of my third line and I am not going to break it in front of everybody for the sake of winning an argument.\"\n\n\"You may sit down and hear it read, and the room will settle it, and it will be over tonight.\"\n\n\"Or you may walk up the north passage and out through whichever grating you came in by. Nobody will follow you. Nobody will speak to you down here again either — not out of spite; simply that people do not talk to somebody a court could not finish with.\"\n\nShe folds her hands.\n\n\"Both of those are findings,\" says Aggie Slate. \"One of them I have to give to an empty room, and I have never had to do that, and I would very much rather not start.\"",
+                "choices": [
+                    {
+                        "label": "Sit down and hear it read.",
+                        "next": "the_charge"
+                    },
+                    {
+                        "label": "Then give it to the empty room. I'm going.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_undertown_court",
+                                    "stage": "refused_the_court"
+                                }
+                            }
+                        ],
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_arch_offer": [
+            {
+                "text": "Aggie Slate thinks about it for a while, and then, having decided, says it all at once.\n\n\"There is a passage south of the weir that used to come out somewhere,\" she says. \"I walked it as a girl. I could not tell you where it came out because I was nine and it was dark and my mother took the strap to me for it, but it came out, because I felt the air change.\"\n\nShe smooths her skirt.\n\n\"It does not come out anywhere now. There is a wall across the arch and the wall is newer than I am, and in nineteen years I have got four people to go and look at it and every one of them has come back and told me it is a wall.\"\n\nA pause.\n\n\"Go and look at the wall,\" says Aggie Slate. \"Not at what is behind it. At the wall.\"",
+                "choices": [
+                    {
+                        "label": "I'll go and look.",
+                        "effects": [
+                            {
+                                "start_quest": "the_sealed_arch"
+                            }
+                        ],
+                        "next": "she_gives_directions"
+                    },
+                    {
+                        "label": "It's a wall, Aggie.",
+                        "next": "it_is_a_wall"
+                    }
+                ]
+            }
+        ],
+        "it_is_a_wall": [
+            {
+                "text": "\"That is what all four of them said,\" says Aggie Slate, entirely without rancour. \"And every one of them was right, and not one of them told me which side of it the mason was standing on.\"\n\nShe looks at the lamp.\n\n\"I am sixty-one,\" she says. \"I would like to know before I stop being able to walk up there. That is the whole of my reason and I am aware it is not a good one.\"",
+                "choices": [
+                    {
+                        "label": "All right. I'll go and look.",
+                        "effects": [
+                            {
+                                "start_quest": "the_sealed_arch"
+                            }
+                        ],
+                        "next": "she_gives_directions"
+                    },
+                    {
+                        "label": "Not today.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "she_gives_directions": [
+            {
+                "text": "\"Up the old stair at the east end of this room, or south from the weir if you would rather be wet,\" says Aggie. \"You will know it when the brick changes, and if you do not know it when the brick changes then there is no point in you being the fifth one.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_sealed_arch",
+                            "stage": "find_the_arch"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "I'll come back and tell you.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_far_face": [
+            {
+                "text": "You put it to her the way you worked it out standing in front of it.\n\nThe arch is old — soft hand-made brick, lime-set, weeping at every joint. The fill is hard grey brick in a cement that has not weathered at all in what cannot be more than a few years. It is laid plumb and it is laid well, by somebody who was paid properly for it.\n\nAnd the joints are struck smooth on the far face and left rough on this one. Nobody finishes the face they are walking away from.\n\n\"So he was standing on the other side,\" says Aggie Slate.\n\n\"He was standing on the other side. And when he finished, he walked away in the direction I cannot go.\"\n\nAggie Slate sits with that for a long moment.\n\n\"Nineteen years,\" she says, \"and four people, and not one of them looked at which way round the joints were.\"\n\nThere is one other thing, and you mention it because you mention everything: a small cut mark on one brick near the springing of the arch. A plumb-line crossed by a square, no bigger than a thumbnail, cut into the clay before the brick was ever fired.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_sealed_arch",
+                            "stage": "the_far_side"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"Somebody sealed a tunnel from the inside and then went further in.\" She turns her cup. \"That is not somebody hiding a thing. That is somebody who lives there.\""
+                    },
+                    {
+                        "companion": "kessa",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "companion": "ilse",
+                                    "status": "active"
+                                }
+                            }
+                        ],
+                        "text": "Kessa shrugs. \"Masons cut a mark in every brick they make. My uncle did. It doesn't mean anything.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "I take it down.",
+                        "next": "through_the_wall"
+                    },
+                    {
+                        "label": "I leave it, and I write down where it is.",
+                        "next": "left_standing"
+                    },
+                    {
+                        "label": "I take a rubbing of that brick and go and ask a mason.",
+                        "next": "the_rubbing"
+                    }
+                ]
+            }
+        ],
+        "through_the_wall": [
+            {
+                "text": "Two hours with a bar.\n\nBehind the fill the passage runs on about thirty feet and then turns down, and it has been timbered — new pine, sawn square, set by somebody who means the roof to stand for years. There is a ladder in the turn.\n\nThe ladder is dry, which nothing at this depth is, and every rung is worn in the middle, which takes traffic.\n\nYou go down four lengths and then come back, because you have one lamp and about an hour of oil and no idea at all how far down it goes.\n\nYou come back eleven days later with four lamps and a rope.\n\nThe arch is bricked again, in the same hard grey brick, and the joints are struck smooth on the far side.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_sealed_arch",
+                            "stage": "broke_through"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric puts his hand flat on the new cement, which is still cold. \"Eleven days,\" he says. \"Somebody was told.\""
+                    },
+                    {
+                        "companion": "sera",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "companion": "aldric",
+                                    "status": "active"
+                                }
+                            }
+                        ],
+                        "text": "Sera: \"Two days' work and a mason's wages, at eleven days' notice, to shut a hole in a drain nobody uses.\" She looks at it a while. \"Whoever they are, that was not expensive for them.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Go and tell Aggie.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "left_standing": [
+            {
+                "text": "You leave the wall up.\n\nYou pace it out from the weir and again from the head of the old stair, and write both counts down, so that if it ever matters you can put your hand on that place in the dark.\n\nAggie Slate watches you do it and says nothing at all until you have finished.\n\n\"In nineteen years,\" she says then, \"you are the second person to write anything down about that wall.\"\n\nShe does not say who the first was, and when you ask she is already talking about something else, and she is not a woman who does that by accident.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_sealed_arch",
+                            "stage": "left_it_sealed"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Let it go.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_rubbing": [
+            {
+                "text": "Paper on the brick and the flat of a charcoal, and it comes up clean: a plumb-line crossed by a square, no bigger than a thumbnail.\n\nBrenna Coalwright turns it over twice at her own counter, in her own light.\n\n\"Mason's mark,\" she says. \"Every mason cuts one. That is a good clean job and I do not know the hand, and I know most of the hands that work stone within a day of here.\"\n\nShe hands it back.\n\nThen she asks, in a completely ordinary voice, where you got it. You tell her.\n\nBrenna says \"Hm,\" and goes back to the bellows, and does not say anything else about it that day.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_sealed_arch",
+                            "stage": "took_a_rubbing"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Keep the paper.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "not_nothing": [
+            {
+                "text": "\"No,\" says Aggie Slate. \"It is not nothing.\" She looks at her hands. \"It is a wall that somebody rebuilds. Which means it is not a wall at all — it is a door that is shut, and shut things have somebody minding them, and I have been telling this room for nineteen years that there is nothing behind it but rubble.\"\n\nShe folds her hands.\n\n\"I shall have to stop saying that,\" she says. \"That is going to be a considerable nuisance.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "some_men_sign": [
+            {
+                "text": "\"They do,\" Aggie agrees. \"My mother's people were tilers and every one of them signed the underside of a roof nobody would see for eighty years.\"\n\nShe turns her hands over.\n\n\"So it is a man being proud of his work in the dark,\" she says, \"and that is a perfectly good answer, and I have decided to keep it, because the other kind of answer keeps a woman of sixty-one awake and does not put anything in the box.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "were_you_right": [
+            {
+                "text": "\"About the lamp?\" Aggie Slate considers it properly, which is the compliment. \"You gave it to the wrong one and you gave her the right reason, and I have thought about it since and I could not have done better and I could have done it faster.\"\n\nShe moves along the plank another inch.\n\n\"They took it,\" she says. \"That is the whole of what a bench is. It is not being right. It is being somebody the room will take it from.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_arrangement": [
+            {
+                "text": "It takes about six minutes, which is what shocks you.\n\nThe hatch is not looked at. What comes down the stair goes on coming down the stair, and about a third of it goes on stopping here, and eighty gold a season comes up to you out of an arrangement you did not have to explain to anybody, because there is nobody it needs explaining to.\n\n\"You will want to hear me say the bad part,\" says Aggie Slate, \"so I shall, and then we need not do it again.\"\n\nShe folds her hands.\n\n\"Everybody in this room eats. Nobody up there is any worse off than they were on Tuesday. And you are now one of the reasons that nothing in this town gets weighed, and so am I, and I have been one for eleven years and it has never once got easier and I have never once stopped.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "rats_and_better",
+                            "stage": "kept_the_route"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"I do not like it and I cannot argue with it, and those two together are how I have felt about nearly everything since we came to this valley.\""
+                    },
+                    {
+                        "companion": "aldric",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "companion": "ilse",
+                                    "status": "active"
+                                }
+                            }
+                        ],
+                        "text": "Aldric: \"She said the bad part out loud without being asked. Remember that when you are deciding what she is.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "We need not do it again.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

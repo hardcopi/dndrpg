@@ -1,0 +1,12 @@
+{
+    "npc_key": "tibald_ashe",
+    "name": "Tibald Ashe",
+    "role": "Counting-House Clerk",
+    "description": "Keeps Rivermark's town account. Will tell you anything that is written down and nothing that is not.",
+    "sprite_key": "tibald_ashe",
+    "image_url": "assets/images/npcs/monk.png",
+    "dialog": "tibald_ashe",
+    "place": {
+        "location": "counting_house"
+    }
+}

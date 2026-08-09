@@ -1,0 +1,67 @@
+{
+ "resistances": [],
+ "immunities": [],
+ "vulnerabilities": [],
+ "condition_immunities": [],
+ "source": "5e SRD",
+ "monster_key": "giant_spider",
+ "name": "Giant Spider",
+ "size": "Large",
+ "type": "beast",
+ "alignment": "unaligned",
+ "armor_class": 14,
+ "hit_points": 26,
+ "hit_dice": "4d10+4",
+ "speed": "30 ft., climb 30 ft.",
+ "strength": 14,
+ "dexterity": 16,
+ "constitution": 12,
+ "intelligence": 2,
+ "wisdom": 11,
+ "charisma": 4,
+ "challenge_rating": 1,
+ "experience_points": 200,
+ "traits": {
+  "Spider Climb": "The spider can climb difficult surfaces, including upside down on ceilings, without needing an ability check.",
+  "Web Sense": "While in contact with a web, the spider knows the exact location of any other creature in contact with the same web.",
+  "Web Walker": "The spider ignores movement restrictions caused by webbing."
+ },
+ "actions": [
+  {
+   "name": "Bite",
+   "type": "melee",
+   "bonus": 5,
+   "damage": "1d8+3",
+   "damage_type": "piercing",
+   "note": "The target must make a DC 11 Constitution saving throw, taking 2d8 poison damage on a failure, or half as much on a success."
+  },
+  {
+   "name": "Web",
+   "type": "ranged",
+   "bonus": 5,
+   "damage": "0",
+   "damage_type": "bludgeoning",
+   "range": "30/60",
+   "note": "The target is restrained by webbing. As an action, the restrained target can make a DC 12 Strength check, bursting the webbing on a success.",
+   "save": {
+    "ability": "str",
+    "dc": 12
+   },
+   "on_fail": {
+    "condition": "restrained",
+    "repeat_save": true
+   }
+  }
+ ],
+ "saves": {
+  "dex": 5
+ },
+ "rank_pref": "front",
+ "sprite_key": "giant_spider",
+ "loot": [
+  {
+   "item": "antitoxin",
+   "chance": 35
+  }
+ ]
+}

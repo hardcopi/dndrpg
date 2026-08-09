@@ -1,0 +1,368 @@
+{
+    "npc_key": "hesk_dray",
+    "start": "hail",
+    "nodes": {
+        "hail": [
+            {
+                "conditions": [
+                    {
+                        "flag": "salt_fate",
+                        "equals": "opened"
+                    }
+                ],
+                "once": true,
+                "text": "The sheets are off, the salt is in a heap on the chalk, and the bar iron is stacked beside it in bundles of ten where anybody coming up the road can count them. Hesk Dray is sitting on a wheel-hub with four fewer men than he had at dawn.\n\n\"Twenty years,\" he says. \"Twenty years and not one complaint, and I finish it sat on a wheel next to a heap of somebody else's iron.\"",
+                "choices": [
+                    {
+                        "label": "Nobody's come for it.",
+                        "next": "nobody_came"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "salt_fate",
+                        "equals": "followed"
+                    }
+                ],
+                "once": true,
+                "text": "\"You saw it counted,\" Hesk says. \"Slate and a tally and two of them, at four in the morning, and they signed nothing.\" He is not looking at you. \"I've done that run eleven times. This is the first time anybody's been on the wagon with me for it.\"",
+                "choices": [
+                    {
+                        "label": "Who gave you the token to bring back?",
+                        "next": "the_token"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "salt_fate",
+                        "equals": "paid"
+                    }
+                ],
+                "once": true,
+                "text": "The ground is empty. The wheel-ruts go east. Hesk Dray is standing where the fire was, with the purse-strings still in his hand out of habit.\n\n\"Had that made up before you got here,\" he says. \"Not for you in particular. For whoever.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "salt_and_silence",
+                        "stage": "under_the_salt"
+                    }
+                ],
+                "text": "Hesk Dray is standing between you and the nearer wagon and has arranged that without appearing to move.\n\n\"You want the sheets off,\" he says. \"Right. Then say it out loud in front of my carters, because I'm not having it said afterwards that I offered.\"",
+                "choices": [
+                    {
+                        "label": "Sheets off. Now.",
+                        "next": "the_sheets_come_off"
+                    },
+                    {
+                        "label": "Or I walk up the trail with you and we both see who takes delivery.",
+                        "next": "walk_it_up"
+                    },
+                    {
+                        "label": "Or you pay me and I was never here.",
+                        "next": "the_purse"
+                    },
+                    {
+                        "label": "Later.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "salt_and_silence",
+                        "stage": "the_laced_sheets"
+                    }
+                ],
+                "text": "The man on the near wagon is heavy, apron-coated, and about fifty, and he watched you come across the chalk from a long way off.\n\n\"Hesk Dray,\" he says. \"Six wagons, four routes, twenty years, not one complaint.\" He says it the way a man says a thing he has been repeating to himself. \"You'll be watch, or you'll be somebody's, and either way you can do it from over there.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_hesk"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Your sheets are laced, not tied.",
+                        "next": "laced_not_tied"
+                    },
+                    {
+                        "label": "Your men are camped between the load and the road.",
+                        "next": "laced_not_tied"
+                    },
+                    {
+                        "label": "Nothing. Good night.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "A heavy man in an apron-coat at the near wagon, greasing a wheel in the dark by feel, without a lamp.\n\n\"Ground's public,\" he says. \"Fire's over there. Well's over there. Wagons are mine.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_hesk"
+                    },
+                    {
+                        "start_quest": "salt_and_silence"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera, quietly: \"Laced sheets. Not tied. Lacing takes four times as long to open and about eight times as long to open quietly.\""
+                    },
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa has counted them. \"Six men, one fire, and the fire's at the wrong end of the ground. They're not sitting at it. They're sitting between it and us.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Your sheets are laced, not tied.",
+                        "next": "laced_not_tied"
+                    },
+                    {
+                        "label": "Fair enough.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "nobody_came": [
+            {
+                "text": "\"No,\" Hesk agrees. \"That's the bit I keep turning over. Eleven days that iron's been sat in the open on a public stand and not one soul has come up that road to ask after it.\"\n\nHe rubs his face.\n\n\"If it was worth what I was paid to carry it, somebody would have come.\"",
+                "choices": [
+                    {
+                        "label": "Then you weren't paid for the iron.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_token": [
+            {
+                "text": "\"Bit of slate,\" Hesk says. \"Notched. I hand it in at the far end and the far end pays out on it, and I've never met the far end either — it's a counter and a hand and a hatch.\"\n\nHe looks at the wagon.\n\n\"Twenty years I've prided myself on knowing every man on every one of my routes.\"",
+                "choices": [
+                    {
+                        "label": "Keep the slate.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "laced_not_tied": [
+            {
+                "text": "Hesk Dray does not look at the sheets, which is itself an answer.\n\n\"Aye,\" he says. \"They are.\" He puts the grease rag down. \"I'll tell you exactly as much as I'm going to tell you, because I'd rather say it than have you find it: I'm paid in advance now. Have been since the spring. I never asked for that and I don't like it, and a man who's paid in advance stops being able to ask what he's carrying, because there's no leverage in a question you've already been paid to not ask.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "salt_and_silence",
+                            "stage": "under_the_salt"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric: \"You know what is under the salt.\" Hesk: \"I know what a wagon weighs. That's not the same and I've spent six months telling myself it is.\""
+                    },
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"Salt to the depth of a forearm. That is exactly how deep a searcher goes before he stops.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Sheets off. In front of your men.",
+                        "next": "the_sheets_come_off"
+                    },
+                    {
+                        "label": "Then I'll walk up the trail with you and see who takes it.",
+                        "next": "walk_it_up"
+                    },
+                    {
+                        "label": "How much to have not been here?",
+                        "next": "the_purse"
+                    },
+                    {
+                        "label": "We'll have them off ourselves, then.",
+                        "next": "they_move_in"
+                    },
+                    {
+                        "label": "I'll think about it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "they_move_in": [
+            {
+                "text": "The six men between the wagons and the road stop being carters between one step and the next, which is a thing carters cannot usually do, and two of them are holding the wrong end of the wrong tool for the wrong reason.\n\nHesk Dray does not move. He has gone the colour of the chalk.",
+                "choices": [
+                    {
+                        "label": "Dray. Call them off.",
+                        "check": {
+                            "skill": "persuasion",
+                            "dc": 14,
+                            "on_success": "call_them_off",
+                            "on_failure": "no_talking"
+                        }
+                    },
+                    {
+                        "label": "Then it's a fight on a public stand.",
+                        "effects": [
+                            {
+                                "start_combat": "salt_wagon_knives"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "Back off. Hands where they are.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "no_talking": [
+            {
+                "text": "\"I can't,\" Hesk says, and he means it, and that is the whole of what has been wrong with this ground since you walked onto it. \"They're not mine. Four of the six aren't mine and never were.\"",
+                "on_enter": [
+                    {
+                        "start_combat": "salt_wagon_knives"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Then get behind the wagon.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_sheets_come_off": [
+            {
+                "text": "He says it himself, out loud, in front of his own carters, because you make him and because at some point in the last six months he has been waiting to be made.\n\nSalt to the depth of a forearm — because that is exactly how deep a searcher goes. Under the salt: bar iron in bundles of ten, tied with wire, unworked. That is not a trade good. That is a specification.\n\nFour of the six walk off the job before dawn. The iron is still standing on the caravan ground.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "salt_and_silence",
+                            "stage": "opened_the_wagons"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa turns a bundle over with her boot. \"Bar iron,\" she says. \"That's not for ploughs. That's what you give somebody who's going to make their own.\""
+                    },
+                    {
+                        "companion": "sera",
+                        "text": "Sera: \"Salt and iron.\" She does not say anything else, and does not need to, because you have heard that pair of words before on this road."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Leave it standing.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "walk_it_up": [
+            {
+                "text": "It goes up the trail at two in the morning with you on the tail-board, and Hesk says nothing for four hours.\n\nDelivery is taken at the warren gate at four by two goblins with a slate and a tally, who count the bundles, check the count, and sign nothing at all because there is nothing to sign. One of them gives Hesk a notched piece of slate to carry back. It takes eleven minutes. Nobody raises their voice.\n\nSalt and iron, a quarter of the load. Somebody has been paying that price for four years, and it is not Hesk Dray, and Hesk Dray has never once been told who it is.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "salt_and_silence",
+                            "stage": "walked_it_up"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"They counted it. They checked their own count. That is not a raid taking tribute — that is a delivery against an account.\""
+                    },
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric, watching the gate shut: \"Nobody shouted. In four years of this, nobody has ever needed to shout.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Ride the wagon back down.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_purse": [
+            {
+                "text": "The purse is out before you have finished the sentence, which tells you it was made up before you arrived and not for you in particular.\n\n\"For whoever,\" Hesk says. \"I've been expecting somebody since the spring and I costed it in.\"\n\nThe wagons go up the trail at first light. You do not know what was under the salt and you write that down, in those words, so that later you cannot pretend you did.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "salt_and_silence",
+                            "stage": "took_the_silence"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric does not say anything about it, then or later, which is worse."
+                    },
+                    {
+                        "companion": "sera",
+                        "text": "Sera counts it without being asked. \"He had that made up in advance,\" she says. \"We are a line in somebody's costing.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Take it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "call_them_off": [
+            {
+                "text": "\"Hold!\" Hesk Dray is off the wagon and in the middle of it with both hands up, which at his age and his weight is not a safe thing to do.\n\n\"Hold. Hold.\" He is out of breath. \"These are carters. Two of them are, anyway, and I've known them nine years, and I'm not having a fight on a public stand over a load I never asked to carry.\"\n\nHe turns round to the men behind him and says something short, and they stop, and one of them says something back that is not respectful.",
+                "choices": [
+                    {
+                        "label": "Then have the sheets off.",
+                        "next": "the_sheets_come_off"
+                    },
+                    {
+                        "label": "Then I ride up the trail with you.",
+                        "next": "walk_it_up"
+                    },
+                    {
+                        "label": "Then pay me and I was never here.",
+                        "next": "the_purse"
+                    }
+                ]
+            }
+        ]
+    }
+}

@@ -1,0 +1,1151 @@
+{
+    "npc_key": "jimmy_able",
+    "start": "hail",
+    "nodes": {
+        "hail": [
+            {
+                "once": true,
+                "text": "The block has one way in and a man sitting comfortably in it, which is not an accident. He has a good coat, a better knife laid across his knee where you can see it, and he stands up as if you were expected.\n\n\"Jimmy Able,\" he says, and does not offer a hand. \"You'll be the ones the Watch let through the door. That's fine. We're all down here for the same three reasons and none of them is each other.\"",
+                "choices": [
+                    {
+                        "label": "Sit down a while.",
+                        "conditions": [
+                            {
+                                "companion": "jimmy_able",
+                                "status": "active"
+                            }
+                        ],
+                        "next": "camp"
+                    },
+                    {
+                        "label": "What three reasons?",
+                        "next": "three_reasons"
+                    },
+                    {
+                        "label": "We're looking for children.",
+                        "next": "children"
+                    },
+                    {
+                        "label": "Nothing from you.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "oldcity_broodmother_down"
+                    },
+                    {
+                        "not": {
+                            "companion": "jimmy_able",
+                            "status": "active"
+                        }
+                    },
+                    {
+                        "not": {
+                            "companion": "jimmy_able",
+                            "status": "camp"
+                        }
+                    },
+                    {
+                        "not": {
+                            "companion": "jimmy_able",
+                            "status": "left"
+                        }
+                    },
+                    {
+                        "not": {
+                            "companion": "jimmy_able",
+                            "status": "hostile"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "He is on his feet and out of the chair before you are through the wall, and this time he does not sit back down.\n\n\"Two years,\" Jimmy says. \"Two years I have been telling people about that shop and not one of them went, and I include myself in that, and I have thought about it every single week.\"\n\nHe looks at the gap in the wall, and at the eight people behind him who are all pretending not to listen.\n\n\"I would like to come with you. I want to say that badly, so that neither of us has to pretend I am doing you a favour.\"",
+                "choices": [
+                    {
+                        "label": "Why?",
+                        "next": "why_come"
+                    },
+                    {
+                        "label": "Then come.",
+                        "effects": [
+                            {
+                                "recruit": "jimmy_able"
+                            }
+                        ],
+                        "next": "he_comes"
+                    },
+                    {
+                        "label": "You have a block and eight people in it.",
+                        "next": "you_have_a_block"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "oldcity_the_cutters_trove",
+                        "stage": "opened_the_workshop"
+                    }
+                ],
+                "once": true,
+                "text": "Jimmy is on his feet before you are through the gap in the wall, and for once the easy manner is not quite fastened on.\n\n\"You got in,\" he says. \"You actually got in.\"\n\nHe looks at what you are carrying, and at the weight of it, and does the arithmetic he has been doing in his head for two years without ever once being willing to walk down there and do it properly.",
+                "choices": [
+                    {
+                        "label": "We got in. We're keeping it.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "oldcity_the_cutters_trove",
+                                    "stage": "took_the_trove"
+                                }
+                            }
+                        ],
+                        "next": "keeping_it"
+                    },
+                    {
+                        "label": "We shut it again and left it.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "oldcity_the_cutters_trove",
+                                    "stage": "left_it_sealed"
+                                }
+                            }
+                        ],
+                        "next": "left_it"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "oldcity_the_short_tally",
+                        "status": "active"
+                    },
+                    {
+                        "quest": "oldcity_the_short_tally",
+                        "stage": "follow_the_stone"
+                    }
+                ],
+                "once": true,
+                "text": "He has followed your eye to the wall, and to the two courses of new dressed stone in it that are paler than everything around them and cut square where nothing else down here is.\n\n\"Ah,\" says Jimmy Able. \"Yes.\"\n\nHe does not bother denying it, which is either honesty or the most efficient available lie.\n\n\"It's lying in a heap thirty feet from here and the Works have more of it than they've hands to lay it. And we needed a wall, on account of the goblins. You'll notice the goblins haven't got in.\"",
+                "choices": [
+                    {
+                        "label": "Dessel has been writing letters about it for eleven weeks.",
+                        "next": "eleven_weeks"
+                    },
+                    {
+                        "label": "What's it worth to you if I forget?",
+                        "next": "worth_to_you"
+                    }
+                ],
+                "on_enter": [
+                    {
+                        "set_flag": "oldcity_stone_traced"
+                    }
+                ]
+            },
+            {
+                "text": "Jimmy is where he was, in the one chair, in the one doorway.\n\n\"Still breathing,\" he observes. \"That's better than most weeks.\"",
+                "choices": [
+                    {
+                        "label": "Sit down a while.",
+                        "conditions": [
+                            {
+                                "companion": "jimmy_able",
+                                "status": "active"
+                            }
+                        ],
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Tell me about the cutter's shop.",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "quest": "oldcity_the_cutters_trove",
+                                    "status": "active"
+                                }
+                            }
+                        ],
+                        "next": "the_cutters_shop",
+                        "reoffer": true
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "three_reasons": [
+            {
+                "text": "\"Old coin, old stones, and getting away from somebody.\" He counts them off. \"Everyone down here is one of those. The Works are the exception and I've never trusted them for it.\"\n\n\"You're not running from anyone — you came in the front. So it's coin or stones. And if it's stones, I know where a great many of them are, and I'll tell you for nothing, because I have wanted somebody else to go and get them for about two years.\"",
+                "choices": [
+                    {
+                        "label": "Tell me about the stones.",
+                        "next": "the_cutters_shop"
+                    },
+                    {
+                        "label": "We're looking for children.",
+                        "next": "children"
+                    }
+                ]
+            }
+        ],
+        "children": [
+            {
+                "text": "The easy manner goes off him like a coat.\n\n\"Not us,\" he says. \"I want that said first and I want it said flat. Not us, not ever, and if it were one of mine he'd go in the channel the same hour.\"\n\nHe sits back down.\n\n\"There's a thing on the far ledge past the drop hole. We don't go east of the hole. It came about a year back and the noise off that ledge changed and we stopped going, and I'd sooner you didn't tell me what's on the end of it.\"",
+                "choices": [
+                    {
+                        "label": "Tell me about the stones.",
+                        "next": "the_cutters_shop"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_cutters_shop": [
+            {
+                "text": "\"South of the low channel there's a cutter's shop. Sealed the night the City came down on it — not looted, not opened, sealed. Wheels still on the bench. Everything a man like that would have had in the wall on the night he stopped going home.\"\n\nHe lets that sit.\n\n\"And between it and the channel there are two caves of web, and in the second one there is something that took Corran Fitch off his feet and up into the roof in front of four of us, and none of the four of us saw it arrive. So. It's yours, with my blessing, and I'll not take a share.\"",
+                "choices": [
+                    {
+                        "label": "Generous.",
+                        "next": "generous"
+                    },
+                    {
+                        "label": "We'll look at it.",
+                        "end": true
+                    }
+                ],
+                "on_enter": [
+                    {
+                        "start_quest": "oldcity_the_cutters_trove"
+                    },
+                    {
+                        "quest_stage": {
+                            "quest": "oldcity_the_cutters_trove",
+                            "stage": "past_the_webs"
+                        }
+                    }
+                ]
+            }
+        ],
+        "generous": [
+            {
+                "text": "\"It isn't,\" Jimmy says, cheerfully. \"It costs me nothing and I have already decided I'm never going down there. If you come back up with it I'll buy you a drink at the top of the stair and be genuinely pleased. If you don't, I'll have lost nothing but a rumour.\"",
+                "choices": [
+                    {
+                        "label": "Understood.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "eleven_weeks": [
+            {
+                "text": "\"Eleven weeks,\" Jimmy agrees. \"That's about right. He's a careful man, Dessel. Rules his lines.\"\n\nHe is watching your face rather than your hands, which is the tell that he has already decided how this goes.\n\n\"Say it to him if you like. I'd not hold it against you. He'll write it in a column and the Works will send a letter and by the time anybody comes down that stair with enough men, we'll be in a different block with the same stone in the wall.\"",
+                "choices": [
+                    {
+                        "label": "What's it worth to you if I forget?",
+                        "next": "worth_to_you"
+                    },
+                    {
+                        "label": "I'll say it to him.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "worth_to_you": [
+            {
+                "text": "He is delighted, and does not trouble to hide it.\n\n\"Now that's a conversation.\"\n\nThe floorboards by the wall lift together, which means they have been cut to. What comes up is a chest with a good lock and a bad hinge, and what comes out of the chest is counted into your hand one coin at a time, so that you have to watch him do it.",
+                "choices": [
+                    {
+                        "label": "Take it.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "oldcity_the_short_tally",
+                                    "stage": "took_their_price"
+                                }
+                            },
+                            {
+                                "approval": {
+                                    "jimmy_able": 6
+                                }
+                            }
+                        ],
+                        "next": "took_it"
+                    },
+                    {
+                        "label": "Put it back.",
+                        "next": "put_it_back",
+                        "effects": [
+                            {
+                                "approval": {
+                                    "jimmy_able": -4
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "took_it": [
+            {
+                "text": "\"Pleasure,\" says Jimmy Able, and means it, and shuts the floor.",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "put_it_back": [
+            {
+                "text": "The coins go back one at a time, at the same speed, and he watches you the whole way.\n\n\"Right,\" he says. \"Well. You'll do what you'll do.\"\n\nThe knife has not moved off his knee the entire conversation.",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "keeping_it": [
+            {
+                "text": "\"'Course you are.\" He laughs, genuinely, and there is a beat afterwards where nine other people in this block do not laugh and are all watching from the windows.\n\nThen he sits back down and the beat passes.\n\n\"Buy me that drink at the top of the stair,\" he says. \"I've earned the rumour.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true,
+                        "effects": [
+                            {
+                                "approval": {
+                                    "jimmy_able": 5
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "left_it": [
+            {
+                "text": "Jimmy stares at you for a long moment.\n\n\"You got past the web,\" he says slowly, \"and through the door, and you put the door back.\"\n\nHe shakes his head, and something in him settles that you cannot read.\n\n\"There's not one man in this block would have done that. Including me. Especially me.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true,
+                        "effects": [
+                            {
+                                "approval": {
+                                    "jimmy_able": 10
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "why_come": [
+            {
+                "text": "\"Because I am forty-one and I run nine men in a sewer.\" He says it lightly, which is how he says everything, and it does not quite come off. \"That was a young man's plan and I made it eleven years ago and I have not had a new one since.\"\n\n\"And because you went down there. I want to be near the next thing somebody does that I would not.\"",
+                "choices": [
+                    {
+                        "label": "Then come.",
+                        "effects": [
+                            {
+                                "recruit": "jimmy_able"
+                            }
+                        ],
+                        "next": "he_comes"
+                    },
+                    {
+                        "label": "Not yet.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "you_have_a_block": [
+            {
+                "text": "\"I have a block and eight people in it and every one of them would have it off me by Tuesday if they thought of it first.\" Still light. Still not quite coming off. \"That is not bitterness, it is the arrangement. I built it. It works.\"\n\n\"I would just rather be somewhere else while it does.\"",
+                "choices": [
+                    {
+                        "label": "Then come.",
+                        "effects": [
+                            {
+                                "recruit": "jimmy_able"
+                            }
+                        ],
+                        "next": "he_comes"
+                    },
+                    {
+                        "label": "Stay and hold it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "he_comes": [
+            {
+                "text": "He does not pack. He picks up the knife off the chair, puts it somewhere you do not see, and takes the coat off the nail, and that is the whole of it — a man who has been ready to leave for eleven years and has never once said so.\n\nAt the gap in the wall he stops and says something to the nearest of them, too quiet to hear. Whatever it is, the man laughs.\n\nNobody comes to the wall to watch him go.",
+                "choices": [
+                    {
+                        "label": "Come on.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "camp": [
+            {
+                "text": "Jimmy has the fire side nobody wanted, same as ever, but he sits it differently since the business with the ninth man was settled — less like a man minding the door, more like a man who has finally worked out he is allowed to be in the room.",
+                "choices": [
+                    {
+                        "label": "There was a body in a side-way off Copper Wire Lane.",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "quest": "jimmy_the_ninth_man"
+                                }
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "start_quest": "jimmy_the_ninth_man"
+                            }
+                        ],
+                        "next": "ninth_the_body"
+                    },
+                    {
+                        "label": "Nine men. Four years.",
+                        "conditions": [
+                            {
+                                "quest": "jimmy_the_ninth_man",
+                                "stage": "who_told_them"
+                            }
+                        ],
+                        "next": "ninth_the_count"
+                    },
+                    {
+                        "label": "How did you come to run a gang?",
+                        "next": "camp_how",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "flag": "camp_jimmy_how"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "label": "What do you make of the rest of us?",
+                        "next": "camp_us",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "flag": "camp_jimmy_us"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "label": "I'll take the door side tonight. You sleep.",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "flag": "camp_jimmy_watch"
+                                }
+                            }
+                        ],
+                        "next": "camp_jimmy_watch"
+                    },
+                    {
+                        "label": "The block. Now that it's said.",
+                        "conditions": [
+                            {
+                                "flag": "jimmy_fate"
+                            },
+                            {
+                                "not": {
+                                    "flag": "camp_jimmy_after_told"
+                                }
+                            }
+                        ],
+                        "next": "camp_jimmy_after"
+                    },
+                    {
+                        "label": "Something has been sitting on you for days.",
+                        "conditions": [
+                            {
+                                "companion": "jimmy_able",
+                                "approval_at_least": 30
+                            },
+                            {
+                                "not": {
+                                    "companion": "jimmy_able",
+                                    "romance_stage": 2
+                                }
+                            },
+                            {
+                                "not": {
+                                    "companion": "jimmy_able",
+                                    "romance_locked": true
+                                }
+                            }
+                        ],
+                        "next": "jimmy_close"
+                    },
+                    {
+                        "label": "Still counting?",
+                        "conditions": [
+                            {
+                                "companion": "jimmy_able",
+                                "romance_stage": 2
+                            }
+                        ],
+                        "next": "romance_after"
+                    },
+                    {
+                        "label": "Nothing. Sleep.",
+                        "end": true
+                    }
+                ],
+                "conditions": [
+                    {
+                        "flag": "jimmy_fate"
+                    }
+                ]
+            },
+            {
+                "text": "Jimmy has the fire side nobody wanted and is perfectly comfortable on it, which is a trick he has never explained.",
+                "choices": [
+                    {
+                        "label": "There was a body in a side-way off Copper Wire Lane.",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "quest": "jimmy_the_ninth_man"
+                                }
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "start_quest": "jimmy_the_ninth_man"
+                            }
+                        ],
+                        "next": "ninth_the_body"
+                    },
+                    {
+                        "label": "Nine men. Four years.",
+                        "conditions": [
+                            {
+                                "quest": "jimmy_the_ninth_man",
+                                "stage": "who_told_them"
+                            }
+                        ],
+                        "next": "ninth_the_count"
+                    },
+                    {
+                        "label": "How did you come to run a gang?",
+                        "next": "camp_how",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "flag": "camp_jimmy_how"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "label": "What do you make of the rest of us?",
+                        "next": "camp_us",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "flag": "camp_jimmy_us"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "label": "I'll take the door side tonight. You sleep.",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "flag": "camp_jimmy_watch"
+                                }
+                            }
+                        ],
+                        "next": "camp_jimmy_watch"
+                    },
+                    {
+                        "label": "The block. Now that it's said.",
+                        "conditions": [
+                            {
+                                "flag": "jimmy_fate"
+                            },
+                            {
+                                "not": {
+                                    "flag": "camp_jimmy_after_told"
+                                }
+                            }
+                        ],
+                        "next": "camp_jimmy_after"
+                    },
+                    {
+                        "label": "Something has been sitting on you for days.",
+                        "conditions": [
+                            {
+                                "companion": "jimmy_able",
+                                "approval_at_least": 30
+                            },
+                            {
+                                "not": {
+                                    "companion": "jimmy_able",
+                                    "romance_stage": 2
+                                }
+                            },
+                            {
+                                "not": {
+                                    "companion": "jimmy_able",
+                                    "romance_locked": true
+                                }
+                            }
+                        ],
+                        "next": "jimmy_close"
+                    },
+                    {
+                        "label": "Still counting?",
+                        "conditions": [
+                            {
+                                "companion": "jimmy_able",
+                                "romance_stage": 2
+                            }
+                        ],
+                        "next": "romance_after"
+                    },
+                    {
+                        "label": "Nothing. Sleep.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "camp_how": [
+            {
+                "text": "\"Badly, and by accident, and eleven years ago.\" He turns his hand over, looking for something on it that is not there. \"There were four of us and a man called Corse who was in charge, and Corse was taken on the quay in front of all four of us, and afterwards the other three looked at me.\"\n\n\"I have never worked out why they looked at me. I have thought about it more than is healthy.\"",
+                "choices": [
+                    {
+                        "label": "Because you were still standing there.",
+                        "next": "camp_still_standing"
+                    },
+                    {
+                        "label": "Somebody has to be looked at.",
+                        "end": true
+                    }
+                ],
+                "on_enter": [
+                    {
+                        "approval": {
+                            "jimmy_able": 2
+                        }
+                    },
+                    {
+                        "set_flag": "camp_jimmy_how"
+                    }
+                ]
+            }
+        ],
+        "camp_still_standing": [
+            {
+                "text": "That lands somewhere. He does not do anything with his face, but he stops looking at his hand.\n\n\"Yes,\" he says, after a while. \"That is about the size of it.\"",
+                "choices": [
+                    {
+                        "label": "Goodnight, Jimmy.",
+                        "end": true
+                    }
+                ],
+                "on_enter": [
+                    {
+                        "approval": {
+                            "jimmy_able": 6
+                        }
+                    }
+                ]
+            }
+        ],
+        "camp_us": [
+            {
+                "text": "\"You are all extremely bad at this and it is restful.\" He is delighted with the observation. \"Nobody has priced me once. Nobody has worked out where I sleep relative to the way out. You have all simply decided I am here.\"\n\nA beat.\n\n\"It is going to take me a while to stop finding that suspicious.\"",
+                "choices": [
+                    {
+                        "label": "Take your time.",
+                        "end": true
+                    }
+                ],
+                "on_enter": [
+                    {
+                        "approval": {
+                            "jimmy_able": 4
+                        }
+                    },
+                    {
+                        "set_flag": "camp_jimmy_us"
+                    }
+                ]
+            }
+        ],
+        "ninth_the_body": [
+            {
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "jimmy_the_ninth_man",
+                            "stage": "the_body"
+                        }
+                    }
+                ],
+                "text": "\"Fitch,\" Jimmy says immediately. \"Corran Fitch. He went off with the box in the spring and the centipedes had him before we did, which I call a result for everybody.\"\n\nIt comes out clean and complete and slightly too fast, the way a thing does when it has been said several times before to several different people.",
+                "choices": [
+                    {
+                        "label": "Who worked out he was skimming?",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "jimmy_the_ninth_man",
+                                    "stage": "who_told_them"
+                                }
+                            }
+                        ],
+                        "next": "ninth_who_told"
+                    },
+                    {
+                        "label": "Leave it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "ninth_who_told": [
+            {
+                "text": "\"Everybody. It was obvious.\" A shrug, easy as anything. \"He was buying. You do not buy on our money without the rest of us noticing.\"\n\n\"Ask the block, if you like. They will all tell you the same.\"",
+                "choices": [
+                    {
+                        "label": "I did ask the block.",
+                        "next": "ninth_i_asked"
+                    },
+                    {
+                        "label": "All right.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "ninth_i_asked": [
+            {
+                "text": "The easy manner does not go anywhere. It simply stops being aimed at you and starts being aimed at the fire.\n\n\"And?\"",
+                "choices": [
+                    {
+                        "label": "Every one of them heard it. None of them said it.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "jimmy_the_ninth_man",
+                                    "stage": "the_count"
+                                }
+                            }
+                        ],
+                        "next": "ninth_the_count"
+                    },
+                    {
+                        "label": "Nothing worth repeating.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "ninth_the_count": [
+            {
+                "text": "\"Nine,\" Jimmy agrees. \"Four years. Eleven names.\"\n\nHe does not pretend not to follow. That is the thing about him you keep underestimating: he is not slow, he is simply never the one who says it first.\n\n\"You want to know whether I arrange it. Whether there is always one of them who is going to be the one, and whether I know which, and whether I know it early.\"\n\nThe fire does something. Nobody moves.\n\n\"Yes,\" he says.",
+                "choices": [
+                    {
+                        "label": "Then say it to them. Not to me.",
+                        "next": "ninth_say_it_to_them"
+                    },
+                    {
+                        "label": "I'm not going to repeat it.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "jimmy_the_ninth_man",
+                                    "stage": "kept_it_quiet"
+                                }
+                            }
+                        ],
+                        "next": "ninth_kept_quiet"
+                    },
+                    {
+                        "label": "They should hear it from me, then.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "jimmy_the_ninth_man",
+                                    "stage": "told_them_myself"
+                                }
+                            }
+                        ],
+                        "next": "ninth_told_them"
+                    }
+                ]
+            }
+        ],
+        "ninth_say_it_to_them": [
+            {
+                "text": "\"To the eight of them.\" He says it as if testing whether the words will hold weight. \"In the room. Standing up.\"\n\n\"They will not kill me. I want to be clear that I have already done that arithmetic, because that is the whole of my problem and I am doing it right now in front of you.\"\n\nHe puts his hands on his knees.\n\n\"All right.\"",
+                "choices": [
+                    {
+                        "label": "I'll come with you.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "jimmy_the_ninth_man",
+                                    "stage": "made_him_say_it"
+                                }
+                            }
+                        ],
+                        "next": "ninth_confessed"
+                    }
+                ]
+            }
+        ],
+        "ninth_confessed": [
+            {
+                "text": "He does it exactly as described: the room they sleep in, standing up, no coat. It takes him four minutes and he does not once make it charming, which is the most difficult thing you have ever watched anybody do.\n\nTwo of them leave that night.\n\nAfterwards, on the channel, he says: \"That is going to get me caught inside a year.\" And then, further along, and not to you: \"Worth it, probably.\"",
+                "choices": [
+                    {
+                        "label": "Probably.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "ninth_kept_quiet": [
+            {
+                "text": "\"Thank you,\" Jimmy says, in the easy way he thanks everybody, and that is the last thing he says for a long time.\n\nThe block stays nine. It will not be the same nine in a year, and both of you now know that, and only one of you is going to do anything about it, and it is not going to be him.",
+                "choices": [
+                    {
+                        "label": "Goodnight.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "ninth_told_them": [
+            {
+                "text": "You say it to the eight of them with him standing in the room, which is the only honest way to do it and is not a kind one.\n\nHe does not deny it. He does not say anything at all. He looks at the eight of them for a while, working out what they will do, because that is the only thing he has ever known how to do — and then he goes out through the gap in the wall, and the block is his, and he is not in it.",
+                "choices": [
+                    {
+                        "label": "Let him go.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "romance_one": [
+            {
+                "on_enter": [
+                    {
+                        "romance": {
+                            "companion": "jimmy_able",
+                            "stage": 1
+                        }
+                    }
+                ],
+                "text": "\"Right,\" says Jimmy. \"Yes. I am going to do this badly and I would like that on the record in advance, because doing things badly is not something I have any practice at and I would hate for you to think it came naturally.\"\n\nHe stops. Starts again, and this time without the manner on it, which is a different voice entirely and one you have not heard.\n\n\"I would like to stay. That is the whole of it. I have never wanted to stay anywhere and I have been extremely comfortable about that for eleven years.\"",
+                "choices": [
+                    {
+                        "label": "Then stay.",
+                        "next": "romance_two"
+                    },
+                    {
+                        "label": "Say it again when you've slept on it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "romance_two": [
+            {
+                "on_enter": [
+                    {
+                        "romance": {
+                            "companion": "jimmy_able",
+                            "stage": 2
+                        }
+                    }
+                ],
+                "text": "\"Then here is the part I am actually frightened of,\" he says, cheerfully, and it is not a lie and it is not quite a joke either.\n\n\"There will come a night where the sensible thing is to be somewhere else. It will be obvious. I will see it about an hour before anybody else does — that is the one thing I am genuinely good at — and I will have to decide, in that hour, on my own, with nobody watching.\"\n\nHe turns his hand over, looking for the thing that is not on it.\n\n\"I do not know what I will do. I want you to know that I do not know, because everybody who has ever been in a room with me has been told I did know, and that has always been the lie.\"",
+                "choices": [
+                    {
+                        "label": "Then I'll be watching.",
+                        "end": true
+                    },
+                    {
+                        "label": "Decide it now, and hold to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "romance_after": [
+            {
+                "text": "\"Still here,\" Jimmy agrees. \"Eleven weeks. I have counted, which I am aware is not the behaviour of a relaxed man.\"",
+                "choices": [
+                    {
+                        "label": "Count on.",
+                        "end": true
+                    }
+                ],
+                "pool": "afterglow",
+                "conditions": [
+                    {
+                        "companion": "jimmy_able",
+                        "romance_stage": 2
+                    }
+                ]
+            },
+            {
+                "pool": "afterglow",
+                "text": "He has the fire side nobody wanted, and has moved along it until the gap between you is not a gap by anyone's measure, and has said nothing about having moved. For a man who narrates everything he does, the silence is the announcement.",
+                "choices": [
+                    {
+                        "label": "Budge up, then.",
+                        "end": true
+                    }
+                ],
+                "conditions": [
+                    {
+                        "companion": "jimmy_able",
+                        "romance_stage": 2
+                    }
+                ]
+            },
+            {
+                "pool": "afterglow",
+                "text": "He is asleep on the wrong side of the fire — the side with the dark behind it — and has been for hours. Eleven years of arranging never to have his back to anything, and he has handed the watching of it to you without a word being said.",
+                "choices": [
+                    {
+                        "label": "Take the watch.",
+                        "end": true
+                    }
+                ],
+                "conditions": [
+                    {
+                        "companion": "jimmy_able",
+                        "romance_stage": 2
+                    }
+                ]
+            },
+            {
+                "text": "Jimmy pats the ground beside him as if he had been saving it, which — eleven weeks of sitting in exactly the same spot — he has.",
+                "choices": [
+                    {
+                        "label": "Budge up.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "jimmy_close": [
+            {
+                "conditions": [
+                    {
+                        "companion": "jimmy_able",
+                        "status": "active"
+                    },
+                    {
+                        "companion": "jimmy_able",
+                        "approval_at_least": 30
+                    },
+                    {
+                        "not": {
+                            "companion": "jimmy_able",
+                            "romance_stage": 2
+                        }
+                    },
+                    {
+                        "not": {
+                            "companion": "jimmy_able",
+                            "romance_locked": true
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"I have worked out what is wrong with me,\" Jimmy announces, to the fire.\n\n\"I have spent eleven years making sure I am never the one who is left holding anything. And it turns out that if you do that for long enough you end up not holding anything.\"\n\nHe is not looking at you, which from him is enormous.",
+                "choices": [
+                    {
+                        "label": "Hold something, then.",
+                        "next": "romance_one"
+                    },
+                    {
+                        "label": "That's a young man's problem.",
+                        "next": "romance_one"
+                    },
+                    {
+                        "label": "Get some sleep, Jimmy.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "jimmy_able",
+                        "status": "active"
+                    },
+                    {
+                        "companion": "jimmy_able",
+                        "approval_at_least": 30
+                    },
+                    {
+                        "not": {
+                            "companion": "jimmy_able",
+                            "romance_stage": 2
+                        }
+                    },
+                    {
+                        "not": {
+                            "companion": "jimmy_able",
+                            "romance_locked": true
+                        }
+                    }
+                ],
+                "pool": "close",
+                "text": "He has taken the side of the fire between you and the dark again. He has done it four nights running and he has an explanation ready for it, and nobody has asked.",
+                "choices": [
+                    {
+                        "label": "Nobody asked you to do that.",
+                        "next": "romance_one"
+                    },
+                    {
+                        "label": "Let him have it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "jimmy_able",
+                        "status": "active"
+                    },
+                    {
+                        "companion": "jimmy_able",
+                        "approval_at_least": 30
+                    },
+                    {
+                        "not": {
+                            "companion": "jimmy_able",
+                            "romance_stage": 2
+                        }
+                    },
+                    {
+                        "not": {
+                            "companion": "jimmy_able",
+                            "romance_locked": true
+                        }
+                    }
+                ],
+                "pool": "close",
+                "text": "\"I have been trying to work out what I would take,\" Jimmy says, out of nothing. \"If I went. Tonight. What I would actually pick up on the way past.\"\n\nHe seems genuinely puzzled by the answer.\n\n\"The coat. That is the entire list. Eleven years.\"",
+                "choices": [
+                    {
+                        "label": "Make a longer list.",
+                        "next": "romance_one"
+                    },
+                    {
+                        "label": "It's a good coat.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "Jimmy looks at you, and looks at the fire, and produces his most charming shrug, which is the one he uses when charm is the wrong tool and he knows it.",
+                "choices": [
+                    {
+                        "label": "Goodnight, Jimmy.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "camp_jimmy_watch": [
+            {
+                "text": "Jimmy opens his mouth to make it a joke, and does not find one, which you would have said was not possible.\n\n\"Eleven years,\" he says instead, \"and the number of people who have offered me that is now one.\" He moves to the warm side like a man expecting the floor to object, and is asleep in four minutes flat.",
+                "on_enter": [
+                    {
+                        "set_flag": "camp_jimmy_watch"
+                    },
+                    {
+                        "approval": {
+                            "jimmy_able": 4
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Goodnight, Jimmy.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "camp_jimmy_after": [
+            {
+                "conditions": [
+                    {
+                        "flag": "jimmy_fate",
+                        "equals": "confessed"
+                    }
+                ],
+                "text": "\"Four minutes,\" Jimmy says. \"Eleven years of being charming about it, and the truth took four minutes and cost me two men.\" He turns his hand over, looking at the same nothing as ever. \"Cheap,\" he decides, and for once the lightness holds all the way to the end of the word.",
+                "on_enter": [
+                    {
+                        "set_flag": "camp_jimmy_after_told"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Cheap at twice the price.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "\"Nine men,\" Jimmy says, apropos of the fire. \"Same nine, for now. You kept it and I watched you keep it, and I want you to know that watching a person hold a thing shut on your behalf is a new experience for me, and I am handling it extremely well.\" He is not, quite. It is closer than he has ever come.",
+                "on_enter": [
+                    {
+                        "set_flag": "camp_jimmy_after_told"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "It stays kept.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

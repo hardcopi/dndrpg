@@ -1,0 +1,109 @@
+{
+    "quest_key": "salt_and_silence",
+    "title": "Salt and Silence",
+    "description": "Two wagons on the caravan ground with the sheets laced rather than tied, six men camped between them and the road, and a carrier of twenty years' standing who has stopped asking what he is hauling.",
+    "giver": "hesk_dray",
+    "on_job_board": true,
+    "required_level": 3,
+    "rewards": {
+        "xp": 400,
+        "gold": 140
+    },
+    "stages": {
+        "the_laced_sheets": {
+            "title": "The laced sheets",
+            "objective": "Find out what Hesk Dray is carrying and why he is camped the wrong way round.",
+            "journal": "Hesk Dray runs six wagons on four routes and has never had a complaint. Two of his wagons are standing on the caravan ground with the sheets laced instead of tied, and his men have put themselves between the load and the road rather than round the fire.",
+            "target": {
+                "location": "caravan_ground"
+            }
+        },
+        "under_the_salt": {
+            "title": "Under the salt",
+            "objective": "Get a wagon open, one way or another.",
+            "journal": "Salt on top, to the depth of a forearm, because salt is what a searcher stops at. Under the salt: bar iron in bundles of ten, tied with wire. That is not a trade good. That is a specification.",
+            "target": {
+                "location": "caravan_ground"
+            }
+        },
+        "opened_the_wagons": {
+            "title": "Opened on the ground",
+            "journal": "We had the sheets off in front of his own carters and made him say what was under the salt out loud, with them standing there. He said it. Four of the six walked off the job before dawn. The iron is still on the ground at the caravan stand and nobody has come for it.",
+            "resolution": "opened_the_wagons",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "salt_fate",
+                    "value": "opened"
+                },
+                {
+                    "set_flag": "salt_iron_exposed"
+                },
+                {
+                    "xp": 100
+                },
+                {
+                    "approval": {
+                        "aldric": 12,
+                        "kessa": 6,
+                        "sera": -6,
+                        "ilse": 4
+                    }
+                }
+            ]
+        },
+        "walked_it_up": {
+            "title": "Walked it up",
+            "journal": "We let him run and walked the wagons up with him to see who took delivery. The delivery was taken at the warren gate at four in the morning by two goblins with a slate and a tally, who counted the bundles, signed nothing, and gave Hesk a token to carry back. Salt and iron, a quarter of the load. Somebody has been paying that price for four years and it is not Hesk.",
+            "resolution": "walked_it_up",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "salt_fate",
+                    "value": "followed"
+                },
+                {
+                    "set_flag": "salt_iron_exposed"
+                },
+                {
+                    "set_flag": "knows_paymaster"
+                },
+                {
+                    "xp": 150
+                },
+                {
+                    "approval": {
+                        "ilse": 14,
+                        "sera": 8,
+                        "aldric": -2,
+                        "kessa": -4
+                    }
+                }
+            ]
+        },
+        "took_the_silence": {
+            "title": "Paid to look elsewhere",
+            "journal": "Hesk paid us out of a purse he had ready before we arrived, which tells you he has been expecting somebody for a while and has costed us in. The wagons went up the trail at first light. I do not know what they were carrying and I have written down that I do not know.",
+            "resolution": "took_the_silence",
+            "terminal": true,
+            "outcome": "neutral",
+            "effects": [
+                {
+                    "set_flag": "salt_fate",
+                    "value": "paid"
+                },
+                {
+                    "give_gold": 200
+                },
+                {
+                    "approval": {
+                        "sera": 10,
+                        "kessa": 2,
+                        "aldric": -14,
+                        "ilse": -10
+                    }
+                }
+            ]
+        }
+    }
+}

@@ -1,0 +1,15 @@
+{
+  "item_key": "pit_wardens_coat",
+  "name": "Pit Warden's Coat",
+  "description": "Doubled canvas over a lining of small plates, cut long, with the collar high against falling grit. Company issue and company quality — which is to say better than the watch wears, and paid for out of a different book.",
+  "item_type": "armor",
+  "rarity": "uncommon",
+  "weight": 12,
+  "value_gp": 150,
+  "armor_bonus": 13,
+  "armor_type": "light",
+  "properties": {
+    "dex_bonus": true
+  },
+  "icon": "armor"
+}

@@ -1,0 +1,12 @@
+{
+  "encounter_key": "pit_gate_beast",
+  "name": "Whatever Is Behind the Gate",
+  "description": "The rope goes up, the counterweight drops, and the thing that has been leaning on the boards for an hour comes out into the light already moving.",
+  "difficulty": "hard",
+  "monsters": [
+    {"monster": "ogre", "quantity": 1, "rank": "front"}
+  ],
+  "allow_flee": false,
+  "allow_parley": false,
+  "victory_flag": "pit_gate_beaten"
+}

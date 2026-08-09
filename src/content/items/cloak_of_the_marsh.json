@@ -1,0 +1,12 @@
+{
+  "item_key": "cloak_of_the_marsh",
+  "name": "Cloak of the Marsh",
+  "description": "Waxed wool the colour of standing water, lined with fen-moss that never dries out. The bog's own venoms slide off it.",
+  "item_type": "misc",
+  "rarity": "uncommon",
+  "weight": 3,
+  "value_gp": 350,
+  "slot": "cloak",
+  "properties": { "resistance": ["poison"] },
+  "icon": "armor"
+}

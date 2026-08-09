@@ -1,0 +1,98 @@
+{
+    "quest_key": "jimmy_the_ninth_man",
+    "title": "The Ninth Man",
+    "description": "There is a body in a side-way off Copper Wire Lane with a lockbox in its arms, and the gang were told he was skimming. Somebody told them. Jimmy Able's gang has been nine men for four years, and it has not been the same nine.",
+    "companion": "jimmy_able",
+    "giver": "jimmy_able",
+    "on_job_board": false,
+    "required_level": 2,
+    "rewards": {
+        "xp": 400
+    },
+    "stages": {
+        "the_body": {
+            "title": "The body in the side-way",
+            "objective": "Ask Jimmy about the man in the side-way.",
+            "journal": "The corpse off Copper Wire Lane had the gang's own lockbox in its arms and the centipedes had four weeks with it. Jimmy's account of the man is fluent, complete, and the third version I have heard of a thing he was not present for.",
+            "target": {
+                "location": "oldcity_renegades_stash"
+            }
+        },
+        "who_told_them": {
+            "title": "Who told them",
+            "objective": "Find out who named the renegade to the gang.",
+            "journal": "Nobody in the block will say who first said the word skimming. Every one of them remembers hearing it and not one of them remembers saying it, which is the same shape a thing has when it was said once, quietly, to the right person.",
+            "target": {
+                "location": "oldcity_thieves_den"
+            }
+        },
+        "the_count": {
+            "title": "Nine, four years running",
+            "objective": "Put it to Jimmy.",
+            "journal": "Four years, nine men, and eleven names. Two dead in the channel, one taken at the assize, and the rest simply not spoken of. In every case the gang had been told, first, by somebody who was not there when it happened.\n\nHe has never once been the one holding the bag when it was opened. That is not luck. That is a method.",
+            "target": {
+                "location": "oldcity_thieves_den"
+            }
+        },
+        "made_him_say_it": {
+            "title": "He said it out loud",
+            "journal": "He said it to the eight of them in the room they sleep in, standing up, without a coat on, which for Jimmy Able is roughly being stripped to the waist.\n\nThey did not kill him. Two of them left that night and the rest are still there and the block is quieter than it was. He has stopped arranging for there to be a ninth man, which he says is going to get him caught inside a year.\n\nHe came with us anyway. He says that is not related. It is related.",
+            "resolution": "made_him_say_it",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "jimmy_fate",
+                    "value": "confessed"
+                },
+                {
+                    "approval": {
+                        "jimmy_able": 20
+                    }
+                },
+                {
+                    "xp": 250
+                }
+            ]
+        },
+        "kept_it_quiet": {
+            "title": "Kept it quiet",
+            "journal": "I told him I knew and that I was not going to say it, and he thanked me in the easy way he thanks everybody, and then did not speak for the rest of the walk back up the channel.\n\nThe gang is still nine. It will not be the same nine in a year.",
+            "resolution": "kept_it_quiet",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "jimmy_fate",
+                    "value": "quiet"
+                },
+                {
+                    "approval": {
+                        "jimmy_able": 8
+                    }
+                },
+                {
+                    "xp": 150
+                }
+            ]
+        },
+        "told_them_myself": {
+            "title": "Told them myself",
+            "journal": "I said it to the eight of them and I said it with him in the room, which was the only honest way to do it and was not kind.\n\nHe did not deny it. He did not say anything at all. He walked out through the gap in the wall and the block is his and he is not in it, and whatever he is now he is that on his own.",
+            "resolution": "told_them_myself",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "jimmy_fate",
+                    "value": "exposed"
+                },
+                {
+                    "approval": {
+                        "jimmy_able": -60
+                    }
+                },
+                {
+                    "xp": 200
+                }
+            ]
+        }
+    }
+}

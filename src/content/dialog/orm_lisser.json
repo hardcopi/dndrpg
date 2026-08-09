@@ -1,0 +1,350 @@
+{
+    "npc_key": "orm_lisser",
+    "start": "hail",
+    "nodes": {
+        "hail": [
+            {
+                "conditions": [
+                    {
+                        "flag": "orm_free"
+                    }
+                ],
+                "text": "He is sitting on the end of the bed in the second stall with his boots on, which he did not do before, and a sack packed at his feet that took about four minutes to pack.\n\n\"I've been trying to work out what I do tomorrow,\" he says. \"I've had fourteen months of knowing exactly what I do tomorrow. It turns out that was the good part and I didn't notice.\"",
+                "choices": [
+                    {
+                        "label": "You'll work it out.",
+                        "next": "he_will_work_it_out"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "pit_champion_is_you"
+                    }
+                ],
+                "text": "He is in the stall with the door open and the belt gone off the peg, and he looks better than he did, which is not the same as looking well.\n\n\"Twelfth name,\" he says. \"You went at the shoulder. Everybody goes at the shoulder and nobody's ever got there.\"",
+                "choices": [
+                    {
+                        "label": "You could have finished it twice.",
+                        "next": "he_could_have"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "pit_champion_lost"
+                    }
+                ],
+                "text": "You came round on the sand with the crowd already drifting off the rim, and nothing broken that will not mend, and your gear stacked at the foot of the ladder in a neat pile that somebody made neat.\n\nOrm Lisser is sitting on the bottom rung with his forearms on his knees.\n\n\"You want to know why I stopped,\" he says.",
+                "choices": [
+                    {
+                        "label": "Yes.",
+                        "next": "mid_bout"
+                    },
+                    {
+                        "label": "Not now.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "pit_bond_read"
+                    }
+                ],
+                "text": "\"You've read it,\" Orm says. He is sitting on the bed with his hands between his knees. \"Right. Then you've done the sum and I don't have to watch somebody do the sum, which is the part I've stopped being able to sit through.\"",
+                "choices": [
+                    {
+                        "label": "I'll pay it.",
+                        "next": "pay_it"
+                    },
+                    {
+                        "label": "I'll read it out on the rim.",
+                        "next": "read_it_out"
+                    },
+                    {
+                        "label": "I'll fight you for it.",
+                        "next": "fight_me_for_it"
+                    },
+                    {
+                        "label": "Not today.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_pit_champion",
+                        "stage": "the_undercroft"
+                    }
+                ],
+                "text": "The second stall has a bed in it, made, with a chest at the foot and a belt on a peg. The door is open. It has no lock on it and never has had.\n\nThe man sitting on the bed is about thirty-five and looks fifty from the eyebrows up and twenty-five from the shoulders down.\n\n\"Door's open,\" he says, before you ask. \"Everybody asks. Door's open, nobody's chained, and I've not been up that ladder since the spring before last.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_orm"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Then why are you still here?",
+                        "next": "why_still_here"
+                    },
+                    {
+                        "label": "What's in the fourth stall?",
+                        "next": "fourth_stall"
+                    },
+                    {
+                        "label": "Nothing. Sorry.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "A stone gallery with a drain down the middle and six barred stalls off one side. Two of the stalls have beds in them. A big, tired man is sitting on the nearer bed with a whetstone he is not using.\n\n\"Come through the gate, then,\" he says. \"Mind the fourth stall on the way back.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_orm"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Why do you sleep down here?",
+                        "next": "why_still_here"
+                    },
+                    {
+                        "label": "What's in the fourth stall?",
+                        "next": "fourth_stall"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "he_will_work_it_out": [
+            {
+                "text": "\"Aye,\" he says. \"Probably badly. That's all right.\" He gets up and puts the sack over one shoulder and looks at the ladder for a while before he starts up it.",
+                "choices": [
+                    {
+                        "label": "Let him go.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "he_could_have": [
+            {
+                "text": "\"Twice,\" he agrees. \"Second one was easy.\" He turns the whetstone over. \"I've had eleven of them on that sand and not one of them's gone home in a box, and the rim has started saying that like it's a fault. That's the bit I'd have wanted somebody to know if it had gone the other way.\"",
+                "choices": [
+                    {
+                        "label": "Somebody knows.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "fourth_stall": [
+            {
+                "text": "\"Something Vessa bought off a menagerie four winters back,\" Orm says. \"It paces four steps and turns and paces four steps. It's done that every hour I've been down here.\"\n\nHe puts the whetstone down.\n\n\"It's fed better than I am. That's not a complaint, it's arithmetic — it's worth more.\"",
+                "choices": [
+                    {
+                        "label": "Why are you still here?",
+                        "next": "why_still_here"
+                    },
+                    {
+                        "label": "That's enough.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "why_still_here": [
+            {
+                "text": "He looks at the open stall door for a while.\n\n\"Because I took forty-one gold off this pit four years ago,\" he says, \"and put my mark on a bond for eighteen months of bouts, and I've fought a hundred and sixty of them.\" He lifts his hands and drops them. \"There's a forfeit clause. Fifth of the principal, every bout I miss. I've missed some. Broke this arm in the first winter and missed nine.\"\n\nA pause.\n\n\"Eighteen months went to four years somewhere in there and I couldn't tell you what week. It's in the chest. You can read it. I can't, past about the third line, and I've had it read to me twice and both times I stopped listening because of what my face was doing.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_pit_champion",
+                            "stage": "the_undercroft"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa has gone very still. \"A fifth per missed,\" she says. \"On forty-one. You could fight until you're sixty.\""
+                    },
+                    {
+                        "companion": "sera",
+                        "text": "Sera reads it in about twenty seconds and puts it down carefully. \"It is lawful,\" she says. \"Every clause of it. That is what makes it what it is.\""
+                    },
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric: \"You have paid it four times over.\" Orm: \"Aye. That's not how it works, though, is it.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Show me the bond.",
+                        "next": "the_bond"
+                    },
+                    {
+                        "label": "I'll go and talk to Dann.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_bond": [
+            {
+                "text": "Forty-one gold advanced. Eighteen months of bouts. Forfeit at a fifth of the principal per bout missed, compounding, witnessed by two people who were paid to witness it.\n\nBy the terms as written, Orm Lisser owes the fighting pit fifty-two gold and will owe it for the rest of his life, because a man in a stall with no lock on it cannot earn fifty-two gold anywhere except on the sand, and the sand is where the forfeit is set.",
+                "on_enter": [
+                    {
+                        "set_flag": "pit_bond_read"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Fifty-two. I'll pay it.",
+                        "next": "pay_it"
+                    },
+                    {
+                        "label": "I'll read this out on the rim.",
+                        "next": "read_it_out"
+                    },
+                    {
+                        "label": "I'll fight you for it.",
+                        "next": "fight_me_for_it"
+                    },
+                    {
+                        "label": "I need to think.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "pay_it": [
+            {
+                "conditions": [
+                    {
+                        "gold_at_least": 120
+                    }
+                ],
+                "text": "It is paid on the rim, in daylight, in front of about forty people who came to bet on something else, and Vessa Dann writes 'discharged' across the bond in her own hand and signs under it without being asked to.\n\nOrm does not say anything at all for about a minute. Then he says: \"Right,\" and looks up the ladder, and does not move toward it.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_pit_champion",
+                            "stage": "bought_the_bond"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric: \"He has been looking at that ladder for fourteen months. Give him the afternoon.\""
+                    },
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa: \"Hundred and twenty gold for a man who's not going to be able to do anything with it.\" A pause. \"I'd have done it too.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Take your time.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "\"With what,\" Orm says, without any edge on it at all. He is not being unkind; he has done this sum a great many times and has stopped expecting anybody else's version of it to come out differently. \"Fifty-two on the bond and Dann won't take it in halves. She's not a thief. She's just not in a hurry.\"",
+                "choices": [
+                    {
+                        "label": "I'll come back with it.",
+                        "end": true
+                    },
+                    {
+                        "label": "Then I'll read it out on the rim.",
+                        "next": "read_it_out"
+                    },
+                    {
+                        "label": "Then I'll fight you for it.",
+                        "next": "fight_me_for_it"
+                    }
+                ]
+            }
+        ],
+        "read_it_out": [
+            {
+                "text": "You read it from the rim. All of it, including the forfeit clause, twice, slowly, to forty people who had come to bet on the man it belongs to.\n\nThe pit does not close because anybody closes it. It closes because you cannot sell a bout to a crowd that has just done the arithmetic in public, and by the second reading there are men on the rim doing it out loud on their fingers, and by dusk there is nobody left up there but the man taking the bets, who has nothing to write.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_pit_champion",
+                            "stage": "broke_the_pit"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera, watching the rim empty: \"Nobody up there is angry on his behalf. They are angry because they were made to notice. That is a different thing and it lasts longer.\""
+                    },
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"Forty people have just learned that a lawful paper can do that. They will all go home and think about their own.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Come down off the rim.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "fight_me_for_it": [
+            {
+                "text": "He looks at you for a long moment and then stands up, and standing up takes him longer than it should and he does it anyway.\n\n\"Terms are terms,\" he says. \"Champion who loses isn't a champion, and a bond you can't work is discharged. Dann wrote that clause herself and she wrote it thinking nobody would ever come down that ladder good enough to use it.\"\n\nHe takes the belt off the peg and does not put it on.\n\n\"Go at the shoulder. Everybody does. Don't.\"",
+                "choices": [
+                    {
+                        "label": "Up the ladder, then.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "mid_bout": [
+            {
+                "text": "The bout stops in the middle, which is not a thing that happens down here. He has a forearm across your chest and the wall of the cut behind you and the whole rim making the noise that means finish it, and he does not finish it.\n\n\"I've not killed anyone on this sand,\" he says, close and quiet, so the rim cannot hear it. \"Hundred and sixty bouts. I'm not starting on somebody who came down that ladder asking about the bond.\"\n\nHe steps back and drops his hands and stands there, and the rim starts booing him, which is a sound they have clearly made before.",
+                "choices": [
+                    {
+                        "label": "Then we both stop. I'll pay it.",
+                        "next": "pay_it"
+                    },
+                    {
+                        "label": "Then we both stop. The rim can hear the bond instead.",
+                        "next": "read_it_out"
+                    },
+                    {
+                        "label": "Pick your hands up, Orm.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

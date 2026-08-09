@@ -1,0 +1,166 @@
+{
+    "npc_key": "foreman_dessel",
+    "start": "hail",
+    "nodes": {
+        "hail": [
+            {
+                "once": true,
+                "text": "A depot swept so thoroughly that the line where the sweeping stops is visible from the doorway. The foreman is at a tally board with a rule and a pot of ink, and he does not stop ruling while he talks.\n\n\"If you're here about the causeway you can see it's going up. If you're here about anything else you'll want somebody who isn't nine hundred feet of shoring behind.\"",
+                "choices": [
+                    {
+                        "label": "Why are your columns short?",
+                        "next": "why_short"
+                    },
+                    {
+                        "label": "Nothing. Carry on.",
+                        "end": true
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "jimmy_able",
+                        "text": "Jimmy: \"Careful man, Dessel. Writes everything down. Eleven years I have been one line in that ledger, and I have never once minded being a line.\"",
+                        "once": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "oldcity_stone_traced"
+                    }
+                ],
+                "once": true,
+                "text": "Dessel listens all the way to the end without interrupting, which not many people do.\n\n\"Two storeys,\" he repeats. \"Standing to two storeys. Down here. And I have been telling the Works for eleven weeks that my numbers are short and getting letters back about my arithmetic.\"\n\nHe rules a line under the last row, in ink, very straight.",
+                "choices": [
+                    {
+                        "label": "Their name is Able. Jimmy Able.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "oldcity_the_short_tally",
+                                    "stage": "named_them"
+                                }
+                            },
+                            {
+                                "give_gold": 90
+                            },
+                            {
+                                "approval": {
+                                    "jimmy_able": -25
+                                }
+                            }
+                        ],
+                        "next": "named"
+                    },
+                    {
+                        "label": "I'd rather not say who.",
+                        "next": "rather_not"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "oldcity_the_short_tally",
+                        "status": "active"
+                    }
+                ],
+                "text": "\"Board's there,\" Dessel says, without looking up. \"Read it as often as you like. It says the same thing it said this morning.\"",
+                "choices": [
+                    {
+                        "label": "Where does the stone go?",
+                        "next": "where_does_it_go"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "\"Still here,\" says Dessel. \"Still short.\"",
+                "choices": [
+                    {
+                        "label": "Why are your columns short?",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "quest": "oldcity_the_short_tally",
+                                    "status": "active"
+                                }
+                            }
+                        ],
+                        "next": "why_short",
+                        "reoffer": true
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "why_short": [
+            {
+                "text": "The rule stops.\n\n\"Because somebody is taking my stone.\" He turns the board round. Two columns, loads down the shaft and loads laid on the causeway, in a hand that has never once been in a hurry. \"Eleven weeks. It is never a great deal — two courses, three. But it is every week and it is only ever in the one direction, and I have written to the Works four times and been asked four times whether I have checked my addition.\"\n\n\"I have checked my addition.\"",
+                "choices": [
+                    {
+                        "label": "Where would it go?",
+                        "next": "where_does_it_go"
+                    },
+                    {
+                        "label": "We'll find out.",
+                        "end": true
+                    }
+                ],
+                "on_enter": [
+                    {
+                        "start_quest": "oldcity_the_short_tally"
+                    }
+                ]
+            }
+        ],
+        "where_does_it_go": [
+            {
+                "text": "\"Not up. The grates are barred, and the stair has seven of the Watch sitting at the bottom of it playing cards. Nobody is carrying dressed stone past Bram Ockley.\"\n\nHe taps the board.\n\n\"So it is still down here. And nobody steals building stone to look at it. Find me something down here that has been built with recently.\"",
+                "choices": [
+                    {
+                        "label": "We'll look.",
+                        "end": true
+                    }
+                ],
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "oldcity_the_short_tally",
+                            "stage": "follow_the_stone"
+                        }
+                    }
+                ]
+            }
+        ],
+        "named": [
+            {
+                "text": "He writes it in a third column he ruled some weeks ago and has not used until now.\n\n\"Bram will say he has seven men.\" Dessel caps the ink. \"He will say it to me and I will say it back to the Works, and in about a month somebody with more than seven men will come down that stair, and my stone will still be in their wall.\"\n\n\"But it will be written down. That is the part that lasts.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "rather_not": [
+            {
+                "text": "\"No,\" says Dessel, after a moment. \"No, I don't suppose you would.\"\n\nHe uncaps the ink again and goes back to the second column.",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

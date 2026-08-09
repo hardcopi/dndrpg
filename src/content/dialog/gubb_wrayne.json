@@ -1,0 +1,304 @@
+{
+    "npc_key": "gubb_wrayne",
+    "start": "hail",
+    "nodes": {
+        "hail": [
+            {
+                "conditions": [
+                    {
+                        "flag": "sluice_fate",
+                        "equals": "shut"
+                    }
+                ],
+                "once": true,
+                "text": "The gate is down. The apron is dry above the frame and wet below it and the difference is already visible on the stone.\n\nGubb Wrayne is greasing the screw-jack, which does not need greasing, because it is the second day of the month and on the second day of the month he greases the screw-jack.\n\n\"Should I still expect my wage?\" he says.",
+                "choices": [
+                    {
+                        "label": "I don't know.",
+                        "next": "i_do_not_know"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "sluice_fate",
+                        "equals": "kept"
+                    }
+                ],
+                "once": true,
+                "text": "\"Purse was back,\" Gubb says. \"Third morning. Same slot.\" He is not looking at the west pier. \"Somebody put a fresh one in and I'd rather they hadn't, because now I know they know.\"",
+                "choices": [
+                    {
+                        "label": "Leave it where it is this quarter.",
+                        "next": "leave_it_this_quarter"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "sluice_fate",
+                        "equals": "open"
+                    }
+                ],
+                "once": true,
+                "text": "The gate is up exactly as far as it was built to stand, and Gubb Wrayne is greasing the screw.\n\n\"Second of the month,\" he says, by way of explanation, and carries on.",
+                "choices": [
+                    {
+                        "label": "Carry on.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_sluice",
+                        "stage": "who_pays_the_keeper"
+                    }
+                ],
+                "text": "He has the notch-stick out on the wall and he is going along it with a thumbnail, which is how he counts.\n\n\"You'll want to see the whole of it,\" Gubb says. \"Nobody's ever wanted to see the whole of it. Sit on the wall.\"",
+                "choices": [
+                    {
+                        "label": "Sit on the wall.",
+                        "next": "the_quarters"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_sluice",
+                        "stage": "the_gate_is_up"
+                    }
+                ],
+                "text": "There is a hut on the west pier with a chimney that draws, and an old man on the apron with a rake-hook and a grease-pot, working along the frame of a sluice gate that has not needed anything doing to it in living memory.\n\n\"Second of the month,\" he says, without being asked. \"Screw gets done on the second. Grating gets done Fridays.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_wrayne"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "How long has this gate been open?",
+                        "next": "how_long"
+                    },
+                    {
+                        "label": "Who tells you to do the second and the Friday?",
+                        "next": "how_long"
+                    },
+                    {
+                        "label": "Nothing. Carry on.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "Dressed stone, a paved apron, an oak gate in an iron frame, and a screw-jack that has been greased this month. It is the first square corner west of the causeway.\n\nAn old man on the apron looks up from a grease-pot.\n\n\"It's up,\" he says. \"In case that's the question. It's been up.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_wrayne"
+                    },
+                    {
+                        "start_quest": "the_sluice"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera has both hands on the frame. \"This has been maintained continuously,\" she says. \"Not repaired. Maintained. That is a completely different kind of money.\""
+                    },
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"The counterweight is a cut block with lifting-holes in it. That came out of a quarry, and it came out of a quarry with a crane.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "How long has it been up?",
+                        "next": "how_long"
+                    },
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "i_do_not_know": [
+            {
+                "text": "\"No,\" Gubb agrees. \"Nor do I.\" He wipes the screw. \"I'll do the second and the Friday until somebody stops the wage, and then I'll do the second and the Friday for a bit after that, because I don't know what else the second and the Friday are for.\"",
+                "choices": [
+                    {
+                        "label": "Good enough.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "leave_it_this_quarter": [
+            {
+                "text": "\"That's what I'd do,\" Gubb says, relieved. \"That's exactly what I'd do. Take nothing, leave it sat there, let them see it sat there.\"\n\nHe stops.\n\n\"Except now they know somebody watched. You can't put that back.\"",
+                "choices": [
+                    {
+                        "label": "No. You can't.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "how_long": [
+            {
+                "text": "\"Forty year,\" Gubb Wrayne says. \"Bit over. My father had it before me and he had it off a man from downriver who set it all up, and that man is the last person who ever told me anything about it.\"\n\nHe puts the grease-pot down.\n\n\"Screw on the second. Grating on the Friday. Gate stays where it is. Wage comes quarterly. Forty year.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_sluice",
+                            "stage": "who_pays_the_keeper"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric: \"Forty years is two men's working lives.\" Gubb: \"Aye. That's how you'd say it. I'd say it's two thousand and eighty Fridays.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Who pays you?",
+                        "next": "the_quarters"
+                    },
+                    {
+                        "label": "Later.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_quarters": [
+            {
+                "text": "He cannot write, so he keeps his accounts in notches and coin-rubbings: a stick for the quarters and a folded sheet with the rubbings pressed onto it in candle-black, one per payment, going back further than the stick does.\n\nForty years of quarterly wages. Every one paid. Not one late.\n\nAnd there is no name anywhere in any of it.\n\n\"Slot in the west pier,\" Gubb says. \"Second day after the quarter. I was told at the start that if I ever waited up to see, the wage'd stop.\" He shrugs. \"So I never waited up. I'm eighty-one and I've never waited up once.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "sluice_wage_known"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera goes through the rubbings twice. \"Same mint, four different reigns,\" she says. \"Whoever this is has been paying out of the same purse for forty years and has never once been in a hurry.\""
+                    },
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa: \"Forty years of being told not to look, and he didn't look.\" A pause. \"I'd have looked in the first month and then I'd have had no wage for forty years, so.\""
+                    },
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"Somebody is paying, every quarter, to keep four thousand acres under water. There is a reason and it is worth more than the wage.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Then we shut it.",
+                        "next": "shut_it"
+                    },
+                    {
+                        "label": "We wait for the quarter and take the purse.",
+                        "next": "took_the_wage"
+                    },
+                    {
+                        "label": "It's been up forty years. Leave it up.",
+                        "next": "left_open"
+                    }
+                ]
+            }
+        ],
+        "shut_it": [
+            {
+                "text": "It takes four of you on the screw and most of an afternoon, and the gate comes down as sweetly as if it had been shut last week — because it has been maintained continuously for forty years by a man with nothing else to do.\n\nThe fen will take two years to drain. About a hundred people are going to discover that ground they have been using was not theirs, the causeway will be a raised bank across wet grass, and the drowned village will come up out of the water one course of stone at a time.\n\nGubb Wrayne watches the whole thing and does not stop you and does not help. At the end of it he asks whether he should still expect his wage.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_sluice",
+                            "stage": "shut_the_sluice"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric: \"Two hundred and six people were moved for this.\" He puts his shoulder to the screw with everybody else and does not say anything further."
+                    },
+                    {
+                        "companion": "sera",
+                        "text": "Sera, at the top of the screw: \"Whoever has been paying for this will know inside a fortnight. There is no version of this they do not notice.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Let the water go.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "took_the_wage": [
+            {
+                "text": "Two nights on the west pier, out of the wind, watching a slot in the masonry. Nobody comes.\n\nOn the third morning it is there: a purse, no writing on it, no seal, sat in the slot as if it had grown.\n\nYou take it, leave Gubb his share, and put the empty purse back where it was.\n\nSomebody now knows that somebody is watching the sluice. That is a message you sent without meaning to and cannot take back.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_sluice",
+                            "stage": "took_the_keepers_wage"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa: \"Two nights and nobody came, and then it was there.\" She looks at the water. \"I'd rather have fought somebody.\""
+                    },
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"They will change the slot. Or the day. And Gubb will be told, and Gubb will not be told by anyone he can see.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Put it back empty.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "left_open": [
+            {
+                "text": "Four thousand acres, a village under it, a road across it, forty-odd people living off it, and one gate that could undo all of that in an afternoon.\n\nYou leave the gate where it has been since before you were born.\n\nGubb Wrayne greases the screw while you are still standing there, because it is the second of the month, and it is very hard to explain afterwards why that was the thing that decided it.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_sluice",
+                            "stage": "left_it_open"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Walk back up the cut.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

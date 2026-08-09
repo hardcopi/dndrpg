@@ -1,0 +1,11 @@
+{
+    "npc_key": "watch_relief",
+    "name": "A watchman",
+    "role": "Town Watch",
+    "sprite_key": "monk",
+    "is_ambient": true,
+    "dialog": "watch_relief",
+    "place": {
+        "location": "market_square"
+    }
+}

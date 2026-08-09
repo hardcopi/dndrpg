@@ -1,0 +1,69 @@
+{
+    "npc_key": "odger_vance",
+    "name": "Odger Vance",
+    "role": "Salvage Buyer",
+    "description": "Buys what comes back up the stair without its owner, cleans it, and sells it on the other side of the same fire. Under the price of anything new, and he will tell you why without being asked, because he would rather you heard it from him.",
+    "sprite_key": "odger_vance",
+    "is_merchant": true,
+    "dialog": "odger_vance",
+    "shop": [
+        {
+            "item": "leather_armor",
+            "stock": 2,
+            "markup_pct": 80
+        },
+        {
+            "item": "chain_shirt",
+            "stock": 1,
+            "markup_pct": 85
+        },
+        {
+            "item": "oldcity_serviceable_mail",
+            "stock": 1,
+            "markup_pct": 85
+        },
+        {
+            "item": "oldcity_steel_helm",
+            "stock": 2,
+            "markup_pct": 80
+        },
+        {
+            "item": "shortsword",
+            "stock": 3,
+            "markup_pct": 80
+        },
+        {
+            "item": "mace",
+            "stock": 2,
+            "markup_pct": 80
+        },
+        {
+            "item": "spear",
+            "stock": 3,
+            "markup_pct": 75
+        },
+        {
+            "item": "shortbow",
+            "stock": 1,
+            "markup_pct": 85
+        },
+        {
+            "item": "light_crossbow",
+            "stock": 1,
+            "markup_pct": 90
+        },
+        {
+            "item": "javelin",
+            "stock": 4,
+            "markup_pct": 75
+        },
+        {
+            "item": "silvered_shortsword",
+            "stock": 1,
+            "markup_pct": 110
+        }
+    ],
+    "place": {
+        "location": "uv_camp"
+    }
+}

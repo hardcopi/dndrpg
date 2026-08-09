@@ -1,0 +1,46 @@
+{
+ "resistances": [],
+ "immunities": [],
+ "vulnerabilities": [],
+ "condition_immunities": [],
+ "source": "5e SRD",
+ "monster_key": "city_engineer",
+ "name": "City Engineer",
+ "size": "Medium",
+ "type": "humanoid (any race)",
+ "alignment": "neutral",
+ "armor_class": 10,
+ "hit_points": 4,
+ "hit_dice": "1d8",
+ "speed": "30 ft.",
+ "strength": 10,
+ "dexterity": 10,
+ "constitution": 10,
+ "intelligence": 10,
+ "wisdom": 10,
+ "charisma": 10,
+ "challenge_rating": 0,
+ "experience_points": 10,
+ "traits": {},
+ "actions": [
+  {
+   "name": "Mattock",
+   "type": "melee",
+   "bonus": 2,
+   "damage": "1d4",
+   "damage_type": "bludgeoning"
+  }
+ ],
+ "saves": {},
+ "rank_pref": "front",
+ "sprite_key": "city_engineer",
+ "loot": [
+  {
+   "gold": "1d6"
+  },
+  {
+   "item": "surveyors_plumb",
+   "chance": 35
+  }
+ ]
+}

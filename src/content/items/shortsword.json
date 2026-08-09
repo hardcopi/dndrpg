@@ -1,0 +1,17 @@
+{
+  "item_key": "shortsword",
+  "name": "Shortsword",
+  "description": "A short straight blade, worn low and drawn fast.",
+  "item_type": "weapon",
+  "rarity": "common",
+  "weight": 2,
+  "value_gp": 10,
+  "damage_dice": "1d6",
+  "damage_type": "piercing",
+  "properties": {
+    "finesse": true,
+    "light": true,
+    "martial": true
+  },
+  "icon": "sword"
+}

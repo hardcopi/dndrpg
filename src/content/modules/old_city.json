@@ -1,0 +1,9 @@
+{
+    "module_key": "old_city",
+    "name": "Secrets of the Old City",
+    "blurb": "The City stands on an older City, and the older one is still down there — its streets running as the sewers, its buildings filled to the lintels with rubble. Everyone who goes down goes for the buried money. Some do not come back up, and lately neither do some of the children.",
+    "start_location_key": "oldcity_stair",
+    "level_max": 4,
+    "attribution": "Adapted from Secrets of the Old City by Simon J. Bull (2014), originally written for the 2009 One Page Dungeon Contest. Prose and statistics rewritten for 5e; the original is a system-neutral scenario for 0e play. Rules content from the System Reference Document 5.1 and 5.2, CC-BY 4.0.",
+    "sort_order": 20
+}

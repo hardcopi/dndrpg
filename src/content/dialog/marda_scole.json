@@ -1,0 +1,336 @@
+{
+    "npc_key": "marda_scole",
+    "start": "hail",
+    "nodes": {
+        "hail": [
+            {
+                "conditions": [
+                    {
+                        "quest": "uv_three_floors",
+                        "status": "active"
+                    },
+                    {
+                        "flag": "uv_deepest",
+                        "at_least": 3
+                    }
+                ],
+                "text": "Marda has the chalk in her hand before you have finished coming through the flap, which means she has been watching the path.\n\n\"Three,\" she says. \"You were down long enough for three.\" She does not make the mark yet. \"Tell it to me first. All of it, in the order it happened, and don't tidy it.\"",
+                "choices": [
+                    {
+                        "label": "Tell her what was down there.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "uv_three_floors",
+                                    "stage": "came_back"
+                                }
+                            }
+                        ],
+                        "next": "the_twelfth_account"
+                    },
+                    {
+                        "label": "Later.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "uv_first_step",
+                        "status": "active"
+                    },
+                    {
+                        "flag": "uv_deepest",
+                        "at_least": 1
+                    }
+                ],
+                "text": "Marda looks up, looks at all of you, and counts — not quickly, and not trying to hide that she is doing it.\n\n\"Same number,\" she says, and reaches for the chalk.",
+                "choices": [
+                    {
+                        "label": "Same number.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "uv_first_step",
+                                    "stage": "came_back"
+                                }
+                            }
+                        ],
+                        "next": "the_mark"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "uv_three_floors",
+                        "resolution": "came_back"
+                    }
+                ],
+                "once": true,
+                "text": "The slates are out on the bunk in two piles instead of one, and Marda is going along them with a stub of chalk, not writing.\n\n\"I sorted them,\" she says. \"Eleven and yours. Twelve accounts, and I have spent the night looking for one room that appears in two of them.\"\n\nShe puts the chalk down.\n\n\"There isn't one. Not a room, not a corridor, not a stair that turns the same way. Twelve people describing the same hole and not one shared wall between them. I have had that in front of me for four years in pieces and I could not see it until there were twelve.\"",
+                "choices": [
+                    {
+                        "label": "Does it change what you do?",
+                        "next": "change_what_you_do"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "uv_first_step",
+                        "resolution": "came_back"
+                    }
+                ],
+                "once": true,
+                "text": "Marda glances at the board on her way past it, which she does perhaps thirty times a night and has stopped noticing that she does.\n\n\"You're on it with a stroke,\" she says. \"That puts you ahead of nineteen people. I'd not make anything of it if I were you — everybody's ahead of nineteen people the first time.\"\n\nShe opens the stove and feeds it.\n\n\"Bunk's still three coppers.\"",
+                "choices": [
+                    {
+                        "label": "What does the second stroke get me?",
+                        "next": "second_stroke"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "once": true,
+                "text": "The stove is at the far end and the heat off it reaches about two thirds of the way down, which is why the bunks at this end are empty. By the door there is a board, and on the board there are names in two columns, each with a row of chalk strokes beside it.\n\nThe woman feeding the stove wipes her hands and comes over.\n\n\"Three coppers for the bunk and the stove, paid before you sleep, not after.\" She nods at the board. \"The board's free. One stroke every time you come back up. If you'd rather not be on it, say so now and you won't be.\"",
+                "choices": [
+                    {
+                        "label": "What is the board for?",
+                        "next": "the_board"
+                    },
+                    {
+                        "label": "Put me on it.",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "quest": "uv_first_step",
+                                    "status": "completed"
+                                }
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "start_quest": "uv_first_step"
+                            }
+                        ],
+                        "next": "put_you_on_it"
+                    },
+                    {
+                        "label": "I'd rather not be on it.",
+                        "next": "rather_not"
+                    }
+                ]
+            },
+            {
+                "text": "Marda is at the stove with the door open and her face turned away from it. The board by the flap has one more name on it than it had, or one fewer.\n\n\"Bunk's three coppers,\" she says. \"Board's where it always is.\"",
+                "choices": [
+                    {
+                        "label": "Put me on the board.",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "quest": "uv_first_step",
+                                    "status": "active"
+                                }
+                            },
+                            {
+                                "not": {
+                                    "quest": "uv_first_step",
+                                    "status": "completed"
+                                }
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "start_quest": "uv_first_step"
+                            }
+                        ],
+                        "next": "put_you_on_it",
+                        "reoffer": true
+                    },
+                    {
+                        "label": "You said you collect accounts of the third floor.",
+                        "conditions": [
+                            {
+                                "level_at_least": 3
+                            },
+                            {
+                                "not": {
+                                    "quest": "uv_three_floors",
+                                    "status": "active"
+                                }
+                            },
+                            {
+                                "not": {
+                                    "quest": "uv_three_floors",
+                                    "status": "completed"
+                                }
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "start_quest": "uv_three_floors"
+                            }
+                        ],
+                        "next": "the_eleven",
+                        "reoffer": true
+                    },
+                    {
+                        "label": "How many names have no strokes?",
+                        "next": "no_strokes"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "second_stroke": [
+            {
+                "text": "\"Nothing. It gets you a second stroke.\" Marda shuts the stove door on it. \"There's no ladder. I am not running anything, and if I were, I'd be running something that got people to go down more often, and I would not be able to look at the left column afterwards.\"\n\n\"It gets you a second stroke. That is the whole of what it gets you and I have never once dressed it up.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "change_what_you_do": [
+            {
+                "text": "\"No,\" says Marda, straight off, and then thinks about it properly, which she plainly has not let herself do.\n\n\"It changes one thing. When somebody comes up and tells me they lost a man in the fourth gallery, I have been writing down 'fourth gallery' for nine years as though it meant a place, and going back to it later as though I could find it.\"\n\nShe squares the two piles into one.\n\n\"I'll go on writing it. But I'll know what I am writing down now, which is not where he was. It is what the hole was doing to the man who came up.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_board": [
+            {
+                "text": "\"Started it to save arguing.\" She does not look at it while she talks about it. \"Crew comes up, somebody says we lost two, somebody else says three, and a week later nobody can remember which. So now it is written down on the night, by me, and it is not open to discussion in the morning.\"\n\n\"Left column has been down. Right column has come back. A name in the left with nothing beside it is somebody I am still waiting on, and I do not rub those out.\"",
+                "choices": [
+                    {
+                        "label": "Put me on it.",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "quest": "uv_first_step",
+                                    "status": "completed"
+                                }
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "start_quest": "uv_first_step"
+                            }
+                        ],
+                        "next": "put_you_on_it"
+                    },
+                    {
+                        "label": "How many are you waiting on?",
+                        "next": "no_strokes"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "put_you_on_it": [
+            {
+                "text": "She writes it in the left column in a hand that has written a great many names in that column.\n\n\"Right,\" says Marda. \"Go down, then come back up, and I'll put the stroke against it. That is the entire arrangement and I will not pretend it is more than that.\"\n\nShe caps the chalk.\n\n\"There's coin in it. Not from me — from the pot the crews keep for whoever is new, because a new crew that comes back up is worth more to everybody here than a new crew that doesn't.\"",
+                "choices": [
+                    {
+                        "label": "We'll be back up.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_mark": [
+            {
+                "text": "The chalk goes on with a small definite sound. She stands back and looks at it, which she does every time and has never once explained.\n\n\"That's one.\" Marda counts out the coin from a tin behind the stove without being asked. \"The crews put it by for whoever is new. Don't thank me for it, I only hold the tin.\"\n\n\"Come back and I'll make another. That's all it is. It has been all it is for nine years.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_eleven": [
+            {
+                "text": "\"Eleven,\" says Marda. \"Eleven accounts of the third floor and no two of them describe the same place. Not the same rooms, not the same shape, not the same way down.\"\n\nShe pulls a bundle of slates from under the bunk with her foot.\n\n\"I spent the first four years trying to work out which ones were lying. Then I stopped, because the answer is none of them, and what that means about the hole is worse than any of them lying. So now I only collect them.\"\n\n\"Get to three. Come up. Tell me what yours was.\"",
+                "choices": [
+                    {
+                        "label": "We'll get you a twelfth.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_twelfth_account": [
+            {
+                "text": "She lets you get all the way to the end of it without saying anything, and then sits down on the edge of a bunk with the slate on her knee and writes it out.\n\n\"Twelfth,\" she says at last. \"And it matches none of the eleven either. Not one room of it.\"\n\nMarda puts the slate on the pile and squares the pile up.\n\n\"People ask me what I think is down there. I have never had an answer for them. What I have is twelve, and twelve is starting to be a kind of answer on its own.\"",
+                "choices": [
+                    {
+                        "label": "What kind?",
+                        "next": "what_kind"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "what_kind": [
+            {
+                "text": "\"That it isn't a place.\" She feeds the stove and shuts the door on it. \"A place is the same when you come back to it. That is nearly the whole of what a place is.\"\n\n\"So whatever is under this hill is a great many things that each behave like a place for as long as somebody is standing in one. And every crew that ever argued about which gallery they lost somebody in was arguing about nothing, and I have been writing down the losing for nine years and I did not know that until about four minutes ago.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "no_strokes": [
+            {
+                "text": "Marda does not have to count them and does not pretend to.\n\n\"Thirty-one,\" she says. \"Nine years.\"\n\nShe goes back to the stove.\n\n\"Some of those went down twice and I only wrote them once, so it is fewer than thirty-one people and more than nineteen, and I could tell you which if you asked me and I would rather you didn't.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "rather_not": [
+            {
+                "text": "\"Then you're not on it.\" She goes back to the stove without any change in her at all. \"Bunk's still three coppers. The board isn't a toll.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

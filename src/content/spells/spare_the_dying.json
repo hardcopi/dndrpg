@@ -1,0 +1,23 @@
+{
+  "spell_key": "spare_the_dying",
+  "name": "Spare the Dying",
+  "level": 0,
+  "school": "Necromancy",
+  "classes": [
+    "Cleric"
+  ],
+  "resolution": "heal",
+  "target_kind": "ally",
+  "casting_time": "1 action",
+  "range_text": "Touch",
+  "components": "V, S",
+  "duration": "Instantaneous",
+  "description": "You touch a living creature that has 0 hit points. The creature becomes stable.",
+  "concentration": false,
+  "duration_rounds": 0,
+  "reaches_back_rank": true,
+  "effect": {
+    "stabilise": true
+  },
+  "source": "5e SRD"
+}

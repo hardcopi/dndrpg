@@ -1,0 +1,62 @@
+{
+ "resistances": [
+  "acid",
+  "cold",
+  "fire"
+ ],
+ "immunities": [],
+ "vulnerabilities": [],
+ "condition_immunities": [
+  "blinded",
+  "charmed",
+  "deafened",
+  "exhaustion",
+  "frightened",
+  "prone"
+ ],
+ "source": "5e SRD",
+ "monster_key": "peat_ooze",
+ "name": "Peat Ooze",
+ "size": "Medium",
+ "type": "ooze",
+ "alignment": "unaligned",
+ "armor_class": 8,
+ "hit_points": 22,
+ "hit_dice": "3d8+9",
+ "speed": "10 ft., climb 10 ft.",
+ "strength": 12,
+ "dexterity": 6,
+ "constitution": 16,
+ "intelligence": 1,
+ "wisdom": 6,
+ "charisma": 2,
+ "challenge_rating": 0.5,
+ "experience_points": 100,
+ "traits": {
+  "Amorphous": "The ooze can move through a space as narrow as 1 inch wide without squeezing.",
+  "False Appearance": "While motionless, the ooze is indistinguishable from a peat-slick on wet stone."
+ },
+ "actions": [
+  {
+   "name": "Pseudopod",
+   "type": "melee",
+   "bonus": 3,
+   "damage": "1d6+1",
+   "damage_type": "bludgeoning",
+   "note": "Plus 2d6 acid damage, and any nonmagical metal armour worn by the target corrodes."
+  }
+ ],
+ "saves": {},
+ "rank_pref": "front",
+ "sprite_key": "peat_ooze",
+ "loot": [
+  {
+   "gold": "1d10",
+   "chance": 60
+  },
+  {
+   "item": "thieves_tools",
+   "chance": 20
+  }
+ ]
+}

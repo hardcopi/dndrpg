@@ -1,0 +1,81 @@
+{
+ "resistances": [],
+ "immunities": [],
+ "vulnerabilities": [],
+ "condition_immunities": [],
+ "source": "5e SRD",
+ "monster_key": "broodmother_spider",
+ "name": "Broodmother",
+ "size": "Large",
+ "type": "beast",
+ "alignment": "unaligned",
+ "armor_class": 15,
+ "hit_points": 58,
+ "hit_dice": "9d10+9",
+ "speed": "30 ft., climb 30 ft.",
+ "strength": 16,
+ "dexterity": 16,
+ "constitution": 13,
+ "intelligence": 3,
+ "wisdom": 12,
+ "charisma": 4,
+ "challenge_rating": 3,
+ "experience_points": 700,
+ "traits": {
+  "Spider Climb": "The broodmother can climb difficult surfaces, including upside down on ceilings, without needing an ability check.",
+  "Web Sense": "While in contact with a web, she knows the exact location of any other creature in contact with the same web.",
+  "Web Walker": "She ignores movement restrictions caused by webbing.",
+  "Drop From Above": "She has advantage on attack rolls against any creature that has not yet acted this combat."
+ },
+ "actions": [
+  {
+   "name": "Bite",
+   "type": "melee",
+   "bonus": 6,
+   "damage": "2d8+3",
+   "damage_type": "piercing",
+   "note": "The target must make a DC 13 Constitution saving throw, taking 3d8 poison damage on a failure, or half as much on a success.",
+   "save": {
+    "ability": "con",
+    "dc": 13
+   },
+   "on_fail": {
+    "condition": "poisoned",
+    "rounds": 10,
+    "repeat_save": true
+   }
+  },
+  {
+   "name": "Web",
+   "type": "ranged",
+   "bonus": 6,
+   "damage": "0",
+   "damage_type": "bludgeoning",
+   "range": "30/60",
+   "note": "The target is wrapped and hauled toward the dark. As an action, the restrained target can make a DC 14 Strength check to tear free.",
+   "save": {
+    "ability": "str",
+    "dc": 14
+   },
+   "on_fail": {
+    "condition": "restrained",
+    "repeat_save": true
+   }
+  }
+ ],
+ "saves": {
+  "dex": 6,
+  "con": 4
+ },
+ "loot": [
+  {
+   "gold": "2d10"
+  },
+  {
+   "item": "cloak_of_the_marsh",
+   "chance": 50
+  }
+ ],
+ "rank_pref": "front",
+ "sprite_key": "broodmother_spider"
+}

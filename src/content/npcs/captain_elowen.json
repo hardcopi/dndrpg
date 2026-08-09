@@ -1,0 +1,12 @@
+{
+    "npc_key": "captain_elowen",
+    "name": "Captain Elowen Reed",
+    "role": "Watch Captain",
+    "description": "Rivermark's watch captain. Asks quiet questions and remembers the answers.",
+    "sprite_key": "elowen",
+    "is_quest_giver": true,
+    "dialog": "captain_elowen",
+    "place": {
+        "location": "market_square"
+    }
+}

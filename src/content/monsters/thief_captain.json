@@ -1,0 +1,58 @@
+{
+ "resistances": [],
+ "immunities": [],
+ "vulnerabilities": [],
+ "condition_immunities": [],
+ "source": "5e SRD",
+ "monster_key": "thief_captain",
+ "name": "Thief Captain",
+ "size": "Medium",
+ "type": "humanoid (any race)",
+ "alignment": "neutral",
+ "armor_class": 13,
+ "hit_points": 27,
+ "hit_dice": "6d8",
+ "speed": "30 ft.",
+ "strength": 10,
+ "dexterity": 15,
+ "constitution": 10,
+ "intelligence": 12,
+ "wisdom": 14,
+ "charisma": 16,
+ "challenge_rating": 1,
+ "experience_points": 200,
+ "traits": {
+  "Cutpurse's Opening": "Once per turn, the captain deals an extra 2d6 damage to a target it hits with a weapon attack if another enemy of that target is in the front rank."
+ },
+ "actions": [
+  {
+   "name": "Shortsword",
+   "type": "melee",
+   "bonus": 4,
+   "damage": "1d6+2",
+   "damage_type": "piercing"
+  },
+  {
+   "name": "Hand Crossbow",
+   "type": "ranged",
+   "bonus": 4,
+   "damage": "1d6+2",
+   "damage_type": "piercing",
+   "range": "30/120"
+  }
+ ],
+ "saves": {
+  "dex": 4
+ },
+ "loot": [
+  {
+   "gold": "4d10"
+  },
+  {
+   "item": "shield_warded",
+   "chance": 50
+  }
+ ],
+ "rank_pref": "back",
+ "sprite_key": "thief_captain"
+}

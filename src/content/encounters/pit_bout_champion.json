@@ -1,0 +1,14 @@
+{
+  "encounter_key": "pit_bout_champion",
+  "name": "The Pit's Man",
+  "description": "He comes down the ladder rather than out of the gate, because he is not what is kept behind the gate. The sand has been raked. The crowd has already been paid its money either way.",
+  "difficulty": "hard",
+  "monsters": [
+    {"monster": "pit_champion", "quantity": 1, "rank": "front"}
+  ],
+  "allow_flee": false,
+  "allow_parley": true,
+  "parley_node": "orm_lisser:mid_bout",
+  "victory_flag": "pit_champion_beaten",
+  "defeat_flag": "pit_champion_lost"
+}

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<!--
+  The board's momentary things: floating numbers and the bolt of a ranged shot.
+
+  Both last about a second and only happen mid-fight, on somebody's turn, when
+  a particular kind of attack resolves. Judging them in the game means starting
+  an encounter and hoping an archer rolls — and then they are gone before you
+  have decided whether the rise is too fast.
+
+  This draws a real board with the real ui-battlemap.js and the real stylesheet
+  and lets the effects be fired on demand. Nothing here is a re-implementation:
+  BattleMap.floatText() and BattleMap.shoot() are the same functions
+  ui-combat.js calls from playEvents().
+
+  `window.Game` is stubbed to the one method the module actually uses. That is
+  the whole of its dependency on the rest of the game.
+
+  Open at /tools/battlemap_preview.html
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Battlemap — floats and shots</title>
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <style>
+    body { padding: 1.2rem; background: var(--bg-inset); }
+    .wrap { display: flex; gap: 1rem; align-items: flex-start; }
+    .stage { width: 720px; height: 540px; position: relative; padding: 0.4rem;
+             background: var(--bg-inset); border: 1px solid var(--border); border-radius: 6px; }
+    .panel { display: flex; flex-direction: column; gap: 0.4rem; }
+    .panel h2 { color: var(--gold); font-size: 0.85rem; margin: 0.4rem 0 0; }
+    .note { color: var(--text-dim); font-size: 0.75rem; max-width: 30ch; margin: 0; }
+  </style>
+</head>
+<body class="game-page">
+  <div class="wrap">
+    <div class="stage" id="stage"></div>
+    <div class="panel">
+      <h2>Floats</h2>
+      <p class="note">Over the token, in cell units, so they scale with the board.</p>
+      <button class="btn btn-small" data-float="-7|float-dmg">damage</button>
+      <button class="btn btn-small" data-float="-14|float-crit">critical</button>
+      <button class="btn btn-small" data-float="miss|float-miss">miss</button>
+      <button class="btn btn-small" data-float="+5|float-heal">heal</button>
+      <button class="btn btn-small" data-float="frightened|float-cond">condition</button>
+      <button class="btn btn-small" data-float="DEX 17 vs 13|float-save-ok">save</button>
+      <h2>Shots</h2>
+      <p class="note">Archer at the left edge, target at the right. About a fifth of a second.</p>
+      <button class="btn btn-small" data-shot="">arrow</button>
+      <button class="btn btn-small" data-shot="is-spell">spell</button>
+      <h2>Together</h2>
+      <p class="note">What playEvents actually does: the bolt lands, then the number.</p>
+      <button class="btn btn-small" id="volley">shoot and hit</button>
+    </div>
+  </div>
+
+  <script>
+  // The whole of ui-battlemap.js's dependency on the rest of the game.
+  window.Game = {
+    esc: (s) => String(s ?? '').replace(/[&<>"']/g,
+      (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])),
+  };
+  </script>
+  <script src="/assets/js/ui-battlemap.js"></script>
+  <script>
+  const ARCHER = [2, 6];
+  const TARGET = [13, 4];
+
+  const state = {
+    round: 2,                       // past 1, so deployment zones are not drawn
+    turn_index: 0,
+    order: ['pc_1', 'mon_1'],
+    grid: {
+      terrain: (() => {
+        const rows = Array.from({ length: 12 }, () => '.'.repeat(16).split(''));
+        for (const [x, y] of [[7, 3], [7, 4], [8, 4], [8, 5]]) rows[y][x] = 'n';
+        for (const [x, y] of [[5, 8], [6, 8], [6, 9]]) rows[y][x] = ',';
+        return rows.map((r) => r.join(''));
+      })(),
+      zones: null,
+    },
+    combatants: [
+      { cid: 'pc_1', name: 'Sera', side: 'party', x: ARCHER[0], y: ARCHER[1],
+        hp: 17, max_hp: 19, ac: 14, alive: true, conditions: [] },
+      { cid: 'mon_1', name: 'Bandit', side: 'foe', x: TARGET[0], y: TARGET[1],
+        hp: 8, max_hp: 11, ac: 13, alive: true, conditions: [] },
+    ],
+    ui: null,
+  };
+
+  const stage = document.getElementById('stage');
+  stage.innerHTML = BattleMap.html(state, { selected: null, faceUrl: () => '' });
+
+  document.querySelectorAll('[data-float]').forEach((b) => {
+    b.onclick = () => {
+      const [text, cls] = b.dataset.float.split('|');
+      BattleMap.floatText(stage, TARGET[0], TARGET[1], text, cls);
+    };
+  });
+
+  document.querySelectorAll('[data-shot]').forEach((b) => {
+    b.onclick = () => BattleMap.shoot(stage, ARCHER, TARGET, b.dataset.shot);
+  });
+
+  document.getElementById('volley').onclick = () => {
+    const ms = BattleMap.shoot(stage, ARCHER, TARGET, '');
+    setTimeout(() => BattleMap.floatText(stage, TARGET[0], TARGET[1], '-7', 'float-dmg'), ms);
+  };
+  </script>
+</body>
+</html>

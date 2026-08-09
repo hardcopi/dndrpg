@@ -1,0 +1,359 @@
+{
+    "npc_key": "wat_fenner",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "flag": "flood_gate_fate",
+                        "equals": "opened"
+                    }
+                ],
+                "once": true,
+                "text": "The gate stands up in its frame and the eastern cut is a river.\n\nWat Fenner is sitting on the stone sill with the wheel key across his knees, watching the water go east, and he has plainly been sitting there some hours.\n\n\"Nothing came on the second,\" he says. \"First time in a year and two months.\" He turns the key over. \"I did not expect it to. I sat here anyway, on account of it being the second.\"",
+                "choices": [
+                    {
+                        "label": "What will you do?",
+                        "next": "what_now"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "flood_gate_fate",
+                        "equals": "key"
+                    }
+                ],
+                "once": true,
+                "text": "\"Second of the month,\" says Wat Fenner, by way of hello, \"two hours, and then down again. Same as ever.\" He nods at your belt, where the other key is. \"And it cannot be worked hard against either of us now, which is the first night's sleep I have had in a year and two months.\"",
+                "choices": [
+                    {
+                        "label": "Has anyone asked about the second key?",
+                        "next": "nobody_has_asked"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "flood_gate_fate",
+                        "equals": "left"
+                    }
+                ],
+                "once": true,
+                "text": "Wat Fenner is greasing the worm-screw, which does not need greasing, and both of you know that it is what a man does with his hands when he has been thinking.\n\n\"You came, you looked, you went,\" he says. \"That is what everybody does. I do not hold it against anybody and I would like that said, because I can hear how it sounded.\"",
+                "choices": [
+                    {
+                        "label": "Do you want it opened?",
+                        "next": "does_he_want_it"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_flood_gate",
+                        "stage": "who_pays_wat"
+                    }
+                ],
+                "text": "\"So now you know the whole of it,\" says Wat Fenner, \"which is more than I do, and I have been here a year and two months.\"\n\nHe steps back from the wheel and stands aside, deliberately, so that nothing in the room is between you and it.\n\n\"There it is,\" he says. \"I am not going to fight anybody over a gate.\"",
+                "choices": [
+                    {
+                        "label": "Wind it up. Let the water in.",
+                        "next": "opens_it"
+                    },
+                    {
+                        "label": "Give me the key. Then it takes two of us either way.",
+                        "next": "the_key"
+                    },
+                    {
+                        "label": "Leave it shut. Go on with your Tuesdays.",
+                        "next": "leaves_it"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_flood_gate",
+                        "status": "active"
+                    }
+                ],
+                "text": "\"Still here,\" says Wat Fenner. \"Still shut, except the second, and I have still not been told why, and you have still not stopped looking at the grease.\"",
+                "choices": [
+                    {
+                        "label": "Tell me about the second of the month.",
+                        "next": "the_second"
+                    },
+                    {
+                        "label": "Later.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "There is a man here, which you were not expecting.\n\nHe is about sixty, in a good oilskin, and he is sitting on the stone sill beside a gate the size of a barn door with a lamp that has proper glass in it, and he watches you come the whole way up the cut without getting up.\n\n\"Wat Fenner,\" he says. \"I keep the gate. Do not touch the wheel.\"",
+                "choices": [
+                    {
+                        "label": "Somebody has spent money on this gate.",
+                        "next": "the_new_work",
+                        "effects": [
+                            {
+                                "start_quest": "the_flood_gate"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Who do you keep it for?",
+                        "next": "the_new_work",
+                        "effects": [
+                            {
+                                "start_quest": "the_flood_gate"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "I won't touch the wheel.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_new_work": [
+            {
+                "text": "\"They have,\" Wat agrees, which is not what you expected either.\n\n\"New pintles. New packing. A worm-screw off a proper millwright and not a smith, which you can tell by the cut of the thread.\" He pats the frame. \"Two hundred years of brick down here and every yard of it going soft, and this is the one thing in Undertown that anybody has spent a coin on since the second flood.\"\n\nHe looks at it with a professional's plain pleasure.\n\n\"I was a lock-keeper on the river for thirty-one years,\" he says, \"before the barges stopped. I know what good work costs. Somebody paid for this properly and did not ask anybody's leave and did not tell the town, and I would love to be able to tell you who.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_flood_gate",
+                            "stage": "look_at_the_gate"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera: \"Nobody repairs a thing they do not intend to use. Ask him how often it moves.\""
+                    },
+                    {
+                        "companion": "ilse",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "companion": "sera",
+                                    "status": "active"
+                                }
+                            }
+                        ],
+                        "text": "Ilse is looking east, past the gate, at four hundred feet of tunnel that is not wet. \"Everything down here is wet,\" she says. \"That is not.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "You'd love to. So you don't know.",
+                        "next": "the_second"
+                    },
+                    {
+                        "label": "What's east of the gate?",
+                        "next": "what_is_east"
+                    }
+                ]
+            }
+        ],
+        "what_is_east": [
+            {
+                "text": "\"Dry cut,\" says Wat Fenner. \"Four hundred feet of it, straight, and then it turns down and I have not been round the turn.\"\n\nHe says the last part without any embarrassment.\n\n\"I am sixty-one and I am paid to work a wheel,\" he says. \"A man who goes round the turn is a man who has decided to find something out, and once you have found a thing out you cannot go back to being the man who works the wheel. I have thought about that a great deal and I would rather you did not sneer at it until you have.\"",
+                "choices": [
+                    {
+                        "label": "Nobody's sneering. Who pays you?",
+                        "next": "the_second"
+                    }
+                ]
+            }
+        ],
+        "the_second": [
+            {
+                "text": "\"Four silver a month,\" says Wat Fenner. \"Wrapped in paper, under the third brick of the sill, and it has never once been late.\"\n\nHe holds up the square iron key.\n\n\"And the whole of my instruction, which came the same way and which I have kept, is this: gate stays shut. On the second of each month, wind it up for two hours, and then wind it down.\"\n\nHe puts the key back inside his coat.\n\n\"A year and two months. Fourteen times. I have never been told why, I have never met anybody, and nobody has ever come to see whether I have done it.\" A pause. \"That is the part I mind. Not the money and not the secrecy. That nobody has ever once come to check.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_flood_gate",
+                            "stage": "who_pays_wat"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera: \"They do not need to check. If he stopped, the cut would flood, and whatever is down there would tell them for him.\""
+                    },
+                    {
+                        "companion": "kessa",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "companion": "sera",
+                                    "status": "active"
+                                }
+                            }
+                        ],
+                        "text": "Kessa: \"Two hours a month. That's a delivery. Something goes through and something comes back.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "What comes through in those two hours?",
+                        "next": "the_two_hours"
+                    },
+                    {
+                        "label": "Wind it up. Let the water in.",
+                        "next": "opens_it"
+                    },
+                    {
+                        "label": "Give me the key.",
+                        "next": "the_key"
+                    },
+                    {
+                        "label": "Leave it shut.",
+                        "next": "leaves_it"
+                    }
+                ]
+            }
+        ],
+        "the_two_hours": [
+            {
+                "text": "\"Nothing I have seen,\" says Wat Fenner, \"and I have looked, and I have been ashamed of looking, and I have looked anyway.\"\n\nHe rubs the grease off his thumb.\n\n\"I wind it up. I sit here. Nothing comes west. Nothing goes east past me. At the two hours I wind it down.\" He shrugs. \"So either it is done a long way beyond the turn where I cannot hear it, or the whole thing is a habit that outlived whatever it was for. I have had fourteen months to pick between those and I keep changing my mind.\"",
+                "choices": [
+                    {
+                        "label": "Wind it up. Let the water in.",
+                        "next": "opens_it"
+                    },
+                    {
+                        "label": "Give me the key.",
+                        "next": "the_key"
+                    },
+                    {
+                        "label": "Leave it shut.",
+                        "next": "leaves_it"
+                    }
+                ]
+            }
+        ],
+        "opens_it": [
+            {
+                "text": "It takes both of you and about a quarter of an hour, and Wat Fenner does not once argue and does not once help more than he is asked to.\n\nThe water goes east. It does not stop going for two days.\n\nWhatever was being kept dry beyond the turn is not dry now. You never see what it was.\n\nWhat you do see is the two lowest bays of the Low Court standing in four feet of it, and Meg Corrow's whole winter store gone soft, and Aggie Slate making you come down and stand in it and look — not saying anything, which is very much worse than saying something.\n\nWat Fenner's four silver does not come the next month. He sits on the sill on the second anyway.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_flood_gate",
+                            "stage": "opened_the_gate"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"You have hurt the people who live here to inconvenience people who do not.\" A pause. \"I would probably have done it too. I want to be honest about that.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Leave it standing open.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_key": [
+            {
+                "text": "Wat Fenner hands it over without a word, and then stands there for a moment as though he has put down something heavy.\n\n\"There were two,\" he says. \"They gave me the one and I have never known where the other is. Without a key the wheel spins free and the gate does whatever it was last told to do.\"\n\nHe sits back down on the sill.\n\n\"So now it cannot be worked hard against me without you,\" he says, \"and it cannot be worked hard against you without me. That is two people in an arrangement that has had one in it for a year and two months.\"\n\nHe looks at the gate.\n\n\"I am relieved,\" says Wat Fenner, sounding surprised about it. \"I did not expect to be relieved.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_flood_gate",
+                            "stage": "took_the_wheel_key"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric: \"He has been alone with that for fourteen months and nobody has once asked him about it. That is the whole of what was wrong here.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Second of the month, then.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "leaves_it": [
+            {
+                "text": "\"Right,\" says Wat Fenner, and goes back to the sill, and is neither disappointed nor relieved, which somehow lands harder than either would.\n\n\"Second of the month, two hours, and down again,\" he says. \"Four silver under the third brick. I shall be here.\"\n\nHe picks up the grease rag.\n\n\"It is the cheapest arrangement I have ever been part of,\" he says, \"and I was thirty-one years on the river, where they are all cheap.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_flood_gate",
+                            "stage": "left_it_shut"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "what_now": [
+            {
+                "text": "\"Sit here,\" says Wat Fenner. \"Somebody will come and look at it eventually, and when they do I should like to be the man sitting on the sill rather than the man who was not.\"\n\nHe turns the key over.\n\n\"And they will come,\" he says. \"That is the thing I have got out of all this. Somebody paid a millwright's price to hang that gate. Nobody spends that and then does not come back.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "nobody_has_asked": [
+            {
+                "text": "\"Not a soul,\" says Wat Fenner. \"Four silver on the second, under the third brick, same as ever. If they know you have it they do not mind, and if they do not know then nobody is looking, and I could not tell you which of those keeps me up more.\"\n\nHe wipes the wheel down.\n\n\"Come on the second, if you are ever near,\" he says. \"It is two hours and there is nothing to see and I would be glad of the company, which I have not said out loud to anybody in a year.\"",
+                "choices": [
+                    {
+                        "label": "I'll come on the second.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "does_he_want_it": [
+            {
+                "text": "Wat Fenner takes a long time over that one.\n\n\"No,\" he says. \"There are sixty people at the lamps and the two lowest bays would go, and I have carried a chair for Meg Corrow.\"\n\nHe puts the rag down.\n\n\"But I should like it *found out*,\" he says. \"That is a different thing and I have only lately been able to tell the two apart. I want to know. I do not want anybody to drown for my knowing. I have not worked out how a man gets the first without the second and I have had fourteen months at it.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

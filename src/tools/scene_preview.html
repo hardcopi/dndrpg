@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<!--
+  The exploration screen — one location, drawn by the real renderer, with no
+  session and no database.
+
+  The scene is where the game spends most of its time and was the one screen
+  with no bench at all: to look at it you had to sign in, walk somewhere with
+  the right things in it, and hope the room had a job board. The awkward cases
+  are exactly the ones worth judging — a room with a fight in it AND loot on
+  the floor AND a bed AND a stair down is where the Actions panel was running
+  to eight rows, which is the fault this bench was built to see.
+
+  Nothing is transcribed. `Game.renderLocation()` is the function the game
+  calls, against the shipped stylesheet and the shipped icon sprite; what is
+  faked is `location/state` and the handful of routes boot() asks for on the
+  way in, in the shapes the API actually returns.
+
+    /tools/scene_preview.html            a busy room: fight, loot, board, bed
+    /tools/scene_preview.html?case=quiet a plain room with a search and a camp
+    /tools/scene_preview.html?case=delve a dungeon room, with the stair
+
+  A drawing bench. It reads nothing and writes nothing.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <!-- The renderers build asset paths relative to the document — `assets/…`,
+       as the game serves them from the root. This bench is served a directory
+       down, so without a base every portrait and every location plate 404s
+       and removes itself, and the bench would show a game with no art in it. -->
+  <base href="/">
+  <title>The scene — location screen</title>
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <style>
+    body { margin: 0; padding: 0.8rem; background: var(--bg-inset); }
+    .bench-note {
+      color: var(--text-dim); font-size: 0.75rem; margin: 0 0 0.6rem;
+      font-family: var(--mono);
+    }
+    /* The scene column, at the width and HEIGHT the shell gives it — the chart
+       fills the middle, so a bench that let the column grow would preview a
+       map no window ever draws. */
+    .bench-scene { max-width: 900px; height: calc(100vh - 3rem); }
+  </style>
+</head>
+<body class="game-page">
+  <p class="bench-note" id="note"></p>
+  <div id="error-banner" class="error-banner hidden" role="alert"></div>
+  <div class="bench-scene scene">
+    <div class="screen" id="location-root"></div>
+  </div>
+  <!-- The rails the panels draw into. Present but empty: renderLocation()
+       fills the people rail as part of drawing a scene, and a bench that left
+       the element out would be testing the guard rather than the render. -->
+  <aside class="rail rail-left" hidden>
+    <div class="hud-party" id="party-rail"></div>
+    <div class="hud-people" id="people-rail"></div>
+    <span class="loc-count hidden" id="people-count"></span>
+  </aside>
+  <aside class="rail rail-right" hidden>
+    <section class="hud-quest quest-tracker" id="quest-tracker"></section>
+    <div class="log" id="game-log"></div>
+    <div class="hud-actions action-bar" id="action-bar"></div>
+  </aside>
+  <div class="combat-screen hidden" id="combat-root"></div>
+  <div id="modal-root" class="modal-backdrop hidden"></div>
+
+  <script>
+  const CASE = new URLSearchParams(location.search).get('case') || 'busy';
+
+  const CHARACTER = { id: 1, name: 'Wren Kingsley', current_hp: 34, max_hp: 38,
+                      level: 4, gold: 84, current_location_id: 10 };
+
+  /* Real column names, taken from what locationPayload() serves. */
+  const BASE = {
+    id: 10, key: 'flagon_common_room', location_key: 'flagon_common_room',
+    name: 'The Flagon, common room',
+    location_type: 'inn', region_id: 1,
+    description: 'Low beams, a fire that has been going since before you came in, '
+      + 'and a floor that has been swept around rather than swept. Somebody has '
+      + 'left a tankard on the sill where the draught will find it.',
+    npcs: [{ id: 3, name: 'Mira Fennow', role: 'the innkeeper', known: true,
+             sprite_key: 'innkeeper' }],
+    items: [], exits: [], job_board: false, allow_camp: false,
+    inn_cost: null, encounter: null, delve: null, pit: null,
+  };
+
+  const CASES = {
+    // The case the change is about: everything a room can offer, at once.
+    busy: {
+      ...BASE,
+      job_board: true,
+      inn_cost: 5,
+      allow_camp: true,
+      items: [
+        { location_item_id: 21, name: 'Rusted Key', description: 'Somebody wanted it lost.' },
+        { location_item_id: 22, name: "Drover's Tally", description: 'Numbers, and one name.' },
+      ],
+      encounter: { id: 7, name: 'Cellar Rats', foes_text: 'Four rats, and something bigger behind them',
+                   description: 'They came up through the boards.' },
+      exits: [{ id: 31, to_location_id: 11, to_name: 'The cellar stair', label: 'Down to the cellar',
+                locked: true, attempt: 'force' }],
+    },
+    quiet: { ...BASE, allow_camp: true },
+    delve: {
+      ...BASE,
+      key: '_dg_1_2_r3', location_key: '_dg_1_2_r3',
+      name: 'The Long Dark', location_type: 'room',
+      description: 'A chamber cut square and left unfinished, the chisel marks '
+        + 'still running one way across the wall. Water has found a way in at the far corner.',
+      npcs: [],
+      items: [{ location_item_id: 23, name: 'Delver\'s Lamp', description: 'Half its oil left.' }],
+      delve: { depth: 2, can_descend: false, can_deeper: true, can_leave: true },
+    },
+  };
+
+  const LOCATION = CASES[CASE] || CASES.busy;
+
+  /* The chart is the scene now, so a bench without one previews an empty box.
+     Shapes taken from what `regionMap()` serves: nodes with a position in the
+     0–100 by 0–75 field, `visited` per party, and one `current`. */
+  const REGION_MAP = {
+    region_id: 1, region_key: 'rivermark', name: 'Rivermark', region_type: 'town',
+    nodes: [
+      { id: 10, key: 'flagon_common_room', name: 'The Flagon', type: 'inn',
+        x: 46, y: 40, visited: true, current: true },
+      { id: 11, key: 'flagon_cellar', name: 'The cellar', type: 'room',
+        x: 46, y: 58, visited: false, current: false },
+      { id: 12, key: 'market_square', name: 'Market Square', type: 'square',
+        x: 24, y: 30, visited: true, current: false },
+      { id: 13, key: 'ford_road', name: 'The ford road', type: 'road',
+        x: 70, y: 26, visited: true, current: false },
+      { id: 14, key: 'quarry_gate', name: 'The quarry gate', type: 'gate',
+        x: 84, y: 52, visited: false, current: false },
+    ],
+    edges: [
+      { from: 10, to: 11 }, { from: 10, to: 12 },
+      { from: 10, to: 13 }, { from: 13, to: 14 },
+    ],
+    neighbors: [],
+    floorplan: null,
+  };
+
+  window.API = {
+    get: async (route) => {
+      if (route.startsWith('session/status')) {
+        return { ok: true, character_id: 1, party_id: 1, character: CHARACTER };
+      }
+      if (route.startsWith('location/state')) {
+        return {
+          ok: true, character: CHARACTER, location: LOCATION,
+          region_map: REGION_MAP, combat: null, known_npc_ids: [3],
+        };
+      }
+      // Everything else boot() asks for on the way in. Empty is a real answer
+      // for all of them — a party of one with no quests and no companions.
+      if (route.startsWith('session/party')) return { ok: true, party: [CHARACTER] };
+      if (route.startsWith('quest/list')) return { ok: true, mine: [], board: [] };
+      if (route.startsWith('companion/list')) return { ok: true, companions: [] };
+      return { ok: true };
+    },
+    post: async (route) => { throw new Error('bench: ' + route + ' is not wired up here'); },
+  };
+  </script>
+  <script src="/assets/js/svg-view.js"></script>
+  <script src="/assets/js/ui-map.js"></script>
+  <!-- The panels, for `UI.showModal` alone: the ⓘ opens the description
+       through the same modal stack every other panel uses, so a bench without
+       it would draw the button and prove nothing about pressing it. -->
+  <script src="/assets/js/ui-panels.js"></script>
+  <script src="/assets/js/game.js"></script>
+  <script>
+  /* The icon sprite game.php inlines — the action keys are <use> against it.
+     Fetched rather than copied, so a symbol renamed there goes blank here
+     exactly as it would in the game. */
+  fetch('/assets/icons.svg').then((r) => r.text()).then((text) => {
+    const svg = new DOMParser().parseFromString(text, 'image/svg+xml').querySelector('svg');
+    if (svg) document.body.appendChild(document.importNode(svg, true));
+  }).catch(() => {});
+
+  document.getElementById('note').textContent = `bench · the scene · case: ${CASE}`;
+  </script>
+</body>
+</html>

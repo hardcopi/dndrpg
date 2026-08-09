@@ -1,0 +1,11 @@
+{
+  "item_key": "potion_healing_greater",
+  "name": "Greater Potion of Healing",
+  "description": "A deeper red than the common draught, and it moves on its own. Restores 4d4+4 hit points.",
+  "item_type": "potion",
+  "rarity": "uncommon",
+  "weight": 0.5,
+  "value_gp": 150,
+  "properties": { "heals": "4d4+4" },
+  "icon": "potion"
+}

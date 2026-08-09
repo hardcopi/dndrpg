@@ -1,0 +1,27 @@
+{
+    "item_key": "oldcity_dagger_of_the_warren",
+    "name": "Jimmy's Dagger",
+    "item_type": "weapon",
+    "rarity": "uncommon",
+    "weight": 1,
+    "value_gp": 350,
+    "damage_dice": "1d4+1",
+    "damage_type": "piercing",
+    "icon": "dagger",
+    "description": "A plain blade with an unhelpful history and a maker's mark nobody recognises. It bites truer than it has any business biting, and against goblinkind it bites a great deal truer than that — which suggests the mark belonged to somebody with a specific grievance.",
+    "properties": {
+        "finesse": true,
+        "light": true,
+        "thrown": true,
+        "attack_bonus": 1,
+        "damage_bonus": 1,
+        "bane": {
+            "type": "humanoid (goblinoid)",
+            "attack_bonus": 2,
+            "damage_bonus": 2
+        }
+    },
+    "place": {
+        "location": "oldcity_thieves_den"
+    }
+}

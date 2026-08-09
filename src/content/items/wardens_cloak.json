@@ -1,0 +1,15 @@
+{
+  "item_key": "wardens_cloak",
+  "name": "Warden's Oilcloth",
+  "description": "Green wax-cloth cut for the eastern hills. It has been patched at the left shoulder twice.",
+  "item_type": "armor",
+  "rarity": "uncommon",
+  "weight": 3,
+  "value_gp": 120,
+  "armor_bonus": 0,
+  "armor_type": "cloak",
+  "properties": {
+    "stealth_advantage_outdoors": true
+  },
+  "icon": "cloak"
+}

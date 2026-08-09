@@ -1,0 +1,310 @@
+{
+    "npc_key": "brother_teodor",
+    "start": "hail",
+    "nodes": {
+        "hail": [
+            {
+                "conditions": [
+                    {
+                        "flag": "teodor_fate",
+                        "equals": "written"
+                    }
+                ],
+                "once": true,
+                "text": "The writing-board is off the wall and there is nothing clipped to it, and the old man in the bed looks lighter by about a stone, which is not a thing that happens to a body in two days.\n\n\"Eleven lines,\" Brother Teodor says. \"I have been trying to write eleven lines for four winters and it took an afternoon with somebody else holding the pen.\"",
+                "choices": [
+                    {
+                        "label": "It took eleven starts and one afternoon.",
+                        "next": "eleven_starts"
+                    },
+                    {
+                        "label": "Rest.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "teodor_fate",
+                        "equals": "spoke"
+                    }
+                ],
+                "once": true,
+                "text": "The door is open. He insisted on the door.\n\n\"They can hear me down the ward,\" Teodor says, \"and that is the point of it, and I would like it very much if you did not shut it on your way out.\"",
+                "choices": [
+                    {
+                        "label": "I won't.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "teodor_fate",
+                        "equals": "silent"
+                    }
+                ],
+                "once": true,
+                "text": "He is looking at the shutter, which is open a hand's width and has been set there and not moved.\n\nHe does not turn his head. After a while the almoner comes and stands in the doorway, courteously, and does not leave.",
+                "choices": [
+                    {
+                        "label": "Go.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "brother_teodor",
+                        "stage": "the_unfinished_sheet"
+                    }
+                ],
+                "text": "\"You have looked at the board,\" Teodor says. \"Everybody looks at the board. Nobody has ever asked me what is on it, which I had assumed was tact and have lately decided was relief.\"",
+                "choices": [
+                    {
+                        "label": "What's on the board?",
+                        "next": "the_sheet"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "brother_teodor",
+                        "stage": "the_end_cell"
+                    }
+                ],
+                "text": "A bed, a stool, a shutter open a hand's width, a shelf with a full cup on it that nobody drinks, and a writing-board propped against the wall with a half-finished sheet clipped to it in ink that has been dry a long time.\n\nThe man in the bed is eighty-one and entirely awake.\n\n\"You will be the ones from the valley,\" he says. \"Sit on the stool. It is the only one and I shall not be needing it.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_teodor"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "You wrote a letter four winters ago.",
+                        "next": "the_letter"
+                    },
+                    {
+                        "label": "What's on the writing-board?",
+                        "next": "the_sheet"
+                    },
+                    {
+                        "label": "We'll come back.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "Off the infirmary, through a door kept shut for quiet: a bed, a stool, a shutter, a shelf, a cup that is filled and not drunk.\n\nThe man in the bed is awake and has been awake for some time.\n\n\"Come in properly,\" he says, \"or go away properly. The half of it in the doorway is what I have had for two years.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_teodor"
+                    },
+                    {
+                        "start_quest": "brother_teodor"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric is not here. He is at the priory gate. He has been at the priory gate since you came up the track and he has not once said why in a sentence with a verb in it."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "You were infirmarer here.",
+                        "next": "the_letter"
+                    },
+                    {
+                        "label": "What's on the writing-board?",
+                        "next": "the_sheet"
+                    },
+                    {
+                        "label": "Properly out, then.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "eleven_starts": [
+            {
+                "text": "\"Eleven,\" he agrees. \"I counted them. I counted them because counting them was easier than finishing one.\"\n\nHe closes his eyes.\n\n\"Take it out of this house today. Not tomorrow. Today.\"",
+                "choices": [
+                    {
+                        "label": "Today.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_letter": [
+            {
+                "text": "\"Thirty-one years infirmarer,\" Teodor says. \"Two of them in one of my own beds, which is a joke the house is too polite to make.\"\n\nHe folds his hands.\n\n\"I wrote a letter in the fourth winter. I held it three years and eight months. I can tell you the day I let it go and I can tell you why: I had stopped being able to walk as far as the gate, so there was no longer any version of the future in which I carried it down myself.\"\n\nA pause.\n\n\"That is not conscience. That is a man running out of legs.\"",
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera: \"Three years and eight months.\" Teodor: \"And four days. You are wondering whether I counted. I counted.\""
+                    },
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"He has it addressed and sealed for three years and eight months and never once burned it. That is not nothing.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Who was it to?",
+                        "next": "who_was_it_to"
+                    },
+                    {
+                        "label": "What's on the board, then?",
+                        "next": "the_sheet"
+                    },
+                    {
+                        "label": "That's enough.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "who_was_it_to": [
+            {
+                "text": "\"To the brother who would not,\" Teodor says.\n\nHe says it plainly and does not decorate it.\n\n\"There were nineteen people in four huts at the ford and eight of them were not dying, and I gave the order to fire the huts, and one of my brothers stood in front of the third one and would not move, and I had him put out of this house in chapter for it.\"\n\nHe looks at the shutter.\n\n\"I have had four winters to find a sentence for the next part and I have not found one. That is what is on the board.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "brother_teodor",
+                            "stage": "the_unfinished_sheet"
+                        }
+                    },
+                    {
+                        "set_flag": "teodor_gave_the_order"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa: \"He stood in front of it.\" She has to be asked twice to sit back down."
+                    },
+                    {
+                        "companion": "sera",
+                        "text": "Sera: \"You had him expelled for refusing an order you now think was wrong, and you have never said so out loud in this house.\" Teodor: \"That is a very exact sentence. I have been failing to write it for four years.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Then say it out loud. Now, with the door open.",
+                        "next": "said_out_loud"
+                    },
+                    {
+                        "label": "I'll hold the pen. You talk.",
+                        "next": "wrote_it_down"
+                    },
+                    {
+                        "label": "You should say it to him, not to me.",
+                        "next": "he_would_not"
+                    }
+                ]
+            }
+        ],
+        "the_sheet": [
+            {
+                "text": "The sheet on the board is a letter. It is addressed and it is four lines long and the four lines have been started eleven times, because the same opening has been written and struck out and written again down the whole of the left margin in eleven slightly different ways.\n\nNone of the eleven get past the second sentence.\n\n\"That is the second letter,\" Teodor says. \"The first one went four winters ago and it said what happened. This one is supposed to say what I think about it, and it turns out those are not the same document at all.\"",
+                "choices": [
+                    {
+                        "label": "Who is it addressed to?",
+                        "next": "who_was_it_to"
+                    },
+                    {
+                        "label": "What happened at the ford?",
+                        "next": "who_was_it_to"
+                    },
+                    {
+                        "label": "Leave him with it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "said_out_loud": [
+            {
+                "text": "He insists on the door. That is his condition and he states it twice: the door open, so it is not a confession, so anybody the length of the ward can hear it, so it cannot afterwards be described as something said privately to strangers.\n\nThen he says it. It takes about four minutes and he does not stop and he does not qualify any of it.\n\nHe gave the order. A brother refused it. The brother was right, and Teodor has known the brother was right for four winters, and has had him carrying a letter that says what happened and not what it meant.\n\nSomebody at the far end of the ward stops coughing partway through and does not start again until he has finished.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "brother_teodor",
+                            "stage": "he_said_it_again"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric is at the gate and does not hear a word of it, and there are eleven men in this house who now have, and one of them will tell him inside a month whatever anybody decides."
+                    },
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"He made you leave the door open so that it would be a thing the house had heard.\" Teodor, exhausted: \"Yes. That was the whole of the point.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Leave the door open.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "wrote_it_down": [
+            {
+                "text": "He cannot hold a pen long enough, so you hold it and he talks, and it takes most of an afternoon and two false starts and one long stop in the middle that nobody fills.\n\nEleven lines. Signed with his own mark. Witnessed by the almoner, because the prior would not come in and said so plainly rather than being busy, which Teodor says he respects.\n\nIt is not an apology. He is very clear that it is not an apology and makes you write that it is not. It is a record of an order and of who gave it, and it will outlast every single person in this building.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "brother_teodor",
+                            "stage": "wrote_it_down"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera reads it back to him at the end, all eleven lines, slowly, and he corrects one word, and the word he corrects is 'ordered' to 'gave the order', which is worse and he knows it."
+                    },
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric is at the gate. He will not read it there and he will not read it on the track, and where he does read it is his own business."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Fold it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "he_would_not": [
+            {
+                "text": "\"No,\" Teodor says.\n\nHe is courteous about it for about twenty minutes — he answers three other questions, he asks after the road, he is interested in the state of the ford — and then he simply stops answering and looks at the shutter, and goes on looking at it.\n\nAfter a while Brother Venn comes and stands in the doorway, politely, and does not leave.\n\nHe is eighty-one. He has said what he is going to say. He said it once, four winters ago, to one person, in a letter, and that is going to have to be the whole of it.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "brother_teodor",
+                            "stage": "he_would_not"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Go.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

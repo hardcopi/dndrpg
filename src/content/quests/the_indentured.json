@@ -1,0 +1,103 @@
+{
+    "quest_key": "the_indentured",
+    "title": "The Indentured",
+    "description": "Bread is fourpence. Bread against wages is fivepence. Nobody argues, because the argument was had years ago by people who are not here now.",
+    "giver": "corrin_dale",
+    "on_job_board": false,
+    "required_level": 4,
+    "rewards": {
+        "xp": 350
+    },
+    "stages": {
+        "the_canteen_board": {
+            "title": "The second column",
+            "objective": "The price board in the canteen has two columns. Find out what the second one is.",
+            "journal": "There are two columns of prices chalked in the Deepworks canteen. The first is cash. The second is against wages, and it is a halfpenny dearer on every line, and the halfpenny is the whole of it.",
+            "target": {
+                "location": "deepworks_canteen"
+            }
+        },
+        "the_arithmetic": {
+            "title": "The other sheet",
+            "objective": "Corrin Dale's indenture is perfectly fair. Find the sheet that does the arithmetic.",
+            "journal": "Corrin Dale signed for three years against a cottage, a cow and the carriage of both. He is in his fourth year. Every clause of what he signed is fair. The unfairness is entirely in the arithmetic, and the arithmetic is kept on a second sheet in the timekeeper's hut, and he has never been shown it and has never asked to be.",
+            "target": {
+                "location": "timekeepers_hut"
+            }
+        },
+        "bought_him_out": {
+            "title": "Paid off",
+            "journal": "A hundred and fifty gold closed Corrin Dale's account and the clerk thanked me for making the column balance. He walked up the stair and stood at the top of it for a long time. There are a hundred and ninety-odd others and I have a hundred and ninety-odd fewer reasons than I had this morning to think well of myself.",
+            "resolution": "bought_him_out",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "indentured_fate",
+                    "value": "bought"
+                },
+                {
+                    "take_gold": 150
+                },
+                {
+                    "approval": {
+                        "aldric": 16,
+                        "ilse": 12,
+                        "kessa": 10,
+                        "sera": -4
+                    }
+                }
+            ]
+        },
+        "read_it_back": {
+            "title": "Read back to him",
+            "journal": "I read Dale his own indenture and then I read him the arithmetic, in the canteen, out loud, with sixty men listening. Nobody threw anything. Nobody walked out. A man at the end said he had worked that out in his second year and asked me what exactly I thought he was supposed to do about it. I did not have an answer and he did not expect one.",
+            "resolution": "read_it_back",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "indentured_fate",
+                    "value": "read"
+                },
+                {
+                    "set_flag": "diggers_told"
+                },
+                {
+                    "give_item": "indenture_paper",
+                    "quantity": 1
+                },
+                {
+                    "xp": 100
+                },
+                {
+                    "approval": {
+                        "kessa": 14,
+                        "ilse": 10,
+                        "aldric": 8,
+                        "sera": -8
+                    }
+                }
+            ]
+        },
+        "left_them_to_it": {
+            "title": "Left to it",
+            "journal": "It is a contract. They signed it. Every clause of it is fair and every man down there is a grown man, and I have said all of that to myself twice on the way up the stair, which is once more than I needed to.",
+            "resolution": "left_them_to_it",
+            "terminal": true,
+            "outcome": "neutral",
+            "effects": [
+                {
+                    "set_flag": "indentured_fate",
+                    "value": "left"
+                },
+                {
+                    "approval": {
+                        "aldric": -12,
+                        "ilse": -8,
+                        "kessa": -6,
+                        "sera": 4
+                    }
+                }
+            ]
+        }
+    }
+}

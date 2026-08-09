@@ -1,0 +1,10 @@
+{
+    "npc_key": "child_watching",
+    "name": "A child",
+    "role": "Child",
+    "sprite_key": "child_1",
+    "is_ambient": true,
+    "place": {
+        "location": "high_street"
+    }
+}

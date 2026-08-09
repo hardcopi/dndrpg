@@ -1,0 +1,27 @@
+{
+  "spell_key": "poison_spray",
+  "name": "Poison Spray",
+  "level": 0,
+  "school": "Conjuration",
+  "classes": [
+    "Druid",
+    "Sorcerer",
+    "Warlock",
+    "Wizard"
+  ],
+  "resolution": "save",
+  "save_ability": "con",
+  "save_effect": "negate",
+  "damage_dice": "1d12",
+  "damage_type": "poison",
+  "target_kind": "enemy",
+  "reaches_back_rank": false,
+  "casting_time": "1 action",
+  "range_text": "10 feet",
+  "components": "V, S",
+  "duration": "Instantaneous",
+  "description": "You extend your hand toward a creature and project a puff of noxious gas.",
+  "concentration": false,
+  "duration_rounds": 0,
+  "source": "5e SRD"
+}

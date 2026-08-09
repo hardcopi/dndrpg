@@ -1,0 +1,119 @@
+{
+    "quest_key": "fen_root",
+    "title": "Fen-Root",
+    "description": "Osric Fen needs fen-root and will pay above market for it. It grows in one place within forty miles, and the beds are worked by people the watch has a different word for.",
+    "giver": "osric_apothecary",
+    "on_job_board": true,
+    "required_level": 3,
+    "rewards": {
+        "xp": 400,
+        "gold": 130
+    },
+    "stages": {
+        "the_root_beds": {
+            "title": "The root beds",
+            "objective": "Find the fen-root beds and get a bundle cut.",
+            "journal": "Fen-root has to be cut in water and dried out of the sun or it is worth nothing, which is why Rivermark buys it and does not grow it. The beds are two hours west of the causeway and they are beds: straight edges, kept channels, a working stage. Somebody planted this.",
+            "target": {
+                "location": "root_beds"
+            }
+        },
+        "whose_beds": {
+            "title": "Whose beds",
+            "objective": "Find out who has been farming this water for two generations.",
+            "journal": "Three of the four beds are cut close and even, this season, by people who know what they are doing. The fourth has been left and there is a reason standing in it. The wardens at the stilt camp cut these beds, dry the root on their own platforms, and sell it into Rivermark through three separate hands so that nobody has to know where it came from.",
+            "target": {
+                "location": "stilt_camp"
+            }
+        },
+        "cut_it_yourself": {
+            "title": "Cut and carried",
+            "journal": "We cut it ourselves off the second bed and carried it out, and we were watched doing it the whole way from the stage to the causeway by somebody who did not come out of the reeds. Osric has his root. The next person Rivermark sends will be met on the causeway rather than watched from it.",
+            "resolution": "cut_it_yourself",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "fen_root_fate",
+                    "value": "cut"
+                },
+                {
+                    "set_flag": "wardens_crossed"
+                },
+                {
+                    "give_item": "fen_root_bundle",
+                    "quantity": 2
+                },
+                {
+                    "approval": {
+                        "kessa": 6,
+                        "sera": 4,
+                        "aldric": -8,
+                        "ilse": -6
+                    }
+                }
+            ]
+        },
+        "paid_the_toll": {
+            "title": "Paid",
+            "journal": "Eighteen gold for two bundles, which is robbery, and which is also less than it costs to keep forty miles of causeway passable through a winter, and Nesh Gray made sure I had done that arithmetic before I handed anything over. Osric will complain about the price. Osric complains about the price of everything.",
+            "resolution": "paid_the_toll",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "fen_root_fate",
+                    "value": "paid"
+                },
+                {
+                    "take_gold": 60
+                },
+                {
+                    "give_item": "fen_root_bundle",
+                    "quantity": 2
+                },
+                {
+                    "xp": 100
+                },
+                {
+                    "approval": {
+                        "sera": 8,
+                        "aldric": 6,
+                        "ilse": 6
+                    }
+                }
+            ]
+        },
+        "bought_the_season": {
+            "title": "The season, bought",
+            "journal": "We bought the second bed's whole season for Osric outright and had it written down on both sides in front of Gray's people, which is the first written thing that camp has ever put its mark to. The apothecary now has a supply and the wardens now have a customer who exists on paper. Both of those are more dangerous than either of them realises.",
+            "resolution": "bought_the_season",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "fen_root_fate",
+                    "value": "season"
+                },
+                {
+                    "set_flag": "fen_trade_on_paper"
+                },
+                {
+                    "take_gold": 150
+                },
+                {
+                    "give_item": "fen_root_bundle",
+                    "quantity": 4
+                },
+                {
+                    "xp": 150
+                },
+                {
+                    "approval": {
+                        "sera": 14,
+                        "aldric": 8,
+                        "ilse": 8,
+                        "kessa": -2
+                    }
+                }
+            ]
+        }
+    }
+}

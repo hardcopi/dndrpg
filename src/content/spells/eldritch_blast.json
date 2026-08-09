@@ -1,0 +1,22 @@
+{
+  "spell_key": "eldritch_blast",
+  "name": "Eldritch Blast",
+  "level": 0,
+  "school": "Evocation",
+  "classes": [
+    "Warlock"
+  ],
+  "resolution": "attack",
+  "damage_dice": "1d10",
+  "damage_type": "force",
+  "target_kind": "enemy",
+  "casting_time": "1 action",
+  "range_text": "120 feet",
+  "components": "V, S",
+  "duration": "Instantaneous",
+  "description": "A beam of crackling energy streaks toward a creature within range.",
+  "concentration": false,
+  "duration_rounds": 0,
+  "reaches_back_rank": true,
+  "source": "5e SRD"
+}

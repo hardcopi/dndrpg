@@ -1,0 +1,12 @@
+{
+    "npc_key": "orm_lisser",
+    "name": "Orm Lisser",
+    "role": "The Pit's Man",
+    "description": "Eleven names on the belt and all of them his. He sleeps in the second stall, is not chained, and has not been outside the undercroft in fourteen months.",
+    "sprite_key": "prisoner_3",
+    "is_quest_giver": true,
+    "dialog": "orm_lisser",
+    "place": {
+        "location": "pit_undercroft"
+    }
+}

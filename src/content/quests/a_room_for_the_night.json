@@ -1,0 +1,103 @@
+{
+    "quest_key": "a_room_for_the_night",
+    "title": "A Room for the Night",
+    "description": "There is a man face down on the corner table of the Golden Flagon who has been there two days. Mara wants him woken, fed, and either paying or gone, in that order, and she does not much mind which of the last two.",
+    "giver": "mara_hearthstone",
+    "on_job_board": false,
+    "rewards": {
+        "xp": 100,
+        "gold": 15
+    },
+    "stages": {
+        "wake_him": {
+            "title": "Wake him up",
+            "objective": "Get the man at the corner table to talk to you.",
+            "journal": "Mara will not touch him herself. She says a woman who runs a public house learns young that you do not put hands on a sleeping man you do not know, and that the last time she did she was six weeks getting the tooth marks out of her thumb.",
+            "target": {
+                "location": "flagon_common_room"
+            }
+        },
+        "what_he_needs": {
+            "title": "Find out what he wants",
+            "objective": "He is not drunk. Work out what he actually needs.",
+            "journal": "His name is Corbin Waite. He worked the flat boats out of Greyhythe for nineteen years and stopped working them nine days ago, and he walked up here because the road up here goes uphill and he wanted to be somewhere the water was not. He has four coppers. He has not eaten since Rivermark and he did not know that until I asked.",
+            "target": {
+                "location": "flagon_common_room"
+            }
+        },
+        "paid_his_room": {
+            "title": "Paid for",
+            "journal": "Ten coppers for a bed and a bowl and Mara threw in the bowl. He slept eleven hours and came down looking like a man rather than a coat. He left on the Thursday boat with a proper coat on and left his knife on the bar for me, which is a river man's whole toolkit and not a small thing to give away.",
+            "resolution": "paid_his_room",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "room_fate",
+                    "value": "paid"
+                },
+                {
+                    "take_gold": 10
+                },
+                {
+                    "give_item": "thieves_tools",
+                    "quantity": 1
+                },
+                {
+                    "rest": "inn"
+                },
+                {
+                    "approval": {
+                        "aldric": 8,
+                        "kessa": 4,
+                        "ilse": 4
+                    }
+                }
+            ]
+        },
+        "he_worked_it_off": {
+            "title": "Washing pots",
+            "journal": "Mara took him on for the week — pots, kegs, the third step that has been loose since spring. He fixed the step on the first morning without being asked and she has stopped talking about the week. He sleeps in the back and he is up before she is, and once, when he thought there was nobody in the room, I heard him singing something with a very long line in it, the kind you sing to keep time with a pole.",
+            "resolution": "he_worked_it_off",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "room_fate",
+                    "value": "work"
+                },
+                {
+                    "rest": "inn"
+                },
+                {
+                    "approval": {
+                        "kessa": 8,
+                        "aldric": 6,
+                        "ilse": 6,
+                        "sera": 4
+                    }
+                }
+            ]
+        },
+        "walked_him_out": {
+            "title": "Walked to the gate",
+            "journal": "I walked him down to the river stair and put him on a boat going down, which is what he asked for once I had asked him twice. He said the thing men say, that he was grateful and would not forget it, and he meant it for about as long as it takes to cast off. Mara got her table back. Everyone got what they said they wanted.",
+            "resolution": "walked_him_out",
+            "terminal": true,
+            "outcome": "neutral",
+            "effects": [
+                {
+                    "set_flag": "room_fate",
+                    "value": "road"
+                },
+                {
+                    "rest": "inn"
+                },
+                {
+                    "approval": {
+                        "sera": 2,
+                        "aldric": -2
+                    }
+                }
+            ]
+        }
+    }
+}

@@ -1,0 +1,104 @@
+{
+    "quest_key": "kessa_debt",
+    "title": "What Kessa Owes",
+    "description": "Kessa's debt was sold on to a man who collects in person. He has found her, and he is being pleasant about it, which is worse.",
+    "companion": "kessa",
+    "giver": "garrow_finch",
+    "on_job_board": false,
+    "required_level": 2,
+    "rewards": {
+        "xp": 200
+    },
+    "stages": {
+        "finch_comes": {
+            "title": "Garrow Finch, in the common room",
+            "objective": "Find out what Kessa actually owes, and to whom.",
+            "journal": "A debt factor named Garrow Finch bought Kessa's paper from a company that no longer exists. Ninety gold, he says, and he says it the way a man says a number he expects to be argued with.",
+            "target": {
+                "location": "flagon_common_room"
+            }
+        },
+        "terms": {
+            "title": "Finch's terms",
+            "objective": "Settle it. Finch will take coin, or he will take her.",
+            "journal": "Finch will take ninety gold. Failing that he will take Kessa back to the company that holds the other half of her contract, and he has three people outside who are paid to make that convenient. He let me read the paper. Ninety gold, assigned twice, and the second assignment is stamped in black wax with a plumb-bob hanging inside a square instead of a name. Finch says that is usual and that he has never asked whose it is.",
+            "target": {
+                "location": "flagon_common_room"
+            },
+            "effects": [
+                {
+                    "set_flag": "mark_seen_paper"
+                }
+            ]
+        },
+        "paid": {
+            "title": "Paid in full",
+            "journal": "I paid Finch his ninety gold. Kessa watched him count it, watched him leave, and then went outside and stood in the yard for a while. She has not said thank you. She has stopped sitting with her back to the wall.",
+            "resolution": "paid",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "kessa_debt_fate",
+                    "value": "paid"
+                },
+                {
+                    "take_gold": 90
+                },
+                {
+                    "approval": {
+                        "kessa": 25,
+                        "aldric": 5,
+                        "sera": -6,
+                        "ilse": 3
+                    }
+                }
+            ]
+        },
+        "fought": {
+            "title": "Settled in the yard",
+            "journal": "Finch's people came in through the yard door and did not come out of it. Finch himself was unharmed, which he pointed out at length, and which means this is not over. Kessa is free and Kessa is now a name on a list.",
+            "resolution": "fought",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "kessa_debt_fate",
+                    "value": "fought"
+                },
+                {
+                    "approval": {
+                        "kessa": 15,
+                        "aldric": -8,
+                        "sera": -10,
+                        "ilse": -4
+                    }
+                }
+            ]
+        },
+        "sold_her": {
+            "title": "Sold on",
+            "journal": "I took Finch's finder's fee. Kessa went out of the Flagon between two of his men without saying anything at all, which is the part I will keep.",
+            "resolution": "sold_her",
+            "terminal": true,
+            "outcome": "failure",
+            "effects": [
+                {
+                    "set_flag": "kessa_debt_fate",
+                    "value": "sold"
+                },
+                {
+                    "give_gold": 120
+                },
+                {
+                    "companion_leaves": "kessa"
+                },
+                {
+                    "approval": {
+                        "aldric": -25,
+                        "ilse": -18,
+                        "sera": 6
+                    }
+                }
+            ]
+        }
+    }
+}

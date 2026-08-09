@@ -1,0 +1,13 @@
+{
+    "npc_key": "sten_harrow",
+    "name": "Sten Harrow",
+    "role": "Farmer",
+    "description": "Third of his name on this ground and the first to be written to. He has four letters in the house and a lamp on the porch table for reading them by, because he will not read them where his wife can see.",
+    "sprite_key": "sten_harrow",
+    "image_url": "assets/images/npcs/farmer.png",
+    "is_quest_giver": true,
+    "dialog": "sten_harrow",
+    "place": {
+        "location": "harrow_steading"
+    }
+}

@@ -1,0 +1,23 @@
+{
+  "spell_key": "branding_smite",
+  "name": "Branding Smite",
+  "level": 2,
+  "school": "Evocation",
+  "classes": [
+    "Paladin"
+  ],
+  "resolution": "buff",
+  "target_kind": "self",
+  "reaches_back_rank": false,
+  "effect": {
+    "damage_bonus_dice": "2d6"
+  },
+  "casting_time": "1 bonus action",
+  "range_text": "Self",
+  "components": "V",
+  "duration": "Concentration, up to 1 minute",
+  "concentration": true,
+  "duration_rounds": 10,
+  "description": "The next time you hit a creature with a weapon attack, your weapon gleams with astral radiance and deals extra radiant damage.",
+  "source": "5e SRD"
+}

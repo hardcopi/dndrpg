@@ -1,0 +1,15 @@
+{
+  "item_key": "wages_note",
+  "name": "Note of Hand for Wages",
+  "description": "Fourteen days at one and threepence, drawn on the Rivermark counting house and payable by a house downriver whose name is written only as initials and a mark: a plumb-bob hanging inside a square.",
+  "item_type": "misc",
+  "rarity": "common",
+  "weight": 0,
+  "value_gp": 0,
+  "properties": {
+    "quest_item": true,
+    "readable": true
+  },
+  "icon": "scroll",
+  "place": { "location": "counting_house" }
+}

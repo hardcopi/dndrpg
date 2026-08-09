@@ -1,0 +1,11 @@
+{
+  "item_key": "ford_record_copy",
+  "name": "The Ford Entry, Fair Copy",
+  "description": "Eleven lines copied out of the priory's own record of the fourth winter: the brothers who went down to the crossing, the count of the dead, the order given for the huts, and the name of the brother who would not carry it out. It does not use the word the order uses now.",
+  "item_type": "misc",
+  "rarity": "rare",
+  "weight": 0,
+  "value_gp": 0,
+  "properties": {"quest_item": true, "readable": true},
+  "icon": "scroll"
+}

@@ -1,0 +1,117 @@
+{
+    "quest_key": "ledger_and_lie",
+    "title": "The Ledger and the Lie",
+    "description": "The mill's accounts do not add up, and two people would rather you stopped looking. Only one of them is dangerous.",
+    "giver": "captain_elowen",
+    "on_job_board": true,
+    "rewards": {
+        "xp": 250,
+        "gold": 75,
+        "item": "silvered_shortsword"
+    },
+    "stages": {
+        "look_into_it": {
+            "title": "Ask around Rivermark",
+            "objective": "Find out who keeps the mill's books.",
+            "journal": "Captain Reed asked me to look into the mill's accounts quietly. Six caravans paid for grain that was never carted.",
+            "target": {
+                "location": "counting_house"
+            }
+        },
+        "confront_sera": {
+            "title": "Confront Sera Vance",
+            "objective": "Sera keeps the ledger. Get it from her.",
+            "journal": "The books are Sera Vance's work. She has kept them alone since her father died, and she has been keeping two.",
+            "target": {
+                "location": "market_square"
+            }
+        },
+        "the_paymaster": {
+            "title": "Whose hand is on it",
+            "objective": "Sera did not think of this alone. Find out who did.",
+            "journal": "Sera writes what she is told to write. The man telling her is Hollis Marrow, who buys Rivermark's grain and sets its price, and who does better every time a caravan does not arrive. Sera says Marrow keeps a second book, and that every page of it he did not write himself carries the same little stamp in the corner: a plumb-bob hanging inside a square.",
+            "target": {
+                "location": "high_street"
+            },
+            "effects": [
+                {
+                    "set_flag": "mark_seen_book"
+                }
+            ]
+        },
+        "burned_the_book": {
+            "title": "The ledger burns",
+            "journal": "I burned the book in the mill's own grate. Sera keeps her name and Reed keeps her suspicions, and I keep the only version of this that matters.",
+            "resolution": "burned_the_book",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "ledger_fate",
+                    "value": "burned"
+                },
+                {
+                    "set_flag": "sera_spared"
+                },
+                {
+                    "approval": {
+                        "kessa": 6,
+                        "sera": 10,
+                        "aldric": -12,
+                        "ilse": 2
+                    }
+                }
+            ]
+        },
+        "gave_it_to_reed": {
+            "title": "The ledger goes to the captain",
+            "journal": "I gave Reed the ledger. Sera was in the lockup before dusk, and the man who set her writing is still weighing grain by the east gate. The book names her hand and nobody else's.",
+            "resolution": "gave_it_to_reed",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "ledger_fate",
+                    "value": "reed"
+                },
+                {
+                    "set_flag": "sera_arrested"
+                },
+                {
+                    "approval": {
+                        "kessa": -10,
+                        "aldric": 10,
+                        "ilse": -2
+                    }
+                }
+            ]
+        },
+        "sold_it_back": {
+            "title": "Sold back to the man it names",
+            "journal": "Hollis Marrow paid me sixty gold for the ledger and burned it himself, in front of me, so that I would understand the arrangement. Sera walks free. She works for him for as long as he wants her to.",
+            "resolution": "sold_it_back",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "ledger_fate",
+                    "value": "sold"
+                },
+                {
+                    "set_flag": "sera_spared"
+                },
+                {
+                    "set_flag": "hollis_coin_taken"
+                },
+                {
+                    "give_gold": 60
+                },
+                {
+                    "approval": {
+                        "kessa": -6,
+                        "aldric": -18,
+                        "ilse": -8,
+                        "sera": -5
+                    }
+                }
+            ]
+        }
+    }
+}

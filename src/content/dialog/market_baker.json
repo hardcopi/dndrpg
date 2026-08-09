@@ -1,0 +1,381 @@
+{
+    "npc_key": "market_baker",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "flag": "short_measure_fate",
+                        "equals": "stone"
+                    }
+                ],
+                "text": "There is a new board behind the stall and the twelve weeks of chalk have been left on the old one, propped where the customers can see it. \"I am not taking it down,\" says Nell Quist. \"Reed says the stone is right now and I believe her, and I am still not taking it down. Seed cake?\"",
+                "choices": [
+                    {
+                        "label": "Why keep the board?",
+                        "next": "why_the_board"
+                    },
+                    {
+                        "label": "Seed cake.",
+                        "next": "sold"
+                    },
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "short_measure_fate",
+                        "equals": "carter"
+                    }
+                ],
+                "once": true,
+                "text": "\"Right for five weeks,\" Nell says, and rubs a fresh mark off the board with her thumb, \"and now it is two pounds light again, and I have run out of carters to blame.\" She wraps a cake nobody asked for and puts it in your hand. \"Do not tell me you are sorry. Everybody has been sorry. The flour is still light.\"",
+                "choices": [
+                    {
+                        "label": "It was never the carter.",
+                        "next": "never_the_carter"
+                    },
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "short_measure_fate",
+                        "equals": "silence"
+                    }
+                ],
+                "once": true,
+                "text": "Nell weighs your seed cake in front of you, on her own small scale, and turns it so you can see the beam. She does that with everybody now. \"Two ounces over,\" she says, \"which is mine to give.\" She does not ask what came of it. She has not asked since the second week.",
+                "choices": [
+                    {
+                        "label": "You stopped asking.",
+                        "next": "stopped_asking"
+                    },
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "a_short_measure",
+                        "stage": "the_weighing_floor"
+                    },
+                    {
+                        "flag": "stone_recut_known"
+                    }
+                ],
+                "text": "Nell has the board down off the hook and across her knees before you have finished the first sentence. \"Say the rest of it,\" she says.",
+                "choices": [
+                    {
+                        "label": "The town's weighing stone was recut in the spring and came back heavy.",
+                        "next": "the_stone_answer"
+                    },
+                    {
+                        "label": "Your carter has been skimming the tops for years.",
+                        "next": "the_carter_answer"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "a_short_measure",
+                        "stage": "the_weighing_floor"
+                    }
+                ],
+                "text": "\"Well?\" Nell does not stop working. Her hands go on shaping while she looks at you, which is a trick that takes about fifteen years. \"You have been to the floor. Everybody who goes to the floor comes back with the same face and the same sentence and the sentence is always: the stone says they are right.\"",
+                "choices": [
+                    {
+                        "label": "The stone says they are right.",
+                        "next": "she_knew_that"
+                    },
+                    {
+                        "label": "Your carter has been skimming the tops for years.",
+                        "next": "the_carter_answer"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "a_short_measure",
+                        "status": "active"
+                    }
+                ],
+                "text": "\"Granary floor,\" Nell says, pointing with a floury hand, \"down the row and turn at the tall doors. Ask for Pol Reddick and tell him I sent you, which will not help.\"",
+                "choices": [
+                    {
+                        "label": "Why won't it help?",
+                        "next": "why_no_help"
+                    },
+                    {
+                        "label": "I'll go down there.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "\"Loaves went at dawn — there is seed cake, if you are not fussy.\" The baker turns a tray without looking at it. Behind her, on the back of the stall board, there is a column of chalk marks in a small tight hand, twelve of them, each with a figure beside it, and every figure is the same.",
+                "choices": [
+                    {
+                        "label": "I will take one.",
+                        "next": "sold"
+                    },
+                    {
+                        "label": "What are the chalk marks?",
+                        "next": "the_board"
+                    },
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "sold": [
+            {
+                "text": "\"Wrapped in paper. Mind the crumbs.\"",
+                "choices": [
+                    {
+                        "label": "Thanks.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_board": [
+            {
+                "text": "\"Twelve weeks of flour.\" Nell wipes her hands and turns the board round for you. \"My mother weighed every sack that came to this stall and I have weighed every sack that came to this stall, and I have never in my life had a reason to look at the column all together until Candlemas.\"\n\nTwelve marks. Twelve figures. Every one of them: two pounds light.\n\n\"A thief takes what he can carry,\" she says. \"Sometimes more, sometimes less, depending on the week he is having. Two pounds every time is not a thief. Two pounds every time is somebody's arithmetic, and I would like to know whose.\"",
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera looks at the column for rather a long time. \"That is not stealing,\" she says. \"That is a rate.\""
+                    },
+                    {
+                        "companion": "ilse",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "companion": "sera",
+                                    "status": "active"
+                                }
+                            }
+                        ],
+                        "text": "Ilse: \"Twelve weeks and she is the only one in this square who wrote it down.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "I'll find out. Where are the sacks weighed?",
+                        "effects": [
+                            {
+                                "start_quest": "a_short_measure"
+                            }
+                        ],
+                        "next": "where_weighed"
+                    },
+                    {
+                        "label": "Two pounds a sack is not worth an afternoon.",
+                        "next": "worth_an_afternoon"
+                    },
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "worth_an_afternoon": [
+            {
+                "text": "\"Two pounds a sack, nine sacks a week, since Candlemas,\" says Nell, without any heat at all. \"That is eleven hundredweight of flour. That is a family fed for a year. I am not asking anybody to hang for it. I would only like to know where it went, because at the moment I do not know whether I have been robbed or whether I have been bad at my sums, and one of those keeps me awake.\"",
+                "choices": [
+                    {
+                        "label": "All right. Where are the sacks weighed?",
+                        "effects": [
+                            {
+                                "start_quest": "a_short_measure"
+                            }
+                        ],
+                        "next": "where_weighed"
+                    },
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "where_weighed": [
+            {
+                "text": "\"Granary floor, down the row, turn at the tall doors. The town's own stone, in public, with a weigher paid by the town, which is how it has been done since before my mother.\" Nell goes back to the tray. \"Ask for Pol Reddick. Tell him I sent you. It will not help.\"",
+                "choices": [
+                    {
+                        "label": "Why won't it help?",
+                        "next": "why_no_help"
+                    },
+                    {
+                        "label": "I'll go down there.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "why_no_help": [
+            {
+                "text": "\"Because Pol has known me twenty years and Pol will look at his stone and tell me his stone is right, and he will be telling the truth,\" Nell says. \"That is what has been bothering me for twelve weeks. Everybody in this is honest. That is not usually what a robbery looks like.\"",
+                "choices": [
+                    {
+                        "label": "I'll go down there.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "she_knew_that": [
+            {
+                "text": "\"Yes,\" says Nell. \"It does.\" She sets the board down. \"Then either my mother's scale is wrong, and my mother's scale has weighed every loaf on this street for forty years, or the town's stone is wrong, and if the town's stone is wrong then every sack of anything weighed on that floor since it was wrong has gone out short — and it is not eleven hundredweight, it is the whole town's.\"",
+                "choices": [
+                    {
+                        "label": "The stone was recut in the spring. It came back heavy.",
+                        "conditions": [
+                            {
+                                "flag": "stone_recut_known"
+                            }
+                        ],
+                        "next": "the_stone_answer"
+                    },
+                    {
+                        "label": "Go back to the floor and ask Pol about the stone itself.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_stone_answer": [
+            {
+                "text": "Nell listens to the whole of it without once interrupting, which she has clearly been saving up the ability to do.\n\n\"Recut in the spring,\" she says at the end. \"By a mason. Paid for out of the town's own account, because the old one had chipped. And nobody checked it against anything, because it is the thing everything else is checked against.\"\n\nShe takes the board off her knees and hangs it back on its hook, front outwards.\n\n\"Right,\" she says. \"Then I want Reed, and I want her at this stall, and I want her to look at twelve weeks of chalk before anybody starts explaining to me why it cannot be helped.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "a_short_measure",
+                            "stage": "the_weighing_stone"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric: \"Nobody stole anything. That is going to make it very much harder to put right, not easier.\""
+                    },
+                    {
+                        "companion": "kessa",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "companion": "aldric",
+                                    "status": "active"
+                                }
+                            }
+                        ],
+                        "text": "Kessa: \"A rock. Eight months, and the whole thing was a rock.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "She'll come.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_carter_answer": [
+            {
+                "text": "\"Ganny Rilke,\" Nell says slowly. \"Ganny has carted for me eleven years.\" She turns it over. \"And a double handful off the top of every sack, over eleven years, is a thing I would believe of him without any trouble at all, because I would believe it of most men and of some women I could name in this square.\"\n\nA pause.\n\n\"It is not two pounds,\" she says. \"But it is something, and it is something I can put my hand on, and I am so tired of the column.\"\n\nGanny Rilke is off the road within the week. The flour comes right for five.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "a_short_measure",
+                            "stage": "blamed_the_carter"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"You gave her a man because you could not give her an answer.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Leave it there.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "never_the_carter": [
+            {
+                "text": "\"No,\" Nell agrees. \"It was not.\" She goes on wiping the board. \"Ganny has a sister at Greyhythe and he has gone to her, and I have written to say I was wrong, and he has not written back, and I do not expect he will.\" The cloth stops. \"Do not do that to anybody else for me.\"",
+                "choices": [
+                    {
+                        "label": "I won't.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "why_the_board": [
+            {
+                "text": "\"Because it took twelve weeks of me writing a number down every Tuesday for anybody to look at it,\" Nell says, \"and the next time it happens I should like the whole street to already be in the habit.\" She nods at the stall opposite, where somebody has started a chalk column of their own, badly. \"Three of them now. It will be nine by the autumn. That is the only part of this I am proud of.\"",
+                "choices": [
+                    {
+                        "label": "Seed cake.",
+                        "next": "sold"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "stopped_asking": [
+            {
+                "text": "\"I did.\" Nell puts the wrapped cake into your hand and takes your copper and does not hold your eye any longer than she has to. \"You came back and you did not tell me, and you were not sorry, and both of those are answers. I run a stall. I have got very good at hearing an answer somebody has not said.\"",
+                "choices": [
+                    {
+                        "label": "Nell —",
+                        "next": "no_need"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "no_need": [
+            {
+                "text": "\"No,\" says Nell Quist. \"Weigh what you buy off me, that is all I ask of anybody, and I will weigh it in front of you first.\" She turns to the next customer. \"Loaves went at dawn. There is seed cake, if you are not fussy.\"",
+                "choices": [
+                    {
+                        "label": "Go.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

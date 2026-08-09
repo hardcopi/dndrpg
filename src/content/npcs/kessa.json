@@ -1,0 +1,11 @@
+{
+    "npc_key": "kessa",
+    "name": "Kessa Dunmar",
+    "role": "Mercenary",
+    "description": "Half-orc mercenary, drinking alone at the end of the bar, back to the wall.",
+    "sprite_key": "kessa",
+    "dialog": "kessa",
+    "place": {
+        "location": "flagon_common_room"
+    }
+}

@@ -1,0 +1,13 @@
+{
+  "item_key": "drovers_staff",
+  "name": "Drover's Ash Staff",
+  "description": "Six feet of seasoned ash with an iron ferrule and a hook, cut for turning cattle and used for other things on the road at night. Balanced nearer the top than a walking staff, which tells you what it is for.",
+  "item_type": "weapon",
+  "rarity": "common",
+  "weight": 4,
+  "value_gp": 30,
+  "damage_dice": "1d6",
+  "damage_type": "bludgeoning",
+  "properties": {"versatile": "1d8", "reach": true},
+  "icon": "staff"
+}

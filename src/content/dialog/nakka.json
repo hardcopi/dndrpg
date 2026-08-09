@@ -1,0 +1,1750 @@
+{
+    "npc_key": "nakka",
+    "start": "hail",
+    "nodes": {
+        "hail": [
+            {
+                "conditions": [
+                    {
+                        "flag": "warlord_hall_taken"
+                    }
+                ],
+                "text": "The hall is quiet. Nakka Skarn is face-down in the doorway she chose, in armour that was never cut for her, and the helm has come off and rolled about four feet. There is a wax tablet under her hand with a tally on it: salt, iron, days.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "quarry_pact",
+                            "stage": "steel"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa checks the room, then the doorway, then sits down on the step. \"Done is done,\" she says. \"That's not nothing.\""
+                    },
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse reads the tally over your shoulder and says the numbers out loud, once, and then walks out of the hall and does not come back in."
+                    },
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric kneels by her for a moment. \"She had a hall and a count of days,\" he says. \"That is more government than most things get.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Take the tally and go.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "warlord_hall_lost"
+                    }
+                ],
+                "text": "You come round in the cut with your gear stacked beside you and nothing missing from it. Nakka Skarn is sitting on the spoil heap above, out of the plate, eating. \"You were carried out,\" she says. \"By mine. That was not mercy, it was arithmetic — I cannot afford the four of you as a story your town tells. Go down the cut.\"",
+                "choices": [
+                    {
+                        "label": "Why let us live?",
+                        "next": "the_arithmetic"
+                    },
+                    {
+                        "label": "Go down the cut.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "quarry_fate",
+                        "equals": "pact"
+                    }
+                ],
+                "text": "Nakka Skarn comes to the east gate on market days now, without the helm, with two of hers and a slate. \"Your captain has stopped counting my people at the gate,\" she says. \"Your grain factor has stopped counting anything. I consider that a good month.\"",
+                "choices": [
+                    {
+                        "label": "How is the deep?",
+                        "next": "the_deep_after"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "quarry_pact",
+                        "stage": "the_warlords_hall"
+                    }
+                ],
+                "text": "The hall was a quarrymen's mess once; there are still hooks for coats. Nakka Skarn stands at the far end in a suit of human plate that fits her at the shoulder and nowhere else. She has kept the helm. She has worked out what a helm does in a doorway.",
+                "choices": [
+                    {
+                        "label": "Talk to her.",
+                        "next": "the_hall"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "warren_gate_forced"
+                    }
+                ],
+                "text": "The timber is down and there are nine of them on it and none of them are going to be moved off it now. Past the barricade the cut opens into the old quarrymen's mess, and there is somebody standing at the far end of it in human plate, waiting, who has had a quarter of an hour to hear exactly how you came in.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "quarry_pact",
+                            "stage": "the_warlords_hall"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"Nine. That is nine of fourteen hundred and she let us spend them, and she is still standing there.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Walk down the hall.",
+                        "next": "the_hall"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "quarry_pact",
+                        "stage": "the_warren_mouth"
+                    }
+                ],
+                "text": "The barricade is quarry timber, waist-high and well built, and there is a bugbear behind it who has been watching you come up the cut for a quarter of an hour. Somebody in armour is standing on the spoil heap above, not hiding.",
+                "choices": [
+                    {
+                        "label": "Hail the barricade.",
+                        "next": "gate_hail"
+                    },
+                    {
+                        "label": "Back off and come at it another way.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "teeth_in_the_hills",
+                        "status": "active"
+                    }
+                ],
+                "text": "They come off the slope in good order, which is the first thing wrong with it. The second thing is the goblin in human plate who is not running at anybody, and who is watching the wagons and not the guards.",
+                "choices": [
+                    {
+                        "label": "Call out to her.",
+                        "next": "raid_halt"
+                    },
+                    {
+                        "label": "Say nothing and let it happen.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "met_nakka"
+                    }
+                ],
+                "text": "The slate on the wall has today's mark on it already. Nakka Skarn is at the far end of the hall with the helm off and both gauntlets on the table, and she does not stand up.\n\n\"You,\" she says. \"Say what it is. I have four things to do before dark and one of them is counting.\"",
+                "choices": [
+                    {
+                        "label": "The warren itself. I want to know how it stands.",
+                        "next": "the_warren_business"
+                    },
+                    {
+                        "label": "Nothing today.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "Two goblin scouts on the quarry trail, bows already up, and neither of them has loosed. From the spoil heap above, a voice in flat trade-tongue: \"Hold. Let them stand there and be looked at.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_nakka"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Stand still and be looked at.",
+                        "next": "scouts_hold"
+                    },
+                    {
+                        "label": "Draw.",
+                        "effects": [
+                            {
+                                "start_combat": "goblin_scouts"
+                            }
+                        ],
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "scouts_hold": [
+            {
+                "text": "She comes down the spoil heap without hurrying. Up close the plate is worse — it is three suits, and none of them hers. \"Nakka Skarn,\" she says. \"I hold the quarry. You are on the trail and the trail is not the quarry, so you are not yet a problem. Say what you are.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_nakka"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse, low: \"That is the first time in two years one of them has spoken to me instead of running.\""
+                    },
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa: \"She's put herself in front of her own archers. That's either stupid or she's telling us something.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Travellers. We'll go round.",
+                        "next": "she_lets_you_go"
+                    },
+                    {
+                        "label": "Why are you on the surface at all?",
+                        "check": {
+                            "skill": "persuasion",
+                            "dc": 13,
+                            "on_success": "the_pushed_out",
+                            "on_failure": "she_ends_it"
+                        }
+                    },
+                    {
+                        "label": "Two bows and one of you. Stand aside.",
+                        "check": {
+                            "skill": "intimidation",
+                            "dc": 16,
+                            "on_success": "she_stands_aside",
+                            "on_failure": "she_ends_it"
+                        }
+                    },
+                    {
+                        "label": "Blood on the plate is three winters old. You looted a dead field.",
+                        "tag": "SOLDIER",
+                        "conditions": [
+                            {
+                                "origin": "soldier"
+                            }
+                        ],
+                        "next": "the_pushed_out"
+                    }
+                ]
+            }
+        ],
+        "she_lets_you_go": [
+            {
+                "text": "\"Go round,\" Nakka agrees, and steps off the trail, and her scouts lower the bows in the same second, which tells you how long they have been doing this. \"North of the cut. Not south. South is not mine and you will not enjoy it.\"",
+                "on_enter": [
+                    {
+                        "increment_flag": "goblins_spared",
+                        "by": 2
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Go north.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "she_stands_aside": [
+            {
+                "text": "She looks at you for a long moment and then steps out of the trail. \"Yes,\" she says. \"Two bows and one of me, today, on this path. You have counted correctly and I would like you to notice that I am letting you know that you counted correctly.\"",
+                "on_enter": [
+                    {
+                        "increment_flag": "goblins_spared",
+                        "by": 2
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Meaning what?",
+                        "next": "the_pushed_out"
+                    },
+                    {
+                        "label": "Go past her.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "she_ends_it": [
+            {
+                "text": "\"No,\" Nakka says, and goes back up the spoil heap, and does not look round. \"Kill them or don't, I'm not staying for it. I have three hundred at the gate and I cannot spend a morning on four people who came up a trail.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "nakka_dismissed_you"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Fight your way past.",
+                        "effects": [
+                            {
+                                "start_combat": "quarry_trail_ambush"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "Back off.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_pushed_out": [
+            {
+                "text": "Nakka takes the helm off. She is younger than the armour suggests and there is a scar through one ear that has been sewn by somebody competent. \"Because the deep is shut,\" she says. \"Because four winters ago we walked out of it in one week, in the snow, and left our dead in it, and you can ask anyone up here and they will all give you the same week.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "deep_known"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"I counted them coming over the ridge. Six days. I told the watch and the watch wrote it in a book.\""
+                    },
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric: \"You left your dead. You do not do that unless the thing behind you is worse than the snow.\""
+                    },
+                    {
+                        "companion": "kessa",
+                        "conditions": [
+                            {
+                                "companion": "kessa",
+                                "approval_at_least": -10
+                            }
+                        ],
+                        "text": "Kessa: \"She's telling the truth. Nobody invents a story that makes them look like they ran.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "What's down there?",
+                        "next": "what_is_down_there"
+                    },
+                    {
+                        "label": "That's not our problem. Yet.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "what_is_down_there": [
+            {
+                "text": "\"I do not know,\" Nakka says, \"and I have sent people to find out, and I have stopped sending people.\" She puts the helm back on. \"It cuts stone. That is the thing I will tell you for nothing, because I want somebody else to be carrying it. It cuts stone, and it cuts upward.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "deep_known"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Go.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "raid_halt": [
+            {
+                "conditions": [
+                    {
+                        "flag": "knows_paymaster"
+                    }
+                ],
+                "text": "Nakka stops the raid with one word and comes down to the road, and she is not surprised to be stopped. \"You have been to the granary,\" she says. \"I can tell, because you called my name and not my people's.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_nakka"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera, from the wagon: \"She's got the manifest. She's actually got the manifest, in her hand, in his clerk's writing.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Show me the manifest.",
+                        "next": "the_manifest"
+                    },
+                    {
+                        "label": "Take the wagon and go. This one's yours.",
+                        "effects": [
+                            {
+                                "increment_flag": "goblins_spared",
+                                "by": 4
+                            },
+                            {
+                                "quest_stage": {
+                                    "quest": "teeth_in_the_hills",
+                                    "stage": "turned_the_road"
+                                }
+                            }
+                        ],
+                        "next": "she_takes_the_wagon"
+                    },
+                    {
+                        "label": "Not this wagon. Not any of them.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "teeth_in_the_hills",
+                                    "stage": "ambushed_the_raiders"
+                                }
+                            },
+                            {
+                                "start_combat": "hills_raiders"
+                            }
+                        ],
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "The raid stops on one word from the goblin in plate, and the word is not in trade-tongue, and every single one of them stops at once. She walks down to the road. \"You are guarding this one,\" she says. \"Nobody guards these. Why this one.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_nakka"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"She stopped them. Look at the gnolls — they stopped too, and gnolls do not stop.\""
+                    },
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa, gripping the axe: \"Four of them, two of the tall ones. If we're doing this we do it now, before she talks.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Because somebody told you this wagon would be unguarded.",
+                        "check": {
+                            "skill": "insight",
+                            "dc": 13,
+                            "on_success": "the_manifest",
+                            "on_failure": "she_calls_it_on"
+                        }
+                    },
+                    {
+                        "label": "Walk away and there's no fight today.",
+                        "check": {
+                            "skill": "persuasion",
+                            "dc": 16,
+                            "on_success": "she_walks_away",
+                            "on_failure": "she_calls_it_on"
+                        }
+                    },
+                    {
+                        "label": "No talking.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "teeth_in_the_hills",
+                                    "stage": "ambushed_the_raiders"
+                                }
+                            },
+                            {
+                                "start_combat": "hills_raiders"
+                            }
+                        ],
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_manifest": [
+            {
+                "text": "She holds it up rather than handing it over. It is a granary carriage manifest, current, in a clerk's hand, with three wagons on it and two of them crossed through. \"Salt, iron, a quarter of the load,\" Nakka says. \"That is the price, and it is a good price, and I did not go looking for it. It came up the trail in a good coat.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "knows_paymaster"
+                    },
+                    {
+                        "set_flag": "hills_pattern"
+                    },
+                    {
+                        "quest_stage": {
+                            "quest": "teeth_in_the_hills",
+                            "stage": "the_pattern"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric: \"You are starving a town for salt.\" Nakka: \"I am feeding one. You have noticed that these are the same sentence.\""
+                    },
+                    {
+                        "companion": "sera",
+                        "text": "Sera reads it at four paces and closes her eyes. \"That's the fair copy,\" she says. \"That's my hand.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Walk the wagon through. We're done here today.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "teeth_in_the_hills",
+                                    "stage": "escorted_the_caravan"
+                                }
+                            }
+                        ],
+                        "next": "she_lets_the_wagon_pass"
+                    },
+                    {
+                        "label": "Then we settle it in your hall, not on a road.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "teeth_in_the_hills",
+                                    "stage": "escorted_the_caravan"
+                                }
+                            }
+                        ],
+                        "next": "come_to_the_hall"
+                    },
+                    {
+                        "label": "You still burned four wagons and killed the carters.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "teeth_in_the_hills",
+                                    "stage": "ambushed_the_raiders"
+                                }
+                            },
+                            {
+                                "start_combat": "hills_raiders"
+                            }
+                        ],
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "she_lets_the_wagon_pass": [
+            {
+                "text": "Nakka steps off the road and her people go back up the slope in the same order they came down it. \"One wagon,\" she says. \"Not a habit. Tell your factor that his manifest was read out loud on a public road today. He will know what that costs him and it is more than the wagon.\"",
+                "on_enter": [
+                    {
+                        "increment_flag": "goblins_spared",
+                        "by": 4
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Get the wagon moving.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "she_takes_the_wagon": [
+            {
+                "text": "\"Then it is mine,\" Nakka says, and it is off the road in six minutes with no shouting at all. \"You have bought something. I do not know what yet. Come to the cut when you have decided.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "nakka_owes_you"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Let it go.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "she_walks_away": [
+            {
+                "text": "Nakka considers you for a long moment, and then makes a flat gesture with one hand, and the whole raid goes back up the slope without a word. \"Not today,\" she says. \"I am short of people and you are not the wagon.\"",
+                "on_enter": [
+                    {
+                        "increment_flag": "goblins_spared",
+                        "by": 4
+                    },
+                    {
+                        "quest_stage": {
+                            "quest": "teeth_in_the_hills",
+                            "stage": "escorted_the_caravan"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Get the wagon moving.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "she_calls_it_on": [
+            {
+                "text": "\"No,\" says Nakka. \"You are talking because you are four and we are six, and I have been talked at by better while their friends got into position.\" The helm goes on. \"Take the wagon if you can hold it.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "teeth_in_the_hills",
+                            "stage": "ambushed_the_raiders"
+                        }
+                    },
+                    {
+                        "start_combat": "hills_raiders"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Draw.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "come_to_the_hall": [
+            {
+                "text": "\"The cut, then,\" Nakka says. \"Up the winding shaft, past the timber, and tell the one at the barricade that Skarn said the word 'ledger'. He will not like it and he will let you through.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "quarry_pact",
+                            "stage": "the_warren_mouth"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "The cut, then.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "gate_hail": [
+            {
+                "conditions": [
+                    {
+                        "flag": "nakka_owes_you"
+                    }
+                ],
+                "text": "The bugbear at the timber looks at you, looks up at the spoil heap, and moves the bar without being told. Nakka is already halfway down. \"You bought something,\" she says. \"Come and spend it.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "quarry_pact",
+                            "stage": "the_warlords_hall"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Go in.",
+                        "next": "the_hall"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "reed_writ_given"
+                    }
+                ],
+                "text": "You put Reed's writ on the timber. Nakka reads it from the other side of the barricade without picking it up. \"A seal,\" she says. \"That is the first seal anybody has brought up this cut in four years, and it means your captain will admit to knowing you, and that is worth more to me than what it says.\"",
+                "choices": [
+                    {
+                        "label": "Then let us in.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "quarry_pact",
+                                    "stage": "the_warlords_hall"
+                                }
+                            }
+                        ],
+                        "next": "the_hall"
+                    },
+                    {
+                        "label": "Force it.",
+                        "effects": [
+                            {
+                                "start_combat": "warren_gate"
+                            }
+                        ],
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "met_nakka"
+                    }
+                ],
+                "text": "\"You again,\" Nakka says over the timber. \"Down here it is different. Up on the trail I could afford to be curious. Behind this I have three hundred and a reason.\"",
+                "choices": [
+                    {
+                        "label": "Skarn said the word 'ledger'.",
+                        "conditions": [
+                            {
+                                "flag": "knows_paymaster"
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "quarry_pact",
+                                    "stage": "the_warlords_hall"
+                                }
+                            }
+                        ],
+                        "next": "the_hall"
+                    },
+                    {
+                        "label": "I want to talk. Properly. Inside.",
+                        "check": {
+                            "skill": "persuasion",
+                            "dc": 16,
+                            "on_success": "the_gate_opens",
+                            "on_failure": "the_gate_holds"
+                        }
+                    },
+                    {
+                        "label": "Force it.",
+                        "effects": [
+                            {
+                                "start_combat": "warren_gate"
+                            }
+                        ],
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "A voice from behind the timber, flat and unhurried, in trade-tongue: \"You have come up a cut with one way out of it and stopped in front of a wall. Say something interesting in the next few seconds.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_nakka"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "I know who's been paying you.",
+                        "conditions": [
+                            {
+                                "flag": "knows_paymaster"
+                            }
+                        ],
+                        "next": "the_gate_opens"
+                    },
+                    {
+                        "label": "I want to talk to whoever is in charge.",
+                        "check": {
+                            "skill": "persuasion",
+                            "dc": 16,
+                            "on_success": "the_gate_opens",
+                            "on_failure": "the_gate_holds"
+                        }
+                    },
+                    {
+                        "label": "Force it.",
+                        "effects": [
+                            {
+                                "start_combat": "warren_gate"
+                            }
+                        ],
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_gate_opens": [
+            {
+                "text": "The bar comes off. Nobody looks pleased about it. \"Weapons stay on you,\" Nakka says, \"because if I take them you will spend the whole conversation thinking about them. Walk in the middle. Do not touch the props.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "quarry_pact",
+                            "stage": "the_warlords_hall"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Walk in.",
+                        "next": "the_hall"
+                    }
+                ]
+            }
+        ],
+        "the_gate_holds": [
+            {
+                "text": "\"No,\" says the voice. \"You have said nothing interesting.\" Something scrapes on the far side of the timber, and it is not one thing. \"Go back down the cut. If you are still in it when I next look, that is your answer to me and mine to you.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "nakka_dismissed_you"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Force it.",
+                        "effects": [
+                            {
+                                "start_combat": "warren_gate"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "Go back down the cut.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_hall": [
+            {
+                "conditions": [
+                    {
+                        "flag": "goblins_spared",
+                        "at_least": 4
+                    }
+                ],
+                "text": "\"Sit,\" Nakka says, and there is a stool, and it has been put there on purpose. \"You have let mine go past you twice on the trail. I have had that counted for me. So we begin from somewhere other than the beginning, which is a luxury.\"",
+                "choices": [
+                    {
+                        "label": "Talk to me about the man in the good coat.",
+                        "next": "the_paymaster_named"
+                    },
+                    {
+                        "label": "I want a truce.",
+                        "next": "truce_terms"
+                    },
+                    {
+                        "label": "I came to end this.",
+                        "next": "the_choice"
+                    },
+                    {
+                        "label": "Before any of that. Tell me about the warren itself.",
+                        "next": "the_warren_business"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "nakka_dismissed_you"
+                    }
+                ],
+                "text": "\"You,\" Nakka says. \"I told you to go down the cut and you have come further up it instead.\" She does not sit down. \"I have decided to find that interesting rather than insulting. Do not make me revise it.\"",
+                "choices": [
+                    {
+                        "label": "Talk to me about the man in the good coat.",
+                        "next": "the_paymaster_named"
+                    },
+                    {
+                        "label": "I want a truce.",
+                        "next": "truce_terms"
+                    },
+                    {
+                        "label": "I came to end this.",
+                        "next": "the_choice"
+                    },
+                    {
+                        "label": "Before any of that. Tell me about the warren itself.",
+                        "next": "the_warren_business"
+                    }
+                ]
+            },
+            {
+                "text": "The hall was a quarrymen's mess and it still smells of it. There is a slate on the wall with a tally on it, kept daily in the same hand: salt, iron, days. \"Say it,\" Nakka says. \"Whatever you came up here holding. Say it before you look at anything else, because after you have looked at everything else you will say a smaller version.\"",
+                "choices": [
+                    {
+                        "label": "Talk to me about the man in the good coat.",
+                        "next": "the_paymaster_named"
+                    },
+                    {
+                        "label": "I want a truce.",
+                        "next": "truce_terms"
+                    },
+                    {
+                        "label": "I came to end this.",
+                        "next": "the_choice"
+                    },
+                    {
+                        "label": "Before any of that. Tell me about the warren itself.",
+                        "next": "the_warren_business"
+                    }
+                ]
+            }
+        ],
+        "the_paymaster_named": [
+            {
+                "conditions": [
+                    {
+                        "flag": "knows_paymaster"
+                    }
+                ],
+                "text": "\"Marrow,\" says Nakka, without hesitating. \"He came up the trail himself, the first time, alone, in a coat that cost more than the wagon he was asking me to burn.\" She taps the slate. \"He pays in salt and iron because he knows I cannot buy salt and iron. He is the only one of you who worked out what we actually need.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "nakka_named_him"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera: \"He came himself. He never does anything himself.\" Nakka: \"He did this himself.\""
+                    },
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"Salt, iron, and a quarter of the load. She has been provisioning against a siege since the year she came up.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Would you say that in Rivermark?",
+                        "next": "truce_terms"
+                    },
+                    {
+                        "label": "It doesn't change what you did to those carters.",
+                        "next": "the_choice"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "hollis_rattled"
+                    }
+                ],
+                "text": "\"You have a shape and no name,\" Nakka observes. \"You have been leaning on somebody and he has leaned back or you would not be up here.\" She almost smiles. \"Go and get the name. I am not going to hand you the one thing I am being paid for.\"",
+                "choices": [
+                    {
+                        "label": "Then a truce, for now.",
+                        "next": "truce_terms"
+                    },
+                    {
+                        "label": "I came to end this.",
+                        "next": "the_choice"
+                    },
+                    {
+                        "label": "Before any of that. Tell me about the warren itself.",
+                        "next": "the_warren_business"
+                    }
+                ]
+            },
+            {
+                "text": "\"There is no man in a good coat,\" Nakka says, comfortably. \"There are goblins on a hill and they are hungry and that has always been enough of a story for your town.\"",
+                "choices": [
+                    {
+                        "label": "Then a truce.",
+                        "next": "truce_terms"
+                    },
+                    {
+                        "label": "I came to end this.",
+                        "next": "the_choice"
+                    },
+                    {
+                        "label": "Before any of that. Tell me about the warren itself.",
+                        "next": "the_warren_business"
+                    }
+                ]
+            }
+        ],
+        "truce_terms": [
+            {
+                "conditions": [
+                    {
+                        "flag": "nakka_named_him"
+                    }
+                ],
+                "text": "\"A truce is easy,\" Nakka says. \"I want salt, I want iron, I want the north ford left open and nobody counting my people at your gate. Your captain can have the road and every carter on it.\" She leans forward. \"What I will not do is go down there and stand in your market and say his name. That is not a truce, that is me putting my head in your town.\"",
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"Then it stays a rumour, and in a year they will say the goblins made it up.\""
+                    },
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa, arms folded: \"We could just take the hall. That's still on the table and everyone here knows it.\""
+                    },
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric: \"If she says it in front of the town, no one can un-say it. That is worth a risk. Hers, admittedly.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Come down and say it. I'll stand next to you the whole time.",
+                        "check": {
+                            "skill": "persuasion",
+                            "dc": 16,
+                            "on_success": "the_pact",
+                            "on_failure": "she_wont_come_down"
+                        }
+                    },
+                    {
+                        "label": "Send the manifest instead. You keep your hall, I read it out.",
+                        "conditions": [
+                            {
+                                "flag": "hills_pattern"
+                            }
+                        ],
+                        "next": "the_pact"
+                    },
+                    {
+                        "label": "Then there's nothing to talk about.",
+                        "next": "the_choice"
+                    }
+                ]
+            },
+            {
+                "text": "\"Truce with what,\" Nakka says. \"You have brought me nothing. A truce is two people each giving up a thing, and you have arrived holding a sword and an opinion.\" She points at the slate. \"Salt. Iron. The north ford. Bring me one of those or bring me the name of the man who already does.\"",
+                "choices": [
+                    {
+                        "label": "I'll find the name.",
+                        "end": true
+                    },
+                    {
+                        "label": "Then we do it the other way.",
+                        "next": "the_choice"
+                    }
+                ]
+            }
+        ],
+        "she_wont_come_down": [
+            {
+                "text": "\"No.\" Nakka stands. \"I have three hundred and they eat whether or not I am alive to watch them. I am not walking into a town that has been calling me a raid for four years on the promise that one of you will stand near me.\" A pause. \"Bring me something written. Your kind believe writing.\"",
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera, immediately: \"The manifest. She's got the manifest. That's written and it's in his clerk's hand and I can prove whose.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Then give me the manifest and stay in your hall.",
+                        "conditions": [
+                            {
+                                "flag": "hills_pattern"
+                            }
+                        ],
+                        "next": "the_pact"
+                    },
+                    {
+                        "label": "I'll bring you something.",
+                        "end": true
+                    },
+                    {
+                        "label": "Or we finish it now.",
+                        "next": "the_choice"
+                    }
+                ]
+            }
+        ],
+        "the_pact": [
+            {
+                "text": "It takes four days. Nakka comes as far as the east gate and no further, with two of hers and the manifest, and Reed reads it out on the weighing floor with Marrow standing on his own scales. He is still explaining that it is a lawful instrument when they take him. Half the market cheers. The other half goes home and shuts the door, and both halves are still in Rivermark tonight, which is the whole of what you have bought.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "quarry_pact",
+                            "stage": "pact"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"Two years I have written 'they were pushed' in a book nobody reads. Today somebody read it.\""
+                    },
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa is not celebrating. \"They'll be back over that ridge in five years,\" she says. \"I hope I'm wrong. I've been wrong before, twice.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Done.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_choice": [
+            {
+                "text": "Nakka puts the helm on. \"Then say it plainly and I will have the same courtesy off you that I have given you,\" she says. \"You are in my hall. If it is steel, it is steel, and I will meet you in the doorway because it is the only place in here worth two of me.\"",
+                "interjections": [
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa is already moving to the left. \"Doorway,\" she says. \"She's right, it's the doorway.\""
+                    },
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse has not drawn. \"Do not,\" she says. \"Please. Not this one.\""
+                    },
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric steps back and starts, quietly, on the words he says over people afterward. He has begun early. He does that when he thinks it is going to be bad."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Steel, then.",
+                        "effects": [
+                            {
+                                "start_combat": "warlord_hall"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "No. Sit down. We're not finished talking.",
+                        "check": {
+                            "skill": "persuasion",
+                            "dc": 19,
+                            "on_success": "truce_terms",
+                            "on_failure": "no_more_talking"
+                        }
+                    },
+                    {
+                        "label": "Walk out of the hall.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "no_more_talking": [
+            {
+                "text": "\"You have had the talking,\" Nakka says. \"You have had more of it than anyone from down there has ever had off me, and I gave it to you because I am tired, and being tired is not a policy.\" The bugbears come off the wall. \"Doorway.\"",
+                "on_enter": [
+                    {
+                        "start_combat": "warlord_hall"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Doorway.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_deep_after": [
+            {
+                "conditions": [
+                    {
+                        "flag": "deep_shaft_fate",
+                        "equals": "sealed"
+                    }
+                ],
+                "text": "\"Closed,\" Nakka says. \"Properly closed, with your warden's props and my timber, and nothing has come up it in eleven weeks.\" She looks at the slate out of habit. \"I have started writing down the days again. I stopped, for a while.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "deep_shaft_fate",
+                        "equals": "sounded"
+                    }
+                ],
+                "text": "\"You went down and looked,\" Nakka says, \"and you came up, and you have not told your captain, and I know that because your captain still sleeps.\" She turns the slate to the wall. \"Neither have I. We are going to have to, one of us, before the spring.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "deep_known"
+                    }
+                ],
+                "text": "\"Shut,\" Nakka says. \"Still shut. Still cutting.\" She does not elaborate and does not need to. \"Your town has a year of not thinking about it. Spend it well.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "\"The deep is the deep,\" Nakka says, \"and you have not asked me about it once, and I have noticed.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_warren_business": [
+            {
+                "text": "Nakka Skarn puts both hands flat on the table, which is what she does instead of sighing.\n\n\"There are three things and you may have all three,\" she says, \"because I have worked out that a valley which does not know them is a valley that will guess, and its guesses have cost me eleven people this year.\"\n\nShe counts them off without any ceremony at all.\n\n\"What is in the low gallery. Where this armour came from. And what is underneath us, which is the one I would rather you did not ask about and the one you will ask about.\"",
+                "choices": [
+                    {
+                        "label": "What's in the low gallery?",
+                        "next": "the_children"
+                    },
+                    {
+                        "label": "Where did the plate come from?",
+                        "next": "the_plate_asked"
+                    },
+                    {
+                        "label": "What's underneath us?",
+                        "conditions": [
+                            {
+                                "level_at_least": 4
+                            }
+                        ],
+                        "next": "the_floor"
+                    },
+                    {
+                        "label": "None of it. Not today.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_children": [
+            {
+                "conditions": [
+                    {
+                        "quest": "the_warrens_children",
+                        "status": "active"
+                    }
+                ],
+                "text": "\"Walk it, then,\" Nakka says, and gets up.\n\nThe low gallery is two levels the quarrymen cut for spoil, and every foot of both of them is bedding. Hide, sacking, straw, stripped cart-canvas, laid in bays with a hand's width of walkway between them. It is warm. It is loud. The noise is the wrong noise for a warren, because it is the noise of a great many things that are too small to be quiet and too many to be hushed.\n\nShe lets you get about four paces in before she says anything.\n\n\"Now count.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "warren_nests_seen"
+                    },
+                    {
+                        "quest_stage": {
+                            "quest": "the_warrens_children",
+                            "stage": "a_hundred_and_ten"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse counts. She gets to the end of the first bay and stops and starts again, and the second time she counts out loud, and Nakka lets her."
+                    },
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa has not gone past the entry. \"I'm not coming down there,\" she says. \"Not because of them. Because of me.\""
+                    },
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric: \"How many.\" Nakka: \"A hundred and ten under six winters. Of four hundred and six. You may check me; I would rather you did.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "What happens to them in the winter?",
+                        "next": "the_children_numbers"
+                    },
+                    {
+                        "label": "Go back up.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "\"Young,\" Nakka says. \"That is what is in the low gallery. A hundred and ten of them under six winters, out of four hundred and six of us above ground, and I will show you and I will not do it twice, so decide now whether you are the sort of person who is going to be able to look at it.\"\n\nShe waits.\n\n\"Your captain has been counting my fighting strength for two years. Nobody in your valley has ever asked me the other number.\"",
+                "on_enter": [
+                    {
+                        "start_quest": "the_warrens_children"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Show me.",
+                        "next": "the_children"
+                    },
+                    {
+                        "label": "Not now.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_children_numbers": [
+            {
+                "text": "\"Four miles,\" Nakka says. \"That is how far a goblin child can be walked in a day, and it is nothing below freezing, and there is nowhere inside four miles of here that is not yours.\"\n\nShe puts her back against the gallery wall.\n\n\"So we cannot move before spring and we cannot feed ourselves here past midwinter. I have known that since the summer. It is why I have been buying salt and iron and not food, because you cannot store food you have not got, and salt keeps what little there is and iron gets more.\"\n\nA pause.\n\n\"I have run out of arithmetic. That is not a thing I say.\"",
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera: \"There is a north ford. Nobody holds it, because nobody has ever needed to.\" Nakka looks at her for a long moment and says nothing at all."
+                    },
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric: \"Eleven wagons would carry them to spring.\" Nakka: \"Eleven wagons would also be seen going up this trail by every soul in your town.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Then we open the north ford and you go over it.",
+                        "next": "children_moved"
+                    },
+                    {
+                        "label": "Then you stay and we feed you through the winter.",
+                        "next": "children_fed"
+                    },
+                    {
+                        "label": "Reed should know exactly where these galleries are.",
+                        "next": "children_told"
+                    },
+                    {
+                        "label": "I need to think about this.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "children_moved": [
+            {
+                "text": "The north ford is passable to a slow column for eleven days either side of midwinter and nobody in Rivermark holds it, which is exactly why nobody in Rivermark had thought about it.\n\nIt takes walking, marking, and one bad afternoon at the weighing floor getting Reed to put in writing that the watch will not post the crossing until spring — not to help, she is very clear about that, but not to be the reason.\n\nA hundred and ten children go over it in three nights. Nakka Skarn does not thank anybody and does not sleep for the three nights, and is at the far end of the ford on the third one counting them off on a slate.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_warrens_children",
+                            "stage": "moved_them_north"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse works the third night at the far bank and does not come back across until the last one is over. She does not say anything about it afterwards, ever."
+                    },
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa: \"They'll be a problem somewhere else in five years.\" She carries two of them across the shallow part anyway."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Count them off.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "children_fed": [
+            {
+                "text": "Eleven wagons over five weeks: pease, barley and salt fish, bought at market price with your own money and one loan you would rather not describe, delivered to the warren gate in daylight where anybody who wanted to could stand on the ridge and count them.\n\nPlenty do.\n\nRivermark has an opinion about it and half of the opinion is that you are provisioning a siege against your own town. Nakka takes delivery herself every time, in the open, with the helm off, which is the only part of it she is doing for the valley's benefit.\n\nThey stay where they are. In spring the same problem will still be there, four months older.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_warrens_children",
+                            "stage": "fed_them_through"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric walks alongside the fourth wagon the whole way up in daylight, deliberately, where the ridge can see him."
+                    },
+                    {
+                        "companion": "sera",
+                        "text": "Sera: \"You have bought them a winter at market price and made yourself the story instead of them. I do not know whether that was clever or the opposite.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Unload the last wagon.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "children_told": [
+            {
+                "text": "Reed writes it down: where the galleries are, how you get to them, what is in them, and the second column.\n\nShe asks you twice whether you are certain about the second column. You say you are.\n\nShe does not do anything with it. She has it, and she will have it in the spring, and having it is the whole of what you did.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_warrens_children",
+                            "stage": "told_the_watch"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse is not in the room when it is written down and is not with the party the following morning, and comes back, and does not raise it."
+                    },
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa: \"She'll not use it.\" A pause. \"She'll not use it this year.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Watch her write it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_plate_asked": [
+            {
+                "conditions": [
+                    {
+                        "quest": "nakkas_plate",
+                        "status": "active"
+                    }
+                ],
+                "text": "\"Three suits,\" Nakka says. \"I have said this to you before and you did not hear the number.\"\n\nShe puts a gauntlet on the table and turns it over.\n\n\"The greaves came off a field north of here, eleven years ago, off a man I can describe. The breast came off the same field. Both of those I will account for down to the furrow.\"\n\nShe stops.\n\n\"The third suit came up the trail in a crate. Planed pine. Straw still in it. Four winters ago, in the week we came up out of the deep, and I was told to take it.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "nakkas_plate",
+                            "stage": "the_crate_it_came_in"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa: \"Told by who?\" Nakka: \"By a man in a good coat who walked up my trail on his own. You have heard me describe him before. He does not come twice.\""
+                    },
+                    {
+                        "companion": "sera",
+                        "text": "Sera: \"Somebody sent armour to the thing your town was about to be frightened of.\" Nakka: \"Yes. I have had four years on that sentence and it has not got better.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "The stores still have the crate. Show me.",
+                        "next": "the_crate"
+                    },
+                    {
+                        "label": "Later.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "\"Everyone in your valley thinks I took this off a dead man,\" Nakka says. \"That is a comfortable thing to think and I have never corrected it, because the correction is worse.\"\n\nShe knocks a knuckle against the breastplate.\n\n\"It is three suits. Two of them I can account for. If you want the third you may have it, and then it is yours to carry as well as mine.\"",
+                "on_enter": [
+                    {
+                        "start_quest": "nakkas_plate"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Tell me about the third.",
+                        "next": "the_plate_asked"
+                    },
+                    {
+                        "label": "Keep it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_crate": [
+            {
+                "text": "The stores are dry because they were cut dry, and the door still hangs true, and along the back wall there are crates that never came off anything burned on the east road: planed pine, clean straw, opened carefully from the top rather than smashed.\n\nOne of them still has the batten marks on it — three notches cut by a carter who marks his own, and a scar across the boards where strapping has bitten and been cut off.\n\n\"That one,\" Nakka says. \"I have kept it four years because I did not know what else to do with a thing like that.\"",
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera runs a thumb along the strapping scar. \"Strapping,\" she says. \"Rivermark's quay does not strap. Rivermark's quay ropes. This came off a river landing that is not ours.\""
+                    },
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"Three notches on the batten. That is a carter's own mark and carters keep their marks for life. Somebody alive cut that.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Then I'll trace the crate.",
+                        "next": "plate_traced"
+                    },
+                    {
+                        "label": "Take the pauldron off. I want to see the inside of it.",
+                        "next": "plate_given"
+                    },
+                    {
+                        "label": "It's four years old and it's yours. Keep it.",
+                        "next": "plate_left"
+                    }
+                ]
+            }
+        ],
+        "plate_traced": [
+            {
+                "text": "It takes eleven days and most of it is asking carters at the fold and on the east road, one at a time, about three notches and a strapping scar.\n\nThe crate came up the east road. Before the east road it came off a river landing, and the landing it came off is not Rivermark's, because Rivermark's quay ropes and does not strap.\n\nThat is as far as it goes. Nobody you ask will take it any further. Two of them stop talking to you altogether, and one of those is a man you have bought salt from for a month.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "nakkas_plate",
+                            "stage": "traced_the_crate"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera: \"They are not frightened of the goblins.\" She says it on the road, in daylight, and then does not finish the thought out loud."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Stop asking.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "plate_given": [
+            {
+                "text": "She unbuckles the left pauldron in front of you, which takes a while, because the straps have been shortened three times and one of the shortenings was done badly and in a hurry.\n\nInside, on the lining plate, where it would never be seen by anybody wearing it or fighting it: a small clean mark punched into the steel. A plumb-line and a square.\n\nShe has been wearing it for four years.\n\n\"What is that,\" Nakka says.\n\nYou do not know. You say so.\n\n\"Good,\" she says, after a moment. \"That is the first honest answer I have had off your valley all year.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "nakkas_plate",
+                            "stage": "she_took_it_off"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse looks at it for a long time and does not say anything, and later that night writes something in her book and does not read it out."
+                    },
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric: \"That is a maker's mark.\" He turns it to the light. \"It is not a maker's mark. A maker puts his mark where it can be seen.\""
+                    },
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa: \"It's on the inside.\" She hands it back. \"Nothing goes on the inside unless it's for whoever's counting, not whoever's wearing.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Take it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "plate_left": [
+            {
+                "text": "\"Then it stays where it is,\" Nakka says, and buckles the strap back down, and takes rather longer over it than the buckle needs.\n\nShe looks at you for slightly too long afterwards.\n\n\"You are the first one who has not wanted it,\" she says. \"I have not decided what that means about you and I am going to.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "nakkas_plate",
+                            "stage": "let_it_be"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Let her decide.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_floor": [
+            {
+                "conditions": [
+                    {
+                        "quest": "the_bottom_of_the_warren",
+                        "status": "active"
+                    }
+                ],
+                "text": "The lowest gallery rings hollow underfoot for its whole width, and then it stops being a floor and there is a hole thirty feet across with a great deal of nothing under a great deal of stone.\n\nEleven props. Good ones, set by people who have been mining longer than Rivermark has been a town. Not enough of them.\n\n\"Look at the edge,\" Nakka says. \"That is what I brought you down for and I want you to say it, not me.\"\n\nThe edge is dressed. Every foot of the rim. Stone that falls breaks along its bedding and leaves a shelf; this has no shelf. Somebody took this floor out from underneath, working upward, and stopped when they came through.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_bottom_of_the_warren",
+                            "stage": "the_edge_is_cut"
+                        }
+                    },
+                    {
+                        "set_flag": "deep_known"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse gets down on the rim with a lamp held out over thirty feet of nothing. \"Cut,\" she says. \"All the way round. From below.\""
+                    },
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric: \"Four winters ago you walked out of the deep in a week.\" Nakka: \"We did. This is the fourth floor we have lost since. They are working upward and they are not in a hurry.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Put a rope down. I want to see what's under it.",
+                        "next": "floor_sounded"
+                    },
+                    {
+                        "label": "We shore this gallery properly. You keep the level.",
+                        "next": "floor_shored"
+                    },
+                    {
+                        "label": "Eleven props and a hole. It's not my floor.",
+                        "next": "floor_left"
+                    }
+                ]
+            },
+            {
+                "text": "Nakka does not answer straight away, which she has not done once in any conversation you have had with her.\n\n\"There is a gallery below this hall,\" she says, \"and it has a hole in it, and the hole was not made by the hill. I have lost four floors in four years and each one has gone the same way and each one has gone from underneath.\"\n\nShe stands.\n\n\"You have asked. I am going to show you, and after that you will not be able to stop knowing it, and I want that on your account and not mine.\"",
+                "on_enter": [
+                    {
+                        "start_quest": "the_bottom_of_the_warren"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Show me.",
+                        "next": "the_floor"
+                    },
+                    {
+                        "label": "Not yet.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "floor_sounded": [
+            {
+                "text": "Down on the goblins' rope as far as the first landing.\n\nAnd there is a landing. That is the part that stays with you. Not a cave, not a fissure, not a void. A landing, cut square, with a stair going down off it, and the stair swept.\n\nAir comes up it. The air is moving, and it is warm, and it smells of lamp-oil and rock dust and, faintly, of food.\n\nYou come back up. The rope stays where it is.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_bottom_of_the_warren",
+                            "stage": "sounded_the_floor"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse is the last one up the rope. \"The stair is swept,\" she says, at the top, to nobody in particular. \"Somebody sweeps it.\""
+                    },
+                    {
+                        "companion": "sera",
+                        "text": "Sera: \"Lamp oil.\" She says it twice on the way back up the shaft. \"That is not a thing that lives in a hole. That is a payroll.\""
+                    },
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa came up second and has not put the axe away and does not put it away for the rest of the day."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Leave the rope.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "floor_shored": [
+            {
+                "text": "Two days, the warren's own timber, and a great deal of advice from goblins who have been cutting stone since before Rivermark had a wall.\n\nThe gallery will hold. That buys them the level, and the level buys them the winter, and Nakka works the second day alongside everybody else with the plate off and does not say anything about it afterwards.\n\nIt also means nothing else comes up through it.\n\nThe rope is on your side of the hole.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_bottom_of_the_warren",
+                            "stage": "shored_it"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa spends the second day passing timber to a goblin about a third her size who corrects her grip twice and is right both times."
+                    },
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"You have shut a door that only opens one way.\" Nakka: \"Yes. That is what a floor is.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Set the last prop.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "floor_left": [
+            {
+                "text": "\"No,\" Nakka agrees. \"It is not your floor.\"\n\nYou go back up and tell her what you saw from the rim, which is: a great deal of nothing, air moving, and an edge cut square.\n\n\"Thank you,\" she says, which she does not often say, and goes back to the slate and counts the day onto it.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_bottom_of_the_warren",
+                            "stage": "let_it_go"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Go up.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_arithmetic": [
+            {
+                "text": "\"Because a party of adventurers who died in my hall is a reason,\" Nakka says. \"A party of adventurers who were beaten and put outside is an embarrassment, and your town does not march on embarrassments.\" She goes back to the food. \"Also I am short of people. I have said that to you before and you did not hear it either time.\"",
+                "choices": [
+                    {
+                        "label": "Go down the cut.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

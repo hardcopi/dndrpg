@@ -1,0 +1,61 @@
+{
+    "npc_key": "brenna_smith",
+    "name": "Brenna Coalwright",
+    "role": "Smith",
+    "description": "Owns the Anvil, the fire in it, and rather less of the building than she used to.",
+    "sprite_key": "smith",
+    "is_merchant": true,
+    "is_quest_giver": true,
+    "dialog": "brenna_smith",
+    "shop": [
+        {
+            "item": "mace",
+            "stock": 2
+        },
+        {
+            "item": "shortsword",
+            "stock": 2
+        },
+        {
+            "item": "longsword",
+            "stock": 1
+        },
+        {
+            "item": "greataxe",
+            "stock": 1
+        },
+        {
+            "item": "chain_shirt",
+            "stock": 1
+        },
+        {
+            "item": "silvered_shortsword",
+            "stock": 1,
+            "markup_pct": 115
+        },
+        {
+            "item": "longbow",
+            "stock": 1
+        },
+        {
+            "item": "spear",
+            "stock": 2
+        },
+        {
+            "item": "halberd",
+            "stock": 1
+        },
+        {
+            "item": "javelin",
+            "stock": 4
+        },
+        {
+            "item": "shield_warded",
+            "stock": 1,
+            "markup_pct": 120
+        }
+    ],
+    "place": {
+        "location": "the_anvil"
+    }
+}

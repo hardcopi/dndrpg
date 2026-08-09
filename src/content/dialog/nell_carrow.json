@@ -1,0 +1,120 @@
+{
+    "npc_key": "nell_carrow",
+    "start": "hail",
+    "nodes": {
+        "hail": [
+            {
+                "once": true,
+                "text": "She does not run, and she does not call out. She looks at each of you in turn, taking her time, working out whether you are the kind of thing that comes down here or the kind of thing that comes down here after it.\n\nThen, in a very small flat voice: \"Is it still up there? The street.\"",
+                "choices": [
+                    {
+                        "label": "It's still there. We'll take you to it.",
+                        "next": "take_you_up"
+                    },
+                    {
+                        "label": "How did you get out?",
+                        "next": "how_out"
+                    }
+                ],
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "oldcity_the_missing_children",
+                            "stage": "found_the_girl"
+                        }
+                    },
+                    {
+                        "set_flag": "oldcity_nell_found"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "jimmy_able",
+                        "text": "Jimmy: \"She hid eight days in my block once and thinks I didn't know. Let her keep that. It's the only thing down here she ever got for free.\"",
+                        "once": true
+                    }
+                ]
+            },
+            {
+                "text": "Nell has got up. She stays a careful arm's length back, and she is watching the way you came in rather than you.",
+                "choices": [
+                    {
+                        "label": "Tell me about the others.",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Stay here. We'll come back for you.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "how_out": [
+            {
+                "text": "\"The pot's not for cooking in all the time,\" she says. \"Sometimes it's just hot. He was asleep and the dog was out and I went along the wall where it's wet, because the wet bit doesn't crunch.\"\n\nShe says this the way you would give directions.\n\n\"I've been counting. It's been four sleeps. But I don't think I sleep proper so it might be two.\"",
+                "choices": [
+                    {
+                        "label": "Tell me about the others.",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "It's still there. We'll take you up.",
+                        "next": "take_you_up"
+                    }
+                ]
+            }
+        ],
+        "the_others": [
+            {
+                "text": "\"Two boys. They're in the sticks bit at the back. One of them's Anners' and one's the Reddick boy and the Reddick boy won't stop crying, which is why the dog sits by them.\"\n\nShe considers.\n\n\"There's a lot of shoes. More than three of us. A lot more than three.\"",
+                "choices": [
+                    {
+                        "label": "What keeps you there?",
+                        "next": "what_keeps"
+                    },
+                    {
+                        "label": "We'll get them out.",
+                        "end": true
+                    }
+                ],
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "oldcity_the_missing_children",
+                            "stage": "found_the_boys"
+                        }
+                    }
+                ]
+            }
+        ],
+        "what_keeps": [
+            {
+                "text": "\"He's big and he's got a shirt made of rings and he doesn't talk. The dog talks. Not words — but it looks at him and he does what it wants, sometimes. It's got a collar with a pattern that makes your eyes go funny.\"\n\n\"Don't look at the collar,\" she advises.",
+                "choices": [
+                    {
+                        "label": "We'll remember.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "take_you_up": [
+            {
+                "text": "She thinks about it properly, which takes a moment, and then puts her hand up to be held — not out of trust, you think, but because it is the procedure for going somewhere with a grown-up and she is going to do this correctly.",
+                "choices": [
+                    {
+                        "label": "Come on, then.",
+                        "end": true,
+                        "effects": [
+                            {
+                                "approval": {
+                                    "jimmy_able": 8
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}

@@ -1,0 +1,13 @@
+{
+    "npc_key": "gest_pyle",
+    "name": "Gest Pyle",
+    "role": "Road Relief, Rivermark Watch",
+    "description": "The watchman who walks the eastern boundary once a fortnight and carries the hill warden's tallies down to town. He has been carrying a book he cannot read for two years.",
+    "sprite_key": "gest_pyle",
+    "image_url": "assets/images/npcs/captain.png",
+    "is_quest_giver": true,
+    "dialog": "gest_pyle",
+    "place": {
+        "location": "boundary_stone"
+    }
+}

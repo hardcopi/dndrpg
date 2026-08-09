@@ -1,0 +1,150 @@
+{
+    "region_key": "the_deepworks",
+    "module": "rivermark",
+    "name": "The Deepworks",
+    "region_type": "dungeon",
+    "description": "An excavation under the goblin warren, forty feet below the bottom of the old quarry. It is timbered, drained, lit, victualled and worked in shifts, and nobody in Rivermark has ever heard of it.",
+    "sort_order": 50,
+    "locations": {
+        "spoil_stair": {
+            "name": "The Spoil Stair",
+            "type": "room",
+            "map_pos": [12, 18],
+            "allow_camp": true,
+            "description": "The warren's floor has not fallen in. It has been taken out, in courses, and replaced with a stair — sawn treads, a handrail, a rope on iron pins, and a landing every twenty feet with a bucket of sand on it in case of fire. The timber is new enough to still smell of the yard it came from. Somebody carried all of this down here a plank at a time, and somebody else signed for it.",
+            "first_visit": "You have been expecting a hole. It is a staircase. Below you, a long way down and quite steady, there is lamplight, and the sound of a hundred people working.",
+            "ambience": [
+                "The rope on the pins creaks under nobody's hand.",
+                "Someone far below counts something aloud and is answered.",
+                "Sand shifts in the fire bucket as the draught changes.",
+                "Every tread is numbered on the riser, in chalk, in the same hand."
+            ],
+            "exits": [
+                {"to": "deep_shaft", "label": "Back up into the warren"},
+                {"to": "broken_floor", "label": "Back up through the broken floor"},
+                {"to": "muster_yard", "label": "Down the stair"}
+            ]
+        },
+        "muster_yard": {
+            "name": "The Muster Yard",
+            "type": "room",
+            "map_pos": [30, 32],
+            "random_encounter_pct": 5,
+            "description": "A floor of laid plank the size of the market square, under a roof of props and packed spoil. A bell on a bracket. A board with a hundred numbered pegs in it, most of them turned. Two benches, a water butt with a chained cup, and a line painted on the boards that nobody crosses without being counted. The lamps are trimmed. The floor is swept.",
+            "first_visit": "Nobody stops you. Two men look up, decide you are somebody else's business, and go back to what they were doing. A bell rings once and forty people change direction.",
+            "ambience": [
+                "The bell goes once. Nobody hurries, and everybody moves.",
+                "A peg is turned on the board. Somebody's shift has started.",
+                "The water butt's chain rattles and settles.",
+                "A barrow goes past, full, and comes back empty, and goes past again."
+            ],
+            "exits": [
+                {"to": "spoil_stair", "label": "Back up the stair"},
+                {"to": "timekeepers_hut", "label": "To the timekeeper's hut"},
+                {"to": "deepworks_canteen", "label": "Along to the canteen"},
+                {"to": "the_headings", "label": "Out to the headings"}
+            ]
+        },
+        "timekeepers_hut": {
+            "name": "The Timekeeper's Hut",
+            "type": "room",
+            "map_pos": [20, 56],
+            "description": "A plank box with a window in it, warm, dry, and better lit than anywhere else down here. Inside: a water clock, a bell rope, a rack of tallies, and four ledgers that between them can say where any one of two hundred people was standing at any hour of any day for the last three years. The window faces the muster line. It has been positioned.",
+            "ambience": [
+                "The water clock lets a measure go with a click.",
+                "A tally is taken down, read, and hung on a different hook.",
+                "Rain that is not rain runs down the outside of the window.",
+                "Somebody outside waits to be spoken to, and goes on waiting."
+            ],
+            "exits": [
+                {"to": "muster_yard", "label": "Out to the muster yard"}
+            ]
+        },
+        "deepworks_canteen": {
+            "name": "The Canteen",
+            "type": "room",
+            "map_pos": [44, 60],
+            "inn_cost": 4,
+            "description": "Trestles, benches, two coppers of something, and a chalked board of prices with a second column beside it headed with a mark instead of a word. Bread is fourpence. Bread against wages is fivepence. Nobody argues about it; the argument was had years ago by people who are not here now. The room is loud in the way a room is loud when everyone in it is too tired to listen.",
+            "first_visit": "It smells of barley, wet wool and coal. Sixty people are eating. Not one of them looks at you for longer than it takes to decide you are not the overseer.",
+            "ambience": [
+                "The copper is stirred. The sound goes round the room and stops.",
+                "Somebody laughs, once, at the far end.",
+                "A man asleep sitting up is left where he is.",
+                "The second column on the price board is a halfpenny dearer than the first."
+            ],
+            "exits": [
+                {"to": "muster_yard", "label": "Back to the muster yard"}
+            ]
+        },
+        "the_headings": {
+            "name": "The Headings",
+            "type": "room",
+            "map_pos": [54, 24],
+            "random_encounter_pct": 10,
+            "description": "Six faces of raw rock being cut at once, each with its own lamp, its own barrow run and its own number painted on the prop beside it. The noise is enormous and completely regular — pick, pick, pick, and a barrow, and pick again. This is not a search. Nobody is looking for anything here. They are removing a known quantity of stone from a decided place at a rate somebody costed.",
+            "first_visit": "A hundred and something people, working. It goes back further than the lamps do.",
+            "ambience": [
+                "Pick, pick, pick, and a barrow, and pick again.",
+                "Somebody coughs for a long time and then goes back to it.",
+                "A prop is wedged tighter with two taps and a look.",
+                "Lamp black has settled on everything, evenly, like weather."
+            ],
+            "exits": [
+                {"to": "muster_yard", "label": "Back to the muster yard"},
+                {"to": "pump_gallery", "label": "Down the wet way"},
+                {"to": "overseers_office", "label": "Up the ladder to the office"}
+            ]
+        },
+        "pump_gallery": {
+            "name": "The Pump Gallery",
+            "type": "room",
+            "map_pos": [72, 48],
+            "random_encounter_pct": 20,
+            "description": "The works would be a lake without this room. Three chain-pumps turn day and night, driven by a horse gin somewhere above that nobody down here has ever seen, and the water they lift comes up grey and goes away along a launder into the dark. Where the launder leaks, things have started living. The pump crews carry sticks and do not talk about it.",
+            "first_visit": "The noise changes from work to water. The lamps here are caged, and the cages are dented.",
+            "ambience": [
+                "A chain-pump takes up its slack with a bang.",
+                "Something moves in the launder and stops moving.",
+                "The water comes up grey and smells of iron.",
+                "A caged lamp swings, and the shadows go round the room once."
+            ],
+            "exits": [
+                {"to": "the_headings", "label": "Back up to the headings"},
+                {"to": "the_undercut", "label": "Along the launder, into the old workings"}
+            ]
+        },
+        "overseers_office": {
+            "name": "The Overseer's Office",
+            "type": "room",
+            "map_pos": [86, 24],
+            "description": "A hut on a platform above the headings, reached by a ladder, with a shuttered window that opens on the whole works. Inside: a desk, a strongbox bolted through the floor, a shelf of bound volumes and a rack of rolled paper. Somebody has hung a coat on a nail and a good hat above it. From this window a man can see every face being cut and every barrow being pushed, and be seen doing it.",
+            "ambience": [
+                "The shutter is open. The works go on being watched.",
+                "The strongbox is bolted through the floor and through the joist.",
+                "A rolled paper is put back in the rack, in its place.",
+                "The good hat has not been worn underground once."
+            ],
+            "exits": [
+                {"to": "the_headings", "label": "Down the ladder"}
+            ]
+        },
+        "the_undercut": {
+            "name": "The Undercut",
+            "type": "room",
+            "map_pos": [80, 68],
+            "hidden_until_visited": true,
+            "description": "The old workings, from before the Concern's timber and the Concern's lamps: the hole the quarry made when it fell, three years of water in the bottom of it, and one face that has been cut at very carefully by people using hand tools and no picks. The rock here is the wrong colour and gives the wrong sound. Whatever the quarry came down on is behind that face, and the cutting is nearly through, and the men who did the cutting were paid by the day.",
+            "first_visit": "The pumps are behind you. The quiet down here is not the quiet of an empty room. It is the quiet of a room in which something has stopped.",
+            "ambience": [
+                "A drop falls into the standing water and is answered, late, from further in.",
+                "The cut face gives back the wrong sound when the stone shifts.",
+                "Hand tools are stacked against the wall, sharpened, and left.",
+                "There is a chalk line on the floor and nobody's footprints past it."
+            ],
+            "exits": [
+                {"to": "pump_gallery", "label": "Back along the launder"}
+            ]
+        }
+    }
+}

@@ -1,0 +1,12 @@
+{
+    "npc_key": "vessa_dann",
+    "name": "Vessa Dann",
+    "role": "Tally-Keeper of the Pit",
+    "description": "She holds the board, sets the odds, pays out and takes her tenth. Everyone who has ever fought here has been quoted a number by her, and nobody has ever been told how she got it.",
+    "sprite_key": "bard",
+    "is_quest_giver": true,
+    "dialog": "vessa_dann",
+    "place": {
+        "location": "fighting_pit"
+    }
+}

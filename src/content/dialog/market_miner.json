@@ -1,0 +1,17 @@
+{
+    "npc_key": "market_miner",
+    "start": "hail",
+    "nodes": {
+        "hail": [
+            {
+                "text": "Quarry's shut. Goblins. You want ore, somebody has to do something about that.",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

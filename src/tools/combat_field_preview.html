@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<!--
+  The whole combat board — rosters, battlefield, inspector, action bar — with
+  no fight running.
+
+  The board is four clicks and a won initiative roll away, and the parts worth
+  judging are the ones that need the fight to be in a particular state: an
+  inspector with somebody in it, an enemy roster long enough to scroll, a
+  reachable-cells overlay. Arranging that in the game to look at a layout is
+  slow, and it is why the inspector spent months covering the ground it was
+  describing without anybody sitting with it.
+
+  Nothing here is transcribed. `window.Combat.render()` is the function the
+  game calls, drawing the real markup against the real stylesheet; the fixture
+  is a `state.combat.state` of the shape CombatEngine actually serves. So a
+  layout fault visible here is a layout fault in a fight.
+
+  The right-hand rail is here because the inspector is: it is drawn into
+  `#cbt-inspector`, which is page furniture in `game.php` and not part of the
+  board. The rail is the same two-element stack the shell has in a fight — the
+  log, then the readout — under `body.in-combat`, which is the class every rule
+  about either of them is written against.
+
+  What is stubbed is `window.Game` — the handful of members ui-combat.js reads
+  off it — and `API`, which is refused outright: the two routes the board asks
+  for (`meta/rules`, `character/sheet`) both have documented empty-handed
+  paths, so refusing them exercises the board's own fallbacks rather than
+  inventing answers for it.
+
+    /tools/combat_field_preview.html            somebody hovered, mid-fight
+    /tools/combat_field_preview.html?idle=1     nobody pointed at
+    /tools/combat_field_preview.html?foes=8     an enemy column that scrolls
+
+  A drawing bench. It reads nothing and writes nothing.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Combat board — rosters, field, inspector</title>
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <style>
+    /* The shell in miniature: the board in the middle, the rail down the right.
+       Same shape `body.in-combat .game-shell` gives it in the game — the
+       inspector lives in that rail now, so a bench that drew only the board
+       would be drawing the half of this that did not change. */
+    body { margin: 0; padding: 0.8rem; background: var(--bg-inset); }
+    .bench-note {
+      color: var(--text-dim); font-size: 0.75rem; margin: 0 0 0.6rem;
+      font-family: var(--mono);
+    }
+    .bench-shell {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 300px;
+      /* The top line spans both columns, as it does in the shell. */
+      grid-template-rows: auto minmax(0, 1fr);
+      /* Row gap tight, column gap not — the same split the shell makes in a
+         fight, so the space above the board here is the space above it there. */
+      gap: 0.25rem 0.6rem;
+      height: calc(100vh - 3.4rem);
+    }
+    #cbt-top { grid-column: 1 / -1; grid-row: 1; }
+    .scene { grid-column: 1; grid-row: 2; }
+    .rail-right { grid-column: 2; grid-row: 2; }
+    #combat-root { display: flex; flex-direction: column; gap: 0.5rem; min-height: 0; min-width: 0;
+                   flex: 1 1 auto; }
+    /* `.scene`'s own rules come from the stylesheet; it only needs a height
+       here, which the shell gives it in the game. */
+    .scene { min-height: 0; }
+    .rail-right { display: flex; flex-direction: column; min-height: 0; }
+    .rail-bottom { flex: 1 1 auto; min-height: 0; }
+    .hud-log { flex: 1 1 auto; min-height: 0; }
+    .hud-log .log { flex: 1 1 auto; min-height: 0; max-height: none; }
+  </style>
+</head>
+<body class="game-page in-combat">
+  <p class="bench-note" id="note"></p>
+  <div class="bench-shell">
+    <!-- Shell furniture, like the rail below: ui-combat.js draws the turn order
+         into this by id, and it spans both columns so the ribbon gets the whole
+         width. -->
+    <div class="cbt-top" id="cbt-top"></div>
+    <!-- The scene column, as the shell builds it: the icon toolbar sits above
+         the screen and is NOT hidden in a fight, so the board starts below it.
+         Drawn here because a bench that leaves it out is a bench that lies
+         about how much room there is above the board. -->
+    <div class="scene">
+      <div class="topbar" role="toolbar" aria-label="Menu">
+        <div class="topbar-actions hud-icons">
+          <button type="button" class="icon-btn" title="Journal"><svg aria-hidden="true"><use href="#i-journal"></use></svg></button>
+          <button type="button" class="icon-btn" title="Recent rolls"><svg aria-hidden="true"><use href="#i-dice"></use></svg></button>
+          <button type="button" class="icon-btn" title="Camp"><svg aria-hidden="true"><use href="#i-camp"></use></svg></button>
+          <button type="button" class="icon-btn" title="Map"><svg aria-hidden="true"><use href="#i-map"></use></svg></button>
+          <button type="button" class="icon-btn" title="Reload"><svg aria-hidden="true"><use href="#i-refresh"></use></svg></button>
+          <span class="icon-sep" aria-hidden="true"></span>
+          <button type="button" class="icon-btn" title="Fullscreen"><svg aria-hidden="true"><use href="#i-expand"></use></svg></button>
+          <a class="icon-btn" href="#" title="Main menu"><svg aria-hidden="true"><use href="#i-home"></use></svg></a>
+        </div>
+      </div>
+      <div id="combat-root"></div>
+    </div>
+    <aside class="rail rail-right">
+      <div class="rail-bottom">
+        <div class="hud-log" id="hud-log">
+          <div class="hud-log-head">
+            <div class="log-filters" role="group" aria-label="Filter the log">
+              <button type="button" class="chip on" data-filter="all">All</button>
+              <button type="button" class="chip" data-filter="combat">Combat</button>
+            </div>
+          </div>
+          <div class="log" id="game-log"></div>
+        </div>
+        <section class="cbt-inspector" id="cbt-inspector" aria-live="polite"></section>
+      </div>
+    </aside>
+  </div>
+
+  <script>
+  const Q = new URLSearchParams(location.search);
+  const FOES = Math.max(1, Math.min(12, parseInt(Q.get('foes'), 10) || 3));
+  const IDLE = Q.get('idle') === '1';
+
+  window.Game = {
+    esc: (s) => String(s ?? '').replace(/[&<>"']/g,
+      (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])),
+    reducedMotion: () => true,
+    sleep: (ms) => new Promise((r) => setTimeout(r, ms)),
+    log: () => {},
+    showError: (m) => console.log('[bench] showError:', m),
+    refreshAll: async () => {},
+    hpPct: (hp, max) => (max ? Math.max(0, Math.min(100, Math.round((hp / max) * 100))) : 0),
+    hpBand: (hp, max) => (hp / max > 0.5 ? 'ok' : hp / max > 0.25 ? 'mid' : 'low'),
+    TILE_CACHE_VER: 'bench',
+    state: { mode: 'combat', party: [], character: { id: 1 }, combat: null },
+  };
+
+  // Refused rather than faked -- see the header.
+  window.API = {
+    get: () => Promise.reject(new Error('bench: no API')),
+    post: () => Promise.reject(new Error('bench: no API')),
+  };
+  </script>
+  <script src="/assets/js/svg-view.js"></script>
+  <script src="/assets/js/ui-battlemap.js"></script>
+  <script src="/assets/js/ui-combat.js"></script>
+  <script>
+  const W = 16, H = 12;
+
+  /* A board with something on it: a wall the party can shelter behind and a
+     patch of rough ground, both in the middle where they cost a decision. */
+  const terrain = (() => {
+    const rows = Array.from({ length: H }, () => '.'.repeat(W).split(''));
+    for (const [x, y] of [[7, 3], [7, 4], [8, 4], [8, 5], [8, 6]]) rows[y][x] = 'n';
+    for (const [x, y] of [[5, 8], [6, 8], [6, 9], [7, 9]]) rows[y][x] = ',';
+    return rows.map((r) => r.join(''));
+  })();
+
+  const party = [
+    { cid: 'pc_1', name: 'Wren Kingsley', type: 'pc', character_id: 1, side: 'party',
+      x: 2, y: 5, hp: 34, max_hp: 38, ac: 16, speed: 30, alive: true, initiative: 18,
+      class: 'Fighter', level: 4, move_left: 20, conditions: [], boons: [] },
+    { cid: 'pc_2', name: 'Sera of the Low Quarter', type: 'pc', character_id: 2, side: 'party',
+      x: 1, y: 7, hp: 7, max_hp: 31, ac: 14, speed: 30, alive: true, initiative: 14,
+      class: 'Rogue', level: 5, conditions: [{ key: 'frightened', rounds: 2 }],
+      boons: [{ key: 'bless', label: 'Bless', rounds: 8, attack_bonus_dice: 'd4' }] },
+    /* A caster half spent and a caster untouched, because the pips are only
+       worth drawing if a glance tells the two apart. `slots` is the shape
+       CombatEngine::slotsFor() stamps on every party member -- a Fighter and a
+       Rogue get an empty list and no row at all. */
+    { cid: 'pc_3', name: 'Brother Aldric', type: 'pc', character_id: 3, side: 'party',
+      x: 3, y: 8, hp: 30, max_hp: 30, ac: 18, speed: 25, alive: true, initiative: 9,
+      class: 'Cleric', level: 4, conditions: [], boons: [],
+      concentrating: { name: 'Bless' },
+      slots: [{ level: 1, max: 4, left: 1 }, { level: 2, max: 3, left: 2 }] },
+    { cid: 'pc_4', name: 'Tessaly Vane', type: 'pc', character_id: 4, side: 'party',
+      x: 2, y: 10, hp: 26, max_hp: 26, ac: 12, speed: 30, alive: true, initiative: 7,
+      class: 'Sorcerer', level: 5, conditions: [], boons: [],
+      slots: [{ level: 1, max: 4, left: 4 }, { level: 2, max: 3, left: 3 },
+              { level: 3, max: 2, left: 0 }] },
+  ];
+
+  /* Every foe a different distance out, so the shot readouts differ: one in
+     your face, one behind the wall, the rest scattered down the field. */
+  const foes = Array.from({ length: FOES }, (_, i) => ({
+    cid: `mon_${i + 1}`,
+    name: i === 0 ? 'Thief Captain' : `Cutpurse ${i}`,
+    type: 'monster', side: 'foe',
+    x: 10 + (i % 4), y: 2 + ((i * 3) % 9),
+    hp: i === 0 ? 22 : 8 + (i % 3), max_hp: i === 0 ? 27 : 11,
+    ac: 13 + (i % 2), speed: 30, cr: i === 0 ? 2 : 0.25, alive: true,
+    initiative: 16 - i, conditions: i === 1 ? [{ key: 'prone' }] : [], boons: [],
+  }));
+
+  /* The derived block. Same shape the engine ships: which cells the actor can
+     reach and what walking there costs, which cells the enemy threatens, and
+     one entry per foe saying what the shot would be. */
+  const reach = {};
+  for (let y = 0; y < H; y++) {
+    for (let x = 0; x < W; x++) {
+      const d = Math.max(Math.abs(x - party[0].x), Math.abs(y - party[0].y)) * 5;
+      if (d <= 20 && terrain[y][x] !== 'n') reach[`${x},${y}`] = { cost: d, from: null };
+    }
+  }
+  const threat = {};
+  for (const f of foes) {
+    for (let dy = -1; dy <= 1; dy++) {
+      for (let dx = -1; dx <= 1; dx++) {
+        const x = f.x + dx, y = f.y + dy;
+        if (x >= 0 && x < W && y >= 0 && y < H) threat[`${x},${y}`] = 1;
+      }
+    }
+  }
+  const targets = {};
+  foes.forEach((f, i) => {
+    const dist = Math.max(Math.abs(f.x - party[0].x), Math.abs(f.y - party[0].y)) * 5;
+    targets[f.cid] = i === 2
+      ? { dist, mode: 'disadvantage', cover: 2, why: 'half cover from the wall' }
+      : i === 1
+        ? { dist, mode: 'advantage', cover: 0, why: 'they are prone and close' }
+        : { dist, mode: 'normal', cover: 0, why: '' };
+  });
+
+  const state = {
+    status: 'active',
+    round: 3,
+    turn_index: 0,
+    encounter_name: 'Ambush at the ford',
+    order: [...party, ...foes].sort((a, b) => b.initiative - a.initiative).map((c) => c.cid),
+    grid: { terrain, zones: null },
+    combatants: [...party, ...foes],
+    ui: { actor: 'pc_1', reach, threat, targets, attacks_left: 1 },
+    events: [],
+    log: [],
+  };
+  // The ribbon draws `order`, and the actor is whoever `turn_index` names.
+  state.turn_index = state.order.indexOf('pc_1');
+
+  window.Game.state.combat = { state };
+
+  /* A transcript above the readout, because the point of the rail is the two
+     of them sharing it. `.line.cat-combat` is the class ui-panels.js gives a
+     log line; the text is fixture prose, the markup is not. */
+  /* The action bar's keys and the topbar's icons are <use> against the sprite
+     game.php inlines. Fetched rather than copied, so a symbol renamed there
+     goes blank here exactly as it would in the game. */
+  fetch('/assets/icons.svg').then((r) => r.text()).then((text) => {
+    const svg = new DOMParser().parseFromString(text, 'image/svg+xml').querySelector('svg');
+    if (svg) document.body.appendChild(document.importNode(svg, true));
+  }).catch(() => {});
+
+  document.getElementById('game-log').innerHTML = [
+    'Round 2 — Wren Kingsley swings at the Thief Captain.',
+    'Hit for 9 slashing. The captain staggers back a step.',
+    'Cutpurse 1 looses a bolt at Sera. It goes wide.',
+    'Brother Aldric holds concentration on Bless.',
+    'Sera takes 7 piercing and is frightened.',
+    'Round 3 — Wren Kingsley is up. 20 ft of movement.',
+  ].map((t) => `<div class="line cat-combat">${window.Game.esc(t)}</div>`).join('');
+
+  document.getElementById('note').textContent =
+    `bench · combat board · ${FOES} foe(s) · ` + (IDLE ? 'nobody pointed at' : 'the captain inspected');
+
+  Combat.render();
+
+  /* Selecting is what a player does before attacking, and it is the state the
+     inspector is for; the bench opens in it so the readout has somebody in it
+     without a mouse. `?idle=1` is the other half -- the panel with nothing to
+     say still holds its place. */
+  if (!IDLE) {
+    const card = document.querySelector('.cbt-card[data-cid="mon_1"]');
+    if (card) card.click();
+  }
+  </script>
+</body>
+</html>

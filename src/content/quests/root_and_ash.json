@@ -1,0 +1,96 @@
+{
+    "quest_key": "root_and_ash",
+    "title": "Root and Ash",
+    "description": "Osric Fen needs fen-root, will pay well over the odds for it, and will not go and get it. He will not say why, and he will not let the matter drop either.",
+    "giver": "osric_apothecary",
+    "on_job_board": false,
+    "required_level": 2,
+    "rewards": {
+        "xp": 300,
+        "gold": 30
+    },
+    "stages": {
+        "find_the_root": {
+            "title": "Find fen-root",
+            "objective": "Osric wants a hand of fen-root. Find where one can be got.",
+            "journal": "Fen-root grows in one place within forty miles and Osric Fen will not name the place out loud, only the plant. He wants a hand of it. He has money ready in a dish on the counter, counted out, and has plainly had it counted out for some time.",
+            "target": {
+                "location": "root_ash"
+            }
+        },
+        "the_quay_dealer": {
+            "title": "The quay",
+            "objective": "What does not walk out of the fen comes up the river. Ask at the stair.",
+            "journal": "Mott Wenn says a boat comes up from the low water four or five times a year with fen goods and that the men on it do not come further than the bottom step. Dried fen-root is on it. It is four times the price it should be, and that price is not about the root: it is about who is willing to go and cut it.",
+            "target": {
+                "location": "river_stair"
+            }
+        },
+        "bought_it_up": {
+            "title": "Bought at the bottom step",
+            "journal": "A hundred gold for a hand of black root tied with grass, which is robbery, and Osric paid me back thirty of it and looked ashamed of the shortfall. He put it straight into the mortar. He did not tell me what it was for and I did not push, and that is where it stands.",
+            "resolution": "bought_it_up",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "root_and_ash_fate",
+                    "value": "bought"
+                },
+                {
+                    "take_gold": 100
+                },
+                {
+                    "approval": {
+                        "aldric": 4,
+                        "sera": -2
+                    }
+                }
+            ]
+        },
+        "he_said_why": {
+            "title": "He said why",
+            "journal": "Osric Fen is not from Rivermark. He is from the village under the water in the Hollow Fen, and he was nine when the sluice went, and his people are still there in the sense that they were never taken out. Fen-root only grows where there is bone in the silt. He has made the same remedy every year for thirty-one years and given it away for nothing, and he will not go and cut the root himself because he knows exactly what he would be standing on.",
+            "resolution": "he_said_why",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "root_and_ash_fate",
+                    "value": "told"
+                },
+                {
+                    "set_flag": "osric_told"
+                },
+                {
+                    "give_item": "dried_fen_root",
+                    "quantity": 1
+                },
+                {
+                    "approval": {
+                        "aldric": 10,
+                        "ilse": 10,
+                        "kessa": 4
+                    }
+                }
+            ]
+        },
+        "left_it_unmade": {
+            "title": "Not made this year",
+            "journal": "I left it. Osric took the money off the counter and put it back in the drawer, which he did without any expression at all, and that was the end of it. The remedy is a winter cough draught that he has given away free every year since before I was born. Wyke's list has nine children on it this year.",
+            "resolution": "left_it_unmade",
+            "terminal": true,
+            "outcome": "neutral",
+            "effects": [
+                {
+                    "set_flag": "root_and_ash_fate",
+                    "value": "unmade"
+                },
+                {
+                    "approval": {
+                        "aldric": -10,
+                        "ilse": -6
+                    }
+                }
+            ]
+        }
+    }
+}

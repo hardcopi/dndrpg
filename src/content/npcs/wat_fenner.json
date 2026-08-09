@@ -1,0 +1,13 @@
+{
+    "npc_key": "wat_fenner",
+    "name": "Wat Fenner",
+    "role": "Gateman",
+    "description": "Turns the wheel on the flood gate when he is told to. Has never been told why, and has never made that his business.",
+    "sprite_key": "wat_fenner",
+    "image_url": "assets/images/npcs/miner.png",
+    "is_quest_giver": true,
+    "dialog": "wat_fenner",
+    "place": {
+        "location": "flood_gate"
+    }
+}

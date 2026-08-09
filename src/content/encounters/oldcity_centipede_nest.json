@@ -1,0 +1,18 @@
+{
+    "encounter_key": "oldcity_centipede_nest",
+    "name": "The Nest In The Renegade",
+    "description": "The corpse moves, and goes on moving after you have understood why.",
+    "difficulty": "medium",
+    "ambush": true,
+    "monsters": [
+        {
+            "monster": "giant_centipede",
+            "quantity": 5
+        }
+    ],
+    "allow_flee": true,
+    "allow_parley": false,
+    "place": {
+        "location": "oldcity_renegades_stash"
+    }
+}

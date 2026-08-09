@@ -1,0 +1,1541 @@
+{
+    "npc_key": "mara_hearthstone",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "flag": "quarry_fate",
+                        "equals": "ash"
+                    }
+                ],
+                "once": true,
+                "text": "Mara puts both hands flat on the bar. \"You were paid to leave. You left. Don't stand in my doorway and expect a stool.\"",
+                "choices": [
+                    {
+                        "label": "I came back.",
+                        "next": "came_back"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "quarry_fate",
+                        "equals": "steel"
+                    }
+                ],
+                "once": true,
+                "text": "\"Sit anywhere. Half the town's stopped coming in after dark — habit, mostly. Nothing left out there to be frightened of.\" She says it like a woman reading a price off a slate.",
+                "choices": [
+                    {
+                        "label": "That sounds like a complaint.",
+                        "next": "after_steel"
+                    },
+                    {
+                        "label": "A room, please.",
+                        "effects": [
+                            {
+                                "rest": "inn"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Nothing today.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "quarry_fate",
+                        "equals": "pact"
+                    }
+                ],
+                "once": true,
+                "text": "\"I've had two fights in here this week and both of them were about you.\" She fills a cup without being asked. \"Sit at the end. The end's quieter.\"",
+                "choices": [
+                    {
+                        "label": "Which side are you on?",
+                        "next": "after_pact"
+                    },
+                    {
+                        "label": "A room, please.",
+                        "effects": [
+                            {
+                                "rest": "inn"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Nothing today.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "a_room_for_the_night",
+                        "stage": "what_he_needs"
+                    }
+                ],
+                "text": "Mara has come round the end of the bar, which she does perhaps twice an evening. \"Well?\" she says, low. \"Is he ill? Because if he is ill that is one conversation and if he is drunk it is another, and I have been standing here for two days not knowing which one I am having.\"",
+                "choices": [
+                    {
+                        "label": "He's a bargeman off the river. He walked here and he stopped.",
+                        "next": "corbin_the_truth"
+                    },
+                    {
+                        "label": "I'll pay for his bed and his supper.",
+                        "conditions": [
+                            {
+                                "gold_at_least": 10
+                            }
+                        ],
+                        "next": "corbin_paid_for"
+                    },
+                    {
+                        "label": "Put him to work. He can fix that third step.",
+                        "next": "corbin_works"
+                    },
+                    {
+                        "label": "I'll walk him down to the boats.",
+                        "next": "corbin_walked_out"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "a_room_for_the_night",
+                        "status": "active"
+                    }
+                ],
+                "text": "\"Corner table,\" Mara says, without looking at it, which takes some doing. \"Still there. Still face down. I have counted his breathing twice from behind this bar like a fool and it is perfectly good breathing.\"",
+                "choices": [
+                    {
+                        "label": "I'll go and talk to him.",
+                        "end": true
+                    },
+                    {
+                        "label": "Why won't you wake him yourself?",
+                        "next": "why_not_wake_him"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "rats_and_better",
+                        "stage": "the_grain_stair"
+                    }
+                ],
+                "text": "Mara puts both hands on the bar and does not fill anything for anybody for the length of this conversation, which is a first.\n\n\"Say it slowly,\" she says.",
+                "choices": [
+                    {
+                        "label": "There's a stair under Granary Row and a road under your cellar wall.",
+                        "next": "the_route_explained"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "rats_and_better",
+                        "status": "active"
+                    }
+                ],
+                "text": "\"Behind the north wall,\" Mara says. \"Where the drain goes through. I have had a lamp down there twice this week and I have not put my arm in it, and I am not going to, and that is what I am paying you for.\"",
+                "choices": [
+                    {
+                        "label": "I'll go down.",
+                        "end": true
+                    },
+                    {
+                        "label": "Nothing today.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "grain_route_fate",
+                        "equals": "shut"
+                    }
+                ],
+                "once": true,
+                "text": "There is fresh mortar along the foot of the north wall and Mara has put a keg in front of it, which does not hide it. \"Eleven gold of brick,\" she says. \"Cheapest eleven gold I have ever spent and I have not slept better since.\" A pause, while she wipes. \"There is a girl comes to the back door on a Tuesday now who did not use to have to.\"",
+                "choices": [
+                    {
+                        "label": "Who is she?",
+                        "next": "the_tuesday_girl"
+                    },
+                    {
+                        "label": "A room, please.",
+                        "effects": [
+                            {
+                                "rest": "inn"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "grain_route_fate",
+                        "equals": "watch"
+                    }
+                ],
+                "once": true,
+                "text": "\"Nine of them in the lockup,\" says Mara, \"and every one of them a person who lives in a drain and was carrying somebody else's barley for a cut of it.\" She sets the cloth down. \"And the man whose hatch it was has an explanation about a former employee, and Reed has to take it, because Reed has nine people and a hatch and no name above either.\"",
+                "choices": [
+                    {
+                        "label": "It was still the right thing.",
+                        "next": "was_it"
+                    },
+                    {
+                        "label": "A room, please.",
+                        "effects": [
+                            {
+                                "rest": "inn"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "grain_route_fate",
+                        "equals": "kept"
+                    }
+                ],
+                "once": true,
+                "text": "The north wall is as it was. Mara does not mention it and has not mentioned it since the day you told her, and she is exactly as warm as she was before, and every so often she looks at that corner of the room for slightly too long.",
+                "choices": [
+                    {
+                        "label": "You don't have to like it.",
+                        "next": "she_does_not"
+                    },
+                    {
+                        "label": "A room, please.",
+                        "effects": [
+                            {
+                                "rest": "inn"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "room_fate",
+                        "equals": "work"
+                    }
+                ],
+                "once": true,
+                "text": "The third step does not creak. There is a man in the back doing kegs who was face down on the corner table a fortnight ago, and Mara has stopped talking about the week being up.\n\n\"He is up before I am,\" she says. \"Which I resent, and which I have decided to go on resenting rather than examine.\"",
+                "choices": [
+                    {
+                        "label": "He's staying, then.",
+                        "next": "he_is_staying"
+                    },
+                    {
+                        "label": "A room, please.",
+                        "effects": [
+                            {
+                                "rest": "inn"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "sera_arrested"
+                    }
+                ],
+                "text": "\"Vance girl's in the lockup. Been in three days.\" She wipes the same patch of bar twice. \"Her father drank here for twenty years and never once short-changed me.\"",
+                "choices": [
+                    {
+                        "label": "She was keeping false books.",
+                        "next": "sera_talk"
+                    },
+                    {
+                        "label": "She was writing what she was told to write.",
+                        "next": "sera_talk"
+                    },
+                    {
+                        "label": "A room, please.",
+                        "effects": [
+                            {
+                                "rest": "inn"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "mara_wary"
+                    }
+                ],
+                "text": "\"Room's four coppers, stew's two, and I've got nothing to say about anybody.\" She does not look up from the slate.",
+                "choices": [
+                    {
+                        "label": "A room, please.",
+                        "effects": [
+                            {
+                                "rest": "inn"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Who else drinks here?",
+                        "next": "who_drinks_here"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    },
+                    {
+                        "label": "There's a man asleep at your corner table.",
+                        "next": "the_corner_table"
+                    },
+                    {
+                        "label": "The four sacks. Let me look at the north wall.",
+                        "conditions": [
+                            {
+                                "flag": "cellar_cleared",
+                                "equals": "cause"
+                            }
+                        ],
+                        "next": "the_north_wall"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "cellar_rats",
+                        "status": "active"
+                    },
+                    {
+                        "flag": "cellar_stirges_beaten"
+                    }
+                ],
+                "text": "You come back up with the drain grating under one arm. Mara looks at it, and then at you, and puts the cloth down for the first time all evening.",
+                "choices": [
+                    {
+                        "label": "The rats were commuting. Something else was feeding them.",
+                        "next": "the_sump"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "cellar_rats",
+                        "status": "active"
+                    },
+                    {
+                        "flag": "cellar_rats_beaten"
+                    }
+                ],
+                "text": "\"Well?\" Mara has the coin ready in her fist and has clearly had it there for an hour.",
+                "choices": [
+                    {
+                        "label": "Dead. All of them.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "cellar_rats",
+                                    "stage": "exterminated"
+                                }
+                            }
+                        ],
+                        "next": "she_pays_up"
+                    },
+                    {
+                        "label": "Dead. But there's a drain behind the north wall and something's using it.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "cellar_rats",
+                                    "stage": "the_grain"
+                                }
+                            },
+                            {
+                                "start_combat": "cellar_stirges"
+                            }
+                        ],
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "cellar_cleared",
+                        "equals": "cause"
+                    }
+                ],
+                "text": "\"Four sacks I never bought, in my own cellar.\" She has not sat down since you came back up. \"I've been trading with the granary since I was nineteen.\"",
+                "choices": [
+                    {
+                        "label": "Somebody used your cellar as a midden.",
+                        "next": "the_grain_talk"
+                    },
+                    {
+                        "label": "Who has a key?",
+                        "next": "the_grain_talk"
+                    },
+                    {
+                        "label": "They didn't use the door at all. Let me look at the north wall.",
+                        "conditions": [
+                            {
+                                "level_at_least": 3
+                            },
+                            {
+                                "not": {
+                                    "quest": "rats_and_better"
+                                }
+                            }
+                        ],
+                        "next": "the_north_wall"
+                    },
+                    {
+                        "label": "There's a man asleep at your corner table.",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "quest": "a_room_for_the_night"
+                                }
+                            }
+                        ],
+                        "next": "the_corner_table"
+                    },
+                    {
+                        "label": "A room, please.",
+                        "effects": [
+                            {
+                                "rest": "inn"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "cellar_cleared",
+                        "equals": "killed"
+                    }
+                ],
+                "text": "\"Cellar's quiet. Thank you for that.\" She slides a bowl across. \"On the house until it isn't.\"",
+                "choices": [
+                    {
+                        "label": "They'll be back, you know.",
+                        "next": "they_come_back"
+                    },
+                    {
+                        "label": "Tell me about this town.",
+                        "next": "about_town"
+                    },
+                    {
+                        "label": "There is a way into your cellar that isn't the stairs.",
+                        "conditions": [
+                            {
+                                "level_at_least": 3
+                            },
+                            {
+                                "not": {
+                                    "quest": "rats_and_better"
+                                }
+                            }
+                        ],
+                        "next": "the_north_wall"
+                    },
+                    {
+                        "label": "There's a man asleep at your corner table.",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "quest": "a_room_for_the_night"
+                                }
+                            }
+                        ],
+                        "next": "the_corner_table"
+                    },
+                    {
+                        "label": "A room, please.",
+                        "effects": [
+                            {
+                                "rest": "inn"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "cellar_rats",
+                        "status": "active"
+                    }
+                ],
+                "text": "\"Still down there, is it.\" Not a question. \"Cellar door's behind the tap. Mind the third step, it's been loose since spring and I've not had a week to spare on it.\"",
+                "choices": [
+                    {
+                        "label": "What am I looking for?",
+                        "next": "cellar_terms"
+                    },
+                    {
+                        "label": "There's a man asleep at your corner table.",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "quest": "a_room_for_the_night"
+                                }
+                            }
+                        ],
+                        "next": "the_corner_table"
+                    },
+                    {
+                        "label": "Go down.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "\"Welcome to the Golden Flagon. Beds are clean, stew is hot, and I've a problem I'd pay to be rid of.\"",
+                "choices": [
+                    {
+                        "label": "What problem?",
+                        "next": "cellar_terms"
+                    },
+                    {
+                        "label": "There's a man asleep at your corner table.",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "quest": "a_room_for_the_night"
+                                }
+                            }
+                        ],
+                        "next": "the_corner_table"
+                    },
+                    {
+                        "label": "Tell me about this town.",
+                        "next": "about_town"
+                    },
+                    {
+                        "label": "Who else drinks here?",
+                        "next": "who_drinks_here"
+                    },
+                    {
+                        "label": "A room, please.",
+                        "effects": [
+                            {
+                                "rest": "inn"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "cellar_terms": [
+            {
+                "conditions": [
+                    {
+                        "quest": "cellar_rats",
+                        "status": "active"
+                    }
+                ],
+                "text": "\"Rats. Big ones, and too many of them for the time of year. They're through four sacks of barley and a whole side of bacon. Kill them and I'll pay you twenty and feed you while you're in town.\"",
+                "choices": [
+                    {
+                        "label": "Twenty is fine.",
+                        "end": true
+                    },
+                    {
+                        "label": "Rats don't turn up in numbers for nothing.",
+                        "next": "she_shrugs"
+                    }
+                ]
+            },
+            {
+                "text": "\"Rats. Big ones, and too many of them for the time of year. They're through four sacks of barley and a whole side of bacon. Kill them and I'll pay you twenty and feed you while you're in town.\"",
+                "choices": [
+                    {
+                        "label": "I'll clear it out.",
+                        "effects": [
+                            {
+                                "start_quest": "cellar_rats"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "Rats don't turn up in numbers for nothing.",
+                        "effects": [
+                            {
+                                "start_quest": "cellar_rats"
+                            }
+                        ],
+                        "next": "she_shrugs"
+                    },
+                    {
+                        "label": "Find someone else.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "she_shrugs": [
+            {
+                "text": "\"They turn up because there's food. That's the whole of a rat.\" She stops wiping. \"But there's four sacks down there I didn't put down there, if that's your question. I've been meaning to look at them for a fortnight.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "cellar_rats",
+                            "stage": "the_grain"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse, from the door: \"Four sacks is a cart. Somebody drove that in.\""
+                    },
+                    {
+                        "companion": "kessa",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "companion": "ilse",
+                                    "status": "active"
+                                }
+                            }
+                        ],
+                        "text": "Kessa, without turning round: \"Rats. Grain. It's not a riddle.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "I'll look at the sacks.",
+                        "end": true
+                    },
+                    {
+                        "label": "Who has a key to your cellar?",
+                        "next": "who_has_a_key"
+                    }
+                ]
+            }
+        ],
+        "who_has_a_key": [
+            {
+                "text": "\"Me. My girl, who's fourteen and terrified of the dark. And the granary, because the granary delivers.\" She hears it as she says it. \"The granary delivers.\"",
+                "choices": [
+                    {
+                        "label": "I'll go down.",
+                        "end": true
+                    },
+                    {
+                        "label": "Say nothing about this to anyone.",
+                        "next": "she_agrees"
+                    }
+                ]
+            }
+        ],
+        "she_agrees": [
+            {
+                "text": "\"I've run a public house for twenty-two years,\" Mara says. \"I know how to not say a thing.\"",
+                "choices": [
+                    {
+                        "label": "Good.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "she_pays_up": [
+            {
+                "text": "The coin goes on the bar. \"Twenty, and the stew's yours while you're in town.\" Mara picks the cloth back up. \"I'll not ask what was down there. I've a public house to run and I've found that asking costs me a fortnight.\"",
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse, on the way out: \"There were four sacks of grain down there she did not buy. She knows. She has decided not to know.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Fair enough.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_sump": [
+            {
+                "text": "\"Four sacks of barley gone to rot, stacked against the north wall, and a split hazel tally with them.\" You put the stick on the bar. Mara turns it over once. \"That's the granary's mark,\" she says. \"That's Hollis Marrow's own mark, on grain I never ordered, rotting in my cellar.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "cellar_rats",
+                            "stage": "source_found"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric: \"He was paid for it and could not deliver it, so he had to lose it somewhere that was not his own yard.\""
+                    },
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa: \"That's a lot of trouble to go to over barley.\" She turns the tally over once. \"So it was never about the barley.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Who has a key to your cellar?",
+                        "next": "who_has_a_key"
+                    },
+                    {
+                        "label": "Keep this to yourself.",
+                        "next": "she_agrees"
+                    }
+                ]
+            }
+        ],
+        "the_grain_talk": [
+            {
+                "text": "\"Hollis Marrow's people deliver here twice a month and they've a key to my hatch because I gave them one.\" She folds her arms. \"You're going to ask me to say that in front of the watch.\"",
+                "choices": [
+                    {
+                        "label": "Just tell me what Marrow's been buying.",
+                        "check": {
+                            "skill": "persuasion",
+                            "dc": 13,
+                            "on_success": "she_talks",
+                            "on_failure": "she_shuts_up"
+                        }
+                    },
+                    {
+                        "label": "You've kept accounts thirty years. What does a granary reeve do with spoiled grain?",
+                        "tag": "GUILD ARTISAN",
+                        "conditions": [
+                            {
+                                "origin": "guild_artisan"
+                            }
+                        ],
+                        "next": "she_talks"
+                    },
+                    {
+                        "label": "No. Keep it to yourself for now.",
+                        "next": "she_agrees"
+                    }
+                ]
+            }
+        ],
+        "she_talks": [
+            {
+                "text": "\"He buys the whole harvest forward, at a price set in spring, and sells it on through the year.\" She counts it off on the bar. \"So a bad year makes him rich and a good year ruins him. And a road nobody can use makes him rich in a good year too.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "mara_knows_marrow"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera has gone very still by the door. \"She's not wrong,\" she says, to nobody."
+                    },
+                    {
+                        "companion": "aldric",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "companion": "sera",
+                                    "status": "active"
+                                }
+                            }
+                        ],
+                        "text": "Aldric: \"That is not gossip. That is arithmetic.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Keep that between us.",
+                        "next": "she_agrees"
+                    },
+                    {
+                        "label": "Thank you.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "she_shuts_up": [
+            {
+                "text": "\"No.\" Mara straightens. \"I've buried a husband and kept this roof on alone and I did not do it by naming the man who sets the price of bread to a stranger with a sword. Four coppers for the room. Two for the stew.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "mara_wary"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa, quietly: \"You pushed. She's got more to lose than you do.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Fair enough.",
+                        "end": true
+                    },
+                    {
+                        "label": "You're frightened of him.",
+                        "next": "she_is_frightened"
+                    }
+                ]
+            }
+        ],
+        "she_is_frightened": [
+            {
+                "text": "\"I am careful of him,\" Mara says. \"There is a difference and you'll learn it if you stay in this town a season.\"",
+                "choices": [
+                    {
+                        "label": "Leave it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "they_come_back": [
+            {
+                "text": "\"They will,\" she agrees. \"They always do. Then I'll pay somebody to kill them again, and that's the arrangement, and it's cheaper than finding out why.\"",
+                "choices": [
+                    {
+                        "label": "Back",
+                        "next": "greeting"
+                    }
+                ]
+            }
+        ],
+        "about_town": [
+            {
+                "conditions": [
+                    {
+                        "flag": "hills_pattern"
+                    }
+                ],
+                "text": "\"Old trade road, quiet enough, until the raids.\" She looks at you sideways. \"You've been counting wagons. I've heard. Carters talk in here and they've noticed which of them get through.\"",
+                "choices": [
+                    {
+                        "label": "Who do the carters blame?",
+                        "next": "carters_blame"
+                    },
+                    {
+                        "label": "Back",
+                        "next": "greeting"
+                    }
+                ]
+            },
+            {
+                "text": "\"Rivermark sits on the old trade road. The quarry east of here fell in before you were born and the town has been arguing about it ever since.\" She shrugs. \"Now there's things living in it and we're still arguing.\"",
+                "choices": [
+                    {
+                        "label": "Arguing about what?",
+                        "next": "the_argument"
+                    },
+                    {
+                        "label": "Back",
+                        "next": "greeting"
+                    }
+                ]
+            }
+        ],
+        "carters_blame": [
+            {
+                "text": "\"Goblins, out loud. The granary, once they've had three.\" She takes the cup away. \"You did not hear that from me and I will say so.\"",
+                "choices": [
+                    {
+                        "label": "Back",
+                        "next": "greeting"
+                    }
+                ]
+            }
+        ],
+        "the_argument": [
+            {
+                "text": "\"Reed wants it emptied. Council wants it left. Half the men who'd have to go down there dug the thing in the first place and won't.\" She refills a cup nobody asked for. \"Meanwhile something's been coming up out of it.\"",
+                "choices": [
+                    {
+                        "label": "Who else drinks here?",
+                        "next": "who_drinks_here"
+                    },
+                    {
+                        "label": "Back",
+                        "next": "greeting"
+                    }
+                ]
+            }
+        ],
+        "who_drinks_here": [
+            {
+                "text": "\"The half-orc at the end of the bar has been nursing the same cup since noon and she's paid for four. The cleric in the corner treats anybody who asks and won't take coin for it, which means he's got a reason not to.\" She lowers her voice. \"Both of them are waiting for something. Not the same something.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_kessa"
+                    },
+                    {
+                        "set_flag": "met_aldric"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Anyone else?",
+                        "next": "the_warden"
+                    },
+                    {
+                        "label": "Back",
+                        "next": "greeting"
+                    }
+                ]
+            }
+        ],
+        "the_warden": [
+            {
+                "text": "\"There's a warden works the east hills. Thornwood. Comes in for salt about once a fortnight and goes out again before dark.\" Mara considers. \"She's the only one in this town who goes toward the quarry on purpose.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_ilse"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Back",
+                        "next": "greeting"
+                    }
+                ]
+            }
+        ],
+        "sera_talk": [
+            {
+                "text": "\"Maybe both,\" Mara says. \"I've known her since she was small and she was never a liar. She was always a girl who did what she was told and hated it. That's a different fault and it hangs the same.\"",
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric says nothing at all, and looks at the floor, and that is the loudest thing in the room."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "A room, please.",
+                        "effects": [
+                            {
+                                "rest": "inn"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "after_steel": [
+            {
+                "text": "\"It's not a complaint. Half my trade was carters who wouldn't do the east road without stopping over, and now they don't stop over, because there's nothing to stop for.\" She shrugs. \"You made us safe. Safe's cheaper than I thought.\"",
+                "interjections": [
+                    {
+                        "companion": "kessa",
+                        "conditions": [
+                            {
+                                "companion": "kessa",
+                                "approval_at_least": 20
+                            }
+                        ],
+                        "text": "Kessa: \"Nobody thanks the wall for the wind it keeps off.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "A room, please.",
+                        "effects": [
+                            {
+                                "rest": "inn"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "after_pact": [
+            {
+                "text": "\"I'm on the side of whoever still buys ale.\" She sets the cloth down. \"Which is currently both sides, so I'm doing better than the council. Ask me again in a year.\"",
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "conditions": [
+                            {
+                                "companion": "ilse",
+                                "approval_at_least": 20
+                            }
+                        ],
+                        "text": "Ilse: \"That is the most honest thing anyone in this town has said to us.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "A room, please.",
+                        "effects": [
+                            {
+                                "rest": "inn"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "came_back": [
+            {
+                "text": "\"So did about forty of us,\" Mara says. \"There's no roof on the mill and the granary went up with everything in it, and we are still here, and you are not staying.\"",
+                "choices": [
+                    {
+                        "label": "Go.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_corner_table": [
+            {
+                "text": "\"Two days,\" says Mara. \"Two days on my corner table, in the seat that gets the fire, on a market week.\"\n\nShe does not sound angry, which is the interesting part.\n\n\"He came in on the Monday, bought one small ale, drank about a third of it, put his head on his arms, and that is the whole of it. He is not drunk. I have thrown out enough drunks to know the difference from across a room.\" She wipes the same patch of bar. \"He has got four coppers on the table in front of him that he has not touched, which is a man saying: I am not stealing from you. And every hour or so he sits up and looks at the door and then puts his head back down.\"",
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric, quietly: \"He is waiting for somebody to come in. Or for himself to want to go out. I have done both of those in a room like this one.\""
+                    },
+                    {
+                        "companion": "kessa",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "companion": "aldric",
+                                    "status": "active"
+                                }
+                            }
+                        ],
+                        "text": "Kessa: \"Four coppers on the table where she can see them. That's a man with manners and nowhere to be.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "I'll wake him and find out what he needs.",
+                        "effects": [
+                            {
+                                "start_quest": "a_room_for_the_night"
+                            }
+                        ],
+                        "next": "she_is_grateful"
+                    },
+                    {
+                        "label": "Why not wake him yourself?",
+                        "next": "why_not_wake_him"
+                    },
+                    {
+                        "label": "Throw him out.",
+                        "next": "she_will_not"
+                    }
+                ]
+            }
+        ],
+        "why_not_wake_him": [
+            {
+                "text": "\"Because a woman who runs a public house learns young that you do not put hands on a sleeping man you have not met,\" Mara says. \"The last time I did I was six weeks getting the tooth marks out of my thumb, and he was a perfectly nice fellow who had been at sea.\"\n\nShe puts the cloth down.\n\n\"And because if I go over there it is the landlady coming to move him on, and he will go, and I would rather somebody found out first whether he has anywhere to go to.\"",
+                "choices": [
+                    {
+                        "label": "I'll wake him.",
+                        "effects": [
+                            {
+                                "start_quest": "a_room_for_the_night"
+                            }
+                        ],
+                        "next": "she_is_grateful"
+                    },
+                    {
+                        "label": "Leave him be.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "she_will_not": [
+            {
+                "text": "\"No,\" says Mara Hearthstone. \"I said I wanted him woken, fed, and paying or gone. I did not say thrown, and I will thank you to hear the difference, because I chose those words on the Monday night and I have been choosing them again every morning since.\"",
+                "choices": [
+                    {
+                        "label": "All right. I'll go and talk to him.",
+                        "effects": [
+                            {
+                                "start_quest": "a_room_for_the_night"
+                            }
+                        ],
+                        "next": "she_is_grateful"
+                    },
+                    {
+                        "label": "Fair enough.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "she_is_grateful": [
+            {
+                "text": "\"Right,\" says Mara, and immediately finds something else to do with her hands. \"There is stew in the pot and I have not put it on his slate, and I would like that not to be a thing anybody remarks on.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "a_room_for_the_night",
+                            "stage": "wake_him"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Nobody will remark on it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "corbin_the_truth": [
+            {
+                "text": "Mara listens to all of it: nineteen years on the flat boats out of Greyhythe, and nine days ago he stopped, and he walked up here because up here is uphill and he wanted to be somewhere the water was not.\n\n\"Nineteen years,\" she repeats. \"And he has got four coppers.\"\n\nShe looks at the corner table for a while.\n\n\"Right,\" she says. \"Well. Something has to happen. He cannot have my fire seat through the autumn and I cannot put him on the road with four coppers and be a person I recognise afterwards, so.\"",
+                "choices": [
+                    {
+                        "label": "I'll pay for his bed and his supper.",
+                        "conditions": [
+                            {
+                                "gold_at_least": 10
+                            }
+                        ],
+                        "next": "corbin_paid_for"
+                    },
+                    {
+                        "label": "Put him to work. He can fix that third step.",
+                        "next": "corbin_works"
+                    },
+                    {
+                        "label": "I'll walk him down to the boats.",
+                        "next": "corbin_walked_out"
+                    }
+                ]
+            }
+        ],
+        "corbin_paid_for": [
+            {
+                "text": "Ten coppers for a bed and a bowl, and Mara throws in the bowl and does not say she is throwing in the bowl.\n\nHe sleeps eleven hours. He comes down on the second morning looking like a man rather than a coat, eats everything in front of him, and asks Mara — properly, standing up — whether there is anything wants doing before he goes.\n\nHe takes the Thursday boat. On the bar, when he has gone, there is a river man's knife: short, thick-backed, worn to nothing at the heel from nineteen years of sharpening. That is a bargeman's whole toolkit, and it is not a small thing to leave behind.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "a_room_for_the_night",
+                            "stage": "paid_his_room"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric turns the knife over once and puts it back down. \"He will be all right,\" he says. \"Not because of the bed. Because somebody paid for it in front of him.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Take the knife.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "corbin_works": [
+            {
+                "text": "\"A week,\" says Mara, in the voice of a woman who has already decided and is pretending to negotiate. \"Pots, kegs, and that third step. Bed in the back and what comes out of the pot. If he is still here on the eighth day we shall both have to say something about it.\"\n\nHe fixes the step on the first morning without being asked, which nobody in the Flagon has managed since spring.\n\nBy the fourth day Mara has stopped mentioning the week. Once, when he thinks the room is empty, he sings something with a very long line in it — the kind you sing to keep time with a pole — and then stops, embarrassed, and goes back to the kegs.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "a_room_for_the_night",
+                            "stage": "he_worked_it_off"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa, from the end of the bar: \"That's the first thing anyone's fixed in this town since we got here.\""
+                    },
+                    {
+                        "companion": "ilse",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "companion": "kessa",
+                                    "status": "active"
+                                }
+                            }
+                        ],
+                        "text": "Ilse: \"He needed a thing to do with his hands before anybody asked him a question. You got the order right.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Stay for a bowl.",
+                        "effects": [
+                            {
+                                "rest": "inn"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "corbin_walked_out": [
+            {
+                "text": "You walk him down to the river stair and put him on a boat going down, which is what he asks for once you have asked him twice.\n\nHe says the thing men say — that he is grateful, and that he will not forget it — and he means it for about as long as it takes to cast off, which is not a criticism of him and is only how that sentence works.\n\nMara gets her table back and wipes it down twice.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "a_room_for_the_night",
+                            "stage": "walked_him_out"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric watches the boat until it is round the bend, which takes some time, and does not say anything about it."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Everyone got what they asked for.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "he_is_staying": [
+            {
+                "text": "\"He is not staying,\" says Mara. \"He is here until the spring boats, and then he is going back on the water, and he has told me so twice.\" She stacks a mug. \"He has also mended the yard gate, the shutter, and the pump, and none of those were the week, so we shall see.\"",
+                "choices": [
+                    {
+                        "label": "A room, please.",
+                        "effects": [
+                            {
+                                "rest": "inn"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_north_wall": [
+            {
+                "text": "Mara goes very still.\n\n\"Say that again,\" she says.\n\nYou say it again. Four sacks do not walk down a stair that comes up behind the tap she stands at eighteen hours a day. They came through the wall — through the gap where the drain goes out into the sump — and that gap is not a gap. Somebody has been taking a course of brick out of it at a time, for years, and putting the loose ones back.\n\n\"I have stood on the other side of that wall since I was nineteen,\" Mara says. She puts down the cloth and does not pick it up again for the rest of the conversation. \"Find out where it goes. I will pay whatever it costs and I do not want to be told what it cost.\"",
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"A road, then. Not a nest. Roads have two ends and somebody maintains them.\""
+                    },
+                    {
+                        "companion": "sera",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "companion": "ilse",
+                                    "status": "active"
+                                }
+                            }
+                        ],
+                        "text": "Sera: \"Grain that never crosses a weighing floor. Do you know what that is worth? Nobody does. That is the point of it.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "I'll follow it back.",
+                        "effects": [
+                            {
+                                "start_quest": "rats_and_better"
+                            }
+                        ],
+                        "next": "she_gives_the_lamp"
+                    },
+                    {
+                        "label": "Brick it up and forget it.",
+                        "next": "not_yet"
+                    }
+                ]
+            }
+        ],
+        "she_gives_the_lamp": [
+            {
+                "text": "\"Take the good lamp,\" says Mara, \"and take the long one off the hook by the door, because the good lamp will not last you and I would rather you had two than be brave about it.\"\n\nShe fills something for somebody without looking at either.\n\n\"And whatever is down there,\" she says, \"it has been down there the whole time I have been up here. I should like that said out loud once before you go, because I have been telling myself for a fortnight that it is new.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "rats_and_better",
+                            "stage": "the_way_in"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "It has been down there the whole time.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "not_yet": [
+            {
+                "text": "\"I have thought about that every night for a fortnight,\" says Mara, \"and every night I get as far as: and then I am a woman standing on a brick wall, not knowing.\" She picks the cloth back up after all. \"Ask me again when I am tired enough.\"",
+                "choices": [
+                    {
+                        "label": "Fair enough.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_route_explained": [
+            {
+                "text": "You say it slowly.\n\nA brick stair under Granary Row, up to a loading hatch. A landing at the bottom of it swept cleaner than anywhere else underneath this town. And from there, a run of dry conduit going west into half the cellars between the market and the quay — including hers.\n\nNone of it crosses the weighing floor. None of it is tallied, taxed, or seen. It is not grain being stolen from the granary; it is grain that starts at the granary and is never anywhere at all.\n\n\"Four sacks in my cellar,\" says Mara.\n\n\"Four sacks that had gone off,\" you say. \"They were not delivering to you. They were storing, and something spoiled, and they left it where it lay.\"\n\nMara Hearthstone sits down on her own bar stool, which you have never seen.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "rats_and_better",
+                            "stage": "the_grain_stair"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric: \"How many cellars in this town have a north wall somebody has been taking apart a brick at a time?\""
+                    },
+                    {
+                        "companion": "kessa",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "companion": "aldric",
+                                    "status": "active"
+                                }
+                            }
+                        ],
+                        "text": "Kessa: \"It's a warehouse. The whole under-side of this town is somebody's warehouse.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Brick it. Your wall and the hatch, both.",
+                        "next": "she_bricks_it"
+                    },
+                    {
+                        "label": "This is Reed's now.",
+                        "next": "she_calls_reed"
+                    },
+                    {
+                        "label": "There are sixty people down there who eat off that route.",
+                        "next": "sixty_people"
+                    }
+                ]
+            }
+        ],
+        "sixty_people": [
+            {
+                "text": "Mara does not answer for a long time.\n\n\"I know,\" she says. \"I have known there were people down there since I was about thirty and somebody's child came up out of my own cellar with a candle and neither of us screamed.\" She rubs her face. \"I have left the hatch on the latch every winter since. So do not stand in my house and explain to me about the sixty people.\"\n\nShe stands up off the stool.\n\n\"But it is not sixty people any more,\" she says. \"It is sixty people and a *business*, and one of those was down there first, and I would like somebody to tell me which one it is I am protecting.\"",
+                "choices": [
+                    {
+                        "label": "Brick it. Your wall and the hatch, both.",
+                        "next": "she_bricks_it"
+                    },
+                    {
+                        "label": "This is Reed's now.",
+                        "next": "she_calls_reed"
+                    },
+                    {
+                        "label": "Neither. Leave it open and I'll make my own arrangement.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "she_bricks_it": [
+            {
+                "text": "It takes two days and eleven gold of brick, and the mason is Mara's cousin's boy, and neither of them asks any questions in front of the other.\n\nThe north wall is a wall. The hatch under Granary Row is a floor.\n\nNothing comes down the grain stair now. Nothing goes along the conduit either — and it turns out that a very great deal of what Undertown had been quietly eating came along that conduit, which is a thing nobody mentions to you while you are laying brick, and which you find out about afterwards, in the ordinary way, by there being fewer people at the lamps.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "rats_and_better",
+                            "stage": "shut_the_route"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Leave it there.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "she_calls_reed": [
+            {
+                "text": "Reed puts four men on the hatch for a fortnight and takes nine people at the bottom of it.\n\nEvery one of the nine lives in the tunnels. Every one of them was carrying somebody else's barley for a cut of it, and not one of them can name whose, because the arrangement was made with a man who came down twice a year with a slate and no name.\n\nThe granary's books show nothing, because the granary's books were never the point. The man whose hatch it is has an excellent explanation involving a former employee, and it is a good explanation, and Reed writes it down.\n\n\"I have nine people in my lockup who live in a drain,\" says Captain Elowen Reed, \"and I know exactly what I have caught and exactly what I have not.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "rats_and_better",
+                            "stage": "told_the_watch"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse says nothing at all for the rest of the day, and camps well away from the fire that night."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Leave it there.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_tuesday_girl": [
+            {
+                "text": "\"Somebody's,\" says Mara. \"She is about nine and she comes up the area steps on a Tuesday and I give her what is going, and she says thank you and takes it back down.\" She wipes. \"She used not to have to come to the door. That is all I am saying about it and it is more than I meant to.\"",
+                "choices": [
+                    {
+                        "label": "A room, please.",
+                        "effects": [
+                            {
+                                "rest": "inn"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "was_it": [
+            {
+                "text": "\"It was the lawful thing,\" says Mara, \"and I have kept a public house for twenty-two years by knowing that those are two different words.\" She takes a cup away. \"Nine of them. Not one name above them. And my north wall is still a hole, and next winter somebody will find another hatch, and we shall all do this again.\"",
+                "choices": [
+                    {
+                        "label": "A room, please.",
+                        "effects": [
+                            {
+                                "rest": "inn"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "she_does_not": [
+            {
+                "text": "\"No,\" Mara agrees. \"I do not.\" She fills something. \"And I have not lost a sack since, and the girl comes to the door on a Tuesday, and every so often I stand at that end of the bar and think about how much of this town I do not know the underneath of.\"\n\nShe puts the cup down in front of you.\n\n\"Which is a thing I could have thought at any point in twenty-two years,\" she says, \"and did not.\"",
+                "choices": [
+                    {
+                        "label": "A room, please.",
+                        "effects": [
+                            {
+                                "rest": "inn"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

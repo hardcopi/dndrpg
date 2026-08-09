@@ -1,0 +1,414 @@
+{
+    "npc_key": "street_seer",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "flag": "seers_coin_fate",
+                        "equals": "stopped"
+                    }
+                ],
+                "text": "Nan Vetch has moved her stool six feet along the wall, which in her trade is an act of some seriousness, and there is a girl of about nineteen doing cards outside the Flagon where Nan used to sit.\n\n\"Weather,\" says Nan. \"That is all I do now, and there is no living in weather, and I sleep.\"",
+                "choices": [
+                    {
+                        "label": "Who's the girl?",
+                        "next": "the_girl"
+                    },
+                    {
+                        "label": "Read the weather, then.",
+                        "next": "the_weather"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "seers_coin_fate",
+                        "equals": "turned"
+                    }
+                ],
+                "once": true,
+                "text": "Nan Vetch has a new shawl and the same stool. \"Sit down and tell me what I saw,\" she says, perfectly pleasantly, and holds out her hand for the copper anyway, because the copper is the part that makes it a reading.",
+                "choices": [
+                    {
+                        "label": "Are you still taking the Tuesday silver?",
+                        "next": "still_taking_it"
+                    },
+                    {
+                        "label": "Nothing today.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "seers_coin_fate",
+                        "equals": "traced"
+                    }
+                ],
+                "once": true,
+                "text": "\"You went up the stair after him,\" says Nan Vetch, before you have sat down. \"And you found a boy at a desk who is paid by the letter and has never met anybody, and you came back down here and you did not know what to do with your hands.\" She snorts. \"That is not the sight. That is having watched four people do it.\"",
+                "choices": [
+                    {
+                        "label": "Will you stop?",
+                        "next": "will_you_stop"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_seers_coin",
+                        "stage": "traced_the_hand"
+                    }
+                ],
+                "text": "\"Well?\" Nan Vetch does not look up from her cloth. \"Whose hand was it? I have wondered for four months and I have never once been able to make myself follow him, which I would like you to think about before you say anything clever to me.\"",
+                "choices": [
+                    {
+                        "label": "A copyist paid by the letter, who has never met anyone.",
+                        "next": "the_copyist_answer"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_seers_coin",
+                        "stage": "follow_the_coin"
+                    }
+                ],
+                "text": "\"Tuesdays,\" says Nan. \"Between the ninth and the tenth bell, from the counting-house end, a man with a leather satchel and a very ordinary coat. He does not stop. He puts it in my dish going past and he has never once said good morning.\"",
+                "choices": [
+                    {
+                        "label": "I'll wait for him.",
+                        "end": true
+                    },
+                    {
+                        "label": "Take my money instead and say what I want said.",
+                        "conditions": [
+                            {
+                                "gold_at_least": 30
+                            }
+                        ],
+                        "next": "she_takes_your_coin"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_seers_coin",
+                        "status": "active"
+                    }
+                ],
+                "text": "\"You have come back,\" says Nan Vetch, \"which four hundred people have not, and you have come back with a question rather than a copper, which is worse for me and better for you.\"",
+                "choices": [
+                    {
+                        "label": "Who pays you to say the river is coming?",
+                        "next": "she_admits_it"
+                    },
+                    {
+                        "label": "Nothing today.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "\"Your fortune? Cross the river, mind the ford. That one is free; the rest cost.\"\n\nAn old woman on a stool against the wall with a cloth over her knees, doing very good business, mostly with people in farm boots.",
+                "choices": [
+                    {
+                        "label": "A copper, then. Read me.",
+                        "next": "the_reading"
+                    },
+                    {
+                        "label": "Why is your queue all farmers?",
+                        "next": "all_farmers"
+                    },
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_reading": [
+            {
+                "text": "She takes the copper, turns your hand over, does not look at it, and looks at your boots instead — which is, you understand a moment later, where the actual information is.\n\n\"Road,\" she says. \"Bad ground east and worse ground west, and you will go both ways twice before the year is out.\"\n\nThen, without any change of tone at all, in the voice of a woman reciting:\n\n\"And the river is coming back for the west bank. It has done it twice in my life. A wise man sells while the ground is still worth something.\"\n\nShe stops. She looks up at you properly for the first time, because you are not wearing farm boots, and something goes across her face that is a great deal like being caught.",
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera, afterwards: \"She said the last part differently. Flatter. That is a line somebody gave her.\""
+                    },
+                    {
+                        "companion": "ilse",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "companion": "sera",
+                                    "status": "active"
+                                }
+                            }
+                        ],
+                        "text": "Ilse: \"She has said that four hundred times. You can hear the grooves in it.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "You have said that before.",
+                        "effects": [
+                            {
+                                "start_quest": "the_seers_coin"
+                            }
+                        ],
+                        "next": "she_admits_it"
+                    },
+                    {
+                        "label": "Thank you.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "all_farmers": [
+            {
+                "text": "\"Because farmers are the only people left who pay for weather,\" says Nan Vetch. \"Townsmen want love and money. Farmers want to know when the water is coming, and I am very good at that, and I have been right about it more often than the almanac.\"\n\nShe puts out her hand for the copper.",
+                "choices": [
+                    {
+                        "label": "A copper, then. Read me.",
+                        "next": "the_reading"
+                    },
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "she_admits_it": [
+            {
+                "text": "\"Four hundred and some times,\" says Nan Vetch, \"since Candlemas, to every pair of farm boots that has sat down in front of me off the west road.\"\n\nShe does not pretend, and she does not apologise, and both of those take you a moment to catch up with.\n\n\"Two silver a week. In advance. Tuesdays.\" She folds the cloth. \"And before you say the thing you are about to say — I have never once said anything untrue. The flats *do* go under. They went under when I was eleven and again when I was thirty-four and they will go under again, and any old woman on this street would tell you so for nothing.\"\n\nA pause.\n\n\"Somebody is paying me to keep saying so,\" she says, \"at exactly the season it is worth the most to them. That is the whole of what I have done, and I have thought about it every Tuesday for four months.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_seers_coin",
+                            "stage": "sit_for_a_reading"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa: \"Two silver a week to say a true thing on a schedule.\" She sounds almost admiring. \"That's cheap.\""
+                    },
+                    {
+                        "companion": "aldric",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "companion": "kessa",
+                                    "status": "active"
+                                }
+                            }
+                        ],
+                        "text": "Aldric: \"You have not lied. You have been aimed.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Who brings the silver?",
+                        "next": "the_tuesday_man"
+                    },
+                    {
+                        "label": "Stop taking it.",
+                        "next": "why_should_she"
+                    },
+                    {
+                        "label": "Take mine instead, and say what I tell you.",
+                        "conditions": [
+                            {
+                                "gold_at_least": 30
+                            }
+                        ],
+                        "next": "she_takes_your_coin"
+                    }
+                ]
+            }
+        ],
+        "the_tuesday_man": [
+            {
+                "text": "\"A man with a satchel, from the counting-house end, between the ninth and the tenth bell.\" Nan tucks the cloth under her knees. \"He does not stop and he has never once said good morning, and I could no more follow him than fly, on account of the stool and the knees and the fact that I would lose a Tuesday.\"\n\nShe looks up.\n\n\"You could,\" she says.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_seers_coin",
+                            "stage": "follow_the_coin"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "I'll wait for him.",
+                        "end": true
+                    },
+                    {
+                        "label": "Take mine instead, and say what I tell you.",
+                        "conditions": [
+                            {
+                                "gold_at_least": 30
+                            }
+                        ],
+                        "next": "she_takes_your_coin"
+                    }
+                ]
+            }
+        ],
+        "why_should_she": [
+            {
+                "text": "\"With what,\" says Nan Vetch, and there it is again, that sentence, the one this whole town seems to be built on. \"I am sixty-eight. The stool is mine and the shawl is mine and that is the inventory.\"\n\nShe softens fractionally, which on Nan is enormous.\n\n\"I did not come up out of the fen at fourteen and keep myself for fifty-four years by turning down two silver a week for telling the truth. If you want me to stop, you had better be able to tell me what stops instead.\"",
+                "choices": [
+                    {
+                        "label": "Then stop. I'll see you're not out of pocket.",
+                        "conditions": [
+                            {
+                                "gold_at_least": 20
+                            }
+                        ],
+                        "next": "she_gives_it_back"
+                    },
+                    {
+                        "label": "Tell me who brings the silver instead.",
+                        "next": "the_tuesday_man"
+                    },
+                    {
+                        "label": "Then keep taking it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "she_gives_it_back": [
+            {
+                "text": "She gives the last week's silver back.\n\nYou would not think two coins could take that long to hand over. She has to be talked into the fourth attempt, and she is furious about it in a way that has nothing to do with you, and when it is finally done she sits with her hands in her lap and says, \"Fifty-four years and I have never given anything back.\"\n\nWithin a fortnight there is a girl of nineteen doing cards outside the Flagon who tells anybody in farm boots that the water is coming. Nan watches her work for a while from six feet along the wall.\n\n\"She is not very good,\" says Nan Vetch. \"She will get better.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_seers_coin",
+                            "stage": "she_stopped"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"Two silver a week is not a person. It is a place in a list. Places in lists get filled.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "It was still worth doing.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "she_takes_your_coin": [
+            {
+                "text": "\"Thirty gold,\" says Nan Vetch, and does not count it, which is a courtesy and also a way of not being seen to. \"Tell me what you want said, and to whom, and I shall say it to them the way I say things — which is nine parts weather and one part the thing you paid for, because that is the whole trade and the rest of it is theatre.\"\n\nA pause.\n\n\"And I shall keep the Tuesday silver,\" she says, evenly. \"You knew that before you sat down. I could see you knowing it.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_seers_coin",
+                            "stage": "turned_her"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric: \"There are now two people paying an old woman to point a town in a direction. That is not an improvement. That is a competition.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "I knew.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_copyist_answer": [
+            {
+                "text": "Nan Vetch listens to the whole thing and then laughs, once, without much in it.\n\n\"So there is nobody,\" she says. \"There is a boy at a desk being paid by the letter, and a satchel, and a Tuesday. Somewhere at the far end of it there is a person, and between me and them there are four rooms full of people who have all done nothing wrong.\"\n\nShe pulls the shawl up.\n\n\"That is the cleverest thing I have ever heard of,\" she says. \"And I have spent fifty years being paid for knowing what people are up to.\"",
+                "choices": [
+                    {
+                        "label": "Will you stop?",
+                        "next": "will_you_stop"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "will_you_stop": [
+            {
+                "text": "\"I shall say it slower,\" says Nan Vetch. \"That is what I have got. If I say it slower and I put more weather round it, fewer of them will hear it as advice.\"\n\nShe looks down the High Street at nothing in particular.\n\n\"It is not much of a rebellion,\" she says. \"It is what a woman on a stool has got.\"",
+                "choices": [
+                    {
+                        "label": "It counts.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "still_taking_it": [
+            {
+                "text": "\"Every Tuesday,\" says Nan, \"and yours as well, and I have not lied to a single soul in either direction.\" She adjusts the new shawl. \"You have bought a woman who tells the truth for money. There is nothing in that arrangement that will ever break, and you should be a good deal more uneasy about that than you look.\"",
+                "choices": [
+                    {
+                        "label": "Nothing today.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_girl": [
+            {
+                "text": "\"Petra Coule. Her mother did cards on the ford road until the ford road stopped having anybody on it.\" Nan watches her deal. \"She got the Tuesday within a fortnight of my giving it up, which tells you they were not looking for me. They were looking for a stool.\"",
+                "choices": [
+                    {
+                        "label": "Read the weather, then.",
+                        "next": "the_weather"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_weather": [
+            {
+                "text": "\"Rain by Thursday, hard, off the west, and it will not last,\" says Nan Vetch. \"And the flats will go under one of these years, and I shall be dead, and it will still be true.\"\n\nShe holds out her hand for the copper.",
+                "choices": [
+                    {
+                        "label": "Worth a copper.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

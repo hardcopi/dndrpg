@@ -1,0 +1,13 @@
+{
+    "npc_key": "market_baker",
+    "name": "Nell Quist",
+    "role": "Baker",
+    "description": "Bakes for half the High Street out of a stall she inherited and an oven she rents. Weighs everything twice.",
+    "sprite_key": "nell_quist",
+    "image_url": "assets/images/npcs/innkeeper.png",
+    "is_quest_giver": true,
+    "dialog": "market_baker",
+    "place": {
+        "location": "market_square"
+    }
+}

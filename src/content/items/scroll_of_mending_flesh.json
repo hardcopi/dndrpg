@@ -1,0 +1,13 @@
+{
+  "item_key": "scroll_of_mending_flesh",
+  "name": "Scroll of Mending Flesh",
+  "description": "A Priory copyist's rendering of Cure Wounds, good for one reading. The vellum crumbles as the last word lands.",
+  "item_type": "scroll",
+  "rarity": "uncommon",
+  "weight": 0.1,
+  "value_gp": 120,
+  "properties": {
+    "use_effect": { "cast": "cure_wounds" }
+  },
+  "icon": "scroll"
+}

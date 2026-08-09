@@ -1,0 +1,13 @@
+{
+    "item_key": "oldcity_lockbox_purse",
+    "name": "The Renegade's Purse",
+    "item_type": "treasure",
+    "rarity": "common",
+    "weight": 1,
+    "value_gp": 30,
+    "icon": "coin",
+    "description": "Thirty gold in a lockbox a dead man would not let go of. He got further with it than the others expected and not nearly as far as he did.",
+    "place": {
+        "location": "oldcity_renegades_stash"
+    }
+}

@@ -1,0 +1,11 @@
+{
+    "npc_key": "street_minstrel",
+    "name": "A minstrel",
+    "role": "Townsfolk",
+    "sprite_key": "bard",
+    "is_ambient": true,
+    "dialog": "street_minstrel",
+    "place": {
+        "location": "high_street"
+    }
+}

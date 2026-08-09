@@ -1,0 +1,15 @@
+{
+    "item_key": "oldcity_steel_helm",
+    "name": "Dented Steel Helm",
+    "item_type": "armor",
+    "rarity": "common",
+    "weight": 6,
+    "value_gp": 10,
+    "armor_bonus": 0,
+    "armor_type": "helm",
+    "icon": "helmet",
+    "description": "The gleam that draws people further into the web than they meant to go. Still on its owner when you find it, and its owner is past objecting.",
+    "place": {
+        "location": "oldcity_spider_lair"
+    }
+}

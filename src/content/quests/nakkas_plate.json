@@ -1,0 +1,109 @@
+{
+    "quest_key": "nakkas_plate",
+    "title": "Nakka's Plate",
+    "description": "The warlord of the warren wears human plate that does not fit her. Everyone in Rivermark assumes she took it off a dead man. It is three suits, and the best of them arrived in a crate with the straw still in it.",
+    "giver": "nakka",
+    "on_job_board": false,
+    "required_level": 3,
+    "rewards": {
+        "xp": 450,
+        "gold": 120
+    },
+    "stages": {
+        "three_suits": {
+            "title": "Three suits",
+            "objective": "Ask Nakka Skarn where the armour came from.",
+            "journal": "Up close the plate is worse than it looks from a distance: it is three suits, cut for three different men, none of them her size. Two of the three she can account for down to the field they were taken off. The third she cannot, and she says so without being asked twice.",
+            "target": {
+                "location": "warlord_hall"
+            }
+        },
+        "the_crate_it_came_in": {
+            "title": "The crate it came in",
+            "objective": "The stores still have the crate. Go and look at it.",
+            "journal": "The warren keeps a dry store with a door that still hangs true, and along the back wall of it there are crates that never came off a burned wagon: planed pine, clean straw, opened carefully from the top. The best of the three suits came up the trail in one of them four winters ago, and Nakka was told to take it, and the person who told her was not a goblin.",
+            "target": {
+                "location": "warren_stores"
+            }
+        },
+        "traced_the_crate": {
+            "title": "Traced",
+            "journal": "The crate is carter's work and carters mark their own: three notches on the batten and a route-scar where the strapping bit. It came up the east road, and before the east road it came off a river landing, and the landing it came off is not Rivermark's, because Rivermark's quay does not use strapping. That is as far as it goes. Nobody I asked would take it further and two of them stopped talking to me.",
+            "resolution": "traced_the_crate",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "plate_fate",
+                    "value": "traced"
+                },
+                {
+                    "set_flag": "mark_seen_plate"
+                },
+                {
+                    "set_flag": "crate_came_downriver"
+                },
+                {
+                    "xp": 200
+                },
+                {
+                    "approval": {
+                        "sera": 12,
+                        "ilse": 10,
+                        "aldric": 6,
+                        "kessa": -2
+                    }
+                }
+            ]
+        },
+        "she_took_it_off": {
+            "title": "She took it off",
+            "journal": "She unbuckled the left pauldron in front of us and handed it over, which took a while, because the straps have been shortened three times. Inside, on the lining plate where nobody would ever look, there is a small clean mark punched into the steel: a plumb-line and a square. She has been wearing it for four years. She asked me what it was. I did not know and I said so, and she said that was the first honest answer she had had off the valley all year.",
+            "resolution": "she_took_it_off",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "plate_fate",
+                    "value": "given"
+                },
+                {
+                    "set_flag": "mark_seen_plate"
+                },
+                {
+                    "give_item": "marked_pauldron",
+                    "quantity": 1
+                },
+                {
+                    "xp": 150
+                },
+                {
+                    "approval": {
+                        "ilse": 16,
+                        "aldric": 10,
+                        "kessa": 4,
+                        "sera": 6
+                    }
+                }
+            ]
+        },
+        "let_it_be": {
+            "title": "Left buckled",
+            "journal": "She wears three men's armour and none of it fits and she has kept the helm for the shape it makes in a doorway. I decided that where the third suit came from was her business, and she let me decide that, and looked at me for slightly too long afterwards.",
+            "resolution": "let_it_be",
+            "terminal": true,
+            "outcome": "neutral",
+            "effects": [
+                {
+                    "set_flag": "plate_fate",
+                    "value": "unasked"
+                },
+                {
+                    "approval": {
+                        "kessa": 4,
+                        "ilse": -6,
+                        "sera": -8
+                    }
+                }
+            ]
+        }
+    }
+}

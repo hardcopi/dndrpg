@@ -1,0 +1,311 @@
+{
+    "npc_key": "osgar_tull",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "flag": "passage_fate",
+                        "equals": "booked"
+                    }
+                ],
+                "once": true,
+                "text": "Tull has your name in the book, or the name you gave him, and taps it with a thumb the size of a spoon. \"Second or the fifth,\" he says. \"I go at first light and I go whether you're on the step or not. Nineteen years. Two men have missed it and both of them were surprised, which tells you what people are.\"",
+                "choices": [
+                    {
+                        "label": "What's down there?",
+                        "next": "what_is_down_there"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "passage_fate",
+                        "equals": "waiting"
+                    }
+                ],
+                "once": true,
+                "text": "Tull does not look up and does not need to. \"Second and the fifth,\" he says, coiling. \"Same price, same steps, same time. I'll not ask you again and I'll not be surprised when you come.\"",
+                "choices": [
+                    {
+                        "label": "Sixty, then.",
+                        "conditions": [
+                            {
+                                "gold_at_least": 60
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "passage_downriver",
+                                    "stage": "booked_passage"
+                                }
+                            }
+                        ],
+                        "next": "the_book"
+                    },
+                    {
+                        "label": "What goes up the river?",
+                        "next": "up_the_river"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "survey_fate",
+                        "equals": "sold"
+                    }
+                ],
+                "once": true,
+                "text": "Tull looks at you for a moment longer than he looked at you last time. \"You'll be going down on the house's account now,\" he says. It is not a question and there is no judgement in it whatsoever, which is somehow worse. \"That's a different page of the book. Costs you nothing and I write it different.\"",
+                "choices": [
+                    {
+                        "label": "Write it however you like.",
+                        "next": "the_other_page"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "passage_downriver",
+                        "status": "active"
+                    }
+                ],
+                "text": "\"Sixty,\" Tull says, before you have asked. \"Sixty for a place, food's yours, and I'll not carry livestock or anything that's still arguing.\" He coils rope while he talks, which he does whether or not there is rope to coil. \"Second and the fifth. First light. I'll want a name for the book.\"",
+                "choices": [
+                    {
+                        "label": "Sixty, then. Here's the name.",
+                        "conditions": [
+                            {
+                                "gold_at_least": 60
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "passage_downriver",
+                                    "stage": "booked_passage"
+                                }
+                            }
+                        ],
+                        "next": "the_book"
+                    },
+                    {
+                        "label": "Why do you need a name?",
+                        "next": "the_other_page"
+                    },
+                    {
+                        "label": "What's down there?",
+                        "next": "what_is_down_there"
+                    },
+                    {
+                        "label": "Not on this one.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "passage_downriver",
+                                    "stage": "not_yet"
+                                }
+                            }
+                        ],
+                        "next": "she_goes_anyway"
+                    }
+                ]
+            },
+            {
+                "text": "The packet stair is green below the sixth step and dry above it, and there is a very large man sitting on the seventh with a rope in his hands he is not doing anything with. \"Second and the fifth,\" he says, without being asked. \"That's the sailing. Everyone comes down here to ask and it's chalked on the board behind me and nobody reads a board.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_tull"
+                    },
+                    {
+                        "start_quest": "passage_downriver"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "What does a place cost?",
+                        "next": "the_price"
+                    },
+                    {
+                        "label": "What's down there?",
+                        "next": "what_is_down_there"
+                    },
+                    {
+                        "label": "Nothing. Sorry.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_price": [
+            {
+                "text": "\"Sixty,\" Tull says. \"Food's yours. No livestock and nothing that's still arguing.\" He shifts the rope to the other hand. \"And a name for the book. The name's the same price whatever you tell me it is, and I've had a lot of names off people and I've never once corrected one.\"",
+                "choices": [
+                    {
+                        "label": "Sixty, then.",
+                        "conditions": [
+                            {
+                                "gold_at_least": 60
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "passage_downriver",
+                                    "stage": "booked_passage"
+                                }
+                            }
+                        ],
+                        "next": "the_book"
+                    },
+                    {
+                        "label": "Why the name?",
+                        "next": "the_other_page"
+                    },
+                    {
+                        "label": "Not yet.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "passage_downriver",
+                                    "stage": "not_yet"
+                                }
+                            }
+                        ],
+                        "next": "she_goes_anyway"
+                    }
+                ]
+            }
+        ],
+        "the_other_page": [
+            {
+                "text": "\"Because people ask me,\" Tull says. \"Not often. Twice a year, maybe, somebody comes down from the house or up from the sea and wants to know who I carried and when. And I tell them, because I'm a bargemaster and not a hero, and because what I've got in the book is whatever the man on the step told me.\" He looks up. \"So think about what you tell me. That's the only advice I give free.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "tull_told_us_straight"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa: \"He just told us he sells us out and charged nothing for the warning.\" Tull: \"That's about the size of it, love.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Sixty, and put down whatever you like.",
+                        "conditions": [
+                            {
+                                "gold_at_least": 60
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "passage_downriver",
+                                    "stage": "booked_passage"
+                                }
+                            }
+                        ],
+                        "next": "the_book"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "what_is_down_there": [
+            {
+                "text": "\"Widens,\" Tull says. \"Hills give out about the second bend and then it's flat as a table for four days and there's more people on one wharf down there than in your whole valley.\" He coils. \"You'll want to know about the house. Everybody does. It's a street of offices and a yard, and I've never been past the yard, and the man who takes the manifests off me at the yard has been taking manifests off me for nineteen years and I don't know his name.\"",
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric: \"Nineteen years.\" Tull: \"He's very pleasant, brother. It's just never come up.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "What goes up the river?",
+                        "next": "up_the_river"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "up_the_river": [
+            {
+                "text": "\"Chain,\" Tull says. \"Oil. Timber cut to a length somebody upriver decided. Salt. Iron.\" He thinks. \"And men, the first two years. A lot of men, in the spring, and none of them ever on the boat coming back.\" He coils. \"That's not a dark thing. They're working. It's a long way and a man doesn't come home for a Sunday.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "tull_counted_the_men"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "How many men?",
+                        "next": "he_does_not_know_how_many"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "he_does_not_know_how_many": [
+            {
+                "text": "Tull works it out on his fingers, twice, and does not like the answer either time. \"Call it two hundred and some,\" he says. \"Over the two springs.\" He puts the rope down, which he has not done at any point in this conversation. \"And none coming back down. I've never sat and added that up before and I'd be obliged if you'd not ask me to do it again.\"",
+                "choices": [
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_book": [
+            {
+                "text": "He writes what you tell him, spells it the way he spells everything, and takes the sixty without counting it because he will count it later and would not embarrass you. \"Second and the fifth,\" he says. \"First light. Bring a coat; it's colder on the water than the water looks.\"",
+                "choices": [
+                    {
+                        "label": "I'll be here.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "she_goes_anyway": [
+            {
+                "text": "\"She goes anyway,\" Tull says, entirely unbothered, and picks the rope back up. \"Nineteen years I've never had to persuade anybody twice. Either the valley's finished with a man or it isn't, and a man always knows which before I do.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

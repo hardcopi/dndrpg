@@ -1,0 +1,25 @@
+{
+  "spell_key": "guidance",
+  "name": "Guidance",
+  "level": 0,
+  "school": "Divination",
+  "casting_time": "1 action",
+  "range_text": "Touch",
+  "components": "V, S",
+  "duration": "Concentration, up to 1 minute",
+  "description": "You touch one willing creature. Once before the spell ends, the target can roll a d4 and add the number rolled to one ability check of its choice. It can roll the die before or after making the ability check. The spell then ends.",
+  "resolution": "buff",
+  "concentration": true,
+  "duration_rounds": 10,
+  "target_kind": "ally",
+  "reaches_back_rank": false,
+  "effect": {
+    "check_bonus_dice": "1d4",
+    "uses": 1
+  },
+  "source": "5e SRD",
+  "classes": [
+    "Cleric",
+    "Druid"
+  ]
+}

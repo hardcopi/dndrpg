@@ -1,0 +1,12 @@
+{
+  "item_key": "ring_of_protection",
+  "name": "Ring of Protection",
+  "description": "A plain band of grey metal, warm to the touch. The world's edges land a little softer on whoever wears it.",
+  "item_type": "misc",
+  "rarity": "rare",
+  "weight": 0,
+  "value_gp": 600,
+  "slot": "ring",
+  "properties": { "ac_bonus": 1, "save_bonus": 1 },
+  "icon": "treasure"
+}

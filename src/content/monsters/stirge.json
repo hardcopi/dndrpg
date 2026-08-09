@@ -1,0 +1,46 @@
+{
+  "resistances": [],
+  "immunities": [],
+  "vulnerabilities": [],
+  "condition_immunities": [],
+  "source": "5e SRD",
+  "monster_key": "stirge",
+  "name": "Stirge",
+  "size": "Tiny",
+  "type": "beast",
+  "alignment": "unaligned",
+  "armor_class": 14,
+  "hit_points": 2,
+  "hit_dice": "1d4",
+  "speed": "10 ft., fly 40 ft.",
+  "strength": 4,
+  "dexterity": 16,
+  "constitution": 11,
+  "intelligence": 2,
+  "wisdom": 8,
+  "charisma": 6,
+  "challenge_rating": 0.125,
+  "experience_points": 25,
+  "traits": {},
+  "actions": [
+    {
+      "name": "Blood Drain",
+      "type": "melee",
+      "bonus": 5,
+      "damage": "1d4+3",
+      "damage_type": "piercing",
+      "note": "The stirge attaches to the target. While attached it does not attack; instead it drains 1d4+3 blood at the start of each of its turns."
+    }
+  ],
+  "saves": {
+    "dex": 3
+  },
+  "rank_pref": "front",
+  "sprite_key": "stirge",
+  "loot": [
+    {
+      "item": "antitoxin",
+      "chance": 15
+    }
+  ]
+}

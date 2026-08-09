@@ -1,0 +1,73 @@
+{
+    "quest_key": "the_same_mark",
+    "title": "The Same Mark",
+    "description": "A plumb-bob hanging inside a square. You have now seen it in two places that have nothing to do with each other.",
+    "giver": "alder_pyke",
+    "on_job_board": false,
+    "required_level": 2,
+    "rewards": {
+        "xp": 150
+    },
+    "stages": {
+        "two_places": {
+            "title": "Two places",
+            "objective": "Nothing to do about it. Keep your eyes open.",
+            "journal": "A plumb-bob hanging inside a square, cut or stamped or painted. I have seen it twice now, in two places that have no business sharing anything. It is probably a maker's mark. Most things are.",
+            "target": {
+                "location": "granary_row"
+            }
+        },
+        "asked_the_chainman": {
+            "title": "Ask the man who paints them",
+            "objective": "Alder Pyke walks lines for whoever is paying. Ask him what the mark is.",
+            "journal": "There is an old chainman on Granary Row with a hundred feet of chain over his shoulder and a plumb-bob in his pocket, and the plumb-bob has the mark stamped on the flat. He paints them. He has painted a great many.",
+            "target": {
+                "location": "granary_row"
+            }
+        },
+        "started_counting": {
+            "title": "Counting them",
+            "journal": "It is a survey mark. Pyke was quite clear and quite bored: a chain is dragged, a line is walked, a mark is painted, and a man is paid one and threepence a day for it. There is nothing to it. I have started writing down where I see them anyway, and I could not tell you why.",
+            "resolution": "started_counting",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "same_mark_fate",
+                    "value": "counting"
+                },
+                {
+                    "set_flag": "counting_the_marks"
+                },
+                {
+                    "give_item": "surveyors_plumb",
+                    "quantity": 1
+                },
+                {
+                    "approval": {
+                        "ilse": 5,
+                        "sera": 6,
+                        "aldric": 3
+                    }
+                }
+            ]
+        },
+        "let_it_alone": {
+            "title": "A maker's mark",
+            "journal": "It is a survey mark. Somebody is measuring something, which is what people with money do before they buy it, and it is no more sinister than a milestone. I asked, I was answered, and I have let it alone.",
+            "resolution": "let_it_alone",
+            "terminal": true,
+            "outcome": "neutral",
+            "effects": [
+                {
+                    "set_flag": "same_mark_fate",
+                    "value": "let_alone"
+                },
+                {
+                    "approval": {
+                        "kessa": 3
+                    }
+                }
+            ]
+        }
+    }
+}

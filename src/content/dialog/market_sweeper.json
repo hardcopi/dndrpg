@@ -1,0 +1,17 @@
+{
+    "npc_key": "market_sweeper",
+    "start": "hail",
+    "nodes": {
+        "hail": [
+            {
+                "text": "Swept this square twice today. Horses have no respect for a clean cobble.",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

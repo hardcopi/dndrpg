@@ -1,0 +1,14 @@
+{
+  "item_key": "fennow_ledger",
+  "name": "The Fennow Deposit Book",
+  "description": "Waterlogged to the spine and legible anyway, because it was written in oak-gall ink by people who expected to be checked. Two hundred and six names, what each of them put in the strongroom, and the date the doors were shut on all of it. The last eleven entries are all one week, and all withdrawals, and all to the bank's own partners.",
+  "item_type": "misc",
+  "rarity": "rare",
+  "weight": 4,
+  "value_gp": 0,
+  "properties": {
+    "quest_item": true,
+    "readable": true
+  },
+  "icon": "book"
+}

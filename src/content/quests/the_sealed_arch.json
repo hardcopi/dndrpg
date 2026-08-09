@@ -1,0 +1,101 @@
+{
+    "quest_key": "the_sealed_arch",
+    "title": "The Sealed Arch",
+    "description": "There is an arch in the Undertown brickwork that was open within living memory and is a wall now. The wall is newer than anything else at that depth, it is very good work, and it was laid from the far side.",
+    "giver": "aggie_slate",
+    "on_job_board": false,
+    "required_level": 3,
+    "rewards": {
+        "xp": 500,
+        "gold": 50
+    },
+    "stages": {
+        "find_the_arch": {
+            "title": "Find the arch",
+            "objective": "Aggie Slate says a passage that used to go somewhere does not any more. Go and look at it.",
+            "journal": "Aggie Slate has sat the Low Court eleven years and lived in the tunnels for nineteen. She walked the passage south of the weir as a girl and it came out somewhere. It does not come out anywhere now.",
+            "target": {
+                "location": "bricked_arch"
+            }
+        },
+        "the_far_side": {
+            "title": "Read the wall",
+            "objective": "Work out when the arch was closed, and from which side.",
+            "journal": "The arch is old, soft, lime-set and hand-made. The fill is hard grey brick in a cement that has not weathered, laid plumb, laid by somebody who was paid properly. The joints are struck smooth on the far face and rough on this one, which is what a wall looks like when the mason was standing on the other side of it: nobody finishes the face they are walking away from. Whoever bricked this up did not come back this way. One brick near the springing of the arch carries a small cut mark, a plumb-line crossed by a square, cut before the brick was fired.",
+            "target": {
+                "location": "bricked_arch"
+            },
+            "effects": [
+                {
+                    "set_flag": "mark_seen_brick"
+                }
+            ]
+        },
+        "broke_through": {
+            "title": "Through",
+            "journal": "Two hours with a bar. Behind the fill the passage runs on about thirty feet and then turns down, and it has been timbered — new pine, sawn square, set by somebody who intends the roof to stay up for years. There is a ladder. The ladder is worn in the middle of every rung and dry, which means it is used and used often and not by anyone coming up through water. We went down four lengths and then came back, because I had a lamp and about an hour of oil and no idea at all how deep it went. I went back eleven days later. The arch was bricked again, in the same grey brick, and the joints were struck smooth on the far side.",
+            "resolution": "broke_through",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "sealed_arch_fate",
+                    "value": "opened"
+                },
+                {
+                    "set_flag": "arch_reopened"
+                },
+                {
+                    "approval": {
+                        "ilse": 10,
+                        "kessa": 8,
+                        "sera": 6,
+                        "aldric": -2
+                    }
+                }
+            ]
+        },
+        "left_it_sealed": {
+            "title": "Left standing",
+            "journal": "I left the wall up. I paced it out from the weir and from the Low Court stair and wrote both counts down, so that if it ever matters I can put my hand on the place in the dark. Aggie Slate watched me do it and said nothing, and then said that in nineteen years I was the second person to write anything down about that wall, and did not say who the first was.",
+            "resolution": "left_it_sealed",
+            "terminal": true,
+            "outcome": "neutral",
+            "effects": [
+                {
+                    "set_flag": "sealed_arch_fate",
+                    "value": "left"
+                },
+                {
+                    "approval": {
+                        "ilse": 4,
+                        "aldric": 4,
+                        "kessa": -4
+                    }
+                }
+            ]
+        },
+        "took_a_rubbing": {
+            "title": "A rubbing of the brick",
+            "journal": "Paper on the brick and the flat of a charcoal, and it came up clean: a plumb-line crossed by a square, no bigger than a thumbnail. I took it to Brenna, who deals with people who work stone, and she said it is a mason's mark, that every mason cuts one, that this one is a good clean job and she does not know the hand. She turned it over twice. Then she gave it back and asked me, in a completely ordinary voice, where I had got it, and I told her, and she said hm, and went back to the bellows.",
+            "resolution": "took_a_rubbing",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "sealed_arch_fate",
+                    "value": "rubbing"
+                },
+                {
+                    "give_item": "arch_rubbing",
+                    "quantity": 1
+                },
+                {
+                    "approval": {
+                        "sera": 8,
+                        "ilse": 6,
+                        "aldric": 2
+                    }
+                }
+            ]
+        }
+    }
+}

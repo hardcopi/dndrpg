@@ -1,0 +1,12 @@
+{
+    "npc_key": "foreman_dessel",
+    "name": "Foreman Dessel",
+    "role": "City Engineer",
+    "description": "Responsible for the two causeways, the stone that shores them, and a tally board whose columns have not agreed since the spring.",
+    "sprite_key": "foreman_dessel",
+    "is_quest_giver": true,
+    "dialog": "foreman_dessel",
+    "place": {
+        "location": "oldcity_works_depot"
+    }
+}

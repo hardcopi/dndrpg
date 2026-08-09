@@ -1,0 +1,17 @@
+{
+    "npc_key": "street_scholar",
+    "start": "hail",
+    "nodes": {
+        "hail": [
+            {
+                "text": "The mill ledger, the granary tallies — numbers are the truest gossip in this town.",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

@@ -1,0 +1,11 @@
+{
+    "npc_key": "dov_mudlark",
+    "name": "Dov",
+    "role": "Mudlark",
+    "description": "Works the low water for whatever the town drops through its gratings. Knows every yard of the tunnels and would rather you did not.",
+    "sprite_key": "beggar",
+    "dialog": "dov_mudlark",
+    "place": {
+        "location": "low_conduit"
+    }
+}

@@ -1,0 +1,13 @@
+{
+  "item_key": "gate_wheel_key",
+  "name": "Gate Wheel Key",
+  "description": "A square iron key eighteen inches long, for the worm-screw on the flood gate. Without it the wheel spins free and the gate does whatever it was last told to do. There were two. This is one.",
+  "item_type": "misc",
+  "rarity": "uncommon",
+  "weight": 4,
+  "value_gp": 0,
+  "properties": {
+    "quest_item": true
+  },
+  "icon": "tools"
+}

@@ -1,0 +1,13 @@
+{
+  "encounter_key": "the_drowned_nave",
+  "name": "The Nave",
+  "description": "Three feet of still black water in a stone room, and the still black water stands up.",
+  "difficulty": "hard",
+  "monsters": [
+    {"monster": "drowned_man", "quantity": 1, "rank": "front"},
+    {"monster": "peat_ooze", "quantity": 2, "rank": "front"}
+  ],
+  "allow_flee": true,
+  "allow_parley": false,
+  "victory_flag": "drowned_nave_cleared"
+}

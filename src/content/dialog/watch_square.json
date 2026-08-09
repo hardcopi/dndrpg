@@ -1,0 +1,17 @@
+{
+    "npc_key": "watch_square",
+    "start": "hail",
+    "nodes": {
+        "hail": [
+            {
+                "text": "Move along, or buy something. The stalls pay for this square.",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

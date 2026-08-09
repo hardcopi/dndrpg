@@ -1,0 +1,17 @@
+{
+  "item_key": "dart",
+  "name": "Dart",
+  "description": "Weighted, finger-length, sold by the handful. Quicker to throw than to explain.",
+  "item_type": "weapon",
+  "rarity": "common",
+  "weight": 0.25,
+  "value_gp": 1,
+  "damage_dice": "1d4",
+  "damage_type": "piercing",
+  "properties": {
+    "thrown": "20/60",
+    "finesse": true,
+    "simple": true
+  },
+  "icon": "weapon"
+}

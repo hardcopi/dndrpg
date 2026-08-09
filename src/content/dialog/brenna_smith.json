@@ -1,0 +1,518 @@
+{
+    "npc_key": "brenna_smith",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "flag": "anvil_debt_fate",
+                        "equals": "bought"
+                    }
+                ],
+                "once": true,
+                "text": "Brenna sets the hammer down when she sees you, which she does not do for customers. \"Landlord,\" she says. It is not quite a joke and she does not quite smile. \"Forge is hot. What do you need.\"",
+                "choices": [
+                    {
+                        "label": "I'm not going to call it in.",
+                        "next": "not_calling_it_in"
+                    },
+                    {
+                        "label": "Let's trade.",
+                        "effects": [
+                            {
+                                "open_shop": "brenna_smith"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "Just the warmth.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "anvil_debt_fate",
+                        "equals": "void"
+                    }
+                ],
+                "once": true,
+                "text": "\"I have been doing sums,\" Brenna says, without looking up, \"for two days, and every one of them comes out the same, and I keep doing them.\" The hammer falls three times. \"Four years. I have four years before anybody in Greyhythe untangles a dead man's estate and finds me in it. I have not had four years of anything since I was twenty.\"",
+                "choices": [
+                    {
+                        "label": "What will you do with them?",
+                        "next": "four_years"
+                    },
+                    {
+                        "label": "Let's trade.",
+                        "effects": [
+                            {
+                                "open_shop": "brenna_smith"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "anvil_debt_fate",
+                        "equals": "paid"
+                    }
+                ],
+                "once": true,
+                "text": "\"Forge is hot and the quarter's paid and I have got twelve weeks,\" Brenna says. \"That is the best sentence I have said out loud since spring, so I have been saying it a good deal.\" She pushes a wrapped bundle across the counter. \"Steel offcuts. Take them or I will be embarrassed about it for a month.\"",
+                "choices": [
+                    {
+                        "label": "Twelve weeks isn't a solution.",
+                        "next": "twelve_weeks"
+                    },
+                    {
+                        "label": "Let's trade.",
+                        "effects": [
+                            {
+                                "open_shop": "brenna_smith"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "anvil_debt_fate",
+                        "equals": "stands"
+                    }
+                ],
+                "once": true,
+                "text": "The good steel is not under the counter any more. There is a gap where it was, and Brenna has arranged three horseshoes across the gap in a way that does not fool anybody and is not meant to. \"Buying, selling, or warming your hands,\" she says, and gets on with it.",
+                "choices": [
+                    {
+                        "label": "You sold the good stock.",
+                        "next": "sold_the_stock"
+                    },
+                    {
+                        "label": "Let's trade.",
+                        "effects": [
+                            {
+                                "open_shop": "brenna_smith"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_anvil_debt",
+                        "stage": "the_assignments"
+                    }
+                ],
+                "text": "Brenna looks at your face and works out from it that you have not solved it yet. \"Counting house,\" she says. \"That is where paper goes to be argued with. I have been three times, and they were polite to me three times.\"",
+                "choices": [
+                    {
+                        "label": "Here — forty gold. Pay the quarter.",
+                        "conditions": [
+                            {
+                                "gold_at_least": 40
+                            }
+                        ],
+                        "next": "she_takes_it"
+                    },
+                    {
+                        "label": "I'll go to the counting house.",
+                        "end": true
+                    },
+                    {
+                        "label": "This is your debt, not mine.",
+                        "next": "walking_away"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_anvil_debt",
+                        "status": "active"
+                    }
+                ],
+                "text": "\"You came back.\" She wipes her hands on the apron twice, which is one more time than they need. \"Right. The paper. It is in the flour crock, because that is where my mother kept things and I have never had a better idea.\"",
+                "choices": [
+                    {
+                        "label": "Show me.",
+                        "next": "the_note"
+                    },
+                    {
+                        "label": "Later.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "sealed_arch_fate",
+                        "equals": "rubbing"
+                    }
+                ],
+                "once": true,
+                "text": "\"That rubbing of yours,\" Brenna says, before you have said anything. \"I have asked two masons and a monument cutter. Good clean work, all three said so, and not one of them knew the hand.\" She goes back to the bellows. \"Rivermark is not a big place for masons.\"",
+                "choices": [
+                    {
+                        "label": "What does that tell you?",
+                        "next": "not_a_big_place"
+                    },
+                    {
+                        "label": "Let's trade.",
+                        "effects": [
+                            {
+                                "open_shop": "brenna_smith"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "\"Forge's hot and the guild's far away, so my prices are my own.\" Brenna Coalwright turns a bar over in the fire without looking at it. \"Buying, selling, or warming your hands?\"",
+                "choices": [
+                    {
+                        "label": "Let's trade.",
+                        "effects": [
+                            {
+                                "open_shop": "brenna_smith"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "Whose forge is this?",
+                        "next": "whose_forge"
+                    },
+                    {
+                        "label": "You look like a woman counting days.",
+                        "next": "counting_days"
+                    },
+                    {
+                        "label": "Just the warmth.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "whose_forge": [
+            {
+                "text": "\"Mine.\" The bar comes out, gets three blows, goes back. \"My father's, and his mother's before that. The roof is mine and the anvil is mine and the fire is mine.\" Three more blows. \"About sixty parts in a hundred of the building belong to somebody I have never met.\"",
+                "choices": [
+                    {
+                        "label": "That sounds like a story.",
+                        "next": "counting_days"
+                    },
+                    {
+                        "label": "None of my business.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "counting_days": [
+            {
+                "text": "\"Eleven,\" Brenna says. \"Eleven days to the quarter, and I am eleven gold short, which is a coincidence I have decided not to enjoy.\" She sets the hammer down. \"My father borrowed eighty gold against this building in the fourth year of the road tax, off Halloway the cooper, who was his friend and has been dead nine years. I pay forty a quarter. I have paid forty a quarter since I was twenty-six.\"",
+                "interjections": [
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa has done the arithmetic and does not like the answer. \"Forty a quarter. On eighty.\""
+                    },
+                    {
+                        "companion": "sera",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "companion": "kessa",
+                                    "status": "active"
+                                }
+                            }
+                        ],
+                        "text": "Sera, quietly: \"That is not a loan. That is rent on a thing you already own.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Who do you pay?",
+                        "next": "who_do_you_pay"
+                    },
+                    {
+                        "label": "Show me the paper. I'll look into it.",
+                        "effects": [
+                            {
+                                "start_quest": "the_anvil_debt"
+                            }
+                        ],
+                        "next": "the_note"
+                    },
+                    {
+                        "label": "That is between you and him.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "who_do_you_pay": [
+            {
+                "text": "\"A clerk comes on the quarter day. Not the same clerk. Four different ones in six years, and none of them from Rivermark.\" She shrugs one shoulder. \"They are always polite. They always have the right paper. One of them apologised to me, and I have thought about that one since — because a man only doing his job does not apologise, unless somebody has told him it is the sort of job that wants apologising for.\"",
+                "choices": [
+                    {
+                        "label": "Show me the paper. I'll look into it.",
+                        "effects": [
+                            {
+                                "start_quest": "the_anvil_debt"
+                            }
+                        ],
+                        "next": "the_note"
+                    },
+                    {
+                        "label": "Leave it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_note": [
+            {
+                "text": "It comes out of the flour crock in an oilcloth, soft at the folds from being read. Eighty gold against the forge, in a hand that slopes badly. And on the back, four assignments in four different hands: Halloway to a corn factor, the factor to a man in Greyhythe, that man on again — and then a fourth entry, in a copperplate so good it looks printed, selling the note to a house rather than to a person, and witnessed by nobody at all.\n\n\"I have looked at that fourth one for two years,\" Brenna says. \"I know it is wrong. I do not know what wrong is worth.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_anvil_debt",
+                            "stage": "the_assignments"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera reads it upside down from three feet away, which is apparently a thing she can do. \"An unwitnessed assignment. That is not a small point. That is the only point.\""
+                    },
+                    {
+                        "companion": "aldric",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "companion": "sera",
+                                    "status": "active"
+                                }
+                            }
+                        ],
+                        "text": "Aldric: \"Four men have made money out of eighty gold your father borrowed from a friend.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Let me take this to the counting house.",
+                        "next": "she_agrees_paper"
+                    },
+                    {
+                        "label": "That fourth hand is a forger's hand, not a clerk's.",
+                        "tag": "ARTISAN",
+                        "conditions": [
+                            {
+                                "origin": "artisan"
+                            }
+                        ],
+                        "next": "she_agrees_paper"
+                    },
+                    {
+                        "label": "I'll cover the quarter for now.",
+                        "conditions": [
+                            {
+                                "gold_at_least": 40
+                            }
+                        ],
+                        "next": "she_takes_it"
+                    },
+                    {
+                        "label": "I can't help with this.",
+                        "next": "walking_away"
+                    }
+                ]
+            }
+        ],
+        "she_agrees_paper": [
+            {
+                "text": "\"Take it. If you lose it I am no worse off than if a fire took it, and whoever holds the debt has his own copy anyway.\" She wraps it back in the oilcloth and hands it across with both hands, which is how a person hands over a thing that has been in the family for fourteen years. \"Ask for Ashe. He is the only one in there who reads a thing before he tells you what it says.\"",
+                "choices": [
+                    {
+                        "label": "I'll come back.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "she_takes_it": [
+            {
+                "text": "She counts it. She counts it a second time, standing very straight, and puts it in the apron pocket rather than the crock. \"Right,\" she says. \"Right. Well.\" The hammer goes back into her hand, because her hand wants something in it. \"Twelve weeks.\"\n\nYou are halfway out of the door before she says thank you.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_anvil_debt",
+                            "stage": "paid_the_note"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa, outside: \"Twelve weeks. Then forty again. Then forty again.\" She does not say the rest of it."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Twelve weeks.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "walking_away": [
+            {
+                "text": "\"No,\" Brenna agrees. \"It is not.\" She takes the note back and puts it in the crock, and there is nothing in her face at all, which is worse than most of the things she could have put there. \"It was honestly borrowed and it is lawfully owed and I have never once said otherwise. Forge is hot, if you want anything made.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_anvil_debt",
+                            "stage": "let_it_stand"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Good luck to you.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "not_calling_it_in": [
+            {
+                "text": "\"I know,\" Brenna says. \"You are a decent sort and you are not going to call it in.\" She turns the bar. \"Halloway was a decent sort and he was not going to call it in either. Then he died. And a decent sort's paper is worth exactly what anybody else's is worth, on the day after.\"",
+                "choices": [
+                    {
+                        "label": "Then buy it back off me at what I paid.",
+                        "next": "she_cannot"
+                    },
+                    {
+                        "label": "That's fair.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "she_cannot": [
+            {
+                "text": "\"With what,\" says Brenna, not unkindly, and that is the end of that.",
+                "choices": [
+                    {
+                        "label": "Leave it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "four_years": [
+            {
+                "text": "\"Take an apprentice,\" Brenna says at once, so she has thought about it. \"There is a girl from the west gate whose father sold up, and she has been hanging round that door since Candlemas pretending to want a hinge mended. Four years is long enough to make a smith. It is not long enough to make one and find eighty gold, so I shall be doing one of those two things.\"",
+                "choices": [
+                    {
+                        "label": "Take the apprentice.",
+                        "next": "take_the_girl"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "take_the_girl": [
+            {
+                "text": "\"That is what I had decided before you came in,\" she says. \"I only wanted somebody to hear me say it. Then I have to.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "twelve_weeks": [
+            {
+                "text": "\"No,\" Brenna agrees. \"It is twelve weeks.\" She sets the bar down. \"I have had eleven days for eleven days. Twelve weeks is a holiday. Do not spoil it for me before about the ninth one.\"",
+                "choices": [
+                    {
+                        "label": "Fair enough.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "sold_the_stock": [
+            {
+                "text": "\"I did.\" She does not pretend otherwise, which is very Brenna. \"Good steel does not go off. I will buy it back when there is a quarter I can make without it.\" A pause exactly long enough. \"That is a thing people say. I have heard four men in this town say it about four different trades and not one of them ever bought anything back.\"",
+                "choices": [
+                    {
+                        "label": "Then stop paying him.",
+                        "next": "cannot_stop"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "cannot_stop": [
+            {
+                "text": "\"And lose the roof, and the fire under it, and the only thing I know how to do.\" She goes back to the bellows. \"Forty a quarter is not the worst arrangement in this town by a long way. That is not me being brave. That is me having asked around.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "not_a_big_place": [
+            {
+                "text": "\"It tells me somebody who is not from here cut that brick,\" Brenna says. \"Which is not sinister. Brick comes up the river from four yards downstream and every one of them has masons I have never met.\" She works the bellows twice. \"I only say it because you looked as though you wanted it to mean something, and I would rather you had the dull answer off me than the interesting one off somebody with a reason.\"",
+                "choices": [
+                    {
+                        "label": "Fair.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

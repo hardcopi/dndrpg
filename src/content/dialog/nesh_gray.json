@@ -1,0 +1,591 @@
+{
+    "npc_key": "nesh_gray",
+    "start": "hail",
+    "nodes": {
+        "hail": [
+            {
+                "conditions": [
+                    {
+                        "flag": "wardens_fate",
+                        "equals": "turned"
+                    }
+                ],
+                "once": true,
+                "text": "There is nothing on the piles but the piles. The platforms came down in a morning and the punts went with them, and eleven weeks later the causeway is under at four points and there is nobody mending it.\n\nA withy leans out of the water where the plank walk used to start. Somebody has tied a strip of sacking to it.",
+                "choices": [
+                    {
+                        "label": "Turn back.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "wardens_fate",
+                        "equals": "bought"
+                    }
+                ],
+                "once": true,
+                "text": "\"Season's paid,\" Nesh Gray says. \"On a piece of paper, in front of both camps, with my mark on it.\" She is not entirely happy about the paper and is not going to say so twice. \"Road's open to anyone with business and nobody asks at either end. That's what you bought. I hope your town knows what it's got.\"",
+                "choices": [
+                    {
+                        "label": "It doesn't.",
+                        "next": "it_does_not"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "wardens_fate",
+                        "equals": "ran"
+                    }
+                ],
+                "once": true,
+                "text": "\"You came back,\" Gray says, which from her is most of a welcome. \"Punts go out at two. You know where the pole goes now, which puts you ahead of most of Rivermark.\"",
+                "choices": [
+                    {
+                        "label": "How many this month?",
+                        "next": "how_many_this_month"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_fen_wardens",
+                        "stage": "one_run"
+                    }
+                ],
+                "text": "\"Two in the morning,\" Gray says. \"Two punts. You'll be cold, you'll be useless, and you'll be quiet, and I'd put those in the order I've just said them.\"",
+                "choices": [
+                    {
+                        "label": "Two in the morning.",
+                        "next": "the_run"
+                    },
+                    {
+                        "label": "Not tonight.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "fen_root",
+                        "stage": "the_root_beds"
+                    }
+                ],
+                "text": "\"Beds,\" Nesh Gray says, before you have got your boots off the walk. \"You've been at the beds. There's a working stage there with my hook laid on it and you'll have picked the hook up and put it down again, because everyone does.\"\n\nShe comes to the edge of the platform.\n\n\"Two generations we've cut that water. Straight edges, kept channels, three beds a season and the fourth left fallow when it needs it. That is farming. Your town buys the root through three hands so it never has to know whose water it came out of.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "fen_root",
+                            "stage": "whose_beds"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera: \"Three hands. That is a supply chain, not a smuggling run.\" Gray: \"It is both. It has to be both, because of what your watch would do to the first hand.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "I'll pay the toll.",
+                        "next": "paid"
+                    },
+                    {
+                        "label": "I'll buy the bed's whole season.",
+                        "next": "the_season"
+                    },
+                    {
+                        "label": "I'll cut it myself.",
+                        "next": "cut_it"
+                    },
+                    {
+                        "label": "What's in the fourth bed?",
+                        "next": "the_fourth_bed"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "fen_root",
+                        "stage": "whose_beds"
+                    }
+                ],
+                "text": "\"Root,\" Nesh Gray says, before anybody has said anything. \"You've been at the beds. There's a stage there and the stage has my hook on it and you'll have picked it up and put it down again, because everyone does.\"\n\nShe comes to the edge of the platform.\n\n\"So. You can have it cut, or you can have it stolen. Say which one you came for.\"",
+                "choices": [
+                    {
+                        "label": "I'll pay the toll.",
+                        "next": "paid"
+                    },
+                    {
+                        "label": "I'll buy the bed's whole season.",
+                        "next": "the_season"
+                    },
+                    {
+                        "label": "I'll cut it myself.",
+                        "next": "cut_it"
+                    },
+                    {
+                        "label": "What's in the fourth bed?",
+                        "next": "the_fourth_bed"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_fen_wardens",
+                        "stage": "the_stilt_camp"
+                    }
+                ],
+                "text": "Six platforms, four feet up on driven piles, and about a dozen people on them who have watched you come the whole way in. Nobody has reached for anything. That is a decision that has been made and could be un-made.\n\nThe woman at the rail is fifty, hooded against the wet, and has one hand resting on a plank that is not nailed down.\n\n\"Nesh Gray,\" she says. \"You've come a long way to be looked at.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_gray"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "You mend the causeway.",
+                        "next": "the_causeway"
+                    },
+                    {
+                        "label": "The watch has a different word for this camp.",
+                        "next": "the_other_word"
+                    },
+                    {
+                        "label": "We'll go back.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "Six platforms on piles, a stack of new faggot bundles taller than the camp could ever use, and about a dozen people looking down at you off plank walks that can all be pulled up in four seconds.\n\n\"You'll want to say what you are,\" the woman at the rail says, \"while everyone's still holding the planks down.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_gray"
+                    },
+                    {
+                        "start_quest": "the_fen_wardens"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa, without moving her mouth much: \"Every walk between those platforms is loose. They've done this before and it went well for them.\""
+                    },
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"That faggot stack is four times what a camp this size burns in a winter. That is road-mending. They are the road.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Travellers. We'll pay a toll like everyone else.",
+                        "next": "the_causeway"
+                    },
+                    {
+                        "label": "That faggot stack is road-mending. Why?",
+                        "next": "the_causeway"
+                    },
+                    {
+                        "label": "Planks up, then.",
+                        "next": "planks_up"
+                    }
+                ]
+            }
+        ],
+        "it_does_not": [
+            {
+                "text": "\"No,\" Gray agrees. \"They never do. A road's like a roof — nobody's grateful for one until there isn't.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "how_many_this_month": [
+            {
+                "text": "\"Six,\" Gray says. \"Four families and two on their own. Two of the families had beasts, which is a nightmare, and we did it anyway.\"\n\nShe coils rope.\n\n\"That's up from four. It's been going up since the spring and I've stopped saying so out loud, because saying so out loud makes it a thing people can decide to do something about.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "planks_up": [
+            {
+                "text": "The plank walks come up in about four seconds — all of them, in order, from the outside in, by people who have done this against the watch twice and were pleased with it both times.\n\nNesh Gray does not move off the rail.\n\n\"Last chance to make that a misunderstanding,\" she says.",
+                "choices": [
+                    {
+                        "label": "It's a misunderstanding.",
+                        "check": {
+                            "skill": "persuasion",
+                            "dc": 13,
+                            "on_success": "stand_down",
+                            "on_failure": "no_it_is_not"
+                        }
+                    },
+                    {
+                        "label": "It isn't.",
+                        "effects": [
+                            {
+                                "start_combat": "stilt_camp_stand"
+                            }
+                        ],
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "no_it_is_not": [
+            {
+                "text": "\"No,\" Gray says. \"I didn't think it was.\"\n\nThe last walk goes up.",
+                "on_enter": [
+                    {
+                        "start_combat": "stilt_camp_stand"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Water on three sides.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "stand_down": [
+            {
+                "text": "Nesh Gray puts one hand up and everything stops, which is more interesting than the fact that it started.\n\n\"Planks down,\" she says, and they go down. \"Right. You're in the middle of a camp with the water on three sides of you and you're about to be told a thing that Rivermark has decided not to know for eleven years, so sit down and get the mud off your boots first, because the platform's mine.\"",
+                "choices": [
+                    {
+                        "label": "Sit down.",
+                        "next": "the_causeway"
+                    }
+                ]
+            }
+        ],
+        "the_causeway": [
+            {
+                "text": "\"Forty miles,\" Nesh Gray says. \"Faggot, stone and driven stake, and every winter the fen takes about a mile and a half of it back. That's four hundred bundles a year, cut, bound, carried and bedded, and it is done by us, out of the takings, because there is nobody to ask.\"\n\nShe lets that sit.\n\n\"Your town calls us smugglers. Your town is correct. Your town also uses the fen road, and has never once put a copper into it, and would notice inside a month if we stopped.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_fen_wardens",
+                            "stage": "one_run"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric: \"You are the only people keeping this road open, and you are keeping it open with stolen salt.\" Gray: \"Yes. Would you like it kept open some other way? I'd take that.\""
+                    },
+                    {
+                        "companion": "sera",
+                        "text": "Sera: \"Four hundred bundles a year. You could put a number on that.\" Gray: \"I have. Nobody in your town has ever asked me for it.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Show me a run.",
+                        "next": "the_run"
+                    },
+                    {
+                        "label": "What crosses the fen?",
+                        "next": "the_run"
+                    },
+                    {
+                        "label": "I'll take this to Reed.",
+                        "next": "turned_in"
+                    },
+                    {
+                        "label": "What would a season's toll cost the town?",
+                        "next": "the_price_of_the_road"
+                    }
+                ]
+            }
+        ],
+        "the_other_word": [
+            {
+                "text": "\"Smugglers,\" Gray says, without any heat at all. \"That's the word. It's accurate.\" She leans on the rail. \"It leaves a bit out, and the bit it leaves out is forty miles of causeway, but it's accurate and I'm not going to stand here arguing with a dictionary.\"",
+                "choices": [
+                    {
+                        "label": "Tell me about the forty miles.",
+                        "next": "the_causeway"
+                    },
+                    {
+                        "label": "Then that's what I'll report.",
+                        "next": "turned_in"
+                    }
+                ]
+            }
+        ],
+        "the_run": [
+            {
+                "text": "Two in the morning, two punts, eleven miles of black water, and you have never been so cold or so completely useless.\n\nWhat goes west is salt and wool. What comes back is iron and a fifth of everything, left at the fen road head for whoever is walking out of the valley that week with more than they can carry.\n\nAnd what crosses the fen is not goods. It is people. Four families this month, walking west at two in the morning with what they can carry, off ground that was bought out from under them one non-renewal at a time. Gray does not charge those. She charges the salt in order to pay for them.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_fen_wardens",
+                            "stage": "ran_with_them"
+                        }
+                    },
+                    {
+                        "set_flag": "grazing_bought_known"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse counts them onto the punt without being asked to and writes the number on her hand because there is nowhere dry to write it."
+                    },
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric takes the second pole for the last three miles and is worse at it than anybody has ever been, and nobody laughs, which tells you something about the boat."
+                    },
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa: \"Four families. In one month. Out of one valley.\" Gray, poling: \"Six. Two of them went on their own.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "That's the work.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_price_of_the_road": [
+            {
+                "text": "Nesh Gray tells you the number without hesitating, which means she has had it ready for years.\n\n\"For a season, open to anyone with business, no questions at either end, and the causeway kept whole,\" she says. \"That's the figure. I worked it out the winter before last and I've never been asked for it, and I've been asked for a great many other things.\"",
+                "choices": [
+                    {
+                        "label": "Then Rivermark's paying it. Today.",
+                        "conditions": [
+                            {
+                                "gold_at_least": 250
+                            }
+                        ],
+                        "next": "bought_the_road"
+                    },
+                    {
+                        "label": "I'll come back with it.",
+                        "end": true
+                    },
+                    {
+                        "label": "Show me a run first.",
+                        "next": "the_run"
+                    }
+                ]
+            }
+        ],
+        "bought_the_road": [
+            {
+                "text": "It is paid in one payment, on the platform, in front of both camps, and written down on both sides — which is the first written thing this camp has ever put its mark to, and Nesh Gray signs it with the expression of a woman doing something slightly dangerous on purpose.\n\nThe fen road is open for the season to anyone with legitimate business, no questions at either end, and the causeway will be kept whole.\n\nIt is a bad deal. It is also a road, in a season when four other things in this valley have quietly stopped being anybody's.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_fen_wardens",
+                            "stage": "bought_the_road"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera: \"You have just put a smugglers' camp on a piece of paper. That is either the safest thing that has ever happened to them or the end of them.\" Gray: \"Aye. I know which way I'd bet and I signed it anyway.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Both marks on it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "turned_in": [
+            {
+                "text": "Reed takes the camp in the second week of the month with eleven of the watch and two boats borrowed off the quay. It goes cleanly. Nobody is killed and four people are held and released, because there is nothing to charge them with that will stand up.\n\nThe platforms come down. The punts go.\n\nNothing has been spent on the fen road since. Eleven weeks later the causeway is under at four points, and the west of the valley is a place you cannot get to, and nobody in Rivermark has connected those two facts out loud.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_fen_wardens",
+                            "stage": "turned_them_in"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"Who mends it now.\" Nobody in the room has an answer and Reed does not pretend to."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "It went cleanly.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_fourth_bed": [
+            {
+                "text": "\"Something got into it in the autumn,\" Gray says. \"Two of mine went to cut it and came back with one of them carried, and after that I put a stake at each corner and left it.\"\n\nShe looks west.\n\n\"You want to earn a price on the root, you can have the fourth bed. I'll not pretend that's generous.\"",
+                "choices": [
+                    {
+                        "label": "We'll take the fourth bed.",
+                        "effects": [
+                            {
+                                "start_combat": "root_bed_ooze"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "I'll pay the toll like anyone else.",
+                        "next": "paid"
+                    },
+                    {
+                        "label": "I'll buy the season instead.",
+                        "next": "the_season"
+                    }
+                ]
+            }
+        ],
+        "cut_it": [
+            {
+                "text": "You cut it off the second bed and carry it out, and you are watched the whole way from the working stage to the causeway by somebody who does not come out of the reeds and does not need to.\n\nOsric will have his root. The next person Rivermark sends will be met on the causeway rather than watched from it.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "fen_root",
+                            "stage": "cut_it_yourself"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric carries his share and does not say anything about it until the fen road head, and then says one sentence."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Keep walking.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "paid": [
+            {
+                "conditions": [
+                    {
+                        "gold_at_least": 60
+                    }
+                ],
+                "text": "Eighteen gold a bundle, which is robbery.\n\nIt is also less than it costs to keep forty miles of causeway passable through a winter, and Nesh Gray makes absolutely sure you have done that arithmetic before she takes anything, and then takes it, and hands over two bundles cut that morning and tied at both ends the way they have to be tied.\n\nOsric will complain about the price. Osric complains about the price of everything.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "fen_root",
+                            "stage": "paid_the_toll"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Take the bundles.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "\"Eighteen a bundle,\" Gray says. \"Two bundles is what your apothecary will want and thirty-six is what that costs, and you have not got thirty-six.\" She is not enjoying it. \"Come back, or cut the fourth bed and earn it.\"",
+                "choices": [
+                    {
+                        "label": "What's in the fourth bed?",
+                        "next": "the_fourth_bed"
+                    },
+                    {
+                        "label": "Then I'll cut it myself and go.",
+                        "next": "cut_it"
+                    },
+                    {
+                        "label": "I'll come back.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_season": [
+            {
+                "conditions": [
+                    {
+                        "gold_at_least": 150
+                    }
+                ],
+                "text": "The second bed's whole season, bought outright, written down on both sides in front of Gray's people with a date and two marks on it.\n\nThe apothecary now has a supply that does not depend on anybody's mood. The wardens now have a customer who exists on paper.\n\nBoth of those are more dangerous than either party currently realises, and Nesh Gray is the only person on the platform who looks like she has thought about that.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "fen_root",
+                            "stage": "bought_the_season"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera: \"You have just made an illegal trade legible. Somebody will read it eventually and it will not be Osric.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Both marks on it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "\"A season's a hundred and fifty,\" Gray says, \"and you have not got a hundred and fifty, and I can tell that from here because I have been doing this a long time.\"",
+                "choices": [
+                    {
+                        "label": "Then the toll.",
+                        "next": "paid"
+                    },
+                    {
+                        "label": "Then the fourth bed.",
+                        "next": "the_fourth_bed"
+                    },
+                    {
+                        "label": "I'll come back.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

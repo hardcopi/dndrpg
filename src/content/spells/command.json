@@ -1,0 +1,26 @@
+{
+  "spell_key": "command",
+  "name": "Command",
+  "level": 1,
+  "school": "Enchantment",
+  "classes": [
+    "Cleric",
+    "Paladin"
+  ],
+  "resolution": "debuff",
+  "save_ability": "wis",
+  "save_effect": "negate",
+  "target_kind": "enemy",
+  "concentration": false,
+  "duration_rounds": 1,
+  "effect": {
+    "condition": "incapacitated"
+  },
+  "casting_time": "1 action",
+  "range_text": "60 feet",
+  "components": "V",
+  "duration": "1 round",
+  "description": "You speak a one-word command to a creature you can see within range.",
+  "reaches_back_rank": true,
+  "source": "5e SRD"
+}

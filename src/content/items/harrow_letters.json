@@ -1,0 +1,11 @@
+{
+  "item_key": "harrow_letters",
+  "name": "Four Letters to Sten Harrow",
+  "description": "Four offers for one farm, over nine months, each better than the last. Three are in a clerk's hand and the fourth is in a different one. None of them are signed with a name. All four are sealed with a black wax square, and the offer is not for the land — it is for the water right on the mill race.",
+  "item_type": "misc",
+  "rarity": "uncommon",
+  "weight": 0,
+  "value_gp": 0,
+  "properties": {"quest_item": true, "readable": true},
+  "icon": "scroll"
+}

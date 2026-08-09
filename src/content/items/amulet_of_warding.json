@@ -1,0 +1,12 @@
+{
+  "item_key": "amulet_of_warding",
+  "name": "Amulet of Warding",
+  "description": "A river-stone drilled and strung on waxed cord, carved with the Priory's oldest mark. What reaches for the wearer reaches a little short.",
+  "item_type": "misc",
+  "rarity": "uncommon",
+  "weight": 0.2,
+  "value_gp": 300,
+  "slot": "amulet",
+  "properties": { "save_bonus": 1 },
+  "icon": "treasure"
+}

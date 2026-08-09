@@ -1,0 +1,13 @@
+{
+  "item_key": "grain_tally",
+  "name": "Stamped Tally Stick",
+  "description": "A split hazel stick notched for eighteen sacks, stamped with the granary reeve's mark.",
+  "item_type": "misc",
+  "rarity": "common",
+  "weight": 1,
+  "value_gp": 0,
+  "properties": {
+    "quest_item": true
+  },
+  "icon": "scroll"
+}

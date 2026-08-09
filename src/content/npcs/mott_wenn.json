@@ -1,0 +1,12 @@
+{
+    "npc_key": "mott_wenn",
+    "name": "Mott Wenn",
+    "role": "Quay Porter",
+    "description": "Carries up whatever the flat boats bring to the river stair. Reads nothing and remembers everything.",
+    "sprite_key": "mott_wenn",
+    "image_url": "assets/images/npcs/fighter.png",
+    "dialog": "mott_wenn",
+    "place": {
+        "location": "river_stair"
+    }
+}

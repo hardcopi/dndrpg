@@ -1,0 +1,116 @@
+{
+    "quest_key": "the_pit_champion",
+    "title": "The Pit's Man",
+    "description": "The fighting pit has a champion with eleven names on his belt and no way of leaving the undercroft. The tally-woman would like a twelfth name, and she does not much mind whose.",
+    "giver": "vessa_dann",
+    "on_job_board": true,
+    "required_level": 2,
+    "rewards": {
+        "xp": 350,
+        "gold": 150
+    },
+    "stages": {
+        "take_a_bout": {
+            "title": "Take a bout",
+            "objective": "Get Vessa Dann to quote you a number, and find out what the number is for.",
+            "journal": "Vessa Dann keeps the board at the fighting pit. She looked me over on the way down the ladder and decided on a number before I opened my mouth. The pit has one draw worth betting on and he has not lost in fourteen months.",
+            "target": {
+                "location": "fighting_pit"
+            }
+        },
+        "the_undercroft": {
+            "title": "Behind the gate",
+            "objective": "Go through the gate and find out why the pit's man never leaves.",
+            "journal": "Orm Lisser sleeps in the second stall. He is not chained and the door is not locked and he has not been outside in fourteen months, because there is a bond with his mark on it: forty-one gold advanced against eighteen months of bouts, at a rate of forfeit that has quietly made the eighteen months into four years.",
+            "target": {
+                "location": "pit_undercroft"
+            }
+        },
+        "took_the_belt": {
+            "title": "The twelfth name",
+            "journal": "I fought him and I won it, on the sand, in front of forty people making the noise of three hundred. The belt has my name punched into it now. So does the board. Orm's bond is discharged by the terms of it — a champion who loses is a champion nobody pays to see — and he walked up the ladder at dusk with nothing, which he says is more than he had at noon.",
+            "resolution": "took_the_belt",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "pit_fate",
+                    "value": "belt"
+                },
+                {
+                    "set_flag": "pit_champion_is_you"
+                },
+                {
+                    "give_item": "pit_belt",
+                    "quantity": 1
+                },
+                {
+                    "xp": 150
+                },
+                {
+                    "approval": {
+                        "kessa": 15,
+                        "sera": 4,
+                        "aldric": -6,
+                        "ilse": -4
+                    }
+                }
+            ]
+        },
+        "bought_the_bond": {
+            "title": "Bought out",
+            "journal": "Forty-one gold and eleven in accrued forfeit, paid on the rim in front of witnesses, and Vessa wrote 'discharged' on the bond herself because she is not a thief and never claimed to be. She was also not pleased. The pit still stands and it still has a gate, and it now has nobody to put behind it.",
+            "resolution": "bought_the_bond",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "pit_fate",
+                    "value": "bought"
+                },
+                {
+                    "set_flag": "orm_free"
+                },
+                {
+                    "take_gold": 120
+                },
+                {
+                    "give_item": "pit_bond",
+                    "quantity": 1
+                },
+                {
+                    "approval": {
+                        "aldric": 16,
+                        "ilse": 8,
+                        "sera": -6,
+                        "kessa": -4
+                    }
+                }
+            ]
+        },
+        "broke_the_pit": {
+            "title": "Read out on the rim",
+            "journal": "I read the bond out loud from the rim, all of it, including the rate of forfeit, to forty people who had come to bet on the man it belonged to. The pit did not close because somebody closed it. It closed because you cannot sell a bout to a crowd that has just done the arithmetic.",
+            "resolution": "broke_the_pit",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "pit_fate",
+                    "value": "broken"
+                },
+                {
+                    "set_flag": "orm_free"
+                },
+                {
+                    "set_flag": "pit_closed"
+                },
+                {
+                    "approval": {
+                        "ilse": 12,
+                        "aldric": 12,
+                        "kessa": -10,
+                        "sera": -8
+                    }
+                }
+            ]
+        }
+    }
+}

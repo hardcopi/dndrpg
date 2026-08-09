@@ -1,0 +1,101 @@
+{
+    "quest_key": "the_ford_itself",
+    "title": "The Ford Itself",
+    "description": "Carters cross the ford at a trot and water their horses upstream of it. On the west bank there are four long rectangles of bare ground in a row where nothing has grown back in four years.",
+    "giver": "joss_frayle",
+    "on_job_board": true,
+    "required_level": 3,
+    "rewards": {
+        "xp": 400,
+        "gold": 110
+    },
+    "stages": {
+        "the_four_rectangles": {
+            "title": "The four rectangles",
+            "objective": "Find out what stood on the west bank of the ford.",
+            "journal": "Four patches of bare ground, laid out square, in a row, on the west bank of the crossing. Grass reaches the edges and stops. Nobody using the ford will talk about them and everybody using the ford knows exactly where they are, because they all water their horses upstream.",
+            "target": {
+                "location": "the_ford"
+            }
+        },
+        "the_standing_stone": {
+            "title": "The standing stone",
+            "objective": "There is a flat grey stone on the near bank that is not a milestone. Find out what it is.",
+            "journal": "The stone on the near bank has no cutting on it at all. There are river-stones piled against its foot, hundreds of them, put there one at a time. A man called Joss Frayle comes twice a year and adds one, and he has been doing it for four winters, and he is not the only one.",
+            "target": {
+                "location": "the_ford"
+            }
+        },
+        "named_the_dead": {
+            "title": "Nineteen names",
+            "journal": "There were four fever-huts on the west bank in the fourth winter and nineteen people in them when they went up. We got the count off Frayle and the names off the carters who use the road, one at a time, over three days, and we cut them into the standing stone in a hand that will embarrass a mason and last as long as the stone does. It is the first time the place has said anything.",
+            "resolution": "named_the_dead",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "ford_fate",
+                    "value": "named"
+                },
+                {
+                    "set_flag": "ford_ground_seen"
+                },
+                {
+                    "set_flag": "ford_dead_named"
+                },
+                {
+                    "xp": 150
+                },
+                {
+                    "approval": {
+                        "aldric": 18,
+                        "ilse": 8,
+                        "kessa": 6,
+                        "sera": -2
+                    }
+                }
+            ]
+        },
+        "cleared_the_crossing": {
+            "title": "The crossing, cleared",
+            "journal": "The ford has been silting for four years because the burnt timbers went into the water and stayed there, and everybody has been crossing round the fouled part and calling it the crossing. We got the timbers out. It runs clean over laid stone again and takes a wagon at any hour, which is worth more to the west road than anything else I did out here.",
+            "resolution": "cleared_the_crossing",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "ford_fate",
+                    "value": "cleared"
+                },
+                {
+                    "set_flag": "ford_ground_seen"
+                },
+                {
+                    "set_flag": "ford_road_open"
+                },
+                {
+                    "approval": {
+                        "kessa": 8,
+                        "sera": 10,
+                        "ilse": 4,
+                        "aldric": 2
+                    }
+                }
+            ]
+        },
+        "left_the_ford": {
+            "title": "Crossed and went on",
+            "journal": "Four rectangles, a stone with no cutting on it, and a river. I crossed at a trot like everybody else does.",
+            "resolution": "left_the_ford",
+            "terminal": true,
+            "outcome": "neutral",
+            "effects": [
+                {
+                    "set_flag": "ford_fate",
+                    "value": "left"
+                },
+                {
+                    "set_flag": "ford_ground_seen"
+                }
+            ]
+        }
+    }
+}

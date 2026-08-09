@@ -1,0 +1,135 @@
+{
+    "region_key": "hollow_fen",
+    "module": "rivermark",
+    "name": "Hollow Fen",
+    "region_type": "wilderness",
+    "description": "Four thousand acres of standing water west of the ford road, with a village under it and a road across it that somebody keeps open at their own expense.",
+    "sort_order": 40,
+    "locations": {
+        "fen_causeway": {
+            "name": "The Fen Causeway",
+            "type": "site",
+            "map_pos": [86, 30],
+            "random_encounter_pct": 15,
+            "description": "A raised way of faggot bundles, stone and driven stakes, running dead straight west across open water. Three feet wide in the good stretches. There are marker withies pushed in on both sides at every ten paces, and where the causeway has gone under, the withies are the only thing telling you the road is still down there.",
+            "first_visit": "The water closes in on both sides and stays there. The causeway runs straight ahead until the mist takes it, and it does not look wide enough to turn a cart on, because it is not.",
+            "ambience": [
+                "A withy leans out of the water on the left. Then another. Then a gap.",
+                "Something crosses the causeway ahead of you and is gone before it registers.",
+                "The water is absolutely still and about four feet deep. You can see the bottom.",
+                "Bird-noise stops behind you and starts again after you pass."
+            ],
+            "exits": [
+                {"to": "fen_road_head", "label": "East off the fen to dry ground"},
+                {"to": "drowned_village", "label": "Northwest toward the roofs"},
+                {"to": "stilt_camp", "label": "South along the poled channel"}
+            ]
+        },
+        "drowned_village": {
+            "name": "The Drowned Village",
+            "type": "site",
+            "map_pos": [62, 22],
+            "description": "Eleven roofs standing out of four feet of water, in two rows, with a street between them you can still follow because the water over it is clearer. The thatch is gone; the rafters are not. Doorways stand open at knee height with the water going in and coming out again, and every house was emptied properly before it went under — no furniture, no pots, nothing left in a hurry.",
+            "first_visit": "You come round the reed-bank and the village is simply there, in rows, with the water sitting halfway up its doors, and the thing that stops you is not the ruin. It is that it is tidy.",
+            "ambience": [
+                "Water goes in at a doorway and comes out again, patiently, at the same rate.",
+                "A rafter has kept its peg. The peg has kept its shape.",
+                "The street between the rows is still a street. The water over it is clearer.",
+                "Something moves in one of the houses and does not come to the door."
+            ],
+            "exits": [
+                {"to": "fen_causeway", "label": "Southeast back to the causeway"},
+                {"to": "drowned_chapel", "label": "West to the chapel"},
+                {"to": "black_pools", "label": "South into the black pools"}
+            ]
+        },
+        "drowned_chapel": {
+            "name": "The Drowned Chapel",
+            "type": "room",
+            "map_pos": [48, 8],
+            "description": "The only building here with a stone roof, which is why it is the only one with an inside. The nave holds three feet of black water, still and cold, and the water reaches the third step of the chancel and stops. There is a chest on the fourth step. It has been on the fourth step for forty years, and the fourth step is dry, and somebody worked out that it would be before they carried it up there.",
+            "first_visit": "The door is off its hinges and floating flat, and past it the chapel is dim and cold and absolutely silent, in the way that only a stone room over water is silent.",
+            "ambience": [
+                "Your own noise comes back off the vault a half-second late.",
+                "The waterline on the wall is a hand's width below the third step. It has not moved.",
+                "Something under the water shifts its weight and the surface does not break.",
+                "The chest on the fourth step is dry. Everything below it is not."
+            ],
+            "exits": [
+                {"to": "drowned_village", "label": "East out into the village"}
+            ]
+        },
+        "black_pools": {
+            "name": "The Black Pools",
+            "type": "site",
+            "map_pos": [56, 48],
+            "random_encounter_pct": 20,
+            "description": "Where the fen stops being shallow. Peat-cuttings from a hundred years back have flooded into a chain of pools the colour of strong tea and deeper than a pole will find, with sedge islands between them that will hold a man if he is quick about it. Things float here and do not sink, because peat water does not let go of what it takes.",
+            "first_visit": "The bottom drops away without warning and the water changes colour, brown to black, in the space of a stride. There is a great deal of it and it is all completely still.",
+            "ambience": [
+                "A sedge island shifts underfoot and settles somewhere else.",
+                "Something surfaces at the far end of the pool, keeps its shape, and stays.",
+                "The water is the colour of strong tea and shows you nothing at all.",
+                "Gas comes up through the peat in a slow line of bubbles and stops."
+            ],
+            "exits": [
+                {"to": "drowned_village", "label": "North to the village roofs"},
+                {"to": "stilt_camp", "label": "East to the stilt camp"},
+                {"to": "root_beds", "label": "West to the root beds"},
+                {"to": "sluice_gate", "label": "Southwest to the sluice"}
+            ]
+        },
+        "stilt_camp": {
+            "name": "The Stilt Camp",
+            "type": "camp",
+            "map_pos": [80, 58],
+            "allow_camp": true,
+            "description": "Six platforms on driven piles, joined by plank walks, four feet above the water and out of sight of the causeway. Punts underneath, drying nets that have never held a fish, and a stack of new faggot bundles that is bigger than anything the camp itself could use. Whoever lives here mends the road for nothing and charges for everything else.",
+            "first_visit": "You come round the reeds and there are people above you on planks, six or seven of them, none of them reaching for anything, all of them already looking at you. They have watched you come the whole way in.",
+            "ambience": [
+                "A punt goes out west, poled by one person, loaded and low in the water.",
+                "The faggot stack is head-high and none of it is for the camp's own fires.",
+                "Somebody is splicing rope and has not looked up since you arrived.",
+                "The plank walks give and come back. Everything here is built to be pulled down fast."
+            ],
+            "exits": [
+                {"to": "fen_causeway", "label": "North to the causeway"},
+                {"to": "black_pools", "label": "West into the black pools"}
+            ]
+        },
+        "root_beds": {
+            "name": "The Root Beds",
+            "type": "site",
+            "map_pos": [34, 40],
+            "random_encounter_pct": 15,
+            "description": "A shallow flooded flat where fen-root grows in beds that were planted, not found — straight edges, kept channels, and a plank stage to work from. Somebody has been farming this water for two generations. Three of the four beds have been cut this season, close and even. The fourth has been left, and the reason is standing in it.",
+            "first_visit": "Four beds, cut in squares, in the middle of a wilderness. Somebody built this. Somebody is still keeping it.",
+            "ambience": [
+                "Cut fen-root smells like bruised iron. The whole flat smells of it.",
+                "The channels between the beds run. They have been kept open by hand.",
+                "A working stage, planked and pegged, with a cutting hook laid on it.",
+                "The fourth bed has not been touched. Nothing about it looks different."
+            ],
+            "exits": [
+                {"to": "black_pools", "label": "East to the black pools"}
+            ]
+        },
+        "sluice_gate": {
+            "name": "The Sluice",
+            "type": "site",
+            "map_pos": [22, 62],
+            "allow_camp": true,
+            "description": "Masonry, not fen-work: two stone piers, a paved apron, and an oak gate in an iron frame with a screw-jack and a counterweight, all of it forty years old and all of it maintained. The gate is up. The fen goes through it and out to the river, and the river cannot get back. There is a hut on the west pier with a chimney, and the chimney is drawing.",
+            "first_visit": "It is the first square corner you have seen since the causeway. The stonework is dressed, the ironwork is greased, and the gate is standing open exactly as far as it was built to stand open.",
+            "ambience": [
+                "The screw-jack has been greased this month. The grease is clean.",
+                "Water goes through the gate at a steady rate and makes almost no noise.",
+                "The counterweight is a cut block with lifting-holes. It came from a quarry.",
+                "Smoke from the hut chimney goes straight up. There is no wind down in the cut."
+            ],
+            "exits": [
+                {"to": "black_pools", "label": "Northeast into the black pools"}
+            ]
+        }
+    }
+}

@@ -1,0 +1,789 @@
+{
+    "npc_key": "hollis_marrow",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "flag": "quarry_fate",
+                        "equals": "ash"
+                    }
+                ],
+                "once": true,
+                "text": "The weighing floor is thirty feet of scorched flagstone under an open sky. Hollis Marrow is standing in the middle of it in a good coat, with a wax tablet, counting what is left. \"You came back,\" he says, pleased. \"People always come back to look. It is the only honest thing about anybody.\"",
+                "choices": [
+                    {
+                        "label": "You said the town would hold.",
+                        "next": "he_did_not_say_that"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "quarry_fate",
+                        "equals": "pact"
+                    }
+                ],
+                "once": true,
+                "text": "Marrow is not on the weighing floor. Marrow is in the lockup behind the watch house, and he has been reading his own writ back to himself for three days. \"It is a lawful instrument,\" he says through the window. \"It is a perfectly lawful instrument.\"",
+                "choices": [
+                    {
+                        "label": "It's signed and it's sealed and it's yours.",
+                        "next": "lawful_instrument"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "quarry_fate",
+                        "equals": "steel"
+                    }
+                ],
+                "once": true,
+                "text": "\"Terrible business,\" Marrow says, and means it, because grain that nobody is frightened to cart is grain at last year's price. \"Truly terrible. The town owes you a very great deal.\" He does not offer to pay any of it.",
+                "choices": [
+                    {
+                        "label": "You paid them.",
+                        "next": "no_proof_now"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "hollis_coin_taken"
+                    }
+                ],
+                "text": "Marrow looks up from the scales and does not stop weighing. \"My associate,\" he says warmly, to the room, so that the two carters hear it. \"Whatever it is, the answer is that we have an arrangement, and that I honour arrangements. Ask anyone.\"",
+                "choices": [
+                    {
+                        "label": "I want out of it.",
+                        "next": "no_out"
+                    },
+                    {
+                        "label": "I want more.",
+                        "next": "the_ash_offer"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "knows_paymaster"
+                    },
+                    {
+                        "has_item": "the_ledger"
+                    }
+                ],
+                "text": "Marrow's eyes go to the book, and then to the door behind you, and then back to your face, and the whole circuit takes less than a second. \"Well,\" he says. \"Come in properly. Shut it behind you. We are going to have the conversation and there is no sense doing it in a draught.\"",
+                "choices": [
+                    {
+                        "label": "Make an offer.",
+                        "next": "the_offer"
+                    },
+                    {
+                        "label": "I'm not selling. I wanted to see your face.",
+                        "next": "not_selling"
+                    },
+                    {
+                        "label": "Sixty won't cover it. Two hundred, and the writ.",
+                        "check": {
+                            "skill": "persuasion",
+                            "dc": 16,
+                            "on_success": "the_ash_offer",
+                            "on_failure": "he_recalculates"
+                        }
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "granary_knives_beaten"
+                    }
+                ],
+                "text": "There is fresh sand on the weighing floor where the sand was needed. Marrow is weighing. \"Kell had a wife in Fenmoor and the other one had nobody,\" he says, conversationally. \"The dog I shall miss. I want you to understand that I have written all three off and that I am not going to do anything about it, because doing something about it would cost more than they did.\"",
+                "choices": [
+                    {
+                        "label": "You sent them at us.",
+                        "next": "he_is_untroubled"
+                    },
+                    {
+                        "label": "The wagons you had raided.",
+                        "next": "the_wagons"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "hollis_warned"
+                    }
+                ],
+                "text": "There are two men on the weighing floor who are not weighing anything, and a dog on a short chain by the loft stair. Marrow is very glad to see you. \"The Vance girl came through here at a gallop,\" he says. \"Distraught. I have sent for the physician.\"",
+                "choices": [
+                    {
+                        "label": "You've had an hour to burn things.",
+                        "next": "not_selling"
+                    },
+                    {
+                        "label": "Sera Vance never came through here.",
+                        "check": {
+                            "skill": "insight",
+                            "dc": 13,
+                            "on_success": "the_lie_shows",
+                            "on_failure": "he_is_untroubled"
+                        }
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "reed_looks_away"
+                    }
+                ],
+                "text": "Marrow glances at the door twice while you are talking, and there is nobody in it. \"No watchman today,\" he observes. \"How odd. Reed is usually so thorough about me.\" He puts the ladle down. \"What is it you want, then, without a witness.\"",
+                "choices": [
+                    {
+                        "label": "The wagons you had raided.",
+                        "next": "the_wagons"
+                    },
+                    {
+                        "label": "Nobody's coming. You should think about that.",
+                        "check": {
+                            "skill": "intimidation",
+                            "dc": 13,
+                            "on_success": "he_gives_a_name",
+                            "on_failure": "he_is_untroubled"
+                        }
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "watch_on_you"
+                    }
+                ],
+                "text": "Marrow sees the watchman behind you and becomes, instantly, delighted. \"Corwin! Your mother's knee, is it better? Good, good.\" He turns to you, radiant. \"Now. What can the granary do for the watch today.\"",
+                "choices": [
+                    {
+                        "label": "The wagons you had raided.",
+                        "next": "the_wagons"
+                    },
+                    {
+                        "label": "Nothing. Later.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "grain_stamp_seen"
+                    }
+                ],
+                "text": "You put the stamped tally on the weighing floor. Marrow picks it up, reads it, turns it over, and hands it back. \"Eighteen sacks, mark of this house, dated the fourth.\" He smiles. \"And what would you like me to do about a stick?\"",
+                "choices": [
+                    {
+                        "label": "Explain why it was in the Flagon's cellar with four sacks of rot.",
+                        "next": "the_spoiled_grain"
+                    },
+                    {
+                        "label": "You dumped grain you'd already been paid for.",
+                        "check": {
+                            "skill": "investigation",
+                            "dc": 13,
+                            "on_success": "the_spoiled_grain",
+                            "on_failure": "he_is_untroubled"
+                        }
+                    },
+                    {
+                        "label": "Nothing. Yet.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "mara_knows_marrow"
+                    }
+                ],
+                "text": "\"Hearthstone's been talking to you,\" Marrow says, without turning round, weighing. \"She has a good head for figures and a bad one for who she says them to. Twenty-two years and she still buys her barley from me.\"",
+                "choices": [
+                    {
+                        "label": "You set the price of bread in this town.",
+                        "next": "the_price_of_bread"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "The weighing floor smells of dust and hot iron. A neat man in a good coat is running grain through his fingers and letting it fall. \"Reeve of the granary,\" he says, without looking. \"Buying, selling, or lost?\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_hollis"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "What does a reeve actually do?",
+                        "next": "the_price_of_bread"
+                    },
+                    {
+                        "label": "Nothing. Sorry.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_price_of_bread": [
+            {
+                "text": "\"I buy the whole harvest in spring at a price I set in spring, and I sell it through the year at whatever the year turns out to be worth.\" He lets another handful fall. \"So I am the only man in Rivermark who is ruined by a good summer. Nobody has ever once found that interesting until they are standing where you are.\"",
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera, flatly: \"He tells everybody that. It's true and it's the reason and he tells everybody, because nobody follows it to the end.\""
+                    },
+                    {
+                        "companion": "aldric",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "companion": "sera",
+                                    "status": "active"
+                                }
+                            }
+                        ],
+                        "text": "Aldric: \"And a road nobody can use?\" Marrow, pleasantly: \"Is a bad summer, brother, that arrives whenever I need one.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "And a road nobody can use.",
+                        "next": "the_wagons"
+                    },
+                    {
+                        "label": "Interesting. Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_wagons": [
+            {
+                "conditions": [
+                    {
+                        "flag": "hills_pattern"
+                    }
+                ],
+                "text": "\"Four wagons,\" Marrow agrees. \"All mine. All insured against loss on the road, all replaced at the year's price rather than the spring price, all of it perfectly documented and all of it lodged with the council.\" He spreads his hands. \"You have found the shape of a thing. The shape is not a crime.\"",
+                "choices": [
+                    {
+                        "label": "Then give me the shape of the payment.",
+                        "next": "no_proof_now"
+                    },
+                    {
+                        "label": "Goblins were told which wagon. Only a man with the manifests could tell them.",
+                        "check": {
+                            "skill": "investigation",
+                            "dc": 16,
+                            "on_success": "he_gives_a_name",
+                            "on_failure": "he_is_untroubled"
+                        }
+                    }
+                ]
+            },
+            {
+                "text": "\"Is a bad summer,\" Marrow says, \"which arrives when it arrives. I did not put goblins in that quarry. They were there before I held this post and they will be there after.\"",
+                "choices": [
+                    {
+                        "label": "Someone's paying them.",
+                        "next": "no_proof_now"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_spoiled_grain": [
+            {
+                "text": "Marrow does not stop smiling but he stops weighing. \"Grain spoils,\" he says. \"It spoils in lofts and it spoils in cellars, and when it spoils it is disposed of, and the tally goes with it because the tally is how we know how much was disposed of.\" A pause exactly one beat too long. \"You are a very tiresome person.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "hollis_rattled"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"You dumped eighteen sacks in a public house's cellar. You could have burned it in your own yard in an hour.\" Marrow says nothing at all."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "You were paid for grain you never carted, and you had to lose it somewhere.",
+                        "next": "he_gives_a_name"
+                    },
+                    {
+                        "label": "I'm going to keep being tiresome.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_lie_shows": [
+            {
+                "text": "It is a very small thing. He says \"the Vance girl\" and his eyes go to the loft stair, not to the road she would have come in by. Whatever he has been doing this hour, he has been doing it upstairs, and he has not finished.",
+                "on_enter": [
+                    {
+                        "set_flag": "hollis_rattled"
+                    },
+                    {
+                        "set_flag": "sera_second_book_known"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "What's in the loft, Marrow?",
+                        "next": "he_gives_a_name"
+                    },
+                    {
+                        "label": "Back out. Come again at night.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "he_is_untroubled": [
+            {
+                "text": "\"Mm,\" says Marrow, and goes back to the scales, and lets you stand there for as long as you want to. He is not frightened of you. He has been in this room for eleven years and he has watched five watch captains come through that door with a theory.",
+                "interjections": [
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa: \"We could do this the short way.\" Marrow, without turning: \"You could. Corwin's mother lives four doors down and she is fond of me.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    },
+                    {
+                        "label": "This isn't finished.",
+                        "next": "not_finished"
+                    }
+                ]
+            }
+        ],
+        "not_finished": [
+            {
+                "text": "\"Nothing is,\" Marrow agrees. \"That is what a ledger is for.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "he_gives_a_name": [
+            {
+                "text": "Marrow puts the ladle down and looks at you properly for the first time. \"Skarn,\" he says. \"That is the name you want. She takes salt, iron and a quarter of the load, and she has never once asked me why, which is the only genuinely restful professional relationship I have.\" He picks the ladle back up. \"Now. What is that worth to you, and to whom.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "knows_paymaster"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"Salt and iron. She is provisioning. She is not raiding, she is holding a siege from inside.\""
+                    },
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric: \"He told us. He simply told us.\" Marrow, not looking up: \"A thing you were told, brother, is not a thing you can produce.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "It's worth taking to Reed.",
+                        "next": "no_proof_now"
+                    },
+                    {
+                        "label": "What would you pay to keep it quiet?",
+                        "next": "the_ash_offer"
+                    },
+                    {
+                        "label": "Nothing. Yet.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "no_proof_now": [
+            {
+                "text": "\"Take it to her,\" Marrow says. \"Take all of it. She will write it down, because she is thorough, and then she will ask you for the instrument — the docket, the note of hand, the book. And you will not have one, because I am careful, and because the only book that was ever a danger to me was in somebody else's handwriting.\"",
+                "choices": [
+                    {
+                        "label": "I'll find one.",
+                        "end": true
+                    },
+                    {
+                        "label": "You keep it in your own loft.",
+                        "next": "the_loft_taunt"
+                    }
+                ]
+            }
+        ],
+        "the_loft_taunt": [
+            {
+                "conditions": [
+                    {
+                        "flag": "sera_second_book_known"
+                    }
+                ],
+                "text": "Marrow's face does something for about a third of a second. \"That,\" he says, \"was told to you by a frightened woman who wants very badly for somebody else to be responsible for her handwriting.\" He straightens his cuff. \"The loft is locked and the stair is on my floor.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "hollis_rattled"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "We'll see.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "\"I keep barley in my loft,\" Marrow says. \"Two hundred and forty quarters of it. You are welcome to search it and I will bill the watch for the sweeping.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_offer": [
+            {
+                "text": "\"Sixty gold,\" Marrow says immediately, \"and I burn it here, in front of you, so that we both know exactly where we stand afterward. That last part is not a courtesy. It is the point.\"",
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric: \"Do not.\" He has stepped between you and the desk without appearing to move."
+                    },
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"He is buying you, not the book. The book he could live without.\""
+                    },
+                    {
+                        "companion": "sera",
+                        "text": "Sera has gone to stand by the door. She is not going to say anything. She has been in this room for this conversation before."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Done.",
+                        "effects": [
+                            {
+                                "take_item": "the_ledger"
+                            },
+                            {
+                                "quest_stage": {
+                                    "quest": "ledger_and_lie",
+                                    "stage": "sold_it_back"
+                                }
+                            }
+                        ],
+                        "next": "the_burning"
+                    },
+                    {
+                        "label": "A hundred and twenty.",
+                        "check": {
+                            "skill": "persuasion",
+                            "dc": 13,
+                            "on_success": "he_pays_more",
+                            "on_failure": "he_recalculates"
+                        }
+                    },
+                    {
+                        "label": "No.",
+                        "next": "not_selling"
+                    }
+                ]
+            }
+        ],
+        "he_pays_more": [
+            {
+                "text": "\"A hundred and twenty,\" Marrow repeats, and counts it out, and is visibly happier about the transaction than he was, which should worry you. \"A man who haggles is a man with a price, and a man with a price is a man I can plan around.\"",
+                "on_enter": [
+                    {
+                        "take_item": "the_ledger"
+                    },
+                    {
+                        "give_gold": 60
+                    },
+                    {
+                        "quest_stage": {
+                            "quest": "ledger_and_lie",
+                            "stage": "sold_it_back"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Burn it, then.",
+                        "next": "the_burning"
+                    }
+                ],
+                "once": true
+            },
+            {
+                "text": "Marrow has the book and you have his money, and he has already stopped thinking about you. \"Was there something else?\"",
+                "choices": [
+                    {
+                        "label": "Burn it, then.",
+                        "next": "the_burning"
+                    }
+                ]
+            }
+        ],
+        "he_recalculates": [
+            {
+                "text": "\"No,\" says Marrow, and the warmth goes out of him like a lamp being turned down. \"Sixty was for a person who was going to take sixty. You are apparently a different kind of problem, and I price those differently.\" He looks past you at the yard door. \"Kell. Bring the dog in.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "hollis_rattled"
+                    },
+                    {
+                        "start_combat": "granary_knives"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Draw.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_burning": [
+            {
+                "text": "He does it in the weighing-floor furnace with the door open so you can watch, and he waits until the boards go, and then he shakes your hand. His hand is perfectly dry. \"There,\" he says. \"Now neither of us has to wonder about the other one. It is a great relief. Most people find it a relief within about a week.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "not_selling": [
+            {
+                "text": "\"No,\" Marrow says, thoughtfully, as though you had passed something. \"No, I did not think you would, but it costs nothing to ask and it tells me a great deal.\" He goes back to the scales. \"You will find that I am extremely difficult to be angry at. It is my one gift.\"",
+                "choices": [
+                    {
+                        "label": "The wagons.",
+                        "next": "the_wagons"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_ash_offer": [
+            {
+                "conditions": [
+                    {
+                        "quest": "quarry_pact",
+                        "status": "active"
+                    }
+                ],
+                "text": "Marrow puts down the ladle and gives you his whole attention, which is a thing he has done perhaps four times in eleven years. \"Four hundred gold,\" he says, \"a writ of carriage that gets you and a wagon through any gate on this road unsearched, and my sincere hope that you will use them tonight.\" A pause. \"I am not asking you to do anything. I am asking you to be elsewhere while it is done.\"",
+                "interjections": [
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa has not moved and is not going to. \"Say no,\" she says. \"Say it now, out loud, so I've heard you say it.\""
+                    },
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"There are eleven hundred people in this town and about forty of them can run.\""
+                    },
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric: \"You will not do this.\" It is the first time he has told you what you will do."
+                    },
+                    {
+                        "companion": "sera",
+                        "text": "Sera, quietly, without judgement: \"He'll pay it. He's good for it. That's not the question and you know it isn't.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Take the coin and the writ. Go west.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "quarry_pact",
+                                    "stage": "ash"
+                                }
+                            }
+                        ],
+                        "next": "the_road_west"
+                    },
+                    {
+                        "label": "Six hundred.",
+                        "check": {
+                            "skill": "persuasion",
+                            "dc": 19,
+                            "on_success": "he_pays_the_six",
+                            "on_failure": "the_offer_withdrawn"
+                        }
+                    },
+                    {
+                        "label": "No.",
+                        "next": "the_offer_withdrawn"
+                    }
+                ]
+            },
+            {
+                "text": "\"There is nothing further on offer today,\" Marrow says. \"Come back when you have a decision in front of you rather than an appetite. I pay for decisions.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "he_pays_the_six": [
+            {
+                "text": "\"Six,\" Marrow agrees, and pays it, and does not blink, which tells you what the granary is worth to him and therefore what Rivermark is worth to him. \"You should have asked for eight. I would like you to think about that on the road.\"",
+                "on_enter": [
+                    {
+                        "give_gold": 200
+                    },
+                    {
+                        "quest_stage": {
+                            "quest": "quarry_pact",
+                            "stage": "ash"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Go west.",
+                        "next": "the_road_west"
+                    }
+                ],
+                "once": true
+            },
+            {
+                "text": "The six hundred is counted, paid and behind you. Marrow does not offer it twice, and looks faintly insulted that you have come back to the subject.",
+                "choices": [
+                    {
+                        "label": "Go west.",
+                        "next": "the_road_west"
+                    }
+                ]
+            }
+        ],
+        "the_offer_withdrawn": [
+            {
+                "text": "\"Then we are finished,\" Marrow says, and turns back to the scales, and does not raise his voice or send for anybody, because he has already done the sum and it comes out the same either way. \"Do close the door. The dust gets into the loft.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_road_west": [
+            {
+                "text": "The writ takes you through the east gate at dusk and the west gate at moonrise and nobody looks in the wagon. You are eleven miles out before the sky behind you changes colour, and you keep going, because there is no version of turning round that helps anyone now.",
+                "choices": [
+                    {
+                        "label": "Keep going.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "no_out": [
+            {
+                "text": "\"There is no out,\" Marrow says kindly. \"There is no document. There is nothing to tear up. There is only the fact that you took it, and the fact that I know, and the fact that you know I know.\" He weighs. \"It really is a very economical arrangement.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "he_did_not_say_that": [
+            {
+                "text": "\"I did not say it would hold,\" Marrow says. \"I said I would be elsewhere and I offered you the same. Read the writ. It is very carefully worded and I wrote it myself.\" He makes a note on the tablet. \"There will be a granary here again by spring. There is always a granary.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "lawful_instrument": [
+            {
+                "text": "\"It is,\" Marrow agrees through the window. \"That is what has been so difficult to explain to the crowd on market day. Nothing I signed was unlawful and everything I signed was read aloud by a goblin, and those two facts have turned out to weigh differently.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

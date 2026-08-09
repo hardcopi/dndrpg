@@ -1,0 +1,16 @@
+{
+  "encounter_key": "garrow_collectors",
+  "name": "Collection Day",
+  "description": "Three of Garrow Finch's people, who have been paid to be unhurried about it.",
+  "difficulty": "medium",
+  "monsters": [
+    {
+      "monster": "bandit",
+      "quantity": 3
+    }
+  ],
+  "allow_flee": false,
+  "allow_parley": true,
+  "parley_node": "garrow_finch:call_them_off",
+  "place": { "location": "flagon_common_room" }
+}

@@ -1,0 +1,14 @@
+{
+  "item_key": "arch_rubbing",
+  "name": "Charcoal Rubbing",
+  "description": "Paper laid on brick and rubbed with the side of a charcoal. It has taken the cut cleanly: a plumb-line crossed by a square, no larger than a thumbnail, cut before the brick was fired.",
+  "item_type": "misc",
+  "rarity": "common",
+  "weight": 0,
+  "value_gp": 0,
+  "properties": {
+    "quest_item": true,
+    "readable": true
+  },
+  "icon": "scroll"
+}

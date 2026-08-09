@@ -1,0 +1,13 @@
+{
+    "item_key": "oldcity_cut_gems",
+    "name": "The Cutter's Finished Work",
+    "item_type": "treasure",
+    "rarity": "uncommon",
+    "weight": 1,
+    "value_gp": 1250,
+    "icon": "gem",
+    "description": "Nine stones at thirty gold, five at a hundred, and two that are worth three hundred each and know it. Set into the plaster of the workshop wall at chest height, because that is where you hid things when the ceiling was the thing you did not trust.",
+    "place": {
+        "location": "oldcity_gem_cutters"
+    }
+}

@@ -1,0 +1,66 @@
+{
+  "resistances": [],
+  "immunities": [],
+  "vulnerabilities": [],
+  "condition_immunities": [],
+  "source": "5e SRD",
+  "monster_key": "gnoll",
+  "name": "Gnoll",
+  "size": "Medium",
+  "type": "humanoid (gnoll)",
+  "alignment": "chaotic evil",
+  "armor_class": 15,
+  "hit_points": 22,
+  "hit_dice": "5d8",
+  "speed": "30 ft.",
+  "strength": 14,
+  "dexterity": 12,
+  "constitution": 11,
+  "intelligence": 6,
+  "wisdom": 10,
+  "charisma": 7,
+  "challenge_rating": 0.5,
+  "experience_points": 100,
+  "traits": {
+    "Rampage": "When the gnoll reduces a creature to 0 hit points with a melee attack on its turn, the gnoll can take a bonus action to move up to half its speed and make a bite attack."
+  },
+  "actions": [
+    {
+      "name": "Bite",
+      "type": "melee",
+      "bonus": 4,
+      "damage": "1d4+2",
+      "damage_type": "piercing"
+    },
+    {
+      "name": "Spear",
+      "type": "melee",
+      "bonus": 4,
+      "damage": "1d6+2",
+      "damage_type": "piercing",
+      "note": "1d8+2 when used with two hands."
+    },
+    {
+      "name": "Longbow",
+      "type": "ranged",
+      "bonus": 3,
+      "damage": "1d8+1",
+      "damage_type": "piercing",
+      "range": "150/600"
+    }
+  ],
+  "saves": {
+    "dex": 1
+  },
+  "rank_pref": "front",
+  "sprite_key": "gnoll",
+  "loot": [
+    {
+      "gold": "2d6"
+    },
+    {
+      "item": "javelin",
+      "chance": 30
+    }
+  ]
+}

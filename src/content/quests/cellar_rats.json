@@ -1,0 +1,76 @@
+{
+    "quest_key": "cellar_rats",
+    "title": "Something in the Cellar",
+    "description": "Mara has lost a week of stores to whatever is living under the Golden Flagon. She wants it gone. She has not asked why it came.",
+    "giver": "mara_hearthstone",
+    "on_job_board": true,
+    "rewards": {
+        "xp": 100,
+        "gold": 20
+    },
+    "stages": {
+        "into_the_cellar": {
+            "title": "Go down to the cellar",
+            "objective": "Deal with whatever is eating the Flagon's stores.",
+            "journal": "Mara Hearthstone is losing grain to something in her cellar. She wants it dead more than she wants it explained.",
+            "target": {
+                "location": "flagon_common_room"
+            }
+        },
+        "the_grain": {
+            "title": "Find out what drew them",
+            "objective": "The rats came for something. Find out what.",
+            "journal": "The rats are not nesting in the cellar. They are commuting to it. Four sacks of spoiled grain are stacked against the north wall, and none of them are Mara's. Four of the sacks carry a second mark under the granary stamp, burnt into the hessian: a plumb-bob hanging inside a square. It is not the granary's.",
+            "target": {
+                "location": "flagon_cellar"
+            }
+        },
+        "exterminated": {
+            "title": "Cellar cleared",
+            "journal": "I killed the rats. Mara paid me and swept up. She will lose the stores again in a month and neither of us said so.",
+            "resolution": "exterminated",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "cellar_cleared",
+                    "value": "killed"
+                },
+                {
+                    "approval": {
+                        "kessa": 4,
+                        "ilse": -3
+                    }
+                }
+            ]
+        },
+        "source_found": {
+            "title": "The spoiled grain",
+            "journal": "The rats were coming for four sacks of rotted grain nobody in the Flagon ordered. The tally stick with them carries the granary reeve's stamp. Hollis Marrow is dumping grain he was paid for and never delivered.",
+            "resolution": "source_found",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "cellar_cleared",
+                    "value": "cause"
+                },
+                {
+                    "set_flag": "grain_stamp_seen"
+                },
+                {
+                    "give_item": "grain_tally",
+                    "quantity": 1
+                },
+                {
+                    "xp": 50
+                },
+                {
+                    "approval": {
+                        "ilse": 5,
+                        "aldric": 4,
+                        "kessa": -2
+                    }
+                }
+            ]
+        }
+    }
+}

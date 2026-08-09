@@ -1,0 +1,99 @@
+{
+    "quest_key": "night_soil",
+    "title": "Night Soil",
+    "description": "Rivermark's nightmen have not gone down a grating in nine days and will not say why. In nine more days it will stop being their problem and start being everybody's.",
+    "on_job_board": true,
+    "required_level": 2,
+    "rewards": {
+        "xp": 350,
+        "gold": 60,
+        "item": "oilskin_hood"
+    },
+    "stages": {
+        "find_the_nightman": {
+            "title": "Find a nightman",
+            "objective": "Ask the men who go down there what stopped them.",
+            "journal": "A notice on the Flagon board, in the town clerk's hand and posted by the council: the emptying of the cesspits and gratings is in arrears and the contractors decline to proceed. Nobody has written down why.",
+            "target": {
+                "location": "river_stair"
+            }
+        },
+        "into_the_drains": {
+            "title": "Find the way down",
+            "objective": "Sib Marrell will not take you. Find your own way in.",
+            "journal": "Sib Marrell has emptied Rivermark's pits for twenty years and will not go down this month. He says the gratings are being used. Not blocked — used, from below, by something that moves them and puts them back. He will not go and he will not let his boy go and he does not want the watch told, and he was careful to say all three.",
+            "target": {
+                "location": "flagon_cellar"
+            }
+        },
+        "what_is_down_there": {
+            "title": "Go and see",
+            "objective": "Find out what is coming up out of the drains.",
+            "journal": "There is a whole town's worth of brickwork under Rivermark and it is not empty.",
+            "target": {
+                "location": "low_conduit"
+            }
+        },
+        "killed_it": {
+            "title": "Dead in the conduit",
+            "journal": "There was a crawler in the low conduit, forty feet of it in the wrong shape, and it had been coming up through the gratings after the pit leavings and after anything else that was near them. It is dead in six feet of water under the High Street. The nightmen went back down inside the week. Sib Marrell shook my hand and did not thank me, which from Sib is thanks.",
+            "resolution": "killed_it",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "night_soil_fate",
+                    "value": "killed"
+                },
+                {
+                    "approval": {
+                        "kessa": 8,
+                        "aldric": 4
+                    }
+                }
+            ]
+        },
+        "it_was_people": {
+            "title": "People",
+            "journal": "What has been shifting the gratings is about sixty people who live in the flood tunnels and cannot come up through the gates after dark. They have been coming up the drains because that is the only door they have. I told the council that the tunnels are inhabited, which they knew, and that the nightmen had been frightened by neighbours, which they did not. The nightmen went back down. Nobody has decided what to do about Undertown and I do not think anybody intends to.",
+            "resolution": "it_was_people",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "night_soil_fate",
+                    "value": "people"
+                },
+                {
+                    "set_flag": "undertown_known"
+                },
+                {
+                    "approval": {
+                        "ilse": 12,
+                        "aldric": 8,
+                        "kessa": 2,
+                        "sera": -2
+                    }
+                }
+            ]
+        },
+        "bricked_the_gratings": {
+            "title": "Bricked up",
+            "journal": "Nine gratings on the High Street and Granary Row are bricked and barred and the nightmen work above them in perfect safety. It cost the council eleven gold and took two days. The first hard rain of the autumn came up through the cellars of everything between the market and the quay, because a drain that cannot take water is a wall, and Undertown lost the whole of its eastern side in a night.",
+            "resolution": "bricked_the_gratings",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "night_soil_fate",
+                    "value": "sealed"
+                },
+                {
+                    "approval": {
+                        "sera": 4,
+                        "ilse": -14,
+                        "aldric": -10,
+                        "kessa": -4
+                    }
+                }
+            ]
+        }
+    }
+}

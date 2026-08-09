@@ -1,0 +1,17 @@
+{
+    "npc_key": "market_farmer",
+    "start": "hail",
+    "nodes": {
+        "hail": [
+            {
+                "text": "Grain's weighed at the granary, not here. Reeve's rules, not mine.",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

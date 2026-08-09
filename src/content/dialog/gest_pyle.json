@@ -1,0 +1,517 @@
+{
+    "npc_key": "gest_pyle",
+    "start": "hail",
+    "nodes": {
+        "hail": [
+            {
+                "conditions": [
+                    {
+                        "flag": "wardens_count_fate",
+                        "equals": "true"
+                    }
+                ],
+                "once": true,
+                "text": "\"They've had it read to me,\" Pyle says. \"The corrected one. Took the clerk four minutes and I've been carrying it two years.\" He looks out east at the hills for a bit. \"Four hundred and six. Hundred and ten of them small. I've walked past that book eleven hundred times.\"",
+                "expression": 2,
+                "choices": [
+                    {
+                        "label": "It was in your hands the whole while.",
+                        "next": "not_his_fault"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "wardens_count_fate",
+                        "equals": "muster"
+                    }
+                ],
+                "once": true,
+                "text": "\"There's a list on the Flagon door,\" Pyle says. \"Eleven names. I know nine of them.\" He shifts the satchel. \"Warden's still sending the book down. I'm still carrying it. Nobody's asked me for it since.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "wardens_count_fate",
+                        "equals": "unread"
+                    }
+                ],
+                "once": true,
+                "text": "\"Back on the shelf,\" Pyle says, and looks relieved about it, and then looks at his boots because he has heard himself. \"Watch's business. That's what you said.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_wardens_count",
+                        "stage": "count_them_yourself"
+                    }
+                ],
+                "text": "\"You want to go and count them,\" Pyle says. \"Right. Well.\" He is a man who has been given an instruction he cannot argue with and has no intention of following. \"I'll be here. I'm always here on a Thursday and this is a Thursday somewhere.\"",
+                "choices": [
+                    {
+                        "label": "What do I do if the number's wrong?",
+                        "next": "if_the_number_is_wrong"
+                    },
+                    {
+                        "label": "I'll be back.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_wardens_count",
+                        "stage": "the_tally"
+                    }
+                ],
+                "text": "Pyle has the satchel open on the top of the stone before you ask, which tells you how long he has been waiting for somebody to ask. \"It's every day,\" he says. \"One line a day, no words in it, just marks. Two years. She's never missed.\"",
+                "choices": [
+                    {
+                        "label": "Open it.",
+                        "next": "the_book_open"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "stone_and_writ",
+                        "stage": "the_fourth_face"
+                    }
+                ],
+                "text": "\"You're looking at the fourth face,\" Pyle says. \"Everyone does now. Wasn't like that in the spring.\" He puts his hand flat on the old crozier mark and does not touch the new one. \"That's a mason's work. That's not somebody's boy with a pick.\"",
+                "choices": [
+                    {
+                        "label": "Who re-cuts a mearing stone?",
+                        "next": "who_recuts"
+                    },
+                    {
+                        "label": "Later.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "not": {
+                            "quest": "the_wardens_count",
+                            "status": "active"
+                        }
+                    },
+                    {
+                        "not": {
+                            "quest": "the_wardens_count",
+                            "status": "completed"
+                        }
+                    }
+                ],
+                "text": "A watchman on the ridge with a satchel over one shoulder and the strap wound twice, the way a man carries something he has been told not to put down. \"Relief,\" he says. \"Gest Pyle. I walk the boundary every fortnight and I fetch the warden's book down to town, and I do not go any further east than this stone, and I'd rather you didn't tell me you're going to.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_pyle"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "What book?",
+                        "next": "what_book"
+                    },
+                    {
+                        "label": "What happened to this stone?",
+                        "next": "who_recuts"
+                    },
+                    {
+                        "label": "Nothing. Carry on.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "\"Still walking it,\" Pyle says. \"Fortnight in, fortnight out. Stone's still here, hills are still there.\" He hitches the satchel. \"Book's still in the bag.\"",
+                "choices": [
+                    {
+                        "label": "About the stone.",
+                        "next": "who_recuts"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "not_his_fault": [
+            {
+                "text": "\"It was,\" he agrees. He is not arguing and he is not apologising. \"I can't read. Never said otherwise and never been asked. Reed knew when she gave me the round — that's half of why she gave me the round, a man who can't read a thing can't be got at over it.\" He almost laughs. \"Worked, didn't it.\"",
+                "choices": [
+                    {
+                        "label": "It did.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "what_book": [
+            {
+                "text": "\"Warden's count,\" Pyle says. \"Hill warden east of here keeps a tally of what's moving on the boundary and sends it down. I carry it. Clerk shelves it.\" He shifts. \"Two years I've done that. Nobody's opened it in front of me once, and I'll tell you the reason if you want it, and it isn't a good one.\"",
+                "choices": [
+                    {
+                        "label": "Tell me the reason.",
+                        "next": "the_reason"
+                    },
+                    {
+                        "label": "Let me see the book.",
+                        "next": "the_book_offer"
+                    },
+                    {
+                        "label": "Not my business.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_reason": [
+            {
+                "text": "\"Because I can't read,\" Pyle says, flatly, the way a man says a thing he has decided in advance not to be ashamed of. \"So I don't know if it's important. And the clerk shelves it because I hand it over like it isn't. That's the whole of it. Two years of somebody's work and it's sat on a shelf because of how I hand a bag across a counter.\"",
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse says nothing at all for a long moment. Then: \"Every fortnight. In all weathers. He has never once been late.\""
+                    },
+                    {
+                        "companion": "sera",
+                        "text": "Sera: \"That is not how a thing gets ignored. That is how a thing gets ignored on purpose, by somebody higher than him.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Then let me read it.",
+                        "next": "the_book_offer"
+                    },
+                    {
+                        "label": "That's not on you.",
+                        "next": "the_book_offer"
+                    }
+                ]
+            }
+        ],
+        "the_book_offer": [
+            {
+                "text": "He has the satchel open before you finish the sentence. \"You'll want to be quick,\" he says, \"because I'm meant to be walking, and also you won't, because nobody ever is.\"",
+                "on_enter": [
+                    {
+                        "start_quest": "the_wardens_count"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Open it.",
+                        "next": "the_book_open"
+                    },
+                    {
+                        "label": "Not today.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_book_open": [
+            {
+                "text": "One line a day. No words anywhere in it. A stroke for each one seen, in groups, with a small mark against some of the groups that repeats about one time in four. Two years of that, in the same hand, without a gap — including the eleven days in the second winter when the pass was shut and nobody in Rivermark went further east than the gate.\n\nRead front to back it says: more of them, every spring.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_wardens_count",
+                            "stage": "count_them_yourself"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse does not take the book. \"The small mark is young,\" she says. \"One in four. I put it in because I did not want to write the word.\""
+                    },
+                    {
+                        "companion": "sera",
+                        "text": "Sera turns four pages at once and stops. \"Read it back to front,\" she says. \"Go on. Start at this end.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Read it back to front.",
+                        "check": {
+                            "skill": "investigation",
+                            "dc": 13,
+                            "on_success": "read_backwards",
+                            "on_failure": "cannot_get_it"
+                        }
+                    },
+                    {
+                        "label": "I'll go and count them myself.",
+                        "next": "if_the_number_is_wrong"
+                    },
+                    {
+                        "label": "Close it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "read_backwards": [
+            {
+                "text": "Backwards it is a different document. The groups are the same groups. The same small marks travel with them, spring to spring, one gallery higher up the hill each year. And the totals do not rise — the totals arriving fall, every single year, and the reason the count goes up is that nothing that comes up ever goes back down.\n\nIt is not a count of an invasion. It is a count of a retreat, taken from the wrong end.",
+                "on_enter": [
+                    {
+                        "set_flag": "count_read_backwards"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"I have known that for a year and a half. I could not put it in the book because a warden's book is marks, and there is no mark for 'they are running from something'.\""
+                    },
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric: \"Every spring somebody in Rivermark says there are more of them than last year. Every spring they have been right, and every spring they have been wrong about why.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "I still want the real number. I'll count them myself.",
+                        "next": "if_the_number_is_wrong"
+                    },
+                    {
+                        "label": "Give Pyle the corrected book.",
+                        "next": "corrected"
+                    },
+                    {
+                        "label": "Give the watch the number and nothing else.",
+                        "next": "just_the_number"
+                    }
+                ]
+            }
+        ],
+        "cannot_get_it": [
+            {
+                "text": "Marks in groups, a small mark against one in four, and a number at the end of every fortnight that is bigger than the number at the end of the fortnight before. Whatever else is in it is not coming out on a windy ridge with a watchman waiting.",
+                "choices": [
+                    {
+                        "label": "I'll go and count them myself.",
+                        "next": "if_the_number_is_wrong"
+                    },
+                    {
+                        "label": "Give the watch the number and nothing else.",
+                        "next": "just_the_number"
+                    },
+                    {
+                        "label": "Put it back in the bag.",
+                        "next": "left_it"
+                    }
+                ]
+            }
+        ],
+        "if_the_number_is_wrong": [
+            {
+                "text": "\"Then it's wrong,\" Pyle says. \"And you'll have counted it, which is more than the clerk did, and more than me.\" He does up the satchel. \"East gallery, low, where the noise is. You'll hear it before you see it and then you'll wish you hadn't heard it.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_wardens_count",
+                            "stage": "count_them_yourself"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "I'll bring you a number.",
+                        "end": true
+                    },
+                    {
+                        "label": "I have counted them.",
+                        "conditions": [
+                            {
+                                "flag": "warren_nests_seen"
+                            }
+                        ],
+                        "next": "the_real_number"
+                    }
+                ]
+            }
+        ],
+        "the_real_number": [
+            {
+                "text": "Pyle listens to the number and then asks you to say the second part again, and then a third time, and then sits down on the base of the mearing stone with the satchel in his lap.\n\n\"Hundred and ten,\" he says. \"Under six winters.\" He looks east. \"I've been carrying that up and down this ridge for two years in a bag.\"",
+                "choices": [
+                    {
+                        "label": "Put the correction in the front of the book, in words.",
+                        "next": "corrected"
+                    },
+                    {
+                        "label": "The watch gets the total. That's all they need.",
+                        "next": "just_the_number"
+                    },
+                    {
+                        "label": "Say nothing. Give him the bag back.",
+                        "next": "left_it"
+                    }
+                ]
+            }
+        ],
+        "corrected": [
+            {
+                "text": "It goes in the front, in plain words, in a hand that will embarrass anybody who reads it after a clerk: what the marks mean, which way the book runs, and both columns of the number. Pyle watches it being written and does not pretend he can check it.\n\n\"Right,\" he says. \"Thursday, then. I'll hand it over the same as always and this time I'll wait while they open it.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_wardens_count",
+                            "stage": "counted_true"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"Two years I have written that in marks because marks cannot be argued with. You have written it in words. Words can.\" A pause. \"Do it anyway.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Thursday, then.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "just_the_number": [
+            {
+                "text": "\"Four hundred and six,\" Pyle repeats, and you can hear him fixing it in place the way a man does who has nowhere else to put a thing. \"Right. That I can carry.\"\n\nHe does not ask about the other column, because you did not give him the other column, and by the end of the week there is a muster list on the door of the Golden Flagon with eleven names on it.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_wardens_count",
+                            "stage": "counted_for_the_muster"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"Four hundred and six.\" She says it twice more, quietly, on the way down the ridge, as if checking whether it will start meaning something else."
+                    },
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa: \"That's the number they needed. Everything else was going to be an argument.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Carry it down.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "left_it": [
+            {
+                "text": "He takes the satchel back and winds the strap twice round his shoulder, the way he had it when you arrived.\n\n\"Watch's business,\" he agrees, and he is relieved, and he hears himself being relieved, and neither of you says anything about it.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_wardens_count",
+                            "stage": "left_the_book"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Walk on.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "who_recuts": [
+            {
+                "conditions": [
+                    {
+                        "quest": "stone_and_writ",
+                        "status": "active"
+                    }
+                ],
+                "text": "\"Nobody re-cuts a mearing,\" Pyle says. \"That's the point of it. You put it up once and then everyone's grandfather agrees about where it is.\" He rubs the back of his neck. \"Somebody's dressed that face right back and cut it fresh and done it well, and I walk past here every fortnight and I never saw them at it.\"",
+                "choices": [
+                    {
+                        "label": "Who holds the quarry now?",
+                        "next": "who_holds_it"
+                    },
+                    {
+                        "label": "Leave it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "\"Nobody re-cuts a mearing,\" Pyle says. \"That's the whole point of the thing. You put it up once and after that everyone's grandfather agrees where it is.\" He taps the old crozier with two fingers and does not touch the new face at all. \"Somebody's dressed that back and cut it fresh this year, properly, and I walk this ridge every fortnight and never saw a soul at it.\"",
+                "on_enter": [
+                    {
+                        "start_quest": "stone_and_writ"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera is already at the stone. \"A boundary is whatever the ground says and whatever the paper says,\" she says. \"When those two stop agreeing, somebody has just made a great deal of money.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Who holds the quarry now?",
+                        "next": "who_holds_it"
+                    },
+                    {
+                        "label": "Later.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "who_holds_it": [
+            {
+                "text": "\"The town did,\" Pyle says. \"Then the grain factor did, in the spring, and everybody said that was Marrow being Marrow. Then it went again in the summer and it went to a name, and the name isn't a person anybody's met.\" He shrugs. \"I don't read. But I hear the clerks, and the clerks were surprised twice.\"\n\nHe points east with his chin. \"Ackley's on the spoil heap over there. Last man out of that quarry. He'll know whose it was, because he'll know whose it was when it killed everyone.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "stone_and_writ",
+                            "stage": "whose_name_is_on_it"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "I'll go and ask him.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

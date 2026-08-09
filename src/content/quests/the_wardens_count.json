@@ -1,0 +1,108 @@
+{
+    "quest_key": "the_wardens_count",
+    "title": "The Warden's Count",
+    "description": "Ilse Thornwood has counted goblins on the eastern boundary every day for two years and sent the tally down to the watch every fortnight. Nobody in Rivermark has ever read it. The man who carries it cannot.",
+    "giver": "ilse",
+    "on_job_board": true,
+    "required_level": 2,
+    "rewards": {
+        "xp": 300,
+        "gold": 80
+    },
+    "stages": {
+        "the_tally": {
+            "title": "Read the tally",
+            "objective": "Find the watchman who carries the warden's book and get him to open it.",
+            "journal": "The hill warden sends a count down to Rivermark every fortnight. It goes to the mearing stone with a watchman called Gest Pyle and from there to a shelf. Two years of it, and nobody has read a line.",
+            "target": {
+                "location": "boundary_stone"
+            }
+        },
+        "count_them_yourself": {
+            "title": "Count them yourself",
+            "objective": "The book says one thing forwards. Go and see which way it should be read.",
+            "journal": "Read forwards, the tally says: more of them every spring. Read backwards it says the same families, one gallery further up the hill each year, and fewer of them arriving each time. It is not a count of an invasion. It is a count of a retreat, taken from the wrong end.",
+            "target": {
+                "location": "warren_nests"
+            }
+        },
+        "counted_true": {
+            "title": "The count, corrected",
+            "journal": "We recounted it in front of Pyle and put the correction in the front of the book in plain words, so that the next person to open it does not have to be clever. Four hundred and six above ground, of whom a hundred and ten are under six winters. Pyle carried it down. Reed read it. She did not say anything for a while.",
+            "resolution": "counted_true",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "wardens_count_fate",
+                    "value": "true"
+                },
+                {
+                    "set_flag": "warren_numbers_known"
+                },
+                {
+                    "give_item": "wardens_tally",
+                    "quantity": 1
+                },
+                {
+                    "xp": 100
+                },
+                {
+                    "approval": {
+                        "ilse": 18,
+                        "aldric": 8,
+                        "kessa": -4,
+                        "sera": 2
+                    }
+                }
+            ]
+        },
+        "counted_for_the_muster": {
+            "title": "The count, as a number",
+            "journal": "Four hundred and six is a number a town can act on and I gave it to the watch as a number. Reed has the count, the gate is shut at dusk, and there is a muster list on the door of the Flagon with eleven names on it. Nobody down there has asked what the other column means.",
+            "resolution": "counted_for_the_muster",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "wardens_count_fate",
+                    "value": "muster"
+                },
+                {
+                    "set_flag": "warren_numbers_known"
+                },
+                {
+                    "set_flag": "rivermark_mustering"
+                },
+                {
+                    "give_gold": 60
+                },
+                {
+                    "approval": {
+                        "kessa": 10,
+                        "ilse": -20,
+                        "aldric": -8,
+                        "sera": 4
+                    }
+                }
+            ]
+        },
+        "left_the_book": {
+            "title": "Put back on the shelf",
+            "journal": "I gave Pyle his book back and told him it was the watch's business. He agreed with me and looked relieved about it, and that is two of us who have now decided not to read it.",
+            "resolution": "left_the_book",
+            "terminal": true,
+            "outcome": "neutral",
+            "effects": [
+                {
+                    "set_flag": "wardens_count_fate",
+                    "value": "unread"
+                },
+                {
+                    "approval": {
+                        "ilse": -10,
+                        "kessa": 2
+                    }
+                }
+            ]
+        }
+    }
+}

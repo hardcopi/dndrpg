@@ -1,0 +1,13 @@
+{
+    "npc_key": "brother_teodor",
+    "name": "Brother Teodor",
+    "role": "Of the Sun's Hour",
+    "description": "Infirmarer at Arden for thirty-one years, and in one of his own beds for the last two. He wrote a letter four winters ago and did not send it until he could no longer walk.",
+    "sprite_key": "brother_teodor",
+    "image_url": "assets/images/npcs/monk.png",
+    "is_quest_giver": true,
+    "dialog": "brother_teodor",
+    "place": {
+        "location": "teodors_cell"
+    }
+}

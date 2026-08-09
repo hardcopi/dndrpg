@@ -1,0 +1,140 @@
+{
+    "quest_key": "the_survey",
+    "title": "The Survey",
+    "description": "Nine sheets of good paper in an unlocked rack, and every fact you have collected this year written down on them in one hand, in order, with a total at the bottom.",
+    "giver": "bael_rourke",
+    "on_job_board": false,
+    "required_level": 5,
+    "rewards": {
+        "xp": 800
+    },
+    "stages": {
+        "the_rack": {
+            "title": "Not in the strongbox",
+            "objective": "The strongbox holds the wages. The rack holds the working paper. Look in the rack.",
+            "journal": "Rourke's strongbox is bolted through the floor and through the joist and there are eleven pounds in it. The rolled paper in the rack beside it is not locked up at all, because nobody at the works has ever thought of it as worth anything. It is only the survey.",
+            "target": {
+                "location": "overseers_office"
+            }
+        },
+        "in_hand": {
+            "title": "In hand",
+            "objective": "You have it. Now decide what it is for.",
+            "journal": "Every field, road, weir, seam and roof between the ford and Greyhythe, measured and valued and totalled in one hand. Rivermark is on sheet six. It is not drawn as a town. It is entered in the margin under the head 'clearance', as a cost, and the figure beside it has been revised downward twice — which means somebody sat down twice and worked out that we would come cheaper than that.",
+            "target": {
+                "location": "factors_house"
+            }
+        },
+        "took_the_survey": {
+            "title": "Kept",
+            "journal": "I have it, and Corse knows I have it, and he was neither angry nor surprised. He said that a document is only worth what the man holding it can do with it, and asked whether I would like a copy of sheet six for my own use, since I would find the original difficult to read by candlelight. I said no. I am not certain that was the right answer.",
+            "resolution": "took_the_survey",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "survey_fate",
+                    "value": "took"
+                },
+                {
+                    "set_flag": "act_two_open"
+                },
+                {
+                    "approval": {
+                        "sera": 12,
+                        "ilse": 8,
+                        "aldric": 6,
+                        "kessa": 6
+                    }
+                }
+            ]
+        },
+        "burned_the_survey": {
+            "title": "Burned",
+            "journal": "Three years of chain-work, nine sheets, and about four hundred days of somebody's wages, gone in the time it takes paper to go. It will all be done again. It will take them three years to do it again, and for three years nobody will know what this valley is worth, including us. Somebody is going to start asking who was standing next to the fire.",
+            "resolution": "burned_the_survey",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "survey_fate",
+                    "value": "burned"
+                },
+                {
+                    "set_flag": "act_two_open"
+                },
+                {
+                    "take_item": "the_valley_survey"
+                },
+                {
+                    "approval": {
+                        "kessa": 16,
+                        "ilse": 10,
+                        "aldric": -6,
+                        "sera": -10
+                    }
+                }
+            ]
+        },
+        "sold_it_back": {
+            "title": "Sold back",
+            "journal": "Five hundred gold, counted out without a word of argument, and articles of retainer at forty a quarter for services not further described. He had them written before I came. Not for me — for whoever came. That is the part I keep going back to: the chair was worn through at the arms and the paper was already drawn.",
+            "resolution": "sold_it_back",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "survey_fate",
+                    "value": "sold"
+                },
+                {
+                    "set_flag": "act_two_open"
+                },
+                {
+                    "set_flag": "corse_retains_us"
+                },
+                {
+                    "take_item": "the_valley_survey"
+                },
+                {
+                    "give_gold": 500
+                },
+                {
+                    "give_item": "corse_retainer",
+                    "quantity": 1
+                },
+                {
+                    "approval": {
+                        "kessa": -12,
+                        "ilse": -18,
+                        "aldric": -20,
+                        "sera": 8
+                    }
+                }
+            ]
+        },
+        "warned_the_town": {
+            "title": "Read out on Granary Row",
+            "journal": "Pyke read it out, because Pyke can read a survey and I cannot, and because it was his chain that made half of it. Forty people stood in the rain on Granary Row and listened to a man tell them what their roofs had been valued at. Reed wrote it all down. There is no law it breaks. There is nobody to arrest. The town knows exactly what is coming now, and knowing is the whole of what it can do, and Pyke is out of work.",
+            "resolution": "warned_the_town",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "survey_fate",
+                    "value": "warned"
+                },
+                {
+                    "set_flag": "act_two_open"
+                },
+                {
+                    "set_flag": "rivermark_warned"
+                },
+                {
+                    "approval": {
+                        "aldric": 18,
+                        "ilse": 14,
+                        "kessa": 8,
+                        "sera": -6
+                    }
+                }
+            ]
+        }
+    }
+}

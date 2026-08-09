@@ -1,0 +1,29 @@
+{
+  "spell_key": "charm_person",
+  "name": "Charm Person",
+  "level": 1,
+  "school": "Enchantment",
+  "classes": [
+    "Bard",
+    "Druid",
+    "Sorcerer",
+    "Warlock",
+    "Wizard"
+  ],
+  "resolution": "debuff",
+  "save_ability": "wis",
+  "save_effect": "negate",
+  "target_kind": "enemy",
+  "reaches_back_rank": true,
+  "effect": {
+    "condition": "charmed"
+  },
+  "casting_time": "1 action",
+  "range_text": "30 feet",
+  "components": "V, S",
+  "duration": "1 hour",
+  "concentration": false,
+  "duration_rounds": 10,
+  "description": "You attempt to charm a humanoid you can see within range. It must make a Wisdom saving throw, and does so with advantage if you or your companions are fighting it. On a failed save, it is charmed by you.",
+  "source": "5e SRD"
+}

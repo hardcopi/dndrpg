@@ -1,0 +1,112 @@
+{
+    "quest_key": "the_warrens_children",
+    "title": "The Warren's Children",
+    "description": "There are two galleries in the warren that are nothing but bedding, and the bedding is small. Nakka Skarn would like somebody from the valley to have seen them, and is aware of exactly what she is risking by showing you.",
+    "giver": "nakka",
+    "on_job_board": false,
+    "required_level": 3,
+    "rewards": {
+        "xp": 450,
+        "gold": 80
+    },
+    "stages": {
+        "the_nest_ledges": {
+            "title": "The nest ledges",
+            "objective": "Nakka has offered to show you the low galleries. Go and look.",
+            "journal": "Nakka Skarn has offered to walk us along the low gallery, which she has not done for anyone from the valley, and she said so in the tone of somebody stating a price rather than doing a favour.",
+            "target": {
+                "location": "warren_nests"
+            }
+        },
+        "a_hundred_and_ten": {
+            "title": "A hundred and ten",
+            "objective": "Work out what the numbers mean for the winter.",
+            "journal": "Four hundred and six above ground. A hundred and ten of them under six winters. Goblin young cannot be walked more than four miles in a day and cannot be walked at all below freezing, which means the warren cannot move before spring and cannot feed itself where it is past midwinter. Nakka has known this since the summer. She has been buying salt and iron and not food, because you cannot store food you have not got.",
+            "target": {
+                "location": "warren_nests"
+            }
+        },
+        "moved_them_north": {
+            "title": "Moved north",
+            "journal": "The north ford is passable to a slow column for eleven days either side of midwinter and nobody in Rivermark holds it, which is why nobody in Rivermark had thought about it. We walked it, marked it, and got Reed to agree in writing not to post the crossing until spring — not to help, she was clear about that, but not to be the reason. A hundred and ten children went over it in three nights. Nakka did not thank anybody and did not sleep for the three nights.",
+            "resolution": "moved_them_north",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "children_fate",
+                    "value": "moved"
+                },
+                {
+                    "set_flag": "north_ford_open"
+                },
+                {
+                    "xp": 200
+                },
+                {
+                    "approval": {
+                        "ilse": 22,
+                        "aldric": 16,
+                        "kessa": -8,
+                        "sera": -4
+                    }
+                }
+            ]
+        },
+        "fed_them_through": {
+            "title": "Fed through the winter",
+            "journal": "Eleven wagons of pease, barley and salt fish over five weeks, bought at market price with our own money and one loan I would rather not describe, delivered to the warren gate in daylight where anyone could see it. Rivermark has an opinion about that and half of the opinion is that we are provisioning a siege against ourselves. They stay where they are. In spring the same problem will still be there and it will be four months older.",
+            "resolution": "fed_them_through",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "children_fate",
+                    "value": "fed"
+                },
+                {
+                    "set_flag": "warren_fed"
+                },
+                {
+                    "take_gold": 200
+                },
+                {
+                    "xp": 150
+                },
+                {
+                    "approval": {
+                        "aldric": 20,
+                        "ilse": 14,
+                        "sera": -10,
+                        "kessa": -6
+                    }
+                }
+            ]
+        },
+        "told_the_watch": {
+            "title": "Told the watch",
+            "journal": "I gave Reed the galleries: where they are, how to get to them, and what is in them. She wrote it down and asked me twice whether I was certain about the second column, and I said I was. She has not done anything with it. She has it, and she will have it in the spring, and having it is the whole of what I did.",
+            "resolution": "told_the_watch",
+            "terminal": true,
+            "outcome": "neutral",
+            "effects": [
+                {
+                    "set_flag": "children_fate",
+                    "value": "told"
+                },
+                {
+                    "set_flag": "warren_nests_known_to_watch"
+                },
+                {
+                    "give_gold": 120
+                },
+                {
+                    "approval": {
+                        "kessa": 6,
+                        "sera": 6,
+                        "ilse": -28,
+                        "aldric": -22
+                    }
+                }
+            ]
+        }
+    }
+}

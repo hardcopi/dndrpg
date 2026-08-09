@@ -1,0 +1,24 @@
+{
+  "spell_key": "shield_of_faith",
+  "name": "Shield of Faith",
+  "level": 1,
+  "school": "Abjuration",
+  "casting_time": "1 bonus action",
+  "range_text": "60 feet",
+  "components": "V, S, M",
+  "duration": "Concentration, up to 10 minutes",
+  "description": "A shimmering field appears and surrounds a creature of your choice within range, granting it a +2 bonus to AC for the duration.",
+  "resolution": "buff",
+  "concentration": true,
+  "duration_rounds": 10,
+  "target_kind": "ally",
+  "reaches_back_rank": true,
+  "effect": {
+    "ac": 2
+  },
+  "source": "5e SRD",
+  "classes": [
+    "Cleric",
+    "Paladin"
+  ]
+}

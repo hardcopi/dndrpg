@@ -1,0 +1,63 @@
+{
+  "resistances": [],
+  "immunities": [],
+  "vulnerabilities": [],
+  "condition_immunities": [],
+  "source": "5e SRD",
+  "monster_key": "carrion_crawler",
+  "name": "Carrion Crawler",
+  "size": "Large",
+  "type": "monstrosity",
+  "alignment": "unaligned",
+  "armor_class": 13,
+  "hit_points": 51,
+  "hit_dice": "6d10+18",
+  "speed": "30 ft., climb 30 ft.",
+  "strength": 14,
+  "dexterity": 13,
+  "constitution": 16,
+  "intelligence": 1,
+  "wisdom": 12,
+  "charisma": 5,
+  "challenge_rating": 2,
+  "experience_points": 450,
+  "traits": {
+    "Keen Smell": "The crawler has advantage on Wisdom (Perception) checks that rely on smell.",
+    "Spider Climb": "The crawler can climb difficult surfaces, including upside down on ceilings, without needing an ability check."
+  },
+  "actions": [
+    {
+      "name": "Tentacles",
+      "type": "melee",
+      "bonus": 8,
+      "damage": "1d4+2",
+      "damage_type": "poison",
+      "note": "The target must succeed on a DC 13 Constitution saving throw or be poisoned for 1 minute. Until this poison ends, the target is paralysed.",
+      "save": {
+        "ability": "con",
+        "dc": 13
+      },
+      "on_fail": {
+        "condition": "paralyzed",
+        "rounds": 10,
+        "repeat_save": true
+      }
+    },
+    {
+      "name": "Bite",
+      "type": "melee",
+      "bonus": 4,
+      "damage": "2d4+2",
+      "damage_type": "piercing"
+    }
+  ],
+  "saves": {},
+  "rank_pref": "front",
+  "sprite_key": "crawler",
+  "loot": [
+    {
+      "item": "antitoxin",
+      "chance": 40
+    }
+  ]
+}

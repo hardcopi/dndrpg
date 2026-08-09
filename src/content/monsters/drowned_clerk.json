@@ -1,0 +1,78 @@
+{
+  "resistances": [
+    "necrotic",
+    "bludgeoning, piercing and slashing from nonmagical attacks"
+  ],
+  "immunities": [
+    "poison"
+  ],
+  "vulnerabilities": [],
+  "condition_immunities": [
+    "exhaustion",
+    "frightened",
+    "poisoned"
+  ],
+  "source": "Rivermark Chronicles",
+  "monster_key": "drowned_clerk",
+  "name": "The Drowned Clerk",
+  "size": "Medium",
+  "type": "undead",
+  "alignment": "neutral",
+  "armor_class": 12,
+  "hit_points": 45,
+  "hit_dice": "7d8+14",
+  "speed": "20 ft., swim 30 ft.",
+  "strength": 15,
+  "dexterity": 10,
+  "constitution": 15,
+  "intelligence": 10,
+  "wisdom": 11,
+  "charisma": 6,
+  "challenge_rating": 2,
+  "experience_points": 450,
+  "traits": {
+    "Will Not Leave the Room": "The clerk does not pursue beyond the strongroom door. It has never once tried to.",
+    "Underwater Silence": "The clerk makes no sound at all, in or out of the water. It did not make much when it was living either.",
+    "Keeps the Boxes": "While any deposit box remains in the strongroom, the clerk has advantage on saving throws against being moved, charmed or frightened."
+  },
+  "actions": [
+    {
+      "name": "Drag Down",
+      "type": "melee",
+      "bonus": 4,
+      "damage": "1d8+2",
+      "damage_type": "bludgeoning",
+      "note": "If the target is standing in the flooded room it must succeed on a DC 13 Strength saving throw or be pulled under and begin to drown, taking 1d6 at the start of each of its turns until it or an ally spends an action to get it up.",
+      "save": {
+        "ability": "str",
+        "dc": 13
+      },
+      "on_fail": {
+        "condition": "restrained",
+        "repeat_save": true
+      }
+    },
+    {
+      "name": "Ledger Weight",
+      "type": "melee",
+      "bonus": 4,
+      "damage": "2d6+2",
+      "damage_type": "bludgeoning",
+      "note": "A brass-cornered ledger weight on a thong, still tied to its wrist."
+    }
+  ],
+  "saves": {
+    "con": 4
+  },
+  "rank_pref": "front",
+  "sprite_key": "boss_drowned",
+  "loot": [
+    {
+      "gold": "2d8"
+    },
+    {
+      "item": "oldcity_lockbox_purse",
+      "chance": 35
+    }
+  ]
+}

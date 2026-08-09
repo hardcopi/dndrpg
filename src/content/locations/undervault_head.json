@@ -1,0 +1,81 @@
+{
+    "region_key": "undervault_head",
+    "module": "undervault",
+    "name": "The Stair Head",
+    "region_type": "wilderness",
+    "description": "A shelf of bare hillside with a hole in it, and everything that has grown up around the hole: a camp that was meant to be temporary nine years ago, a spoil heap taller than the tents, and a winch nobody trusts. This is the last place with a fire in it.",
+    "sort_order": 60,
+    "locations": {
+        "uv_camp": {
+            "name": "The Delvers' Camp",
+            "type": "camp",
+            "map_pos": [70, 30],
+            "allow_camp": true,
+            "job_board": true,
+            "description": "Two dozen tents pitched in the lee of the spoil heap, arranged by how long their owners have lasted. The fire in the middle is communal and never goes out; the crews who keep it going are not the ones who talk. Everything here is for sale twice — once by the people who brought it up the hill, and once by the people who carried it back out of the dark.",
+            "first_visit": "Somebody looks up as you come in, counts your party, and goes back to what they were doing without writing anything down.",
+            "ambience": [
+                "The fire pops. Nobody looks at it.",
+                "Someone is repacking a bag for the third time.",
+                "A crew comes up the path with three people and four packs.",
+                "Two of them are arguing quietly about which way the third gallery ran.",
+                "A woman is drawing on a board in charcoal and rubbing it out again."
+            ],
+            "exits": [
+                {"to": "uv_bunkhouse", "label": "Into the long tent"},
+                {"to": "uv_spoil", "label": "Up onto the spoil heap"},
+                {"to": "uv_mouth", "label": "Along the path to the stair"}
+            ]
+        },
+        "uv_bunkhouse": {
+            "name": "The Long Tent",
+            "type": "building",
+            "map_pos": [85, 48],
+            "inn_cost": 3,
+            "description": "Canvas over a timber frame, forty feet of it, with bunks down both sides and a stove at the end that somebody feeds all night. Three coppers gets you a bunk and the use of the stove. It is warmer than the tents and closer to the fire, and the people who sleep in it are the ones who intend to go down again tomorrow.",
+            "first_visit": "The stove-keeper points at an empty bunk with his chin and does not ask your names.",
+            "ambience": [
+                "Somebody is asleep in their boots.",
+                "The stove ticks as it cools and is fed again.",
+                "A man is oiling a mail shirt with more care than it deserves.",
+                "Someone counts coins twice and puts them away unhappy."
+            ],
+            "exits": [
+                {"to": "uv_camp", "label": "Out to the fire"}
+            ]
+        },
+        "uv_spoil": {
+            "name": "The Spoil Heap",
+            "type": "site",
+            "map_pos": [20, 55],
+            "allow_camp": true,
+            "description": "Everything that has come out of the hole and was not worth keeping, in a slope forty feet high: cut stone, broken tools, bone that may be animal. From the top you can see the whole shelf and the path down to the road. People come up here to sit when they have lost somebody, which is why nobody follows them up.",
+            "first_visit": "From the top, the hole in the hillside is a very small thing to have taken so much.",
+            "ambience": [
+                "Something shifts further down the slope and settles.",
+                "The wind up here is constant and cold.",
+                "A bootprint in the spoil, going up, none coming down.",
+                "Somebody has left a cup on a stone, upside down."
+            ],
+            "exits": [
+                {"to": "uv_camp", "label": "Back down to the camp"}
+            ]
+        },
+        "uv_mouth": {
+            "name": "The Mouth",
+            "type": "gate",
+            "map_pos": [45, 27],
+            "description": "The stair is cut, not natural — square treads, a handrail groove worn into the rock where no handrail remains, and a lintel with the marks of letters somebody has chiselled off. Six steps down the daylight stops mattering. The winch stands beside it with its rope coiled and its pawl wedged, and nobody has used it in living memory.",
+            "first_visit": "Cold comes up the stair steadily, the way a draught does when the far end is open somewhere you cannot see.",
+            "ambience": [
+                "The rope on the winch turns very slightly, and stops.",
+                "Cold air comes up the stair and keeps coming.",
+                "Somebody has scratched a tally into the lintel and stopped at eleven.",
+                "The chiselled letters catch the light and are still unreadable."
+            ],
+            "exits": [
+                {"to": "uv_camp", "label": "Back along the path to the fire"}
+            ]
+        }
+    }
+}

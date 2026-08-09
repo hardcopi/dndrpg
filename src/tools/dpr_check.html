@@ -1,0 +1,127 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Display measurement — art upscale Tier 0</title>
+<!--
+  Tier 0 of the art upscale work: measure the browser's actual device pixel
+  ratio, because every later decision is derived from it.
+
+  The compositor config says one thing (kwinoutputconfig.json: scale 1.5) and
+  the X11 path says another (kdeglobals: ScreenScaleFactors=eDP-1=1), and
+  browser zoom multiplies into devicePixelRatio on top of both. None of those
+  are authoritative for the browser you actually play in — only the browser is.
+
+  Open this at http://localhost:8081/tools/dpr_check.html
+-->
+<style>
+  :root { color-scheme: dark; }
+  body {
+    margin: 0; padding: 2rem;
+    background: #14121a; color: #e8e4dc;
+    font: 15px/1.55 system-ui, sans-serif;
+  }
+  h1 { font-size: 1.25rem; margin: 0 0 1.5rem; color: #d4b45a; font-weight: 600; }
+  h2 { font-size: .95rem; margin: 2rem 0 .6rem; color: #d4b45a; font-weight: 600; }
+  .verdict {
+    font-size: 2.6rem; font-weight: 700; letter-spacing: -.02em;
+    padding: 1.2rem 1.5rem; border-radius: 10px; margin-bottom: .4rem;
+  }
+  .go   { background: #1d3a24; color: #7fdd93; border: 1px solid #2f6b3d; }
+  .stop { background: #3a1d1d; color: #ec8b8b; border: 1px solid #6b2f2f; }
+  .warn { background: #3a331d; color: #e8cf7f; border: 1px solid #6b5d2f; }
+  .note { color: #a49c92; margin: 0 0 1.5rem; max-width: 62ch; }
+  table { border-collapse: collapse; font-size: .88rem; }
+  th, td { text-align: left; padding: .35rem .9rem .35rem 0; vertical-align: top; }
+  th { color: #a49c92; font-weight: 500; }
+  td { font-family: ui-monospace, monospace; }
+  .short { color: #ec8b8b; font-weight: 600; }
+  .ok    { color: #7fdd93; }
+  code { background: #221f2b; padding: .1rem .35rem; border-radius: 3px; font-size: .85em; }
+</style>
+
+<h1>Display measurement — art upscale Tier 0</h1>
+
+<div id="verdict" class="verdict">measuring…</div>
+<p class="note" id="verdict-note"></p>
+
+<h2>Raw measurements</h2>
+<table id="raw"></table>
+
+<h2>Art headroom at this ratio</h2>
+<p class="note">
+  For each CSS box the game draws art into: the device pixels it actually needs
+  at this ratio, against the pixels the art file has.
+  <span class="short">Red</span> means the art is short and genuinely looks soft.
+</p>
+<table id="headroom"></table>
+
+<script>
+  // Every CSS box that displays art, with the pixels its source file holds.
+  // Sizes read from style.css; see the plan for the file:line of each.
+  const BOXES = [
+    ['.party-face',      'style.css:1828', 74,  144, 'party rail face'],
+    ['.avatar-option',   'style.css:1544', 72,  144, 'creator portrait grid'],
+    ['.cbt-face',        'style.css:2551', 54,  144, 'combat card face'],
+    ['.ribbon-slot img', 'style.css:2437', 40,  144, 'initiative ribbon'],
+    ['.camp-face',       'style.css:1874', 96,  144, 'camp modal'],
+    ['.dlg-bust',        'style.css:2071', 186, 512, 'dialogue bust'],
+    ['.sheet-bust',      'style.css:1565', 190, 512, 'character sheet bust'],
+    ['.check-bust',      'style.css:2179', 116, 512, 'skill check bust'],
+    ['.pd-bust',         'style.css:1094', 200, 512, 'creator bust preview'],
+    ['.cbt-battler',     'style.css:2582', 220, 512, 'combat inspector battler'],
+    ['.map-sprite',      'style.css:510',  81.6, 128, 'map character (tile x1.7)'],
+    ['.map-ground',      'style.css:420',  48,  96,  'ground tile (2x, wrap-aware)'],
+    ['.map-prop-sprite', 'art.json',       96,  192, 'props/decor at 2x, e.g. a 96px door'],
+    ['.pd-preview cell', 'style.css:1066', 192, 128, 'creator walk preview (zoom 1.5)'],
+  ];
+
+  const dpr = window.devicePixelRatio;
+
+  const raw = [
+    ['devicePixelRatio', dpr],
+    ['screen (CSS px)', `${screen.width} x ${screen.height}`],
+    ['screen (device px)', `${Math.round(screen.width * dpr)} x ${Math.round(screen.height * dpr)}`],
+    ['window inner (CSS px)', `${innerWidth} x ${innerHeight}`],
+    ['matchMedia >= 1.5dppx', matchMedia('(min-resolution: 1.5dppx)').matches],
+    ['matchMedia >= 2dppx', matchMedia('(min-resolution: 2dppx)').matches],
+    ['user agent', navigator.userAgent],
+  ];
+  document.getElementById('raw').innerHTML = raw
+    .map(([k, v]) => `<tr><th>${k}</th><td>${v}</td></tr>`).join('');
+
+  // Verdict
+  const el = document.getElementById('verdict');
+  const note = document.getElementById('verdict-note');
+  el.textContent = `devicePixelRatio = ${dpr}`;
+
+  if (dpr >= 1.45) {
+    el.className = 'verdict go';
+    note.innerHTML = 'The upscale work is justified. Art drawn 1:1 is short of device '
+      + 'pixels by half again, and the raised slicer caps have somewhere to go. '
+      + '<strong>Proceed with the plan.</strong>';
+  } else if (dpr <= 1.05) {
+    el.className = 'verdict stop';
+    note.innerHTML = 'Everything is already 1:1 or better — every art class has '
+      + 'headroom at this ratio, and larger files would be downsampled straight '
+      + 'back with no visible gain. <strong>Stop and re-decide.</strong> The map '
+      + 'zoom (<code>ZOOM_MAX = 2.2</code>) is then the only remaining argument, '
+      + 'and it is a much weaker one.';
+  } else {
+    el.className = 'verdict warn';
+    note.innerHTML = 'Between the expected values — likely browser zoom '
+      + 'multiplying into the compositor scale. Reset zoom with '
+      + '<code>Ctrl+0</code> and reload before trusting this.';
+  }
+
+  // Headroom table
+  document.getElementById('headroom').innerHTML =
+    '<tr><th>CSS box</th><th>defined at</th><th>box</th><th>needs @' + dpr
+    + '</th><th>art has</th><th>margin</th><th></th></tr>'
+    + BOXES.map(([sel, where, css, art, what]) => {
+        const need = Math.ceil(css * dpr);
+        const ratio = art / need;
+        const cls = ratio < 1 ? 'short' : 'ok';
+        return `<tr><td>${sel}</td><th>${where}</th><td>${css}px</td>`
+             + `<td class="${cls}">${need}</td><td>${art}</td>`
+             + `<td class="${cls}">${ratio.toFixed(2)}x</td><th>${what}</th></tr>`;
+      }).join('');
+</script>

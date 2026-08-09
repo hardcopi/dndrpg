@@ -1,0 +1,108 @@
+{
+    "quest_key": "tobins_consignment",
+    "title": "Tobin's Consignment",
+    "description": "Twelve hundredweight of coarse salt is sitting on the river stair, carriage paid, invoiced to Tobin Brassscale. Tobin did not order it and cannot prove he did not.",
+    "giver": "tobin",
+    "on_job_board": false,
+    "rewards": {
+        "xp": 200,
+        "gold": 25
+    },
+    "stages": {
+        "go_and_look": {
+            "title": "Look at the crate",
+            "objective": "Find out what is actually on the quay.",
+            "journal": "Tobin has been invoiced for twelve hundredweight of coarse salt he did not order. It is good salt and he could sell it in a week, which is the part that is bothering him: nobody plays a trick on a man by giving him something he can sell.",
+            "target": {
+                "location": "river_stair"
+            }
+        },
+        "the_quay_book": {
+            "title": "The quay master's book",
+            "objective": "Find out who the salt was really for.",
+            "journal": "The bill of lading names a consignee in a clerk's copperplate. Mott Wenn has never heard of him and Mott has carried up everything that has come off a boat here for nine years. The same name is on eleven other bills in the quay book going back to spring — salt, lime, lamp oil, rope, and two hundred feet of pine board. None of it was collected by anyone who signed for it.",
+            "target": {
+                "location": "river_stair"
+            },
+            "effects": [
+                {
+                    "give_item": "lading_bill",
+                    "quantity": 1
+                }
+            ]
+        },
+        "paid_and_kept": {
+            "title": "Paid, and sold on",
+            "journal": "Tobin paid the carriage and sold the salt inside the fortnight at a profit he was not comfortable with. His name is now in the quay book as the man who received that consignment, in his own hand, next to eleven others he has nothing to do with. He said: I have made forty gold and acquired a history.",
+            "resolution": "paid_and_kept",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "consignment_fate",
+                    "value": "kept"
+                },
+                {
+                    "set_flag": "tobin_named"
+                },
+                {
+                    "take_item": "lading_bill"
+                },
+                {
+                    "give_gold": 60
+                },
+                {
+                    "approval": {
+                        "sera": 6,
+                        "aldric": -6,
+                        "kessa": -2
+                    }
+                }
+            ]
+        },
+        "refused_the_crate": {
+            "title": "Refused, and watched",
+            "journal": "Tobin refused it and the crate sat on the landing for four days going nobody's. On the fifth night two men came up the stair with a handcart, produced no paper, argued with nobody, and took it away downriver. Mott watched them do it and did not stop them, because nobody had told him to, and because they were extremely ordinary men doing an extremely ordinary job.",
+            "resolution": "refused_the_crate",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "consignment_fate",
+                    "value": "refused"
+                },
+                {
+                    "take_item": "lading_bill"
+                },
+                {
+                    "approval": {
+                        "kessa": 6,
+                        "ilse": 6,
+                        "sera": -4
+                    }
+                }
+            ]
+        },
+        "gave_reed_the_bill": {
+            "title": "The bill goes to the captain",
+            "journal": "Reed took the bill of lading and sent to Greyhythe about the name on it. The answer came back in nineteen days: the consignee is a real man, of a real address, and he has been dead for two years, and his estate has never been closed. She wrote it in the day book. There is nothing in Rivermark's law that makes a dead man receiving salt an offence.",
+            "resolution": "gave_reed_the_bill",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "consignment_fate",
+                    "value": "watch"
+                },
+                {
+                    "take_item": "lading_bill"
+                },
+                {
+                    "approval": {
+                        "aldric": 8,
+                        "ilse": 4,
+                        "sera": -6,
+                        "kessa": -2
+                    }
+                }
+            ]
+        }
+    }
+}

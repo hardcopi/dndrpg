@@ -1,0 +1,119 @@
+{
+    "quest_key": "the_anvil_debt",
+    "title": "The Anvil Debt",
+    "description": "Brenna Coalwright borrowed eighty gold against her forge fourteen years ago, from a cooper who has been dead for nine. Somebody she has never met has started collecting, and is entirely within their rights.",
+    "giver": "brenna_smith",
+    "on_job_board": false,
+    "rewards": {
+        "xp": 200
+    },
+    "stages": {
+        "see_the_paper": {
+            "title": "Look at what she signed",
+            "objective": "Get Brenna to show you the note.",
+            "journal": "Brenna Coalwright pays forty gold a quarter against a loan she took out on the forge in the fourth year of the road tax. She has never met the man who takes it. She is two days from the next quarter and eleven gold short.",
+            "target": {
+                "location": "the_anvil"
+            }
+        },
+        "the_assignments": {
+            "title": "Follow the assignments",
+            "objective": "The note has been sold on four times. Find out to whom.",
+            "journal": "The back of the note carries four assignments in four hands. Old Halloway sold it to a corn factor, who sold it to a man in Greyhythe, who sold it on again. The fourth entry is the interesting one: it is a house, not a person, and it is not witnessed.",
+            "target": {
+                "location": "counting_house"
+            }
+        },
+        "paid_the_note": {
+            "title": "The quarter is paid",
+            "journal": "I put forty gold on Brenna's counter and she took it standing very straight and did not thank me until I was halfway out of the door. The note stands. The next quarter is in twelve weeks and she knows exactly how many days that is.",
+            "resolution": "paid_the_note",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "anvil_debt_fate",
+                    "value": "paid"
+                },
+                {
+                    "take_gold": 40
+                },
+                {
+                    "approval": {
+                        "kessa": 8,
+                        "aldric": 6,
+                        "sera": -2
+                    }
+                }
+            ]
+        },
+        "voided_the_note": {
+            "title": "The fourth assignment is nothing",
+            "journal": "The last sale of the note was never witnessed. Tibald Ashe read it twice, said so out loud in front of two clerks so that it would be heard, and struck it. The debt still exists. It belongs to a corn factor in Greyhythe who has been dead since the winter and whose estate will take years to find it. Brenna gets those years.",
+            "resolution": "voided_the_note",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "anvil_debt_fate",
+                    "value": "void"
+                },
+                {
+                    "set_flag": "ashe_helped"
+                },
+                {
+                    "approval": {
+                        "sera": 10,
+                        "kessa": 8,
+                        "ilse": 4,
+                        "aldric": -2
+                    }
+                }
+            ]
+        },
+        "bought_the_note": {
+            "title": "The note changes hands again",
+            "journal": "I bought the paper. A hundred and twenty gold to a clerk who was pleased to be rid of a small account a long way from home. Brenna's forge is mortgaged to me now. She said thank you. She said it the way you say it to a man who has just bought your house.",
+            "resolution": "bought_the_note",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "anvil_debt_fate",
+                    "value": "bought"
+                },
+                {
+                    "take_gold": 120
+                },
+                {
+                    "give_item": "anvil_note",
+                    "quantity": 1
+                },
+                {
+                    "approval": {
+                        "kessa": -12,
+                        "aldric": -6,
+                        "ilse": -4,
+                        "sera": 8
+                    }
+                }
+            ]
+        },
+        "let_it_stand": {
+            "title": "Her debt, her forge",
+            "journal": "I left it. It is a real debt, honestly contracted and lawfully sold, and none of my business. Brenna made the quarter by selling the good steel out from under her own counter, which is how a smithy stops being a smithy over about four years.",
+            "resolution": "let_it_stand",
+            "terminal": true,
+            "outcome": "neutral",
+            "effects": [
+                {
+                    "set_flag": "anvil_debt_fate",
+                    "value": "stands"
+                },
+                {
+                    "approval": {
+                        "kessa": -8,
+                        "aldric": -4
+                    }
+                }
+            ]
+        }
+    }
+}

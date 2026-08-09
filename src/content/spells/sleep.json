@@ -1,0 +1,27 @@
+{
+  "spell_key": "sleep",
+  "name": "Sleep",
+  "level": 1,
+  "school": "Enchantment",
+  "classes": [
+    "Bard",
+    "Sorcerer",
+    "Wizard"
+  ],
+  "resolution": "debuff",
+  "save_ability": "wis",
+  "save_effect": "negate",
+  "target_kind": "enemy",
+  "concentration": false,
+  "duration_rounds": 3,
+  "effect": {
+    "condition": "unconscious"
+  },
+  "casting_time": "1 action",
+  "range_text": "90 feet",
+  "components": "V, S, M",
+  "duration": "1 minute",
+  "description": "This spell sends creatures into a magical slumber.",
+  "reaches_back_rank": true,
+  "source": "5e SRD"
+}

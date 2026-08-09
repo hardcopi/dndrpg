@@ -1,0 +1,31 @@
+{
+  "spell_key": "lesser_restoration",
+  "name": "Lesser Restoration",
+  "level": 2,
+  "school": "Abjuration",
+  "classes": [
+    "Bard",
+    "Cleric",
+    "Druid",
+    "Paladin",
+    "Ranger"
+  ],
+  "resolution": "buff",
+  "target_kind": "ally",
+  "concentration": false,
+  "duration_rounds": 0,
+  "effect": {
+    "cure": [
+      "poisoned",
+      "blinded",
+      "paralyzed"
+    ]
+  },
+  "casting_time": "1 action",
+  "range_text": "Touch",
+  "components": "V, S",
+  "duration": "Instantaneous",
+  "description": "You touch a creature and can end either one disease or one condition afflicting it.",
+  "reaches_back_rank": true,
+  "source": "5e SRD"
+}

@@ -1,0 +1,12 @@
+{
+    "npc_key": "jimmy_able",
+    "name": "Jimmy Able",
+    "role": "Thief",
+    "description": "A good coat, a better knife, and the easy manner of a man who has never once been the one holding the bag when it was opened.",
+    "sprite_key": "jimmy_able",
+    "is_quest_giver": true,
+    "dialog": "jimmy_able",
+    "place": {
+        "location": "oldcity_thieves_den"
+    }
+}

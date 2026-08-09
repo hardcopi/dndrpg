@@ -1,0 +1,75 @@
+{
+    "quest_key": "the_factors_house",
+    "title": "The Factor's House",
+    "description": "He answers the door himself, puts you in the chair, and asks whether you have eaten. There is nothing in this house that will fight you.",
+    "giver": "ludo_corse",
+    "on_job_board": false,
+    "required_level": 5,
+    "rewards": {
+        "xp": 450,
+        "gold": 100
+    },
+    "stages": {
+        "the_front_room": {
+            "title": "The front room",
+            "objective": "Corse keeps his own house and answers his own door. Go in.",
+            "journal": "The step is washed and the door is answered. Nothing in the hall is expensive and nothing in it is cheap. There is one desk facing the window so that whoever sits at it can watch the landing and be watched doing it, and one chair on the other side, worn through at the arms.",
+            "target": {
+                "location": "factors_house"
+            }
+        },
+        "the_long_room": {
+            "title": "The long room",
+            "objective": "The whole back of the house is paper, and the door to it is not locked.",
+            "journal": "Presses to the ceiling, every drawer labelled by year and by hundred in one hand, a lamp on a gimbal so it can be carried without being set down. The Concern keeps everything it knows in this room and the room is not locked, and I have stood in it for ten minutes working out why that frightens me more than a lock would.",
+            "target": {
+                "location": "the_long_room"
+            }
+        },
+        "asked_him_home": {
+            "title": "The whole conversation",
+            "journal": "I asked him the questions in his own house with his own lamp lit and he answered all of them and offered me the run of the long room while he went to see about supper. He is not careless. He has simply never once met a person who could hurt him with a fact, and he has met a great many people.",
+            "resolution": "asked_him_home",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "factors_house_fate",
+                    "value": "asked"
+                },
+                {
+                    "set_flag": "long_room_open"
+                },
+                {
+                    "xp": 100
+                },
+                {
+                    "approval": {
+                        "sera": 14,
+                        "aldric": 6,
+                        "ilse": 6,
+                        "kessa": -6
+                    }
+                }
+            ]
+        },
+        "walked_out": {
+            "title": "Out into the street",
+            "journal": "I got as far as the front room, took the chair, and could not stay in it. He came to the door with me and told me to come back when I had something to ask, and to eat first, and he meant both.",
+            "resolution": "walked_out",
+            "terminal": true,
+            "outcome": "neutral",
+            "effects": [
+                {
+                    "set_flag": "factors_house_fate",
+                    "value": "out"
+                },
+                {
+                    "approval": {
+                        "kessa": 4,
+                        "sera": -6
+                    }
+                }
+            ]
+        }
+    }
+}

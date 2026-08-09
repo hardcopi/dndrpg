@@ -1,0 +1,77 @@
+{
+  "resistances": [
+    "cold",
+    "necrotic"
+  ],
+  "immunities": [
+    "poison"
+  ],
+  "vulnerabilities": [
+    "fire"
+  ],
+  "condition_immunities": [
+    "blinded",
+    "charmed",
+    "frightened",
+    "prone"
+  ],
+  "source": "Rivermark Chronicles",
+  "monster_key": "the_growth",
+  "name": "The Growth",
+  "size": "Huge",
+  "type": "aberration",
+  "alignment": "unaligned",
+  "armor_class": 15,
+  "hit_points": 132,
+  "hit_dice": "16d12+32",
+  "speed": "0 ft.",
+  "strength": 20,
+  "dexterity": 8,
+  "constitution": 18,
+  "intelligence": 2,
+  "wisdom": 12,
+  "charisma": 6,
+  "challenge_rating": 5,
+  "experience_points": 1800,
+  "traits": {
+    "Rooted": "It does not move and it has never needed to. The face of the cut is what has been coming to it.",
+    "In the Stone": "Damage that does not reach past the rock crust it has taken into itself is halved."
+  },
+  "actions": [
+    {
+      "name": "Runner",
+      "type": "melee",
+      "bonus": 7,
+      "damage": "2d8+5",
+      "damage_type": "bludgeoning"
+    },
+    {
+      "name": "Sweep",
+      "type": "melee",
+      "bonus": 7,
+      "damage": "2d6+5",
+      "damage_type": "slashing"
+    },
+    {
+      "name": "Spore Cast",
+      "type": "ranged",
+      "bonus": 6,
+      "damage": "3d6",
+      "damage_type": "poison",
+      "range": "40 ft."
+    }
+  ],
+  "saves": {
+    "con": 7
+  },
+  "loot": [
+    {
+      "gold": "5d10"
+    },
+    {
+      "item": "ring_of_protection"
+    }
+  ],
+  "rank_pref": "front",
+  "sprite_key": "boss_worm"
+}

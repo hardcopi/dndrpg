@@ -1,0 +1,60 @@
+{
+  "resistances": [],
+  "immunities": [],
+  "vulnerabilities": [],
+  "condition_immunities": [],
+  "source": "5e SRD",
+  "monster_key": "kobold",
+  "name": "Kobold",
+  "size": "Small",
+  "type": "humanoid (kobold)",
+  "alignment": "lawful evil",
+  "armor_class": 12,
+  "hit_points": 5,
+  "hit_dice": "2d6-2",
+  "speed": "30 ft.",
+  "strength": 7,
+  "dexterity": 15,
+  "constitution": 9,
+  "intelligence": 8,
+  "wisdom": 7,
+  "charisma": 8,
+  "challenge_rating": 0.125,
+  "experience_points": 25,
+  "traits": {
+    "Sunlight Sensitivity": "While in sunlight, the kobold has disadvantage on attack rolls and on Wisdom (Perception) checks that rely on sight.",
+    "Pack Tactics": "The kobold has advantage on an attack roll against a creature if at least one of the kobold's allies is within 5 feet of the creature and that ally isn't incapacitated."
+  },
+  "actions": [
+    {
+      "name": "Dagger",
+      "type": "melee",
+      "bonus": 4,
+      "damage": "1d4+2",
+      "damage_type": "piercing"
+    },
+    {
+      "name": "Sling",
+      "type": "ranged",
+      "bonus": 4,
+      "damage": "1d4+2",
+      "damage_type": "bludgeoning",
+      "range": "30/120"
+    }
+  ],
+  "saves": {
+    "dex": 2
+  },
+  "loot": [
+    {
+      "gold": "1d4",
+      "chance": 50
+    },
+    {
+      "item": "sling",
+      "chance": 15
+    }
+  ],
+  "rank_pref": "back",
+  "sprite_key": "kobold"
+}

@@ -1,0 +1,24 @@
+{
+  "spell_key": "vicious_mockery",
+  "name": "Vicious Mockery",
+  "level": 0,
+  "school": "Enchantment",
+  "classes": [
+    "Bard"
+  ],
+  "resolution": "save",
+  "save_ability": "wis",
+  "save_effect": "negate",
+  "damage_dice": "1d4",
+  "damage_type": "psychic",
+  "target_kind": "enemy",
+  "casting_time": "1 action",
+  "range_text": "60 feet",
+  "components": "V",
+  "duration": "Instantaneous",
+  "description": "You unleash a string of insults laced with subtle enchantment at a creature you can see.",
+  "concentration": false,
+  "duration_rounds": 0,
+  "reaches_back_rank": true,
+  "source": "5e SRD"
+}

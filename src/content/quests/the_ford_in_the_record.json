@@ -1,0 +1,112 @@
+{
+    "quest_key": "the_ford_in_the_record",
+    "title": "The Ford in the Record",
+    "description": "Arden Priory writes everything down and keeps it in order and dusts it weekly. That includes the fourth winter, and the crossing, and the four huts on the west bank.",
+    "giver": "sister_ovid",
+    "on_job_board": false,
+    "required_level": 4,
+    "rewards": {
+        "xp": 500,
+        "gold": 140
+    },
+    "stages": {
+        "the_fourth_press": {
+            "title": "The fourth press",
+            "objective": "Get Ovid to open the press for the fourth winter.",
+            "journal": "Every deed, grant, boundary and account this house has held since it was founded, bound by decade, in order. Ovid keeps them and dusts them and lets the rest of the priory look after itself. The fourth winter is in the fourth press and nobody has asked for it in four years.",
+            "target": {
+                "location": "priory_scriptorium"
+            }
+        },
+        "eleven_lines": {
+            "title": "Eleven lines",
+            "objective": "Read the priory's own entry for the ford.",
+            "journal": "Eleven lines, in the infirmarer's hand, dated. Four huts on the west bank. Nineteen sick, of whom eleven were already dying and eight were not. The order to fire the huts was given by the house, in the house's own words, to stop the fever crossing the river. One brother would not carry it out. The entry gives the name of the hut he would not fire, and the name of the person in it. It is Bettony Frayle. Nowhere in the eleven lines does the word murder appear.",
+            "target": {
+                "location": "priory_scriptorium"
+            }
+        },
+        "copied_the_record": {
+            "title": "Copied",
+            "journal": "Ovid found me a good pen and better paper and did not ask what I wanted it for, which is a form of help. The fair copy is eleven lines and it is exact, and I checked it against the original twice, and Ovid checked it once more after that without being asked. The press still holds the original. Now there are two.",
+            "resolution": "copied_the_record",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "ford_record",
+                    "value": "copied"
+                },
+                {
+                    "set_flag": "priory_record_read"
+                },
+                {
+                    "give_item": "ford_record_copy",
+                    "quantity": 1
+                },
+                {
+                    "xp": 200
+                },
+                {
+                    "approval": {
+                        "sera": 14,
+                        "aldric": 8,
+                        "ilse": 6
+                    }
+                }
+            ]
+        },
+        "read_and_left_it": {
+            "title": "Read and left",
+            "journal": "I read it twice and put the volume back in the press and Ovid closed it and marked the page with a strip of leather, the way she marks everything. It is in the house. It has been in the house for four years and will be there in forty. It says what it says whether or not anybody outside the room has been told.",
+            "resolution": "read_and_left_it",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "ford_record",
+                    "value": "read"
+                },
+                {
+                    "set_flag": "priory_record_read"
+                },
+                {
+                    "approval": {
+                        "aldric": 4,
+                        "ilse": 4,
+                        "sera": -4
+                    }
+                }
+            ]
+        },
+        "took_the_leaf": {
+            "title": "The leaf, taken",
+            "journal": "One leaf, cut out at the gutter with a knife, clean, in about four seconds while Ovid was at the other end of the room with her back to me. The priory's record of the fourth winter now has a gap in it where the ford was. Nobody can produce their version any more. Neither can anybody else, ever, and that is the part I did not think about until I was on the track going down.",
+            "resolution": "took_the_leaf",
+            "terminal": true,
+            "outcome": "neutral",
+            "effects": [
+                {
+                    "set_flag": "ford_record",
+                    "value": "taken"
+                },
+                {
+                    "set_flag": "priory_record_read"
+                },
+                {
+                    "set_flag": "priory_record_cut"
+                },
+                {
+                    "give_item": "ford_record_copy",
+                    "quantity": 1
+                },
+                {
+                    "approval": {
+                        "kessa": 4,
+                        "sera": -8,
+                        "aldric": -14,
+                        "ilse": -10
+                    }
+                }
+            ]
+        }
+    }
+}

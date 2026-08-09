@@ -1,0 +1,14 @@
+{
+  "item_key": "lading_bill",
+  "name": "Bill of Lading",
+  "description": "Twelve hundredweight of coarse salt, carriage paid at Greyhythe, to be delivered to Rivermark quay and invoiced to the consignee. The consignee is named in a clerk's copperplate. Nobody in Rivermark has ever heard of him, and the quay master's book has the same name on eleven other bills going back to spring.",
+  "item_type": "misc",
+  "rarity": "common",
+  "weight": 0,
+  "value_gp": 0,
+  "properties": {
+    "quest_item": true,
+    "readable": true
+  },
+  "icon": "scroll"
+}

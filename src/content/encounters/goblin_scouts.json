@@ -1,0 +1,16 @@
+{
+  "encounter_key": "goblin_scouts",
+  "name": "Goblin Scouts",
+  "description": "Two goblin sentries step off the quarry trail with their bows already up.",
+  "difficulty": "easy",
+  "monsters": [
+    {
+      "monster": "goblin",
+      "quantity": 2
+    }
+  ],
+  "allow_flee": true,
+  "allow_parley": true,
+  "parley_node": "nakka:scouts_hold",
+  "place": { "location": "quarry_road" }
+}

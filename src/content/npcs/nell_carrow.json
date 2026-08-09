@@ -1,0 +1,11 @@
+{
+    "npc_key": "nell_carrow",
+    "name": "Nell Carrow",
+    "role": "Escaped",
+    "description": "Six years old, in the one shaft of daylight in a cave the size of a cupboard, and not making any noise at all.",
+    "sprite_key": "nell_carrow",
+    "dialog": "nell_carrow",
+    "place": {
+        "location": "oldcity_fugitives_hideout"
+    }
+}

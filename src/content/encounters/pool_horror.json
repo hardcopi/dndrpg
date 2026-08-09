@@ -1,0 +1,15 @@
+{
+  "encounter_key": "pool_horror",
+  "name": "What the Peat Kept",
+  "description": "Fifteen feet of tendril comes out of black water that a pole cannot find the bottom of, and it does not come far out, because it does not have to.",
+  "difficulty": "hard",
+  "monsters": [
+    {"monster": "fen_horror", "quantity": 1, "rank": "back"},
+    {"monster": "bog_crawler", "quantity": 2, "rank": "front"}
+  ],
+  "allow_flee": true,
+  "allow_parley": false,
+  "ambush": true,
+  "place": {"location": "black_pools"},
+  "victory_flag": "black_pools_cleared"
+}

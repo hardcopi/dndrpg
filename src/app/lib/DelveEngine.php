@@ -1,0 +1,1363 @@
+<?php
+/**
+ * A generated dungeon level, written into the world and taken out again.
+ *
+ * DungeonGen decides the shape and knows nothing about the database.
+ * This decides nothing and writes everything — the same split PitEngine draws
+ * between "how big should this fight be" and "which creatures make it", and
+ * the reason a thousand levels can be checked in a millisecond upstairs.
+ *
+ * WHAT IT WRITES ARE ORDINARY ROWS. A generated floor is a `regions` row with
+ * `locations` and `location_exits` hanging off it, exactly like an authored
+ * one — so travel, the region chart, encounters, searching and every per-party
+ * table work on it with no special case anywhere. The only thing that marks it
+ * out is the key, which is prefixed `_dg_` the way PitEngine's scratch
+ * encounter is prefixed `_pit_`.
+ *
+ * WHICH IS ALSO HOW IT IS CLEANED UP — ALMOST. Deleting the region cascades
+ * through locations, exits and every party_* row that references them, because
+ * the schema says ON DELETE CASCADE on all of those.
+ *
+ * Encounters are the exception and cost a second statement. `encounters`
+ * references `locations` with ON DELETE **SET NULL**, which is the right rule
+ * for the authored world — removing a location should not destroy a
+ * hand-written fight — and the wrong one here, where the fight exists only to
+ * stand in a room that is about to stop existing. See dropRegion().
+ *
+ * THE MODULE BOUNDARY IS ENFORCED HERE, AT RUNTIME, AND THAT IS NEW.
+ * Everywhere else in this game two games are kept apart by tools/load_content.py,
+ * which BFSes each module from its own start and errors on an exit that joins
+ * two of them. That check reads files. It will never see a row written here.
+ * So the guarantee has to be restated in code: every exit this class writes has
+ * both ends inside the delving party's own module, and `assertContained()` is
+ * run over the finished level before the party is allowed to walk into it.
+ */
+
+declare(strict_types=1);
+
+final class DelveEngine
+{
+    /** The module the whole feature lives in. */
+    public const MODULE_KEY = 'undervault';
+
+    /** Where a delve starts and returns to — authored, and never generated. */
+    public const MOUTH_KEY = 'uv_mouth';
+
+    /**
+     * How many floors down the stair goes.
+     *
+     * Not a rule, a stopping point: past this the profiles stop changing and a
+     * dungeon that never ends is a dungeon nobody finishes. Reaching it is the
+     * closest thing this module has to winning.
+     */
+    public const MAX_DEPTH = 5;
+
+    /** How many foes a generated room may hold, matching the pit's ceiling. */
+    private const MAX_FOES = 6;
+
+    /**
+     * The most a found item may be worth, indexed by band — see treasureFor().
+     *
+     * Index 0 is unused (a band is depth plus at least zero, and depth starts
+     * at one). The top of the table is the ceiling for everything below it, so
+     * a party who somehow reach a deeper band than this is authored for get the
+     * best band rather than nothing.
+     */
+    private const TREASURE_CEILING = [25, 25, 60, 150, 350, 700, 1300];
+
+    /**
+     * Leaving a passage at either end.
+     *
+     * Deliberately not a door: the door is on the room end of the join and is
+     * written there. Stepping out of a corridor into the room it runs to is
+     * just walking, and calling it "A stuck door" a second time would have the
+     * player forcing the same door twice.
+     */
+    private const PASSAGE_LABEL = 'On, to the far end';
+
+    /**
+     * The high-water mark: the deepest floor this party has ever stood on.
+     *
+     * `dungeon_delves.depth` is where they are, and it goes away when they
+     * climb out. This is what they have DONE, and it is the only thing about a
+     * generated dungeon that authored content can talk about — a floor has no
+     * key, no name and no history, so there is nothing else down there to
+     * write a quest against.
+     *
+     * Deliberately one dumb number rather than a hook. Nothing here knows what
+     * a quest is; content reads the flag with `{"flag": "uv_deepest",
+     * "at_least": 3}` and decides for itself what that is worth. A DelveEngine
+     * that advanced named quest stages would be a generator with a plot in it.
+     */
+    public const DEPTH_FLAG = 'uv_deepest';
+
+    private PDO $db;
+
+    public function __construct(PDO $db)
+    {
+        $this->db = $db;
+    }
+
+    // =======================================================================
+    // Reading a delve
+    // =======================================================================
+
+    /** The party's delve, or null if they are not down a hole. */
+    public function current(?int $partyId): ?array
+    {
+        if (!$partyId) {
+            return null;
+        }
+        $stmt = $this->db->prepare('SELECT * FROM dungeon_delves WHERE party_id = ?');
+        $stmt->execute([$partyId]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $row ?: null;
+    }
+
+    /**
+     * Whether this party may start one from where they are standing.
+     *
+     * The Mouth and nowhere else. A delve begun from the camp would put the
+     * party underground without walking to the stair, which is the class of
+     * thing the module boundary rules exist to stop.
+     */
+    public function canDescendHere(int $characterId): bool
+    {
+        $stmt = $this->db->prepare(
+            'SELECT l.location_key FROM characters c
+               INNER JOIN locations l ON l.id = c.current_location_id
+              WHERE c.id = ?'
+        );
+        $stmt->execute([$characterId]);
+        return $stmt->fetchColumn() === self::MOUTH_KEY;
+    }
+
+    /**
+     * What the stair is offering from where the party is standing.
+     *
+     * Carried on the scene the way the pit's card is, and for the same reason:
+     * there is nobody down here to talk to, so standing in the right place has
+     * to be enough to see the option. Null everywhere the question is
+     * meaningless, which is most of the world — a party in Rivermark should not
+     * be told about a hole they cannot reach.
+     *
+     * @return array{depth:int, max_depth:int, can_descend:bool,
+     *               can_deeper:bool, can_leave:bool}|null
+     */
+    public function status(int $characterId, ?int $partyId): ?array
+    {
+        if (!$partyId) {
+            return null;
+        }
+        $stmt = $this->db->prepare(
+            'SELECT l.location_key, r.module_id, m.module_key
+               FROM characters c
+               INNER JOIN locations l ON l.id = c.current_location_id
+               INNER JOIN regions r ON r.id = l.region_id
+               INNER JOIN modules m ON m.id = r.module_id
+              WHERE c.id = ?'
+        );
+        $stmt->execute([$characterId]);
+        $here = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (!$here || $here['module_key'] !== self::MODULE_KEY) {
+            return null;
+        }
+
+        $delve = $this->current($partyId);
+        if ($delve === null) {
+            return [
+                'depth'       => 0,
+                'max_depth'   => self::MAX_DEPTH,
+                'can_descend' => $here['location_key'] === self::MOUTH_KEY,
+                'can_deeper'  => false,
+                'can_leave'   => false,
+            ];
+        }
+
+        // Deeper only from the room the stair is actually in. Recomputed from
+        // the seed rather than stored, because DungeonGen is deterministic and
+        // a second copy of "which room was the stair" is a second thing that
+        // can disagree with the first.
+        $depth = (int) $delve['depth'];
+        $level = DungeonGen::generate((int) $delve['seed'], $depth);
+        $stairKey = self::roomKey($partyId, $depth, (int) $level['stair']);
+
+        return [
+            'depth'       => $depth,
+            'max_depth'   => self::MAX_DEPTH,
+            'can_descend' => false,
+            'can_deeper'  => $here['location_key'] === $stairKey && $depth < self::MAX_DEPTH,
+            'can_leave'   => true,
+        ];
+    }
+
+    /**
+     * The floor plan for a generated region, in the chart's own coordinates.
+     *
+     * A generated level has no painted map and never will — the plates under
+     * the authored regions are drawn once by a tool and committed, and a floor
+     * that exists only for as long as a party is standing on it cannot be. So
+     * the chart draws the level's actual shape instead: the rooms as rooms and
+     * the passages between them, which is what the region art was standing in
+     * for anyway.
+     *
+     * Regenerated from the seed rather than stored, which is the rule this
+     * whole engine follows and the same reason status() gives for recomputing
+     * the stair: DungeonGen is deterministic, and a stored copy of the layout
+     * is a second thing that can disagree with the first. `dungeon_delves`
+     * holds the seed and the depth, and those two numbers are the level.
+     *
+     * Returns null for anything that is not a generated floor, which is how
+     * the chart decides whether to draw a plan or fall back to parchment.
+     */
+    public function planFor(int $regionId): ?array
+    {
+        $stmt = $this->db->prepare('SELECT region_key FROM regions WHERE id = ?');
+        $stmt->execute([$regionId]);
+        $key = (string) $stmt->fetchColumn();
+
+        // `_dg_<party>_<depth>`. Matched rather than assumed: an authored
+        // region that happened to be passed here would otherwise be looked up
+        // as a delve and come back with somebody else's floor.
+        if (!preg_match('/^_dg_(\d+)_(\d+)$/', $key, $m)) {
+            return null;
+        }
+        $partyId = (int) $m[1];
+        $depth = (int) $m[2];
+
+        $delve = $this->current($partyId);
+        // Depth as well as party: a region left behind by a failed drop is not
+        // the floor this party is on, and drawing it would be a plan of
+        // somewhere else.
+        if ($delve === null || (int) $delve['depth'] !== $depth) {
+            return null;
+        }
+
+        $level = DungeonGen::generate((int) $delve['seed'], $depth);
+        $plan = DungeonGen::plan($level);
+
+        // Room ids mean nothing to the client; location ids are what its nodes
+        // are keyed by. Resolved through the room key, which is stable across
+        // a regeneration by construction — the same argument the content
+        // pipeline makes for keys over ids.
+        $ids = [];
+        $rows = $this->db->prepare(
+            'SELECT id, location_key FROM locations WHERE region_id = ?'
+        );
+        $rows->execute([$regionId]);
+        foreach ($rows->fetchAll(PDO::FETCH_ASSOC) as $row) {
+            $ids[$row['location_key']] = (int) $row['id'];
+        }
+
+        $idFor = function (int $room) use ($ids, $partyId, $depth): ?int {
+            return $ids[self::roomKey($partyId, $depth, $room)] ?? null;
+        };
+
+        foreach ($plan['rooms'] as $i => $r) {
+            $plan['rooms'][$i]['location_id'] = $idFor((int) $r['id']);
+        }
+        // A passage carries its OWN location id now, because it is a place. It
+        // used to carry the ids of the two rooms either end, so that ui-map.js
+        // could match the drawn run against an edge in the graph; there is no
+        // such edge any more — the graph goes room, passage, room — and the run
+        // is the node rather than the line between two of them.
+        foreach ($plan['corridors'] as $i => $c) {
+            $plan['corridors'][$i]['location_id'] =
+                $ids[self::passageKey($partyId, $depth, (int) $c['id'])] ?? null;
+            $plan['corridors'][$i]['from'] = $idFor((int) $c['a']);
+            $plan['corridors'][$i]['to'] = $idFor((int) $c['b']);
+        }
+
+        return $this->playersMap($plan, $partyId, $ids);
+    }
+
+    /**
+     * The GM's plan, censored down to what this party has earned.
+     *
+     * DungeonGen::plan() knows the whole truth of the floor — every secret
+     * door, every rigged flag — because it IS the floor. What the chart may
+     * draw is a different question, answered here where the party is known,
+     * so the generator stays pure and the map stops spoiling:
+     *
+     *  - A stuck door whose exits are still unfound loses its glyph, and the
+     *    passage behind it is not drawn at all — see fog(), which is where
+     *    that is decided. It used to be drawn dimmed and doorless; the fog is
+     *    what made that wrong. Drawing the dashed glyph regardless was the
+     *    behaviour before THAT, and it was the map answering a question the
+     *    player had not earned: donjon ships a "player's map" for exactly this
+     *    reason.
+     *  - A trapped door reads as a plain door until the trap is met.
+     *  - A trap mark ships only once the party has found it (or been found
+     *    by it), with which of those it was.
+     *  - And the fog: a room or a passage the party has not walked into is not
+     *    on the map at all. See `seen` and `glimpsed` below.
+     */
+    private function playersMap(array $plan, int $partyId, array $ids): array
+    {
+        $found = [];
+        $stmt = $this->db->prepare(
+            'SELECT f.exit_id FROM party_exits_found f
+              INNER JOIN location_exits e ON e.id = f.exit_id
+              WHERE f.party_id = ?'
+        );
+        $stmt->execute([$partyId]);
+        foreach ($stmt->fetchAll(PDO::FETCH_COLUMN) as $exitId) {
+            $found[(int) $exitId] = true;
+        }
+        // Which hidden exits guard which passage: hidden rows point AT the
+        // passage location (room → passage is the hidden half), so the
+        // passage's location id is the join key back to a corridor.
+        $hidden = $this->db->prepare(
+            'SELECT e.id, e.to_location_id FROM location_exits e
+              WHERE e.is_hidden = 1 AND e.to_location_id IN (' .
+                (count($ids) ? implode(',', array_map('intval', $ids)) : '0') . ')'
+        );
+        $hidden->execute();
+        $hiddenByPassage = [];
+        foreach ($hidden->fetchAll(PDO::FETCH_ASSOC) as $row) {
+            $hiddenByPassage[(int) $row['to_location_id']][] = (int) $row['id'];
+        }
+
+        $world = new WorldState($this->db);
+        $visited = [];
+        // (one WorldState for the whole pass; its per-party cache makes the
+        // per-corridor reads below free)
+        $vs = $this->db->prepare('SELECT location_id FROM party_locations_visited WHERE party_id = ?');
+        $vs->execute([$partyId]);
+        foreach ($vs->fetchAll(PDO::FETCH_COLUMN) as $lid) {
+            $visited[(int) $lid] = true;
+        }
+
+        foreach ($plan['corridors'] as $i => $c) {
+            $locId = $c['location_id'];
+
+            if ($c['door'] === 'stuck') {
+                $exits = $locId !== null ? ($hiddenByPassage[$locId] ?? []) : [];
+                $anyFound = false;
+                foreach ($exits as $eid) {
+                    if (isset($found[$eid])) {
+                        $anyFound = true;
+                    }
+                }
+                // Walked through counts as found the hard way round.
+                if ($locId !== null && isset($visited[$locId])) {
+                    $anyFound = true;
+                }
+                if (!$anyFound) {
+                    $plan['corridors'][$i]['door'] = null;
+                    $plan['corridors'][$i]['found'] = false;
+                }
+            }
+
+            if ($c['trap'] !== null) {
+                $key = array_search($locId, $ids, true);
+                $state = $key !== false
+                    ? $world->get($partyId, self::trapFlag((string) $key))
+                    : null;
+                if ($state === 'found' || $state === 'sprung') {
+                    $plan['corridors'][$i]['trap'] = ['kind' => $c['trap'], 'state' => $state];
+                } else {
+                    $plan['corridors'][$i]['trap'] = null;
+                }
+            }
+
+            if ($plan['corridors'][$i]['door'] === 'trapped'
+                && !is_array($plan['corridors'][$i]['trap'])) {
+                // The door is drawn as what the party believes it is.
+                $plan['corridors'][$i]['door'] = 'door';
+            }
+        }
+
+        return self::fog($plan, $visited);
+    }
+
+    /**
+     * The fog: what of the floor has been walked, and what can be seen from it.
+     *
+     * The plan is the whole level, and it was shipped whole — a party stepping
+     * off the stair got the map a DM draws before play, every room, every
+     * passage, the way to the stair down included. There was nothing to find,
+     * and the loops that make a level a place you can be cut off in were
+     * legible from the first room.
+     *
+     * Three states, and they are what a party with a lamp and a pencil actually
+     * has:
+     *
+     *  - `seen`      — you have stood in it. Drawn whole, ruled, named.
+     *  - `glimpsed`  — you have stood somewhere that opens onto it. A passage
+     *                  off a room you have been in, or the room at the far end
+     *                  of a passage you have walked: you have seen the doorway
+     *                  and not what is past it. Drawn as an outline, unnamed.
+     *  - neither     — not drawn at all. It is rock until you go and look.
+     *
+     * WHICH IS DECIDED HERE AND NOT ON THE CLIENT, for the reason the combat
+     * board computes nothing: ui-map.js would need the room-to-passage graph to
+     * work out what is adjacent to what, and a second copy of the level's
+     * topology in JavaScript is a copy that disagrees with the one the exits
+     * are built from. It gets two booleans per shape instead.
+     *
+     * The names are withheld by the same fact, one layer up: a room the party
+     * has not visited is `visited: false` on its node, and the chart already
+     * refuses to name one of those.
+     *
+     * Static and PDO-free, like DungeonGen and BattleGrid and for their reason:
+     * it is arithmetic over a plan and a set of ids, so it can be swept in a
+     * test and drawn on a bench without a party, a database or a delve.
+     * tools/floorplan_preview.php calls this one rather than describing what it
+     * does — a bench that reimplements the rule it is previewing is a bench
+     * that agrees with itself and nothing else.
+     *
+     * @param array<int,bool> $visited location id => true
+     */
+    public static function fog(array $plan, array $visited): array
+    {
+        $seenRoom = [];
+        foreach ($plan['rooms'] as $i => $r) {
+            $id = $r['location_id'] ?? null;
+            $seen = $id !== null && isset($visited[$id]);
+            $plan['rooms'][$i]['seen'] = $seen;
+            $plan['rooms'][$i]['glimpsed'] = false;
+            $seenRoom[(int) $r['id']] = $seen;
+        }
+
+        // A passage is glimpsed from either room it joins; a room is glimpsed
+        // from a passage that has been walked, which is the doorway at the end
+        // of it. One pass each, in that order, because the second reads the
+        // first — and no further: standing in a room does not show you what is
+        // beyond the passage leaving it.
+        $glimpsedRoom = [];
+        foreach ($plan['corridors'] as $i => $c) {
+            $id = $c['location_id'] ?? null;
+            $seen = $id !== null && isset($visited[$id]);
+            $touching = !empty($seenRoom[(int) $c['a']]) || !empty($seenRoom[(int) $c['b']]);
+            // A PASSAGE BEHIND A SECRET DOOR IS NOT ON THE MAP. `found` is set
+            // false above for a stuck door whose exits are still unfound, and
+            // the run used to be drawn anyway — dimmed and doorless, on the
+            // chart's standing rule that a way may be shown going somewhere it
+            // will not name.
+            //
+            // That rule was written when the whole floor was drawn, where
+            // hiding one run would have been the odd thing out. With the fog it
+            // is the other way round: the map shows what has been walked, so a
+            // dim line into the rock is the one mark on it that could only have
+            // come from the GM's copy — and worse, a secret off a room you have
+            // been in is exactly what `glimpsed` lights up as a way onward.
+            // Finding it is the whole of what a secret door is for.
+            $secret = ($c['found'] ?? true) === false;
+            $plan['corridors'][$i]['seen'] = $seen;
+            $plan['corridors'][$i]['glimpsed'] = !$seen && !$secret && $touching;
+            if ($seen) {
+                $glimpsedRoom[(int) $c['a']] = true;
+                $glimpsedRoom[(int) $c['b']] = true;
+            }
+        }
+        foreach ($plan['rooms'] as $i => $r) {
+            if (!$plan['rooms'][$i]['seen'] && !empty($glimpsedRoom[(int) $r['id']])) {
+                $plan['rooms'][$i]['glimpsed'] = true;
+            }
+        }
+
+        return $plan;
+    }
+
+    // =======================================================================
+    // Going down
+    // =======================================================================
+
+    /**
+     * Begin a delve, or go one floor deeper.
+     *
+     * The seed is rolled once, when the delve begins, and every floor is
+     * derived from it plus the depth — so a delve is one dungeon rather than a
+     * series of unrelated ones, and the whole of it can be rebuilt from the two
+     * numbers in `dungeon_delves`.
+     *
+     * The previous floor is dropped as the party leaves it. That is what makes
+     * this affordable: at most one generated region exists per party at a time,
+     * however deep they go. It also means there is no way back UP a floor,
+     * which is a deliberate reading of a stair you have already come down —
+     * the way out is the way out, from wherever you are.
+     */
+    public function descend(int $characterId, int $partyId): array
+    {
+        $delve = $this->current($partyId);
+
+        if ($delve === null) {
+            if (!$this->canDescendHere($characterId)) {
+                throw new InvalidArgumentException('The stair is at the Mouth, not here.');
+            }
+            $seed = random_int(1, 0x7FFFFFFF);
+            $depth = 1;
+            $this->db->prepare(
+                'INSERT INTO dungeon_delves (party_id, seed, depth) VALUES (?, ?, ?)'
+            )->execute([$partyId, $seed, $depth]);
+        } else {
+            $seed = (int) $delve['seed'];
+            $depth = (int) $delve['depth'] + 1;
+            if ($depth > self::MAX_DEPTH) {
+                throw new InvalidArgumentException('The stair ends here. There is nothing below.');
+            }
+        }
+
+        $level = DungeonGen::generate($seed, $depth);
+        if (!DungeonGen::isWalkable($level)) {
+            // Cannot happen — the layout is joined by a spanning tree before
+            // anything else — but a generated thing that reaches the database
+            // should say so rather than write a floor nobody can cross.
+            throw new RuntimeException('Generated a level that cannot be walked. Seed ' . $seed);
+        }
+
+        $old = $delve === null ? null : (int) ($delve['region_id'] ?? 0);
+        $regionId = $this->write($partyId, $level);
+
+        $this->db->prepare(
+            'UPDATE dungeon_delves SET seed = ?, depth = ?, region_id = ? WHERE party_id = ?'
+        )->execute([$seed, $depth, $regionId, $partyId]);
+
+        $entranceId = $this->locationIdOf($partyId, $depth, $level['entrance']);
+        $this->moveParty($partyId, $entranceId);
+
+        // Only after everybody is standing on the new floor, or dropping the
+        // old one would take the ground out from under them.
+        if ($old) {
+            $this->dropRegion($old);
+        }
+
+        $this->markDepth($partyId, $depth);
+
+        return [
+            'ok' => true,
+            'depth' => $depth,
+            'seed' => $seed,
+            'rooms' => count($level['rooms']),
+            // Reported separately from the rooms because they are a separate
+            // kind of place, and because the two together are what the region
+            // actually holds — see test_delve.php, which counts location rows.
+            'passages' => count($level['corridors']),
+            'location_id' => $entranceId,
+            'message' => $depth === 1
+                ? 'You go down the stair. The cold closes over you.'
+                : "You take the stair down. Level {$depth}.",
+        ];
+    }
+
+    /**
+     * Raise the high-water mark, never lower it.
+     *
+     * A party who reached the fifth floor, climbed out and started a fresh
+     * delve is standing on level 1 and has still been to the bottom. Writing
+     * the current depth unconditionally would take that back off them, and
+     * would take it back off the quest they had already turned in.
+     */
+    private function markDepth(int $partyId, int $depth): void
+    {
+        $world = new WorldState($this->db);
+        if ($world->number($partyId, self::DEPTH_FLAG) < $depth) {
+            $world->set($partyId, self::DEPTH_FLAG, (string) $depth);
+        }
+    }
+
+    /**
+     * Leave, from wherever you are.
+     *
+     * Used by climbing out on purpose and by being carried out after a defeat,
+     * which are the same operation: the party stands at the Mouth and the floor
+     * they were on stops existing. Safe to call when there is no delve.
+     */
+    public function end(int $partyId, bool $moveParty = true): void
+    {
+        $delve = $this->current($partyId);
+        if ($delve === null) {
+            return;
+        }
+        if ($moveParty) {
+            $mouth = $this->locationIdByKey(self::MOUTH_KEY);
+            if ($mouth) {
+                $this->moveParty($partyId, $mouth);
+            }
+        }
+        // The region first, then the delve row: dropping the region while the
+        // delve still points at it is what the ON DELETE SET NULL is for, and
+        // doing it the other way round would leave the region unreferenced and
+        // uncollected if the second statement failed.
+        if (!empty($delve['region_id'])) {
+            $this->dropRegion((int) $delve['region_id']);
+        }
+        // Every floor's forced-door and found-trap flags, not just the current
+        // depth's: a delve that ended on level 4 walked through three others.
+        for ($d = 1; $d <= self::MAX_DEPTH; $d++) {
+            $this->clearFloorFlags($partyId, $d);
+        }
+        $this->db->prepare('DELETE FROM dungeon_delves WHERE party_id = ?')->execute([$partyId]);
+    }
+
+    // =======================================================================
+    // Writing a floor
+    // =======================================================================
+
+    /**
+     * Turn a generated level into rows, and hand back the region id.
+     *
+     * Everything is keyed from the party and the depth, so two parties delving
+     * at once cannot collide and one party's floors cannot collide with each
+     * other. The keys are deliberately readable — `_dg_12_3_room7` — because
+     * the first thing anybody does with a broken delve is look in the database.
+     */
+    private function write(int $partyId, array $level): int
+    {
+        $depth = (int) $level['depth'];
+        $regionKey = self::regionKey($partyId, $depth);
+        $moduleId = $this->moduleId();
+
+        // Anything left from a previous visit to this depth. dropRegion() should
+        // already have taken it, but a region removed by any other route — a
+        // hand-run DELETE, a half-finished request — leaves encounter keys
+        // behind, and the insert below is unique on that key. The dg_* flag
+        // families go with it: a door forced and a trap sprung belong to the
+        // FLOOR, and the keys are built from party and depth rather than the
+        // seed, so a fresh delve reaching this depth would otherwise inherit
+        // them — doors standing open on a floor where they were never forced.
+        $this->db->prepare('DELETE FROM regions WHERE region_key = ?')->execute([$regionKey]);
+        $this->db->prepare('DELETE FROM encounters WHERE encounter_key LIKE ?')
+            ->execute(['_dg_' . $partyId . '_' . $depth . '_e%']);
+        $this->clearFloorFlags($partyId, $depth);
+        $this->db->prepare(
+            'INSERT INTO regions (region_key, module_id, name, description, region_type, sort_order)
+             VALUES (?, ?, ?, ?, ?, ?)'
+        )->execute([
+            $regionKey,
+            $moduleId,
+            'The Undervault, level ' . $depth,
+            // The level's one atmosphere, stated where the floor announces
+            // itself — the same pick that flavours the entrance and a third
+            // of the passages, so the region says what they will then show.
+            'Cut stone giving way to older cut stone: ' . $level['atmosphere']['label']
+                . '. Nothing down here was meant to be found.',
+            'dungeon',
+            1000 + $depth,
+        ]);
+        $regionId = (int) $this->db->lastInsertId();
+
+        $insert = $this->db->prepare(
+            'INSERT INTO locations
+                (location_key, region_id, name, description, first_visit_text,
+                 location_type, map_x, map_y, allow_camp, sort_order,
+                 trap_json, random_encounter_pct)
+             VALUES (?, ?, ?, ?, NULL, ?, ?, ?, ?, ?, ?, ?)'
+        );
+        foreach ($level['rooms'] as $room) {
+            $insert->execute([
+                self::roomKey($partyId, $depth, (int) $room['id']),
+                $regionId,
+                $room['name'],
+                $room['description'],
+                $room['role'] === 'stair' ? 'gate' : 'room',
+                $room['x'],
+                $room['y'],
+                // You may catch your breath in an empty room, and nowhere else.
+                // A long rest in the room you just cleared would make the whole
+                // descent free, and a short one is the interesting decision.
+                $room['kind'] === 'empty' ? 1 : 0,
+                (int) $room['id'] * 10,
+                null,
+                // Rooms do not roll wandering fights: what stands in a room was
+                // stocked there and cleared once. The corridors are where the
+                // floor's own traffic finds you.
+                0,
+            ]);
+        }
+
+        // The passages, which are places now rather than lines between places.
+        //
+        // Positioned at the midpoint of their own drawn run, which comes from
+        // plan() — the only thing in this file that knows where anything is on
+        // the chart, and deliberately so. A passage that computed its own
+        // position would be a second copy of the projection.
+        //
+        // No camping in a corridor, whatever is in it. Stopping for the night
+        // in the passage outside the room you just cleared is the sort of thing
+        // a rule should simply not allow.
+        $plan = DungeonGen::plan($level);
+        $mids = [];
+        foreach ($plan['corridors'] as $c) {
+            $mids[(int) $c['id']] = $c['mid'];
+        }
+        foreach ($level['corridors'] as $corridor) {
+            $id = (int) $corridor['id'];
+            // A corridor whose rooms overlap on the plan is not drawn — see
+            // clipEnds() — and a passage with no shape has nowhere to be. Its
+            // two rooms are joined directly instead; see writeExits(). A trap
+            // dressed onto such a corridor goes with it: a trap with no
+            // passage has nowhere to stand and nobody to bite.
+            if (!isset($mids[$id])) {
+                continue;
+            }
+            $insert->execute([
+                self::passageKey($partyId, $depth, $id),
+                $regionId,
+                $corridor['name'],
+                $corridor['description'],
+                'passage',
+                $mids[$id][0],
+                $mids[$id][1],
+                0,
+                1000 + $id * 10,
+                isset($corridor['trap']) ? json_encode($corridor['trap'], JSON_UNESCAPED_SLASHES) : null,
+                // The wandering roll, per hop through a corridor. Deeper floors
+                // are busier — their traffic is what the deep table's names are
+                // about — but the chance stays a seasoning: at 6 + 2×depth a
+                // full crossing of a middle floor springs roughly one interrupt.
+                6 + 2 * $depth,
+            ]);
+        }
+
+        $this->writeExits($partyId, $level, $regionId);
+        $this->stock($partyId, $level, $regionId);
+        $this->assertContained($regionId, $moduleId);
+
+        return $regionId;
+    }
+
+    /**
+     * Room to passage to room, both ways, plus the way back up.
+     *
+     * Authored content declares each direction separately and the loader warns
+     * about a one-way exit; a generated dungeon has no author to warn, so both
+     * halves are written from one edge here.
+     *
+     * A PASSAGE SITS IN THE MIDDLE OF EVERY JOIN. Rooms used to be wired to
+     * each other and the corridor was a line drawn between them; now the
+     * corridor is a location and the wiring is A→C, C→B and back. That is the
+     * whole of what makes a hallway somewhere you can be — travel is a BFS over
+     * these rows, so a passage in the graph is a passage you walk through,
+     * with its own description, its own search, and its own chance to be
+     * standing in it when something comes the other way.
+     *
+     * The door belongs to the room end of the join rather than to both. A stuck
+     * door is a way you have to force, and forcing it should get you out of the
+     * room; having to force it again to leave the corridor would be the same
+     * door twice.
+     */
+    private function writeExits(int $partyId, array $level, int $regionId): void
+    {
+        $depth = (int) $level['depth'];
+        $id = fn (int $room) => $this->locationIdOf($partyId, $depth, $room);
+
+        $insert = $this->db->prepare(
+            'INSERT INTO location_exits
+                (from_location_id, to_location_id, label, is_hidden, sort_order, conditions_json)
+             VALUES (?, ?, ?, ?, ?, ?)'
+        );
+        foreach ($level['corridors'] as $i => $corridor) {
+            $a = $id((int) $corridor['a']);
+            $b = $id((int) $corridor['b']);
+            $label = self::doorLabel((string) $corridor['door']);
+            // A stuck door is the only kind that hides an exit: a way you have
+            // to force is a way you have to find. Searching reveals it, which
+            // is what `is_hidden` already means everywhere else.
+            $hidden = $corridor['door'] === 'stuck' ? 1 : 0;
+            // Locked and portcullis BLOCK instead: the way is drawn, named and
+            // shut, until the party forces it. The gate is a per-party flag
+            // through the same conditions_json every authored locked way uses —
+            // Requirements::pass reads it, exitsFrom marks the exit locked, the
+            // chart greys it, and travel refuses it, all for free. Both room-end
+            // rows share one flag because they are one door: forced is forced
+            // from either side. api `location/force_door` is what sets it.
+            $conds = in_array($corridor['door'], ['locked', 'portcullis'], true)
+                // A LIST of one condition — Requirements::pass iterates a
+                // list, and a bare object would read as key=>string and fail
+                // closed forever, which is a door no die can open.
+                ? json_encode([['flag' => self::openFlag($partyId, $depth, (int) $corridor['id'])]])
+                : null;
+
+            // A join whose passage was not drawable — two rooms overlapping on
+            // the plan — has no location to route through, so the rooms are
+            // wired to each other as they always were. Rare, and better than a
+            // way through the level that silently does not exist.
+            $mid = $this->locationIdByKey(self::passageKey($partyId, $depth, (int) $corridor['id']));
+            if ($mid === null) {
+                $insert->execute([$a, $b, $label, $hidden, $i * 10, $conds]);
+                $insert->execute([$b, $a, $label, $hidden, $i * 10, $conds]);
+                continue;
+            }
+
+            $on = self::PASSAGE_LABEL;
+            $insert->execute([$a, $mid, $label, $hidden, $i * 10, $conds]);
+            $insert->execute([$mid, $a, $on, 0, $i * 10, null]);
+            $insert->execute([$mid, $b, $on, 0, $i * 10 + 1, null]);
+            $insert->execute([$b, $mid, $label, $hidden, $i * 10 + 1, $conds]);
+        }
+
+        // Out. From the entrance room only, and back to the authored Mouth —
+        // the one exit in a generated level that leaves the generated region,
+        // and the reason assertContained() checks the module rather than the
+        // region.
+        $mouth = $this->locationIdByKey(self::MOUTH_KEY);
+        if ($mouth) {
+            $insert->execute([
+                $id((int) $level['entrance']),
+                $mouth,
+                $depth === 1 ? 'Back up the stair, into the daylight' : 'Back up the stair, and keep going up',
+                0,
+                -10,
+                null,
+            ]);
+        }
+    }
+
+    /**
+     * Put something in the rooms that hold something.
+     *
+     * The budget is the pit's, because it is the game's: a room's tier comes
+     * from how deep the floor is, and EncounterBudget turns that plus the
+     * party's levels into an XP allowance. Nothing here invents a reward — the
+     * XP and the gold are the monsters' own, paid by CombatEngine exactly as
+     * for an authored fight, which is the rule PitEngine states and the reason
+     * a delve cannot out-earn the world.
+     */
+    private function stock(int $partyId, array $level, int $regionId): void
+    {
+        $depth = (int) $level['depth'];
+        $tier = DungeonGen::PROFILES[$level['profile']]['tier'];
+        $levels = $this->partyLevels($partyId);
+        $budget = $this->scaled(EncounterBudget::forParty($levels, $tier), $depth);
+        $roster = $this->roster();
+        if (!$roster) {
+            return;                       // a bestiary with nothing in it
+        }
+
+        $encounter = $this->db->prepare(
+            'INSERT INTO encounters
+                (encounter_key, name, description, location_id, region_id,
+                 is_random, is_ambush, difficulty, allow_flee, allow_parley)
+             VALUES (?, ?, ?, ?, NULL, 0, 1, ?, 1, 0)'
+        );
+        $member = $this->db->prepare(
+            'INSERT INTO encounter_monsters (encounter_id, monster_id, quantity) VALUES (?, ?, ?)'
+        );
+
+        foreach ($level['rooms'] as $room) {
+            if (!in_array($room['kind'], ['monster', 'hoard', 'boss'], true)) {
+                continue;
+            }
+            // A boss is the floor's fight and gets the whole hard budget
+            // whatever tier the floor is otherwise on.
+            $roomBudget = $room['kind'] === 'boss'
+                ? $this->scaled(EncounterBudget::forParty($levels, 'hard'), $depth)
+                : $budget;
+            $group = $this->pick($roster, $roomBudget);
+            if (!$group) {
+                continue;
+            }
+
+            $locationId = $this->locationIdOf($partyId, $depth, (int) $room['id']);
+            $encounter->execute([
+                self::encounterKey($partyId, $depth, (int) $room['id']),
+                $room['name'],
+                'Something is already here.',
+                $locationId,
+                $room['kind'] === 'boss' ? 'hard' : $tier,
+            ]);
+            $encounterId = (int) $this->db->lastInsertId();
+            foreach ($group as $g) {
+                $member->execute([$encounterId, $g['id'], $g['quantity']]);
+            }
+        }
+
+        $this->wander($partyId, $level, $regionId, $levels);
+        $this->strew($partyId, $level);
+    }
+
+    /**
+     * The floor's own traffic: two or three fights with no address.
+     *
+     * These are the region's `is_random` pool, which LocationEngine's travel
+     * roll draws from per hop — machinery that has existed all along and that
+     * generated floors simply never fed. The passages carry the roll chance
+     * (see write()); rooms deliberately do not.
+     *
+     * The names carry what the wanderers are DOING, which is doing the work
+     * donjon's wandering tables do: "4 x Rat, hunting for food" is an
+     * encounter with a reason to exist, where "Rats" is a die result. Sized
+     * under the room fights — an interrupt pays no treasure and guards no
+     * stair, so it should not cost what a stocked room costs.
+     */
+    private function wander(int $partyId, array $level, int $regionId, array $levels): void
+    {
+        $roster = $this->roster();
+        if (!$roster) {
+            return;
+        }
+        $depth = (int) $level['depth'];
+        $tier = DungeonGen::PROFILES[$level['profile']]['tier'];
+        $budget = intdiv($this->scaled(EncounterBudget::forParty($levels, $tier), $depth) * 6, 10);
+
+        $doings = [
+            'hunting for food',
+            'fleeing something worse',
+            'fighting over the spoils when you interrupt',
+            'that heard the door',
+            'dragging something back the way you came',
+        ];
+
+        $encounter = $this->db->prepare(
+            'INSERT INTO encounters
+                (encounter_key, name, description, location_id, region_id,
+                 is_random, is_ambush, difficulty, allow_flee, allow_parley)
+             VALUES (?, ?, ?, NULL, ?, 1, 0, ?, 1, 0)'
+        );
+        $member = $this->db->prepare(
+            'INSERT INTO encounter_monsters (encounter_id, monster_id, quantity) VALUES (?, ?, ?)'
+        );
+
+        $count = random_int(2, 3);
+        for ($n = 0; $n < $count; $n++) {
+            $group = $this->pick($roster, $budget);
+            if (!$group) {
+                continue;
+            }
+            $doing = $doings[random_int(0, count($doings) - 1)];
+            $encounter->execute([
+                self::wanderKey($partyId, $depth, $n),
+                $group[0]['name'] . ', ' . $doing,
+                'They were not waiting for you. That is the only comfort in it.',
+                $regionId,
+                $tier,
+            ]);
+            $encounterId = (int) $this->db->lastInsertId();
+            foreach ($group as $g) {
+                $member->execute([$encounterId, $g['id'], $g['quantity']]);
+            }
+        }
+    }
+
+    /**
+     * Put something in the rooms that promise something.
+     *
+     * The stocking table calls nearly a quarter of every floor `treasure` or
+     * `hoard`, and their prose says so out loud — "There is something here
+     * worth stooping for", "Something has made a nest here, and lined it".
+     * Nothing was ever placed. A `treasure` room was the worse of the two: it
+     * is not in the encounter list either, so it had no fight, no item and a
+     * description promising one. The whole of a delve's reward was XP, the
+     * gold every fight pays out, and nothing you could carry.
+     *
+     * This is the same fault the Undervault's surface shipped with, which
+     * CLAUDE.md records: prose describing a thing to do, and no row behind it.
+     *
+     * Value bands by depth rather than a flat roll, so descending is worth
+     * something. A `hoard` is what a monster was sitting on and is drawn from
+     * the same band a level deeper — that is what makes fighting for it
+     * different from finding it.
+     */
+    private function strew(int $partyId, array $level): void
+    {
+        $depth = (int) $level['depth'];
+        $insert = $this->db->prepare(
+            'INSERT INTO location_items (location_id, item_id) VALUES (?, ?)'
+        );
+
+        // Nothing found twice on one floor. The bands are narrow at the top of
+        // the dungeon — a dozen items are worth twenty-five gold or less — so
+        // independent draws put the same Drainman's Oilskin in both of a
+        // level's two treasure rooms often enough to notice, and a floor whose
+        // two finds are the same object reads as a generator repeating itself
+        // rather than as a place.
+        $taken = [];
+
+        foreach ($level['rooms'] as $room) {
+            $kind = (string) $room['kind'];
+            if ($kind !== 'treasure' && $kind !== 'hoard' && $kind !== 'boss') {
+                continue;
+            }
+            // A hoard is guarded, so it is worth a level more than loose
+            // treasure; a boss is sitting on the best thing on the floor.
+            $band = $depth + ($kind === 'treasure' ? 0 : 1) + ($kind === 'boss' ? 1 : 0);
+            $items = $this->treasureFor($band, $kind === 'boss' ? 2 : 1, $taken);
+            if (!$items) {
+                continue;
+            }
+            $locationId = $this->locationIdOf($partyId, $depth, (int) $room['id']);
+            foreach ($items as $itemId) {
+                $insert->execute([$locationId, $itemId]);
+                $taken[$itemId] = true;
+            }
+        }
+    }
+
+    /**
+     * Items worth roughly what this depth should be paying.
+     *
+     * Drawn from the item table by value rather than from a hand-written drop
+     * list, for the reason the monster picker is: a list here would be a
+     * second copy of the catalogue, and an item added to the world would never
+     * find its way underground.
+     *
+     * The band is generous at the bottom — anything cheaper than the ceiling
+     * is eligible — because a floor that only ever pays its exact rate reads
+     * as a vending machine. What descending buys is a higher ceiling, not a
+     * higher floor.
+     *
+     * @param  array<int,true> $taken ids already found on this floor
+     * @return list<int> item ids
+     */
+    private function treasureFor(int $band, int $count, array $taken = []): array
+    {
+        $ceiling = self::TREASURE_CEILING[min($band, count(self::TREASURE_CEILING) - 1)];
+
+        $sql = 'SELECT id FROM items WHERE value_gp > 0 AND value_gp <= ?';
+        $args = [$ceiling];
+        if ($taken) {
+            $sql .= ' AND id NOT IN (' . implode(',', array_fill(0, count($taken), '?')) . ')';
+            $args = array_merge($args, array_keys($taken));
+        }
+        $sql .= ' ORDER BY RAND() LIMIT ' . max(1, $count);
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($args);
+        $ids = array_map('intval', $stmt->fetchAll(PDO::FETCH_COLUMN));
+
+        // A band small enough to be exhausted by one floor falls back to
+        // repeating rather than to an empty room, because the room's own prose
+        // has already promised there is something here.
+        if (!$ids && $taken) {
+            return $this->treasureFor($band, $count);
+        }
+        return $ids;
+    }
+
+    /**
+     * The same budget, weighed against how far down it is being spent.
+     *
+     * The tier table stops at `deep`, which every floor from the third down
+     * shares — so without this, floor three and floor nine are the same fight
+     * against a party who have levelled in between and are now walking through
+     * it. The tiers themselves already went up a step (see DungeonGen::PROFILES);
+     * this is what keeps descending meaningful once they have.
+     *
+     * An eighth per floor below the first, and capped at double. The cap is the
+     * point: a delve has no bottom, the multiplier is compound-looking, and a
+     * floor twenty that asked for eight times a hard fight would not be
+     * difficulty, it would be a wall. Two hard fights' worth of XP through 5e's
+     * group multiplier is already the far end of what a party can take.
+     */
+    private function scaled(int $budget, int $depth): int
+    {
+        $factor = 1.0 + 0.125 * max(0, $depth - 1);
+        return (int) round($budget * min($factor, 2.0));
+    }
+
+    /**
+     * How many bodies a room holds, before what they are.
+     *
+     * Weighted toward a handful: mostly two to four, sometimes a lone big
+     * thing, occasionally a crowd. Read by pick(), which rolls the SHAPE of
+     * the fight first and only then asks what fits it.
+     */
+    private const GROUP_SIZES = [1, 2, 2, 3, 3, 3, 4, 4, 5, 6];
+
+    /**
+     * What stands in one room, against one budget.
+     *
+     * ROLL THE SIZE FIRST. This used to take the top third of everything the
+     * budget could afford and then ask how many of it fit — which, since the
+     * top of that list is by definition the thing that eats the budget on its
+     * own, answered "one" almost every time. Every stocked room on every floor
+     * was the party against a single large creature: the picker's own comment
+     * said it was biased toward the largest thing that fits, and that bias
+     * turned out to be the whole of the fight. Raising the budgets made it
+     * worse, because a bigger budget only widens the list whose top third gets
+     * picked from.
+     *
+     * So a size is rolled, the per-body allowance is worked out for that size —
+     * through EncounterBudget's own multiplier, because six bodies cost more
+     * than six times one — and the species is chosen from the top third of what
+     * fits AT THAT SIZE. The original intent survives intact: a party that has
+     * outgrown rats still meets the biggest thing the room can hold, there are
+     * just several of it.
+     *
+     * Falls down through the sizes rather than giving up: a budget that cannot
+     * afford six of anything can usually afford three, and a room the map has
+     * promised is occupied must not come out empty.
+     *
+     * @return list<array{id:int, quantity:int}>
+     */
+    private function pick(array $roster, int $budget): array
+    {
+        $want = self::GROUP_SIZES[random_int(0, count(self::GROUP_SIZES) - 1)];
+
+        for ($n = min($want, self::MAX_FOES); $n >= 1; $n--) {
+            $each = (int) floor($budget / ($n * EncounterBudget::multiplier($n)));
+            $fits = array_values(array_filter(
+                $roster,
+                static fn ($m) => (int) $m['xp'] > 0 && (int) $m['xp'] <= $each
+            ));
+            if (!$fits) {
+                continue;
+            }
+            // The top third of what fits at this size, so a room is not always
+            // the biggest thing affordable and not always the smallest. The
+            // roster arrives sorted by XP descending.
+            $band = array_slice($fits, 0, max(1, (int) ceil(count($fits) / 3)));
+            $pick = $band[random_int(0, count($band) - 1)];
+            // Asked rather than assumed: bestCount() re-measures the group at
+            // each step through the same multiplier, so it is the authority on
+            // whether the size that was rolled actually fits.
+            $qty = EncounterBudget::bestCount((int) $pick['xp'], $budget, $n, 0, 0, true);
+            return [[
+                'id' => (int) $pick['id'],
+                'name' => (string) $pick['name'],
+                'quantity' => max(1, $qty),
+            ]];
+        }
+
+        // Nothing fits at any size: send the cheapest thing in the bestiary
+        // rather than an empty room that the map has already promised is
+        // occupied.
+        $cheapest = $roster[count($roster) - 1];
+        return [['id' => (int) $cheapest['id'], 'name' => (string) $cheapest['name'], 'quantity' => 1]];
+    }
+
+    // =======================================================================
+    // The boundary, restated in code
+    // =======================================================================
+
+    /**
+     * Every way out of this region stays inside this module.
+     *
+     * The check tools/load_content.py performs over the authored world, done
+     * over one generated region at the moment it is written. It exists because
+     * that loader will never see these rows: the static guarantee stops at the
+     * file system, and without this the first bug that wrote a stray exit would
+     * put a party into another game with nothing to catch it.
+     *
+     * Throws rather than repairing. A generated level that reaches out of its
+     * module is a programming error, not a bad roll, and the right answer to it
+     * is a failed request rather than a quietly mended dungeon.
+     */
+    private function assertContained(int $regionId, int $moduleId): void
+    {
+        $stmt = $this->db->prepare(
+            'SELECT COUNT(*) FROM location_exits e
+               INNER JOIN locations lf ON lf.id = e.from_location_id
+               INNER JOIN locations lt ON lt.id = e.to_location_id
+               INNER JOIN regions rf ON rf.id = lf.region_id
+               INNER JOIN regions rt ON rt.id = lt.region_id
+              WHERE (rf.id = ? OR rt.id = ?)
+                AND (rf.module_id <> ? OR rt.module_id <> ?)'
+        );
+        $stmt->execute([$regionId, $regionId, $moduleId, $moduleId]);
+        $strays = (int) $stmt->fetchColumn();
+        if ($strays > 0) {
+            $this->dropRegion($regionId);
+            throw new RuntimeException(
+                "A generated level joined another module ({$strays} exit(s)). Refusing to open it."
+            );
+        }
+    }
+
+    // =======================================================================
+    // Plumbing
+    // =======================================================================
+
+    public static function regionKey(int $partyId, int $depth): string
+    {
+        return "_dg_{$partyId}_{$depth}";
+    }
+
+    public static function roomKey(int $partyId, int $depth, int $room): string
+    {
+        return "_dg_{$partyId}_{$depth}_r{$room}";
+    }
+
+    /**
+     * A passage's key. `c` where a room is `r`, and the two never collide.
+     *
+     * Rooms and passages number from zero independently, so the prefix letter
+     * is the only thing separating room 3 from passage 3 — which is why it is
+     * a letter and not, say, an offset added to the id. An offset is a rule you
+     * have to remember; a letter is one you can read off the key in a table.
+     */
+    public static function passageKey(int $partyId, int $depth, int $corridor): string
+    {
+        return "_dg_{$partyId}_{$depth}_c{$corridor}";
+    }
+
+    public static function encounterKey(int $partyId, int $depth, int $room): string
+    {
+        return "_dg_{$partyId}_{$depth}_e{$room}";
+    }
+
+    /**
+     * A wandering encounter's key. `ew` sorts into the same `_e%` family the
+     * pre-clean and dropRegion sweeps already delete by pattern, which is not
+     * an accident: a key scheme the cleanup does not know about is a leak.
+     */
+    public static function wanderKey(int $partyId, int $depth, int $n): string
+    {
+        return "_dg_{$partyId}_{$depth}_ew{$n}";
+    }
+
+    /**
+     * The flag a forced door sets, and travel's conditions read.
+     *
+     * Built on the passage key so it names the door it opens, and cleared with
+     * the floor by clearFloorFlags() — the key carries party and depth but not
+     * the seed, so left behind it would unlock a door on the NEXT delve's
+     * version of this floor, one nobody forced.
+     */
+    public static function openFlag(int $partyId, int $depth, int $corridor): string
+    {
+        return 'dg_open_' . self::passageKey($partyId, $depth, $corridor);
+    }
+
+    /**
+     * The flag a trap's state lives under: unset, 'found', or 'sprung'.
+     * Keyed by the passage's location_key — the trap row is on that location.
+     */
+    public static function trapFlag(string $locationKey): string
+    {
+        return 'dg_trap_' . $locationKey;
+    }
+
+    /**
+     * The dg_open_ flag of a forceable exit, or null for every other kind.
+     *
+     * "Forceable" means the exit's WHOLE condition is the one flag this
+     * engine writes: a list of exactly one bare flag test, named to the
+     * convention. An authored locked way — gating on story, or on anything
+     * more than the flag — returns null and is never offered to a shoulder.
+     * The one recognizer, used by the offer and by the exit listing, so the
+     * two cannot drift about what counts as a door you may put a boot to.
+     */
+    public static function forceFlagOf(?string $conditionsJson): ?string
+    {
+        if (!$conditionsJson) {
+            return null;
+        }
+        $conds = json_decode($conditionsJson, true);
+        if (!is_array($conds) || count($conds) !== 1 || !isset($conds[0])) {
+            return null;
+        }
+        $one = $conds[0];
+        if (!is_array($one) || count($one) !== 1) {
+            return null;
+        }
+        $flag = $one['flag'] ?? null;
+        return is_string($flag) && preg_match('/^dg_open__dg_\d+_\d+_c\d+$/', $flag)
+            ? $flag
+            : null;
+    }
+
+    /**
+     * Forget everything the party did TO one floor: doors forced, traps found.
+     *
+     * LIKE with the underscores escaped, because every one of these keys is
+     * mostly underscores and an unescaped pattern would happily match a
+     * different party's floor ten depths away.
+     */
+    private function clearFloorFlags(int $partyId, int $depth): void
+    {
+        $suffix = str_replace('_', '\\_', "_dg_{$partyId}_{$depth}_") . '%';
+        $this->db->prepare(
+            "DELETE FROM world_flags WHERE party_id = ?
+              AND (flag_key LIKE ? OR flag_key LIKE ?)"
+        )->execute([$partyId, 'dg\\_open\\_' . $suffix, 'dg\\_trap\\_' . $suffix]);
+    }
+
+    /** What the player clicks to go through a door. */
+    private static function doorLabel(string $door): string
+    {
+        return match ($door) {
+            'door'       => 'Through the door',
+            'trapped'    => 'Through the door',   // the surprise is the point
+            'stuck'      => 'Force the jammed door',
+            'arch'       => 'Under the arch',
+            'locked'     => 'Through the locked door',
+            'portcullis' => 'Under the portcullis',
+            default      => 'Along the passage',
+        };
+    }
+
+    private function moduleId(): int
+    {
+        $stmt = $this->db->prepare('SELECT id FROM modules WHERE module_key = ?');
+        $stmt->execute([self::MODULE_KEY]);
+        $id = (int) $stmt->fetchColumn();
+        if ($id <= 0) {
+            throw new RuntimeException('The Undervault module is not loaded.');
+        }
+        return $id;
+    }
+
+    private function locationIdOf(int $partyId, int $depth, int $room): int
+    {
+        return $this->locationIdByKey(self::roomKey($partyId, $depth, $room))
+            ?? throw new RuntimeException("Generated room {$room} is missing from the database.");
+    }
+
+    private function locationIdByKey(string $key): ?int
+    {
+        $stmt = $this->db->prepare('SELECT id FROM locations WHERE location_key = ?');
+        $stmt->execute([$key]);
+        $id = $stmt->fetchColumn();
+        return $id === false ? null : (int) $id;
+    }
+
+    /** @return int[] */
+    private function partyLevels(int $partyId): array
+    {
+        $stmt = $this->db->prepare(
+            'SELECT c.level FROM characters c
+               INNER JOIN character_party cp ON cp.character_id = c.id
+              WHERE cp.party_id = ? AND c.is_active = 1'
+        );
+        $stmt->execute([$partyId]);
+        return array_map('intval', $stmt->fetchAll(PDO::FETCH_COLUMN));
+    }
+
+    /** The bestiary, dearest first, so `pick()` can take from the top. */
+    private function roster(): array
+    {
+        return $this->db->query(
+            'SELECT id, name, experience_points AS xp FROM monsters
+              WHERE experience_points > 0 ORDER BY experience_points DESC'
+        )->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    private function moveParty(int $partyId, int $locationId): void
+    {
+        $this->db->prepare(
+            'UPDATE characters c
+               INNER JOIN character_party cp ON cp.character_id = c.id
+                SET c.current_location_id = ?
+              WHERE cp.party_id = ?'
+        )->execute([$locationId, $partyId]);
+    }
+
+    /**
+     * Take a floor away, and everything that only existed to be on it.
+     *
+     * Locations and exits cascade from the region. Encounters DO NOT: their
+     * foreign key is ON DELETE SET NULL, which is right for authored content —
+     * deleting a location should not destroy a hand-written fight — and wrong
+     * for a generated one, which exists only to stand in a room that is about
+     * to stop existing.
+     *
+     * Left alone they outlive the region as orphans with a null location,
+     * accumulate a set per delve, and then collide by key the next time the
+     * same party reaches the same depth. That is exactly how this was found.
+     */
+    private function dropRegion(int $regionId): void
+    {
+        $this->db->prepare(
+            'DELETE FROM encounters
+              WHERE location_id IN (SELECT id FROM locations WHERE region_id = ?)'
+        )->execute([$regionId]);
+        // The wandering pool is scoped by region and has no location, so the
+        // delete above never sees it — and its foreign key is the same
+        // ON DELETE SET NULL that orphaned the placed fights before it.
+        $this->db->prepare('DELETE FROM encounters WHERE region_id = ?')->execute([$regionId]);
+        $this->db->prepare('DELETE FROM regions WHERE id = ?')->execute([$regionId]);
+    }
+}

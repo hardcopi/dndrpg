@@ -1,0 +1,11 @@
+{
+    "npc_key": "nakka",
+    "name": "Nakka Skarn",
+    "role": "Warlord of the Warren",
+    "description": "Goblin warlord in looted human plate that does not fit her and was never meant to. She kept the helm for the shape it makes in a doorway.",
+    "sprite_key": "goblin_warlord",
+    "dialog": "nakka",
+    "place": {
+        "location": "warlord_hall"
+    }
+}

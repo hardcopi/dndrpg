@@ -1,0 +1,16 @@
+{
+  "encounter_key": "cellar_stirges",
+  "name": "The Sump Behind the Wall",
+  "description": "The rats were eating what came up the drain. The drain still has things in it.",
+  "difficulty": "easy",
+  "monsters": [
+    {
+      "monster": "stirge",
+      "quantity": 3
+    }
+  ],
+  "allow_flee": true,
+  "allow_parley": false,
+  "victory_flag": "cellar_stirges_beaten",
+  "place": { "location": "flagon_cellar" }
+}

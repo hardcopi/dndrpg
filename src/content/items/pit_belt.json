@@ -1,0 +1,11 @@
+{
+  "item_key": "pit_belt",
+  "name": "The Pit Belt",
+  "description": "Three inches of harness leather with the names of eleven winners punched into it in a line, and room punched for a twelfth. It is worth nothing and the crowd knows exactly what it is worth.",
+  "item_type": "treasure",
+  "rarity": "uncommon",
+  "weight": 2,
+  "value_gp": 25,
+  "properties": {"quest_item": true},
+  "icon": "belt"
+}

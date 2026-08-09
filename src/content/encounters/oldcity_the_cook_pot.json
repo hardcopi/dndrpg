@@ -1,0 +1,23 @@
+{
+    "encounter_key": "oldcity_the_cook_pot",
+    "name": "The Cook-Pot",
+    "description": "He does not shout and he does not charge. He picks up the mace, and the warg gets off its haunches, and the two of them come at you together because they have done this before.",
+    "difficulty": "deadly",
+    "ambush": true,
+    "monsters": [
+        {
+            "monster": "ogre",
+            "quantity": 1
+        },
+        {
+            "monster": "worg",
+            "quantity": 1
+        }
+    ],
+    "allow_flee": true,
+    "allow_parley": false,
+    "victory_flag": "oldcity_ogre_down",
+    "place": {
+        "location": "oldcity_ogres_lair"
+    }
+}

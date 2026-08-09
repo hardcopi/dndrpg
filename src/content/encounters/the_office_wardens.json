@@ -1,0 +1,14 @@
+{
+  "encounter_key": "the_office_wardens",
+  "name": "The Ladder Cleared",
+  "description": "Rourke does not shout. He leans out of the shutter and says a number, and the number is how many wardens come up the ladder behind you.",
+  "difficulty": "hard",
+  "monsters": [
+    { "monster": "warden_serjeant", "quantity": 1, "rank": "front" },
+    { "monster": "concern_warden", "quantity": 3 }
+  ],
+  "allow_flee": true,
+  "allow_parley": false,
+  "victory_flag": "office_taken",
+  "defeat_flag": "office_thrown_out"
+}

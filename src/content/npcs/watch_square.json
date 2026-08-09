@@ -1,0 +1,11 @@
+{
+    "npc_key": "watch_square",
+    "name": "A watchwoman",
+    "role": "Town Watch",
+    "sprite_key": "paladin",
+    "is_ambient": true,
+    "dialog": "watch_square",
+    "place": {
+        "location": "market_square"
+    }
+}

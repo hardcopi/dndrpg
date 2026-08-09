@@ -1,0 +1,521 @@
+{
+    "npc_key": "tull_barrow",
+    "start": "hail",
+    "nodes": {
+        "hail": [
+            {
+                "conditions": [
+                    {
+                        "flag": "drove_fate",
+                        "equals": "out"
+                    }
+                ],
+                "once": true,
+                "text": "He is at the horn-post at the fen road head with the herd already across in three lots and the dogs sitting where he told them to sit an hour ago.\n\n\"That's it, then,\" Tull Barrow says. \"Forty years my father walked this road east. I've walked it west once and I'm not walking it back.\"",
+                "choices": [
+                    {
+                        "label": "Good luck on the crossing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "drove_fate",
+                        "equals": "back"
+                    }
+                ],
+                "once": true,
+                "text": "\"Worse price,\" Tull says. \"Two coppers a head worse and a day longer on the road for it.\" He is standing in Rivermark's own weighing yard with sixty beasts behind him and three other holders in the doorway who came to find out why. \"Aye. Worth it.\"",
+                "choices": [
+                    {
+                        "label": "They're still asking questions in there.",
+                        "next": "still_asking"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "drove_fate",
+                        "equals": "lost"
+                    }
+                ],
+                "once": true,
+                "text": "He has counted what is left twice and said the number out loud both times, and he is not going to make the crossing with it and he knows that and is walking anyway.\n\n\"Forty-nine,\" he says. \"You don't have to stand there.\"",
+                "choices": [
+                    {
+                        "label": "I'm sorry.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "not": {
+                            "flag": "wolves_fate"
+                        }
+                    },
+                    {
+                        "any": [
+                            {
+                                "flag": "winter_field_cleared"
+                            },
+                            {
+                                "flag": "howler_killed"
+                            }
+                        ]
+                    }
+                ],
+                "text": "The herd is off the corner and spread across the low half of the field for the first time in three weeks, and Tull Barrow is standing in the middle of them counting, which he does not need to do and is doing anyway.\n\n\"Four of them,\" he says. \"All thin. I've seen thin. That was hungry in a way that had been going on a while.\"",
+                "choices": [
+                    {
+                        "label": "That's the end of it. The field's clear.",
+                        "next": "the_field_is_clear"
+                    },
+                    {
+                        "label": "We went and found where they were denning.",
+                        "next": "the_den"
+                    },
+                    {
+                        "label": "Later.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "wolves_fate"
+                    }
+                ],
+                "once": true,
+                "text": "\"Field's quiet,\" Tull says. \"Beasts are grazing the far corner. First time in three weeks.\" He does not thank you in words; he pours you something out of a flask instead and it is not the flask he offers to strangers.",
+                "choices": [
+                    {
+                        "label": "About the drove.",
+                        "next": "the_work"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_drovers_road",
+                        "stage": "where_the_drove_is_going"
+                    }
+                ],
+                "text": "He knows what you are going to ask before you ask it, because you have been walking west for a day and a half and there is nothing west but the fen.\n\n\"Go on,\" he says. \"Say it.\"",
+                "choices": [
+                    {
+                        "label": "The market's east.",
+                        "next": "the_market_is_east"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_drovers_road",
+                        "stage": "take_the_work"
+                    }
+                ],
+                "text": "The man at the third fire has sixty beasts in the fold, four dogs working the edge of it without being told, and a six-foot ash staff across his knees.\n\n\"You'll be the swords,\" Tull Barrow says. \"Two days, fold to the fen road head, paid at the horn-post. It's ordinary work.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_barrow"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Nobody robs cattle. Why are you paying for swords?",
+                        "next": "why_swords"
+                    },
+                    {
+                        "label": "Two days, then.",
+                        "next": "the_work"
+                    },
+                    {
+                        "label": "Not interested.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "Three fires along the fold wall and none of them talking to each other. The man at the third has four dogs, sixty beasts, and an ash staff across his knees with an iron ferrule on it that has been used for something other than turning cattle.\n\n\"Fold's common,\" he says. \"Fire's mine.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_barrow"
+                    },
+                    {
+                        "start_quest": "the_drovers_road"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "You're hiring.",
+                        "next": "why_swords"
+                    },
+                    {
+                        "label": "What's happening on Winter Field?",
+                        "next": "the_field"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "still_asking": [
+            {
+                "text": "\"They are,\" Tull says. \"Bewick's in there, and two of the Ellerys, and a man from the counting house who came because the counting house heard the word 'common' said in a loud voice.\"\n\nHe watches the door.\n\n\"None of them are going to get anywhere. But it's been said in a room with a clerk in it. That's different from being said at a fire.\"",
+                "choices": [
+                    {
+                        "label": "It is.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "why_swords": [
+            {
+                "text": "Tull Barrow looks at the fire for a bit.\n\n\"Because I'm paying for swords,\" he says. \"That's the answer you're getting at a fire. You want the other answer, you can have it on the road on the second day, and if you don't like it then you can turn round and I'll still pay you.\"",
+                "choices": [
+                    {
+                        "label": "Two days, then.",
+                        "next": "the_work"
+                    },
+                    {
+                        "label": "I'd rather have it now.",
+                        "next": "not_now"
+                    }
+                ]
+            }
+        ],
+        "not_now": [
+            {
+                "text": "\"Then you'd rather have it now and I'd rather give it to you on the road,\" Tull says, \"and one of us is paying, so.\"\n\nHe pokes the fire.",
+                "choices": [
+                    {
+                        "label": "Two days, then.",
+                        "next": "the_work"
+                    },
+                    {
+                        "label": "Keep your money.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_work": [
+            {
+                "text": "\"Right,\" Tull says. \"Dawn. We take them off the fold, down the west side of Winter Field, and up the drove track to the fen road head. Dogs do the work. You do the standing about.\"\n\nHe hands over a staff without being asked, which is either a courtesy or a test.",
+                "on_enter": [
+                    {
+                        "give_item": "drovers_staff",
+                        "quantity": 1
+                    },
+                    {
+                        "quest_stage": {
+                            "quest": "the_drovers_road",
+                            "stage": "where_the_drove_is_going"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Dawn.",
+                        "end": true
+                    },
+                    {
+                        "label": "The market's east, Barrow.",
+                        "next": "the_market_is_east"
+                    }
+                ]
+            }
+        ],
+        "the_market_is_east": [
+            {
+                "text": "\"It is,\" Tull agrees. He does not stop walking.\n\n\"Common grazing on Winter Field was bought in the spring. Not fenced. Not stocked. Nobody's come to look at it. What they've done is stop renewing the commoners' rights as they fall due, one name at a time, and mine fell due at Michaelmas.\" He whistles the far dog round. \"I'm not being turned off. I'm being not-renewed. There's nobody to shout at.\"\n\nA long pause and about two hundred yards.\n\n\"I didn't tell you because I thought you'd been sent to stop me.\"",
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"How many others.\" Tull: \"Three since spring that I know of. There'll be more that didn't say.\""
+                    },
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa: \"Sent by who? Who'd send us?\" Tull, not looking round: \"That's the thing. I don't know either. That's why I thought it.\""
+                    },
+                    {
+                        "companion": "sera",
+                        "text": "Sera: \"Not renewing is cheaper than evicting and it does not go anywhere near a court. Somebody has done this before.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Then we walk you out. Slowly, in daylight.",
+                        "next": "walked_out"
+                    },
+                    {
+                        "label": "No. We turn them round and walk them into Rivermark market.",
+                        "next": "turned_back"
+                    },
+                    {
+                        "label": "Push on through the night. We can be at the fen road head by morning.",
+                        "next": "the_night_crossing"
+                    }
+                ]
+            }
+        ],
+        "the_night_crossing": [
+            {
+                "text": "Tull Barrow does not like it and says so once, which for him is a formal protest.\n\n\"Sixty head across the bottom of Winter Field in the dark,\" he says. \"Past the thorn. With four dogs.\"\n\nHe whistles the far pair in anyway, because you are the swords and he is paying, and that is a bargain he has kept the whole way.",
+                "choices": [
+                    {
+                        "label": "Take them down the fen side of the field.",
+                        "check": {
+                            "skill": "survival",
+                            "dc": 14,
+                            "on_success": "walked_out",
+                            "on_failure": "the_drove_breaks"
+                        }
+                    },
+                    {
+                        "label": "You're right. We wait for light.",
+                        "next": "walked_out"
+                    }
+                ]
+            }
+        ],
+        "the_drove_breaks": [
+            {
+                "text": "It goes wrong at the thorn brake, in the dark, in about ninety seconds.\n\nYou lose eleven head and both of the far dogs, and after that the herd will not be held by anything — not by dogs, not by the wall, not by four people with ash staffs shouting into the wind off the fen.\n\nTull Barrow does not blame anybody. He counts what is left twice, says the number out loud both times, and starts walking.\n\nHe is not going to make the crossing with what he has, and he knows that, and he starts walking.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_drovers_road",
+                            "stage": "lost_the_drove"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa went into the thorn after the second dog and came out without it and has not said anything since."
+                    },
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"Forty-nine.\" She says it once. Tull says it again about a mile later, to himself, and gets the same number."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Walk with him.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "turned_back": [
+            {
+                "text": "It takes an extra day and costs him two coppers a head, and he does it, and he does it because you say it out loud in front of his own dogs and there is nowhere for him to put the argument.\n\nSixty beasts through Rivermark's east gate at noon into a weighing yard that was not expecting them. Tull says the word 'common' in front of a clerk, and then in front of a different clerk, and by dusk there are three other holders in the room and a man from the counting house who came because somebody said 'common' loudly enough to carry.\n\nThey will get nowhere. It has been said in a room with a clerk in it, which is not the same as being said at a fire.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_drovers_road",
+                            "stage": "turned_them_back"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera: \"Nothing will come of it.\" A pause. \"It is on a page now. Things that are on a page take longer to disappear.\""
+                    },
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric: \"Three men and a clerk. That is what a town is, when it works.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Get the beasts watered.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "walked_out": [
+            {
+                "text": "The fen wardens take them across the causeway in three lots, which is a thing you did not know could be done to cattle and would rather not have watched.\n\nTull Barrow pays at the horn-post, shakes hands, whistles the dogs in, and goes west. He is the fourth this year, on this road, that anybody knows about.\n\nNobody in Rivermark is counting.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_drovers_road",
+                            "stage": "walked_them_out"
+                        }
+                    },
+                    {
+                        "set_flag": "grazing_bought_known"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Watch him go.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_field": [
+            {
+                "conditions": [
+                    {
+                        "flag": "wolves_fate"
+                    }
+                ],
+                "text": "\"Quiet,\" Tull says. \"You'd know.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "\"Beasts have been stood in the far corner three days,\" Tull says. \"Facing the thorn. Not eating.\" He turns the staff over. \"That's not wolves being wolves. Wolves being wolves is you lose one and the rest graze. This is the whole herd deciding, together, to starve rather than go down that end.\"\n\nHe looks west.\n\n\"Nobody's cut that thorn back in two years and nobody's going to, because the field's common and common ground belongs to whoever will do the work, and there isn't anybody.\"",
+                "on_enter": [
+                    {
+                        "start_quest": "wolves_in_winter_field"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"Four of them, and they are working it from the fen side. That is the wrong side. There is nothing to eat on the fen side.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "We'll go into the thorn.",
+                        "next": "into_the_thorn"
+                    },
+                    {
+                        "label": "Then it's not my field either.",
+                        "next": "not_my_field"
+                    },
+                    {
+                        "label": "Later.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "into_the_thorn": [
+            {
+                "text": "\"Take the channel,\" Tull says. \"There's a dragged track through the grass into the brake and it's been used more than once. Go in on that and don't go in abreast, because whatever's in there has the thorn on its side and you don't.\"\n\nHe whistles the dogs off the fold wall and puts them behind him, which he has not done once while you have been standing here.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "wolves_in_winter_field",
+                            "stage": "the_thorn_brake"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Go in now.",
+                        "effects": [
+                            {
+                                "start_combat": "the_field_howler"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "In the morning.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_field_is_clear": [
+            {
+                "text": "\"That'll do,\" Tull says, and goes back to counting. \"Beasts were grazing the far corner inside the hour. That's the whole of what I wanted and I'm not going to pretend I wanted more.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "wolves_in_winter_field",
+                            "stage": "killed_the_pack"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "That's the whole of it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_den": [
+            {
+                "text": "The den is on the fen side of the old bank, dug well in, and it is dry.\n\nIt should not be dry. It is four feet below the level of the winter field and the winter field is standing in water in half its ruts. The water is on the wrong side of the bank, and it has been coming up that side for at least two seasons, because there are two seasons of old bedding in there and the lower layer is rotted and the upper is not.\n\nThey did not come up onto the grazing because they were hungry. They came up because their ground went under, and then they were hungry.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "wolves_in_winter_field",
+                            "stage": "found_the_den"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse is on her knees at the mouth of it with a handful of the lower bedding. \"Two years,\" she says. \"The fen has come up two feet in two years and nobody living on it has said a word.\""
+                    },
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric: \"They were pushed.\" He says it the way a man says a sentence he has said recently about something else."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Fill it in and go back to Barrow.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "not_my_field": [
+            {
+                "text": "\"No,\" Tull agrees. \"It isn't.\"\n\nHe puts the staff back across his knees.\n\n\"It's not mine either, as of Michaelmas. That's how it is with common ground — it belongs to whoever'll do the work, right up until nobody will, and then it turns out it belonged to somebody else the whole time.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "wolves_in_winter_field",
+                            "stage": "left_them_to_it"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Good night, Barrow.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

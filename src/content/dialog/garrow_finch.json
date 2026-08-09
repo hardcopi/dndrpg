@@ -1,0 +1,518 @@
+{
+    "npc_key": "garrow_finch",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "flag": "kessa_debt_fate",
+                        "equals": "paid"
+                    }
+                ],
+                "once": true,
+                "text": "Finch is settling his bill at the bar and is in an excellent mood. \"A clean transaction,\" he says. \"You have no idea how rare that is. Most of my work is standing in yards.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "kessa_debt_fate",
+                        "equals": "fought"
+                    }
+                ],
+                "once": true,
+                "text": "Finch is at the same table with a new cup and a slightly different coat, and three chairs beside him are empty. \"No hard feelings,\" he says. \"Genuinely. I have written the loss against the year and I have written the name in a different book. That is the whole of my revenge and it is quite enough.\"",
+                "choices": [
+                    {
+                        "label": "Which book?",
+                        "next": "the_other_book"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "kessa_debt_fate",
+                        "equals": "sold"
+                    }
+                ],
+                "once": true,
+                "text": "Finch is gone by morning and so is Kessa. Mara says there were four horses and nobody made any noise about it at all.",
+                "choices": [
+                    {
+                        "label": "Leave it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "finch_backed_off"
+                    }
+                ],
+                "text": "Finch has moved to the table by the window and has bought a second drink, which for him is practically a holiday. \"Still not today,\" he says. \"I have written to Fenmoor for instructions and the post is nine days each way. Enjoy the nine days. I mean that without any edge on it whatsoever.\"",
+                "choices": [
+                    {
+                        "label": "Ninety, and we're done properly.",
+                        "next": "he_takes_the_money"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "finch_knows_you_are_short"
+                    },
+                    {
+                        "quest": "kessa_debt",
+                        "status": "active"
+                    }
+                ],
+                "text": "\"You have not been to a moneylender,\" Finch observes, \"because there is only one in this town and he holds my paper too, and he would have mentioned it.\" He turns the cup. \"So it is the ninety, or the yard, or the fee. It has been those three since Tuesday.\"",
+                "choices": [
+                    {
+                        "label": "Ninety.",
+                        "next": "he_takes_the_money"
+                    },
+                    {
+                        "label": "The fee, then.",
+                        "next": "the_fee"
+                    },
+                    {
+                        "label": "The yard.",
+                        "next": "call_them_off"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "kessa_debt",
+                        "status": "active"
+                    }
+                ],
+                "text": "\"Ninety gold,\" Finch says, before you have sat down. \"I say the number first because everybody's first question is the number and it saves us four minutes of both being charming.\"",
+                "choices": [
+                    {
+                        "label": "Show me the paper.",
+                        "next": "the_paper"
+                    },
+                    {
+                        "label": "What happens if it isn't paid?",
+                        "next": "the_terms"
+                    },
+                    {
+                        "label": "Nothing yet.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "met_garrow"
+                    }
+                ],
+                "text": "The man in the green coat by the hearth has not touched his drink either, which is either a coincidence or the whole trade. \"You are with the Dunmar woman,\" he says pleasantly. \"Sit down. This is much better done sitting.\"",
+                "on_enter": [
+                    {
+                        "start_quest": "kessa_debt"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Sit down.",
+                        "next": "the_paper"
+                    },
+                    {
+                        "label": "Stay standing.",
+                        "next": "the_terms"
+                    }
+                ]
+            },
+            {
+                "text": "A neat man in a green coat is sitting where he can see the yard door and the stair at the same time. He has been there since noon and has bought one drink. \"Garrow Finch,\" he says. \"Debt factor. You will not have heard of me and that is by design.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_garrow"
+                    },
+                    {
+                        "start_quest": "kessa_debt"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Whose debt?",
+                        "next": "the_paper"
+                    },
+                    {
+                        "label": "Not interested.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_paper": [
+            {
+                "text": "He puts it on the table and turns it round so you can read it, which is more than he has to do. It is a soldier's advance-of-pay bond, nine years old, signed with a mark rather than a name, endorsed twice on the back to two companies that no longer exist and once to Garrow Finch.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "kessa_debt",
+                            "stage": "terms"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera reads it upside down in about six seconds. \"Second endorsement's out of date order,\" she says. \"That's not forgery, that's sloppiness, but it's worth twenty off if you make a face about it.\""
+                    },
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa is looking at her own mark on a nine-year-old page. She does not say anything at all."
+                    },
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric: \"She signed with a mark.\" Finch, mildly: \"Most of them do, brother. That is not an argument against the debt, it is an argument against the recruiting.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Ninety, then. Take it and go.",
+                        "next": "he_takes_the_money"
+                    },
+                    {
+                        "label": "The endorsements are out of order. Sixty.",
+                        "conditions": [
+                            {
+                                "companion": "sera",
+                                "status": "active"
+                            }
+                        ],
+                        "check": {
+                            "skill": "persuasion",
+                            "dc": 13,
+                            "on_success": "he_takes_sixty",
+                            "on_failure": "he_holds_at_ninety"
+                        }
+                    },
+                    {
+                        "label": "You bought this at a quarter. Take thirty and be ahead.",
+                        "check": {
+                            "skill": "persuasion",
+                            "dc": 16,
+                            "on_success": "he_takes_sixty",
+                            "on_failure": "he_holds_at_ninety"
+                        }
+                    },
+                    {
+                        "label": "What happens if it isn't paid?",
+                        "next": "the_terms"
+                    }
+                ]
+            }
+        ],
+        "the_terms": [
+            {
+                "text": "\"Then I take her,\" Finch says, without any relish at all, which is worse. \"There is a company at Fenmoor that will honour the other half of that bond in labour, and they will take her, and it is four years. I have three people in the yard and they are paid by the day, so I would rather this were today.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "kessa_debt",
+                            "stage": "terms"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa, to you, not to him: \"Four years is what it was the first time. I did two of them.\""
+                    },
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"He has told you exactly what he will do and exactly when. He is not bluffing and he does not want you to think he is.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Ninety, then.",
+                        "next": "he_takes_the_money"
+                    },
+                    {
+                        "label": "Call them off and walk out of here.",
+                        "check": {
+                            "skill": "intimidation",
+                            "dc": 16,
+                            "on_success": "he_walks_away",
+                            "on_failure": "call_them_off"
+                        }
+                    },
+                    {
+                        "label": "What's a finder's fee worth to you?",
+                        "next": "the_fee"
+                    },
+                    {
+                        "label": "Nothing today.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "he_takes_the_money": [
+            {
+                "conditions": [
+                    {
+                        "gold_at_least": 90
+                    }
+                ],
+                "text": "He counts it, which takes a while, and then endorses the bond over to you and hands it across. \"There,\" says Finch. \"That is a discharged instrument. Frame it, burn it, give it to her — most people give it to them and most of them do not know what to do with it.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "kessa_debt",
+                            "stage": "paid"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa takes the paper. She looks at it for slightly too long and then folds it very small and puts it away, and goes out into the yard, and stands there."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Let him go.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "\"You have not got ninety gold,\" Finch observes, without malice. \"I have been doing this eleven years and I can see it from here.\" He turns the cup. \"So: find it, or find me something else, and either way find it before the men in the yard are on their second day's pay.\"",
+                "choices": [
+                    {
+                        "label": "I'll get it.",
+                        "end": true
+                    },
+                    {
+                        "label": "What else would you take?",
+                        "next": "the_fee"
+                    }
+                ]
+            }
+        ],
+        "he_takes_sixty": [
+            {
+                "conditions": [
+                    {
+                        "gold_at_least": 60
+                    }
+                ],
+                "text": "\"Sixty,\" Finch says, pained and professional, \"and you have cost me a dinner.\" He counts it, endorses the bond, and hands it over. \"You will notice I did not argue very long. Do reflect on what that means about the ninety.\"",
+                "on_enter": [
+                    {
+                        "take_gold": 60
+                    },
+                    {
+                        "give_gold": 90
+                    },
+                    {
+                        "quest_stage": {
+                            "quest": "kessa_debt",
+                            "stage": "paid"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Let him go.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "text": "\"Sixty,\" Finch agrees, \"which you also do not have.\" He is not unkind about it. \"Come back with sixty. The offer stands until my people go onto a second day.\"",
+                "choices": [
+                    {
+                        "label": "I'll get it.",
+                        "end": true
+                    }
+                ],
+                "conditions": [
+                    {
+                        "not": {
+                            "gold_at_least": 60
+                        }
+                    }
+                ]
+            },
+            {
+                "text": "\"The bond is endorsed and the debt is dead,\" Finch says, \"and I have had my dinner. There is nothing further here for either of us.\"",
+                "choices": [
+                    {
+                        "label": "Let him go.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "he_holds_at_ninety": [
+            {
+                "text": "\"No,\" Finch says. \"I have been leaned on by better and in worse rooms and the number is the number.\" He glances, once, at the yard door. \"And you have now told me that you cannot pay it, which is a thing I did not know four minutes ago. Thank you for that.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "finch_knows_you_are_short"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Ninety, then.",
+                        "next": "he_takes_the_money"
+                    },
+                    {
+                        "label": "Then take it out of the yard.",
+                        "next": "call_them_off"
+                    },
+                    {
+                        "label": "What's a finder's fee worth?",
+                        "next": "the_fee"
+                    }
+                ]
+            }
+        ],
+        "the_fee": [
+            {
+                "text": "Finch's expression does not change at all, which is how you know you have found the actual business. \"Twenty per cent,\" he says. \"A hundred and twenty gold, paid now, in this room, for you to sit down and finish your drink while my people take her out through the yard.\" A pause. \"I have never once had to explain that offer twice.\"",
+                "interjections": [
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa has not moved. She is watching you and not him and she will remember whatever happens in the next few seconds for the rest of her life."
+                    },
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric, standing: \"No.\" Finch: \"I did not ask you, brother.\" Aldric: \"You did not have to.\""
+                    },
+                    {
+                        "companion": "sera",
+                        "text": "Sera says nothing and looks at the table, and that is her whole opinion, delivered."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Take the fee.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "kessa_debt",
+                                    "stage": "sold_her"
+                                }
+                            }
+                        ],
+                        "next": "the_yard_door"
+                    },
+                    {
+                        "label": "No. Ninety, and get out.",
+                        "next": "he_takes_the_money"
+                    },
+                    {
+                        "label": "No.",
+                        "next": "call_them_off"
+                    }
+                ]
+            }
+        ],
+        "call_them_off": [
+            {
+                "text": "\"Then we are past the talking,\" Finch says, and stands, and puts three coins on the table for the drink because he is not going to have this conversation about a bar bill afterwards. \"Kell. Yard door.\" He walks out through the front.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "kessa_debt",
+                            "stage": "fought"
+                        }
+                    },
+                    {
+                        "start_combat": "garrow_collectors"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa is already up and the table is already going over. \"Nine years,\" she says. \"Nine years and it's a Tuesday.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Draw.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "he_walks_away": [
+            {
+                "text": "Finch looks at you for a while, and then makes a small gesture at the window, and the three in the yard go. \"Not today,\" he says. \"I am a factor, not a captain, and I have no instructions worth a broken arm.\" He gathers the bond. \"It is not discharged. Nothing has been discharged. But it is not today.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "finch_backed_off"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Ninety, and we're done properly.",
+                        "next": "he_takes_the_money"
+                    },
+                    {
+                        "label": "Good enough.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_yard_door": [
+            {
+                "text": "It takes about a minute and there is no shouting. Finch counts out a hundred and twenty on the table in front of you and does not hurry over it. Kessa goes out through the yard between two of his people without saying anything at all, and does not look back, and that is the part you will keep.",
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric goes out into the street and is not there in the morning either. He has left the sun-disc on the table, next to the coin."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Finish the drink.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_other_book": [
+            {
+                "text": "\"The one with the names in,\" Finch says. \"Everyone in my trade keeps two. The first is what people owe. The second is what people are.\" He drinks. \"You are both in it now. That is not a threat, it is simply where you are.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

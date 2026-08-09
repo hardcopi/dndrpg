@@ -1,0 +1,20 @@
+{
+  "encounter_key": "warren_stragglers",
+  "name": "Warren Stragglers",
+  "description": "A goblin rounds the tunnel bend with an armload of loot, sees you, and shrieks for its friend.",
+  "difficulty": "easy",
+  "is_random": true,
+  "region": "goblin_warren",
+  "monsters": [
+    {
+      "monster": "goblin",
+      "quantity": 1
+    },
+    {
+      "monster": "kobold",
+      "quantity": 1
+    }
+  ],
+  "allow_flee": true,
+  "allow_parley": false
+}

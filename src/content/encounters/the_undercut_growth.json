@@ -1,0 +1,14 @@
+{
+  "encounter_key": "the_undercut_growth",
+  "name": "The Face of the Cut",
+  "description": "The face of the cut comes away in one piece, and what is behind it has been waiting for the last four inches for three years.",
+  "difficulty": "deadly",
+  "monsters": [
+    { "monster": "the_growth", "quantity": 1, "rank": "front" },
+    { "monster": "crust", "quantity": 2, "rank": "front" }
+  ],
+  "allow_flee": true,
+  "allow_parley": false,
+  "victory_flag": "growth_cut_out",
+  "defeat_flag": "growth_drove_us_out"
+}

@@ -1,0 +1,62 @@
+{
+    "quest_key": "oldcity_the_short_tally",
+    "title": "The Short Tally",
+    "description": "Dressed stone goes down the shaft and less of it arrives at the causeway, every week, for eleven weeks.",
+    "giver": "foreman_dessel",
+    "on_job_board": true,
+    "rewards": {
+        "xp": 250,
+        "gold": 90
+    },
+    "stages": {
+        "read_the_board": {
+            "title": "The tally board",
+            "objective": "Look at the Engineers' tally at the works depot.",
+            "journal": "Foreman Dessel rules two neat columns, loads in and loads out, and they have not agreed since the spring. The difference goes one way and it goes every week.",
+            "target": {
+                "location": "oldcity_works_depot"
+            }
+        },
+        "follow_the_stone": {
+            "title": "Where it went",
+            "objective": "Find who is taking the Works' stone.",
+            "journal": "It is not being carried up — the grates are barred and the stair has a guard house at the bottom of it. It is being walled with. Somewhere off the channels there is a block of Old City houses with fresh dressed courses in it.",
+            "target": {
+                "location": "oldcity_thieves_den"
+            }
+        },
+        "named_them": {
+            "title": "Named them",
+            "journal": "They have walled themselves in with the Works' own stone, which is why the block is the only structure down here still standing to two storeys. Dessel took the name, wrote it in the third column he had already ruled and not used, and said he would put it to the Watch in the morning.",
+            "resolution": "named_them",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "oldcity_tally",
+                    "value": "named"
+                },
+                {
+                    "xp": 150
+                }
+            ]
+        },
+        "took_their_price": {
+            "title": "Took their price",
+            "journal": "Jimmy Able paid, in coin, out of a chest under a pair of floorboards that lift together. Dessel is still eleven weeks short and will go on being short, and the columns will go on disagreeing until somebody who is not us tells him why.",
+            "resolution": "took_their_price",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "oldcity_tally",
+                    "value": "bought"
+                },
+                {
+                    "xp": 80
+                },
+                {
+                    "give_gold": 75
+                }
+            ]
+        }
+    }
+}

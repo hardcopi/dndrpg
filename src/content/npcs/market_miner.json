@@ -1,0 +1,11 @@
+{
+    "npc_key": "market_miner",
+    "name": "A miner",
+    "role": "Townsfolk",
+    "sprite_key": "miner",
+    "is_ambient": true,
+    "dialog": "market_miner",
+    "place": {
+        "location": "market_square"
+    }
+}

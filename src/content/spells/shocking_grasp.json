@@ -1,0 +1,23 @@
+{
+  "spell_key": "shocking_grasp",
+  "name": "Shocking Grasp",
+  "level": 0,
+  "school": "Evocation",
+  "classes": [
+    "Sorcerer",
+    "Wizard"
+  ],
+  "resolution": "attack",
+  "damage_dice": "1d8",
+  "damage_type": "lightning",
+  "target_kind": "enemy",
+  "reaches_back_rank": false,
+  "casting_time": "1 action",
+  "range_text": "Touch",
+  "components": "V, S",
+  "duration": "Instantaneous",
+  "description": "Lightning springs from your hand to deliver a shock to a creature you try to touch.",
+  "concentration": false,
+  "duration_rounds": 0,
+  "source": "5e SRD"
+}

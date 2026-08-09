@@ -1,0 +1,101 @@
+{
+    "quest_key": "what_floats",
+    "title": "What Floats",
+    "description": "Peat water does not let go of what it takes. There are men in the black pools who have not sunk, and they are all lying the same way.",
+    "giver": "cully_tench",
+    "on_job_board": true,
+    "required_level": 3,
+    "rewards": {
+        "xp": 400,
+        "gold": 110
+    },
+    "stages": {
+        "the_black_pools": {
+            "title": "The black pools",
+            "objective": "Go out to the peat cuttings and see what is in them.",
+            "journal": "The old peat cuttings have flooded into a chain of pools deeper than a pole will find. Things come up in them and stay up, because peat water preserves what it takes and never gives it back.",
+            "target": {
+                "location": "black_pools"
+            }
+        },
+        "all_facing_one_way": {
+            "title": "All facing one way",
+            "objective": "Get them out of the water and look at them properly.",
+            "journal": "Seven of them. Not one is from the drowned village — the village went under forty years ago and these have been in the water for two years at the outside. All seven are men between twenty and forty, and all seven have the same wear in the same place: the right shoulder, in a band, the way a shoulder goes when it has carried a yoke or a pick for a very long time. They are all lying with their heads toward the sluice.",
+            "target": {
+                "location": "black_pools"
+            }
+        },
+        "named_them": {
+            "title": "Named",
+            "journal": "Two of the seven had marks that could be read: a guild tattoo from a stone-cutters' house four days downriver, and a wedding band with a date in it. Neither of them is from this valley. Neither of them was reported missing to anybody, anywhere, and both of them had been working with their hands until about a fortnight before they went in the water.",
+            "resolution": "named_them",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "floats_fate",
+                    "value": "named"
+                },
+                {
+                    "set_flag": "pool_dead_named"
+                },
+                {
+                    "xp": 150
+                },
+                {
+                    "approval": {
+                        "sera": 12,
+                        "aldric": 10,
+                        "ilse": 6
+                    }
+                }
+            ]
+        },
+        "gave_them_ground": {
+            "title": "Given ground",
+            "journal": "There is no dry ground in the fen worth the name, so we took them up to the village and laid them in the chapel, which has a stone floor above the waterline and has not had anybody in it for forty years. Aldric's order has words for this and I do not, so I said the ones I could remember and we shut the door.",
+            "resolution": "gave_them_ground",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "floats_fate",
+                    "value": "buried"
+                },
+                {
+                    "set_flag": "pool_dead_buried"
+                },
+                {
+                    "xp": 100
+                },
+                {
+                    "approval": {
+                        "aldric": 18,
+                        "ilse": 10,
+                        "kessa": 6,
+                        "sera": -2
+                    }
+                }
+            ]
+        },
+        "left_them_floating": {
+            "title": "Left in the water",
+            "journal": "Seven men in black water, all lying the same way, none of them anything to do with me. I know that the pools are two hours off the causeway and that nobody goes there, and I have decided that is the same thing as nobody knowing.",
+            "resolution": "left_them_floating",
+            "terminal": true,
+            "outcome": "neutral",
+            "effects": [
+                {
+                    "set_flag": "floats_fate",
+                    "value": "left"
+                },
+                {
+                    "approval": {
+                        "aldric": -12,
+                        "ilse": -6,
+                        "kessa": -4
+                    }
+                }
+            ]
+        }
+    }
+}

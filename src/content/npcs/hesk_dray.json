@@ -1,0 +1,12 @@
+{
+    "npc_key": "hesk_dray",
+    "name": "Hesk Dray",
+    "role": "Carrier",
+    "description": "Six wagons, four routes, twenty years without a complaint. He is paid in advance now, which he did not ask for and does not like, and he has stopped asking what is under the salt.",
+    "sprite_key": "baker",
+    "is_quest_giver": true,
+    "dialog": "hesk_dray",
+    "place": {
+        "location": "caravan_ground"
+    }
+}

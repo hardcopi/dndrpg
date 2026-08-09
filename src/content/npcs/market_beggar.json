@@ -1,0 +1,12 @@
+{
+    "npc_key": "market_beggar",
+    "name": "A beggar",
+    "role": "Townsfolk",
+    "sprite_key": "beggar",
+    "pose": "kneel",
+    "is_ambient": true,
+    "dialog": "market_beggar",
+    "place": {
+        "location": "market_square"
+    }
+}

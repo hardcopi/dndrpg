@@ -1,0 +1,11 @@
+{
+    "npc_key": "watch_gate",
+    "name": "A watchman",
+    "role": "Town Watch",
+    "sprite_key": "captain",
+    "is_ambient": true,
+    "dialog": "watch_gate",
+    "place": {
+        "location": "east_gate"
+    }
+}

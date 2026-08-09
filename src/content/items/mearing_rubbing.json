@@ -1,0 +1,11 @@
+{
+  "item_key": "mearing_rubbing",
+  "name": "Rubbing from the Mearing Stone",
+  "description": "Charcoal on paper, taken off the fourth face of the boundary stone. The old marks came out faint. The new cutting came out sharp: a plumb-line and a square, and no letters at all.",
+  "item_type": "misc",
+  "rarity": "common",
+  "weight": 0,
+  "value_gp": 0,
+  "properties": {"quest_item": true, "readable": true},
+  "icon": "scroll"
+}

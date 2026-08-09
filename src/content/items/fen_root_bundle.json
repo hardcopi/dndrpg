@@ -1,0 +1,11 @@
+{
+  "item_key": "fen_root_bundle",
+  "name": "Cut Fen-Root",
+  "description": "A bundle of pale jointed root, still wet, tied at both ends. It smells of bruised iron. It has to be cut in water and dried out of the sun or it is worth nothing, which is most of why nobody in Rivermark grows it.",
+  "item_type": "misc",
+  "rarity": "common",
+  "weight": 3,
+  "value_gp": 45,
+  "properties": {"quest_item": true},
+  "icon": "herb"
+}

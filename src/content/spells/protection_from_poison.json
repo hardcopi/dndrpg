@@ -1,0 +1,28 @@
+{
+  "spell_key": "protection_from_poison",
+  "name": "Protection from Poison",
+  "level": 2,
+  "school": "Abjuration",
+  "classes": [
+    "Cleric",
+    "Druid",
+    "Paladin",
+    "Ranger"
+  ],
+  "resolution": "buff",
+  "target_kind": "ally",
+  "reaches_back_rank": true,
+  "effect": {
+    "cure": [
+      "poisoned"
+    ]
+  },
+  "casting_time": "1 action",
+  "range_text": "Touch",
+  "components": "V, S",
+  "duration": "1 hour",
+  "concentration": false,
+  "duration_rounds": 10,
+  "description": "You touch a creature. If it is poisoned, you neutralise the poison. For the duration, the target has advantage on saving throws against being poisoned.",
+  "source": "5e SRD"
+}

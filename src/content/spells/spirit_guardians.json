@@ -1,0 +1,24 @@
+{
+  "spell_key": "spirit_guardians",
+  "name": "Spirit Guardians",
+  "level": 3,
+  "school": "Conjuration",
+  "classes": [
+    "Cleric"
+  ],
+  "resolution": "save",
+  "save_ability": "wis",
+  "save_effect": "half",
+  "damage_dice": "3d8",
+  "damage_type": "radiant",
+  "target_kind": "all_enemies",
+  "concentration": true,
+  "duration_rounds": 10,
+  "casting_time": "1 action",
+  "range_text": "Self (15-foot radius)",
+  "components": "V, S, M",
+  "duration": "Concentration, up to 10 minutes",
+  "description": "You call forth spirits to protect you. They flit around you to a distance of 15 feet for the duration.",
+  "reaches_back_rank": true,
+  "source": "5e SRD"
+}

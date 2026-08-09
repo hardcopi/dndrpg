@@ -1,0 +1,26 @@
+{
+  "spell_key": "scorching_ray",
+  "name": "Scorching Ray",
+  "level": 2,
+  "higher_level": {
+    "dice_per_level": "2d6"
+  },
+  "school": "Evocation",
+  "classes": [
+    "Sorcerer",
+    "Wizard"
+  ],
+  "resolution": "attack",
+  "damage_dice": "6d6",
+  "damage_type": "fire",
+  "target_kind": "enemy",
+  "casting_time": "1 action",
+  "range_text": "120 feet",
+  "components": "V, S",
+  "duration": "Instantaneous",
+  "description": "You create three rays of fire and hurl them at targets within range.",
+  "concentration": false,
+  "duration_rounds": 0,
+  "reaches_back_rank": true,
+  "source": "5e SRD"
+}

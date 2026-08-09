@@ -1,0 +1,279 @@
+{
+    "npc_key": "dessa_kell",
+    "start": "hail",
+    "nodes": {
+        "hail": [
+            {
+                "conditions": [
+                    {
+                        "quest": "uv_where_they_were_left",
+                        "status": "active"
+                    },
+                    {
+                        "flag": "uv_deepest",
+                        "at_least": 3
+                    }
+                ],
+                "text": "She is where she always is, facing the Mouth, with her hands inside her sleeves against the wind. She hears you coming up the spoil and does not turn round until you have stopped.\n\nThen she does turn round, and looks at your faces first, which is a thing people do when they have already had one answer and know how it arrives.\n\n\"Right,\" says Dessa Kell. \"Go on.\"",
+                "choices": [
+                    {
+                        "label": "There is no fourth gallery. There is nothing down there that stays put.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "uv_where_they_were_left",
+                                    "stage": "told_her"
+                                }
+                            }
+                        ],
+                        "next": "the_truth"
+                    },
+                    {
+                        "label": "We found the marker. He was past it. It was quick.",
+                        "check": {
+                            "skill": "deception",
+                            "dc": 14,
+                            "on_success": "she_believes",
+                            "on_failure": "she_sees_it"
+                        }
+                    },
+                    {
+                        "label": "Not yet. Give us longer.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "uv_where_they_were_left",
+                        "status": "active"
+                    }
+                ],
+                "text": "Dessa is sitting where the slope flattens, facing the hole. She lifts a hand without turning her head.\n\n\"You've not been down three,\" she says. \"You'd be walking differently.\"",
+                "choices": [
+                    {
+                        "label": "We're going.",
+                        "end": true
+                    },
+                    {
+                        "label": "How will we know the fourth gallery?",
+                        "next": "how_will_we_know"
+                    }
+                ]
+            },
+            {
+                "once": true,
+                "text": "There is a woman sitting near the top of the spoil with her back to the camp, and going by the flattened place she has been sitting there a good while.\n\nShe does not seem surprised to have company and does not look pleased about it either.\n\n\"Whoever you're looking for,\" she says, \"they'll have gone up to the fire. Nobody comes up here for anything but this.\" She nods at the Mouth, small and square across the shelf. \"You get the whole of it from here. Everyone who goes in and everyone who comes out.\"",
+                "choices": [
+                    {
+                        "label": "Who are you counting out?",
+                        "next": "counting_out"
+                    },
+                    {
+                        "label": "We'll leave you to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "Dessa is where she was, facing the Mouth, out of the wind as much as anybody can be up here.",
+                "choices": [
+                    {
+                        "label": "Who are you waiting for?",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "quest": "uv_where_they_were_left",
+                                    "status": "completed"
+                                }
+                            }
+                        ],
+                        "next": "counting_out",
+                        "reoffer": true
+                    },
+                    {
+                        "label": "Leave her to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "counting_out": [
+            {
+                "text": "\"My brother. Tam Kell.\" She says it in the voice of somebody who has said it many times and got nothing back. \"Went down eleven weeks ago in a crew of four. Three came up.\"\n\n\"And here is the thing I cannot get past. I asked all three where. Separately, so they'd not agree it between them. One said the fourth gallery. One said the one under the fall. One said a gallery I have never heard named by anybody, before or since.\"\n\nShe looks at you for the first time.\n\n\"Three men. One afternoon. Three different places. So one of them is lying, or two, or all three, and I have had eleven weeks to work out which and I am no further on.\"",
+                "choices": [
+                    {
+                        "label": "We're going down. We'll look.",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "quest": "uv_where_they_were_left",
+                                    "status": "completed"
+                                }
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "start_quest": "uv_where_they_were_left"
+                            },
+                            {
+                                "give_item": "uv_crew_tag",
+                                "quantity": 1
+                            }
+                        ],
+                        "next": "take_the_tag"
+                    },
+                    {
+                        "label": "Maybe none of them is lying.",
+                        "next": "none_of_them"
+                    },
+                    {
+                        "label": "I'm sorry.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "none_of_them": [
+            {
+                "text": "\"Everybody says that.\" It comes out flat and fast, worn smooth. \"Everybody up here says that, and what they mean by it is that I should stop asking, and they are kind about it, and it is the same thing every time.\"\n\nShe pulls her sleeves down over her hands.\n\n\"If none of them is lying then there is an explanation, and nobody who tells me none of them is lying ever has one.\"",
+                "choices": [
+                    {
+                        "label": "Then we'll go and get you one.",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "quest": "uv_where_they_were_left",
+                                    "status": "completed"
+                                }
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "start_quest": "uv_where_they_were_left"
+                            },
+                            {
+                                "give_item": "uv_crew_tag",
+                                "quantity": 1
+                            }
+                        ],
+                        "next": "take_the_tag"
+                    },
+                    {
+                        "label": "Leave her to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "take_the_tag": [
+            {
+                "text": "She takes a lead disc on a bootlace out of her coat and holds it out, and does not let go of it immediately.\n\n\"Crew tag. Everybody carries two — one to leave and one to be counted by. This is the leaving one. He left it with me because I asked him to, that once, and I have not decided yet whether that was luck or whether I knew.\"\n\nShe lets go of it.\n\n\"Third floor. That's where the fourth gallery runs, if the first one told me true. Go and look and come back and say what you saw, and say it plain. I've had eleven weeks of people saying things nicely.\"",
+                "choices": [
+                    {
+                        "label": "Plain it is.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "how_will_we_know": [
+            {
+                "text": "\"You won't.\" She says it without any bitterness at all, which is worse. \"There's no map of it. There's never been a map of it. You'll know it because somebody down there marked it, or you'll not know it.\"\n\n\"Go three floors and look at what a third floor is. That is all I am asking for. I have not been able to get anybody to do that much.\"",
+                "choices": [
+                    {
+                        "label": "We'll go.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_truth": [
+            {
+                "text": "You tell it plain, the way she asked. That there is no fourth gallery, and no third, and no under-the-fall; that the floors are not the same twice and do not keep what is left in them; that two crews on the same afternoon walk different halls under the same hillside and both of them are telling the truth about where they were.\n\nDessa listens to all of it without once helping you along.\n\n\"So they weren't lying,\" she says.\n\n\"No.\"\n\n\"They were each of them saying where they were. And none of them was where he was.\" She turns the empty tag over in her hand. \"Eleven weeks. I have been eleven weeks certain that at least one of those men looked me in the face and lied to me, and I have been civil to all three, and I have been proud of being civil to all three.\"",
+                "choices": [
+                    {
+                        "label": "You couldn't have known.",
+                        "next": "couldnt_have_known"
+                    },
+                    {
+                        "label": "Say nothing.",
+                        "next": "couldnt_have_known"
+                    }
+                ]
+            }
+        ],
+        "couldnt_have_known": [
+            {
+                "text": "\"No,\" she agrees, after a while. The wind up here does not stop for any of it. \"No, I couldn't.\"\n\nShe puts the tag away in the coat rather than throwing it, which she looks at her own hand for doing.\n\n\"That's the first thing anybody has said to me in eleven weeks that couldn't also have been a kindness. I want you to know I noticed.\"\n\nDessa Kell stands up off the spoil for what is plainly the first time in some hours, and goes down towards the fire.",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "she_believes": [
+            {
+                "text": "It goes down. You give her the marker at the head of the gallery, and him past it, and quick, and she takes each piece as it comes and sets it somewhere it will sit.\n\n\"Past the marker,\" she repeats. \"So he was going on. He wasn't turned round and lost, he was going on.\"\n\nShe has a purse out before you have finished, and it is the kind of purse that has been made up for a while and carried up the heap every day since.\n\n\"Take it. I have been keeping it for whoever brought me an answer and I would rather not carry it back down.\"",
+                "choices": [
+                    {
+                        "label": "Take it.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "uv_where_they_were_left",
+                                    "stage": "let_her_believe"
+                                }
+                            }
+                        ],
+                        "next": "she_goes_down"
+                    }
+                ]
+            }
+        ],
+        "she_goes_down": [
+            {
+                "text": "She goes down off the spoil ahead of you, and she does not look back at the Mouth on the way, which is the first time in eleven weeks that anybody up here has seen her not do that.\n\nThe tag stays in her hand the whole way down.",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "she_sees_it": [
+            {
+                "text": "You get as far as the marker.\n\n\"There's no marker,\" says Dessa.\n\nShe is not angry, which would be easier. She is looking at you the way she must have looked at the three of them, one at a time, eleven weeks ago.\n\n\"Nobody marks anything down there. That is the one thing every single person who has ever come up that stair agrees on, and it is the reason I cannot get an answer, and you have just handed me a marker.\"\n\nShe waits.",
+                "choices": [
+                    {
+                        "label": "Tell her what is actually down there.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "uv_where_they_were_left",
+                                    "stage": "told_her"
+                                }
+                            }
+                        ],
+                        "next": "the_truth_late"
+                    }
+                ]
+            }
+        ],
+        "the_truth_late": [
+            {
+                "text": "So you tell it plain, late. No fourth gallery, no third, nothing that is the same twice, nothing that keeps what is left in it. Three men on one afternoon in three different halls under one hillside, all three of them telling the truth.\n\nDessa hears it out.\n\n\"That's the answer, is it.\"\n\n\"Yes.\"\n\n\"And you had it,\" she says, \"and you looked at me, and you thought I'd rather have the other one.\" She turns the empty tag over. \"You may even be right. That is going to sit with me a while and I would rather it didn't.\"\n\nShe goes down towards the fire on her own. There is no purse.",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

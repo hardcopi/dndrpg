@@ -1,0 +1,25 @@
+{
+  "spell_key": "inflict_wounds",
+  "name": "Inflict Wounds",
+  "level": 1,
+  "higher_level": {
+    "dice_per_level": "1d10"
+  },
+  "school": "Necromancy",
+  "classes": [
+    "Cleric"
+  ],
+  "resolution": "attack",
+  "damage_dice": "3d10",
+  "damage_type": "necrotic",
+  "target_kind": "enemy",
+  "reaches_back_rank": false,
+  "casting_time": "1 action",
+  "range_text": "Touch",
+  "components": "V, S",
+  "duration": "Instantaneous",
+  "description": "Make a melee spell attack against a creature you can reach.",
+  "concentration": false,
+  "duration_rounds": 0,
+  "source": "5e SRD"
+}

@@ -1,0 +1,12 @@
+{
+    "npc_key": "serjeant_ballow",
+    "name": "Serjeant Ballow",
+    "role": "Town Watch",
+    "description": "Twenty-two years on the watch and the last four of them on the west gate, which is where the watch puts a man it has stopped promoting.",
+    "sprite_key": "serjeant_ballow",
+    "image_url": "assets/images/npcs/captain.png",
+    "dialog": "serjeant_ballow",
+    "place": {
+        "location": "west_gate"
+    }
+}

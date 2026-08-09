@@ -1,0 +1,13 @@
+{
+    "item_key": "uv_crew_tag",
+    "name": "Kell's Crew Tag",
+    "description": "A lead disc stamped with a crew number and a letter, on a bootlace. Every delver carries two of them, so that whoever comes up can leave one and whoever does not can be counted. Dessa Kell has had this one on the table eleven weeks.",
+    "item_type": "misc",
+    "rarity": "common",
+    "weight": 0,
+    "value_gp": 0,
+    "properties": {
+        "quest_item": true
+    },
+    "icon": "misc"
+}

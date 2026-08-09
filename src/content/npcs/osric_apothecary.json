@@ -1,0 +1,36 @@
+{
+    "npc_key": "osric_apothecary",
+    "name": "Osric Fen",
+    "role": "Apothecary",
+    "sprite_key": "druid",
+    "is_merchant": true,
+    "is_quest_giver": true,
+    "dialog": "osric_apothecary",
+    "shop": [
+        {
+            "item": "potion_healing",
+            "stock": 4
+        },
+        {
+            "item": "holy_symbol",
+            "markup_pct": 120
+        },
+        {
+            "item": "potion_healing_greater",
+            "stock": 2,
+            "markup_pct": 110
+        },
+        {
+            "item": "antitoxin",
+            "stock": 3
+        },
+        {
+            "item": "scroll_of_mending_flesh",
+            "stock": 2,
+            "markup_pct": 115
+        }
+    ],
+    "place": {
+        "location": "root_ash"
+    }
+}

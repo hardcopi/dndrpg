@@ -1,0 +1,13 @@
+{
+    "npc_key": "street_cutpurse",
+    "name": "Rilk",
+    "role": "Loiterer",
+    "description": "Stands at the east gate looking at hands. Sleeps somewhere the watch has never found and is very calm about it.",
+    "sprite_key": "rilk",
+    "image_url": "assets/images/npcs/rogue.png",
+    "is_quest_giver": true,
+    "dialog": "street_cutpurse",
+    "place": {
+        "location": "east_gate"
+    }
+}

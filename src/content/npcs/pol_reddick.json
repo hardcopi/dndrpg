@@ -1,0 +1,12 @@
+{
+    "npc_key": "pol_reddick",
+    "name": "Pol Reddick",
+    "role": "Granary Weigher",
+    "description": "Works the weighing floor on Granary Row. Believes the scales, because believing the scales is the job.",
+    "sprite_key": "pol_reddick",
+    "image_url": "assets/images/npcs/farmer.png",
+    "dialog": "pol_reddick",
+    "place": {
+        "location": "granary_row"
+    }
+}

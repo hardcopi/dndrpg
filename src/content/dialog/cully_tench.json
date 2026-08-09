@@ -1,0 +1,473 @@
+{
+    "npc_key": "cully_tench",
+    "start": "hail",
+    "nodes": {
+        "hail": [
+            {
+                "conditions": [
+                    {
+                        "flag": "ashlade_named"
+                    }
+                ],
+                "text": "Cully Tench has the punt tied off and is sitting on the gunwale with his heels in the water, which is a thing he does not do.\n\n\"Ashlade,\" he says. \"I've poled past that village my whole life and it never had a name. It had 'the roofs'.\" He says it again. \"Ashlade.\"",
+                "choices": [
+                    {
+                        "label": "Two hundred and six people.",
+                        "next": "two_hundred_and_six"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "pool_dead_buried"
+                    }
+                ],
+                "text": "\"You put them in the chapel,\" Cully says. \"On the stone floor above the line.\" He is coiling the pole-strap and not looking up. \"That's a better job than they'd have got off anyone else out here, and I'm including me in that.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "drowned_nave_cleared"
+                    },
+                    {
+                        "not": {
+                            "flag": "village_fate"
+                        }
+                    }
+                ],
+                "text": "Cully brings the punt in against the causeway and does not tie it off, which means he wants to hear this and then leave.\n\n\"It's out of the nave,\" he says. It is not a question. \"I could hear it from the reed bank and then I couldn't.\"",
+                "choices": [
+                    {
+                        "label": "The nave's a nave again.",
+                        "next": "the_nave_is_clear"
+                    },
+                    {
+                        "label": "There's a chest on the fourth step.",
+                        "next": "what_is_in_the_chapel"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "what_floats",
+                        "stage": "all_facing_one_way"
+                    }
+                ],
+                "text": "He has the punt in the shallow end of the black pools and the pole across his knees, and he has not looked at the water once since you got in the boat.\n\n\"Seven,\" he says. \"I've counted. I count every time and it's been seven since the spring.\"",
+                "choices": [
+                    {
+                        "label": "Get them out.",
+                        "next": "get_them_out"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_drowned_village",
+                        "stage": "the_chapel"
+                    }
+                ],
+                "text": "\"Chapel,\" Cully says, and does not sound pleased about it. \"Right. I'll put you at the door and I'll hold off the door, and if you're longer than an hour I'll be at the reed bank and you can shout.\"",
+                "choices": [
+                    {
+                        "label": "What's in there?",
+                        "next": "what_is_in_the_chapel"
+                    },
+                    {
+                        "label": "An hour, then.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_drowned_village",
+                        "stage": "eleven_roofs"
+                    }
+                ],
+                "text": "The lad with the punt is about nineteen, was born on this causeway, and has the easy balance of somebody who has never once thought about which foot to put where.\n\n\"You'll be for the roofs,\" he says. \"Everyone's for the roofs. Nobody ever asks to go anywhere else.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_cully"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Who lived there?",
+                        "next": "who_lived_there"
+                    },
+                    {
+                        "label": "Take me out to it.",
+                        "next": "who_lived_there"
+                    },
+                    {
+                        "label": "Not now.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "A punt comes alongside the causeway with a lad in it who poles it one-handed and stops it dead with about four inches to spare, and does not appear to have done anything to achieve either.\n\n\"Cully Tench,\" he says. \"I'll take you anywhere on this water for a copper and there's about three places I'll take you for a copper and a good reason.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_cully"
+                    },
+                    {
+                        "start_quest": "the_drowned_village"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa looks at the punt, and then at the water, and then at the punt. \"How deep,\" she says. Cully: \"Four foot. Mostly.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "What are the roofs out there?",
+                        "next": "who_lived_there"
+                    },
+                    {
+                        "label": "What are the three places?",
+                        "next": "three_places"
+                    },
+                    {
+                        "label": "Nothing yet.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "two_hundred_and_six": [
+            {
+                "text": "\"Two hundred and six,\" Cully repeats. \"And not one burial in the book.\" He looks out at the roofs. \"So where'd they go? Nobody out here's got two hundred and six people's worth of grandparents.\"\n\nHe pushes off.\n\n\"They went east, didn't they. Into your town. And nobody in it can tell you the name of the place they came from.\"",
+                "choices": [
+                    {
+                        "label": "No. Nobody can.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "three_places": [
+            {
+                "text": "\"Roofs,\" Cully says, counting on the pole. \"Pools. Sluice.\" He shrugs. \"Root beds, but that's Gray's and you'd want asking first. Camp, but that's Gray's and you'd definitely want asking first.\"",
+                "choices": [
+                    {
+                        "label": "The roofs.",
+                        "next": "who_lived_there"
+                    },
+                    {
+                        "label": "The pools.",
+                        "next": "the_pools"
+                    },
+                    {
+                        "label": "Not yet.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "who_lived_there": [
+            {
+                "text": "\"Don't know,\" Cully says, and he is not being cagey; he genuinely does not. \"Nobody does. It's 'the roofs'. My grandfather called it the roofs and he was born the year after it went under.\"\n\nHe poles.\n\n\"Thing about it is it's tidy. There's no furniture in any of them and no pots in any of the hearths and no doors off their hinges. People went out of there carrying things, in an order, with time. And then the water came and it's been four foot ever since — not five one year and three the next. Four. Like it was set.\"",
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera: \"Water does not sit at one level for forty years unless something is holding it there.\""
+                    },
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"Every house emptied and not one door forced. They were told. Somebody told them.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Take me to the chapel.",
+                        "next": "what_is_in_the_chapel"
+                    },
+                    {
+                        "label": "Set the punt at the street and let me walk it.",
+                        "next": "what_is_in_the_chapel"
+                    },
+                    {
+                        "label": "Turn back.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "what_is_in_the_chapel": [
+            {
+                "text": "\"Only one with a stone roof,\" Cully says. \"So it's the only one that's got an inside. Water's three foot in the nave and it stops a hand's width under the third step, and I've been in there twice and both times I came straight back out.\"\n\nHe holds the punt off the door.\n\n\"There's a chest on the fourth step. Fourth step's dry. Always has been.\"\n\nA pause.\n\n\"And there's something in the nave, and it's been in the nave both times.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_drowned_village",
+                            "stage": "the_chapel"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Go in.",
+                        "effects": [
+                            {
+                                "start_combat": "the_drowned_nave"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "Go in quietly. Get the chest and get out.",
+                        "check": {
+                            "skill": "stealth",
+                            "dc": 15,
+                            "on_success": "the_register",
+                            "on_failure": "it_stands_up"
+                        }
+                    },
+                    {
+                        "label": "Not today.",
+                        "next": "left_under"
+                    }
+                ]
+            }
+        ],
+        "it_stands_up": [
+            {
+                "text": "You are four feet from the chest when the still black water of the nave stands up behind you.",
+                "on_enter": [
+                    {
+                        "start_combat": "the_drowned_nave"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Turn round.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_register": [
+            {
+                "text": "The chest holds one thing: the parish register. Baptisms, marriages and burials for a hundred and ninety years, in five hands, dry, in order, and entirely legible.\n\nThe village was called Ashlade. Two hundred and six people were living in it in the year the water came, and every one of them is in this book.\n\nThere is no burial entry for any of them. The register does not stop because the parish died. It stops because the parish left, and somebody carried the book up four steps and put it above a waterline that had not happened yet.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_drowned_village",
+                            "stage": "raised_the_names"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric holds it and does not open it for a while. \"Somebody knew how deep,\" he says. \"To the hand's width. Before it happened.\""
+                    },
+                    {
+                        "companion": "sera",
+                        "text": "Sera: \"Two hundred and six people were moved, in order, with notice, and then the water was let in. That is not a flood. That is a scheme.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Carry it out.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_nave_is_clear": [
+            {
+                "text": "Forty years of standing black water in a stone room, and something in it that the peat had kept in far better condition than it had any business being in. It is down.\n\nThe nave is a nave again: three feet of cold water, a vault that gives your own noise back a half-second late, and a waterline a hand's width below the third step that has not moved since before anyone alive was born.\n\nIt is also, now, a room with a chest in it and nothing at all to stop anyone taking the chest. Cully works that out about four seconds after you do and says so.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_drowned_village",
+                            "stage": "cleared_the_nave"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa: \"Whatever that was, it wasn't guarding the box. It was between the door and the box, which isn't the same thing, and I'd like it to have been the same thing.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Then I'd better take it.",
+                        "next": "the_register"
+                    },
+                    {
+                        "label": "Leave it where it is.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "left_under": [
+            {
+                "text": "\"Right,\" Cully says, and has the punt off the door and turned round before you have finished agreeing with yourself.\n\n\"For what it's worth,\" he says, halfway back, \"that's what I'd have picked.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_drowned_village",
+                            "stage": "left_it_under"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Back to the causeway.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_pools": [
+            {
+                "text": "Cully stops poling.\n\n\"There's things in the pools,\" he says. \"That's the first thing and it's the boring thing. Second thing is what's floating in them, and I'll take you and I'll not get out of the boat.\"\n\nHe pushes off anyway.\n\n\"Seven. All men. All lying the same way. It was five in the autumn.\"",
+                "on_enter": [
+                    {
+                        "start_quest": "what_floats"
+                    },
+                    {
+                        "quest_stage": {
+                            "quest": "what_floats",
+                            "stage": "all_facing_one_way"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"Five to seven since autumn. That is not a fen taking travellers. That is a rate.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Get them out of the water.",
+                        "next": "get_them_out"
+                    },
+                    {
+                        "label": "Turn the punt round.",
+                        "next": "left_floating"
+                    }
+                ]
+            }
+        ],
+        "get_them_out": [
+            {
+                "text": "Peat water preserves what it takes, which is the reason this is possible and also the reason it is bad.\n\nSeven men, none of them from Ashlade — Ashlade went under forty years ago and these have been in the water two years at the very outside. All seven between twenty and forty. All seven with the same wear in the same place: a band across the right shoulder and the top of the back, the wear a shoulder gets from a carrying-yoke or a pick, over years, not months.\n\nAnd all seven were lying with their heads toward the sluice.",
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric works out the shoulder wear at the same moment you do and says nothing about it at all, which from him means he has decided to check something later."
+                    },
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa: \"Seven working men and not one of them's been reported missing to anybody. That takes doing. You have to not be from anywhere.\""
+                    },
+                    {
+                        "companion": "sera",
+                        "text": "Sera: \"They are pointing at the sluice because the current points at the sluice. That is not a message. That is worse — it means they all went in at the same end.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "See if any of them can be named.",
+                        "next": "named_them"
+                    },
+                    {
+                        "label": "Take them up to the chapel and put them on stone.",
+                        "next": "gave_them_ground"
+                    },
+                    {
+                        "label": "Put them back.",
+                        "next": "left_floating"
+                    }
+                ]
+            }
+        ],
+        "named_them": [
+            {
+                "text": "Two of the seven can be read. One has a guild mark on the inside of the forearm — a stone-cutters' house, four days downriver, the kind that tattoos an apprentice and not a journeyman. The other has a wedding band with a date inside it and the date is two years old.\n\nNeither of them is from this valley. Neither of them was reported missing to anybody, anywhere. And both of them had been working with their hands right up until about a fortnight before they went into the water.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "what_floats",
+                            "stage": "named_them"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Write it down.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "gave_them_ground": [
+            {
+                "text": "There is no dry ground in the fen worth the name, so it has to be the chapel: two trips in the punt, four feet of black water in the nave, and seven men laid on the stone above the line where the floor is dry and has been dry for forty years.\n\nCully holds the door and does not come in for either trip.\n\nAldric's order has words for this. You have the ones you can remember, and you say those, and then you shut the door.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "what_floats",
+                            "stage": "gave_them_ground"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric says the full thing, all of it, without hurrying, and gets to the end of it. It takes a while."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Shut the door.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "left_floating": [
+            {
+                "text": "Cully has the punt turned and moving before the sentence is finished, and does not say anything at all until the reed bank is between you and the pools.\n\n\"Two hours off the causeway,\" he says then. \"Nobody comes out here. That's near enough to nobody knowing, isn't it.\"\n\nHe does not appear to be asking you.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "what_floats",
+                            "stage": "left_them_floating"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Keep poling.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

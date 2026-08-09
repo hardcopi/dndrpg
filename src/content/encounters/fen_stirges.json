@@ -1,0 +1,13 @@
+{
+  "encounter_key": "fen_stirges",
+  "name": "Off the Reed Bank",
+  "description": "They come off the reeds in a body, low and fast, and the fen is the only place in the valley where there are enough of them to matter.",
+  "difficulty": "easy",
+  "is_random": true,
+  "region": "hollow_fen",
+  "monsters": [
+    {"monster": "stirge", "quantity": 4}
+  ],
+  "allow_flee": true,
+  "allow_parley": false
+}

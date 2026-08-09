@@ -1,0 +1,13 @@
+{
+  "item_key": "surveyors_plumb",
+  "name": "Brass Plumb-Bob",
+  "description": "A surveyor's bob on eighteen inches of waxed line, the brass worn bright at the shoulder. The maker's stamp on the flat is a plumb-bob hanging inside a square. It is a perfectly ordinary tool and there is nothing whatever wrong with it.",
+  "item_type": "misc",
+  "rarity": "common",
+  "weight": 1,
+  "value_gp": 4,
+  "properties": {
+    "quest_item": true
+  },
+  "icon": "amulet"
+}

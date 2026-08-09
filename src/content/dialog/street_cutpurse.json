@@ -1,0 +1,240 @@
+{
+    "npc_key": "street_cutpurse",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "flag": "undertown_closed"
+                    }
+                ],
+                "text": "Rilk is looking at hands, which is what Rilk does, and yours are not among them. He does not acknowledge you at all, and when you move he moves the same distance, keeping the gate arch between the two of you the whole time.",
+                "choices": [
+                    {
+                        "label": "Leave him.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "undertown_court_fate"
+                    }
+                ],
+                "once": true,
+                "text": "\"Went down, then,\" says Rilk, still watching the gate crowd. \"Stood in front of Aggie.\" He does not look round. \"Nobody up here will ever know you did that, and nobody down there will ever forget it, and that is the exchange rate and it is not a good one and I told you so.\"",
+                "choices": [
+                    {
+                        "label": "You were right about the walk.",
+                        "next": "the_walk"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_undertown_court",
+                        "status": "active"
+                    }
+                ],
+                "text": "\"Third grating past the tall doors on Granary Row,\" says Rilk, without moving his lips much. \"Or go in the way you have been going in, which everybody down there knows about, and which is the difference between arriving and being brought.\"",
+                "choices": [
+                    {
+                        "label": "I'll go down.",
+                        "end": true
+                    },
+                    {
+                        "label": "Come with me.",
+                        "next": "he_will_not_come"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "level_at_least": 3
+                    },
+                    {
+                        "any": [
+                            {
+                                "flag": "undertown_known"
+                            },
+                            {
+                                "flag": "sump_rats_beaten"
+                            },
+                            {
+                                "flag": "weir_gremlins_beaten"
+                            },
+                            {
+                                "flag": "strongroom_cleared"
+                            },
+                            {
+                                "flag": "flood_gate_fate"
+                            }
+                        ]
+                    }
+                ],
+                "text": "Rilk is not looking at hands today. Rilk is looking at you, and has been since you came up the High Street, which is a change.\n\n\"You have been down,\" he says. \"Do not bother. Everybody down there knows exactly who has been down and for how long and with how many lamps, because that is the only thing anybody down there has got to talk about.\"\n\nHe moves off the wall.\n\n\"Aggie Slate has your name,\" he says. \"And she has asked me — asked, mind, which she did not have to — whether you would come down and have it explained to your face.\"",
+                "choices": [
+                    {
+                        "label": "Explained by whom?",
+                        "next": "the_court_explained"
+                    },
+                    {
+                        "label": "And if I don't?",
+                        "next": "if_you_dont"
+                    },
+                    {
+                        "label": "Not interested.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "\"Wasn't me. Whatever it was.\" He is leaning on the gate arch watching the crowd, and he is not watching faces. \"Streets are full of thieves. Mind your purse.\"",
+                "choices": [
+                    {
+                        "label": "You're watching hands, not faces.",
+                        "next": "watching_hands"
+                    },
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "watching_hands": [
+            {
+                "text": "That gets you a proper look for the first time.\n\n\"Faces lie,\" he says. \"Hands are doing whatever they are doing.\" He goes back to the crowd. \"Rilk. And before you ask, the watch has had me up four times in six years and let me go four times, because I have never once been carrying anything.\"\n\nA cart goes through the arch.\n\n\"That is not luck,\" says Rilk. \"That is having somewhere to put things down that nobody up here will look.\"",
+                "choices": [
+                    {
+                        "label": "Where's that?",
+                        "next": "he_will_not_say"
+                    },
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "he_will_not_say": [
+            {
+                "text": "\"No,\" says Rilk, and it is not even unfriendly. \"You are all right. I have watched you cross this gate about nine times and your hands are perfectly ordinary. But you are from up, and everything I have got is that you are not going to find out where I sleep.\"",
+                "choices": [
+                    {
+                        "label": "Fair enough.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_court_explained": [
+            {
+                "text": "\"There is a court down there,\" says Rilk. \"That is the word and it is the right one, so do not make the face.\"\n\nHe leans back on the arch.\n\n\"Sixty-odd people, one room, and a woman on a plank who has sat it eleven years because nobody down there can think of anyone else who would be believed.\" He shrugs. \"No lockup. No gallows. Nowhere to put anybody. So it happens in the room, in front of everybody, or it happens in a tunnel with a hooked pole, and Aggie Slate has spent eleven years making it the first one.\"\n\nA pause.\n\n\"She would like it to be the first one with you,\" he says. \"That is not a threat. She has genuinely gone to some trouble to make it not be a threat, which I would think about, if I were the sort of person anybody went to trouble for.\"",
+                "choices": [
+                    {
+                        "label": "Take me down.",
+                        "effects": [
+                            {
+                                "start_quest": "the_undertown_court"
+                            }
+                        ],
+                        "next": "he_walks_you_in"
+                    },
+                    {
+                        "label": "And if I don't?",
+                        "next": "if_you_dont"
+                    },
+                    {
+                        "label": "Not interested.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "if_you_dont": [
+            {
+                "text": "\"Then nothing happens,\" says Rilk, \"which is what everybody expects, and which is why she asked me instead of sending anybody.\"\n\nHe watches a hand near a purse and decides against saying anything about it.\n\n\"You go on walking about under a town where sixty people live, being talked about, and one night you are somewhere narrow and there are four of them and it is not a court, it is a tunnel.\" He shrugs. \"I am not saying that to frighten you. I am saying it because it is the exact thing Aggie has spent eleven years trying to stop happening, and she would rather it did not start with you.\"",
+                "choices": [
+                    {
+                        "label": "Take me down.",
+                        "effects": [
+                            {
+                                "start_quest": "the_undertown_court"
+                            }
+                        ],
+                        "next": "he_walks_you_in"
+                    },
+                    {
+                        "label": "Not interested.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "he_walks_you_in": [
+            {
+                "text": "\"Right,\" says Rilk, and looks genuinely relieved, which he covers badly.\n\n\"Third grating past the tall doors on Granary Row, or your own way in — but if you come your own way, come to the lamps and stand where you can be seen, and do not go along the wall.\" He straightens his coat. \"People who come in along the wall are people who have decided something.\"\n\nHe steps back into the crowd at the arch.\n\n\"I will be there,\" he says, \"and I will not say anything, because I am not anybody. That is not modesty. There is a rule about who may speak and I am on the wrong side of it and I have been for four years.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_undertown_court",
+                            "stage": "go_down_with_rilk"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Why the wrong side of it?",
+                        "next": "the_wrong_side"
+                    },
+                    {
+                        "label": "I'll come to the lamps.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_wrong_side": [
+            {
+                "text": "\"Because I take purses up here and bring the money down there,\" says Rilk, \"and Aggie's second line is that the bench is whoever has least to gain, and by that reckoning I am the last man in that room who ought to open his mouth about a stranger.\"\n\nHe almost smiles.\n\n\"She has never once made me stop,\" he says. \"She has only made it so that nobody has to listen to me. There is a difference and it took me about two years to be grateful for it.\"",
+                "choices": [
+                    {
+                        "label": "I'll come to the lamps.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "he_will_not_come": [
+            {
+                "text": "\"I shall be there,\" says Rilk. \"I am not walking through the east gate beside you in daylight, because half my trade is that the watch has stopped noticing me.\" He goes back to the crowd. \"Come to the lamps. Do not go along the wall.\"",
+                "choices": [
+                    {
+                        "label": "Understood.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_walk": [
+            {
+                "text": "\"Everybody says that afterwards,\" says Rilk. \"Nobody believes it beforehand.\"\n\nHe watches the arch.\n\n\"It is not the room,\" he says. \"The room is only a room. It is the walk down, when you have got about two hundred feet left and you are still deciding whether you are the sort of person who is going to arrive.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

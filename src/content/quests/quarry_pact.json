@@ -1,0 +1,139 @@
+{
+    "quest_key": "quarry_pact",
+    "title": "The Quarry Pact",
+    "description": "The eastern quarry fell in years ago and something moved into the hole. Rivermark has been arguing about what to do since. It has run out of time to argue.",
+    "giver": "captain_elowen",
+    "on_job_board": false,
+    "required_level": 2,
+    "rewards": {
+        "xp": 600,
+        "gold": 200
+    },
+    "stages": {
+        "east_gate": {
+            "title": "Go east",
+            "objective": "Get to the quarry and see what is actually down there.",
+            "journal": "Reed has stopped asking the town council. She wants the warren dealt with, and she is not particular about the verb.",
+            "target": {
+                "location": "east_gate"
+            }
+        },
+        "the_warren_mouth": {
+            "title": "The warren mouth",
+            "objective": "Get past the gate the goblins built in the quarry cut.",
+            "journal": "They have barricaded the old winding shaft with quarry timber and put a bugbear behind it. They are not raiding from here. They are holding this.",
+            "target": {
+                "location": "warren_mouth"
+            }
+        },
+        "the_warlords_hall": {
+            "title": "Nakka Skarn",
+            "objective": "The warren has a warlord. Decide what she is to you.",
+            "journal": "The warlord is a goblin called Nakka Skarn, in a suit of human plate that does not fit her. She is not stupid and she is not comfortable. She has three thousand mouths behind her and the deep tunnels are shut. The plate is human-made and does not fit her, and there is a mark punched into the inside of the left pauldron where a smith would put his own: a plumb-bob hanging inside a square. She has no idea it is there. Nobody has ever taken it off her to look.",
+            "target": {
+                "location": "warlord_hall"
+            },
+            "effects": [
+                {
+                    "set_flag": "mark_seen_plate"
+                }
+            ]
+        },
+        "steel": {
+            "title": "Steel",
+            "journal": "We took the hall and Nakka Skarn died in the doorway she picked. What was left of the warren went down into the dark or out into the hills. Rivermark is safe. The east gate stays shut at dusk now, and Reed does not ask the council about anything any more.",
+            "resolution": "steel",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "quarry_fate",
+                    "value": "steel"
+                },
+                {
+                    "set_flag": "warlord_dead"
+                },
+                {
+                    "set_flag": "town_standing",
+                    "value": "safe"
+                },
+                {
+                    "set_flag": "reed_absolute"
+                },
+                {
+                    "approval": {
+                        "kessa": 15,
+                        "ilse": -25,
+                        "aldric": -8,
+                        "sera": 4
+                    }
+                }
+            ]
+        },
+        "pact": {
+            "title": "Pact",
+            "journal": "Nakka took the truce and I took her tooth on a wire, and then we walked Hollis Marrow out onto his own weighing floor and read his own writ back to him in front of the town. Half of Rivermark thinks I sold them. The other half has started trading salt for quarry stone. Both halves are right.",
+            "resolution": "pact",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "quarry_fate",
+                    "value": "pact"
+                },
+                {
+                    "set_flag": "warren_truce"
+                },
+                {
+                    "set_flag": "town_standing",
+                    "value": "divided"
+                },
+                {
+                    "give_item": "truce_token",
+                    "quantity": 1
+                },
+                {
+                    "approval": {
+                        "ilse": 20,
+                        "aldric": 10,
+                        "kessa": -12,
+                        "sera": -6
+                    }
+                }
+            ]
+        },
+        "ash": {
+            "title": "Ash",
+            "journal": "Marrow paid me to be somewhere else. He was very clear that it was not a bribe, it was a retainer, and that the distinction would matter later. I took the writ and the horses and went west. The smoke was visible for most of the first day.",
+            "resolution": "ash",
+            "terminal": true,
+            "outcome": "neutral",
+            "effects": [
+                {
+                    "set_flag": "quarry_fate",
+                    "value": "ash"
+                },
+                {
+                    "set_flag": "town_standing",
+                    "value": "fallen"
+                },
+                {
+                    "set_flag": "hollis_coin_taken"
+                },
+                {
+                    "give_gold": 400
+                },
+                {
+                    "give_item": "quarry_writ",
+                    "quantity": 1
+                },
+                {
+                    "approval": {
+                        "kessa": -20,
+                        "aldric": -30,
+                        "ilse": -30,
+                        "sera": 12
+                    }
+                }
+            ]
+        }
+    }
+}

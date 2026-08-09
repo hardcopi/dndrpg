@@ -1,0 +1,14 @@
+{
+  "encounter_key": "the_long_room_wardens",
+  "name": "The Long Room",
+  "description": "Nobody bars the door. Corse finishes the sentence he was in the middle of, and by the time he has finished it there are wardens between you and the front room.",
+  "difficulty": "hard",
+  "monsters": [
+    { "monster": "warden_serjeant", "quantity": 1, "rank": "front" },
+    { "monster": "concern_warden", "quantity": 4 }
+  ],
+  "allow_flee": true,
+  "allow_parley": false,
+  "victory_flag": "long_room_held",
+  "defeat_flag": "long_room_lost"
+}

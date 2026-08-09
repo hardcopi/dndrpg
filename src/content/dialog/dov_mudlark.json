@@ -1,0 +1,603 @@
+{
+    "npc_key": "dov_mudlark",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "flag": "undertown_closed"
+                    }
+                ],
+                "text": "There is nobody on the ledge. There is a lamp burning in a niche a hundred feet along, which means there was somebody on the ledge until quite recently, and the water at your feet is still cloudy.",
+                "choices": [
+                    {
+                        "label": "Go on.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "arch_reopened"
+                    }
+                ],
+                "text": "Dov is not working the silt. Dov is standing on the ledge looking south, in the direction of the old stair, with the pole across both shoulders.\n\n\"They came in on the Tuesday night,\" they say. \"Four of them, a handcart of brick, and a lantern with a proper shade on it so that it threw forwards and not sideways.\" A pause. \"I was forty feet off and they never once put the light on me, and I have been down here nineteen years and I could not have done that.\"",
+                "choices": [
+                    {
+                        "label": "Did you see faces?",
+                        "next": "no_faces"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "sat_the_low_bench"
+                    }
+                ],
+                "text": "\"Bench,\" says Dov, without looking up, and then, because they cannot help it: \"The lamp one. Everybody has an opinion and about half of them think you got it wrong.\"\n\nThey rinse something in the channel.\n\n\"Which is the point,\" they say. \"Nobody down here has ever been able to be *wrong* about anything before. It was always somebody being bigger. Aggie has been unbearable about it for a week.\"",
+                "choices": [
+                    {
+                        "label": "Which half are you in?",
+                        "next": "which_half"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "strongroom_fate",
+                        "equals": "returned"
+                    }
+                ],
+                "once": true,
+                "text": "Dov is sitting on the ledge with both feet in the water, which is a thing Dov does when there is nothing that needs finding.\n\n\"Nine boxes,\" they say. \"Up a drain. In the daylight, to people's actual doors.\" A pause. \"Aggie says you did it because you are soft. I said you did it because you could not think of anything else to do with them, which is the same thing said properly.\"",
+                "choices": [
+                    {
+                        "label": "How many are left down there?",
+                        "next": "how_many_left"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "strongroom_fate",
+                        "equals": "took"
+                    }
+                ],
+                "once": true,
+                "text": "Dov looks at you for slightly too long before saying anything, which is new.\n\n\"Eleven boxes,\" they say. \"You could have had eleven boxes off me for a lamp and a rope any time in six years, if I had thought you were the sort to want them.\" They go back to the silt. \"I did not think you were the sort.\"",
+                "choices": [
+                    {
+                        "label": "They were dead men's.",
+                        "next": "dead_mens"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "strongroom_fate",
+                        "equals": "ledger"
+                    }
+                ],
+                "once": true,
+                "text": "\"You took the book,\" says Dov, \"and left forty boxes of silver standing in the water, and I have been trying to explain that to Aggie for a week and getting nowhere at all.\"\n\nThey rinse something in the channel and hold it up to the lamp.\n\n\"I understand it,\" they say. \"I want that on the record. Everybody else down here thinks you are simple.\"",
+                "choices": [
+                    {
+                        "label": "What does the book get me?",
+                        "next": "what_the_book_gets"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "what_the_water_left",
+                        "stage": "the_boxes"
+                    }
+                ],
+                "text": "Dov has not moved off the ledge and does not intend to. \"Well?\" they say. \"Is he still in there?\"",
+                "choices": [
+                    {
+                        "label": "Not any more.",
+                        "conditions": [
+                            {
+                                "flag": "strongroom_cleared"
+                            }
+                        ],
+                        "next": "the_decision"
+                    },
+                    {
+                        "label": "Yes. And he is not letting anybody past.",
+                        "next": "still_in_there"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "what_the_water_left",
+                        "status": "active"
+                    }
+                ],
+                "text": "\"Side arch,\" says Dov, pointing with their chin, \"and then it is chest-deep for about thirty feet and then it is a room. Not a drain. A *room*, with a plaster rose on the ceiling you can put your hand on.\"\n\nThey do not offer to come.",
+                "choices": [
+                    {
+                        "label": "You've been in.",
+                        "next": "as_far_as_the_door"
+                    },
+                    {
+                        "label": "I've been past the door. There are forty-one boxes on racks in there.",
+                        "next": "the_racks"
+                    },
+                    {
+                        "label": "I'll go and look.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "night_soil",
+                        "stage": "into_the_drains"
+                    }
+                ],
+                "text": "Somewhere in the vault ahead of you a voice says two words and stops.\n\nThe person on the ledge is about thirty, wearing four coats, holding a hooked pole and a shuttered lamp, and is standing exactly far enough away that you would have to commit to something in order to reach them.\n\n\"You are from up,\" they say. \"You have got a lamp you have not shuttered and boots with no grip on them, so you are from up, and you have come in through Hearthstone's, so somebody told you where.\"",
+                "choices": [
+                    {
+                        "label": "Sib Marrell told me.",
+                        "next": "sib_told_me"
+                    },
+                    {
+                        "label": "Who are you?",
+                        "next": "who_are_you"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "night_soil",
+                        "status": "active"
+                    }
+                ],
+                "text": "The person on the ledge lifts the shuttered lamp about an inch, which is a whole conversation.\n\n\"Still here,\" says Dov. \"Still not going any further up that vault until somebody has done something about what is on the crown of it.\"",
+                "choices": [
+                    {
+                        "label": "Tell me what's up there.",
+                        "next": "the_crown_of_the_vault"
+                    },
+                    {
+                        "label": "Later.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "There is somebody on the ledge with a hooked pole and a shuttered lamp, standing far enough off that reaching them would have to be a decision.\n\n\"Dov,\" they say, when it becomes clear you are not going to do anything. \"I work the low water. You are standing in my Tuesday.\"",
+                "choices": [
+                    {
+                        "label": "What do you find down here?",
+                        "next": "what_i_find"
+                    },
+                    {
+                        "label": "Sorry.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "no_faces": [
+            {
+                "text": "\"Backs,\" says Dov. \"Four backs and a barrow, and good boots — I saw the boots, because boots are what you see from the water.\"\n\nThey take the pole down off their shoulders.\n\n\"They were not creeping,\" they say. \"That is the thing I keep going back to. Men doing a thing they should not creep, and men doing a job do not. Those four were doing a job. They had a barrow and a shade on the lantern and they went back the way they came and they did not hurry.\"\n\nA pause.\n\n\"And they came from the far side,\" says Dov. \"Which means there is a far side that a handcart can get down.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "which_half": [
+            {
+                "text": "\"The half that thinks you got it right,\" says Dov, \"which I have not said to anybody down here and am not going to.\"\n\nThey go back to the silt.\n\n\"She had the lamp,\" they say. \"She had it in her hand. And the hand was broke getting it off her, and the man who broke it had a better claim to it than she did, and both of those are true and I could not have stood up and said what to do about it.\" They shrug. \"You did. And you were a stranger, so nobody has to live next to the one who decided. That is the whole of Aggie's second line and I had never understood it until I watched it done.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "who_are_you": [
+            {
+                "text": "\"Dov. I work the low water.\" The lamp does not come up any further. \"Everything this town drops through a grating comes to rest somewhere, and I know all the somewheres, and that is a trade whether or not anybody up there has a word for it.\"",
+                "choices": [
+                    {
+                        "label": "Sib Marrell told me where to come in.",
+                        "next": "sib_told_me"
+                    },
+                    {
+                        "label": "What do you find down here?",
+                        "next": "what_i_find"
+                    }
+                ]
+            }
+        ],
+        "sib_told_me": [
+            {
+                "text": "Dov's shoulders come down about an inch.\n\n\"Marrell,\" they say. \"Right. He is all right, Marrell.\" The lamp opens a shutter. \"He has been leaving the Granary Row grating on the latch for eleven years and pretending he forgets, and there are about nine of us who have eaten because of it.\"\n\nA pause.\n\n\"And he has not been down for a fortnight,\" says Dov, \"which is how I know that whatever is wrong is wrong for both sides of the ceiling.\"",
+                "choices": [
+                    {
+                        "label": "Then tell me what's down here.",
+                        "next": "the_crown_of_the_vault"
+                    },
+                    {
+                        "label": "What do you find down here?",
+                        "next": "what_i_find"
+                    }
+                ]
+            }
+        ],
+        "what_i_find": [
+            {
+                "text": "\"Coin, mostly. Spoons. A great many keys, which nobody ever wants back.\" Dov turns the pole over. \"Rings on a good week. And once, out of the Flagon's own drain, a set of false teeth, which I sold back to the man who lost them for four times what they cost him, and he paid it, and we are on excellent terms.\"\n\nThey almost smile.\n\n\"It is not begging,\" they say, without being asked. \"Nobody has ever given me anything. That is the difference and it matters to me a good deal more than it will to you.\"",
+                "choices": [
+                    {
+                        "label": "What else is down here?",
+                        "next": "the_room"
+                    },
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_crown_of_the_vault": [
+            {
+                "text": "\"Do not put your lamp along the water,\" says Dov. \"Put it up.\"\n\nYou put it up.\n\nThe vault goes on above you for eight feet and the brick at the crown is scored in long parallel drags, wet where nothing else is wet, all the way along as far as the light reaches.\n\n\"Six weeks,\" says Dov, very quietly. \"It came in from the weir end. It works the crown because everything down here works the floor. I have lost two lamps and a whole side of the tunnels to it and I have not been able to make anybody up there care, because what I have got is: something is on the ceiling.\"\n\nA pause.\n\n\"And it has started going up the gratings after the pit leavings,\" they say, \"which is the only reason anybody up there noticed at all.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "night_soil",
+                            "stage": "what_is_down_there"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse has her bow off her shoulder already. \"Long drags, no claw marks. That is not something walking. That is something pulling itself.\""
+                    },
+                    {
+                        "companion": "kessa",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "companion": "ilse",
+                                    "status": "active"
+                                }
+                            }
+                        ],
+                        "text": "Kessa, looking straight up: \"Right. So it's above the lamp. Wonderful. That's my favourite.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Show me the weir end. I'll deal with it.",
+                        "effects": [
+                            {
+                                "start_combat": "conduit_crawler"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "So the gratings were you, and this as well.",
+                        "next": "both_things"
+                    },
+                    {
+                        "label": "Not today.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "both_things": [
+            {
+                "text": "\"Both things,\" Dov agrees. \"That is what nobody up there will hold in their head at once. We come up the gratings because the gates shut at dusk and a drain is the only door we have got. And there is a thing on the ceiling. Those are not the same fact and everybody up there is going to hear them as one.\"\n\nThey shutter the lamp again.\n\n\"Whichever of them you take back up,\" says Dov, \"is what Rivermark will think about us for the next twenty years. So take your time.\"",
+                "choices": [
+                    {
+                        "label": "Show me the weir end.",
+                        "effects": [
+                            {
+                                "start_combat": "conduit_crawler"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "I'll take my time.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_room": [
+            {
+                "text": "Dov considers you for a while, the way you consider whether to show somebody a thing you cannot take back.\n\n\"There is a room off this conduit that is not a drain,\" they say. \"Off the side arch. Plastered. Moulded cornice. A door frame with a lintel on it.\" They point with the pole. \"It is a *house*, and it is under two foot of silt-water, and there is an iron door at the back of it standing open on a strongroom.\"\n\n\"The Fennow bank,\" they say. \"Failed the year of the second flood, before my mother. Everybody up there knows the name and nobody up there knows the cellar is still down here with the boxes in it.\"",
+                "choices": [
+                    {
+                        "label": "Why hasn't anybody emptied it?",
+                        "next": "as_far_as_the_door"
+                    },
+                    {
+                        "label": "Not my business.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "as_far_as_the_door": [
+            {
+                "text": "\"I have been in as far as the door twice,\" says Dov, \"and I go everywhere.\"\n\nThey say the next part flatly, so that it will not sound like a story.\n\n\"There is something standing in the water between the door and the racks. It does not come out. It has never once come out past that door — I have stood in the room and looked at it and backed up and it did not follow.\" They shrug. \"So I stopped going in, and everybody else down here stopped a great deal earlier than I did, and that is why forty boxes of other people's silver have been sitting in a cellar for forty years in a town that has poor in it.\"",
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric: \"Forty years. Whoever it is has been standing there for forty years.\" He does not say the next part."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "I'll go in.",
+                        "effects": [
+                            {
+                                "start_quest": "what_the_water_left"
+                            }
+                        ],
+                        "next": "they_point_the_way"
+                    },
+                    {
+                        "label": "Then leave it standing.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "they_point_the_way": [
+            {
+                "text": "\"Side arch, thirty feet, chest-deep,\" says Dov. \"Keep the lamp above your chin and do not put your hand on the racks to steady yourself, because they are not fixed and I have seen what a whole rack of iron boxes does when it goes over in the dark.\"\n\nThey stay exactly where they are.\n\n\"And the names are still on the plates,\" they add, as you go. \"I want you to have known that before you went in, and not after.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "what_the_water_left",
+                            "stage": "find_the_strongroom"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Understood.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_racks": [
+            {
+                "text": "Dov puts the pole down, which they have not done once.\n\n\"Forty-one,\" they repeat. \"I have never counted them. I have never been close enough to count them.\"\n\nThey sit down on the ledge.\n\n\"Right,\" they say. \"Then it is not a story any more, it is a room with forty-one boxes in it, and somebody is going to have to decide what happens to them, and it is not going to be me because nobody down here would take a decision off a mudlark.\"\n\nThey look up at you, and there is something in it that is not quite friendly.\n\n\"It is going to be you,\" says Dov. \"That is the way it always is and I would like it said out loud once before it happens.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "what_the_water_left",
+                            "stage": "the_boxes"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Then come and stand in the doorway while I do it.",
+                        "conditions": [
+                            {
+                                "flag": "strongroom_cleared"
+                            }
+                        ],
+                        "next": "the_decision"
+                    },
+                    {
+                        "label": "There's something between the door and the racks. It's still there.",
+                        "next": "still_in_there"
+                    }
+                ]
+            }
+        ],
+        "still_in_there": [
+            {
+                "text": "\"Then he is still in there,\" says Dov, \"and he has been for forty years, and he will be next week.\" They go back to the silt. \"Come and find me when it is otherwise. Or do not, and I shall think no worse of you than I do of me.\"",
+                "choices": [
+                    {
+                        "label": "I'll go back.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_decision": [
+            {
+                "text": "Dov comes off the ledge for this, which they have not done once.\n\n\"Right,\" they say, in the doorway of a drowned counting room, looking at forty-one iron boxes on racks with the water at their chest. \"Then there are three things a person does now, and I am not going to pretend I have not thought about all of them for six years.\"\n\nThey count them off on the pole.\n\n\"You take the silver. It is forty years dead and it will feed people who are not.\n\n\"Or you read the plates, and you find out which of those names still has somebody in this town answering to it, and you carry the boxes up a drain in the daylight.\n\n\"Or\" — and here Dov looks at the desk against the far wall, and at the book on it, swollen to twice its thickness and still shut — \"you take the book, and you leave the silver where it stands, and you find out why a bank with forty-one full boxes in its cellar told everybody it had nothing left.\"",
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera is already at the desk. \"Oak-gall ink,\" she says. \"Forty years under water and you will still be able to read every line of it. They wrote it to be checked.\""
+                    },
+                    {
+                        "companion": "aldric",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "companion": "sera",
+                                    "status": "active"
+                                }
+                            }
+                        ],
+                        "text": "Aldric is reading the plates, one at a time, moving along the rack in the water, and saying each name under his breath."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Take the silver.",
+                        "next": "took_it"
+                    },
+                    {
+                        "label": "Read the plates. Take the boxes up.",
+                        "next": "gave_it_back"
+                    },
+                    {
+                        "label": "Take the book.",
+                        "next": "took_the_book"
+                    }
+                ]
+            }
+        ],
+        "took_it": [
+            {
+                "text": "Eleven boxes. Plate, coin, and one very good ring that was somebody's mother's.\n\nDov holds the lamp and says nothing at all while you do it, which is worse than an argument.\n\nOn the way back up the conduit you tell yourself — the whole way, several times — that a bank shut forty years has no depositors, only heirs, and that heirs who have not come in forty years are not coming.\n\nThat is true. It also takes the whole way up the conduit.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "what_the_water_left",
+                            "stage": "took_the_silver"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Go up.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "gave_it_back": [
+            {
+                "text": "Forty-one plates. Nine names that still have somebody in Rivermark answering to them. Three of those nine are on Dagen Wyke's list.\n\nIt takes two days to carry nine iron boxes up a drain, and you do it in daylight, at people's actual front doors, because Dov says — flatly, and only once — that a thing done at night is a thing somebody can be accused of afterwards.\n\nOne of them, a woman of about seventy, sits down on her own step and will not open hers. She holds it on her knees with both hands.\n\n\"I would rather have the box,\" she says.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "what_the_water_left",
+                            "stage": "returned_the_boxes"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse carried four of the nine and did not once let anybody take one off her."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Let her have the box.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "took_the_book": [
+            {
+                "text": "The deposit book is waterlogged to the spine and swollen to twice its thickness, and every line of it is legible, because it was written in oak-gall ink by people who expected to be checked.\n\nTwo hundred and six names. What each of them lodged. The date the doors were shut.\n\nAnd the last eleven entries: one week, all withdrawals, all to the bank's own partners, every one of them dated before the flood.\n\nThe Fennow did not fail in the water. It was emptied first, and the water came in time to be blamed for it, and forty-one boxes belonging to people who were not partners have been standing in the dark ever since because nobody who knew was ever going to come back and say so.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "what_the_water_left",
+                            "stage": "took_the_book"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera reads the last page twice. \"Forty years,\" she says. \"And it was in a cellar the whole time, and the only thing keeping it there was that nobody would go in the water.\""
+                    },
+                    {
+                        "companion": "kessa",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "companion": "sera",
+                                    "status": "active"
+                                }
+                            }
+                        ],
+                        "text": "Kessa: \"So the man standing in the doorway for forty years was guarding an empty lie.\" She looks back at the room. \"Somebody should tell him.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Take it up.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "how_many_left": [
+            {
+                "text": "\"Thirty-two,\" says Dov. \"Names with nobody left to answer to them.\" They swill something in the channel. \"Aggie has put it to the Court that they belong to the tunnels now, on the grounds that we are the ones standing over them, and the Court has not decided, and I do not think the Court is going to.\"\n\nThey hold the thing up to the lamp and it is a spoon.\n\n\"Which suits me,\" says Dov. \"An undecided thing stays where it is.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "dead_mens": [
+            {
+                "text": "\"They were,\" Dov agrees, and that is the whole of the argument, and neither of you has anywhere to take it.\n\n\"Aggie has had the Court on it twice,\" they say after a while. \"Nobody down here has been able to say what the rule ought to be. Three of the names had somebody still up there, mind.\" They go back to the silt. \"You did not read the plates, so you did not know that, so you did not decide it. That is either better or worse and I have not settled which.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "what_the_book_gets": [
+            {
+                "text": "\"Nothing, today,\" says Dov cheerfully. \"That is what everybody down here cannot get past. Two hundred and six names and eleven thieves and every one of them forty years dead.\"\n\nThey wring out a cuff.\n\n\"But it is a *shape*,\" they say. \"A house takes everybody's money, empties itself into its own partners in one week, and then the water comes and gets the blame, and forty years later everybody in this town says the flood ruined the Fennow — including the ones it ruined.\" They look up. \"I have never been able to read. I have listened to Aggie read that book out four times. It is the only thing I have ever wanted to be able to read for myself.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

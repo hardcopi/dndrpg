@@ -1,0 +1,85 @@
+{
+    "quest_key": "ilse_deep_warren",
+    "title": "The Deep Warren",
+    "description": "Ilse has been counting goblins for two years. There are more of them above ground each spring and fewer tunnels open below. Something is taking the bottom of the warren, floor by floor.",
+    "companion": "ilse",
+    "giver": "ilse",
+    "on_job_board": false,
+    "required_level": 3,
+    "rewards": {
+        "xp": 300,
+        "item": "wardens_cloak"
+    },
+    "stages": {
+        "the_lower_shaft": {
+            "title": "The lower shaft",
+            "objective": "Find the shaft the goblins walled off, and get it open.",
+            "journal": "The goblins came up because the deep warren stopped being habitable. They have bricked the lower winding shaft with quarry spoil and they post two on it at all times, facing down.",
+            "target": {
+                "location": "deep_shaft"
+            }
+        },
+        "the_ledge": {
+            "title": "The ledge below",
+            "objective": "Go down as far as the ledge and see what is using the shaft.",
+            "journal": "Forty feet down the shaft opens onto a cut ledge. Things come up it. They are not the things that live down there — they are what the things that live down there are finished with. The cuts on the ledge are not goblin work either. They are square, they are recent, and there is a mark chiselled into the stone at the end of the run: a plumb-bob hanging inside a square.",
+            "target": {
+                "location": "deep_shaft"
+            },
+            "effects": [
+                {
+                    "set_flag": "mark_seen_stone"
+                }
+            ]
+        },
+        "sealed_the_shaft": {
+            "title": "The shaft, closed",
+            "journal": "We brought the roof of the winding shaft down on itself with the goblins' own props. Nothing else comes up this year. Ilse says the hill will find another way out and that we have bought a season, and she says it in the tone of somebody who thinks a season is worth buying.",
+            "resolution": "sealed_the_shaft",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "deep_shaft_fate",
+                    "value": "sealed"
+                },
+                {
+                    "set_flag": "deep_known"
+                },
+                {
+                    "approval": {
+                        "ilse": 18,
+                        "aldric": 8,
+                        "kessa": 6,
+                        "sera": 4
+                    }
+                }
+            ]
+        },
+        "sounded_the_deep": {
+            "title": "Sounded",
+            "journal": "We went down to the ledge and looked, and then we came back up, and Ilse has not written any of it in her warden's book. Whatever holds the deep warren is not a beast and it is not many. It has been quarrying. It cuts the same stone the town does, and it is cutting upward.",
+            "resolution": "sounded_the_deep",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "deep_shaft_fate",
+                    "value": "sounded"
+                },
+                {
+                    "set_flag": "deep_known"
+                },
+                {
+                    "xp": 150
+                },
+                {
+                    "approval": {
+                        "ilse": 12,
+                        "kessa": -6,
+                        "aldric": -4,
+                        "sera": -8
+                    }
+                }
+            ]
+        }
+    }
+}

@@ -1,0 +1,321 @@
+{
+    "npc_key": "corrin_dale",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "flag": "indentured_fate",
+                        "equals": "bought"
+                    }
+                ],
+                "once": true,
+                "text": "Dale is not at the trestle. Dale is at the top of the spoil stair, where he has been for about two hours, sitting on the top tread with his bundle beside him and the daylight on him, not going anywhere yet.",
+                "choices": [
+                    {
+                        "label": "Sit with him.",
+                        "end": true
+                    },
+                    {
+                        "label": "Leave him.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "indentured_fate",
+                        "equals": "read"
+                    }
+                ],
+                "once": true,
+                "text": "The canteen is exactly as loud as it was. Dale has his own indenture folded in his shirt and the copy of the reckoning folded with it. \"Six of them asked me for a look after,\" he says. \"Six. Out of sixty.\" He eats. \"The rest of them already knew, or they've decided not to, and I couldn't tell you which is which and I've been sat next to them four years.\"",
+                "choices": [
+                    {
+                        "label": "What will you do?",
+                        "next": "what_do_you_do"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "indentured_fate",
+                        "equals": "left"
+                    }
+                ],
+                "once": true,
+                "text": "Dale has shifted along the bench for you again, because that is the manners here and he would do it for anybody. He does not ask what was on the sheet. He has not asked once, and he is not going to, and you are going to have to sit next to that for as long as you stay in the room.",
+                "choices": [
+                    {
+                        "label": "What will you do?",
+                        "next": "what_do_you_do"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_indentured",
+                        "stage": "the_arithmetic"
+                    },
+                    {
+                        "flag": "saw_the_arithmetic"
+                    }
+                ],
+                "text": "Dale sees the copied sheet in your hand and puts his spoon down, and does not reach for it. \"That'll be the reckoning,\" he says. He has known for a long time that it existed. \"Coyle's hand. She'd have given it me. I know she'd have given it me.\"",
+                "choices": [
+                    {
+                        "label": "Read it to him. Out loud, here.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_indentured",
+                                    "stage": "read_it_back"
+                                }
+                            }
+                        ],
+                        "next": "the_reading"
+                    },
+                    {
+                        "label": "Pay the account off. All of it.",
+                        "conditions": [
+                            {
+                                "gold_at_least": 150
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_indentured",
+                                    "stage": "bought_him_out"
+                                }
+                            }
+                        ],
+                        "next": "the_account_closed"
+                    },
+                    {
+                        "label": "Fold it up. He's better off not knowing.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_indentured",
+                                    "stage": "left_them_to_it"
+                                }
+                            }
+                        ],
+                        "next": "he_lets_it_go"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_indentured",
+                        "status": "active"
+                    }
+                ],
+                "text": "\"Second column,\" Dale says, when you ask, and does not need to look at the board. \"Cash is the first. Against wages is the second. Halfpenny over, every line.\" He tears his bread. \"It's for the carrying. They have to bring it down the stair and somebody has to be paid to bring it down the stair. That's what I was told and I've never found it to be a lie.\"",
+                "choices": [
+                    {
+                        "label": "How long have you been down here?",
+                        "next": "the_fourth_year"
+                    },
+                    {
+                        "label": "Show me what you signed.",
+                        "next": "the_indenture"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "Trestles, benches, two coppers of something, sixty men eating too fast. The one nearest the end shifts along without being asked, which is the local manners, and looks at you over his bread. \"You're not on my face,\" he says. \"You're not on any face. Dale. Corrin Dale. Sit down or don't, but don't stand — they charge you for standing about eventually, one way or another.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_dale"
+                    },
+                    {
+                        "start_quest": "the_indentured"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "What are the two columns on the board?",
+                        "next": "the_two_columns"
+                    },
+                    {
+                        "label": "How long have you been down here?",
+                        "next": "the_fourth_year"
+                    },
+                    {
+                        "label": "Nothing. Sorry.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_two_columns": [
+            {
+                "text": "\"Cash and against wages,\" Dale says. \"Halfpenny over on the second. Bread's fourpence and fivepence. Soup's tuppence and tuppence-halfpenny.\" He is entirely matter-of-fact. \"Nobody down here's got cash, so it's the second column, and the halfpenny goes on the reckoning, and the reckoning comes off the term. That's the arrangement and I'd not say it was hidden. It's chalked on a board.\"",
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera, quietly: \"A halfpenny a meal, three meals, two hundred men. That is nine pound a week going back the way it came, and it is chalked on a board, and it is legal, and I have written worse.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "How long have you been down here?",
+                        "next": "the_fourth_year"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_fourth_year": [
+            {
+                "text": "\"Three years,\" Dale says. \"I signed for three.\" He goes on eating for a moment. \"This is the fourth. I can tell you exactly how — I can do the whole of it, in order, and I have, to four different people, and every step of it is fair. Water took eleven days in the first winter. A bad face took nine. Lamp against wages. Bread against wages. The cow's carriage went in twice, once as carriage and once as keep, and that's right, because they did carry it and they did keep it.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "dale_did_the_sum"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa: \"You've been robbed.\" Dale, without heat: \"I've been reckoned. There's a difference and I've had four years to get used to it.\""
+                    },
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric: \"And the end of it?\" Dale: \"There isn't one, brother. That's the bit. There's no end written anywhere. It just goes on being reckoned.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Show me what you signed.",
+                        "next": "the_indenture"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_indenture": [
+            {
+                "text": "It comes out of his shirt, folded to a shine along the creases, and it is one sheet. Three years' labour against a cottage, a cow and the carriage of both, the reckoning of days to be kept by the works and the reckoning to be final. Every clause of it is fair. Every clause of it is short. There is nothing on this sheet that does the arithmetic, and Dale has never seen the sheet that does.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_indentured",
+                            "stage": "the_arithmetic"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Where is the reckoning kept?",
+                        "next": "coyles_hut"
+                    },
+                    {
+                        "label": "Give it back.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "coyles_hut": [
+            {
+                "text": "\"Coyle's,\" Dale says. \"Timekeeper's hut, off the muster floor.\" He takes the indenture back and folds it along the same creases. \"She'd show you. She'd show me. I've walked past that window about four thousand times.\" He picks his spoon up. \"You'll want to know why I've never gone in. So do I.\"",
+                "choices": [
+                    {
+                        "label": "I'll go.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_reading": [
+            {
+                "text": "You read it out. Days lost to water. Days lost to a bad face. Lamp against wages. Bread at a halfpenny over, four hundred and some times. Carriage of the cow, and keep of the cow. The room does not go quiet, because it is a room where sixty men are eating and none of them have the strength to stop for a speech, but about a dozen of them have stopped chewing, and at the end a man at the far trestle says, without turning round, \"I worked that out in my second year. What are we supposed to do about it?\"",
+                "on_enter": [
+                    {
+                        "set_flag": "diggers_told"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric: \"Tell him something.\" You do not have anything to tell him. Aldric knows that, and asked anyway, which is the whole of Aldric."
+                    },
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa: \"Sixty of you. Four wardens on the whole works.\" The man at the far trestle: \"And the stair, love. And the eleven miles after the stair.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Say you don't know.",
+                        "next": "what_do_you_do"
+                    }
+                ]
+            }
+        ],
+        "the_account_closed": [
+            {
+                "text": "The clerk in the hut takes a hundred and fifty gold, writes four lines, turns a peg on the board and thanks you, sincerely, for making the column balance. That is the whole ceremony. Dale walks up the stair with a bundle and stands at the top of it for a long time in the daylight. There are a hundred and ninety others down there, and you have a hundred and ninety fewer reasons than you had this morning to feel good about the afternoon.",
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"One.\" A pause. \"I am not saying it was wrong. I am saying the number out loud so that we both have to hear it.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Walk up with him.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "he_lets_it_go": [
+            {
+                "text": "You fold the sheet and put it away, and Dale watches you do it and does not ask, and goes back to his bread. He has been not-asking for four years and he is extremely good at it, and the worst part is that he looks relieved.",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "what_do_you_do": [
+            {
+                "text": "\"Same as tomorrow,\" Dale says. \"Second bell, number three face, barrow to the muster, canteen, bunk.\" He finishes the bread. \"I'll tell you the thing nobody says. It's warm down here and it's dry and there's food twice, and up there I'd have none of the three and a cottage I can't get to. That's not them being clever. That's just true, and they didn't have to make it true, they only had to notice it.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

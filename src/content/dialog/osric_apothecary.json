@@ -1,0 +1,369 @@
+{
+    "npc_key": "osric_apothecary",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "flag": "root_and_ash_fate",
+                        "equals": "told"
+                    }
+                ],
+                "once": true,
+                "text": "There is a row of nine small stoppered bottles on the counter, corked and waxed and labelled in a very small hand, and Osric Fen is writing the tenth label. \"Nine children on Wyke's list,\" he says, without looking up. \"Ten bottles. The tenth is because somebody always turns up in the last week of the month and it is always somebody I have not counted.\"",
+                "choices": [
+                    {
+                        "label": "Will you go back one day?",
+                        "next": "go_back_one_day"
+                    },
+                    {
+                        "label": "Show me your remedies.",
+                        "effects": [
+                            {
+                                "open_shop": "osric_apothecary"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "root_and_ash_fate",
+                        "equals": "bought"
+                    }
+                ],
+                "once": true,
+                "text": "The mortar is going, slowly, in the patient circles Osric grinds everything in. \"It will make nine,\" he says. \"Ten if I am careful with the last of it, and I shall be careful with the last of it.\" He does not stop grinding. \"Thirty gold was what was in the drawer. I am aware that it was not a hundred. Do not tell me it does not matter, because it does, and I would rather owe it than have it excused.\"",
+                "choices": [
+                    {
+                        "label": "What is it for?",
+                        "next": "what_it_is_for"
+                    },
+                    {
+                        "label": "Show me your remedies.",
+                        "effects": [
+                            {
+                                "open_shop": "osric_apothecary"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "root_and_ash_fate",
+                        "equals": "unmade"
+                    }
+                ],
+                "once": true,
+                "text": "The dish on the counter is gone and the drawer it went into is shut. \"Mind the drying racks,\" says Osric Fen. He measures out what you ask for, exactly, and never a grain more than asked for, and there is nothing in his manner you could point to and call cold.",
+                "choices": [
+                    {
+                        "label": "There is still time this year.",
+                        "next": "no_time_left"
+                    },
+                    {
+                        "label": "Show me your remedies.",
+                        "effects": [
+                            {
+                                "open_shop": "osric_apothecary"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "root_and_ash",
+                        "stage": "the_quay_dealer"
+                    }
+                ],
+                "text": "\"You have been to the stair,\" Osric says, and puts the pestle down. \"Then you have a price and you have been told, in the way that people tell things here, that I ought to be asked why I do not go myself.\"",
+                "choices": [
+                    {
+                        "label": "A hundred gold is a lot for a root you won't explain.",
+                        "check": {
+                            "skill": "persuasion",
+                            "dc": 13,
+                            "on_success": "he_tells_you",
+                            "on_failure": "he_does_not"
+                        }
+                    },
+                    {
+                        "label": "You were nine when the sluice went, weren't you.",
+                        "tag": "HERMIT",
+                        "conditions": [
+                            {
+                                "origin": "hermit"
+                            }
+                        ],
+                        "next": "he_tells_you"
+                    },
+                    {
+                        "label": "I'll go and buy it and ask you nothing.",
+                        "end": true
+                    },
+                    {
+                        "label": "Find somebody else for this.",
+                        "next": "he_closes_the_drawer"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "root_and_ash",
+                        "status": "active"
+                    }
+                ],
+                "text": "The dish of money is still on the counter, counted, where it has plainly been for some weeks. \"A hand of fen-root,\" says Osric. \"That is all. It does not have to be fresh and it does not have to be whole. It has to be root and it has to be fen.\"",
+                "choices": [
+                    {
+                        "label": "Where would I even start?",
+                        "next": "where_to_start"
+                    },
+                    {
+                        "label": "I'm working on it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "\"Mind the drying racks. If it is for a wound, tell me how you got it — the herb cares even if you do not.\"\n\nThere is a shallow dish on the counter with coin in it, counted into stacks, which is not where a careful man keeps money.",
+                "choices": [
+                    {
+                        "label": "Show me your remedies.",
+                        "effects": [
+                            {
+                                "open_shop": "osric_apothecary"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "What's the money for?",
+                        "next": "the_dish"
+                    },
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_dish": [
+            {
+                "text": "\"It is for fen-root,\" says Osric Fen, \"and it has been counted and sitting in that dish since the second week of Lent, and every person who has come through that door has looked at it and not one of them has asked.\"\n\nHe sets the pestle down.\n\n\"A hand of fen-root. I will pay whatever it costs and I will not go and get it, and before you ask me why not, I will tell you now that I am not going to answer that, and that I am aware of how that sounds.\"",
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse, mildly: \"Fen-root grows in four feet of standing water over old ground. It is a two-day walk and a wet afternoon.\""
+                    },
+                    {
+                        "companion": "aldric",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "companion": "ilse",
+                                    "status": "active"
+                                }
+                            }
+                        ],
+                        "text": "Aldric: \"He has had that money counted out since Lent. A man does not count money out twice.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "I'll find you a hand of fen-root.",
+                        "effects": [
+                            {
+                                "start_quest": "root_and_ash"
+                            }
+                        ],
+                        "next": "where_to_start"
+                    },
+                    {
+                        "label": "Then go and get it yourself.",
+                        "next": "he_will_not"
+                    },
+                    {
+                        "label": "Not my errand.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "he_will_not": [
+            {
+                "text": "\"No,\" says Osric, and that is the whole of it. He picks the pestle back up. After a moment he says, to the mortar, \"I have paid three men to go in eleven years. Two of them came back with reeds and swore they were root. The third came back with root and would not take the money and would not tell me why, and left Rivermark that autumn.\"",
+                "choices": [
+                    {
+                        "label": "All right. I'll find you a hand of fen-root.",
+                        "effects": [
+                            {
+                                "start_quest": "root_and_ash"
+                            }
+                        ],
+                        "next": "where_to_start"
+                    },
+                    {
+                        "label": "Not my errand.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "where_to_start": [
+            {
+                "text": "\"The fen, or the river.\" Osric measures it out the way he measures everything. \"The fen is two days west and nobody in this town will take you within a mile of the drowned ground, and I will not tell you how to find it, because I will not have that on me.\"\n\nHe turns a jar a quarter-turn so its label faces front.\n\n\"The river is the other way. Four or five times a year a boat comes up out of the low water with fen goods in it and ties at the bottom step of the river stair. They do not come up the steps. Ask the porter.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "root_and_ash",
+                            "stage": "find_the_root"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "I'll go to the stair.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "he_tells_you": [
+            {
+                "text": "Osric Fen puts both hands flat on his own counter and looks at them for a while.\n\n\"I am not from Rivermark,\" he says. \"I am from the village in the Hollow Fen. I was nine when the sluice went. It went at night and it went in about the time it takes to walk from this counter to that door, and I was on the high ground with the goats, which is the only reason there is a man standing here.\"\n\nHe does not raise his voice at any point.\n\n\"Nobody was taken out. There was no taking out to be done. They are where they were.\"\n\nA long pause.\n\n\"Fen-root only grows where there is bone in the silt,\" says Osric Fen. \"That is not a country tale, it is soil. So I will pay any price that is asked, and I will make the draught, and I will give it away for nothing as I have done every year for thirty-one years — and I will not go and cut it, because I know precisely what I would be standing on while I did.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "root_and_ash",
+                            "stage": "he_said_why"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric, very quietly: \"Thirty-one years. And he has never once said it in this room.\""
+                    },
+                    {
+                        "companion": "ilse",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "companion": "aldric",
+                                    "status": "active"
+                                }
+                            }
+                        ],
+                        "text": "Ilse does not say anything. She reaches over and turns the jar back a quarter-turn, so it sits square, and Osric lets her."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "What is the draught for?",
+                        "next": "what_it_is_for"
+                    },
+                    {
+                        "label": "I'll get you the root.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "he_does_not": [
+            {
+                "text": "\"No,\" says Osric Fen pleasantly, and goes back to the mortar. \"A hand of fen-root. The money is in the dish and it will be in the dish tomorrow.\"\n\nThat is a door, politely shut, and there is no handle on this side of it.",
+                "choices": [
+                    {
+                        "label": "I'll buy it at the stair, then.",
+                        "end": true
+                    },
+                    {
+                        "label": "Find somebody else for this.",
+                        "next": "he_closes_the_drawer"
+                    }
+                ]
+            }
+        ],
+        "what_it_is_for": [
+            {
+                "text": "\"A winter cough draught,\" says Osric. \"That is all. Fen-root, ash bark, honey and a great deal of boiling. It is not a marvel. It is the only thing I know that reliably keeps a small child from drowning in their own chest in February, and I have made it every year since I was twenty-two and I have never once sold a bottle of it.\"\n\nHe looks at the racks.\n\n\"Nine names on Wyke's list this year,\" he says. \"It was four the year before.\"",
+                "choices": [
+                    {
+                        "label": "Then I'll get you the root.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "he_closes_the_drawer": [
+            {
+                "text": "Osric Fen sweeps the coin off the dish into his palm, and puts it in the drawer, and closes the drawer, and there is no expression on his face at all while he does any of it.\n\n\"Very good,\" he says. \"Mind the drying racks on your way out.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "root_and_ash",
+                            "stage": "left_it_unmade"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric stands in the doorway a moment longer than he needs to. \"Nine children,\" he says, once you are on the street. That is all he says."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "no_time_left": [
+            {
+                "text": "\"The boat came in Lent and it will come again in the autumn,\" says Osric, \"and the draught wants six weeks of standing before it is any use, and the coughing starts at Martinmas.\" He weighs out what you asked for. \"So no. There is not still time this year. There will be time next year. I have had thirty-one of these and one of them being a year without is not the end of anything except for whoever it is the end of.\"",
+                "choices": [
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "go_back_one_day": [
+            {
+                "text": "Osric finishes the label before he answers, and blots it.\n\n\"No,\" he says. \"But I am glad somebody has been, and I am glad it was somebody who came back and told me about the water and not about the bones.\" He sets the bottle in the row with the others. \"That was well done. You will not have known it was well done, so I am telling you.\"",
+                "choices": [
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

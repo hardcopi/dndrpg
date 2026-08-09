@@ -1,0 +1,13 @@
+{
+    "item_key": "oldcity_old_coin",
+    "name": "Old City Coin",
+    "item_type": "treasure",
+    "rarity": "common",
+    "weight": 20,
+    "value_gp": 400,
+    "icon": "coin",
+    "description": "Four thousand silver pieces of a mint nobody has struck in three hundred years, in a strongbox under a workbench. The faces are all the same man and none of the dates agree.",
+    "place": {
+        "location": "oldcity_gem_cutters"
+    }
+}

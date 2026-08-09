@@ -1,0 +1,43 @@
+{
+    "quest_key": "uv_where_they_were_left",
+    "title": "Nobody Is Where They Were Left",
+    "description": "Dessa Kell's brother went down with a crew of four and three came up, and each of the three named a different gallery. She wants somebody to go and look at one of them.",
+    "giver": "dessa_kell",
+    "on_job_board": true,
+    "required_level": 2,
+    "rewards": {
+        "xp": 300
+    },
+    "stages": {
+        "look_for_him": {
+            "title": "Go and look",
+            "objective": "Get three floors down and look for the fourth gallery.",
+            "journal": "Tam Kell went down eleven weeks ago and did not come up. The three who did come up told his sister three different galleries — the fourth, the one under the fall, and one nobody else has heard of — and she has spent eleven weeks deciding they were lying. She has given me his crew tag. The other one is on him.",
+            "target": {
+                "location": "uv_mouth"
+            }
+        },
+        "told_her": {
+            "title": "Told her the truth",
+            "journal": "There is no fourth gallery. There is no third. What is down there is not the same twice and does not keep what you leave in it, and the three who came up were not lying to her — they were each describing the only place they saw. I told her that, and she took a while over it, and then she said that was the first thing anybody had said to her in eleven weeks that could not also have been a kindness.",
+            "resolution": "told_her",
+            "terminal": true,
+            "effects": [
+                {
+                    "xp": 150
+                }
+            ]
+        },
+        "let_her_believe": {
+            "title": "Let her believe it",
+            "journal": "I said I found the fourth gallery and the marker at the head of it, and that he was past it, and that it was quick. She paid me out of a purse she had clearly been keeping ready for the answer. She will stop coming up the heap now, which was the point, and I do not know whose.",
+            "resolution": "let_her_believe",
+            "terminal": true,
+            "effects": [
+                {
+                    "give_gold": 120
+                }
+            ]
+        }
+    }
+}

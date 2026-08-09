@@ -1,0 +1,13 @@
+{
+  "item_key": "fen_waders",
+  "name": "Fen-Wardens' Waders",
+  "description": "Greased hide to the thigh, laced at the calf so they can be cut off in a hurry, with a knife-pocket on the outside of the right leg. Made for standing in cold water all day and getting out of it faster than that.",
+  "item_type": "armor",
+  "rarity": "uncommon",
+  "weight": 4,
+  "value_gp": 90,
+  "armor_bonus": 0,
+  "armor_type": "boots",
+  "properties": {"no_difficult_terrain_marsh": true},
+  "icon": "boots"
+}

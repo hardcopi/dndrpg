@@ -1,0 +1,12 @@
+{
+  "encounter_key": "reliquary_agents",
+  "name": "The Buyer's Men",
+  "description": "Three men in good coats who have been waiting in the chapel through two offices, and who put the coats down before they start, because the coats cost more than the fight will.",
+  "difficulty": "medium",
+  "monsters": [
+    {"monster": "bandit", "quantity": 3, "rank": "front"}
+  ],
+  "allow_flee": true,
+  "allow_parley": false,
+  "victory_flag": "reliquary_agents_beaten"
+}

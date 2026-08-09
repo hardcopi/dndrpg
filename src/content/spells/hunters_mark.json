@@ -1,0 +1,23 @@
+{
+  "spell_key": "hunters_mark",
+  "name": "Hunter's Mark",
+  "level": 1,
+  "school": "Divination",
+  "classes": [
+    "Ranger"
+  ],
+  "resolution": "buff",
+  "target_kind": "self",
+  "concentration": true,
+  "duration_rounds": 10,
+  "effect": {
+    "damage_bonus_dice": "1d6"
+  },
+  "casting_time": "1 bonus action",
+  "range_text": "90 feet",
+  "components": "V",
+  "duration": "Concentration, up to 1 hour",
+  "description": "You choose a creature you can see and mystically mark it as your quarry. You deal an extra 1d6 damage to your target whenever you hit it with a weapon attack.",
+  "reaches_back_rank": true,
+  "source": "5e SRD"
+}

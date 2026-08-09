@@ -1,0 +1,1419 @@
+{
+    "npc_key": "ludo_corse",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "flag": "survey_fate",
+                        "equals": "sold"
+                    }
+                ],
+                "once": true,
+                "text": "\"There you are,\" Corse says, and moves a chair, and pours two glasses without asking whether you want one. \"You will find the first quarter is already lodged at Greyhythe and you have nothing to do for it. That is the usual arrangement and people find it uncomfortable for about a month.\" He sits. \"After that they find it very comfortable indeed, which is the part I would rather you were warned about.\"",
+                "choices": [
+                    {
+                        "label": "What do I actually do for forty gold a quarter?",
+                        "next": "nothing_at_all"
+                    },
+                    {
+                        "label": "I want out of it.",
+                        "next": "there_is_no_out"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "survey_fate",
+                        "equals": "burned"
+                    }
+                ],
+                "once": true,
+                "text": "Corse is standing at the window with his hands behind his back, watching the crane. \"Three years,\" he says, without turning round. \"Nine sheets. Four hundred and eleven days of chain-work.\" He turns. He is not angry. \"It will be done again. I have already written for a chainman. What I would like to know — and you may refuse, and I shall not press it — is whether you thought that would stop anything, or whether you knew it would not and did it regardless. Both are respectable. They are just different sorts of person.\"",
+                "choices": [
+                    {
+                        "label": "I knew.",
+                        "next": "then_we_understand"
+                    },
+                    {
+                        "label": "I thought it might.",
+                        "next": "then_we_understand"
+                    },
+                    {
+                        "label": "Say nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "survey_fate",
+                        "equals": "warned"
+                    }
+                ],
+                "once": true,
+                "text": "\"Eleven hundred people now know what their roofs were entered at,\" Corse says. He offers you the chair, as he always does. \"I have had four letters from Rivermark this week. Two ask me to confirm the figure. One offers to sell me a mill at rather more than the figure. One is from a woman who would like to know whether her name is written anywhere, and I have replied that it is not, and that this is not a comfort and she should not take it as one.\"",
+                "choices": [
+                    {
+                        "label": "You expected worse.",
+                        "next": "he_expected_nothing"
+                    },
+                    {
+                        "label": "They know now.",
+                        "next": "he_expected_nothing"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "survey_fate",
+                        "equals": "took"
+                    }
+                ],
+                "once": true,
+                "text": "\"You have it,\" Corse says, pleasantly, as you come in. \"I know you have it. Rourke wrote the same evening and was extremely apologetic, and I have told him it is not a hanging matter and he is not to dock anybody.\" He indicates the chair. \"Do sit. It changes nothing at all and I would like you to hear me say why.\"",
+                "choices": [
+                    {
+                        "label": "Say it, then.",
+                        "next": "it_changes_nothing"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "long_room_held"
+                    },
+                    {
+                        "quest": "the_survey",
+                        "stage": "in_hand"
+                    }
+                ],
+                "text": "The wardens have been carried out through the kitchen and Corse is at the desk with a cloth round two fingers, writing. \"I shall not do that again,\" he says, without looking up. \"Not on your account — on theirs. Four men, and I put them in a hall, and a hall is the worst room in a house to be four men in. That was my error and I have written it down as mine.\" He indicates the chair. \"Sit. You are still holding it and we still have to finish.\"",
+                "choices": [
+                    {
+                        "label": "Then I'm walking out with it.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_survey",
+                                    "stage": "took_the_survey"
+                                }
+                            }
+                        ],
+                        "next": "the_walk_out"
+                    },
+                    {
+                        "label": "Buy it back from me.",
+                        "next": "the_offer"
+                    },
+                    {
+                        "label": "Burn it here, on your table, with your lamp.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_survey",
+                                    "stage": "burned_the_survey"
+                                }
+                            }
+                        ],
+                        "next": "the_burning_here"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_survey",
+                        "stage": "in_hand"
+                    }
+                ],
+                "text": "He sees the roll under your arm and his face does exactly what it did when you first walked in, which is nothing at all. \"Sheet six is the one you will have read twice,\" he says. \"Everybody does. Sit down. You have carried that eleven miles and you have not eaten.\"",
+                "choices": [
+                    {
+                        "label": "Buy it back from me.",
+                        "next": "the_offer"
+                    },
+                    {
+                        "label": "I'm not selling. I wanted you to see me holding it.",
+                        "next": "keeping_it"
+                    },
+                    {
+                        "label": "Explain 'clearance'.",
+                        "check": {
+                            "skill": "insight",
+                            "dc": 15,
+                            "on_success": "the_word_clearance",
+                            "on_failure": "he_explains_and_it_helps_nothing"
+                        }
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "what_rivermark_is_worth",
+                        "status": "active"
+                    }
+                ],
+                "text": "\"Take the lamp off the gimbal,\" Corse says, without looking up from what he is writing. \"It is on a gimbal so that you can carry it and not put it down on the paper. Third press, drawers by hundred. I shall be in the kitchen; there is a ham.\"",
+                "choices": [
+                    {
+                        "label": "You'd let me read your books.",
+                        "next": "of_course_i_would"
+                    },
+                    {
+                        "label": "Go through to the long room.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_factors_house",
+                        "stage": "the_long_room"
+                    }
+                ],
+                "text": "\"The door at the back,\" Corse says, and pushes his chair away from the desk. \"I shall want a quarter of an hour to see about supper. Take the lamp. It is on a gimbal for a reason and the reason is that people set lamps down on paper.\"",
+                "choices": [
+                    {
+                        "label": "Ask him what Rivermark is entered at.",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "quest": "what_rivermark_is_worth"
+                                }
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "start_quest": "what_rivermark_is_worth"
+                            }
+                        ],
+                        "next": "the_figure_question"
+                    },
+                    {
+                        "label": "Go through and read.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_factors_house",
+                                    "stage": "asked_him_home"
+                                }
+                            }
+                        ],
+                        "next": "the_long_room_alone"
+                    },
+                    {
+                        "label": "Not tonight.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_factors_house",
+                                    "stage": "walked_out"
+                                }
+                            }
+                        ],
+                        "next": "he_sees_you_out"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_factors_house",
+                        "status": "active"
+                    }
+                ],
+                "text": "The front room, the desk facing the window, the whole of the new landing working away beyond it. Corse turns his chair from the window to you without any of the small performance of a man being interrupted. \"You came back,\" he says. \"Good. Sit down properly this time. You hovered, last time, and it made the room awkward for both of us.\"",
+                "choices": [
+                    {
+                        "label": "Show me the house.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_factors_house",
+                                    "stage": "the_long_room"
+                                }
+                            }
+                        ],
+                        "next": "the_long_room_invite"
+                    },
+                    {
+                        "label": "What do you buy?",
+                        "next": "what_i_buy"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "worth_fate",
+                        "equals": "found"
+                    }
+                ],
+                "once": true,
+                "text": "\"You found it, then,\" Corse says, and does not ask which figure or pretend not to know. \"I shall tell you the only thing I have ever been able to say about that column that does not sound like an excuse, which is that I did not add it up and I would have added it up differently and it would have come out the same.\" He moves the chair out for you. \"Sit. There is a ham and you have walked eleven miles.\"",
+                "choices": [
+                    {
+                        "label": "'Clearance'.",
+                        "next": "the_word_clearance"
+                    },
+                    {
+                        "label": "What do you buy?",
+                        "next": "what_i_buy"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "worth_fate",
+                        "equals": "looked_away"
+                    }
+                ],
+                "once": true,
+                "text": "\"You shut the press,\" Corse says. He is not disappointed and he is not relieved and he is certainly not surprised. \"About a third do. I have never once thought less of anybody for it and I have thought a great deal about why the other two thirds do not sleep afterwards.\"",
+                "choices": [
+                    {
+                        "label": "I'll read it another day.",
+                        "next": "of_course_i_would"
+                    },
+                    {
+                        "label": "What do you buy?",
+                        "next": "what_i_buy"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "factors_house_fate",
+                        "equals": "asked"
+                    }
+                ],
+                "once": true,
+                "text": "The door is answered before you have finished knocking, and it is answered by him, and there is already a second cup on the desk. \"You are the only person in nineteen years who has read that room and come back to the front of the house afterwards,\" Corse says. \"Everybody else leaves by the yard. I have never worked out whether that is shame or manners.\"",
+                "choices": [
+                    {
+                        "label": "What do you buy?",
+                        "next": "what_i_buy"
+                    },
+                    {
+                        "label": "Who do you buy it for?",
+                        "next": "who_for"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "factors_house_fate",
+                        "equals": "out"
+                    }
+                ],
+                "once": true,
+                "text": "\"Back,\" Corse says, and there is nothing at all in it — no triumph, no needling. \"The room is still there and the door is still not locked, and I still have not asked anybody what they looked at.\" He indicates the chair. \"Sit down properly this time.\"",
+                "choices": [
+                    {
+                        "label": "Show me the house again.",
+                        "next": "the_long_room_invite"
+                    },
+                    {
+                        "label": "What do you buy?",
+                        "next": "what_i_buy"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "polite_man_fate",
+                        "equals": "asked"
+                    }
+                ],
+                "once": true,
+                "text": "\"Back,\" Corse says, and is genuinely pleased about it. \"Most people are not, and the ones who asked me everything the first time are the least likely of the lot — they go away with a full account and it takes them about a month to notice it is not an answer.\" He moves the chair. \"You have taken rather less than a month.\"",
+                "choices": [
+                    {
+                        "label": "Then I'll have the hour.",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "quest": "the_factors_house"
+                                }
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "start_quest": "the_factors_house"
+                            }
+                        ],
+                        "next": "the_long_room_invite"
+                    },
+                    {
+                        "label": "What is the mark on your notes?",
+                        "next": "the_mark_question"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "polite_man_fate",
+                        "equals": "nothing"
+                    }
+                ],
+                "text": "\"Second visit,\" Corse says, and puts the pen down. \"I said it would be easier. It is a very cheap prophecy and I make it about four times a year.\" He waits, comfortably, for as long as it takes.",
+                "choices": [
+                    {
+                        "label": "Then I'll have the hour.",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "quest": "the_factors_house"
+                                }
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "start_quest": "the_factors_house"
+                            }
+                        ],
+                        "next": "the_long_room_invite"
+                    },
+                    {
+                        "label": "What do you buy?",
+                        "next": "what_i_buy"
+                    },
+                    {
+                        "label": "Why Rivermark?",
+                        "next": "why_rivermark"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_polite_man",
+                        "status": "completed"
+                    }
+                ],
+                "text": "\"Back,\" Corse says, and is genuinely pleased about it. \"Most people are not. I put that down to the chair, which is a bad chair and which I have kept on purpose, because a man who stays in a bad chair for an hour has something he actually wants.\"",
+                "choices": [
+                    {
+                        "label": "Then I'll have the hour.",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "quest": "the_factors_house"
+                                }
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "start_quest": "the_factors_house"
+                            }
+                        ],
+                        "next": "the_long_room_invite"
+                    },
+                    {
+                        "label": "What do you buy?",
+                        "next": "what_i_buy"
+                    },
+                    {
+                        "label": "Who do you buy it for?",
+                        "next": "who_for"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_polite_man",
+                        "status": "active"
+                    }
+                ],
+                "text": "He is younger than the paper suggested and quieter than the house suggested, and he answers his own door with ink on the side of his hand. \"You will be from Rivermark,\" he says, standing back to let you in. \"Nobody else walks. Come in and sit down, and if you have not eaten say so now, because I shall keep you longer than you mean to stay.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_corse"
+                    },
+                    {
+                        "quest_stage": {
+                            "quest": "the_polite_man",
+                            "stage": "the_chair"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Take the chair.",
+                        "next": "the_chair"
+                    },
+                    {
+                        "label": "I'll stand.",
+                        "next": "the_chair"
+                    }
+                ]
+            },
+            {
+                "text": "A plain front room with a desk in it facing the window, and a neat man at the desk in a good plain coat, writing. He puts the pen down when the door opens, which very few men do. \"Corse,\" he says. \"Factor. There is a chair.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_corse"
+                    },
+                    {
+                        "start_quest": "the_polite_man"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Sit down.",
+                        "next": "the_chair"
+                    },
+                    {
+                        "label": "Sorry. Wrong house.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_chair": [
+            {
+                "text": "The chair is worn through at both arms. A great many people have sat in it and worked at those arms with their thumbs while they said whatever they came to say. Corse waits, comfortably, for as long as it takes. He does not fill the silence, and it becomes apparent quite quickly that he could sit there until dark.",
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera, very quietly, at your shoulder: \"Don't lead. Let him answer exactly what you ask and nothing beside it. Watch which one he answers longest.\""
+                    },
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa has not sat down and is not going to. She is looking at the window, and then at the door, and then at the window."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "What do you buy?",
+                        "next": "what_i_buy"
+                    },
+                    {
+                        "label": "Who do you buy it for?",
+                        "next": "who_for"
+                    },
+                    {
+                        "label": "What is the mark on your notes?",
+                        "next": "the_mark_question"
+                    },
+                    {
+                        "label": "Why Rivermark?",
+                        "next": "why_rivermark"
+                    },
+                    {
+                        "label": "That's everything I came with.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_polite_man",
+                                    "stage": "asked_everything"
+                                }
+                            }
+                        ],
+                        "next": "he_sees_you_out"
+                    },
+                    {
+                        "label": "I can't think of anything worth asking.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_polite_man",
+                                    "stage": "asked_nothing"
+                                }
+                            }
+                        ],
+                        "next": "the_second_visit_is_easier"
+                    }
+                ]
+            }
+        ],
+        "what_i_buy": [
+            {
+                "text": "\"Grain forward at spring price. Debt paper at a discount against the term. Water rights where they are severable, which is rarely. Quarry writs. Carriage. Some wool, badly, once.\" He counts them off without any relish at all, the way a man lists what is in a cupboard. \"And ground. Chiefly ground.\"",
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera: \"He has just told you he owns the road, the harvest and everybody's debts, and he did it in eleven seconds and it sounded like an inventory.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "How much ground?",
+                        "next": "how_much_ground"
+                    },
+                    {
+                        "label": "Who do you buy it for?",
+                        "next": "who_for"
+                    },
+                    {
+                        "label": "Back.",
+                        "next": "the_chair"
+                    }
+                ]
+            }
+        ],
+        "how_much_ground": [
+            {
+                "text": "\"I could not tell you offhand,\" Corse says, and means it, and gets up and goes to the back door and calls a question down the passage, and comes back with a figure, and the figure is most of the valley. \"That is by area. By value it is less than it sounds, because a great deal of it is hill. I would not want you to leave thinking I had bought something impressive.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "corse_told_the_area"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"That is my warden's beat you have just read out. All of it. To the ridge.\""
+                    },
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric: \"You went and asked. You did not know your own holding and you went and asked.\" Corse: \"I would rather be exact than impressive, brother.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Why?",
+                        "next": "why_rivermark"
+                    },
+                    {
+                        "label": "Back.",
+                        "next": "the_chair"
+                    }
+                ]
+            }
+        ],
+        "who_for": [
+            {
+                "text": "\"The house,\" Corse says. \"Which is a way of saying eleven people in three towns who have money in it and one of whom I have met.\" He turns his pen around on the desk. \"I am a factor. A factor buys with somebody else's money on somebody else's instruction and takes a fortieth. If you are hoping I will produce a man in a black coat with a plan, I am afraid the answer is a list of subscribers and a quarterly meeting I am not invited to.\"",
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric: \"Then who gives the instruction?\" Corse, without any edge at all: \"The meeting, brother. That is what a meeting is.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Then who decides what to buy?",
+                        "next": "the_instruction"
+                    },
+                    {
+                        "label": "What is the mark on your notes?",
+                        "next": "the_mark_question"
+                    },
+                    {
+                        "label": "Back.",
+                        "next": "the_chair"
+                    }
+                ]
+            }
+        ],
+        "the_instruction": [
+            {
+                "text": "\"I do,\" Corse says, \"within a figure. They give me a figure and a year and I spend it as well as I can, and I am judged on the return and on nothing else whatever.\" He says this without pride and without apology. \"It is why I am able to answer you. There is no secret in it. There is only a figure, and I am under it, and I shall be under it again next year.\"",
+                "choices": [
+                    {
+                        "label": "And nobody ever asks what it is for?",
+                        "next": "for_is_not_a_question"
+                    },
+                    {
+                        "label": "Back.",
+                        "next": "the_chair"
+                    }
+                ]
+            }
+        ],
+        "for_is_not_a_question": [
+            {
+                "text": "\"For,\" Corse repeats, as though turning over a coin somebody has handed him. \"You will find that it is not a question that comes up. A field is bought because it is cheap and next to another field. A debt is bought because it is discounted. Nobody sits down and decides to own a valley. It simply turns out, at the end of a good enough run of ordinary purchases, that somebody does.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "corse_said_for"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera does not say anything. She is looking at him the way you look at a mirror that has just shown you something behind you."
+                    },
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa: \"That's the most frightening thing anybody's ever said to me and I've been threatened by professionals.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Somebody decided.",
+                        "next": "he_agrees_pleasantly"
+                    },
+                    {
+                        "label": "Back.",
+                        "next": "the_chair"
+                    }
+                ]
+            }
+        ],
+        "he_agrees_pleasantly": [
+            {
+                "text": "\"Very likely,\" Corse agrees. \"I should be interested to meet them. I have written to the meeting twice asking what the works at the head of the valley are ultimately for, and been answered both times with a revised figure and a request for a fuller return.\" He shrugs, once, minutely. \"I stopped asking. That is not a confession. It is a description of employment.\"",
+                "choices": [
+                    {
+                        "label": "Back.",
+                        "next": "the_chair"
+                    }
+                ]
+            }
+        ],
+        "the_mark_question": [
+            {
+                "text": "\"The bob and the square,\" he says, and finds a note in the desk and holds it up. \"It is the house's mark. It has been the house's mark since my grandfather, who was a surveyor before he was anything else and thought a merchant's arms were vulgar.\" He puts it back. \"We stamp it on everything we own or have measured, which is why you have been seeing it. It is not a signal to anybody. It is the equivalent of writing your name in a book.\"",
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"Everything you own or have measured.\" Corse: \"Yes.\" Ilse says nothing else for the rest of the conversation."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "It's on a suit of plate a goblin warlord is wearing.",
+                        "next": "the_plate"
+                    },
+                    {
+                        "label": "It's cut into stone forty feet under the warren.",
+                        "next": "the_stone"
+                    },
+                    {
+                        "label": "Back.",
+                        "next": "the_chair"
+                    }
+                ]
+            }
+        ],
+        "the_plate": [
+            {
+                "text": "\"That would be the Fenmoor lot,\" Corse says, and thinks, and is quite untroubled. \"We bought a bankrupt armourer's stock four years ago because it was cheap, and sold it on at Greyhythe because it was not our trade. Where it went after that I could not tell you, and I did not ask, and you are entirely right that I should have.\" A pause. \"I shall not pretend to be surprised. Sold goods go where the price is.\"",
+                "choices": [
+                    {
+                        "label": "Somebody armed them.",
+                        "next": "somebody_did"
+                    },
+                    {
+                        "label": "Back.",
+                        "next": "the_chair"
+                    }
+                ]
+            }
+        ],
+        "somebody_did": [
+            {
+                "text": "\"Somebody sold to somebody who sold to somebody,\" Corse says. \"That is not the same sentence and the difference is the whole of commerce. I can give you the name of the man at Greyhythe who took the stock off me. He will give you a name. It will go four or five deep and then it will stop with a carter who is dead.\" He looks at you steadily. \"I am not saying that to close the subject. I am saying it because it is what will happen and I would rather you spent the winter on something else.\"",
+                "choices": [
+                    {
+                        "label": "Back.",
+                        "next": "the_chair"
+                    }
+                ]
+            }
+        ],
+        "the_stone": [
+            {
+                "text": "\"Then a surveyor of ours has been down there,\" Corse says, \"which I would expect, because we hold that ground and a man does not sign for ground he has not walked.\" He turns the pen around again. \"The workings under the old quarry are ours. They are lawful, they are on our own land, and there is no permit in this county for digging on your own ground because nobody ever thought one would be needed.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "corse_named_the_works"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"There are three thousand goblins living on top of your workings and they are being pushed up onto my road.\" Corse writes that down. He actually writes it down."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "What are you digging for?",
+                        "next": "he_does_not_know_either"
+                    },
+                    {
+                        "label": "Back.",
+                        "next": "the_chair"
+                    }
+                ]
+            }
+        ],
+        "he_does_not_know_either": [
+            {
+                "text": "\"Stone,\" Corse says. \"That is what is on the return and that is what I am costing it as.\" And then, because he has answered every other question completely and has apparently decided not to start being careful now: \"Between us, the tonnage does not justify it and I have said so twice. I am instructed to continue and to keep the works fully manned, and I do, because that is what a factor does with an instruction he thinks is poor.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "corse_doubts_the_dig"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera: \"He does not know. He genuinely does not know, and he has told us he does not know, and it has made everything worse.\""
+                    },
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric: \"Two hundred men underground for a thing you have twice said is not worth doing.\" Corse: \"Yes, brother. On time and under cost.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Back.",
+                        "next": "the_chair"
+                    }
+                ]
+            }
+        ],
+        "why_rivermark": [
+            {
+                "text": "\"It is where the road is,\" Corse says. \"Everything at the head of that valley has to come down past the town or go forty miles round. That is all Rivermark is, from a counting point of view — it is the narrow part.\" He hears himself and, to his credit, does not soften it. \"I am aware that is a poor thing to say about eleven hundred people. It is nevertheless why the house is interested and I would be lying if I dressed it.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "corse_said_the_narrow_part"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa: \"Say that again in the Flagon on a Friday and see how far you get to the door.\" Corse: \"I should not say it in the Flagon. I am saying it here, because you asked here.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "And when it stops being convenient?",
+                        "next": "he_does_not_answer_that_one"
+                    },
+                    {
+                        "label": "Back.",
+                        "next": "the_chair"
+                    }
+                ]
+            }
+        ],
+        "he_does_not_answer_that_one": [
+            {
+                "text": "\"That is a question about the future,\" Corse says, \"and I have made it a rule not to guess in front of people who will remember what I guessed.\" It is the first time in the whole conversation that he has declined anything, and he declines it so mildly that you are three streets away before you notice he did.",
+                "on_enter": [
+                    {
+                        "set_flag": "corse_declined_one"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Back.",
+                        "next": "the_chair"
+                    }
+                ]
+            }
+        ],
+        "he_sees_you_out": [
+            {
+                "text": "He comes to the door with you, tells you which way the towpath is less mud, and says that if you think of anything on the road you are to come back rather than write, because letters take a fortnight and he would rather have the conversation. You are at the bottom of the steps before you realise that you have four pages of true answers and not one thing you could take to Reed.",
+                "choices": [
+                    {
+                        "label": "Go.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_second_visit_is_easier": [
+            {
+                "text": "\"Most people find the second visit easier,\" Corse says, without a scrap of condescension. \"The first one you spend working out that I am going to answer. Come back when you have a question that costs you something to ask. Those are the only ones I enjoy.\"",
+                "choices": [
+                    {
+                        "label": "Go.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_long_room_invite": [
+            {
+                "text": "\"The back of the house is all paper,\" Corse says. \"Eleven presses. Everything the house knows about anywhere between here and the ford.\" He is already getting up. \"You may read any of it. I shall not stand over you and I shall not ask afterwards what you looked at, and I would ask you not to tell me, because I do not want to be in a position of having been told.\"",
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera: \"That is not trust. That is a man who knows nothing in that room can hurt him.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Then I'll read.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_factors_house",
+                                    "stage": "the_long_room"
+                                }
+                            }
+                        ],
+                        "next": "the_long_room_alone"
+                    },
+                    {
+                        "label": "Why isn't it locked?",
+                        "next": "of_course_i_would"
+                    },
+                    {
+                        "label": "No. I don't want the run of your house.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_factors_house",
+                                    "stage": "walked_out"
+                                }
+                            }
+                        ],
+                        "next": "he_sees_you_out"
+                    }
+                ]
+            }
+        ],
+        "of_course_i_would": [
+            {
+                "text": "\"Because a lock is an argument that something in there matters,\" Corse says. \"And because in nineteen years the only people who have ever come into that room uninvited were two boys after the lamp oil.\" He pauses at the passage door. \"Also because I should like you to read it. You have been walking about this valley collecting the same fact eleven times. It is all written down through there, in order, and it will take you an hour, and you will be no happier.\"",
+                "choices": [
+                    {
+                        "label": "Then I'll read it.",
+                        "conditions": [
+                            {
+                                "quest": "the_factors_house",
+                                "status": "active"
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_factors_house",
+                                    "stage": "asked_him_home"
+                                }
+                            }
+                        ],
+                        "next": "the_long_room_alone"
+                    },
+                    {
+                        "label": "Go through.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_long_room_alone": [
+            {
+                "text": "He goes to see about supper and leaves you alone with eleven presses and a lamp on a gimbal, and does not once look back down the passage. Somewhere in the house a clock keeps the same time as everything else. The drawers are labelled by year and by hundred, in one hand, and the hand is his.",
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric: \"He has left us in here.\" A long pause. \"I would like that to mean he is a good man and I am aware that it does not.\""
+                    },
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa is standing in the passage where she can see both doors, and she is going to stand there the whole time, and she is right to."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Find what Rivermark is entered at.",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "quest": "what_rivermark_is_worth"
+                                }
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "start_quest": "what_rivermark_is_worth"
+                            }
+                        ],
+                        "next": "the_figure_question"
+                    },
+                    {
+                        "label": "Find the drawer with the town in it.",
+                        "conditions": [
+                            {
+                                "quest": "what_rivermark_is_worth",
+                                "status": "active"
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "what_rivermark_is_worth",
+                                    "stage": "found_the_number"
+                                }
+                            }
+                        ],
+                        "next": "sheet_six"
+                    },
+                    {
+                        "label": "Close the press. I don't want the number.",
+                        "conditions": [
+                            {
+                                "quest": "what_rivermark_is_worth",
+                                "status": "active"
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "what_rivermark_is_worth",
+                                    "stage": "did_not_look"
+                                }
+                            }
+                        ],
+                        "next": "the_drawer_closed"
+                    },
+                    {
+                        "label": "Read nothing. Go back through.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_figure_question": [
+            {
+                "text": "\"Third press, by hundred, and the parish will be under the river rather than under the road,\" Corse says from the passage, without any hesitation at all. \"It is a small figure. I would rather you had it from the sheet than from me, because from me it will sound as though I am being brutal about it, and from the sheet it will only sound like arithmetic, which is what it is and which is worse.\"",
+                "choices": [
+                    {
+                        "label": "Go and find it.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "what_rivermark_is_worth",
+                                    "stage": "found_the_number"
+                                }
+                            }
+                        ],
+                        "next": "sheet_six"
+                    },
+                    {
+                        "label": "Leave the drawer shut.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "what_rivermark_is_worth",
+                                    "stage": "did_not_look"
+                                }
+                            }
+                        ],
+                        "next": "the_drawer_closed"
+                    }
+                ]
+            }
+        ],
+        "sheet_six": [
+            {
+                "text": "Eleven hundred souls. Four hundred and six roofs. A granary, a bridge, two mills of which one is burnt. And a total, in a column, between a weir and a stand of oak, added up by somebody paid by the day to add things up. It is less than the crane on the new landing cost. Nothing about it is cruel. Nobody wrote it to be cruel. That is the part you are going to be carrying about for a while.",
+                "on_enter": [
+                    {
+                        "set_flag": "rivermark_valued"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse reads it twice, and then says the figure out loud, and then apologises for saying it out loud."
+                    },
+                    {
+                        "companion": "sera",
+                        "text": "Sera: \"I have written a column like that. Not this one. But I have written one.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Close the drawer.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_drawer_closed": [
+            {
+                "text": "You stand with your hand on the press for a while, and then you push it shut, and the lamp swings on its gimbal and the shadows go round the room once. There is a version of the rest of your life in which you never know that number. It is not a very good version, and you have chosen it anyway.",
+                "choices": [
+                    {
+                        "label": "Go back through.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_offer": [
+            {
+                "text": "\"Five hundred,\" Corse says. \"That is not a haggling figure; it is what three years of chain-work and four hundred days of wages cost, and I would rather pay for it once than pay for it twice.\" He opens a drawer and takes out two sheets already written. \"And articles of retainer. Forty a quarter, services not further described. Do not agree yet — read the second sheet first, and note that there is no clause about ending it, and that nobody has ever asked for one.\"",
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric: \"They were already written.\" Corse: \"They are always already written, brother. Not for you. For whoever came.\""
+                    },
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa: \"Say no out loud so I've heard you say it.\""
+                    },
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"Five hundred is more than sheet six values the whole town at. Say that back to yourself before you answer.\""
+                    },
+                    {
+                        "companion": "sera",
+                        "text": "Sera, flatly: \"He is good for it. That was never the question and you know it wasn't.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Done.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_survey",
+                                    "stage": "sold_it_back"
+                                }
+                            }
+                        ],
+                        "next": "the_counting_out"
+                    },
+                    {
+                        "label": "Eight hundred, and you tell me what is under the quarry.",
+                        "check": {
+                            "skill": "persuasion",
+                            "dc": 18,
+                            "on_success": "he_pays_and_tells_you_nothing",
+                            "on_failure": "the_offer_stands"
+                        }
+                    },
+                    {
+                        "label": "No.",
+                        "next": "keeping_it"
+                    }
+                ]
+            }
+        ],
+        "the_offer_stands": [
+            {
+                "text": "\"Five hundred,\" Corse says again, in exactly the same tone. \"I do not bid against myself, and I could not tell you what is under the quarry if you offered me the paper for nothing, which is the part you will not believe and which is nevertheless the case.\"",
+                "choices": [
+                    {
+                        "label": "Take the five hundred.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_survey",
+                                    "stage": "sold_it_back"
+                                }
+                            }
+                        ],
+                        "next": "the_counting_out"
+                    },
+                    {
+                        "label": "No.",
+                        "next": "keeping_it"
+                    }
+                ]
+            }
+        ],
+        "he_pays_and_tells_you_nothing": [
+            {
+                "text": "\"Eight,\" Corse says, and pays it, and then keeps his side of it, which is the worst part: he sits down and tells you everything he knows about the workings under the quarry, honestly, for six or seven minutes, and at the end of it you understand the shift rota, the pump schedule, the tonnage and the cost per foot, and you know precisely as much as you did about what is at the bottom.",
+                "on_enter": [
+                    {
+                        "give_gold": 300
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Hand it over.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_survey",
+                                    "stage": "sold_it_back"
+                                }
+                            }
+                        ],
+                        "next": "the_counting_out"
+                    }
+                ],
+                "once": true
+            },
+            {
+                "text": "The eight hundred is counted and behind you. Corse does not revisit a price, and looks faintly puzzled that anyone would.",
+                "choices": [
+                    {
+                        "label": "Hand it over.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_survey",
+                                    "stage": "sold_it_back"
+                                }
+                            }
+                        ],
+                        "next": "the_counting_out"
+                    }
+                ]
+            }
+        ],
+        "the_counting_out": [
+            {
+                "text": "He counts it in front of you, slowly, and pushes the retainer across, and puts the survey in the drawer without unrolling it. Then he shakes your hand, and his hand is warm and perfectly steady, and he says: \"There. Now neither of us has to spend the winter wondering about the other. You will find that a relief within about a fortnight. Everybody does. That is not a threat and I should be sorry if you took it as one.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "keeping_it": [
+            {
+                "text": "\"No,\" Corse says, and puts the two sheets back in the drawer without any change of expression, \"I did not think you would, and it costs nothing to ask and it tells me a great deal.\" He straightens his cuff. \"You may walk out with it. I shall not stop you and there is nobody in this house who would. What I would like you to understand, before you decide it is a victory, is that the sheets are a record of what is true, and burning a record has never once made a thing untrue.\"",
+                "interjections": [
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa, at the door, without turning round: \"There are four men on the quay who weren't there when we came in.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Then I'll walk out with it.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_survey",
+                                    "stage": "took_the_survey"
+                                }
+                            }
+                        ],
+                        "next": "the_walk_out"
+                    },
+                    {
+                        "label": "Burn it here, on your table, with your lamp.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_survey",
+                                    "stage": "burned_the_survey"
+                                }
+                            }
+                        ],
+                        "next": "the_burning_here"
+                    },
+                    {
+                        "label": "Try walking out past the men on the quay.",
+                        "effects": [
+                            {
+                                "start_combat": "the_long_room_wardens"
+                            }
+                        ],
+                        "next": "the_wardens"
+                    }
+                ]
+            }
+        ],
+        "the_walk_out": [
+            {
+                "text": "He sees you to the door, as he always does, and tells you which way the towpath is less mud. The four men on the quay do not move and are not looking at you and have not been told to. Eleven miles later you are still waiting for the part where somebody stops you, and it does not come, and that is when you begin to understand what you are actually holding.",
+                "choices": [
+                    {
+                        "label": "Go home.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_burning_here": [
+            {
+                "text": "He does not put a hand out. He watches it go, and when it has gone he says, \"Four hundred and eleven days,\" and writes something on the pad in front of him, and you realise with a lurch that he is not recording the loss. He is recording you: that you did it in front of him, and how long you took to decide, and whether your hand was steady.",
+                "choices": [
+                    {
+                        "label": "Leave before he finishes writing.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_wardens": [
+            {
+                "text": "\"Ah,\" says Corse, and does not get up, and does not raise his voice, and finishes the sentence he was in the middle of. By the time he has finished it there are wardens between you and the front room. \"They are paid weekly,\" he says, apologetically. \"I would rather you had walked.\"",
+                "choices": [
+                    {
+                        "label": "Draw.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "it_changes_nothing": [
+            {
+                "text": "\"You have a record of what the ground is worth,\" Corse says. \"So do I; I have the field books it was made from and a chainman is walking the lines again as we speak, because a survey is not a secret, it is an expense.\" He offers you the chair once more. \"What you have actually taken is the only copy on which somebody wrote a word in the margin without thinking. That is worth something. It is only not worth what you have been hoping.\"",
+                "choices": [
+                    {
+                        "label": "'Clearance'.",
+                        "next": "the_word_clearance"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_word_clearance": [
+            {
+                "text": "\"It is a head in a column,\" Corse says. \"Everything that has to be paid for and removed before ground is worth its valuation goes under it. A hedge. A weir. A stand of oak.\" He does not look away and he does not soften it. \"Yes. And a town, if a town is in the way, and the figure beside it is not what it would cost to kill anybody, it is what it would cost to buy them out and move them, and it has been revised downward twice because the second time somebody costed it properly. That is the honest answer and I am sorry it is not a worse one.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "corse_explained_clearance"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric: \"Move them where?\" Corse: \"That would be under a different head, brother, and it has not been costed, because nobody has asked for it yet.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "he_explains_and_it_helps_nothing": [
+            {
+                "text": "He explains it. Fully, patiently, with an example about a weir, and at the end of four minutes you have understood every word and are no further forward than you were, and he can see that you have understood every word, and he is pleased, because he genuinely likes explaining things.",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "nothing_at_all": [
+            {
+                "text": "\"Nothing at all,\" Corse says. \"That is the point of a retainer. You are not being bought to do a thing; you are being bought so that when a thing comes up you are already ours and nobody has to have this conversation in a hurry.\" He pours. \"I have four such arrangements in this valley. Two of the four have never once been called on and both of them sleep extremely well.\"",
+                "choices": [
+                    {
+                        "label": "And the other two?",
+                        "next": "there_is_no_out"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "there_is_no_out": [
+            {
+                "text": "\"There is no out,\" Corse says, kindly. \"Not because I would prevent it — I would not, and you may burn the articles this afternoon. There is no out because the fact of it is that you took it, and I know, and you know I know, and there is no document anywhere that can be torn up to make that stop being so.\" He drinks. \"It really is a remarkably economical instrument.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "then_we_understand": [
+            {
+                "text": "\"Then we understand each other,\" Corse says, and writes it down, because he writes everything down. \"I shall tell you what happens next, since you will find out anyway. The house will want a name. I shall be asked for one, and I shall give the true answer, which is that I do not know. That will not be believed, and a man will come up from downriver who is not a factor and does not answer questions.\" He looks up. \"That is not a threat. It is a schedule.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "he_expected_nothing": [
+            {
+                "text": "\"I expected precisely this,\" Corse says. \"A town that knows what it is worth is a town that sells sooner and argues less, and I have written to the meeting to say so, because it would be dishonest of me to let them think you had cost us anything.\" For the first time there is something under the evenness — not anger. Something more like regret at being understood too late. \"You did the right thing. I want to be clear that I am saying so, and that it did not work.\"",
+                "choices": [
+                    {
+                        "label": "It worked for them. They know.",
+                        "next": "he_grants_it"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "he_grants_it": [
+            {
+                "text": "\"They know,\" Corse agrees. \"That is not nothing. In nineteen years it is the only thing anybody has ever taken off me that I could not put back.\" He turns his pen around on the desk. \"Come back in the spring. There will be more to say by then and I would rather say it to you than to whoever they send.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

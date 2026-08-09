@@ -1,0 +1,113 @@
+{
+    "npc_key": "odger_vance",
+    "start": "hail",
+    "nodes": {
+        "hail": [
+            {
+                "once": true,
+                "text": "The stock is laid on a trestle across the fire from the cart, and it is all of it second-hand: mail with the rings bright where somebody has worked a tear closed, a helm scoured back to the metal, three shortswords with three different grips.\n\nOdger Vance watches you look at it and says it before you can.\n\n\"It came up without its owner. All of it. That's why it's under her price and that's the only reason it's under her price, and I'd rather say it than have you work it out at the bottom of the stair.\"",
+                "choices": [
+                    {
+                        "label": "That doesn't trouble me.",
+                        "next": "doesnt_trouble"
+                    },
+                    {
+                        "label": "Doesn't anyone mind?",
+                        "next": "who_minds"
+                    },
+                    {
+                        "label": "Show me what you have.",
+                        "effects": [
+                            {
+                                "open_shop": "odger_vance"
+                            }
+                        ],
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "Vance is going over a mail skirt with a wire brush, ring by ring, and does not hurry it on your account.\n\n\"Trestle's the trestle,\" he says. \"Anything new on it is somebody's who isn't coming for it.\"",
+                "choices": [
+                    {
+                        "label": "Let's trade.",
+                        "effects": [
+                            {
+                                "open_shop": "odger_vance"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "Who brings it to you?",
+                        "next": "who_brings"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "doesnt_trouble": [
+            {
+                "text": "\"No. It doesn't trouble most.\" He turns a helm over and puts his thumb through where the scouring has thinned it. \"The ones it troubles buy from Wren, and they pay the day and a half for the privilege, and I have never once said a word against it. A man ought to be able to buy a sword that hasn't been anywhere.\"",
+                "choices": [
+                    {
+                        "label": "Show me what you have.",
+                        "effects": [
+                            {
+                                "open_shop": "odger_vance"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "who_minds": [
+            {
+                "text": "\"Their people mind. So I hold a thing three months before it goes on the trestle, and if anybody comes up the hill asking, they get it back and they don't pay me for it.\" The brush keeps going. \"Four have come, in nine years. I keep the room for the fifth.\"\n\n\"After three months it is nobody's, and nobody is who I sell to.\"",
+                "choices": [
+                    {
+                        "label": "Show me what you have.",
+                        "effects": [
+                            {
+                                "open_shop": "odger_vance"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "who_brings": [
+            {
+                "text": "\"Crews. Whoever was standing nearest.\" He sets the skirt down. \"There's no law up here and there's no law down there, so what there is instead is that a crew brings the kit up and I write down whose it was, and everybody can see I wrote it down.\"\n\n\"That is the entire arrangement. It has held nine years because it is the only one anybody proposed.\"",
+                "choices": [
+                    {
+                        "label": "Let's trade.",
+                        "effects": [
+                            {
+                                "open_shop": "odger_vance"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

@@ -1,0 +1,13 @@
+{
+    "npc_key": "bael_rourke",
+    "name": "Bael Rourke",
+    "role": "Overseer of the Works",
+    "description": "A big bearded man who came up through the headings and has the hands to prove it. He runs two hundred people underground on time and under cost, and is very proud of the first half of that.",
+    "sprite_key": "bael_rourke",
+    "image_url": "assets/images/npcs/captain.png",
+    "is_quest_giver": true,
+    "dialog": "bael_rourke",
+    "place": {
+        "location": "overseers_office"
+    }
+}

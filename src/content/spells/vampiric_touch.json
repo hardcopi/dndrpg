@@ -1,0 +1,23 @@
+{
+  "spell_key": "vampiric_touch",
+  "name": "Vampiric Touch",
+  "level": 3,
+  "school": "Necromancy",
+  "classes": [
+    "Warlock",
+    "Wizard"
+  ],
+  "resolution": "attack",
+  "damage_dice": "3d6",
+  "damage_type": "necrotic",
+  "target_kind": "enemy",
+  "reaches_back_rank": false,
+  "casting_time": "1 action",
+  "range_text": "Self",
+  "components": "V, S",
+  "duration": "Concentration, up to 1 minute",
+  "concentration": true,
+  "duration_rounds": 10,
+  "description": "The touch of your shadow-wreathed hand can siphon life force from others to heal your wounds. Make a melee spell attack against a creature within your reach.",
+  "source": "5e SRD"
+}

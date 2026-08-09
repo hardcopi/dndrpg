@@ -1,0 +1,13 @@
+{
+    "npc_key": "inn_sleeper",
+    "name": "Corbin Waite",
+    "role": "Bargeman",
+    "description": "Face down on the corner table of the Golden Flagon, and has been for two days. Not drunk. Stopped.",
+    "sprite_key": "corbin_waite",
+    "pose": "sleeping",
+    "image_url": "assets/images/npcs/farmer.png",
+    "dialog": "inn_sleeper",
+    "place": {
+        "location": "flagon_common_room"
+    }
+}

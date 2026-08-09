@@ -1,0 +1,25 @@
+{
+  "spell_key": "false_life",
+  "name": "False Life",
+  "level": 1,
+  "school": "Necromancy",
+  "classes": [
+    "Sorcerer",
+    "Wizard"
+  ],
+  "resolution": "heal",
+  "damage_dice": "1d4+4",
+  "target_kind": "self",
+  "casting_time": "1 action",
+  "range_text": "Self",
+  "components": "V, S, M",
+  "duration": "1 hour",
+  "description": "A brief simulation of life siphons the vitality of the dead, warding you against harm.",
+  "concentration": false,
+  "duration_rounds": 0,
+  "reaches_back_rank": true,
+  "effect": {
+    "temp_hp": true
+  },
+  "source": "5e SRD"
+}

@@ -1,0 +1,456 @@
+{
+    "npc_key": "wick_lorrimer",
+    "start": "hail",
+    "nodes": {
+        "hail": [
+            {
+                "conditions": [
+                    {
+                        "flag": "wick_in_town"
+                    }
+                ],
+                "text": "There is nobody at the mill. The pot is gone off the stone by the wheel-pit and the corner under the sound gable has been swept out, which he did before he left, because of course he did.\n\nThe race still runs.",
+                "choices": [
+                    {
+                        "label": "Walk on.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "miller_fate",
+                        "equals": "stayed"
+                    }
+                ],
+                "once": true,
+                "text": "There is a roof on the sound gable now and a door that shuts, and Wick Lorrimer is standing in the wheel-pit up to his knees clearing weed out of the race.\n\n\"Want doing again Thursday,\" he says. \"Everything wants doing again Thursday.\"",
+                "choices": [
+                    {
+                        "label": "Thursday, then.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "miller_fate",
+                        "equals": "paper"
+                    }
+                ],
+                "once": true,
+                "text": "\"They've had it copied,\" Wick says. \"Whole thing, into the town's book, with the date on it.\" He is up to his knees in the race and does not appear to consider this the important part of his week. \"Man asked me if I understood what it meant. I said no. He explained it. I still said no.\"\n\nA pause.\n\n\"Does it mean I have to move?\"",
+                "choices": [
+                    {
+                        "label": "No.",
+                        "next": "he_does_not_have_to_move"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_miller_who_stayed",
+                        "stage": "the_race_he_keeps"
+                    }
+                ],
+                "text": "He is in the race again with the weed-hook, which is where he has been every time you have come.\n\n\"You'll be back about the letter,\" he says, without looking up. \"I did wonder if you'd work out that was the question.\"",
+                "choices": [
+                    {
+                        "label": "Show me the letter.",
+                        "next": "the_letter"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_burnt_mill",
+                        "stage": "the_counting_loft"
+                    }
+                ],
+                "text": "\"You've been looking at the beam-ends,\" Wick says. \"Everyone who's ever come out here has looked at the beam-ends for about four seconds and then looked at me instead.\"\n\nHe puts the hook down.\n\n\"Go on, then. Which end did it start.\"",
+                "choices": [
+                    {
+                        "label": "The counting loft. River side, high.",
+                        "next": "the_loft"
+                    },
+                    {
+                        "label": "You tell me.",
+                        "next": "the_loft"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_burnt_mill",
+                        "stage": "go_and_look"
+                    }
+                ],
+                "text": "There is a man in the wheel-pit up to his knees in black water with a weed-hook, and he has heard you coming and has decided to finish the length he is on first.\n\n\"Wick Lorrimer,\" he says eventually. \"Milled here eighteen years.\" He straightens up. \"It burned four years ago. You'll have heard that in town. That's usually all anyone's heard.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_wick"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Nobody in town knows which year.",
+                        "next": "which_year"
+                    },
+                    {
+                        "label": "Why are you clearing a race that turns nothing?",
+                        "next": "why_the_race"
+                    },
+                    {
+                        "label": "Where did the fire start?",
+                        "next": "the_loft"
+                    }
+                ]
+            },
+            {
+                "text": "There is a man in the wheel-pit, up to his knees in black water, working a weed-hook along a race that runs perfectly well past a building that has not needed it in four years.\n\n\"You'll want the road,\" he says. \"It's downstream.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_wick"
+                    },
+                    {
+                        "start_quest": "the_burnt_mill"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric: \"There is a pot on that stone and it has been used this week.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "You live here.",
+                        "next": "which_year"
+                    },
+                    {
+                        "label": "Why keep the race clear?",
+                        "next": "why_the_race"
+                    },
+                    {
+                        "label": "The road, then.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "he_does_not_have_to_move": [
+            {
+                "text": "\"Right,\" he says, and goes back to the weed. \"Good. Race wants doing Thursday.\"",
+                "choices": [
+                    {
+                        "label": "Thursday.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "which_year": [
+            {
+                "text": "\"Four years,\" Wick says. \"Second week after Michaelmas. Everybody in Rivermark can tell you the mill burned and not one of them can tell you the year, and I've thought about why that is more than is good for me.\"\n\nHe wipes the hook on his leg.\n\n\"It's because the mill burning isn't a thing that happened to anybody. It's just a thing about the road now. Like the ford.\"",
+                "on_enter": [
+                    {
+                        "start_quest": "the_miller_who_stayed"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Where did it start?",
+                        "next": "the_loft"
+                    },
+                    {
+                        "label": "Why are you still here?",
+                        "next": "why_the_race"
+                    },
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_loft": [
+            {
+                "text": "Every charred beam-end in the standing walls points inward, which is what happens when a roof comes down on a fire rather than a fire going up into a roof.\n\nAnd the scorching is worst at the river end, high, on the stone that carried the counting loft — where the mill kept its paper, its tallies and its books, and where nobody ever lit anything, because you do not put a flame in a room full of dust and ledgers.\n\n\"Aye,\" Wick says, from the pit. \"I said that to the watch. The watch wrote it down.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_burnt_mill",
+                            "stage": "the_counting_loft"
+                        }
+                    },
+                    {
+                        "set_flag": "mill_loft_scorch"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera has her hand flat on the scorched stone. \"No flue,\" she says. \"No lamp bracket. No hearth on this wall at any level.\""
+                    },
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa: \"Somebody stood in a room full of paper and started a fire in it.\" Wick, mildly: \"That's the shape of it, aye.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Then I'll write it down properly and it'll stay written.",
+                        "next": "found_the_cause"
+                    },
+                    {
+                        "label": "This place could be a shelter. Let's make it one.",
+                        "next": "made_a_shelter"
+                    },
+                    {
+                        "label": "Why do you still clear the race?",
+                        "next": "why_the_race"
+                    },
+                    {
+                        "label": "Give me the hook. I'll do the pit.",
+                        "next": "the_wheel_pit"
+                    },
+                    {
+                        "label": "Three walls and running water. I'll leave it.",
+                        "next": "left_the_mill"
+                    }
+                ]
+            }
+        ],
+        "the_wheel_pit": [
+            {
+                "text": "He hands the hook over without an argument, which after four years of doing it himself is either trust or exhaustion.\n\nThe pit is stone, ten feet deep, and it holds four years of black water over four years of grain-dust that came off the floor above when the floor above came down. Everything that has been living off that comes up the wall at once.",
+                "on_enter": [
+                    {
+                        "start_combat": "mill_race_vermin"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Back to the wall.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "found_the_cause": [
+            {
+                "text": "It goes down in full: the beam-ends, the inward fall, the scorching high on the river wall where there was never a flue, a lamp bracket or a hearth at any level, and the fact that the room that burned first was the room the paper was in.\n\nIt does not tell you who. It is not going to. What it does is exist, in writing, with a date on it, which is more than the four years before it managed.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_burnt_mill",
+                            "stage": "found_the_cause"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Close the book.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "made_a_shelter": [
+            {
+                "text": "Two days: the roof-fall out of the south end, hurdles across the gap, a slate over the fire-back, and the door re-hung on the pins that were still in the frame because they were iron and iron does not burn.\n\nWick watched all of it and helped with none of it and did not once suggest you stop. On the way back you tell the fold at the drovers' rest that there is a dry wall two miles up the road. Four of them use it inside the week.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_burnt_mill",
+                            "stage": "made_it_a_shelter"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric, on the roof, with a hurdle: \"This is the only thing we have done this month that will still be doing its job in ten years.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Leave the door on the latch.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "left_the_mill": [
+            {
+                "text": "\"Right,\" Wick says, and goes back to the weed.\n\nThe race runs. It is the only thing here that still does its job.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_burnt_mill",
+                            "stage": "left_the_mill"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Go.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "why_the_race": [
+            {
+                "text": "Wick Lorrimer stops working, which he has not done for anything else you have said.\n\n\"A race that's kept is a race that's still got a right on it,\" he says. \"A race that's silted is a ditch, and a ditch hasn't got a right on it, and after seven years a right nobody's used stops being a right at all.\"\n\nHe leans on the hook.\n\n\"I didn't know that. I worked it out about eleven months after the fire, off a letter that came here by mistake, and I've cleared this race every week since.\"",
+                "on_enter": [
+                    {
+                        "start_quest": "the_miller_who_stayed"
+                    },
+                    {
+                        "quest_stage": {
+                            "quest": "the_miller_who_stayed",
+                            "stage": "the_race_he_keeps"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera: \"Seven years. He has kept a water right alive with a hook and a bad back for four of them.\""
+                    },
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"Whose letter.\" Wick: \"That's the question, isn't it. I've had four years on that one.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Show me the letter.",
+                        "next": "the_letter"
+                    },
+                    {
+                        "label": "Come into town. You can't winter here again.",
+                        "next": "bring_him_in"
+                    },
+                    {
+                        "label": "Later.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_letter": [
+            {
+                "text": "It is an instruction to a clerk, not a letter to a man, and it came to the mill because somebody's boy could not read a direction. It concerns the water right on the mill race: what it is, who holds it, what would need to happen for it to fall in, and what the holding is expected to be worth once it does.\n\nIt is dated three weeks before the fire.\n\n\"Aye,\" Wick says. \"That's the bit.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "mill_race_letter_seen"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera reads it twice and then reads the date twice. \"Three weeks,\" she says. \"That is not a coincidence and it is also not evidence, and I hate that both of those are true.\""
+                    },
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric: \"He has had this in a burnt building for four years.\" Wick: \"Where else was I going to put it.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "This goes to the counting house and gets entered.",
+                        "next": "to_paper"
+                    },
+                    {
+                        "label": "Come into town with me.",
+                        "next": "bring_him_in"
+                    },
+                    {
+                        "label": "Then stay, and we'll make this place fit to stay in.",
+                        "next": "let_him_stay"
+                    }
+                ]
+            }
+        ],
+        "to_paper": [
+            {
+                "text": "The counting house copies it, dates it, and files it against the mill, and the clerk who does it goes quiet halfway through and starts again from the top.\n\nThe debt on the mill was discharged twice: once by the mill, in the year before the fire, and once by whoever bought the holding after it stopped existing. Both discharges are in the town's own book, three pages apart, and nobody has ever had cause to read the two of them on the same afternoon.\n\nWick does not care about any of this. He asks whether it means he has to move.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_miller_who_stayed",
+                            "stage": "took_it_to_paper"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera: \"Paid twice. Somebody bought a debt that was already dead so that there would be a purchase on the record.\" She stops. \"That is not fraud. That is worse than fraud, because it is legal.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Tell him no.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "bring_him_in": [
+            {
+                "text": "It takes most of an evening to talk him into it and about four minutes for him to pack, which are two facts that sit badly together.\n\nHe sleeps in the Flagon's back room on Mara's charity, which she will be calling rent inside a fortnight in order to spare him. On the first night he sits up in the common room until the fire goes out, because he has not been indoors after dark in four years and cannot work out what a person does in a room.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_miller_who_stayed",
+                            "stage": "brought_him_in"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric sits up with him and does not talk, which is the correct thing and is not an obvious one."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Let him sit.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "let_him_stay": [
+            {
+                "text": "A roof on the sound gable, a door that shuts, the wheel-pit swept, and two days' work that he did not ask for and did not stop.\n\nHe does not thank anybody. At the end of it he says the race will want doing again on Thursday, which he says about everything, and which you have started to understand is how this man says most things.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_miller_who_stayed",
+                            "stage": "let_him_stay"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Thursday, then.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

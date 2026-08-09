@@ -1,0 +1,23 @@
+{
+  "spell_key": "spike_growth",
+  "name": "Spike Growth",
+  "level": 2,
+  "school": "Transmutation",
+  "classes": [
+    "Druid",
+    "Ranger"
+  ],
+  "resolution": "auto",
+  "damage_dice": "2d4",
+  "damage_type": "piercing",
+  "target_kind": "all_enemies",
+  "reaches_back_rank": true,
+  "casting_time": "1 action",
+  "range_text": "150 feet",
+  "components": "V, S, M",
+  "duration": "Concentration, up to 10 minutes",
+  "concentration": true,
+  "duration_rounds": 10,
+  "description": "The ground in the area sprouts hard spikes and thorns. Any creature moving through the tangle takes piercing damage for the trouble.",
+  "source": "5e SRD"
+}

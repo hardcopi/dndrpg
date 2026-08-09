@@ -1,0 +1,16 @@
+{
+    "item_key": "uv_cracked_lamp",
+    "name": "Cracked Delving Lamp",
+    "description": "The gauze is split down one side and the brass is dented half round, which is why it came up the hill in a spoil basket instead of on a belt. It still lights, and it still burns the eleven hours it was made to burn.",
+    "item_type": "misc",
+    "rarity": "common",
+    "weight": 3,
+    "value_gp": 6,
+    "properties": {
+        "light": true
+    },
+    "icon": "lantern",
+    "place": {
+        "location": "uv_spoil"
+    }
+}

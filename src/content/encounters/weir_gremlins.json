@@ -1,0 +1,14 @@
+{
+  "encounter_key": "weir_gremlins",
+  "name": "Toll at the Weir",
+  "description": "Four of them on the ledge above the fall, with hooked poles, taking a very reasonable view of who owns anything a stranger is carrying past their pool.",
+  "difficulty": "medium",
+  "monsters": [
+    { "monster": "sump_gremlin", "quantity": 4 }
+  ],
+  "allow_flee": true,
+  "allow_parley": false,
+  "victory_flag": "weir_gremlins_beaten",
+  "ambush": true,
+  "place": { "location": "weir_chamber" }
+}

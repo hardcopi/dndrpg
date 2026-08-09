@@ -1,0 +1,99 @@
+{
+    "quest_key": "the_watch_payroll",
+    "title": "The Watch Payroll",
+    "description": "Rivermark's watch has been paid in full and on the day for fourteen months. The town account has not been able to cover the watch since spring, and Captain Reed has only just worked out that both of those are true.",
+    "giver": "captain_elowen",
+    "on_job_board": false,
+    "required_level": 2,
+    "rewards": {
+        "xp": 350,
+        "gold": 60
+    },
+    "stages": {
+        "ask_the_clerk": {
+            "title": "Ask the counting house",
+            "objective": "Find out where the watch's wages are coming from.",
+            "journal": "Reed signs the watch roll every quarter day and every quarter day the money is there. She has never once had to argue with the council about it, which she now finds remarkable, because she has had to argue about the price of lamp oil twice this year.",
+            "target": {
+                "location": "counting_house"
+            }
+        },
+        "the_standing_order": {
+            "title": "The shortfall",
+            "objective": "Somebody makes up the difference. Find out who.",
+            "journal": "The town account pays about two thirds of the watch roll. The rest arrives four days before each quarter day from a house account at Greyhythe, by letter, and the letters are not kept because the instruction each time is that they are not to be. Tibald Ashe has never met anyone connected with it. He has been putting it through the book for fourteen months and he has been unhappy about it for thirteen.",
+            "target": {
+                "location": "counting_house"
+            }
+        },
+        "refused_the_money": {
+            "title": "Sent back",
+            "journal": "Reed sent the quarter back and told the council to find it. The council found about half. Four men left the watch inside the month — two of them to the granary, which pays better and always did — and the night patrol on the west side has been dropped. Reed says she will take a smaller watch that is hers over a whole one that is somebody else's, and she says it like a woman who has thought about very little else for a fortnight.",
+            "resolution": "refused_the_money",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "watch_payroll_fate",
+                    "value": "refused"
+                },
+                {
+                    "set_flag": "watch_thin"
+                },
+                {
+                    "approval": {
+                        "ilse": 10,
+                        "aldric": 8,
+                        "kessa": -4,
+                        "sera": -6
+                    }
+                }
+            ]
+        },
+        "let_it_stand": {
+            "title": "Nothing said",
+            "journal": "Reed let it stand. Twenty-six men are paid on the day, the west side is patrolled at night, and the alternative was a watch of eighteen. She wrote a note of it in her own book, in her own hand, and did not put it in the day book where it would be read. We have not spoken about it since.",
+            "resolution": "let_it_stand",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "watch_payroll_fate",
+                    "value": "kept"
+                },
+                {
+                    "set_flag": "reed_took_it"
+                },
+                {
+                    "approval": {
+                        "sera": 8,
+                        "kessa": 4,
+                        "aldric": -8,
+                        "ilse": -6
+                    }
+                }
+            ]
+        },
+        "told_the_watch": {
+            "title": "The watch is told",
+            "journal": "I told the watch themselves, in the guardroom, with Reed standing there because I was not going to do it behind her. They took it about as well as men take that. They have all kept the money. Six of them have stopped calling her Captain when she is not in the room, and Ballow, who has twenty-two years in, said the thing everybody was thinking: then who is it we work for, and how would we know.",
+            "resolution": "told_the_watch",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "watch_payroll_fate",
+                    "value": "told"
+                },
+                {
+                    "set_flag": "watch_knows"
+                },
+                {
+                    "approval": {
+                        "ilse": 6,
+                        "kessa": 8,
+                        "aldric": -4,
+                        "sera": -8
+                    }
+                }
+            ]
+        }
+    }
+}

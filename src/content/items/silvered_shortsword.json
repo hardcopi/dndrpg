@@ -1,0 +1,13 @@
+{
+  "item_key": "silvered_shortsword",
+  "name": "Silvered Shortsword",
+  "description": "A light blade sheathed in silver, kept for the things steel does not trouble.",
+  "item_type": "weapon",
+  "rarity": "uncommon",
+  "weight": 2,
+  "value_gp": 110,
+  "damage_dice": "1d6",
+  "damage_type": "piercing",
+  "properties": { "finesse": true, "light": true, "silvered": true, "martial": true },
+  "icon": "sword"
+}

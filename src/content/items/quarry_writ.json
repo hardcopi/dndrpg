@@ -1,0 +1,14 @@
+{
+  "item_key": "quarry_writ",
+  "name": "Reeve's Writ of Carriage",
+  "description": "A grain factor's writ, signed and sealed, permitting one wagon to pass the east gate unsearched.",
+  "item_type": "misc",
+  "rarity": "uncommon",
+  "weight": 1,
+  "value_gp": 0,
+  "properties": {
+    "quest_item": true,
+    "readable": true
+  },
+  "icon": "scroll"
+}

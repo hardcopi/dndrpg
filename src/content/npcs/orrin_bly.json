@@ -1,0 +1,12 @@
+{
+    "npc_key": "orrin_bly",
+    "name": "Orrin Bly",
+    "role": "Tallyman at the Mouth",
+    "description": "A tallyman by his own appointment, with a slate he keeps at the stair head and four hundred names written on it in a hand that has never once been hurried. He was a delver until the winch stopped being trusted, and has not been past the sixth step since.",
+    "sprite_key": "orrin_bly",
+    "is_quest_giver": true,
+    "dialog": "orrin_bly",
+    "place": {
+        "location": "uv_mouth"
+    }
+}

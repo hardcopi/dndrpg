@@ -1,0 +1,268 @@
+{
+    "npc_key": "serjeant_ballow",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "quest": "the_almoners_list",
+                        "stage": "read_the_list"
+                    }
+                ],
+                "text": "The man on the west arch is somewhere past fifty, with the collar of a serjeant and the posting of a probationer, and he watches you cross the whole distance from the High Street before he speaks.\n\n\"Ballow,\" he says. \"Nobody comes down here to talk to me, so you want something, and it is not the road, because the road goes to farms.\" A pause. \"Which means it is the farms.\"",
+                "choices": [
+                    {
+                        "label": "Thirty-six families off the west road in eight months.",
+                        "next": "he_has_counted"
+                    },
+                    {
+                        "label": "How did you know?",
+                        "next": "how_he_knew"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "watch_knows"
+                    }
+                ],
+                "text": "Ballow is standing a good deal straighter than the west gate requires. \"Twenty-two years,\" he says, \"and I have never once wondered who paid me. That is not a thing a man is supposed to have to wonder.\" He looks along the road. \"I have kept the money. All of us kept the money. I want you to know I know how that sounds.\"",
+                "choices": [
+                    {
+                        "label": "It sounds like a man with a family.",
+                        "next": "a_man_with_a_family"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "reed_took_it"
+                    }
+                ],
+                "text": "\"Paid on the day,\" says Ballow, \"same as the last fourteen. Twenty-six of us and the west side walked twice a night.\"\n\nHe looks along the road, and it takes him a moment to get to the rest of it.\n\n\"The captain has stopped saying the roll is met,\" he says. \"She used to say it. Every quarter day, in the guardroom — the roll is met, gentlemen. She has not said it since about Lent and I do not think she knows she has stopped.\"",
+                "choices": [
+                    {
+                        "label": "Would you rather she had sent it back?",
+                        "next": "would_you_rather"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "watch_thin"
+                    }
+                ],
+                "text": "\"Four gone,\" says Ballow. \"Two to the granary, one to the stone yard, one to his brother at Greyhythe. West side gets no night patrol at all now.\" He shifts his weight. \"And the captain sent the money back, in front of the council, with her name on it. So that is what the four of them cost and I have not decided what I think and I have had a fortnight.\"",
+                "choices": [
+                    {
+                        "label": "Was she right?",
+                        "next": "was_she_right"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "west_holdings_recorded"
+                    }
+                ],
+                "text": "\"It is in the day book,\" says Ballow, and he says it like a man reporting a thing done rather than a thing achieved. \"Reed had me read the thirty-six names back to her out loud while she wrote. Took a quarter of an hour.\" He looks along the road west. \"I knew eleven of them to speak to.\"",
+                "choices": [
+                    {
+                        "label": "Any of them come back?",
+                        "next": "none_come_back"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "A serjeant of the watch stands under the west arch with nothing whatever to do, and does it properly: back straight, eyes on the road, hands behind him.\n\n\"West gate,\" he says. \"Ford road out, farms and the burnt mill beyond. Nobody stops anybody here. If you are going out, go; if you are coming in, welcome to Rivermark, and mind the fourth cobble.\"",
+                "choices": [
+                    {
+                        "label": "Quiet posting.",
+                        "next": "quiet_posting"
+                    },
+                    {
+                        "label": "Thanks.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "quiet_posting": [
+            {
+                "text": "\"It is the posting the watch gives a man when it has stopped expecting anything of him,\" says Ballow, without any particular feeling. \"Twenty-two years. Four of them here.\" He looks along the road. \"I do not mind it as much as I am supposed to. You see a great deal from a gate nobody thinks is worth watching.\"",
+                "choices": [
+                    {
+                        "label": "What have you seen?",
+                        "next": "what_he_saw"
+                    },
+                    {
+                        "label": "Thanks.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "what_he_saw": [
+            {
+                "text": "\"Families,\" says Ballow. \"Coming in. All year.\"\n\nHe says it in the flat voice of a man who has been waiting a long while for somebody to ask and has decided in advance not to make anything of it.\n\n\"In daylight. With their tools. Which is what has been sitting wrong with me since about the fifth one.\"",
+                "choices": [
+                    {
+                        "label": "Why does that sit wrong?",
+                        "next": "he_has_counted"
+                    },
+                    {
+                        "label": "Thanks.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "how_he_knew": [
+            {
+                "text": "\"Because I have been standing here for four years watching them come in,\" says Ballow, \"and because sooner or later somebody was going to.\" He almost smiles and thinks better of it. \"I have told two people. One was my wife. The other was Wyke's predecessor, who died.\"",
+                "choices": [
+                    {
+                        "label": "Tell me, then.",
+                        "next": "he_has_counted"
+                    }
+                ]
+            }
+        ],
+        "he_has_counted": [
+            {
+                "text": "\"Thirty-eight,\" says Ballow. \"Not thirty-six. Two of them went straight through and down to the river stair and took a boat, so they never got on the almoner's book.\"\n\nHe has clearly been keeping the number in his head for months.\n\n\"They come in daylight, in families, with their tools on a cart. That is not a farm that has failed — that is a farm that has been *sold*, and a man who has sold walks in the front the way I am standing here now.\" He shifts. \"Every one of them had sold. Not one of them would say to whom. I asked the first eleven, and after the eleventh I stopped, on account of how they looked at me when I did.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_almoners_list",
+                            "stage": "the_west_gate"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"Not frightened of you. Ashamed in front of you. Those look nearly the same and they are not.\""
+                    },
+                    {
+                        "companion": "aldric",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "companion": "ilse",
+                                    "status": "active"
+                                }
+                            }
+                        ],
+                        "text": "Aldric: \"They would not name the buyer. Men who have been cheated name the buyer at once, and loudly.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "How did they look at you?",
+                        "next": "how_they_looked"
+                    },
+                    {
+                        "label": "Did anyone ever come the other way? Buyers, surveyors, agents?",
+                        "next": "the_other_way"
+                    },
+                    {
+                        "label": "Thank you, serjeant.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "how_they_looked": [
+            {
+                "text": "Ballow takes his time over it.\n\n\"Like men who had done a sensible thing,\" he says at last, \"and did not want to have to explain to a watchman why a sensible thing had put them on the parish inside a twelvemonth.\"\n\nHe puts his hands back behind him.\n\n\"That is the part I could not put down. Nobody was angry. If somebody had cheated them there would have been one angry man in thirty-eight, and there was not one.\"",
+                "choices": [
+                    {
+                        "label": "Did anyone ever come the other way?",
+                        "next": "the_other_way"
+                    },
+                    {
+                        "label": "Thank you, serjeant.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_other_way": [
+            {
+                "text": "\"Out?\" Ballow considers the road. \"Carts, drovers, the priory's people twice a month, and a surveying party in the spring with rods and a chain, which I logged, because you log a surveying party.\"\n\n\"Whose?\"\n\n\"Town's, I assumed. Roads get measured.\" He frowns slightly, for the first time. \"I did assume that. Nobody told me it.\"\n\nHe lets it go, and so does the conversation, because there is nothing there to hold on to.",
+                "choices": [
+                    {
+                        "label": "Thank you, serjeant.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "none_come_back": [
+            {
+                "text": "\"Not one,\" says Ballow. \"That is the other thing I have kept in my head. Thirty-eight families out of that road, and in four years not one man has gone back out to have a look at what somebody else is doing with his ground.\"\n\nHe watches the empty road for a moment.\n\n\"I would,\" he says. \"I would not be able to keep away.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "a_man_with_a_family": [
+            {
+                "text": "\"Three,\" says Ballow. \"Two of them grown and one of them still eating.\" He looks at the road. \"So yes. I have kept it, and I will keep the next one, and I will go on standing on this gate for whoever it turns out I am standing on it for, and the only thing that has changed is that I know I do not know.\"\n\nA long pause.\n\n\"That is worse than I expected it to be,\" he says. \"I want that on the record with somebody.\"",
+                "choices": [
+                    {
+                        "label": "It's on the record.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "would_you_rather": [
+            {
+                "text": "\"No,\" says Ballow, immediately, and then stands there with it.\n\n\"No,\" he says again. \"I have got three at home and one of them still eating, and a watch of eighteen does not walk this gate at all, and then I am a serjeant of nothing.\"\n\nHe puts his hands behind him.\n\n\"But I should have liked to be asked,\" he says. \"That is the whole of my complaint and I am aware it is a small one. Twenty-two years, and the question of who I work for was settled in a room I was not in.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "was_she_right": [
+            {
+                "text": "\"Yes,\" says Ballow immediately, and then stands there for a while.\n\n\"Yes,\" he says again. \"And Mattock's widow has no lodger's rent now and the west side is dark from midnight, and both of those are also true, and I have been a watchman twenty-two years and I have never once been able to hold two true things at the same time without one of them going bad.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

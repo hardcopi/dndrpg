@@ -1,0 +1,13 @@
+{
+    "npc_key": "street_almoner",
+    "name": "Dagen Wyke",
+    "role": "Almoner",
+    "description": "Keeps the parish dole and the list of who is on it. Has kept the list nineteen years and has never yet crossed a name off for the right reason.",
+    "sprite_key": "dagen_wyke",
+    "image_url": "assets/images/npcs/cleric.png",
+    "is_quest_giver": true,
+    "dialog": "street_almoner",
+    "place": {
+        "location": "high_street"
+    }
+}

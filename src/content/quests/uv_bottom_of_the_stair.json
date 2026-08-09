@@ -1,0 +1,34 @@
+{
+    "quest_key": "uv_bottom_of_the_stair",
+    "title": "The Bottom of the Stair",
+    "description": "Orrin Bly's slate has a column for how deep, and the deepest number on it is four. He has been leaving room under it for nine years.",
+    "giver": "orrin_bly",
+    "on_job_board": true,
+    "required_level": 5,
+    "rewards": {
+        "xp": 800,
+        "gold": 250,
+        "item": "potion_healing_greater"
+    },
+    "stages": {
+        "go_to_the_bottom": {
+            "title": "As far down as it goes",
+            "objective": "Reach the fifth floor of the Undervault and come back to tell Orrin Bly.",
+            "journal": "Bly writes down who goes down and who comes up, and beside it how deep they say they got. The deepest figure on the slate is a four, entered six years ago by a woman who did not go down again. He wants to know whether there is a bottom or whether the stair just keeps offering.",
+            "target": {
+                "location": "uv_mouth"
+            }
+        },
+        "told_him": {
+            "title": "There is a bottom",
+            "journal": "Five floors, and below the fifth the stair does not offer. Bly ruled a line under the four, wrote the five beneath it, and then sat for a while without writing anything else.",
+            "resolution": "told_him",
+            "terminal": true,
+            "effects": [
+                {
+                    "xp": 200
+                }
+            ]
+        }
+    }
+}

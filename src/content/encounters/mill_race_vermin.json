@@ -1,0 +1,13 @@
+{
+  "encounter_key": "mill_race_vermin",
+  "name": "The Wheel-Pit",
+  "description": "Four years of grain-dust in a stone pit full of black water, and everything that has been living off it comes up the wall at once.",
+  "difficulty": "medium",
+  "monsters": [
+    {"monster": "giant_rat", "quantity": 4, "rank": "front"},
+    {"monster": "stirge", "quantity": 2, "rank": "back"}
+  ],
+  "allow_flee": true,
+  "allow_parley": false,
+  "victory_flag": "mill_pit_cleared"
+}

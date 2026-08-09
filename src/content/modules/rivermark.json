@@ -1,0 +1,8 @@
+{
+    "module_key": "rivermark",
+    "name": "Rivermark Chronicles",
+    "blurb": "A trade town on a tired river, and the country it is losing hold of. Something is emptying the holdings west of the water, the priory has stopped answering letters, and the quarry road is not safe after dark. Start at the Golden Flagon and follow whichever thread pulls hardest.",
+    "start_location_key": "flagon_common_room",
+    "attribution": "Original setting and story. Rules content from the System Reference Document 5.1 and 5.2, CC-BY 4.0.",
+    "sort_order": 10
+}

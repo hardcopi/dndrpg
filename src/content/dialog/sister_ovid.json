@@ -1,0 +1,284 @@
+{
+    "npc_key": "sister_ovid",
+    "start": "hail",
+    "nodes": {
+        "hail": [
+            {
+                "conditions": [
+                    {
+                        "flag": "priory_record_cut"
+                    }
+                ],
+                "text": "The fourth press is open on the desk at the decade and there is a leather marker in it and a gutter with a clean cut in it where a leaf used to be.\n\nOvid has not said anything about it to anybody. She looks up when you come in and looks down again.\n\n\"It was a good knife,\" she says.",
+                "choices": [
+                    {
+                        "label": "It was.",
+                        "next": "it_was"
+                    },
+                    {
+                        "label": "Say nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "priory_record_read"
+                    }
+                ],
+                "text": "\"You have read it,\" Ovid says. \"You will want to read it again. Everybody does, once, about three days later, and then not after that.\"\n\nShe turns the press round on the desk without being asked.",
+                "choices": [
+                    {
+                        "label": "Read it again.",
+                        "next": "eleven_lines"
+                    },
+                    {
+                        "label": "Not today.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_ford_in_the_record",
+                        "stage": "eleven_lines"
+                    }
+                ],
+                "text": "The press is open at the decade and the volume is on the desk under the best window in the house, squared to the edge.\n\n\"The fourth winter,\" Ovid says. \"Second week. It is eleven lines and it is in the infirmarer's hand, and I am going to go and do something at the other end of the room.\"",
+                "choices": [
+                    {
+                        "label": "Read it.",
+                        "next": "eleven_lines"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_ford_in_the_record",
+                        "stage": "the_fourth_press"
+                    }
+                ],
+                "text": "Four desks under the best window in the house, three of them stacked and one of them kept clear, and along the north wall the cartulary presses — every deed, grant, boundary and account this order has held since it was founded, bound by decade, in order, dusted.\n\nThe woman at the clear desk is old, unhurried, and does not stop writing when you come in.\n\n\"Ovid,\" she says. \"I keep the presses. Say the decade and I will get it down, and do not touch the presses yourself, because you will put them back wrong and then it will be wrong for two hundred years.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_ovid"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "The fourth winter back. The ford.",
+                        "next": "the_fourth_press"
+                    },
+                    {
+                        "label": "Does anyone ask for these?",
+                        "next": "does_anyone_ask"
+                    },
+                    {
+                        "label": "Nothing. Sorry to disturb you.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "The only warm room in the priory, and it is warm because the presses must not damp.\n\nAn old woman at the one clear desk finishes the line she is on before she looks up.\n\n\"Ovid,\" she says. \"Presses. Say the decade.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_ovid"
+                    },
+                    {
+                        "start_quest": "the_ford_in_the_record"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera has read the spines of the whole north wall before anybody has finished saying hello. \"A hundred and forty years,\" she says. \"Complete. I have never seen a complete one.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "The fourth winter back. The ford.",
+                        "next": "the_fourth_press"
+                    },
+                    {
+                        "label": "What's in them?",
+                        "next": "does_anyone_ask"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "it_was": [
+            {
+                "text": "\"I have not told the prior,\" Ovid says. \"I will, because I write everything down and that includes this, and I have not yet worked out the sentence.\"\n\nShe closes the press.\n\n\"A hundred and forty years and this house has never had a gap in it. Now it has one, and the gap is the only interesting thing that ever happened to us.\"",
+                "choices": [
+                    {
+                        "label": "Say nothing and go.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "does_anyone_ask": [
+            {
+                "text": "\"No,\" Ovid says. \"Twice in eleven years. A boundary case in the second year, which we won, and a man in the spring who wanted to buy the lot.\"\n\nShe puts the pen down.\n\n\"He was very courteous and he did not want to read any of it. He wanted to buy it. There is a difference and I have thought about very little else since.\"",
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera: \"He did not ask what was in it.\" Ovid: \"He did not ask what was in it.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "The fourth winter back. The ford.",
+                        "next": "the_fourth_press"
+                    },
+                    {
+                        "label": "Thank you.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_fourth_press": [
+            {
+                "text": "She gets it down herself, because nobody else is allowed to, and it takes her a while and she does not accept help.\n\nThe fourth press. The decade. The volume goes on the clear desk squared to the edge, and she opens it at the winter without looking at the index, which tells you she has been at this page before.\n\n\"Second week,\" Ovid says. \"Eleven lines, in the infirmarer's hand. Nobody has asked for it in four years.\"\n\nShe goes and does something at the other end of the room.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_ford_in_the_record",
+                            "stage": "eleven_lines"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Read it.",
+                        "next": "eleven_lines"
+                    }
+                ]
+            }
+        ],
+        "eleven_lines": [
+            {
+                "text": "Eleven lines. Dated. In the infirmarer's hand, which is a good hand that shakes twice.\n\nFour huts on the west bank of the crossing. Nineteen sick, of whom eleven were already dying and eight were not. The fever had begun to take carters, and a river is a thing a fever will not cross, and the house went down to the ford in the second week.\n\nThe order to fire the huts was given. It is in the record as an order, given by the house, in the house's own words, to stop the fever crossing the river. It is not hedged and it is not excused.\n\nOne brother would not carry it out. The entry names the hut he would not fire, and names the person who was in it.\n\nBettony Frayle.\n\nNowhere in the eleven lines does the word *murder* appear.",
+                "on_enter": [
+                    {
+                        "set_flag": "priory_record_read"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric is not in the writing room. He did not come through the cloister arch and he has not come through it since you arrived at this house."
+                    },
+                    {
+                        "companion": "sera",
+                        "text": "Sera reads it three times. \"Both of them are true,\" she says at last. \"His and this. That is the worst possible arrangement and it is also the most common one.\""
+                    },
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"Eight of them were not dying.\" She reads it again. \"It says so. Their own book says so and they kept it.\""
+                    },
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa: \"They wrote it down.\" She sounds genuinely thrown. \"They gave that order and then they wrote it in a book and dusted the book for four years.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Make a fair copy. Exact.",
+                        "next": "copied"
+                    },
+                    {
+                        "label": "Put it back. It stays in the house.",
+                        "next": "read_and_left"
+                    },
+                    {
+                        "label": "Cut the leaf out.",
+                        "next": "took_the_leaf"
+                    }
+                ]
+            }
+        ],
+        "copied": [
+            {
+                "text": "Ovid finds you a good pen and better paper and does not ask what it is for, which is a form of help.\n\nThe fair copy is eleven lines and it is exact. You check it against the original twice. Ovid checks it a third time without being asked, and corrects one word, and says the word out loud so that you know which one it was.\n\nThe press still holds the original. Now there are two.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_ford_in_the_record",
+                            "stage": "copied_the_record"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera: \"Two copies in two buildings. That is the difference between a fact and a rumour and it costs a sheet of paper.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Fold it and put it away.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "read_and_left": [
+            {
+                "text": "Ovid closes the volume, marks the page with a strip of leather the way she marks everything, and carries it back to the press herself.\n\nIt is in the house. It has been in the house for four years and it will be in the house in forty. It says what it says whether or not anybody outside this room has been told, and that is either a comfort or the exact opposite of one depending on the hour of the day you think about it.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_ford_in_the_record",
+                            "stage": "read_and_left_it"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Leave the room.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "took_the_leaf": [
+            {
+                "text": "One leaf. Cut at the gutter, clean, in about four seconds, while Ovid is at the far end of the room with her back to you doing something she does not need to do.\n\nThe priory's record of the fourth winter now has a gap in it where the ford was.\n\nNobody can produce their version any more. Neither can anybody else, ever — not the prior, not the man who wanted to buy the press, not Bettony Frayle's brother, not in eighty years when everyone who was there is dead and the only thing left is what is written down.\n\nYou do not think about that part until you are on the track going down.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_ford_in_the_record",
+                            "stage": "took_the_leaf"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera does not speak until the gate. Then: \"You have made it unprovable. For him and against him. Both.\""
+                    },
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric is at the gate with the horses and asks what was in the book, and there is now exactly one person alive who can tell him, and it is you."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Fold it and go.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

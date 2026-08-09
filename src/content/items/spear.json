@@ -1,0 +1,17 @@
+{
+  "item_key": "spear",
+  "name": "Spear",
+  "description": "Ash haft, leaf blade. Held in one hand behind a shield or in two without.",
+  "item_type": "weapon",
+  "rarity": "common",
+  "weight": 3,
+  "value_gp": 1,
+  "damage_dice": "1d6",
+  "damage_type": "piercing",
+  "properties": {
+    "versatile": "1d8",
+    "thrown": "20/60",
+    "simple": true
+  },
+  "icon": "weapon"
+}

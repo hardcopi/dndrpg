@@ -1,0 +1,68 @@
+{
+ "resistances": [],
+ "immunities": [],
+ "vulnerabilities": [],
+ "condition_immunities": [],
+ "source": "Rivermark Chronicles",
+ "monster_key": "pit_champion",
+ "name": "The Pit's Man",
+ "size": "Medium",
+ "type": "humanoid (human)",
+ "alignment": "neutral",
+ "armor_class": 16,
+ "hit_points": 58,
+ "hit_dice": "9d8+18",
+ "speed": "30 ft.",
+ "strength": 16,
+ "dexterity": 14,
+ "constitution": 15,
+ "intelligence": 10,
+ "wisdom": 12,
+ "charisma": 10,
+ "challenge_rating": 3,
+ "experience_points": 700,
+ "traits": {
+  "Sand Sense": "He has fought on this floor two hundred times and knows where the rake left it soft.",
+  "Does Not Finish": "He has never killed anyone in the pit and the crowd has stopped finding that interesting."
+ },
+ "actions": [
+  {
+   "name": "Shortsword",
+   "type": "melee",
+   "bonus": 6,
+   "damage": "1d6+3",
+   "damage_type": "piercing"
+  },
+  {
+   "name": "Shield Rush",
+   "type": "melee",
+   "bonus": 6,
+   "damage": "1d4+3",
+   "damage_type": "bludgeoning",
+   "note": "On a hit the target must succeed on a DC 14 Strength save or be knocked prone.",
+   "save": {
+    "ability": "str",
+    "dc": 14
+   },
+   "on_fail": {
+    "condition": "prone",
+    "rounds": 1
+   }
+  }
+ ],
+ "saves": {
+  "str": 5,
+  "con": 4
+ },
+ "loot": [
+  {
+   "gold": "3d8"
+  },
+  {
+   "item": "potion_healing_greater",
+   "chance": 30
+  }
+ ],
+ "rank_pref": "front",
+ "sprite_key": "pit_champion"
+}

@@ -1,0 +1,172 @@
+{
+    "region_key": "quarry_wilds",
+    "module": "rivermark",
+    "name": "Quarry Wilds",
+    "region_type": "wilderness",
+    "description": "Open valley country east of Rivermark — the river road, standing woods, and the old quarry cut where the goblins den.",
+    "sort_order": 20,
+    "locations": {
+        "quarry_road": {
+            "name": "The Quarry Road",
+            "type": "site",
+            "map_pos": [18, 45],
+            "allow_camp": true,
+            "description": "The old haul-road runs east from Rivermark's gate, rutted deep by a generation of stone-carts that no longer come. Grass grows up the middle now, and the ruts hold last week's rain. It is a good road for making time and a better one for being watched from the treeline.",
+            "first_visit": "The gate falls behind you and the country opens out — hills, wind, and a road that has seen better decades.",
+            "ambience": [
+                "A hawk turns once over the valley and slides away east.",
+                "Wind moves through the roadside grass in long strokes.",
+                "Something small breaks cover and is gone.",
+                "Old cart-ruts hold water the colour of slate."
+            ],
+            "exits": [
+                {"to": "east_gate", "label": "West to Rivermark's gate"},
+                {"to": "wardens_camp", "label": "Up the track to the warden's camp"},
+                {"to": "broken_hills", "label": "East into the broken hills"},
+                {"to": "fighting_pit", "label": "Down the ladder to the fighting pit"},
+                {"to": "boundary_stone", "label": "North to the mearing stone"},
+                {"to": "caravan_ground", "label": "West to the caravan ground"}
+            ]
+        },
+        "wardens_camp": {
+            "name": "The Warden's Camp",
+            "type": "camp",
+            "map_pos": [35, 22],
+            "allow_camp": true,
+            "description": "A lean camp on high ground above the road: one tent weathered to the colour of the hillside, a fire-ring built to give no light downwind, and sightlines a soldier would pay for. Whoever keeps this camp watches the valley for a living — and has been watching something in particular of late.",
+            "ambience": [
+                "The fire-ring is cold, but not old-cold.",
+                "The valley lies below like an unrolled map.",
+                "A tin cup hangs from the tent-pole, turning in the wind."
+            ],
+            "exits": [
+                {"to": "quarry_road", "label": "Down the track to the road"}
+            ]
+        },
+        "broken_hills": {
+            "name": "The Broken Hills",
+            "type": "site",
+            "map_pos": [55, 62],
+            "allow_camp": true,
+            "random_encounter_pct": 15,
+            "description": "East of the road the land buckles into gorse and grey stone, and the path picks its way through cuttings a wagon could vanish in. Raiders have been working these hills — the burned cart on the ridgeline is nobody's accident. Every rise looks down on the path somewhere, and something is usually looking.",
+            "first_visit": "The road's ease ends here. The hills close in around the path, and the quiet stops feeling like quiet.",
+            "ambience": [
+                "Loose stone clicks somewhere upslope, once.",
+                "The wind drops, and the silence is worse.",
+                "A crow lifts off the ridgeline as if dismissed.",
+                "The burned cart on the ridge has been picked clean."
+            ],
+            "exits": [
+                {"to": "quarry_road", "label": "West back to the quarry road"},
+                {"to": "warren_approach", "label": "East toward the old quarry"},
+                {"to": "boundary_stone", "label": "North to the mearing stone"}
+            ]
+        },
+        "warren_approach": {
+            "name": "The Warren Approach",
+            "type": "site",
+            "map_pos": [82, 40],
+            "allow_camp": true,
+            "random_encounter_pct": 15,
+            "description": "The quarry cut opens ahead: a wall of worked stone gone wild, and below it the black mouth the goblins have made their door. Bones and cart-iron mark the ground where the last visitors stopped being careful. From here on, the hills belong to the warren.",
+            "first_visit": "You smell the warren before you see it — smoke, refuse, and old meat on the wind off the quarry.",
+            "ambience": [
+                "Smoke threads up from the quarry mouth and thins.",
+                "A goblin horn sounds once, far off, and is answered.",
+                "Gnawed bones lie sorted by size near the path.",
+                "The quarry wall throws back every sound you make."
+            ],
+            "exits": [
+                {"to": "broken_hills", "label": "West into the broken hills"},
+                {"to": "warren_mouth", "label": "Into the Goblin Warren"}
+            ]
+        },
+        "fighting_pit": {
+            "name": "The Fighting Pit",
+            "type": "arena",
+            "map_pos": [22, 62],
+            "allow_camp": true,
+            "description": "A quarry cut that stopped being a quarry. The floor is sand over stone, raked between bouts and never quite clean, and the walls go up twenty feet with no way out but the ladder you came down. Somebody has built a gate into the rock at the far end and somebody keeps it fed. Men lean on the rim and bet on strangers.",
+            "first_visit": "The noise reaches you before the ladder does — not a crowd exactly, forty or fifty people making the sound of three hundred. At the bottom the sand is warm. A woman with a tally board looks you over, decides on a number, and does not tell you what it is.",
+            "ambience": [
+                "Somebody on the rim is taking bets, loudly, on a fight that has not been agreed to yet.",
+                "The sand has been raked flat. It will not stay that way.",
+                "Something behind the gate shifts its weight and the gate takes it.",
+                "A man with one ear is explaining that he could have won it, if."
+            ],
+            "exits": [
+                {"to": "quarry_road", "label": "Up the ladder to the road"},
+                {"to": "pit_undercroft", "label": "Behind the gate, into the undercroft"}
+            ]
+        },
+        "pit_undercroft": {
+            "name": "The Undercroft",
+            "type": "room",
+            "map_pos": [10, 70],
+            "description": "Behind the gate the quarry keeps going: a low stone gallery with six barred stalls cut into one side of it and a drain down the middle that has been there since the stone was worked. Four of the stalls hold animals. Two of them hold beds. Nobody down here is chained, and the man who explains that to you will explain it more than once.",
+            "first_visit": "The gate goes up on a rope and a counterweight, and behind it there is no arena and no crowd — only a corridor, a drain, and six stalls, two of which have been swept.",
+            "ambience": [
+                "Something in the fourth stall paces four steps, turns, and paces four steps.",
+                "The drain runs down the middle of the floor and out under the wall.",
+                "Two of the stalls have beds in them, made up, with a chest at the foot.",
+                "Sand comes down through the gate-boards in a thin steady line when the crowd moves."
+            ],
+            "exits": [
+                {"to": "fighting_pit", "label": "Back out through the gate"}
+            ]
+        },
+        "boundary_stone": {
+            "name": "The Mearing Stone",
+            "type": "site",
+            "map_pos": [48, 30],
+            "allow_camp": true,
+            "description": "Where four holdings meet: a waist-high block of the valley's own grey stone, set upright, with the old boundary marks cut into its four faces — a crozier, a ploughshare, the town's tower, and a face that has been dressed back flat and re-cut this year. The new cutting is shallow, clean, and done with a proper mason's chisel by somebody who was not in a hurry.",
+            "first_visit": "The stone stands on the ridge where four boundaries meet, which is the oldest kind of important place there is. Three of its faces are weathered nearly smooth. The fourth is not.",
+            "ambience": [
+                "Three faces of the stone are worn nearly smooth. The fourth is sharp.",
+                "The wind comes across the ridge from the east and does not stop for anything.",
+                "Sheep have been rubbing against the base for a hundred years. The base is polished.",
+                "There is fresh stone-dust in the grass on the north side."
+            ],
+            "exits": [
+                {"to": "quarry_road", "label": "South down to the quarry road"},
+                {"to": "broken_hills", "label": "Southeast into the broken hills"},
+                {"to": "quarrymans_hut", "label": "East to the cottage on the spoil"}
+            ]
+        },
+        "quarrymans_hut": {
+            "name": "The Cottage on the Spoil",
+            "type": "building",
+            "map_pos": [70, 12],
+            "description": "One room and a lean-to, built out of quarry offcuts on top of a spoil heap, facing away from the quarry. There is a bench outside on the wrong side of the house, in the shade, looking north at nothing in particular. Everything about where this cottage sits was decided by a man who did not want to see something, and who would not move further off.",
+            "first_visit": "The door faces north. The quarry is south. The bench outside faces north as well, and the grass in front of it is worn down to the dirt.",
+            "ambience": [
+                "The bench faces north. The grass in front of it is worn bare.",
+                "Cut stone offcuts, laid without mortar, fitted better than most masons manage.",
+                "A pick stands in the corner of the lean-to with the head wrapped in sacking.",
+                "Wind off the quarry goes over the roof and the roof does not care."
+            ],
+            "exits": [
+                {"to": "boundary_stone", "label": "West to the mearing stone"}
+            ]
+        },
+        "caravan_ground": {
+            "name": "The Caravan Ground",
+            "type": "camp",
+            "map_pos": [8, 28],
+            "allow_camp": true,
+            "description": "A hard-standing of rammed chalk beside the road, big enough to turn six wagons on, with a well, a picket line and a stone fire-ring the size of a cart wheel. Carriers stop here because it is the last flat ground before the hills and the first after them. Two wagons are standing tonight with the sheets laced down, and the men on them are camped between the wagons and the road rather than round the fire.",
+            "first_visit": "Two wagons, sheeted and laced, and six men who have arranged themselves between the wagons and the road without appearing to have arranged anything.",
+            "ambience": [
+                "The sheets are laced, not tied. Laced takes longer to open and much longer to look into.",
+                "Somebody walks the picket line, touches every animal, and comes back.",
+                "The fire is small for six men and it is at the wrong end of the ground.",
+                "A wheel is being greased in the dark by feel, without a lamp."
+            ],
+            "exits": [
+                {"to": "quarry_road", "label": "East to the quarry road"}
+            ]
+        }
+    }
+}

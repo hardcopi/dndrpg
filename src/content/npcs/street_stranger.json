@@ -1,0 +1,11 @@
+{
+    "npc_key": "street_stranger",
+    "name": "A stranger",
+    "role": "Townsfolk",
+    "sprite_key": "warlock",
+    "is_ambient": true,
+    "dialog": "street_stranger",
+    "place": {
+        "location": "high_street"
+    }
+}

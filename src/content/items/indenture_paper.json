@@ -1,0 +1,14 @@
+{
+  "item_key": "indenture_paper",
+  "name": "Corrin Dale's Indenture",
+  "description": "Three years' labour against a cottage, a cow and the carriage of both, with the reckoning of days to be kept by the works and the reckoning to be final. Every clause in it is fair. The unfairness is entirely in the arithmetic, and the arithmetic is on the other sheet, which he has never been given.",
+  "item_type": "misc",
+  "rarity": "common",
+  "weight": 0,
+  "value_gp": 0,
+  "properties": {
+    "quest_item": true,
+    "readable": true
+  },
+  "icon": "scroll"
+}

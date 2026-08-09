@@ -1,0 +1,25 @@
+{
+  "encounter_key": "hills_raiders",
+  "name": "The Raiders on the Road",
+  "description": "Two gnolls work the horses. The goblins go straight for the tailgate and the grain.",
+  "difficulty": "hard",
+  "monsters": [
+    {
+      "monster": "gnoll",
+      "quantity": 2,
+      "rank": "front"
+    },
+    {
+      "monster": "goblin",
+      "quantity": 2,
+      "rank": "back"
+    }
+  ],
+  "allow_flee": true,
+  "allow_parley": true,
+  "parley_node": "nakka:raid_halt",
+  "ambush": true,
+  "victory_flag": "hills_raiders_beaten",
+  "victory_quest_stage": "teeth_in_the_hills:ambushed_the_raiders",
+  "place": { "location": "broken_hills" }
+}

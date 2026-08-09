@@ -1,0 +1,42 @@
+{
+    "npc_key": "tobin",
+    "name": "Tobin Brassscale",
+    "role": "Merchant",
+    "description": "Half-dragonborn, dull brass scales, keeps his prices where the road puts them.",
+    "sprite_key": "saurial",
+    "is_merchant": true,
+    "is_quest_giver": true,
+    "dialog": "tobin",
+    "shop": [
+        {
+            "item": "potion_healing",
+            "stock": 3,
+            "markup_pct": 110
+        },
+        {
+            "item": "thieves_tools",
+            "stock": 1,
+            "markup_pct": 120
+        },
+        {
+            "item": "holy_symbol"
+        },
+        {
+            "item": "leather_armor",
+            "stock": 2
+        },
+        {
+            "item": "shortbow",
+            "stock": 1,
+            "markup_pct": 110
+        },
+        {
+            "item": "amulet_of_warding",
+            "stock": 1,
+            "markup_pct": 130
+        }
+    ],
+    "place": {
+        "location": "tobins_goods"
+    }
+}

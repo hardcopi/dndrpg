@@ -1,0 +1,16 @@
+{
+  "item_key": "oil_of_embers",
+  "name": "Oil of Embers",
+  "description": "A stoppered flask of pitch that never quite goes out. Worked along a blade mid-fight, every blow lands burning for a while.",
+  "item_type": "misc",
+  "rarity": "uncommon",
+  "weight": 1,
+  "value_gp": 60,
+  "properties": {
+    "use_effect": {
+      "boon": { "on_hit": "1d4 fire" },
+      "rounds": 10
+    }
+  },
+  "icon": "potion"
+}

@@ -1,0 +1,13 @@
+{
+    "npc_key": "wick_lorrimer",
+    "name": "Wick Lorrimer",
+    "role": "Miller",
+    "description": "The mill burned four years ago. Wick did not, and did not leave, and keeps the race clear out of a habit that has outlasted the reason for it.",
+    "sprite_key": "wick_lorrimer",
+    "image_url": "assets/images/npcs/prisoner_1.png",
+    "is_quest_giver": true,
+    "dialog": "wick_lorrimer",
+    "place": {
+        "location": "mill_ruin"
+    }
+}

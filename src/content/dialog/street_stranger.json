@@ -1,0 +1,17 @@
+{
+    "npc_key": "street_stranger",
+    "start": "hail",
+    "nodes": {
+        "hail": [
+            {
+                "text": "I'm just passing through. Everyone in this town is just passing through, slowly.",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

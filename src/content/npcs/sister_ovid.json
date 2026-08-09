@@ -1,0 +1,12 @@
+{
+    "npc_key": "sister_ovid",
+    "name": "Ovid",
+    "role": "Keeper of the Presses",
+    "description": "Keeps the cartulary — every deed, boundary and account the house has held since it was founded. Dusts the presses weekly and lets the rest of the priory look after itself.",
+    "sprite_key": "wizard",
+    "is_quest_giver": true,
+    "dialog": "sister_ovid",
+    "place": {
+        "location": "priory_scriptorium"
+    }
+}

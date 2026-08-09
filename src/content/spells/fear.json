@@ -1,0 +1,28 @@
+{
+  "spell_key": "fear",
+  "name": "Fear",
+  "level": 3,
+  "school": "Illusion",
+  "classes": [
+    "Bard",
+    "Sorcerer",
+    "Warlock",
+    "Wizard"
+  ],
+  "resolution": "debuff",
+  "save_ability": "wis",
+  "save_effect": "negate",
+  "target_kind": "all_enemies",
+  "reaches_back_rank": true,
+  "effect": {
+    "condition": "frightened"
+  },
+  "casting_time": "1 action",
+  "range_text": "Self (30-foot cone)",
+  "components": "V, S, M",
+  "duration": "Concentration, up to 1 minute",
+  "concentration": true,
+  "duration_rounds": 10,
+  "description": "You project a phantasmal image of a creature's worst fears. Each creature in the area must succeed on a Wisdom saving throw or become frightened for the duration.",
+  "source": "5e SRD"
+}

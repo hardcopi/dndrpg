@@ -1,0 +1,66 @@
+{
+    "quest_key": "what_rivermark_is_worth",
+    "title": "What Rivermark Is Worth",
+    "description": "Somewhere in eleven presses of paper there is a number with the town's name against it. It will be a small number.",
+    "giver": "ludo_corse",
+    "on_job_board": false,
+    "required_level": 5,
+    "rewards": {
+        "xp": 400
+    },
+    "stages": {
+        "the_figure": {
+            "title": "The figure",
+            "objective": "Every drawer in the long room is labelled by year and by hundred. Find the one Rivermark is in.",
+            "journal": "The long room is not locked and the drawers are labelled in one hand and there is no reason on earth why I should not open them. That is the third time this week that a thing has been left open to me and I have found it worse than a lock.",
+            "target": {
+                "location": "the_long_room"
+            }
+        },
+        "found_the_number": {
+            "title": "Sheet six",
+            "journal": "Rivermark: eleven hundred souls, four hundred and six roofs, a granary, a bridge, two mills of which one is burnt, and a total. The total is less than the crane on the new landing cost. It is not written cruelly. It is not written at all — it is added up, in a column, between a weir and a stand of oak, by somebody being paid by the day to add things up.",
+            "resolution": "found_the_number",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "worth_fate",
+                    "value": "found"
+                },
+                {
+                    "set_flag": "rivermark_valued"
+                },
+                {
+                    "xp": 150
+                },
+                {
+                    "approval": {
+                        "aldric": 10,
+                        "ilse": 10,
+                        "kessa": 8,
+                        "sera": 6
+                    }
+                }
+            ]
+        },
+        "did_not_look": {
+            "title": "Left in the drawer",
+            "journal": "I stood in front of the drawer with my hand on it for a while. There is a version of this where I never know the number and the number does not exist, and I am aware that it is not a very good version, and I closed the press anyway.",
+            "resolution": "did_not_look",
+            "terminal": true,
+            "outcome": "neutral",
+            "effects": [
+                {
+                    "set_flag": "worth_fate",
+                    "value": "looked_away"
+                },
+                {
+                    "approval": {
+                        "sera": -8,
+                        "ilse": -4
+                    }
+                }
+            ]
+        }
+    }
+}

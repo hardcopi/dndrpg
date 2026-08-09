@@ -1,0 +1,14 @@
+{
+  "item_key": "almoners_list",
+  "name": "The Almoner's List",
+  "description": "Who in Rivermark is being fed by the parish, kept in a hand that gets smaller down the page to save paper. Eighty-one names. Forty of them were added in the last eight months, and thirty-six of those forty gave a holding west of the river as their last address.",
+  "item_type": "misc",
+  "rarity": "common",
+  "weight": 1,
+  "value_gp": 0,
+  "properties": {
+    "quest_item": true,
+    "readable": true
+  },
+  "icon": "book"
+}

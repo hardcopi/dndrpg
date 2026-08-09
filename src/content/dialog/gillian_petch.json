@@ -1,0 +1,298 @@
+{
+    "npc_key": "gillian_petch",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "flag": "landing_fate",
+                        "equals": "counted"
+                    }
+                ],
+                "once": true,
+                "text": "Petch has the book open on the desk by the shed door and turns it round for you without being asked, which is now apparently the arrangement between you. \"Nothing new in,\" she says. \"Chain, oil, sawn timber, going up on the Thursday hoy. Same as the Thursday before.\" She is pleased to be useful and has not once wondered why.",
+                "choices": [
+                    {
+                        "label": "Does anything ever come back down?",
+                        "next": "nothing_comes_down"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "landing_fate",
+                        "equals": "left"
+                    }
+                ],
+                "once": true,
+                "text": "Petch waves the tally board at you from halfway down the quay and does not stop walking. \"Crane's yours to look at,\" she calls. \"Shed's shut till the Thursday hoy. Mind the coils.\" She is entirely unbothered that you came and looked and went away again, because a great many people do.",
+                "choices": [
+                    {
+                        "label": "Does anything ever come back down the river?",
+                        "next": "nothing_comes_down"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_landing",
+                        "stage": "the_shed"
+                    }
+                ],
+                "text": "\"In you come,\" Petch says, holding the shed door with her hip. \"Mind the coils, they sweat.\" Inside it is cool and dry and enormous and half empty, and she walks you down it reciting the ranks as she goes, the way a child recites a river.",
+                "choices": [
+                    {
+                        "label": "Count the chain.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_landing",
+                                    "stage": "counted_the_chain"
+                                }
+                            }
+                        ],
+                        "next": "eleven_hundred_yards"
+                    },
+                    {
+                        "label": "It's a warehouse. Leave it.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_landing",
+                                    "stage": "left_it_alone"
+                                }
+                            }
+                        ],
+                        "next": "a_quay_is_a_quay"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_landing",
+                        "status": "active"
+                    }
+                ],
+                "text": "\"You'll be the ones off the towpath,\" Petch says, coming down the quay at a clip with a tally board under her arm. \"Everyone who walks it comes and looks at the crane. It's a good crane. It's the best crane between here and the sea and I did not buy it and I am still proud of it.\"",
+                "choices": [
+                    {
+                        "label": "Why is it here?",
+                        "next": "why_a_quay"
+                    },
+                    {
+                        "label": "What's in the shed?",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_landing",
+                                    "stage": "the_shed"
+                                }
+                            }
+                        ],
+                        "next": "the_shed"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "A young woman in a coat that is a size too good for her, going down forty yards of dressed stone quay at a fast walk with a tally board, calling numbers to a crane crew who call them back. She stops when she sees you, entirely pleased to have somebody to explain the quay to. \"Petch,\" she says. \"Landing clerk. You are not carrying anything, so you are either lost or you are here about the crane.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_petch"
+                    },
+                    {
+                        "start_quest": "the_landing"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Why is there a quay this good on a river this small?",
+                        "next": "why_a_quay"
+                    },
+                    {
+                        "label": "Who do you work for?",
+                        "next": "the_house"
+                    },
+                    {
+                        "label": "Nothing. Sorry.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "why_a_quay": [
+            {
+                "text": "\"Because of what's coming,\" Petch says, cheerfully, and then, seeing your face, laughs. \"Trade. Trade's coming. That's what they told me when they took me on and I have never had cause to doubt it — we do about a fifth of what this quay could do and every quarter it's a bit more.\" She taps the tally board. \"You build the quay first. If you build it after, you have spent two years watching money go past you.\"",
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera: \"A fifth. And they built the whole of it three years ago.\" Petch, agreeing happily: \"Four, actually. Before my time.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Who do you work for?",
+                        "next": "the_house"
+                    },
+                    {
+                        "label": "What's in the shed?",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_landing",
+                                    "stage": "the_shed"
+                                }
+                            }
+                        ],
+                        "next": "the_shed"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_house": [
+            {
+                "text": "\"Mister Corse,\" Petch says, and it is obvious within a syllable that she thinks the world of him. \"He took me on when nobody would have a girl on a tally board and he has never once looked over my shoulder. If I say the count's right the count's right and it goes downriver as I wrote it.\" She straightens the board. \"You will meet people who say things about the house. Ask them if they've ever been paid by it.\"",
+                "choices": [
+                    {
+                        "label": "Does he ever come down here?",
+                        "next": "he_walks_it"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "he_walks_it": [
+            {
+                "text": "\"Every day at about four,\" Petch says. \"Walks the quay, asks after the crane crew's people by name, does not touch the book.\" She lowers her voice, not because it is a secret but because it is a compliment. \"He knew my mother was poorly. I never told him. That is either the kindest thing anybody has ever done or it is the other thing, and I have decided it is the first one, and I would thank you not to work on that.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "petch_decided"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Fair enough.",
+                        "end": true
+                    },
+                    {
+                        "label": "Show me the shed.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_landing",
+                                    "stage": "the_shed"
+                                }
+                            }
+                        ],
+                        "next": "the_shed"
+                    }
+                ]
+            }
+        ],
+        "the_shed": [
+            {
+                "text": "\"Bonded, so nothing in here's been landed for Greyhythe,\" Petch says. \"It's all in transit. Salt, iron, lamp oil, sawn timber, rope, sailcloth, chain.\" She goes down the ranks with the board. \"Oil's dated and the oldest goes first. Timber's cut to length, which means somebody upriver told us the length. Chain's the big one. Chain's always the big one.\"",
+                "choices": [
+                    {
+                        "label": "How much chain?",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_landing",
+                                    "stage": "counted_the_chain"
+                                }
+                            }
+                        ],
+                        "next": "eleven_hundred_yards"
+                    },
+                    {
+                        "label": "It's a warehouse. Leave it.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_landing",
+                                    "stage": "left_it_alone"
+                                }
+                            }
+                        ],
+                        "next": "a_quay_is_a_quay"
+                    }
+                ]
+            }
+        ],
+        "eleven_hundred_yards": [
+            {
+                "text": "\"Eleven hundred yards,\" Petch says, off the board, without looking. \"Been that or near it for two years — it goes up and it comes back down and it goes up again, because chain wears and they send the worn back.\" She shows you the column, honestly, to the yard. There is not one dishonest figure in the whole book. That is the point of the book. Somewhere upriver eleven hundred yards of chain is doing something that needs eleven hundred yards of chain, and the place it is doing it does not appear in any document in Greyhythe, because the place has not been given a name yet.",
+                "on_enter": [
+                    {
+                        "set_flag": "landing_read"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"Where does it go?\" Petch: \"Up. The head of the valley. I've never asked past that; it's not my column.\""
+                    },
+                    {
+                        "companion": "sera",
+                        "text": "Sera: \"There is nothing wrong with this book. That is the most alarming thing I have read all year.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Does anything ever come back down?",
+                        "next": "nothing_comes_down"
+                    },
+                    {
+                        "label": "Thank her.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "nothing_comes_down": [
+            {
+                "text": "Petch thinks about it properly, because she is good at her job and it is a fair question. \"Spoil,\" she says at last. \"Some spoil came down the first year, and stone with it, and then it stopped. And worn chain.\" She frowns at the board. \"That's it. Four years and about nine hundred ton up, and what's come back down is worn chain.\" She shakes it off. \"It'll be stone. They're cutting stone. It'll come down when there's a road for it.\"",
+                "choices": [
+                    {
+                        "label": "Leave her to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "a_quay_is_a_quay": [
+            {
+                "text": "\"Right you are,\" Petch says, entirely unbothered, and holds the door for you, and goes back to the crane, calling numbers, and the crane crew call them back, and every one of them is correct.",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

@@ -1,0 +1,13 @@
+{
+    "npc_key": "ludo_corse",
+    "name": "Ludo Corse",
+    "role": "Factor",
+    "description": "A neat, unhurried man in a good plain coat who answers every question he is asked, completely, and is not made any smaller by it. He has never raised his voice in this valley and has never had to.",
+    "sprite_key": "ludo_corse",
+    "image_url": "assets/images/npcs/rogue.png",
+    "is_quest_giver": true,
+    "dialog": "ludo_corse",
+    "place": {
+        "location": "factors_house"
+    }
+}

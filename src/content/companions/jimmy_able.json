@@ -1,0 +1,46 @@
+{
+    "companion_key": "jimmy_able",
+    "name": "Jimmy Able",
+    "title": "who was never holding the bag",
+    "description": "Nine men for four years and never the same nine. He has an explanation for that and it is a good one, which is the problem with it.",
+    "race": "Human",
+    "class": "Rogue",
+    "background": "Charlatan",
+    "alignment": "Chaotic Neutral",
+    "level": 1,
+    "abilities": {
+        "strength": 10,
+        "dexterity": 16,
+        "constitution": 12,
+        "intelligence": 13,
+        "wisdom": 12,
+        "charisma": 15
+    },
+    "sprite_key": "jimmy_able",
+    "combat_rank": "back",
+    "npc_key": "jimmy_able",
+    "personal_quest": "jimmy_the_ninth_man",
+    "recruit": {
+        "location": "oldcity_thieves_den",
+        "conditions": [
+            {
+                "flag": "oldcity_broodmother_down"
+            }
+        ]
+    },
+    "approval": {
+        "leave_at": -15,
+        "hostile_at": -40,
+        "romance_at": 30
+    },
+    "romanceable": true,
+    "gear": [
+        "leather_armor",
+        "shortsword",
+        "thieves_tools"
+    ],
+    "spells": [],
+    "feats": [
+        "alert"
+    ]
+}

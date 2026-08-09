@@ -1,0 +1,57 @@
+{
+  "resistances": [],
+  "immunities": [],
+  "vulnerabilities": [],
+  "condition_immunities": [],
+  "source": "5e SRD",
+  "monster_key": "dire_wolf",
+  "name": "Dire Wolf",
+  "size": "Large",
+  "type": "beast",
+  "alignment": "unaligned",
+  "armor_class": 14,
+  "hit_points": 37,
+  "hit_dice": "5d10+10",
+  "speed": "50 ft.",
+  "strength": 17,
+  "dexterity": 15,
+  "constitution": 15,
+  "intelligence": 3,
+  "wisdom": 12,
+  "charisma": 7,
+  "challenge_rating": 1,
+  "experience_points": 200,
+  "traits": {
+    "Keen Hearing and Smell": "The wolf has advantage on Wisdom (Perception) checks that rely on hearing or smell.",
+    "Pack Tactics": "The wolf has advantage on an attack roll against a creature if at least one of the wolf's allies is within 5 feet of the creature and that ally isn't incapacitated."
+  },
+  "actions": [
+    {
+      "name": "Bite",
+      "type": "melee",
+      "bonus": 5,
+      "damage": "2d6+3",
+      "damage_type": "piercing",
+      "note": "If the target is a creature, it must succeed on a DC 13 Strength saving throw or be knocked prone.",
+      "save": {
+        "ability": "str",
+        "dc": 13
+      },
+      "on_fail": {
+        "condition": "prone",
+        "rounds": 1
+      }
+    }
+  ],
+  "saves": {
+    "dex": 2
+  },
+  "rank_pref": "front",
+  "sprite_key": "dire_wolf",
+  "loot": [
+    {
+      "item": "dried_fen_root",
+      "chance": 35
+    }
+  ]
+}

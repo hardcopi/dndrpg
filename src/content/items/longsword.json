@@ -1,0 +1,13 @@
+{
+  "item_key": "longsword",
+  "name": "Longsword",
+  "description": "A versatile martial blade favoured by fighters.",
+  "item_type": "weapon",
+  "rarity": "common",
+  "weight": 3,
+  "value_gp": 15,
+  "damage_dice": "1d8",
+  "damage_type": "slashing",
+  "properties": { "versatile": "1d10", "martial": true },
+  "icon": "sword"
+}

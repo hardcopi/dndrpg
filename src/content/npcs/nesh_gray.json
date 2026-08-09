@@ -1,0 +1,13 @@
+{
+    "npc_key": "nesh_gray",
+    "name": "Nesh Gray",
+    "role": "Fen Warden",
+    "description": "She calls her people wardens and the watch calls them something else, and both words describe the same six platforms and the same forty miles of causeway that nobody else will mend.",
+    "sprite_key": "nesh_gray",
+    "image_url": "assets/images/npcs/warlock.png",
+    "is_quest_giver": true,
+    "dialog": "nesh_gray",
+    "place": {
+        "location": "stilt_camp"
+    }
+}

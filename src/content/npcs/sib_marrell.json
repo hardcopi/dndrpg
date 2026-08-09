@@ -1,0 +1,12 @@
+{
+    "npc_key": "sib_marrell",
+    "name": "Sib Marrell",
+    "role": "Nightman",
+    "description": "Empties Rivermark's cesspits by dark and knows the underside of it better than the watch knows the top.",
+    "sprite_key": "sib_marrell",
+    "image_url": "assets/images/npcs/sweeper.png",
+    "dialog": "sib_marrell",
+    "place": {
+        "location": "river_stair"
+    }
+}

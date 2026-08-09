@@ -1,0 +1,27 @@
+{
+    "quest_key": "uv_first_step",
+    "title": "The First Step Down",
+    "description": "Marda Scole will put a name on her board for anyone who goes down the stair and comes back up it. She is not paying for the going down.",
+    "giver": "marda_scole",
+    "on_job_board": true,
+    "rewards": {
+        "xp": 100,
+        "gold": 25
+    },
+    "stages": {
+        "go_down": {
+            "title": "Down the stair",
+            "objective": "Go down into the Undervault, and come back up.",
+            "journal": "The stove-keeper in the long tent keeps a board of names with a mark against each for every time they have come back. A name with no mark on it is somebody she is still waiting on. She would rather I were a mark.",
+            "target": {
+                "location": "uv_mouth"
+            }
+        },
+        "came_back": {
+            "title": "Came back up",
+            "journal": "One floor down and back out the same hole. Marda made the mark, said the number out loud the way she does, and put the chalk back on the ledge.",
+            "resolution": "came_back",
+            "terminal": true
+        }
+    }
+}

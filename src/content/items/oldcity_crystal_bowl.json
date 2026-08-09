@@ -1,0 +1,16 @@
+{
+    "item_key": "oldcity_crystal_bowl",
+    "name": "The Crystal Bowl",
+    "item_type": "treasure",
+    "rarity": "rare",
+    "weight": 4,
+    "value_gp": 100,
+    "icon": "gem",
+    "description": "Wrapped in three separate cloths inside a velvet-lined sack, and worth more than everything wrapped alongside it put together. It has come down a chimney chute and through two burglaries without a chip, which cannot go on for ever.",
+    "properties": {
+        "fragile": true
+    },
+    "place": {
+        "location": "oldcity_thieves_den"
+    }
+}

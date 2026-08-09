@@ -1,0 +1,55 @@
+{
+ "resistances": [],
+ "immunities": [],
+ "vulnerabilities": [],
+ "condition_immunities": [],
+ "source": "5e SRD",
+ "monster_key": "giant_centipede",
+ "name": "Giant Centipede",
+ "size": "Small",
+ "type": "beast",
+ "alignment": "unaligned",
+ "armor_class": 13,
+ "hit_points": 9,
+ "hit_dice": "2d6+2",
+ "speed": "30 ft., climb 30 ft.",
+ "strength": 5,
+ "dexterity": 14,
+ "constitution": 12,
+ "intelligence": 1,
+ "wisdom": 7,
+ "charisma": 3,
+ "challenge_rating": 0.25,
+ "experience_points": 50,
+ "traits": {},
+ "actions": [
+  {
+   "name": "Bite",
+   "type": "melee",
+   "bonus": 4,
+   "damage": "1d4+2",
+   "damage_type": "piercing",
+   "note": "The target must make a DC 11 Constitution saving throw, taking 3d6 poison damage on a failure, or half as much on a success.",
+   "save": {
+    "ability": "con",
+    "dc": 11
+   },
+   "on_fail": {
+    "condition": "poisoned",
+    "rounds": 3,
+    "repeat_save": true
+   }
+  }
+ ],
+ "saves": {
+  "dex": 4
+ },
+ "rank_pref": "front",
+ "sprite_key": "giant_centipede",
+ "loot": [
+  {
+   "item": "antitoxin",
+   "chance": 20
+  }
+ ]
+}

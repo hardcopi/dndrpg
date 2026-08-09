@@ -1,0 +1,114 @@
+{
+    "quest_key": "the_reliquary",
+    "title": "The Reliquary",
+    "description": "Seventeen shelf-spaces in the priory reliquary and nine things on them. The empty spaces have cards in them, and the cards are not labels — they are receipts.",
+    "giver": "almoner_venn",
+    "on_job_board": false,
+    "required_level": 3,
+    "rewards": {
+        "xp": 400,
+        "gold": 120
+    },
+    "stages": {
+        "eight_empty_shelves": {
+            "title": "Eight empty shelves",
+            "objective": "Get into the reliquary and find out where the eight went.",
+            "journal": "Nine reliquaries, seventeen spaces, eight small cards in a careful hand. Brother Venn is the almoner. He buys the flour, the linen and the lamp oil for a house with no income, and he has been keeping receipts where the relics used to stand because he refuses to pretend they were stolen.",
+            "target": {
+                "location": "priory_reliquary"
+            }
+        },
+        "what_else_he_offered_for": {
+            "title": "What else he offered for",
+            "objective": "Find out what the buyer asked for besides the relics.",
+            "journal": "The buyer's agent pays well, pays on the day, and does not haggle. On the third visit he asked whether the house had any old paper it wanted rid of — the deeds, the boundary rolls, the cartulary — and offered a price for the lot that Venn thought was generous, because Venn has never once thought of the cartulary as being worth anything at all.",
+            "target": {
+                "location": "priory_reliquary"
+            }
+        },
+        "stopped_the_sale": {
+            "title": "Stopped",
+            "journal": "We put it to the prior in front of Venn, which was not kind and was necessary, and the sale is stopped: no more relics and, specifically and in writing, no paper. The house will be short by midwinter and everybody in the room knew it while they were agreeing to it. Venn shook my hand afterwards and could not look at me.",
+            "resolution": "stopped_the_sale",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "reliquary_fate",
+                    "value": "stopped"
+                },
+                {
+                    "set_flag": "priory_paper_kept"
+                },
+                {
+                    "xp": 150
+                },
+                {
+                    "approval": {
+                        "aldric": 14,
+                        "ilse": 8,
+                        "sera": 6,
+                        "kessa": -2
+                    }
+                }
+            ]
+        },
+        "let_it_sell": {
+            "title": "Sold",
+            "journal": "It is their house and their paper and their winter, and I said so, and the sale went through in the second week: three more reliquaries and the fourth press of the cartulary, for eighty gold, which kept the infirmary in linen and oil until spring. The buyer's man collected it himself and was extremely polite about the whole thing.",
+            "resolution": "let_it_sell",
+            "terminal": true,
+            "outcome": "neutral",
+            "effects": [
+                {
+                    "set_flag": "reliquary_fate",
+                    "value": "sold"
+                },
+                {
+                    "set_flag": "priory_paper_sold"
+                },
+                {
+                    "approval": {
+                        "sera": 4,
+                        "aldric": -12,
+                        "ilse": -8
+                    }
+                }
+            ]
+        },
+        "bought_the_paper": {
+            "title": "The paper, bought",
+            "journal": "I outbid him for the fourth press by ninety gold, which is an absurd amount of money for a decade of a small house's leases and boundary rolls, and Venn took the coin with the expression of a man who has just been let off something. The buyer's agent was told the lot had gone. He asked, very politely, who to. Venn told him. I would have told him too.",
+            "resolution": "bought_the_paper",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "reliquary_fate",
+                    "value": "paper"
+                },
+                {
+                    "set_flag": "priory_paper_kept"
+                },
+                {
+                    "set_flag": "cartulary_held"
+                },
+                {
+                    "take_gold": 90
+                },
+                {
+                    "give_item": "priory_cartulary",
+                    "quantity": 1
+                },
+                {
+                    "xp": 200
+                },
+                {
+                    "approval": {
+                        "sera": 14,
+                        "aldric": 10,
+                        "ilse": 6
+                    }
+                }
+            ]
+        }
+    }
+}

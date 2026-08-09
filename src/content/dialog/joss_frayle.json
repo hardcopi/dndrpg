@@ -1,0 +1,270 @@
+{
+    "npc_key": "joss_frayle",
+    "start": "hail",
+    "nodes": {
+        "hail": [
+            {
+                "conditions": [
+                    {
+                        "flag": "ford_dead_named"
+                    }
+                ],
+                "text": "He is at the stone with his hand flat on the new cutting, going down the list with one finger, and he has been doing that for a while before you got here.\n\n\"Nineteen,\" Joss Frayle says. \"I knew there were nineteen. I've known there were nineteen for four years.\" He does not take his hand off. \"I didn't know the other eighteen were called anything.\"",
+                "expression": 3,
+                "choices": [
+                    {
+                        "label": "They were.",
+                        "next": "they_were"
+                    },
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "ford_fate",
+                        "equals": "cleared"
+                    }
+                ],
+                "once": true,
+                "text": "\"It runs clean,\" Joss says. He is standing in the shallows in his boots watching the water go over laid stone the way it was built to. \"Four years of everybody going round the fouled part and calling that the crossing.\"\n\nHe looks at the west bank for a moment and then does not.",
+                "choices": [
+                    {
+                        "label": "It's a road again.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_ford_itself",
+                        "stage": "the_standing_stone"
+                    }
+                ],
+                "text": "He has a river-stone in his hand and he is not putting it down.\n\n\"You've worked out it isn't a milestone,\" he says. \"Right. Sit down on the block, then, because I'm not doing this standing up and I'm not doing it twice.\"",
+                "choices": [
+                    {
+                        "label": "Sit down.",
+                        "next": "the_account"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_ford_itself",
+                        "stage": "the_four_rectangles"
+                    }
+                ],
+                "text": "A big man in carter's leathers has stopped his cart on the near bank, which nobody does, and walked down to the standing stone with a river-stone in his hand.\n\nHe puts it against the foot of the stone with the others. There are hundreds of them.\n\n\"Don't mind me,\" he says. \"I'll be four minutes and then I'll be gone eleven months.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_frayle"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "What are the four bare patches on the far bank?",
+                        "next": "the_four"
+                    },
+                    {
+                        "label": "What's the stone for?",
+                        "next": "the_four"
+                    },
+                    {
+                        "label": "Take your four minutes.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "A carter has stopped on the near bank, which nobody using this crossing does, and gone down to the flat grey stone at the water's edge with a river-stone in his fist.\n\nHe sets it against the foot with the others. There are a great many others.",
+                "on_enter": [
+                    {
+                        "set_flag": "met_frayle"
+                    },
+                    {
+                        "start_quest": "the_ford_itself"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric has stopped walking. He does not say anything and he does not come any closer to the water."
+                    },
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"Four rectangles on the far bank. Grass to the edges and then nothing. That is burnt ground and it is four years old.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "What's the stone for?",
+                        "next": "the_four"
+                    },
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "they_were": [
+            {
+                "text": "\"Aye,\" he says. \"Well.\" He takes his hand off the stone and looks at it. \"I put one of these here twice a year for four years and I never once thought about the other eighteen as people with names. That's mine to carry and I'll carry it.\"\n\nHe picks up the next river-stone.",
+                "choices": [
+                    {
+                        "label": "Safe road, Frayle.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_four": [
+            {
+                "text": "Joss Frayle straightens up and looks across at the west bank for a long moment.\n\n\"Fever-huts,\" he says. \"Four of them. Fourth winter back. Travellers stopping at the crossing, and it went through them, and then it started going through the carters, so they put the sick on the west bank in huts because a river is a thing a fever won't cross.\"\n\nHe wipes his hands on his leathers.\n\n\"That's what everybody who uses this road knows. Every one of them. And every one of them waters upstream of it and not one of them will say the word out loud, and I've been trying to work out for four years whether that's shame or just how people are.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_ford_itself",
+                            "stage": "the_standing_stone"
+                        }
+                    },
+                    {
+                        "set_flag": "ford_huts_known"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric has not moved and does not speak."
+                    },
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa: \"A river's not a thing a fever won't cross.\" Frayle: \"No. It isn't. They knew that too.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Who's the stone for?",
+                        "next": "the_account"
+                    },
+                    {
+                        "label": "Not today.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_account": [
+            {
+                "text": "\"My sister,\" Joss says. \"Bettony. She was in the third hut, and she was one of the ones that wasn't dying — she had the wasting kind, the slow one, and the slow one takes about a fortnight and you can come out the other side of it if somebody sits with you.\"\n\nHe puts his hand flat on the stone.\n\n\"Somebody sat with her. I know that much and I've never known who. And then the huts went up, all four, on the same night, and after that I stopped being able to find anybody who'd talk about the second week at all.\"\n\nA long pause. The river works at the laid stones.\n\n\"There's no cutting on this stone because nobody could agree what to put on it. So I bring one of these twice a year. It's not much of a system.\"",
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric turns and walks up the bank to the horses and stands with them. He does not come back down until this is over."
+                    },
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"Nineteen?\" Frayle: \"Nineteen. Eleven that were going and eight that weren't. I've had four years to be sure of that number and I'm sure of it.\""
+                    },
+                    {
+                        "companion": "sera",
+                        "text": "Sera: \"Somebody gave the order to fire the huts. Orders like that get written down. That is not comfort, it is just true.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Then we'll put the names on it. All nineteen.",
+                        "next": "named"
+                    },
+                    {
+                        "label": "The crossing's fouled with the old timbers. We'll clear it.",
+                        "next": "cleared"
+                    },
+                    {
+                        "label": "I'm sorry. That's all I've got.",
+                        "next": "left"
+                    }
+                ]
+            }
+        ],
+        "named": [
+            {
+                "text": "It takes three days and it is done a name at a time: Frayle gives you eleven off the top of his head and stops, and the rest come off carters on the west road, one and two at a time, most of them at the fold at the drovers' rest, most of them from men who have to be asked twice and then cannot stop.\n\nNineteen. Cut into the flat face of the standing stone in a hand that will embarrass any mason who ever sees it, and which will last as long as the stone.\n\nIt is the first thing this place has said in four years.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_ford_itself",
+                            "stage": "named_the_dead"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric reads the list from the top down, twice, and puts his hand on one of them and then takes it off again."
+                    },
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa did the second day's cutting because your hands had gone. She did not offer and did not ask; she took the chisel."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Nineteen.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "cleared": [
+            {
+                "text": "The huts went into the river when they came down, and the burnt timbers went into the bed of the ford, and for four years everybody has been crossing round the fouled part and calling that the crossing.\n\nIt is two days of cold, ugly work with ropes and a borrowed team. What comes out is charred oak, four cart-loads of it, and one hut door with its latch still on.\n\nAfterwards the ford runs clean over laid stone from bank to bank and will take a wagon at any hour. It is worth more to the west road than anything else you have done out here, and Frayle stands in the shallows watching it for a long time without saying anything at all.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_ford_itself",
+                            "stage": "cleared_the_crossing"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera: \"Four cart-loads. Four years. Nobody in Rivermark has ever costed that against the price of a day's work.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Get the team off the bank.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "left": [
+            {
+                "text": "\"Aye,\" Joss says. \"Well. It's most of what anyone's got.\"\n\nHe puts the river-stone down against the foot of the standing stone with the others, and gets back on the cart, and goes west at a trot like everybody else does.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_ford_itself",
+                            "stage": "left_the_ford"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Cross.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

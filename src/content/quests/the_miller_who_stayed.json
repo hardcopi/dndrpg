@@ -1,0 +1,107 @@
+{
+    "quest_key": "the_miller_who_stayed",
+    "title": "The Miller Who Stayed",
+    "description": "There is a pot on a stone by the wheel-pit and it has been used recently. Somebody is still living at the burnt mill.",
+    "giver": "wick_lorrimer",
+    "on_job_board": true,
+    "required_level": 3,
+    "rewards": {
+        "xp": 400,
+        "gold": 100
+    },
+    "stages": {
+        "somebody_lives_here": {
+            "title": "Somebody lives here",
+            "objective": "Find out who is living in the mill ruin.",
+            "journal": "A cooking pot, a cleared corner under the sound gable, and a path worn to the race. Wick Lorrimer milled here for eighteen years and has not left in the four since it burned.",
+            "target": {
+                "location": "mill_ruin"
+            }
+        },
+        "the_race_he_keeps": {
+            "title": "The race he keeps",
+            "objective": "Ask him why he still clears a mill race that turns nothing.",
+            "journal": "He clears the race every week. It turns nothing and it has turned nothing for four years. He does it because a race that is kept is a race that still has a right attached to it, and the right is worth something to somebody, and he worked that out about eleven months after the fire, from a letter he was sent by mistake.",
+            "target": {
+                "location": "mill_ruin"
+            }
+        },
+        "brought_him_in": {
+            "title": "Brought in",
+            "journal": "He came into Rivermark with us and is sleeping in the Flagon's back room on Mara's charity, which she will call rent within a fortnight to spare him. He has not been indoors at night in four years and he sat up in the common room until the fire went out because he could not work out what to do in a room.",
+            "resolution": "brought_him_in",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "miller_fate",
+                    "value": "in"
+                },
+                {
+                    "set_flag": "wick_in_town"
+                },
+                {
+                    "xp": 100
+                },
+                {
+                    "approval": {
+                        "aldric": 14,
+                        "kessa": 6,
+                        "ilse": 2,
+                        "sera": -2
+                    }
+                }
+            ]
+        },
+        "let_him_stay": {
+            "title": "Let stay",
+            "journal": "We put a roof over the sound gable, re-hung the door and swept the wheel-pit, and he did not thank us and did not stop us. He said the race would want doing again on Thursday. He says that about everything.",
+            "resolution": "let_him_stay",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "miller_fate",
+                    "value": "stayed"
+                },
+                {
+                    "set_flag": "mill_is_shelter"
+                },
+                {
+                    "approval": {
+                        "ilse": 12,
+                        "kessa": 8,
+                        "aldric": 4,
+                        "sera": 2
+                    }
+                }
+            ]
+        },
+        "took_it_to_paper": {
+            "title": "Taken to paper",
+            "journal": "The letter he was sent by mistake was an instruction to a clerk about the mill race, dated three weeks before the fire. We took it to the counting house and had it copied and entered. The debt on the mill was discharged twice: once by the mill, once by whoever bought it after it stopped existing. Wick does not care about any of this. He asked whether it meant he had to move.",
+            "resolution": "took_it_to_paper",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "miller_fate",
+                    "value": "paper"
+                },
+                {
+                    "set_flag": "mill_fire_was_set"
+                },
+                {
+                    "set_flag": "mill_race_letter_filed"
+                },
+                {
+                    "xp": 150
+                },
+                {
+                    "approval": {
+                        "sera": 14,
+                        "aldric": 6,
+                        "ilse": 4
+                    }
+                }
+            ]
+        }
+    }
+}

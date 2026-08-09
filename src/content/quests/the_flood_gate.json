@@ -1,0 +1,91 @@
+{
+    "quest_key": "the_flood_gate",
+    "title": "The Flood Gate",
+    "description": "Every brick in Undertown is two hundred years old and looks it. The iron gate on the eastern cut was re-hung this year, in good iron, by somebody who paid a proper price for the work and did not tell the town they were doing it.",
+    "giver": "wat_fenner",
+    "on_job_board": false,
+    "required_level": 2,
+    "rewards": {
+        "xp": 350,
+        "gold": 40
+    },
+    "stages": {
+        "look_at_the_gate": {
+            "title": "Look at the gate",
+            "objective": "Find out how new the work on the flood gate really is.",
+            "journal": "New pintles, new packing, and grease on the worm-screw that has not gone grey. The gate is shut and holding four feet of water off a cut that runs east and stays dry. Nothing else at this depth is dry.",
+            "target": {
+                "location": "flood_gate"
+            }
+        },
+        "who_pays_wat": {
+            "title": "Ask the gateman",
+            "objective": "Somebody turns the wheel. Find out who tells him to.",
+            "journal": "Wat Fenner turns the wheel. He is paid four silver a month to keep the gate shut except on the second day of each month, when he raises it for two hours and lowers it again, and he does not know why and has never asked. The money comes wrapped in paper and is left in the same place. He has done it for a year and two months. He was a lock-keeper on the river before the barges stopped, and he is very good at the job nobody has explained to him.",
+            "target": {
+                "location": "flood_gate"
+            }
+        },
+        "opened_the_gate": {
+            "title": "The cut floods",
+            "journal": "I wound the gate up and the water went east and did not stop going for two days. Whatever was being kept dry down there is not dry now. Undertown lost the two lowest bays of the Low Court and a man's whole winter store with them, which I did not think about until Aggie Slate made me stand in the water and look at it. Wat Fenner's money did not come the next month.",
+            "resolution": "opened_the_gate",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "flood_gate_fate",
+                    "value": "opened"
+                },
+                {
+                    "approval": {
+                        "kessa": 4,
+                        "ilse": -10,
+                        "aldric": -8
+                    }
+                }
+            ]
+        },
+        "left_it_shut": {
+            "title": "Left as it was",
+            "journal": "I left the gate shut and Wat Fenner keeps turning the wheel on the second of the month for two hours, and the cut beyond it stays dry, and somebody a long way from here goes on paying four silver for that. It is the cheapest arrangement I have ever seen and I have been thinking about it since.",
+            "resolution": "left_it_shut",
+            "terminal": true,
+            "outcome": "neutral",
+            "effects": [
+                {
+                    "set_flag": "flood_gate_fate",
+                    "value": "left"
+                },
+                {
+                    "approval": {
+                        "sera": 4,
+                        "ilse": -2
+                    }
+                }
+            ]
+        },
+        "took_the_wheel_key": {
+            "title": "The key changes hands",
+            "journal": "I have the key to the worm-screw. Wat has the other one and Wat does what Wat is paid to do, but the gate cannot be worked hard against him now without me, and it cannot be worked hard against me without him. He was relieved when I took it. He said it was the first time in a year and two months that there had been two people in the arrangement.",
+            "resolution": "took_the_wheel_key",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "flood_gate_fate",
+                    "value": "key"
+                },
+                {
+                    "give_item": "gate_wheel_key",
+                    "quantity": 1
+                },
+                {
+                    "approval": {
+                        "sera": 8,
+                        "kessa": 6,
+                        "ilse": 4
+                    }
+                }
+            ]
+        }
+    }
+}

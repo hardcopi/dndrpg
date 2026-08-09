@@ -1,0 +1,325 @@
+{
+    "npc_key": "sten_harrow",
+    "start": "hail",
+    "nodes": {
+        "hail": [
+            {
+                "conditions": [
+                    {
+                        "flag": "harrow_fate",
+                        "equals": "held"
+                    }
+                ],
+                "once": true,
+                "text": "The lamp is on the porch table and it is lit, and he is sitting under it in the evening reading nothing at all, which he tells you is the point.\n\n\"Common to three holdings,\" Sten Harrow says. \"Can't be bought off one man because it isn't one man's. Bewick down the road worked out what that meant about four days after he'd signed it and came up here to shake my hand and then swore at me for twenty minutes.\"",
+                "choices": [
+                    {
+                        "label": "He'll come round.",
+                        "next": "he_will_come_round"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "harrow_gone"
+                    }
+                ],
+                "text": "The yard drains as well as it ever did and the gates still hang true and there is somebody else's dog on the chain. The ground is being worked already, which was fast.",
+                "choices": [
+                    {
+                        "label": "Walk on.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "harrow_farm",
+                        "stage": "what_they_are_buying"
+                    }
+                ],
+                "text": "\"You've been up the river,\" Harrow says. He has the four letters out on the porch table in a row, in date order, which is how he keeps them. \"Go on, then. Say the thing you came back to say and say it in front of the lamp, because I'll want to look at them while you do.\"",
+                "choices": [
+                    {
+                        "label": "They aren't buying the farm.",
+                        "next": "not_the_farm"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "harrow_farm",
+                        "stage": "the_letters"
+                    }
+                ],
+                "text": "The dog gets up, walks to the end of its chain, and waits to see which way you go, and Sten Harrow comes out of the byre wiping his hands and does exactly the same thing.\n\n\"You'll be the ones Ellery sent up from the market,\" he says. \"Right. Well. There's nothing here that wants swords.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_harrow"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "There's a lamp on your porch table that never gets lit.",
+                        "next": "the_lamp"
+                    },
+                    {
+                        "label": "You've been getting letters.",
+                        "next": "the_lamp"
+                    },
+                    {
+                        "label": "Then we'll go.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "A long low farmhouse, a squared muck-heap, ditches clear, gates hanging true. The man who did all of that comes out of the byre wiping his hands and stops in the middle of the yard rather than at the gate, which is a decision.\n\n\"Sten Harrow. Third of the name on this ground.\" A pause. \"You'll want the road. It's east.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_harrow"
+                    },
+                    {
+                        "start_quest": "harrow_farm"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"Everything on this holding has been done twice. That is a man who expects to be here in thirty years.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "There's a lamp on your porch table that has been trimmed and not lit.",
+                        "next": "the_lamp"
+                    },
+                    {
+                        "label": "The road, then.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "he_will_come_round": [
+            {
+                "text": "\"He will,\" Harrow says. \"He's already stopped swearing about it and started telling people it was his idea, which is how I know it's holding.\"",
+                "choices": [
+                    {
+                        "label": "Good night.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_lamp": [
+            {
+                "text": "Sten Harrow looks at the porch table for a while and then goes and sits at it, which is an answer.\n\n\"Four,\" he says. \"Nine months. Each one better than the last.\" He gets them out from under the lamp base, in date order. \"I read them out here because the house isn't big enough to read them in and my wife has enough to be going on with.\"\n\nHe pushes them across.\n\n\"Not one of them's signed with a name. Black wax square and that's your lot.\"",
+                "on_enter": [
+                    {
+                        "give_item": "harrow_letters",
+                        "quantity": 1
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera takes them in date order and reads the fourth one first. \"Three of these are a clerk's hand and this one is not,\" she says. \"Somebody stopped delegating.\""
+                    },
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric: \"They are very polite.\" Harrow: \"Aye. That's what's wrong with them.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Read them properly. All four.",
+                        "check": {
+                            "skill": "investigation",
+                            "dc": 13,
+                            "on_success": "not_the_farm",
+                            "on_failure": "cannot_see_it"
+                        }
+                    },
+                    {
+                        "label": "What does the fourth one say?",
+                        "next": "the_fourth_letter"
+                    },
+                    {
+                        "label": "Keep them under the lamp.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_fourth_letter": [
+            {
+                "text": "\"Says there's a date,\" Harrow says. \"Says after the date the offer regretfully lapses.\" He almost smiles. \"That's a man who's never farmed. A lapsing offer means nothing at all to me. Ground feeds us whether or not anybody's offering for it.\"\n\nHe stops smiling.\n\n\"Except I've read it eleven times.\"",
+                "choices": [
+                    {
+                        "label": "Read all four properly.",
+                        "check": {
+                            "skill": "investigation",
+                            "dc": 13,
+                            "on_success": "not_the_farm",
+                            "on_failure": "cannot_see_it"
+                        }
+                    },
+                    {
+                        "label": "Leave it for tonight.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "cannot_see_it": [
+            {
+                "text": "Four offers, nine months, rising. Courteous, exact, and unsigned. Whatever else is in them is under the courtesy and it is not coming out on a porch at dusk with the man who owns them watching your face.",
+                "choices": [
+                    {
+                        "label": "I'll read them again somewhere else.",
+                        "next": "the_fourth_letter"
+                    },
+                    {
+                        "label": "Leave it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "not_the_farm": [
+            {
+                "text": "It is in every one of the four, in the same subordinate clause, phrased four slightly different ways: *together with all rights of water appurtenant thereto*.\n\nThey are not offering for two hundred acres. The two hundred acres are what they have to buy in order to get the thing they want, which is the water right on the mill race — which Sten Harrow holds, and has never once thought about, because the mill it used to turn burned down four years ago.\n\n\"That's nothing,\" Harrow says. \"That's a dead mill and a ditch.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "harrow_farm",
+                            "stage": "what_they_are_buying"
+                        }
+                    },
+                    {
+                        "set_flag": "mill_race_right_known"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera: \"Four offers in nine months for a dead mill and a ditch. It is not nothing. It stopped being nothing in the spring and nobody has told the valley why.\""
+                    },
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"Water goes downhill from that race to the fen. Whoever holds it holds what happens to everything under it.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Then make it three men's water, not one man's.",
+                        "next": "held"
+                    },
+                    {
+                        "label": "Take the fourth offer. It's the best you'll get.",
+                        "next": "sold"
+                    },
+                    {
+                        "label": "Sign it. There's a fee in it for me and I'll not pretend otherwise.",
+                        "next": "brokered"
+                    },
+                    {
+                        "label": "That's your business. I'll leave it with you.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "held": [
+            {
+                "text": "It takes two days, three neighbours, a clerk who wants six coppers, and one long argument on Bewick's threshing floor about whether a thing that has never been worth anything can be given away.\n\nThe water right on the mill race is now common to three holdings, which means it cannot be bought from one man, because it is no longer one man's. The fourth letter's date came and went. Nothing arrived to replace it.\n\nHarrow has started sleeping. He mentions this in the way a man mentions the weather, and then has to stop and look at the byre for a minute.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "harrow_farm",
+                            "stage": "held_the_farm"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric: \"That is the first thing anyone in this valley has done that cannot be undone with money.\""
+                    },
+                    {
+                        "companion": "sera",
+                        "text": "Sera: \"They will buy Bewick. It will take longer and cost more.\" A pause. \"Longer and more is the whole of what anybody wins against paper.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Get some sleep, Harrow.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "sold": [
+            {
+                "text": "He takes it, because it is a very good price, and because you told him to and he had been waiting nine months for somebody to tell him something.\n\nThe Harrows go downriver in a hired cart on the second morning with the dog on the tail-board. Sten shakes your hand at the gate and thanks you, properly, without any edge on it at all, which is worse than if there had been.\n\nBy the end of the week the ground is being worked by somebody else.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "harrow_farm",
+                            "stage": "they_sold"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse watches the cart until it is out of sight. \"That is the fourth this year,\" she says. \"Nobody is counting them, so it is not happening.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Watch them go.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "brokered": [
+            {
+                "text": "There is a fee for bringing in a signature. It is paid the same day, in coin, by a man on a hired horse who does not haggle, does not stay, and does not write anything down.\n\nHarrow signed because you told him it was the best he would get, which was true, and because you told him you had no interest in it, which was not.\n\nHe did not ask. That is the part that stays.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "harrow_farm",
+                            "stage": "took_the_brokers_fee"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric says one sentence and then does not speak again until the following evening."
+                    },
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa: \"I've done worse for less. I'm still not going to say it was fine.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Take the fee.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

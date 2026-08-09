@@ -1,0 +1,16 @@
+{
+  "item_key": "javelin",
+  "name": "Javelin",
+  "description": "A light spear balanced for throwing, with a soft iron neck that bends on impact.",
+  "item_type": "weapon",
+  "rarity": "common",
+  "weight": 2,
+  "value_gp": 5,
+  "damage_dice": "1d6",
+  "damage_type": "piercing",
+  "properties": {
+    "thrown": "30/120",
+    "simple": true
+  },
+  "icon": "weapon"
+}

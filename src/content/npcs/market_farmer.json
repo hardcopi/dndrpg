@@ -1,0 +1,11 @@
+{
+    "npc_key": "market_farmer",
+    "name": "A farmer",
+    "role": "Townsfolk",
+    "sprite_key": "farmer",
+    "is_ambient": true,
+    "dialog": "market_farmer",
+    "place": {
+        "location": "market_square"
+    }
+}

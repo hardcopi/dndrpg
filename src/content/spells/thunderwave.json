@@ -1,0 +1,30 @@
+{
+  "spell_key": "thunderwave",
+  "name": "Thunderwave",
+  "level": 1,
+  "higher_level": {
+    "dice_per_level": "1d8"
+  },
+  "school": "Evocation",
+  "classes": [
+    "Bard",
+    "Druid",
+    "Sorcerer",
+    "Wizard"
+  ],
+  "resolution": "save",
+  "save_ability": "con",
+  "save_effect": "half",
+  "damage_dice": "2d8",
+  "damage_type": "thunder",
+  "target_kind": "all_enemies",
+  "reaches_back_rank": false,
+  "casting_time": "1 action",
+  "range_text": "Self (15-foot cube)",
+  "components": "V, S",
+  "duration": "Instantaneous",
+  "description": "A wave of thunderous force sweeps out from you.",
+  "concentration": false,
+  "duration_rounds": 0,
+  "source": "5e SRD"
+}

@@ -1,0 +1,13 @@
+{
+    "npc_key": "gubb_wrayne",
+    "name": "Gubb Wrayne",
+    "role": "Sluice-Keeper",
+    "description": "Greases the screw, clears the grating, and keeps the gate exactly as open as it was built to stand. He is paid quarterly and has never met anyone who pays him.",
+    "sprite_key": "gubb_wrayne",
+    "image_url": "assets/images/npcs/sweeper.png",
+    "is_quest_giver": true,
+    "dialog": "gubb_wrayne",
+    "place": {
+        "location": "sluice_gate"
+    }
+}

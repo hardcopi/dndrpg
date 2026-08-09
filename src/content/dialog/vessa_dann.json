@@ -1,0 +1,377 @@
+{
+    "npc_key": "vessa_dann",
+    "start": "hail",
+    "nodes": {
+        "hail": [
+            {
+                "conditions": [
+                    {
+                        "flag": "pit_fate",
+                        "equals": "broken"
+                    }
+                ],
+                "once": true,
+                "text": "The board is off the wall and the sand has not been raked in a week. Vessa Dann is sitting on the bottom rung of the ladder with the tally-slate on her knees, not writing on it.\n\n\"Forty people,\" she says. \"Forty people who'd have bet on him all winter, and you read them the rate of forfeit.\" She almost laughs. \"I've been doing the odds here nine years and I never once did that sum out loud.\"",
+                "choices": [
+                    {
+                        "label": "Neither had they.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "pit_fate",
+                        "equals": "bought"
+                    }
+                ],
+                "once": true,
+                "text": "\"Discharged,\" Vessa says. \"I wrote it myself. I'm not a thief and I've never claimed to be one.\" She taps the board. \"I'm also now a pit with a gate and nothing to put behind it, and that is a worse problem than you think it is.\"",
+                "choices": [
+                    {
+                        "label": "You'll find someone.",
+                        "next": "she_will_find_someone"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "pit_champion_is_you"
+                    }
+                ],
+                "text": "\"There you are,\" Vessa says, without looking up from the board. \"Twelfth name. The rim's been asking after you all week and I've been quoting them a number.\"\n\nShe turns the board round. The number is not small.",
+                "choices": [
+                    {
+                        "label": "What's the number for?",
+                        "next": "the_number"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "pit_champion_beaten"
+                    }
+                ],
+                "text": "The sand has not been raked yet and it will not be for a while. Vessa Dann comes down the ladder with the belt over her arm and the tally-board under it.\n\n\"Eleven names on it and all of them his,\" she says. \"There's room punched for a twelfth. There's been room punched for a twelfth for fourteen months.\"",
+                "choices": [
+                    {
+                        "label": "Take the belt.",
+                        "next": "take_the_belt"
+                    },
+                    {
+                        "label": "Where's Orm?",
+                        "next": "where_is_orm"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_pit_champion",
+                        "stage": "the_undercroft"
+                    }
+                ],
+                "text": "\"You went through the gate,\" Vessa says. She has not moved from the board and does not need to have seen it. \"Everyone goes through the gate eventually and everyone comes back out with the same face on. Say it, then.\"",
+                "choices": [
+                    {
+                        "label": "He's bonded.",
+                        "next": "the_bond_named"
+                    },
+                    {
+                        "label": "I want the bout.",
+                        "next": "the_bout_offer"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_pit_champion",
+                        "stage": "take_a_bout"
+                    }
+                ],
+                "text": "She looked you over on the way down the ladder and decided on a number before you reached the bottom, and she does not tell you what it is. The board behind her has three columns on it and only one of them is money.\n\n\"Vessa Dann. I hold the board.\" She wets the chalk. \"You'll want a bout. Everyone who comes down that ladder wants a bout, they just take different amounts of time to say so.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_vessa"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "What's behind the gate?",
+                        "next": "behind_the_gate"
+                    },
+                    {
+                        "label": "Who's your draw?",
+                        "next": "the_draw"
+                    },
+                    {
+                        "label": "Give me a bout.",
+                        "next": "the_warmup_offer"
+                    }
+                ]
+            },
+            {
+                "text": "A woman with a tally-board at the bottom of a twenty-foot cut, in the middle of forty or fifty people making the noise of three hundred. She looks you over, decides on a number, and does not tell you what it is.\n\n\"Vessa Dann,\" she says. \"I hold the board. You can watch for nothing and bet for anything and fight for what I say you're worth, and I'd think about which of those three you came down the ladder for.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_vessa"
+                    },
+                    {
+                        "start_quest": "the_pit_champion"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa is already looking at the sand rather than at the woman, which tells you what she came down the ladder for."
+                    },
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric: \"There is a gate in the rock at that end and something is leaning on it.\" Vessa, without turning: \"There is. It's fed.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Who's your draw?",
+                        "next": "the_draw"
+                    },
+                    {
+                        "label": "What's behind the gate?",
+                        "next": "behind_the_gate"
+                    },
+                    {
+                        "label": "Give me a bout.",
+                        "next": "the_warmup_offer"
+                    },
+                    {
+                        "label": "I'll watch.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "she_will_find_someone": [
+            {
+                "text": "\"I'll find someone,\" she agrees. \"That's the part people never think about when they're feeling good about themselves on the rim. There is always someone, and the reason there is always someone is forty-one gold.\"",
+                "choices": [
+                    {
+                        "label": "Then it wasn't worth much.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_number": [
+            {
+                "text": "\"Odds,\" she says. \"Yours. Against whatever I put up next.\" She rubs it out and writes it again slightly worse. \"You're the draw now. That's not a compliment, it's a column.\"",
+                "choices": [
+                    {
+                        "label": "Understood.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_draw": [
+            {
+                "text": "\"Orm Lisser,\" Vessa says. \"Eleven names on the belt and all of them his. Hasn't lost in fourteen months and hasn't killed anybody in his life, which the rim's started to hold against him.\" She chalks something. \"He sleeps behind the gate. Not in the gate. Behind it, in the undercroft, in a stall with a bed in it.\"",
+                "choices": [
+                    {
+                        "label": "Why does he sleep down here?",
+                        "next": "why_he_sleeps_here"
+                    },
+                    {
+                        "label": "Then I'll fight him.",
+                        "next": "the_bout_offer"
+                    },
+                    {
+                        "label": "What's behind the gate itself?",
+                        "next": "behind_the_gate"
+                    }
+                ]
+            }
+        ],
+        "why_he_sleeps_here": [
+            {
+                "text": "Vessa looks at you for slightly longer than the question deserves.\n\n\"Because he does,\" she says. \"Door's not locked. Nobody's chained. Go through the gate and ask him yourself, and mind the fourth stall, because what's in the fourth stall is not a conversation.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_pit_champion",
+                            "stage": "the_undercroft"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "I'll do that.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "behind_the_gate": [
+            {
+                "text": "\"A corridor,\" Vessa says. \"Which disappoints everybody. Quarry gallery, six stalls, a drain. Four of the stalls have animals in them and two of them have beds.\" She chalks. \"What comes out of the gate when I want it to come out of the gate is in the fourth stall and it has been leaning on the boards for about an hour. Would you like to meet it, or would you like to keep the afternoon you had planned?\"",
+                "choices": [
+                    {
+                        "label": "Put it up. Let's see.",
+                        "next": "the_warmup_offer"
+                    },
+                    {
+                        "label": "The corridor, then. I'll walk through.",
+                        "next": "why_he_sleeps_here"
+                    },
+                    {
+                        "label": "Neither.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_warmup_offer": [
+            {
+                "text": "\"Right,\" Vessa says, and the whole rim knows it before she has finished saying it, because forty people who have been standing in the cold for an hour can read a chalk-stroke at twenty feet.\n\nThe rope goes up on the gate. The counterweight drops. The thing that has been leaning on the boards comes out into the light already moving.",
+                "on_enter": [
+                    {
+                        "start_combat": "pit_gate_beast"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Sand under your feet.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_bond_named": [
+            {
+                "text": "\"He is,\" Vessa says. No pause at all. \"Forty-one gold advanced against eighteen months of bouts, mark witnessed, forfeit at a fifth per missed. It's lawful, it's on paper, and I did not write it — I bought the pit and the bond came with the pit, the same as the ladder and the gate.\"\n\nShe puts the chalk down, which she has not done once.\n\n\"That's the honest answer. Here's the rest of it: I have never once offered to discharge it, and I could have, any month of the fourteen.\"",
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera: \"A fifth per missed bout. On forty-one gold. He has been paying interest on a debt he cleared in the first year.\" Vessa: \"Yes.\""
+                    },
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric: \"You said that very quickly for a woman who has not been asked before.\" Vessa: \"I've been asked. I've never been asked twice.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Then I'll fight him for it.",
+                        "next": "the_bout_offer"
+                    },
+                    {
+                        "label": "What would it take to discharge it?",
+                        "next": "the_price"
+                    },
+                    {
+                        "label": "I'll talk to him first.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_price": [
+            {
+                "text": "\"Forty-one, and eleven accrued,\" Vessa says. \"Fifty-two. Paid on the rim, in front of witnesses, and I'll write 'discharged' on it in my own hand because I am not going to have it said that I held a man on a technicality.\"\n\nShe picks the chalk back up.\n\n\"I'd rather you didn't. I'll be straight with you about that. He's the only thing down here worth the ladder.\"",
+                "choices": [
+                    {
+                        "label": "I'll go and talk to him.",
+                        "end": true
+                    },
+                    {
+                        "label": "Then I'll fight him instead.",
+                        "next": "the_bout_offer"
+                    }
+                ]
+            }
+        ],
+        "the_bout_offer": [
+            {
+                "text": "\"Bout, then,\" Vessa says, and chalks it, and the noise on the rim changes shape.\n\n\"He comes down the ladder, not out of the gate — he's not what's kept behind the gate and he never has been. Sand's raked. It won't stay raked.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_pit_champion",
+                            "stage": "the_undercroft"
+                        }
+                    },
+                    {
+                        "start_combat": "pit_bout_champion"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa, low: \"He's not going to finish you. Don't let that make you slow.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Sand.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "take_the_belt": [
+            {
+                "text": "She punches the twelfth name in herself, on the rim, in front of everybody, with a bradawl and about four seconds' care.\n\n\"Terms of the bond,\" she says, handing it over. \"A champion who loses is a champion nobody pays to see, and a bond you can't work off is discharged. He's free at dusk with nothing, and he says that's more than he had at noon, and he says it like he means it, which I find irritating.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_pit_champion",
+                            "stage": "took_the_belt"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa: \"Eleven names and then yours. That'll follow you further than you think.\""
+                    },
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric takes the belt out of your hands to look at the eleven names and gives it back without a word."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Take it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "where_is_orm": [
+            {
+                "text": "\"Up the ladder,\" Vessa says, \"which he has not been in fourteen months, and he went slowly, and I am not going to pretend that was easy to watch.\"\n\nShe holds the belt out again.",
+                "choices": [
+                    {
+                        "label": "Take the belt.",
+                        "next": "take_the_belt"
+                    }
+                ]
+            }
+        ]
+    }
+}

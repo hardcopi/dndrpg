@@ -1,0 +1,13 @@
+{
+    "item_key": "oldcity_silver_ring",
+    "name": "Silver Ring",
+    "item_type": "treasure",
+    "rarity": "common",
+    "weight": 0,
+    "value_gp": 20,
+    "icon": "ring",
+    "description": "Off a hand that has been in the webbing long enough to have gone to leather. Plain, worn thin on the inside, the kind of ring somebody was given rather than bought.",
+    "place": {
+        "location": "oldcity_spider_ante"
+    }
+}

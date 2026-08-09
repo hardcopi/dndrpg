@@ -1,0 +1,110 @@
+{
+    "quest_key": "the_almoners_list",
+    "title": "The Almoner's List",
+    "description": "Dagen Wyke has fed Rivermark's poor for nineteen years and has never yet needed to ask why there are more of them. He is asking now.",
+    "giver": "street_almoner",
+    "on_job_board": true,
+    "required_level": 2,
+    "rewards": {
+        "xp": 300,
+        "gold": 40
+    },
+    "stages": {
+        "read_the_list": {
+            "title": "Read the list",
+            "objective": "Get Wyke to let you look at who he is feeding.",
+            "journal": "Eighty-one names on the parish dole. Forty of them were added in the last eight months, and thirty-six of those gave a holding west of the river as their last address. A bad year takes the weakest farms first, in no particular order. This is not in no particular order.",
+            "target": {
+                "location": "high_street"
+            },
+            "effects": [
+                {
+                    "give_item": "almoners_list",
+                    "quantity": 1
+                }
+            ]
+        },
+        "the_west_gate": {
+            "title": "Ask who came in",
+            "objective": "Somebody watched them walk into town. Find him.",
+            "journal": "Serjeant Ballow has kept the west gate four years and has watched every one of them come in. They came in families, in daylight, with their tools, which is not how people leave a farm that has failed — that is done at night, with nothing. Every one of them had sold. None of them will say to whom, and Ballow has stopped asking because of how they look at him when he does.",
+            "target": {
+                "location": "west_gate"
+            }
+        },
+        "fed_them": {
+            "title": "The dole holds",
+            "journal": "I put seventy-five gold into the parish box, which is more than it has held at one time in Wyke's life, and it will feed eighty-one people until about the middle of winter. Wyke wrote my name in the front of the book. He also said, without any edge on it at all, that he would need the same again in the spring and rather more the spring after.",
+            "resolution": "fed_them",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "almoner_list_fate",
+                    "value": "fed"
+                },
+                {
+                    "take_gold": 75
+                },
+                {
+                    "take_item": "almoners_list"
+                },
+                {
+                    "approval": {
+                        "aldric": 12,
+                        "ilse": 4,
+                        "kessa": 4,
+                        "sera": -4
+                    }
+                }
+            ]
+        },
+        "named_the_pattern": {
+            "title": "On the record",
+            "journal": "I took the list to Reed and she read it twice and copied the thirty-six names into the watch day book with the date, which is the only power she actually has. Nothing is illegal. A man may sell his land and a man may buy it. It is written down now, in the town's own hand, which is worth exactly nothing this year and may be worth a great deal later.",
+            "resolution": "named_the_pattern",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "almoner_list_fate",
+                    "value": "recorded"
+                },
+                {
+                    "set_flag": "west_holdings_recorded"
+                },
+                {
+                    "take_item": "almoners_list"
+                },
+                {
+                    "approval": {
+                        "ilse": 10,
+                        "aldric": 6,
+                        "sera": 4
+                    }
+                }
+            ]
+        },
+        "found_them_work": {
+            "title": "Work, of a kind",
+            "journal": "I got twenty-two of them taken on as labour — the granary, the quay, the stone yard. They eat. They are also, all of them, now men who work for wages in a town where they used to own four acres and a roof, and that is not a thing that reverses. Wyke crossed twenty-two names off his list and did not look pleased about it.",
+            "resolution": "found_them_work",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "almoner_list_fate",
+                    "value": "work"
+                },
+                {
+                    "take_item": "almoners_list"
+                },
+                {
+                    "approval": {
+                        "sera": 8,
+                        "kessa": 5,
+                        "aldric": -4,
+                        "ilse": -8
+                    }
+                }
+            ]
+        }
+    }
+}

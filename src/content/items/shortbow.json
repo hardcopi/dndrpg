@@ -1,0 +1,17 @@
+{
+  "item_key": "shortbow",
+  "name": "Shortbow",
+  "description": "Hill yew, strung with gut. The grip is worn to the shape of one hand.",
+  "item_type": "weapon",
+  "rarity": "common",
+  "weight": 2,
+  "value_gp": 25,
+  "damage_dice": "1d6",
+  "damage_type": "piercing",
+  "properties": {
+    "ranged": "80/320",
+    "two_handed": true,
+    "simple": true
+  },
+  "icon": "bow"
+}

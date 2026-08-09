@@ -1,0 +1,161 @@
+{
+    "region_key": "ford_road",
+    "module": "rivermark",
+    "name": "The Ford Road",
+    "region_type": "wilderness",
+    "description": "West of Rivermark: the river crossing, the mill that burned, and the farms that have been on this road longer than the town has.",
+    "sort_order": 25,
+    "locations": {
+        "ford_lane": {
+            "name": "The Ford Lane",
+            "type": "site",
+            "map_pos": [90, 42],
+            "allow_camp": true,
+            "random_encounter_pct": 10,
+            "description": "The west road drops out of Rivermark between two hedges and stops pretending to be a street. Hawthorn on both sides, high enough to hide a cart; a drainage ditch that has been dug out by hand every spring for longer than anyone can say. There is a milestone at the bend with the distance to the ford cut into it, and somebody has been keeping the moss off it.",
+            "first_visit": "The hedges close over the road and the town noise stops in about thirty paces, which is faster than it has any right to.",
+            "ambience": [
+                "Something moves along the ditch and does not come out.",
+                "The hedge is full of small birds arguing.",
+                "Cart-ruts here are shallow. Not much comes this way any more.",
+                "The milestone has been cleaned recently. Not by the watch."
+            ],
+            "exits": [
+                {"to": "west_gate", "label": "East to Rivermark's west gate"},
+                {"to": "the_ford", "label": "West along the lane to the ford"},
+                {"to": "drovers_rest", "label": "South down the drove track"}
+            ]
+        },
+        "the_ford": {
+            "name": "The Ford",
+            "type": "site",
+            "map_pos": [68, 30],
+            "allow_camp": true,
+            "description": "The river runs wide and shallow over a bed of laid stone here, and has done since somebody laid it. On the near bank there is a mounting-block, a rope stay, and a flat grey stone standing on end that is not a milestone. On the far bank the ground is bare in four long rectangles where nothing has grown back in four years, and the carters who use the crossing water their horses upstream of them.",
+            "first_visit": "The water is loud and the crossing is easy and nobody who uses it stops. You can see where they do not stop: four patches of bare ground on the west bank, laid out square, in a row.",
+            "ambience": [
+                "The river works at the laid stones and does not shift them.",
+                "A cart goes through at a trot, west to east, without slowing.",
+                "There are river-stones piled against the standing stone. Somebody adds one.",
+                "Nothing grows on the four rectangles. Grass reaches the edges and stops."
+            ],
+            "exits": [
+                {"to": "ford_lane", "label": "East along the lane"},
+                {"to": "mill_ruin", "label": "Upstream to the burnt mill"},
+                {"to": "priory_track", "label": "Northwest up the priory track"},
+                {"to": "harrow_steading", "label": "Southwest to Harrow's steading"}
+            ]
+        },
+        "mill_ruin": {
+            "name": "The Burnt Mill",
+            "type": "site",
+            "map_pos": [58, 12],
+            "description": "Three stone walls, a wheel-pit full of black water, and a roof that came down inward rather than out. The race still runs — it was cut too well to stop — and it turns nothing. Everyone in Rivermark can tell you the mill burned. Very few of them can tell you which year, and none of them have been out to look.",
+            "first_visit": "The race is the first thing you hear: clean running water, working exactly as built, going past a building that has not needed it since before the fire.",
+            "ambience": [
+                "The race runs. It is the only thing here that still does its job.",
+                "Charred beam-ends stick out of the wall at floor level, all of them pointing in.",
+                "A pot on a stone by the wheel-pit. Recently used.",
+                "Something rustles in the roof-fall and settles."
+            ],
+            "exits": [
+                {"to": "the_ford", "label": "Downstream to the ford"}
+            ]
+        },
+        "priory_track": {
+            "name": "The Priory Track",
+            "type": "site",
+            "map_pos": [30, 16],
+            "allow_camp": true,
+            "random_encounter_pct": 10,
+            "description": "A stone-flagged track climbing away from the river between overgrown hedges — laid for processions and mended for carts, which is why the flags are cracked in the middle and sound at the edges. Every quarter-mile there is a cross-stone with the top broken off. Somebody walks this in both directions regularly and does not clear the brambles.",
+            "ambience": [
+                "The flagstones ring differently where the ground has voided under them.",
+                "A cross-stone, snapped off at the shoulder. The break is old.",
+                "Bell-sound, thin, from somewhere above and west.",
+                "Bramble has taken the hedge and nobody has cut it back this year."
+            ],
+            "exits": [
+                {"to": "the_ford", "label": "Down the track to the ford"},
+                {"to": "priory_gate", "label": "Up to the priory gate"}
+            ]
+        },
+        "harrow_steading": {
+            "name": "Harrow Steading",
+            "type": "building",
+            "map_pos": [50, 48],
+            "allow_camp": true,
+            "description": "A long low farmhouse with a yard, a byre, and a dog that has decided about you before you reach the gate. Good ground, well kept: the ditches are clear, the gates hang true, and the muck-heap is squared off. There is a table under the porch with a lamp on it, and the lamp is for reading letters after dark, because the house is not big enough to read them in.",
+            "first_visit": "The dog gets up. It does not bark. It walks to the end of its chain and waits to see which way you go, which is a better-trained dog than most towns have watchmen.",
+            "ambience": [
+                "The dog watches. It has not decided anything yet.",
+                "Somebody is beating the dust out of a fleece behind the byre.",
+                "The yard drains properly. Everything here has been done twice.",
+                "The lamp on the porch table has been trimmed and not lit."
+            ],
+            "exits": [
+                {"to": "the_ford", "label": "Northeast to the ford"},
+                {"to": "drovers_rest", "label": "East to the drovers' rest"},
+                {"to": "fen_road_head", "label": "West to the head of the fen road"}
+            ]
+        },
+        "drovers_rest": {
+            "name": "The Drovers' Rest",
+            "type": "camp",
+            "map_pos": [74, 62],
+            "inn_cost": 3,
+            "allow_camp": true,
+            "description": "Where the drove track meets the ford road: a walled fold big enough for sixty beasts, a water trough fed off a spring, a lean-to with a fire-back, and a pole for hanging a lantern. It is not an inn and does not pretend to be. Whoever is going through sleeps against the wall with the cattle on the windward side and pays nobody, because there is nobody to pay.",
+            "first_visit": "Cattle-smell and woodsmoke and the sound of sixty animals settling. There are three fires along the fold wall and none of them are talking to each other.",
+            "ambience": [
+                "A beast lows once in the fold and the whole herd shifts and settles.",
+                "Somebody at the far fire is counting under their breath and starting again.",
+                "The trough overflows steadily. The spring does not care about the season.",
+                "Two dogs work the fold edge in opposite directions without being told."
+            ],
+            "exits": [
+                {"to": "ford_lane", "label": "North up the drove track"},
+                {"to": "harrow_steading", "label": "West to Harrow's steading"},
+                {"to": "winter_field", "label": "South onto the winter field"}
+            ]
+        },
+        "winter_field": {
+            "name": "Winter Field",
+            "type": "site",
+            "map_pos": [52, 70],
+            "allow_camp": true,
+            "random_encounter_pct": 25,
+            "description": "Two hundred acres of low grazing between the drove track and the fen edge, held in common and used from Michaelmas to spring. Half of it is under water this year and the good half is being eaten twice as hard. There are thorn brakes along the fen side that nobody has cut back, and the beasts will not graze within forty paces of them.",
+            "first_visit": "The field opens out and the wind comes off the fen unbroken. Down at the far hedge the cattle are all standing in one corner, facing the same way, and none of them are eating.",
+            "ambience": [
+                "The herd is bunched in the corner again, facing the thorn brake.",
+                "Water lies in the ruts across half the field and does not drain.",
+                "Something has been dragged into the thorn. There is a channel through the grass.",
+                "The wind comes off the fen with nothing to break it."
+            ],
+            "exits": [
+                {"to": "drovers_rest", "label": "North to the drovers' rest"},
+                {"to": "fen_road_head", "label": "West to the head of the fen road"}
+            ]
+        },
+        "fen_road_head": {
+            "name": "The Fen Road Head",
+            "type": "site",
+            "map_pos": [24, 62],
+            "allow_camp": true,
+            "description": "The last dry ground. The road stops being a road and becomes a causeway of laid faggots and stone, and the first hundred yards of it have been mended recently by somebody who knew exactly how much to spend. There is a post here with a horn on a chain, for calling across, and the chain is bright where the horn has been lifted.",
+            "first_visit": "The ground gives underfoot and then stops giving, and that is the causeway. West of here the country is water pretending to be land.",
+            "ambience": [
+                "The horn on its chain turns in the wind and does not sound.",
+                "New faggots in the causeway, bedded properly. Somebody paid for this.",
+                "Frogs, in a body, stop all at once and then start again.",
+                "Mist stands over the fen at head height and goes no higher."
+            ],
+            "exits": [
+                {"to": "harrow_steading", "label": "East to Harrow's steading"},
+                {"to": "winter_field", "label": "Northeast onto the winter field"},
+                {"to": "fen_causeway", "label": "West onto the fen causeway"}
+            ]
+        }
+    }
+}

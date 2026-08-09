@@ -1,0 +1,23 @@
+{
+  "spell_key": "shield",
+  "name": "Shield",
+  "level": 1,
+  "school": "Abjuration",
+  "classes": [
+    "Sorcerer",
+    "Wizard"
+  ],
+  "resolution": "buff",
+  "target_kind": "self",
+  "concentration": false,
+  "duration_rounds": 1,
+  "effect": {
+    "ac": 5
+  },
+  "casting_time": "1 reaction",
+  "range_text": "Self",
+  "components": "V, S",
+  "duration": "1 round",
+  "description": "An invisible barrier of magical force appears and protects you. Until the start of your next turn, you have a +5 bonus to AC, including against the triggering attack. Cast for you, as a reaction, the moment it would turn a hit into a miss.",
+  "source": "5e SRD"
+}

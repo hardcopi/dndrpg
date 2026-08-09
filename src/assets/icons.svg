@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  The icon sprite: every `<symbol>` the game draws.
+
+  Its own file rather than a block inside game.php, so that the icons have one
+  source and two consumers. game.php inlines it verbatim — inline `<symbol>`s
+  cost no request and inherit `currentColor`, which is what lets one hover rule
+  light a whole button — and tools/combat_bar_preview.html fetches it directly,
+  which a preview harness must be able to do without a session. It scraped
+  game.php once and got the login page instead, and the only symptom was a bar
+  of blank squares.
+
+  Drawn on a 24-unit grid with `stroke` and no fill, so weight stays even at any
+  size. Every button that uses one carries its own aria-label.
+-->
+  <!-- The namespace is REQUIRED here and was not needed when this lived inside
+     game.php: inline SVG in an HTML document is put in the SVG namespace by
+     the HTML parser, but a standalone file parsed as image/svg+xml is not.
+     Without it every symbol lands in the null namespace, `<use>` cannot see
+     any of them, and the only symptom is blank squares. -->
+<svg xmlns="http://www.w3.org/2000/svg" class="icon-sprite" aria-hidden="true" focusable="false">
+    <symbol id="i-journal" viewBox="0 0 24 24">
+      <path d="M5 4h11a2 2 0 012 2v14H7a2 2 0 01-2-2z"/>
+      <path d="M18 20a2 2 0 002-2V6"/><path d="M8 8h7M8 12h7"/>
+    </symbol>
+    <symbol id="i-dice" viewBox="0 0 24 24">
+      <path d="M12 2.5l8 4.6v9.2l-8 4.6-8-4.6V7.1z"/>
+      <path d="M12 2.5v9.2m0 0l8-4.6m-8 4.6l-8-4.6"/>
+    </symbol>
+    <symbol id="i-camp" viewBox="0 0 24 24">
+      <path d="M12 4L4 19h16z"/><path d="M12 11l-4 8m4-8l4 8"/>
+    </symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24">
+      <path d="M20 11a8 8 0 10-2 6"/><path d="M20 4v6h-6"/>
+    </symbol>
+    <symbol id="i-expand" viewBox="0 0 24 24">
+      <path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>
+    </symbol>
+    <symbol id="i-home" viewBox="0 0 24 24">
+      <path d="M4 11l8-7 8 7"/><path d="M6 10v10h12V10"/>
+    </symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5"/></symbol>
+
+    <!-- The combat action bar.
+         Same stroke-only 24 grid as everything above, so `.icon-btn`'s rule —
+         no fill, currentColor, even weight at any size — lights these too and
+         the bar inherits its states from one place. Drawn rather than
+         downloaded: a strict offline stack has no CDN, and an action bar whose
+         icons are missing is an action bar of blank squares. -->
+    <!-- Point up, guard across. Drawn on the diagonal first, with the guard and
+         pommel as short strokes, and at twenty-two pixels the whole thing read
+         as a double-headed arrow — the strokes that made it a sword were the
+         ones too small to see. Upright, the silhouette carries it. -->
+    <symbol id="i-attack" viewBox="0 0 24 24">
+      <path d="M12 2.5L14.2 6v9H9.8V6z"/>
+      <path d="M6.5 15h11"/><path d="M12 15v4.5"/><path d="M9.5 20.5h5"/>
+    </symbol>
+    <symbol id="i-cast" viewBox="0 0 24 24">
+      <path d="M4 20l9-9"/>
+      <path d="M17.5 3l1.1 2.6L21.2 6.7l-2.6 1.1L17.5 10.4l-1.1-2.6L13.8 6.7l2.6-1.1z"/>
+      <path d="M6 5l.6 1.4L8 7l-1.4.6L6 9l-.6-1.4L4 7l1.4-.6z"/>
+    </symbol>
+    <symbol id="i-potion" viewBox="0 0 24 24">
+      <path d="M9.5 3h5"/>
+      <path d="M10.5 3v5.5l-3.8 7A3.2 3.2 0 009.5 20h5a3.2 3.2 0 002.8-4.5l-3.8-7V3"/>
+      <path d="M7.8 14h8.4"/>
+    </symbol>
+    <!-- Three chevrons: speed, not a boot. A boot at twenty pixels is a smudge. -->
+    <symbol id="i-dash" viewBox="0 0 24 24">
+      <path d="M3 6l5 6-5 6"/><path d="M10 6l5 6-5 6"/><path d="M17 6l5 6-5 6"/>
+    </symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24">
+      <path d="M12 3l7.5 3v6.2c0 4.3-3.2 7-7.5 8.8-4.3-1.8-7.5-4.5-7.5-8.8V6z"/>
+    </symbol>
+    <!-- Stepping around something rather than out of a room: Disengage keeps you
+         in the fight, and the door below is Flee's. -->
+    <symbol id="i-disengage" viewBox="0 0 24 24">
+      <path d="M3.5 20c0-6.5 4.5-10.5 10-10.5h5"/><path d="M15.5 6l3.5 3.5-3.5 3.5"/>
+    </symbol>
+    <!-- A doubled chevron, which is the buff arrow every game with a buff bar
+         uses. An arrow with a bar over it — the first attempt — is the upload
+         glyph, and that is what it read as. -->
+    <symbol id="i-help" viewBox="0 0 24 24">
+      <path d="M6 12.5L12 6.5l6 6"/><path d="M6 18.5L12 12.5l6 6"/>
+    </symbol>
+    <symbol id="i-flee" viewBox="0 0 24 24">
+      <path d="M10.5 3.5H6A2.5 2.5 0 003.5 6v12A2.5 2.5 0 006 20.5h4.5"/>
+      <path d="M13 12h7.5"/><path d="M17.5 8.5l3.5 3.5-3.5 3.5"/>
+    </symbol>
+    <symbol id="i-parley" viewBox="0 0 24 24">
+      <path d="M20.5 14.5a2.5 2.5 0 01-2.5 2.5H8.5L4 21.5V5.5A2.5 2.5 0 016.5 3h11.5a2.5 2.5 0 012.5 2.5z"/>
+      <path d="M8 8h8M8 12h5"/>
+    </symbol>
+    <symbol id="i-hourglass" viewBox="0 0 24 24">
+      <path d="M6.5 3h11M6.5 21h11"/>
+      <path d="M8 3v3.8L12 12l-4 5.2V21"/><path d="M16 3v3.8L12 12l4 5.2V21"/>
+    </symbol>
+    <symbol id="i-rage" viewBox="0 0 24 24">
+      <path d="M12 21c3.6 0 6.2-2.3 6.2-5.6 0-3.7-3.1-5.6-3.7-9.4-1.6 2-2.5 3.6-2.5 5.2-1-1-1.6-2.6-1.6-4.2C8 9 5.8 12 5.8 15.4 5.8 18.7 8.4 21 12 21z"/>
+    </symbol>
+    <!-- A held swing: a sword upright behind a raised guard. -->
+    <symbol id="i-ready" viewBox="0 0 24 24">
+      <path d="M12 3v9"/><path d="M9.5 12h5"/><path d="M12 12v3"/>
+      <path d="M4.5 15.5l7.5-2.5 7.5 2.5v2c0 2.2-3.4 3.5-7.5 3.5S4.5 19.7 4.5 17.5z"/>
+    </symbol>
+    <!-- Grapple: two hands locked. -->
+    <symbol id="i-grapple" viewBox="0 0 24 24">
+      <path d="M3 9h6l3 3-3 3H3"/><path d="M21 9h-6l-3 3 3 3h6"/>
+    </symbol>
+    <!-- Shove: a flat palm and the lines of somebody going backwards. -->
+    <symbol id="i-shove" viewBox="0 0 24 24">
+      <path d="M4 8v8"/><path d="M7 6.5v11"/>
+      <path d="M10 12h9"/><path d="M15.5 8.5L19 12l-3.5 3.5"/>
+    </symbol>
+    <!-- Hide: an eye with a line through it. -->
+    <symbol id="i-hide" viewBox="0 0 24 24">
+      <path d="M2.5 12S6 6.5 12 6.5c1.4 0 2.7.3 3.8.8"/>
+      <path d="M21.5 12S18 17.5 12 17.5c-1.5 0-2.8-.3-4-.9"/>
+      <path d="M9.6 9.8a3 3 0 004.3 4.3"/>
+      <path d="M3.5 3.5l17 17"/>
+    </symbol>
+    <!-- Lay on Hands: an open palm with light coming off it. -->
+    <symbol id="i-hands" viewBox="0 0 24 24">
+      <path d="M8 13V6.5a1.5 1.5 0 013 0V12"/>
+      <path d="M11 11.5V5a1.5 1.5 0 013 0v6.5"/>
+      <path d="M14 12V8a1.5 1.5 0 013 0v7a6 6 0 01-6 6 6 6 0 01-6-6v-2.5a1.5 1.5 0 013 0"/>
+      <path d="M3.5 4l1.2 1.2M20.5 4l-1.2 1.2"/>
+    </symbol>
+    <!-- Divine Sense: an eye inside a radiance. -->
+    <symbol id="i-sense" viewBox="0 0 24 24">
+      <path d="M12 8.5a3.5 3.5 0 100 7 3.5 3.5 0 000-7z"/>
+      <path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22"/>
+      <path d="M5 5l1.8 1.8M19 5l-1.8 1.8M5 19l1.8-1.8M19 19l-1.8-1.8"/>
+    </symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24">
+      <path d="M12 20.5S4.5 16 4.5 10.8A4.3 4.3 0 0112 8a4.3 4.3 0 017.5 2.8c0 5.2-7.5 9.7-7.5 9.7z"/>
+    </symbol>
+    <!-- A folded map: three panels, creased. -->
+    <symbol id="i-map" viewBox="0 0 24 24">
+      <path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2z"/>
+      <path d="M9 4v14M15 6v14"/>
+    </symbol>
+  </svg>

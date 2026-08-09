@@ -1,0 +1,14 @@
+{
+  "encounter_key": "deepworks_shift",
+  "name": "Between Lamps",
+  "description": "Something in the dark between two lamps that the shift has learned to walk around, and which the shift is not walking around today.",
+  "difficulty": "medium",
+  "is_random": true,
+  "region": "the_deepworks",
+  "monsters": [
+    { "monster": "crust", "quantity": 1 },
+    { "monster": "pale_crawler", "quantity": 2 }
+  ],
+  "allow_flee": true,
+  "allow_parley": false
+}

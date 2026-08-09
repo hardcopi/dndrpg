@@ -1,0 +1,14 @@
+{
+  "item_key": "truce_token",
+  "name": "Warlord's Tooth",
+  "description": "A bugbear's tooth drilled and hung on wire. In the warren it means the bearer is not to be eaten.",
+  "item_type": "misc",
+  "rarity": "uncommon",
+  "weight": 1,
+  "value_gp": 0,
+  "properties": {
+    "quest_item": true,
+    "safe_passage": "warren"
+  },
+  "icon": "amulet"
+}

@@ -1,0 +1,155 @@
+{
+    "region_key": "undertown",
+    "module": "rivermark",
+    "name": "Undertown",
+    "region_type": "dungeon",
+    "description": "The flood tunnels under Rivermark. Brick drains cut two hundred years ago to take the river when it comes over the quay, dry eleven months of the year, and lived in for all of them.",
+    "sort_order": 15,
+    "locations": {
+        "sump_drain": {
+            "name": "The Sump Drain",
+            "type": "room",
+            "map_pos": [12, 14],
+            "random_encounter_pct": 10,
+            "hidden_until_visited": true,
+            "description": "Behind the Flagon's north wall the brick opens into a throat wide enough to stoop through, and the smell that has been bothering the cellar for a month is standing here waiting for you. Water comes down the wall in a thin constant sheet and goes away along a channel cut into the floor. Somebody has been through recently: the sludge on the ledge is scuffed, and the scuffs go both ways.",
+            "first_visit": "The lamp reaches about eight feet and then gives up. What it does reach is brickwork laid by someone who expected it to be looked at — courses even, joints tight, a shallow arch overhead. Nobody has looked at it in two hundred years.",
+            "ambience": [
+                "Water comes down the wall in a sheet, evenly, without hurrying.",
+                "Something small goes along the channel and does not stop to look at you.",
+                "The Flagon's floorboards creak overhead, and dust comes down.",
+                "Your lamp finds a bootprint in the sludge that is not one of yours."
+            ],
+            "exits": [
+                {"to": "flagon_cellar", "label": "Back up into the Flagon's cellar"},
+                {"to": "low_conduit", "label": "Follow the channel north"}
+            ]
+        },
+        "low_conduit": {
+            "name": "The Low Conduit",
+            "type": "room",
+            "map_pos": [30, 26],
+            "random_encounter_pct": 15,
+            "description": "The main run, and the reason any of this exists: a barrel vault of dressed brick going away under the High Street in both directions, water ankle-deep down the middle and a dry ledge on either side. Voices carry down here further than they should and arrive without a direction. Every twenty feet a smaller drain comes in from a house above, and most of them have been stopped up with rag by whoever lives below them.",
+            "first_visit": "You come out of the crawl into a tunnel you could drive a cart down, if a cart could get here, and the sound of your own boots goes off ahead of you and does not come back.",
+            "ambience": [
+                "Water runs down the middle of the vault, patient, going somewhere.",
+                "A rag stuffed into a house drain has been changed for a fresh one.",
+                "Somewhere ahead, a voice says two words and stops.",
+                "Light from a street grating lies across the water in bars.",
+                "A rat sits on the ledge and lets you pass, which is worse than fleeing."
+            ],
+            "exits": [
+                {"to": "sump_drain", "label": "Back down the side channel"},
+                {"to": "weir_chamber", "label": "Downstream toward the sound of water"},
+                {"to": "drowned_counting_room", "label": "Through the flooded side arch"},
+                {"to": "low_court", "label": "South, toward the lamps"}
+            ]
+        },
+        "weir_chamber": {
+            "name": "The Weir Chamber",
+            "type": "room",
+            "map_pos": [52, 16],
+            "random_encounter_pct": 20,
+            "description": "Four drains arrive here at four different heights and fall into one pool over a stepped stone weir, and the noise of it is the only thing in Undertown that will not let you hear yourself think. The pool is deeper than the lamplight goes. A rail was set into the wall once for people to hold; half of it is still there, and the half that is missing was taken, not lost.",
+            "first_visit": "The noise arrives before the room does — a flat continuous roar off the brick that you feel in your teeth a hundred feet out.",
+            "ambience": [
+                "The weir puts out one unbroken note and never varies it.",
+                "Something surfaces at the far edge of the pool and is gone.",
+                "Spray has furred every brick within reach with green.",
+                "The stub of the old rail is worn bright by hands."
+            ],
+            "exits": [
+                {"to": "low_conduit", "label": "Back upstream along the vault"},
+                {"to": "flood_gate", "label": "East along the dry cut"},
+                {"to": "bricked_arch", "label": "South, where the brick changes"}
+            ]
+        },
+        "flood_gate": {
+            "name": "The Flood Gate",
+            "type": "site",
+            "map_pos": [77, 12],
+            "description": "An iron gate the size of a barn door, hung in a stone frame across the eastern cut, with a worm-screw and a wheel to raise it. Everything else down here is two hundred years old and looks it. This has new pintles, new packing, and grease on the screw that has not yet gone grey. Beyond the gate the cut runs on dry, and it is the only dry thing at this depth.",
+            "first_visit": "The gate is shut, and the brickwork on either side of it is wet to a line four feet up, and the cut beyond the gate is not wet at all. Somebody has decided where the water stops.",
+            "ambience": [
+                "Water stands against the gate and finds no way through, which is remarkable.",
+                "The grease on the worm-screw takes your thumbprint.",
+                "A drip somewhere behind the gate falls into something with a floor.",
+                "The wheel has been turned enough to polish the spokes."
+            ],
+            "exits": [
+                {"to": "weir_chamber", "label": "Back west toward the weir"}
+            ]
+        },
+        "low_court": {
+            "name": "The Low Court",
+            "type": "site",
+            "map_pos": [45, 44],
+            "allow_camp": true,
+            "description": "Under the market square the drains open out into a vaulted room the size of the square above it, dry, swept, and lit by lamps that are not stolen because everyone here knows who owns them. Sixty or so people live in the bays along the walls, which are curtained with sailcloth and kept better than most rooms in the town over their heads. At the north end somebody has set a scaffold plank across two barrels and worn the middle of it smooth, and that is the bench, and Undertown is very serious about it.",
+            "first_visit": "You come round the turn expecting more brick and find lamplight, washing on a line, and about forty people who stopped talking at exactly the same moment.",
+            "ambience": [
+                "Somebody is boiling something that smells better than it has any right to.",
+                "Two people argue in the ordinary voices of neighbours, and stop when you pass.",
+                "A child is set to watch you and takes the job extremely seriously.",
+                "The plank across the barrels is empty, and nobody sits on it.",
+                "Lamp oil, wet wool, and — faintly, from a great way up — the market."
+            ],
+            "exits": [
+                {"to": "low_conduit", "label": "North, back into the vault"},
+                {"to": "grain_stair", "label": "East along the swept passage"},
+                {"to": "bricked_arch", "label": "Up the old stair to the sealed arch"}
+            ]
+        },
+        "drowned_counting_room": {
+            "name": "The Drowned Counting Room",
+            "type": "room",
+            "map_pos": [17, 45],
+            "description": "Not a drain. A room: plastered, with a moulded cornice under two feet of silt-water, and an iron door standing open on a strongroom at the back. The Fennow bank stood on this ground and failed the year of the second flood, and the cellar it kept its boxes in was never emptied, because emptying it would have meant agreeing whose the boxes were. The water is cold and comes to the chest and the names on the box-plates are still readable.",
+            "first_visit": "Your lamp goes over a cornice, and a plaster rose, and the top of a door frame, and it takes a moment to understand that you are standing on somebody's ceiling.",
+            "ambience": [
+                "The water takes your light and gives back a shape that is only the water.",
+                "Something knocks, once, against the inside of the strongroom door.",
+                "A box-plate catches the lamp: a name, cut deep, quite legible.",
+                "Silt lifts where you walked an hour ago and has not settled yet."
+            ],
+            "exits": [
+                {"to": "low_conduit", "label": "Back out through the side arch"}
+            ]
+        },
+        "bricked_arch": {
+            "name": "The Bricked Arch",
+            "type": "room",
+            "map_pos": [72, 42],
+            "description": "The passage ends at an arch that has been filled in with brick, and the fill is nothing like the arch. The arch is old, soft, hand-made and lime-set. The fill is hard grey brick in a cement that has not weathered at all, laid plumb, laid well, and — this is the part that takes a while to notice — laid from the other side. Whoever closed it walked away in the direction you cannot go.",
+            "first_visit": "The lamp shows a wall where the map in your head says there should be a passage, and the wall is newer than you are.",
+            "ambience": [
+                "The fill gives back a flat, dead sound. There is nothing hollow behind it.",
+                "Cement dust still comes off the joints under a thumbnail.",
+                "One brick near the springing of the arch carries a small cut mark.",
+                "The old brick weeps at the joints. The new brick does not weep at all."
+            ],
+            "exits": [
+                {"to": "weir_chamber", "label": "Back north toward the weir"},
+                {"to": "low_court", "label": "Down the old stair to the Low Court"}
+            ]
+        },
+        "grain_stair": {
+            "name": "The Grain Stair",
+            "type": "room",
+            "map_pos": [58, 64],
+            "description": "A brick stair going up under Granary Row to a loading hatch, and a landing at the bottom swept cleaner than anywhere else down here. The sweeping is the tell: grain has been coming down these steps in quantity and somebody has been very careful that it should not look as though it had. There is a barrow at the foot of the stair with a broken handle, and a smell of malt and mouse.",
+            "first_visit": "The steps are worn in the middle, which takes years, and the landing is swept, which takes somebody deciding to.",
+            "ambience": [
+                "Grain dust hangs in the lamplight and will not settle.",
+                "The hatch above shifts in its frame as a cart goes over it.",
+                "A single barley corn on the step, and then another two steps up.",
+                "Mice go about their business without any interest in yours."
+            ],
+            "exits": [
+                {"to": "low_court", "label": "West along the swept passage"},
+                {"to": "granary_row", "label": "Up the ladder into the loading hatch"}
+            ]
+        }
+    }
+}

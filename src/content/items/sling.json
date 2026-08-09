@@ -1,0 +1,16 @@
+{
+  "item_key": "sling",
+  "name": "Sling",
+  "description": "Two cords and a leather cradle. Ammunition is whatever the road is made of.",
+  "item_type": "weapon",
+  "rarity": "common",
+  "weight": 0,
+  "value_gp": 1,
+  "damage_dice": "1d4",
+  "damage_type": "bludgeoning",
+  "properties": {
+    "ranged": "30/120",
+    "simple": true
+  },
+  "icon": "weapon"
+}

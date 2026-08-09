@@ -1,0 +1,84 @@
+{
+    "quest_key": "aldric_the_true_record",
+    "title": "The True Record",
+    "description": "Aldric read the charge in eight seconds and never once read the foot of it. The brother who wrote it kept the same ward that winter, and there is a roll in a box at Coldwell with a hand on it that says Aldric was not alone in the room.",
+    "companion": "aldric",
+    "giver": "aldric",
+    "on_job_board": false,
+    "required_level": 4,
+    "rewards": {
+        "xp": 350
+    },
+    "stages": {
+        "the_answer": {
+            "title": "Wait for the carrier",
+            "objective": "Aldric has written to Coldwell for the ward roll. See whether an archive that is being shut answers a man it has a summons out on.",
+            "journal": "Brother Teodor wrote the charge against Aldric, and Brother Teodor had vigil to prime on the ward that winter, which means somebody signed the roll for the hour Aldric has spent four years describing as an hour with nobody in it. Aldric has written east asking for the roll. He signed it Brother Aldric and gave no direction, and he says a house does not answer a man it has a summons out on.",
+            "target": {
+                "location": "flagon_common_room"
+            }
+        },
+        "named_himself": {
+            "title": "The original, and an address",
+            "journal": "A hundred and twenty gold for a scribe's fee, and one line in Aldric's own hand giving the sign of the Golden Flagon, Rivermark, by the river road. The original roll came back on the carrier's cart with the salt: Teodor, vigil to prime, ward of eleven beds, his initials and the hour beside them. Aldric is in the record and Aldric is now findable, and he wrote the eleven words himself and handed the letter to the carrier rather than leaving it on the bar.",
+            "resolution": "named_himself",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "aldric_record_fate",
+                    "value": "named"
+                },
+                {
+                    "set_flag": "order_knows_aldric"
+                },
+                {
+                    "approval": {
+                        "aldric": 20,
+                        "ilse": 6,
+                        "kessa": 4,
+                        "sera": -8
+                    }
+                }
+            ]
+        },
+        "wrote_it_himself": {
+            "title": "Two pages, no witness",
+            "journal": "Aldric wrote his own account over three evenings and did not read a word of it aloud. Two pages, beginning with the date and the hour and the names of everybody who was on the ward, with Teodor's second on the list. It went into a closing archive unsigned by any witness, which makes it a claim and not a fact and worth precisely nothing. He says the point was never that anybody would read it. The point was that he stopped being the only account of that night in the world, and therefore stopped being free to improve it.",
+            "resolution": "wrote_it_himself",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "aldric_record_fate",
+                    "value": "claim"
+                },
+                {
+                    "approval": {
+                        "aldric": 14,
+                        "sera": 6,
+                        "kessa": 2
+                    }
+                }
+            ]
+        },
+        "sent_it_back": {
+            "title": "Folded as it came",
+            "journal": "The fair copy went back east on the eighth with nothing written on the outside of it. A roll would have told an office that Aldric was not alone; it would not have carried the one fact in the business that ever mattered, which is that she asked. He would not buy a document that leaves out the woman. He says five names before compline now instead of four.",
+            "resolution": "sent_it_back",
+            "terminal": true,
+            "outcome": "neutral",
+            "effects": [
+                {
+                    "set_flag": "aldric_record_fate",
+                    "value": "stood"
+                },
+                {
+                    "approval": {
+                        "aldric": 10,
+                        "ilse": 4,
+                        "kessa": -2
+                    }
+                }
+            ]
+        }
+    }
+}

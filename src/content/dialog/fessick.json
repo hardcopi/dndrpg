@@ -1,0 +1,318 @@
+{
+    "npc_key": "fessick",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "flag": "growth_cut_out"
+                    }
+                ],
+                "text": "Fessick is sitting in the water with his back against the props, holding a chisel he has not put down. \"That,\" he says, \"was four inches and three years.\" He looks at the hole where the face was. \"I've been told to keep cutting since the spring before last. I want you to write down somewhere that I asked twice what it was, and that both times a man told me it was rock.\"",
+                "choices": [
+                    {
+                        "label": "It's finished.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_thing_under_the_quarry",
+                                    "stage": "cut_it_out"
+                                }
+                            }
+                        ],
+                        "next": "nothing_is_finished"
+                    },
+                    {
+                        "label": "Get him up the stair.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "undercut_fate",
+                        "equals": "cut"
+                    }
+                ],
+                "once": true,
+                "text": "They have put Fessick on the muster floor with a blanket and a cup and nothing to do, and he hates it. \"Rourke's had the chamber propped and boarded,\" he says. \"There's a boy on the door of it counting who goes in.\" He turns the cup round. \"Nobody's said a word to me about what it was. I did the cutting and I'm the one man down here who's not been told.\"",
+                "choices": [
+                    {
+                        "label": "Nobody knows.",
+                        "next": "nothing_is_finished"
+                    },
+                    {
+                        "label": "Leave him.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "undercut_fate",
+                        "equals": "left"
+                    }
+                ],
+                "once": true,
+                "text": "The strokes stop when your lamp reaches the chalk line, and start again when you have stood there long enough to be a person and not a warden. \"Inch a week,\" Fessick says, without turning round. \"Three left, near enough. You know where I am.\"",
+                "choices": [
+                    {
+                        "label": "Take the rest of it out. Now, with us here.",
+                        "effects": [
+                            {
+                                "start_combat": "the_undercut_growth"
+                            }
+                        ],
+                        "next": "the_last_four_inches"
+                    },
+                    {
+                        "label": "Back up the launder.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "undercut_fate",
+                        "equals": "down"
+                    }
+                ],
+                "once": true,
+                "text": "Fessick is on the muster floor with a blanket round him and forty feet of the old quarry between him and the last four inches he was going to cut. He is not thanking you. He is doing the sum. \"Year and a half,\" he says. \"They'll want a face-man. I'll be sixty-eight.\"",
+                "choices": [
+                    {
+                        "label": "Then don't take it.",
+                        "next": "nothing_is_finished"
+                    },
+                    {
+                        "label": "Leave him.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_thing_under_the_quarry",
+                        "stage": "the_face"
+                    }
+                ],
+                "text": "The old man puts the chisel down on the ledge, very carefully, the way you put a thing down when you have decided to stop for a moment and want the decision to be reversible. \"Four inches,\" he says. \"Maybe three. I've been three weeks on the last foot because I was told to take an inch a week and I have never once been ahead of that instruction.\"",
+                "choices": [
+                    {
+                        "label": "Take the rest of it out. Now, with us here.",
+                        "effects": [
+                            {
+                                "start_combat": "the_undercut_growth"
+                            }
+                        ],
+                        "next": "the_last_four_inches"
+                    },
+                    {
+                        "label": "Knock the props. Put the quarry back on top of it.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_thing_under_the_quarry",
+                                    "stage": "brought_it_down"
+                                }
+                            }
+                        ],
+                        "next": "the_props"
+                    },
+                    {
+                        "label": "Leave it. Leave him cutting.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_thing_under_the_quarry",
+                                    "stage": "left_it_cutting"
+                                }
+                            }
+                        ],
+                        "next": "he_goes_back_to_it"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_thing_under_the_quarry",
+                        "status": "active"
+                    }
+                ],
+                "text": "Standing water to the ankle, four lamps, and one old man on a ledge with hand tools laid out in a row, sharpened, in order of size. He is not swinging anything. He is listening to the face with the flat of his hand on it, and he does this for some time before he acknowledges that you are there.",
+                "choices": [
+                    {
+                        "label": "What are you listening for?",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_thing_under_the_quarry",
+                                    "stage": "the_face"
+                                }
+                            }
+                        ],
+                        "next": "the_note"
+                    },
+                    {
+                        "label": "Back up the launder.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "There is a chalk line on the floor of the old workings and no footprints past it, and past it there is one old man on a ledge with a chisel, cutting at a face of the wrong-coloured rock about as fast as a man cuts when he has been told there is no hurry. He looks up. He has the whitest beard you have seen underground.",
+                "on_enter": [
+                    {
+                        "set_flag": "met_fessick"
+                    },
+                    {
+                        "start_quest": "the_thing_under_the_quarry"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "What are you cutting?",
+                        "next": "the_note"
+                    },
+                    {
+                        "label": "Back up the launder.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_note": [
+            {
+                "text": "\"Face has a note,\" Fessick says. \"Any face-man'll tell you. You learn it inside a week — you hit it and it tells you what's behind it, and after forty years you don't even do it on purpose.\" He puts his hand flat on the rock again. \"This one hasn't got a note. Not a wrong one. It hasn't got one. I've been at it two year and I have never in my life stood in front of stone that didn't answer.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_thing_under_the_quarry",
+                            "stage": "the_face"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"Why did you ask for this face?\" Fessick: \"Because somebody was going to get it and the rest of them have children.\""
+                    },
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric puts his hand on the rock beside the old man's, and takes it off again quite quickly, and does not say why."
+                    },
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa: \"Then stop cutting.\" Fessick: \"Then somebody else cuts, love, and he'll be quicker.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "What do you think is behind it?",
+                        "next": "he_does_not_think"
+                    },
+                    {
+                        "label": "Take the rest of it out. Now, with us here.",
+                        "effects": [
+                            {
+                                "start_combat": "the_undercut_growth"
+                            }
+                        ],
+                        "next": "the_last_four_inches"
+                    },
+                    {
+                        "label": "Knock the props. Put the quarry back on top of it.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_thing_under_the_quarry",
+                                    "stage": "brought_it_down"
+                                }
+                            }
+                        ],
+                        "next": "the_props"
+                    },
+                    {
+                        "label": "Leave it. Leave him cutting.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_thing_under_the_quarry",
+                                    "stage": "left_it_cutting"
+                                }
+                            }
+                        ],
+                        "next": "he_goes_back_to_it"
+                    }
+                ]
+            }
+        ],
+        "he_does_not_think": [
+            {
+                "text": "\"I don't,\" Fessick says. \"That's the trade. A face-man who thinks about the far side of a face is a face-man who stops, and a man who stops don't eat.\" He picks the chisel back up and turns it over. \"I'll tell you what I do know. Whatever it is, the quarry came down on it, and it has been under forty foot of the county for three year, and it has not moved once. That's either dead or it's patient, and I'd sooner it were dead.\"",
+                "choices": [
+                    {
+                        "label": "Back.",
+                        "next": "the_note"
+                    }
+                ]
+            }
+        ],
+        "the_last_four_inches": [
+            {
+                "text": "He does it himself. He will not let anybody else have the chisel, and he takes the last of it out in about nine strokes, and the face comes away in one piece like a door, and what is behind it has been waiting for those four inches for three years and is not dead at all.",
+                "choices": [
+                    {
+                        "label": "Get in front of the old man.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_props": [
+            {
+                "text": "It takes an hour and it takes both of you, and Fessick knocks the last one himself because he knows which one it is and you do not. The old workings go up in dust and water and a sound like the valley clearing its throat, and forty feet of quarry that came down three years ago comes down again, and the face is under all of it. \"Year and a half,\" he says, when the dust has settled enough to speak. \"About. I've costed it.\"",
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"A season is worth buying.\" Fessick: \"It's six seasons, warden. I've been doing this since before your father.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Get up the launder before the water finds you.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "he_goes_back_to_it": [
+            {
+                "text": "He waits until you have got back to the chalk line before he starts again. You hear the first stroke from the launder, and the second, and the third, and they are all exactly as far apart as the ones before, because he has been told to take an inch a week and he is a man who has never in his life been ahead of an instruction.",
+                "choices": [
+                    {
+                        "label": "Keep walking.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "nothing_is_finished": [
+            {
+                "text": "\"Nothing's finished,\" Fessick says. \"There's a hole where a face was and there'll be a man on it by the fifteenth, and it'll be somebody with children, and he'll be told it's rock.\" He gets up, slowly, and picks the chisel out of the water, because it is a good chisel and it was his father's. \"Write it down somewhere. That's all I've ever wanted out of any of this. Somebody writing it down.\"",
+                "choices": [
+                    {
+                        "label": "I will.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

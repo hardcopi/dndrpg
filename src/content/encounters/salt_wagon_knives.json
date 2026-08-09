@@ -1,0 +1,14 @@
+{
+  "encounter_key": "salt_wagon_knives",
+  "name": "The Carters Object",
+  "description": "The six men on the caravan ground stop being carters between one step and the next, which is a thing carters cannot usually do.",
+  "difficulty": "medium",
+  "monsters": [
+    {"monster": "bandit", "quantity": 3, "rank": "front"},
+    {"monster": "gnoll", "quantity": 1, "rank": "back"}
+  ],
+  "allow_flee": true,
+  "allow_parley": true,
+  "parley_node": "hesk_dray:call_them_off",
+  "victory_flag": "salt_wagons_taken"
+}

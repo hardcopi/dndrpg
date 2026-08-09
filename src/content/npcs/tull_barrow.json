@@ -1,0 +1,13 @@
+{
+    "npc_key": "tull_barrow",
+    "name": "Tull Barrow",
+    "role": "Drover",
+    "description": "Sixty beasts, four dogs, and a route he has walked since he was nine. He is walking it in the wrong direction this year and has not told anybody why.",
+    "sprite_key": "tull_barrow",
+    "image_url": "assets/images/npcs/barbarian.png",
+    "is_quest_giver": true,
+    "dialog": "tull_barrow",
+    "place": {
+        "location": "drovers_rest"
+    }
+}

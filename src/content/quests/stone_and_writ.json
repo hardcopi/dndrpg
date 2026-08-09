@@ -1,0 +1,116 @@
+{
+    "quest_key": "stone_and_writ",
+    "title": "Stone and Writ",
+    "description": "The quarry has been derelict for eleven years and its writ has changed hands twice since spring. The mearing stone that says where it begins has had one face dressed back flat and cut again.",
+    "giver": "gest_pyle",
+    "on_job_board": true,
+    "required_level": 3,
+    "rewards": {
+        "xp": 400,
+        "gold": 120
+    },
+    "stages": {
+        "the_fourth_face": {
+            "title": "The fourth face",
+            "objective": "Look at what has been cut into the mearing stone this year.",
+            "journal": "Where four holdings meet there is a stone with four faces. Three are worn nearly smooth. The fourth has been dressed back and re-cut this year with a proper mason's chisel, and what is on it now is not a crozier, a ploughshare or a tower.",
+            "target": {
+                "location": "boundary_stone"
+            }
+        },
+        "whose_name_is_on_it": {
+            "title": "Whose name is on it",
+            "objective": "Find out who holds the quarry writ now, and who held it in spring.",
+            "journal": "The writ went from the town, to a grain factor, to a name nobody at the counting house recognises, inside seven months. Each transfer is lawful and each one was cheap. The last one was not paid for in coin — it was paid for by taking on a debt that was already owed.",
+            "target": {
+                "location": "quarrymans_hut"
+            }
+        },
+        "filed_the_copy": {
+            "title": "Filed",
+            "journal": "I took a rubbing of the new face and a copy of the transfers down to the counting house and had both entered in the town's own book with a date on them. It changes nothing about who owns the quarry. It means that in ten years, when somebody asks when it stopped being Rivermark's, there will be an answer.",
+            "resolution": "filed_the_copy",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "quarry_writ_fate",
+                    "value": "filed"
+                },
+                {
+                    "set_flag": "mark_seen_writ"
+                },
+                {
+                    "give_item": "mearing_rubbing",
+                    "quantity": 1
+                },
+                {
+                    "xp": 100
+                },
+                {
+                    "approval": {
+                        "sera": 12,
+                        "aldric": 6,
+                        "ilse": 4,
+                        "kessa": -2
+                    }
+                }
+            ]
+        },
+        "cut_the_stone_back": {
+            "title": "The stone, re-cut",
+            "journal": "We put the old mearing back on the fourth face with a borrowed chisel and a bad hand, and it looks like what it is: a repair. The ground now says one thing and the paper says another, and every boundary case in the valley for the next hundred years will start with an argument about which of them is lying.",
+            "resolution": "cut_the_stone_back",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "quarry_writ_fate",
+                    "value": "stone"
+                },
+                {
+                    "set_flag": "mark_seen_writ"
+                },
+                {
+                    "set_flag": "mearing_recut"
+                },
+                {
+                    "approval": {
+                        "kessa": 12,
+                        "ilse": 8,
+                        "sera": -12,
+                        "aldric": -4
+                    }
+                }
+            ]
+        },
+        "sold_the_reading": {
+            "title": "Sold",
+            "journal": "A man came up the road two days later and asked, politely, what we had found on the stone, and paid for the answer without haggling, which is how I know I undercharged. He wrote nothing down. He thanked me by name.",
+            "resolution": "sold_the_reading",
+            "terminal": true,
+            "outcome": "neutral",
+            "effects": [
+                {
+                    "set_flag": "quarry_writ_fate",
+                    "value": "sold"
+                },
+                {
+                    "set_flag": "mark_seen_writ"
+                },
+                {
+                    "set_flag": "sold_to_the_polite_man"
+                },
+                {
+                    "give_gold": 250
+                },
+                {
+                    "approval": {
+                        "sera": 10,
+                        "kessa": -8,
+                        "ilse": -14,
+                        "aldric": -16
+                    }
+                }
+            ]
+        }
+    }
+}

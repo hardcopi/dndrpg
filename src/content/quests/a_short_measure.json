@@ -1,0 +1,98 @@
+{
+    "quest_key": "a_short_measure",
+    "title": "A Short Measure",
+    "description": "Every sack of flour Nell Quist buys comes in two pounds light. Not roughly two pounds. Two pounds, every sack, every week, since spring.",
+    "giver": "market_baker",
+    "on_job_board": true,
+    "rewards": {
+        "xp": 200,
+        "gold": 35
+    },
+    "stages": {
+        "weigh_it_yourself": {
+            "title": "Weigh a sack",
+            "objective": "Find out whether the baker is right.",
+            "journal": "Nell Quist weighs every sack that comes to her stall because her mother did. Twelve weeks of chalk on the back of her stall board, and the shortfall is two pounds every time. A thief takes what he can carry. Two pounds exactly, every time, is not theft. It is arithmetic.",
+            "target": {
+                "location": "market_square"
+            }
+        },
+        "the_weighing_floor": {
+            "title": "The weighing floor",
+            "objective": "The sacks are weighed at the granary. Go and watch it done.",
+            "journal": "Pol Reddick weighs on the granary floor with the town's own stone and has done for eleven years, and the stone says the sacks are right. He let me lift one. The sacks are new — good sound canvas, better than the old ones, and stamped on the corner with a mark nobody on the floor could name. Pol says they came with the spring contract and that they are excellent sacks.",
+            "target": {
+                "location": "granary_row"
+            },
+            "effects": [
+                {
+                    "set_flag": "grain_stamp_seen"
+                }
+            ]
+        },
+        "blamed_the_carter": {
+            "title": "The carter",
+            "journal": "The carter had been taking a double handful off the top of every sack for years, which is true, and comes to nothing like two pounds, which I did not say. He was put off the road. The flour came right for five weeks. Then it went light again, by exactly two pounds, and Nell stopped chalking the board.",
+            "resolution": "blamed_the_carter",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "short_measure_fate",
+                    "value": "carter"
+                },
+                {
+                    "approval": {
+                        "aldric": -8,
+                        "ilse": -6,
+                        "kessa": 2
+                    }
+                }
+            ]
+        },
+        "the_weighing_stone": {
+            "title": "The stone itself",
+            "journal": "The town's weighing stone was recut in the spring, legitimately, by a mason paid out of the town account, because the old one had chipped. It came back two pounds heavy. Every sack weighed against it in eight months went out light and the difference stayed on the floor. Reed had it checked against the standard at Greyhythe and had a new one cut, and the town is eleven hundredweight of flour poorer and nobody is going to be hanged for it.",
+            "resolution": "the_weighing_stone",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "short_measure_fate",
+                    "value": "stone"
+                },
+                {
+                    "set_flag": "stone_recut_known"
+                },
+                {
+                    "approval": {
+                        "ilse": 8,
+                        "aldric": 8,
+                        "sera": 5
+                    }
+                }
+            ]
+        },
+        "took_the_difference": {
+            "title": "The difference, taken quietly",
+            "journal": "I found where the two pounds a sack was going and arranged to be paid to keep on not knowing. Forty gold, and a standing understanding. Nell still chalks her board. She has started weighing at my stall too, which is a thing I did not expect to mind.",
+            "resolution": "took_the_difference",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "short_measure_fate",
+                    "value": "silence"
+                },
+                {
+                    "give_gold": 40
+                },
+                {
+                    "approval": {
+                        "kessa": 3,
+                        "aldric": -16,
+                        "ilse": -12,
+                        "sera": 6
+                    }
+                }
+            ]
+        }
+    }
+}

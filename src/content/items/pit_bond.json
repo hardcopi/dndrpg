@@ -1,0 +1,11 @@
+{
+  "item_key": "pit_bond",
+  "name": "A Bond of Service",
+  "description": "Forty-one gold advanced against eighteen months of bouts, at a rate of forfeit that means the eighteen months have quietly become four years. Lawful, signed, and witnessed by two people who were paid to witness it.",
+  "item_type": "misc",
+  "rarity": "uncommon",
+  "weight": 0,
+  "value_gp": 0,
+  "properties": {"quest_item": true, "readable": true},
+  "icon": "scroll"
+}

@@ -1,0 +1,14 @@
+{
+  "encounter_key": "undertown_prowl",
+  "name": "Something Using the Same Ledge",
+  "description": "The ledge is the only dry footing in a hundred yards, which means everything down here uses it, and two things using it are one thing too many.",
+  "difficulty": "easy",
+  "is_random": true,
+  "region": "undertown",
+  "monsters": [
+    { "monster": "giant_rat", "quantity": 4 },
+    { "monster": "sump_gremlin", "quantity": 1, "rank": "back" }
+  ],
+  "allow_flee": true,
+  "allow_parley": false
+}

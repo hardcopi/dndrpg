@@ -1,0 +1,16 @@
+{
+    "item_key": "oldcity_boys_shoe",
+    "name": "A Child's Shoe",
+    "item_type": "misc",
+    "rarity": "common",
+    "weight": 0,
+    "value_gp": 0,
+    "icon": "misc",
+    "description": "One of a great many, in a wide ring around a cauldron. This one has a name inked inside the tongue by somebody who expected it to come home.",
+    "properties": {
+        "quest_item": true
+    },
+    "place": {
+        "location": "oldcity_ogres_lair"
+    }
+}

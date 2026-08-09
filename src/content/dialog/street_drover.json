@@ -1,0 +1,17 @@
+{
+    "npc_key": "street_drover",
+    "start": "hail",
+    "nodes": {
+        "hail": [
+            {
+                "text": "Wagons won't run the east road till it's safe. My oxen agree with the wagons.",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

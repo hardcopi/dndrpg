@@ -1,0 +1,12 @@
+{
+    "npc_key": "almoner_venn",
+    "name": "Brother Venn",
+    "role": "Almoner of Arden",
+    "description": "He buys the flour, the linen and the lamp oil for a house with no income and eight empty shelves in its reliquary, and he has been keeping receipts where the relics used to stand.",
+    "sprite_key": "paladin",
+    "is_quest_giver": true,
+    "dialog": "almoner_venn",
+    "place": {
+        "location": "priory_reliquary"
+    }
+}

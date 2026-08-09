@@ -1,0 +1,13 @@
+{
+    "item_key": "oldcity_uncut_stones",
+    "name": "Tray of Uncut Stones",
+    "item_type": "treasure",
+    "rarity": "common",
+    "weight": 3,
+    "value_gp": 300,
+    "icon": "gem",
+    "description": "Thirty rough stones in a graded wooden tray, sorted smallest to largest by a hand that did it every evening. Uncut they are worth perhaps ten gold apiece. Cut, by somebody who knows how, they would be worth a great deal more.",
+    "place": {
+        "location": "oldcity_gem_cutters"
+    }
+}

@@ -1,0 +1,21 @@
+{
+  "encounter_key": "quarry_trail_ambush",
+  "name": "Ambush on the Quarry Trail",
+  "description": "Slings first, then the ones with knives come down off the spoil heap.",
+  "difficulty": "medium",
+  "monsters": [
+    {
+      "monster": "goblin",
+      "quantity": 3,
+      "rank": "front"
+    },
+    {
+      "monster": "kobold",
+      "quantity": 2,
+      "rank": "back"
+    }
+  ],
+  "allow_flee": true,
+  "allow_parley": false,
+  "place": { "location": "warren_approach" }
+}

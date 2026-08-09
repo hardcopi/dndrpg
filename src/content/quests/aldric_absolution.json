@@ -1,0 +1,77 @@
+{
+    "quest_key": "aldric_absolution",
+    "title": "The Thing Brother Aldric Did",
+    "description": "Aldric keeps the hours of an order that threw him out. He will tell you why if you ask him at the right time, and then he will want to know what you intend to do about it.",
+    "companion": "aldric",
+    "giver": "aldric",
+    "on_job_board": false,
+    "required_level": 2,
+    "rewards": {
+        "xp": 200,
+        "item": "holy_symbol"
+    },
+    "stages": {
+        "the_letter": {
+            "title": "The letter Aldric will not open",
+            "objective": "Ask Aldric about the letter he has been carrying since the ford.",
+            "journal": "Aldric has carried a sealed letter since we met. It is addressed to him in a hand he recognises. He has not opened it and he has not thrown it away.",
+            "target": {
+                "location": "flagon_common_room"
+            }
+        },
+        "the_name": {
+            "title": "A name and a date",
+            "objective": "Aldric has told you. Decide what it is worth telling anyone else.",
+            "journal": "A woman called Bettony Frayle, four winters ago, three days into a wasting fever that had eight more days in it. Aldric gave her enough of the draught to stop it. His order calls that murder. He has never argued with them about the word.",
+            "target": {
+                "location": "granary_row"
+            }
+        },
+        "confessed": {
+            "title": "Said out loud",
+            "journal": "Aldric said it in front of Reed and two witnesses, in his own words, in the middle of a working afternoon. Reed wrote it down, read it back, and told him the town had no law that covered it and no intention of finding one. He has slept since.",
+            "resolution": "confessed",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "aldric_fate",
+                    "value": "confessed"
+                },
+                {
+                    "set_flag": "aldric_secret_known"
+                },
+                {
+                    "approval": {
+                        "aldric": 20,
+                        "ilse": 6,
+                        "sera": -12,
+                        "kessa": 4
+                    }
+                }
+            ]
+        },
+        "buried": {
+            "title": "Kept",
+            "journal": "We burned the letter at the ford and I told him it was nobody's business but hers, and she is four winters dead. He agreed with me. He agrees with me the way a man agrees to stop pressing a bruise.",
+            "resolution": "buried",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "aldric_fate",
+                    "value": "buried"
+                },
+                {
+                    "set_flag": "aldric_secret_known"
+                },
+                {
+                    "approval": {
+                        "aldric": 8,
+                        "sera": 10,
+                        "kessa": 6,
+                        "ilse": -4
+                    }
+                }
+            ]
+        }
+    }
+}

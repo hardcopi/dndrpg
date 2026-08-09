@@ -1,0 +1,59 @@
+{
+  "resistances": [],
+  "immunities": [],
+  "vulnerabilities": [],
+  "condition_immunities": [],
+  "source": "Rivermark",
+  "monster_key": "deep_gremlin",
+  "name": "Deep Gremlin",
+  "size": "Small",
+  "type": "monstrosity",
+  "alignment": "unaligned",
+  "armor_class": 13,
+  "hit_points": 14,
+  "hit_dice": "4d6",
+  "speed": "30 ft., climb 30 ft.",
+  "strength": 9,
+  "dexterity": 16,
+  "constitution": 11,
+  "intelligence": 6,
+  "wisdom": 10,
+  "charisma": 5,
+  "challenge_rating": 0.5,
+  "experience_points": 100,
+  "traits": {
+    "Came Up the Hole": "Gremlins do not den in the warren. Every one of them has come up from below in the last two years, and they come up in numbers when the cutting below is loud.",
+    "Sunlight Sensitivity": "Disadvantage on attack rolls and on Perception checks relying on sight in sunlight."
+  },
+  "actions": [
+    {
+      "name": "Claws",
+      "type": "melee",
+      "bonus": 5,
+      "damage": "1d6+3",
+      "damage_type": "slashing"
+    },
+    {
+      "name": "Thrown Stone",
+      "type": "ranged",
+      "bonus": 5,
+      "damage": "1d4+3",
+      "damage_type": "bludgeoning"
+    }
+  ],
+  "saves": {
+    "dex": 5
+  },
+  "rank_pref": "front",
+  "sprite_key": "gremlin",
+  "loot": [
+    {
+      "gold": "2d4",
+      "chance": 60
+    },
+    {
+      "item": "uv_delvers_pick",
+      "chance": 25
+    }
+  ]
+}

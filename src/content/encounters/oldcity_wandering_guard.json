@@ -1,0 +1,16 @@
+{
+    "encounter_key": "oldcity_wandering_guard",
+    "name": "A Patrol On The Causeway",
+    "description": "Lamps coming the other way along the ledge, and a voice telling you to stand where you are.",
+    "difficulty": "easy",
+    "is_random": true,
+    "region": "old_city",
+    "monsters": [
+        {
+            "monster": "city_guard",
+            "quantity": 3
+        }
+    ],
+    "allow_flee": true,
+    "allow_parley": false
+}

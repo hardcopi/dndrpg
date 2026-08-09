@@ -1,0 +1,13 @@
+{
+  "encounter_key": "the_field_howler",
+  "name": "What Came Up Off the Fen",
+  "description": "It does not howl. It makes one flat carrying note, and two hundred acres of cattle go to the far hedge at once, and then it is in the open with you.",
+  "difficulty": "hard",
+  "monsters": [
+    {"monster": "fen_howler", "quantity": 1, "rank": "front"},
+    {"monster": "dire_wolf", "quantity": 1, "rank": "front"}
+  ],
+  "allow_flee": true,
+  "allow_parley": false,
+  "victory_flag": "howler_killed"
+}

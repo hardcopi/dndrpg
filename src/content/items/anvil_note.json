@@ -1,0 +1,14 @@
+{
+  "item_key": "anvil_note",
+  "name": "The Anvil Note",
+  "description": "Eighty gold lent against a forge in the fourth year of the road tax, signed by Brenna Coalwright and by a cooper who has been dead since. On the back, four assignments in four different hands, each one selling the debt on. The last hand did not sign a name, only a house.",
+  "item_type": "misc",
+  "rarity": "uncommon",
+  "weight": 1,
+  "value_gp": 0,
+  "properties": {
+    "quest_item": true,
+    "readable": true
+  },
+  "icon": "scroll"
+}

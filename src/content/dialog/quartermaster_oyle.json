@@ -1,0 +1,69 @@
+{
+    "npc_key": "quartermaster_oyle",
+    "start": "hail",
+    "nodes": {
+        "hail": [
+            {
+                "once": true,
+                "text": "A man with a chest, a ledger and the manner of somebody who has found the one job down here that involves no walking.\n\n\"Oyle,\" he says. \"Stores. Officially I supply the Watch. Unofficially I supply anybody, because the Watch go through four lamps a month and the Works are billed for eleven, and everyone concerned is content with that arrangement.\"",
+                "choices": [
+                    {
+                        "label": "What have you got?",
+                        "effects": [
+                            {
+                                "open_shop": "quartermaster_oyle"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "You don't go down there yourself?",
+                        "next": "not_me"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "\"Back up in one piece,\" Oyle observes, unlocking the chest. \"That's the good outcome. You'd be amazed.\"",
+                "choices": [
+                    {
+                        "label": "What have you got?",
+                        "effects": [
+                            {
+                                "open_shop": "quartermaster_oyle"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "Nothing today.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "not_me": [
+            {
+                "text": "\"Never once. Not a step past the last torch.\" He is not embarrassed about it in the slightest. \"I have been doing this eleven years and I have watched a great many people who were braver than me go down that channel, and I have restocked from a fair number of their packs afterwards.\"\n\nHe taps the chest.\n\n\"Which is where most of this came from, since you did not ask. Prices reflect it.\"",
+                "choices": [
+                    {
+                        "label": "What have you got?",
+                        "effects": [
+                            {
+                                "open_shop": "quartermaster_oyle"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "Grim.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

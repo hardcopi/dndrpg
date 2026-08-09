@@ -1,0 +1,11 @@
+{
+    "npc_key": "hollis_marrow",
+    "name": "Hollis Marrow",
+    "role": "Reeve of the Granary",
+    "description": "Weighs Rivermark's grain and sets its price. Owns the scales, the loft and most of the debt in town.",
+    "sprite_key": "scribe",
+    "dialog": "hollis_marrow",
+    "place": {
+        "location": "granary_row"
+    }
+}

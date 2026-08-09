@@ -1,0 +1,33 @@
+{
+    "quest_key": "uv_three_floors",
+    "title": "Three Floors Down",
+    "description": "Nobody agrees on what the third floor is like, because nobody has been on the same third floor twice. Marda Scole would like one more account of it for the pile.",
+    "giver": "marda_scole",
+    "on_job_board": true,
+    "required_level": 3,
+    "rewards": {
+        "xp": 350,
+        "gold": 90
+    },
+    "stages": {
+        "go_deeper": {
+            "title": "Three floors",
+            "objective": "Get three floors down into the Undervault, and come back up to say so.",
+            "journal": "Marda has eleven accounts of the third floor and no two of them describe the same place. She has stopped expecting them to agree and started collecting them anyway, which she says is the only honest thing to do with a hole that will not hold still.",
+            "target": {
+                "location": "uv_mouth"
+            }
+        },
+        "came_back": {
+            "title": "Told her what was down there",
+            "journal": "Three floors, and mine matched none of the eleven either. She wrote it down without arguing, the way somebody writes down a twelfth thing.",
+            "resolution": "came_back",
+            "terminal": true,
+            "effects": [
+                {
+                    "xp": 100
+                }
+            ]
+        }
+    }
+}

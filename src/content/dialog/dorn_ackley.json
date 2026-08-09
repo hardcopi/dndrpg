@@ -1,0 +1,493 @@
+{
+    "npc_key": "dorn_ackley",
+    "start": "hail",
+    "nodes": {
+        "hail": [
+            {
+                "conditions": [
+                    {
+                        "flag": "quarryman_fate",
+                        "equals": "went"
+                    }
+                ],
+                "once": true,
+                "text": "He is on the bench, facing north, with a blanket over his knees that he did not have last week. \"I went back,\" he says, before you have said anything. \"You were there. I keep having to check that I did it and not that I thought about doing it.\"",
+                "choices": [
+                    {
+                        "label": "You did it.",
+                        "next": "you_did_it"
+                    },
+                    {
+                        "label": "Rest up.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "quarryman_fate",
+                        "equals": "told"
+                    }
+                ],
+                "once": true,
+                "text": "\"Said my piece,\" Ackley says. \"Eleven minutes. First time in eleven years and it took eleven minutes, which is a stupid thing to have noticed and I noticed it.\" He is still facing north. \"I'm not going down there. I said that at the start.\"",
+                "choices": [
+                    {
+                        "label": "You said it at the start.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "quarryman_fate",
+                        "equals": "left"
+                    }
+                ],
+                "once": true,
+                "text": "He does not turn round. \"Still here,\" he says. \"Still north.\"",
+                "choices": [
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_last_quarryman",
+                        "stage": "what_he_heard"
+                    }
+                ],
+                "text": "\"You came back,\" Ackley says. He has moved the bench two feet since you were here, which for this man is an event. \"Right. Then sit down, because I'm not telling it standing and I'm not telling it twice.\"",
+                "choices": [
+                    {
+                        "label": "Sit down.",
+                        "next": "the_account"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "stone_and_writ",
+                        "stage": "whose_name_is_on_it"
+                    }
+                ],
+                "text": "\"Pyle sent you,\" Ackley says, without turning round. \"He does that. Sends people up here and doesn't come himself.\" He shifts along the bench about four inches, which is an invitation. \"You'll be wanting to know whose quarry it is. Everybody's wanted to know that since the spring and none of them wanted to know it in eleven years before.\"",
+                "choices": [
+                    {
+                        "label": "Whose is it?",
+                        "next": "whose_quarry"
+                    },
+                    {
+                        "label": "Whose was it when it fell?",
+                        "next": "whose_quarry"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_last_quarryman",
+                        "stage": "the_cottage_on_the_spoil"
+                    }
+                ],
+                "text": "The man on the bench has his back to a house that has its back to a quarry. He hears you coming across the spoil for a good thirty seconds before you arrive and does not turn round for any of it.\n\n\"If you've come about the hole,\" he says, \"you can say so now and save us both the afternoon.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_ackley"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "I've come about the hole.",
+                        "next": "about_the_hole"
+                    },
+                    {
+                        "label": "I've come about the mearing stone.",
+                        "next": "whose_quarry"
+                    },
+                    {
+                        "label": "I'll go.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "A man on a bench on top of a spoil heap, facing north, with the quarry behind him and the wind going over the roof.\n\n\"There's a bench,\" he says. \"There's not two.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_ackley"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Why does the house face north?",
+                        "next": "about_the_hole"
+                    },
+                    {
+                        "label": "Who owns the quarry now?",
+                        "next": "whose_quarry"
+                    },
+                    {
+                        "label": "Nothing. Good day.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "you_did_it": [
+            {
+                "text": "\"Right,\" he says. \"Good.\" He pulls the blanket up. \"Thirty foot of new fall going the wrong way and I stood in the entry and told you where the water used to run. That's the first useful thing I've done since I was thirty-one.\"",
+                "choices": [
+                    {
+                        "label": "It was.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "about_the_hole": [
+            {
+                "text": "\"Nineteen of us,\" Ackley says. \"Eighteen on the rim. Me in the sump gallery, forty feet under the face, on my own, because it was my week for the sump.\" He is still facing north. \"They'll all tell you the face went and took the floor with it. They watched it happen. Every one of them will swear to it and every one of them is honest.\"\n\nA pause.\n\n\"Floor went first.\"",
+                "on_enter": [
+                    {
+                        "start_quest": "the_last_quarryman"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"Eleven years and nobody has written that down.\""
+                    },
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa, quietly: \"He's been sat on that on his own. That's the bit that's wrong with this.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "How long between them?",
+                        "next": "count_of_four"
+                    },
+                    {
+                        "label": "Why has nobody heard this?",
+                        "next": "count_of_four"
+                    },
+                    {
+                        "label": "That's enough for now.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "count_of_four": [
+            {
+                "text": "\"Count of four,\" he says. \"Maybe five. Floor, then a count, then the face.\" He puts one hand out flat, low, and raises it about a foot, and then brings the other one down on top of it. \"That's not a collapse. A collapse is one noise. That was two noises with a gap in the middle, and I was in the gap.\"\n\nHe drops the hands.\n\n\"Eighteen men on the rim heard one noise, because by the time it got up to them it was one noise. I've had eleven years to work out how to say that to somebody and I've never got past the part where they all saw it and I didn't.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_last_quarryman",
+                            "stage": "what_he_heard"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Come and show me where.",
+                        "next": "asking_him_to_go"
+                    },
+                    {
+                        "label": "Tell me the rest from here.",
+                        "next": "the_account"
+                    },
+                    {
+                        "label": "I'll leave you with it.",
+                        "next": "left_alone"
+                    }
+                ]
+            }
+        ],
+        "the_account": [
+            {
+                "text": "He tells it from the bench, facing north, in about eleven minutes, and does not stop once: the sump gallery, the week rota, the way the water had been running short and nobody had asked why a wet quarry had gone dry in a season. The floor. The count. The face. What he did with his hands in the dark for two days before they got to him.\n\nHe finishes and sits there, and the wind goes over the roof, and he does not turn round.",
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric does not say anything for a while. Then: \"You have been carrying an account nobody asked you for. That is its own kind of weight and there is no word for it.\""
+                    },
+                    {
+                        "companion": "sera",
+                        "text": "Sera: \"A wet quarry that went dry in a season. Somebody drained it. That is not something a hill does.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Now come and show me.",
+                        "next": "asking_him_to_go"
+                    },
+                    {
+                        "label": "That's the account. I'll take it as it is.",
+                        "next": "told_sitting"
+                    },
+                    {
+                        "label": "I'm sorry. I'll go.",
+                        "next": "left_alone"
+                    }
+                ]
+            }
+        ],
+        "asking_him_to_go": [
+            {
+                "text": "He does not answer for a long time. The wind goes over the roof twice.\n\n\"I built this house facing north,\" he says. \"On the spoil. On the actual spoil, off the actual hole, because I couldn't make myself go further off than that and I couldn't make myself look at it. You know what that is? That's eleven years of arranging a life so I don't have to turn round.\"\n\nHe puts his hands on his knees.",
+                "choices": [
+                    {
+                        "label": "I know. Come anyway.",
+                        "check": {
+                            "skill": "persuasion",
+                            "dc": 15,
+                            "on_success": "he_goes",
+                            "on_failure": "he_does_not_go"
+                        }
+                    },
+                    {
+                        "label": "Then tell it from here.",
+                        "next": "told_sitting"
+                    },
+                    {
+                        "label": "Then stay where you are.",
+                        "next": "left_alone"
+                    }
+                ]
+            }
+        ],
+        "he_goes": [
+            {
+                "text": "He comes as far as the old adit and stops in the entry and stands there with one hand flat on the stone, and then he starts talking, and everything he says is a measurement: where the water used to come out, where it comes out now, how far it is between the two. Thirty feet of new fall, and all of it in the wrong direction — from below, upward, toward the sump.\n\nThen he sits down on the spoil and cannot get up for a while, and you walk him home, and at his own door he asks you not to tell anyone he went.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_last_quarryman",
+                            "stage": "he_went_down"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse has been writing while he talks and does not stop when he stops. \"Thirty feet,\" she says. \"Upward.\""
+                    },
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa gets him under the arm without making it look like getting him under the arm, which she is better at than anyone should be."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Nobody will hear it from me.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "he_does_not_go": [
+            {
+                "text": "\"No,\" Ackley says. Not angry. Just done. \"No. I'm eleven years into not going and I'm not undoing it for four people who'll be somewhere else by Thursday.\"\n\nHe turns his face back north.",
+                "choices": [
+                    {
+                        "label": "Then tell it from here.",
+                        "next": "told_sitting"
+                    },
+                    {
+                        "label": "Fair enough.",
+                        "next": "left_alone"
+                    }
+                ]
+            }
+        ],
+        "told_sitting": [
+            {
+                "text": "\"Right,\" he says. \"You've got it, then.\" He looks north. \"Eleven years. Eleven minutes.\"\n\nHe does not offer to walk you off the spoil and does not expect you to say anything else, and when you look back from the bottom he has not moved.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_last_quarryman",
+                            "stage": "he_told_it_sitting"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Go.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "left_alone": [
+            {
+                "text": "\"Right,\" he says, and that is all, and he is still saying nothing when you are halfway down the spoil.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_last_quarryman",
+                            "stage": "left_him_alone"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Go.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "whose_quarry": [
+            {
+                "conditions": [
+                    {
+                        "quest": "stone_and_writ",
+                        "status": "active"
+                    }
+                ],
+                "text": "\"Town's,\" Ackley says. \"Was the town's for ninety years — bought off the priory when the priory ran short, and the priory had it off somebody before that, and it's all in the mearing. Crozier, ploughshare, tower. Three of them's still on the stone.\"\n\nHe finally turns his head about ten degrees, which is as far as he goes.\n\n\"Went to Marrow in the spring for the debt on it. Everybody expected that. Then it went again in the summer and it didn't go for money. It went for somebody taking on a debt that was already owed, which is a thing you do when you want the thing more than you want the price to look normal.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "stone_and_writ",
+                            "stage": "whose_name_is_on_it"
+                        }
+                    },
+                    {
+                        "set_flag": "writ_changed_hands"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera: \"Two transfers in seven months and neither of them at a price. That is not somebody buying a quarry. That is somebody clearing a title.\""
+                    },
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric: \"It has been a hole in the ground for eleven years. Why would anyone want it now.\" Ackley, still facing north: \"Aye.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "I'll take a rubbing down and have the lot entered in the town's book.",
+                        "next": "filed"
+                    },
+                    {
+                        "label": "Then we put the old mearing back on the stone.",
+                        "next": "recut"
+                    },
+                    {
+                        "label": "Somebody will pay for this. Politely.",
+                        "next": "sold_it"
+                    },
+                    {
+                        "label": "Later.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "\"Town's,\" Ackley says. \"Was, anyway. It's changed hands twice since the spring and I only know that because Pyle can't read and talks to himself about what the clerks said.\" He does not turn round. \"Ask him. He's on the ridge on a Thursday.\"",
+                "choices": [
+                    {
+                        "label": "I'll ask him.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "filed": [
+            {
+                "text": "\"Paper,\" Ackley says. \"Right. Well, it's cheap and it lasts, which is more than you can say for men.\"\n\nThe rubbing takes charcoal and a steady hand and comes off the fourth face sharper than anything else on the stone. The counting house enters both the rubbing and the transfers with a date against them and charges four coppers for the privilege. It changes nothing about who owns the quarry. It means that in ten years there will be an answer to the question of when it stopped being Rivermark's.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "stone_and_writ",
+                            "stage": "filed_the_copy"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera: \"Four coppers. That is the whole cost of the only copy that will exist when everybody who remembers is dead.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Four coppers well spent.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "recut": [
+            {
+                "text": "Ackley gets up off the bench for the first time in the conversation, goes into the lean-to, and comes back with a chisel and a lump hammer, and hands them over without a word, and sits back down facing north.\n\nIt takes most of an afternoon and the result looks exactly like what it is: a repair. The old mearing is back on the fourth face and the new cutting is still visible underneath it, and from now on every boundary case in this valley for the next hundred years will begin with an argument about which of the two is lying.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "stone_and_writ",
+                            "stage": "cut_the_stone_back"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa takes the second hour on the chisel without being asked. \"Ground says what it says,\" she says. \"That's older than paper.\""
+                    },
+                    {
+                        "companion": "sera",
+                        "text": "Sera watches the whole thing with her arms folded. \"You have just made the ground unreliable,\" she says. \"That was the last thing in this valley that wasn't.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Hand the chisel back.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "sold_it": [
+            {
+                "text": "It takes two days. A man comes up the quarry road on a hired horse, in a coat that is good and not showy, and asks — politely, and by name — what you found on the stone.\n\nHe pays without haggling, which is how you know you undercharged. He writes nothing down. He thanks you, wishes you well on the road, and is gone before you have finished counting it.",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "stone_and_writ",
+                            "stage": "sold_the_reading"
+                        }
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera watches him go all the way down the road. \"He knew my name too,\" she says. \"He didn't use it. That was on purpose.\""
+                    },
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"He came up a road he has never been on and found us in an afternoon.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Count it again.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

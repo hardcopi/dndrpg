@@ -1,0 +1,23 @@
+{
+  "spell_key": "crusaders_mantle",
+  "name": "Crusader's Mantle",
+  "level": 3,
+  "school": "Evocation",
+  "classes": [
+    "Paladin"
+  ],
+  "resolution": "buff",
+  "target_kind": "all_allies",
+  "reaches_back_rank": true,
+  "effect": {
+    "damage_bonus_dice": "1d4"
+  },
+  "casting_time": "1 action",
+  "range_text": "Self",
+  "components": "V",
+  "duration": "Concentration, up to 1 minute",
+  "concentration": true,
+  "duration_rounds": 10,
+  "description": "Holy power radiates from you, filling your allies with divine purpose. Each ally deals extra radiant damage with its weapon attacks while the mantle holds.",
+  "source": "5e SRD"
+}

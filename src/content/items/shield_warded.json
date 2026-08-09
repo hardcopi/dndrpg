@@ -1,0 +1,13 @@
+{
+  "item_key": "shield_warded",
+  "name": "Warded Shield",
+  "description": "A round shield with a prayer of the Priory hammered into the boss in old letters. Blows seem to arrive a little off-true.",
+  "item_type": "armor",
+  "rarity": "uncommon",
+  "weight": 6,
+  "value_gp": 250,
+  "armor_bonus": 2,
+  "armor_type": "shield",
+  "properties": { "ac_bonus": 1 },
+  "icon": "armor"
+}

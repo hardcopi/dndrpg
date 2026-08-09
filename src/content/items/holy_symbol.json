@@ -1,0 +1,13 @@
+{
+  "item_key": "holy_symbol",
+  "name": "Pewter Sun-Disc",
+  "description": "A cheap pewter disc on a cord. The order that issued it has asked for it back twice.",
+  "item_type": "misc",
+  "rarity": "common",
+  "weight": 1,
+  "value_gp": 5,
+  "properties": {
+    "focus": "divine"
+  },
+  "icon": "amulet"
+}

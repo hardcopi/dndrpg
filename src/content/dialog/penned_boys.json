@@ -1,0 +1,107 @@
+{
+    "npc_key": "penned_boys",
+    "start": "hail",
+    "nodes": {
+        "hail": [
+            {
+                "conditions": [
+                    {
+                        "flag": "oldcity_ogre_down"
+                    }
+                ],
+                "once": true,
+                "text": "The stakes are lashed, not driven, which takes a minute and a knife and no strength at all — the pen was never built to hold anything that could think about it.\n\nThe bigger boy comes out first and stands looking at the cauldron for a while. The smaller one will not come out until somebody puts a hand in, and then will not let go of it.\n\n\"Is the dog dead too,\" the bigger one says. It is not really a question either.",
+                "choices": [
+                    {
+                        "label": "Both of them. Let's go.",
+                        "next": "lets_go",
+                        "effects": [
+                            {
+                                "approval": {
+                                    "jimmy_able": 12
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "label": "How many were there before you?",
+                        "next": "how_many"
+                    }
+                ],
+                "on_enter": [
+                    {
+                        "set_flag": "oldcity_boys_freed"
+                    },
+                    {
+                        "quest_stage": {
+                            "quest": "oldcity_the_missing_children",
+                            "stage": "found_the_boys"
+                        }
+                    },
+                    {
+                        "xp": 100
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "jimmy_able",
+                        "text": "Jimmy: \"Say nothing sharp in front of them. They will be pricing every room they stand in for the rest of their lives as it is. I'd know.\"",
+                        "once": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "oldcity_boys_freed"
+                    }
+                ],
+                "text": "The two of them keep close and keep quiet, and the smaller one has hold of somebody's sleeve and shows no sign of giving it back.",
+                "choices": [
+                    {
+                        "label": "Stay close.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "Two of them, behind the stakes at the back of the cave. Neither makes a sound. The bigger one shakes his head very slightly — not at you; at the idea of you coming any closer while the thing by the fire is still standing.",
+                "choices": [
+                    {
+                        "label": "Back off for now.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "how_many": [
+            {
+                "text": "The bigger boy looks at the ring of shoes on the floor and does the sum you were hoping he had not already done.\n\n\"There's more shoes than people,\" he says. \"I counted twice. I had a lot of time.\"",
+                "choices": [
+                    {
+                        "label": "Let's get you out.",
+                        "next": "lets_go",
+                        "effects": [
+                            {
+                                "approval": {
+                                    "jimmy_able": 12
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "lets_go": [
+            {
+                "text": "They go up the ledge between you without being told twice, and neither of them looks down into the hole on the way past, which suggests they have been along this ledge before and in the other direction.",
+                "choices": [
+                    {
+                        "label": "Keep moving.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

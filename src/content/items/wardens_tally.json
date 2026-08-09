@@ -1,0 +1,11 @@
+{
+  "item_key": "wardens_tally",
+  "name": "The Warden's Tally",
+  "description": "Two years of counting in a waxed-thread book, one line per day, no words. Ilse Thornwood's hand throughout. Read forwards it is a warning; read backwards it is something else.",
+  "item_type": "misc",
+  "rarity": "uncommon",
+  "weight": 1,
+  "value_gp": 0,
+  "properties": {"quest_item": true, "readable": true},
+  "icon": "book"
+}

@@ -1,0 +1,13 @@
+{
+  "item_key": "greataxe",
+  "name": "Greataxe",
+  "description": "A heavy two-handed axe.",
+  "item_type": "weapon",
+  "rarity": "common",
+  "weight": 7,
+  "value_gp": 30,
+  "damage_dice": "1d12",
+  "damage_type": "slashing",
+  "properties": { "heavy": true, "two_handed": true, "martial": true },
+  "icon": "axe"
+}

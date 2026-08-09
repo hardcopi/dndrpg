@@ -1,0 +1,12 @@
+{
+    "npc_key": "marda_scole",
+    "name": "Marda Scole",
+    "role": "Stove-keeper",
+    "description": "Feeds the stove in the long tent, takes the three coppers, and keeps a board of names by the door with a mark against each one for every time they have come back up. She started the board to be useful and cannot now stop keeping it.",
+    "sprite_key": "marda_scole",
+    "is_quest_giver": true,
+    "dialog": "marda_scole",
+    "place": {
+        "location": "uv_bunkhouse"
+    }
+}

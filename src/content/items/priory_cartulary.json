@@ -1,0 +1,11 @@
+{
+  "item_key": "priory_cartulary",
+  "name": "The Arden Cartulary, Fourth Press",
+  "description": "One decade of a small house's deeds, grants, boundaries and accounts, bound in order and dusted every week for a hundred and forty years. Old paper, in the estimate of the man who was buying it.",
+  "item_type": "misc",
+  "rarity": "rare",
+  "weight": 8,
+  "value_gp": 0,
+  "properties": {"quest_item": true, "readable": true},
+  "icon": "book"
+}

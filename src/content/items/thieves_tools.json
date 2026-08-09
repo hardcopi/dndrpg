@@ -1,0 +1,13 @@
+{
+  "item_key": "thieves_tools",
+  "name": "Thieves' Tools",
+  "description": "Picks, a small file, a mirror on a wire. Sera keeps them in a flour tin.",
+  "item_type": "misc",
+  "rarity": "common",
+  "weight": 1,
+  "value_gp": 25,
+  "properties": {
+    "tool": "thieves_tools"
+  },
+  "icon": "tools"
+}

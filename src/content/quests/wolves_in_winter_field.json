@@ -1,0 +1,96 @@
+{
+    "quest_key": "wolves_in_winter_field",
+    "title": "Wolves in Winter Field",
+    "description": "Two hundred acres of common grazing, and the herd has been standing in one corner facing the thorn brake for three days.",
+    "giver": "tull_barrow",
+    "on_job_board": true,
+    "required_level": 2,
+    "rewards": {
+        "xp": 300,
+        "gold": 120
+    },
+    "stages": {
+        "the_far_corner": {
+            "title": "The far corner",
+            "objective": "Go out to Winter Field and see what the cattle are looking at.",
+            "journal": "The beasts on Winter Field are bunched in the far corner facing the thorn brake and will not graze within forty paces of it. Nobody has cut the thorn back in two years.",
+            "target": {
+                "location": "winter_field"
+            }
+        },
+        "the_thorn_brake": {
+            "title": "The thorn brake",
+            "objective": "Go into the thorn and finish it.",
+            "journal": "There is a channel dragged through the grass into the thorn, and it has been used more than once. Four of them: two big ones and two half-grown, all thin, all working the field from the fen side.",
+            "target": {
+                "location": "winter_field"
+            }
+        },
+        "killed_the_pack": {
+            "title": "Killed",
+            "journal": "Four of them and all four down in the brake, which took longer than it should have because the thorn is on their side and not ours. The herd was grazing the far corner within the hour. That is the whole of it, and not everything needs to be more than that.",
+            "resolution": "killed_the_pack",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "wolves_fate",
+                    "value": "killed"
+                },
+                {
+                    "xp": 100
+                },
+                {
+                    "approval": {
+                        "kessa": 8,
+                        "sera": 4,
+                        "ilse": -4
+                    }
+                }
+            ]
+        },
+        "found_the_den": {
+            "title": "The den",
+            "journal": "The den is on the fen side of the thorn, dug into the old bank, and it is dry — which it should not be, because it is four feet below the level of the winter field and the winter field is standing in water. The water is on the wrong side of the bank. They did not come up onto the grazing because they were hungry. They came up because their ground went under.",
+            "resolution": "found_the_den",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "wolves_fate",
+                    "value": "den"
+                },
+                {
+                    "set_flag": "fen_water_rising"
+                },
+                {
+                    "xp": 150
+                },
+                {
+                    "approval": {
+                        "ilse": 14,
+                        "aldric": 4,
+                        "kessa": 2
+                    }
+                }
+            ]
+        },
+        "left_them_to_it": {
+            "title": "Left in the thorn",
+            "journal": "Four of them, all thin, and the field is common ground that nobody has paid me to keep. I walked away from it. The drovers will lose beasts and the beasts will be lost either way, and I am not going to pretend I worked that out at the time.",
+            "resolution": "left_them_to_it",
+            "terminal": true,
+            "outcome": "neutral",
+            "effects": [
+                {
+                    "set_flag": "wolves_fate",
+                    "value": "left"
+                },
+                {
+                    "approval": {
+                        "kessa": -6,
+                        "sera": -4
+                    }
+                }
+            ]
+        }
+    }
+}

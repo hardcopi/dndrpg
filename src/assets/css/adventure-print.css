@@ -1,0 +1,508 @@
+/*
+ * The printed adventure.
+ *
+ * A sibling of sheet-print.css and written on the same terms, which are worth
+ * restating because they are the whole reason this is a stylesheet and not a
+ * PDF library: the browser already prints to PDF, honours `@page`, and sets
+ * type better than anything that would have to be installed to compete. So the
+ * book is a page, and this is what makes it look like a book.
+ *
+ * Shares nothing with style.css, deliberately. The app is a dark room lit by
+ * gold; an adventure is paper. Loading the app's palette here would mean
+ * fighting every token back to black-on-white, and the first person to change
+ * one in style.css would change how somebody's printed book looks.
+ *
+ * WHAT IS AND IS NOT COPIED. The shape of a published adventure is a genre:
+ * two columns, numbered area entries, boxed text the GM reads out, stat blocks
+ * in a tinted panel, appendices at the back. That shape is used here. The trade
+ * dress of any particular publisher is not — no logo, no imitation of their
+ * typefaces, no ornamental borders, and the stat block is tinted in this
+ * project's own parchment rather than in anybody's signature colour. This game
+ * ships SRD content under OGL 1.0a / CC-BY 4.0, and layout is where that line
+ * is easiest to cross by accident. sheet-print.css makes the same note about
+ * the character sheet.
+ *
+ * Sized in inches and points, never pixels: a browser prints 1in as an inch and
+ * renders it as 96 CSS px, so one set of numbers gives a screen preview the
+ * same size and shape as the paper. That is the whole trick to avoiding "looks
+ * right on screen, breaks across pages".
+ */
+
+/* ------------------------------------------------------------------------ */
+/* Paper                                                                     */
+/* ------------------------------------------------------------------------ */
+
+@page {
+  size: letter portrait;
+  margin: 0.6in 0.55in 0.7in;
+}
+
+/* The cover has no running head and wants its own margins. */
+@page :first {
+  margin: 0.6in;
+}
+
+:root {
+  --ink: #1c1a17;
+  --ink-soft: #55504a;
+  --rule: #b9b0a2;
+  --parchment: #f5efe2;      /* the tint inside a stat block or a read-aloud */
+  --parchment-edge: #ded3bd;
+  --accent: #6b2417;         /* headings and drop caps: oxblood, not anybody's brand */
+
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+  --display: "Trajan Pro", "Optima", "Palatino Linotype", Georgia, serif;
+  --sans: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  color: var(--ink);
+  background: #fff;
+  font-family: var(--serif);
+  font-size: 9.6pt;
+  line-height: 1.38;
+  /* Hyphenation earns its place in a two-column measure: 3.3in of justified
+     serif without it opens rivers on every third line. */
+  text-align: justify;
+  hyphens: auto;
+}
+
+/* On screen the sheet is shown on a desk so the page edges are visible; on
+   paper the desk does not exist. */
+@media screen {
+  body { background: #6f6a63; padding: 0.5in 0; }
+  .book-page {
+    width: 8.5in;
+    min-height: 11in;
+    margin: 0 auto 0.35in;
+    padding: 0.6in 0.55in 0.7in;
+    background: #fff;
+    box-shadow: 0 0.05in 0.2in rgba(0, 0, 0, 0.4);
+  }
+}
+@media print {
+  .book-page { padding: 0; }
+  /* Each top-level part starts on a fresh sheet. */
+  .book-page + .book-page { break-before: page; }
+}
+
+/* ------------------------------------------------------------------------ */
+/* The cover                                                                 */
+/* ------------------------------------------------------------------------ */
+
+.cover {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 9.4in;
+}
+.cover-art {
+  width: 5.4in;
+  max-height: 4.2in;
+  object-fit: cover;
+  border: 1.5pt solid var(--ink);
+}
+.cover h1 {
+  font-family: var(--display);
+  font-size: 30pt;
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+  margin: 0.35in 0 0.08in;
+  color: var(--accent);
+  text-align: center;
+}
+.cover-band {
+  font-family: var(--sans);
+  font-size: 8.5pt;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin: 0 0 0.28in;
+}
+.cover-blurb {
+  max-width: 4.9in;
+  font-size: 11pt;
+  font-style: italic;
+  text-align: center;
+  margin: 0 0 0.4in;
+}
+.cover-foot {
+  font-size: 8pt;
+  color: var(--ink-soft);
+  max-width: 5.2in;
+  text-align: center;
+}
+
+/* ------------------------------------------------------------------------ */
+/* Structure                                                                 */
+/* ------------------------------------------------------------------------ */
+
+/* Two columns for the body of a chapter; `column-span: all` on the headings
+   takes anything back to the full measure.
+ *
+ * `column-fill: balance`, and the alternative is worth recording because it is
+ * the obvious choice and it is wrong here. `auto` fills the first column to the
+ * height of the column BOX before starting the second — which is right on
+ * paper, where the box is a page. On screen there is no page box: the box is as
+ * tall as the chapter, so `auto` put all seventy-three areas in the left column
+ * and left the right one empty for the whole document. `balance` is correct in
+ * both, at the cost of a short last column where a chapter ends, which is what
+ * a book does anyway. */
+.cols {
+  columns: 2;
+  column-gap: 0.3in;
+  column-fill: balance;
+  column-rule: 0.5pt solid var(--rule);
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--display);
+  color: var(--accent);
+  text-align: left;
+  break-after: avoid-page;
+  hyphens: none;
+}
+h1 { font-size: 19pt; margin: 0 0 0.12in; letter-spacing: 0.01em; }
+h2 {
+  font-size: 13pt;
+  margin: 0.18in 0 0.06in;
+  padding-bottom: 0.03in;
+  border-bottom: 1pt solid var(--accent);
+  column-span: all;
+}
+h3 { font-size: 10.5pt; margin: 0.14in 0 0.04in; }
+h4 {
+  font-family: var(--sans);
+  font-size: 8.5pt;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin: 0.1in 0 0.02in;
+}
+p { margin: 0 0 0.07in; }
+.lede { font-style: italic; color: var(--ink-soft); }
+
+/* The chapter opener: a rule, the region's name, its own description across
+   the full measure before the entries begin in two columns. */
+.chapter-head { column-span: all; margin-bottom: 0.12in; }
+.chapter-map {
+  margin: 0.08in 0 0.04in;
+}
+.map-caption {
+  font-family: var(--sans);
+  font-size: 7.4pt;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  text-align: center;
+  margin: 0 0 0.12in;
+}
+
+/* The plate, and the pins over it.
+ *
+ * `object-fit: fill` and not `contain`, deliberately: `map_x`/`map_y` are
+ * positions in the chart's 0–100 by 0–75 field and the game draws the plate
+ * into exactly that field with `preserveAspectRatio="none"`. Anything that
+ * preserved the aspect here would letterbox the painting and slide every pin
+ * off the thing it points at. See map_frame() in adventure_print.php. */
+.map-frame {
+  position: relative;
+  border: 0.8pt solid var(--rule);
+  line-height: 0;
+}
+.map-frame img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 100 / 75;
+  object-fit: fill;
+}
+
+/* A number a GM can find on a photocopy: white disc, dark ring, bold figure.
+   Sized in points so it is the same on paper whatever the plate's pixels. */
+.map-pin {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  min-width: 11pt;
+  height: 11pt;
+  padding: 0 1.5pt;
+  border: 0.9pt solid var(--ink);
+  border-radius: 6pt;
+  background: #fff;
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 7pt;
+  font-weight: 700;
+  line-height: 9.5pt;
+  text-align: center;
+  /* A ring of paper round the disc, so a pin sitting on ink is still a disc.
+     Cheaper than a halo filter and it prints. */
+  box-shadow: 0 0 0 1pt rgba(255, 255, 255, 0.9);
+}
+
+/* --- Appendix D: the handouts ------------------------------------------- */
+
+/* One map, one page, nothing else on it. */
+.handout {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 9.4in;
+}
+.handout-frame { width: 100%; }
+.handout .map-frame { border-width: 1.2pt; }
+.handout-name {
+  font-family: var(--display);
+  font-size: 12pt;
+  color: var(--accent);
+  text-align: center;
+  margin: 0.14in 0 0;
+}
+
+/* An area entry. `break-inside: avoid` on the heading and its first paragraph
+   only — a whole entry can be pages long, and forbidding a break inside one
+   would leave half-empty columns everywhere. */
+.area { margin: 0 0 0.13in; }
+.area-head {
+  font-family: var(--display);
+  font-size: 11pt;
+  color: var(--accent);
+  margin: 0 0 0.04in;
+  break-after: avoid-page;
+}
+.area-num { font-variant-numeric: lining-nums; }
+
+/* Boxed text: what the GM reads out. The genre convention is a panel set off
+   from the page, and the convention exists because it answers "which of this
+   do I say aloud" at a glance. */
+.read-aloud {
+  background: var(--parchment);
+  border-left: 2.5pt solid var(--accent);
+  padding: 0.06in 0.09in;
+  margin: 0 0 0.07in;
+  font-style: italic;
+  break-inside: avoid;
+}
+.read-aloud p:last-child { margin-bottom: 0; }
+
+/* The GM's own notes under an entry: exits, people, treasure. A definition
+   list rather than prose, because they are looked up rather than read. */
+.notes { margin: 0.04in 0 0; font-size: 8.8pt; }
+.notes dt {
+  font-family: var(--sans);
+  font-size: 7.4pt;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-top: 0.04in;
+}
+.notes dd { margin: 0 0 0.02in; }
+.notes .tag {
+  font-family: var(--sans);
+  font-size: 7pt;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.area-art {
+  width: 100%;
+  max-height: 2.2in;
+  object-fit: cover;
+  border: 0.6pt solid var(--rule);
+  margin: 0 0 0.06in;
+}
+
+/* ------------------------------------------------------------------------ */
+/* Stat blocks                                                               */
+/* ------------------------------------------------------------------------ */
+
+.stat {
+  background: var(--parchment);
+  border: 0.8pt solid var(--parchment-edge);
+  border-top: 2pt solid var(--accent);
+  padding: 0.08in 0.1in 0.1in;
+  margin: 0 0 0.12in;
+  break-inside: avoid;
+  font-size: 8.6pt;
+}
+/* The creature's own picture, floated so the block's first lines run beside it
+   and the rest of the stats close up underneath — a portrait across the full
+   width would push the numbers off the bottom of a two-column page. `shape-
+   outside` is deliberately not used: the busts are rectangular crops with a
+   dark ground, and a circle would cut the silhouette. */
+.stat-art {
+  float: right;
+  width: 1.05in;
+  height: 1.4in;
+  object-fit: cover;
+  object-position: center 15%;
+  margin: 0 0 0.06in 0.08in;
+  border: 0.6pt solid var(--parchment-edge);
+}
+.stat.has-art { overflow: hidden; }   /* contain the float within the panel */
+.stat h3 { margin: 0; font-size: 12pt; }
+.stat-kind { font-style: italic; color: var(--ink-soft); margin: 0 0 0.05in; }
+.stat-rule { border: 0; border-top: 1pt solid var(--accent); margin: 0.05in 0; }
+.stat-line { margin: 0 0 0.02in; }
+.stat-line b { color: var(--accent); }
+.stat-abilities {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  text-align: center;
+  gap: 0.02in;
+  margin: 0.04in 0;
+}
+.stat-abilities div { font-size: 8pt; }
+.stat-abilities span {
+  display: block;
+  font-family: var(--sans);
+  font-size: 7pt;
+  letter-spacing: 0.1em;
+  color: var(--ink-soft);
+}
+.stat-trait { margin: 0 0 0.04in; }
+.stat-trait b { font-style: italic; }
+
+/* ------------------------------------------------------------------------ */
+/* Appendices                                                                */
+/* ------------------------------------------------------------------------ */
+
+.person, .quest {
+  break-inside: avoid;
+  margin: 0 0 0.12in;
+}
+.person-head { display: flex; gap: 0.08in; align-items: flex-start; }
+.person-bust {
+  width: 0.72in;
+  height: 0.72in;
+  object-fit: cover;
+  object-position: center 20%;
+  border: 0.6pt solid var(--rule);
+  border-radius: 50%;
+  flex: 0 0 auto;
+}
+.person-name { font-family: var(--display); font-size: 10.5pt; color: var(--accent); }
+.person-where { font-family: var(--sans); font-size: 7.2pt; letter-spacing: 0.08em;
+                text-transform: uppercase; color: var(--ink-soft); }
+
+.quest-stages { margin: 0.04in 0 0; padding-left: 0.16in; font-size: 8.8pt; }
+.quest-stages li { margin: 0 0 0.03in; }
+.quest-meta { font-family: var(--sans); font-size: 7.4pt; letter-spacing: 0.08em;
+              text-transform: uppercase; color: var(--ink-soft); }
+
+/* The contents page: chapter, then its areas as a run-in list. */
+.toc { column-span: all; }
+.toc-chapter { margin: 0 0 0.09in; break-inside: avoid; }
+.toc-chapter b { font-family: var(--display); color: var(--accent); }
+.toc-areas { color: var(--ink-soft); font-size: 8.6pt; }
+
+.colophon { column-span: all; margin-top: 0.25in; font-size: 7.6pt; color: var(--ink-soft); }
+
+/* --- Appendix E: the cards ---------------------------------------------- */
+
+/* Four to a page, in a 2×2 grid — see the note in adventure_print.php for why
+   they are chunked rather than flowed. The grid is sized off the page box
+   rather than off its contents so every card on every sheet is identical: a
+   card that was as tall as its own description would be a page of four
+   different rectangles and nothing to cut along. */
+.cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 0.14in;
+  min-height: 9.5in;
+}
+.card {
+  display: flex;
+  flex-direction: column;
+  /* Dashed, because it is a cut line and it should look like one. */
+  border: 0.8pt dashed var(--rule);
+  background: var(--parchment);
+  padding: 0.12in;
+  overflow: hidden;
+  break-inside: avoid;
+}
+/* The face is most of the card. A GM finds a card by the portrait on it, the
+   same way the party rail is found by faces rather than names. */
+.card-art {
+  width: 100%;
+  height: 2.15in;
+  object-fit: cover;
+  object-position: center 18%;
+  border: 0.6pt solid var(--parchment-edge);
+  background: #fff;
+}
+.card-art-blank { background: repeating-linear-gradient(45deg,
+  #ece4d3 0 6pt, #e3d9c4 6pt 12pt); }
+.card-body { padding-top: 0.06in; min-height: 0; }
+.card-name {
+  font-family: var(--display);
+  font-size: 12pt;
+  color: var(--accent);
+  margin: 0;
+  text-align: left;
+}
+.card-role {
+  font-family: var(--sans);
+  font-size: 7.6pt;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin: 0.01in 0 0;
+}
+.card-where {
+  font-size: 8pt;
+  font-style: italic;
+  color: var(--ink-soft);
+  margin: 0 0 0.05in;
+}
+.card-text { font-size: 8.6pt; margin: 0; text-align: left; hyphens: none; }
+.card-wants {
+  margin: 0.06in 0 0;
+  padding-top: 0.05in;
+  border-top: 0.5pt solid var(--parchment-edge);
+  font-size: 8pt;
+  text-align: left;
+}
+.card-wants b { color: var(--accent); }
+.card .tag {
+  font-family: var(--sans);
+  font-size: 6.6pt;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+}
+
+/* The one thing on the page that is not the book: the bar that offers to print
+   it. Never on paper. */
+.book-bar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0.12in;
+  background: #262320;
+  color: #efe7d6;
+  font-family: var(--sans);
+  font-size: 9pt;
+}
+.book-bar a, .book-bar button {
+  font: inherit;
+  color: #efe7d6;
+  background: #3d3833;
+  border: 0.5pt solid #6d6459;
+  border-radius: 3pt;
+  padding: 0.04in 0.12in;
+  cursor: pointer;
+  text-decoration: none;
+}
+.book-bar b { color: #e8c547; font-weight: 600; }
+@media print { .book-bar { display: none; } }

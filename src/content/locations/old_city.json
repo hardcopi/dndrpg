@@ -1,0 +1,392 @@
+{
+    "region_key": "old_city",
+    "module": "old_city",
+    "name": "The Old City",
+    "region_type": "dungeon",
+    "description": "The streets the City was built on top of, roofed over and running as its sewers. Two shored-up causeways are lit and patrolled; everything off them is older stonework and dark.",
+    "sort_order": 10,
+    "locations": {
+        "oldcity_stair": {
+            "name": "The Spiral Stair",
+            "type": "gate",
+            "map_pos": [10, 40],
+            "allow_camp": true,
+            "job_board": true,
+            "description": "A stair winds down out of daylight in a shaft barely wider than its own steps, and stops at a door of banded oak with a sign nailed to it at eye height. KEEP OUT, in the flat lettering the Works use for everything. Below the door the air changes — colder, wetter, and moving, which means it comes from somewhere.",
+            "first_visit": "The last of the street noise goes out above you like a snuffed lamp. From here on the only sounds are the ones down here.",
+            "ambience": [
+                "Water is running somewhere past the door, steady and unhurried.",
+                "The sign has been re-nailed several times. The old holes are still in it.",
+                "Cold air comes up the stair and keeps coming.",
+                "Someone has chalked a tally on the wall and then scrubbed at it."
+            ],
+            "exits": [
+                {"to": "oldcity_guardhouse", "label": "Through the door, toward the lamplight"},
+                {"to": "oldcity_west_causeway", "label": "Down the last steps to the channel"}
+            ]
+        },
+        "oldcity_guardhouse": {
+            "name": "The Guard House",
+            "type": "room",
+            "map_pos": [6, 56],
+            "description": "An Old City room the Watch has made theirs: braziers, a trestle of duty rosters weighted down with a helmet, and seven men who would rather be anywhere with a roof that is not this one. A pot of something dark sits at the edge of the coals. The key to the stair door hangs on a nail by the officer's elbow, and he is aware of you looking at it.",
+            "first_visit": "Seven faces come up at once, in the flat unfriendly way of men who have been bored for six hours and have just been given something to do about it.",
+            "ambience": [
+                "Cards go down. Someone swears without much feeling.",
+                "The brazier pops and a guard kicks a coal back into it.",
+                "A roster gets shuffled to the bottom of the pile and comes back up again.",
+                "Two of them are arguing about whose turn the far walk is."
+            ],
+            "exits": [
+                {"to": "oldcity_stair", "label": "Back to the stair"},
+                {"to": "oldcity_west_causeway", "label": "Out to the channel"}
+            ]
+        },
+        "oldcity_west_causeway": {
+            "name": "The West Causeway",
+            "type": "street",
+            "map_pos": [17, 30],
+            "random_encounter_pct": 12,
+            "description": "One of the two main channels, and the reason anyone can walk down here at all. New stone shores up the old on both sides, a ledge two feet wide runs along either bank, and the filth moves between them about a foot deep and unhurried eastward. Grates overhead let down bars of grey daylight at intervals, and the Works keep torches between the bars.",
+            "ambience": [
+                "A torch gutters in its bracket and steadies.",
+                "Daylight comes down through a grate in a solid grey bar, full of falling dust.",
+                "Something upstream lets go and floats past, and you decide not to look.",
+                "The new stonework is pale against the old. The join is a straight line running away into the dark."
+            ],
+            "exits": [
+                {"to": "oldcity_stair", "label": "Back up to the stair"},
+                {"to": "oldcity_guardhouse", "label": "To the guard house"},
+                {"to": "oldcity_north_causeway", "label": "East, along the north channel"},
+                {"to": "oldcity_south_causeway", "label": "South, where the channel forks"}
+            ]
+        },
+        "oldcity_north_causeway": {
+            "name": "The North Causeway",
+            "type": "street",
+            "map_pos": [34, 22],
+            "random_encounter_pct": 15,
+            "description": "The channel runs on east between shored banks, and the buildings of the Old City crowd it on both sides — doorways at the wrong height, windows filled to their lintels with rubble, a street sign still bolted to a wall naming a street that is now this. The ledge is better kept along here. It has to be; this is the stretch the Engineers work.",
+            "ambience": [
+                "A grate rattles overhead as a cart goes over it.",
+                "Chisel-marks on the new stone, still bright.",
+                "The torches are further apart along this stretch than the last.",
+                "A doorway stands at chest height in the wall, its step buried."
+            ],
+            "exits": [
+                {"to": "oldcity_west_causeway", "label": "West, back toward the stair"},
+                {"to": "oldcity_works_depot", "label": "Up the bank to the depot"},
+                {"to": "oldcity_thiefs_entry", "label": "To the ruin with the loose grate"},
+                {"to": "oldcity_toads_grotto", "label": "North-east, to where the channel heads"},
+                {"to": "oldcity_tripwire_lane", "label": "South, into the unlit streets"},
+                {"to": "oldcity_watch_tower", "label": "East, under the old tower", "hidden": true}
+            ]
+        },
+        "oldcity_works_depot": {
+            "name": "The Works Depot",
+            "type": "building",
+            "map_pos": [40, 8],
+            "description": "The largest clear space down here, and clear because the Engineers cleared it. Dressed stone is stacked in courses by size, newly scrubbed and pale. The tools live in a locked shed with a good hasp on a bad door, and the whole floor has been swept — which, thirty feet under a city, reads less like tidiness than like someone insisting on something.",
+            "ambience": [
+                "The stone stack ticks as it gives up the day's damp.",
+                "A tally board lists loads in and loads out. The columns do not agree.",
+                "Someone's coat is on a nail, still wet.",
+                "The swept floor stops in a straight line and the filth begins."
+            ],
+            "exits": [
+                {"to": "oldcity_north_causeway", "label": "Back down to the channel"}
+            ]
+        },
+        "oldcity_thiefs_entry": {
+            "name": "The Thief's Entry",
+            "type": "room",
+            "map_pos": [52, 14],
+            "description": "Inside a gutted building a stair has been rebuilt out of what was to hand — packing crate, cut stone, a ship's timber — and it climbs to a sluice grate that does not sit right in its frame. The grate has been lifted and dropped many times. There is no rust in the seat of it at all.",
+            "first_visit": "The stair takes your weight with a shift and a complaint. Whoever uses this comes up light and goes down lighter.",
+            "ambience": [
+                "Street noise comes down through the grate, close enough to make out words.",
+                "The stair gives under you and settles.",
+                "Rain-grit has come through the grate and made a small clean cone on the step."
+            ],
+            "exits": [
+                {"to": "oldcity_north_causeway", "label": "Back to the channel"},
+                {"to": "oldcity_thieves_den", "label": "Along the wall-top, south"}
+            ]
+        },
+        "oldcity_toads_grotto": {
+            "name": "The Stagnant Pool",
+            "type": "site",
+            "map_pos": [64, 7],
+            "random_encounter_pct": 10,
+            "description": "The channel heads here in a wide still pool with a skin on it, fed by seepage rather than by the flow. A pair of boots stands at the edge, side by side and empty, laced and upright as if their owner had stepped out of them to wade. They are small boots. Nothing else of the goblin remains.",
+            "first_visit": "The pool does not move at all, which after the channel is the wrong thing for water to do.",
+            "ambience": [
+                "The skin on the pool shifts a little and settles.",
+                "Something releases a slow chain of bubbles and stops.",
+                "The boots have been there long enough to have grown a fur of mould.",
+                "The air here is thick, and warmer than it has any right to be."
+            ],
+            "exits": [
+                {"to": "oldcity_north_causeway", "label": "Back south-west along the channel"},
+                {"to": "oldcity_goblin_foothold", "label": "East, into the tunnels"}
+            ]
+        },
+        "oldcity_tripwire_lane": {
+            "name": "Copper Wire Lane",
+            "type": "street",
+            "map_pos": [40, 36],
+            "random_encounter_pct": 10,
+            "description": "An unlit run of Old City street with high walls on both sides, and stone stacked along the tops of them where it has no reason to be. The wire is copper, dulled deliberately, strung at shin height across the narrows and tied off to pins driven into the mortar. It is not meant to kill anyone. It is meant to make a great deal of noise falling on them.",
+            "ambience": [
+                "Something above shifts its weight on the stacked stone.",
+                "The dark ahead has a corner in it and you cannot see past.",
+                "A wire hums faintly. The draught is playing it.",
+                "Grit trickles off the wall-top and stops."
+            ],
+            "exits": [
+                {"to": "oldcity_north_causeway", "label": "North, back to the lit channel"},
+                {"to": "oldcity_thieves_den", "label": "On, to the walled block"},
+                {"to": "oldcity_renegades_stash", "label": "Into the side-way, where the smell is", "hidden": true}
+            ]
+        },
+        "oldcity_thieves_den": {
+            "name": "The Thieves' Den",
+            "type": "building",
+            "map_pos": [52, 39],
+            "description": "A knot of Old City houses still standing to their second floors, backed onto one another and walled between so the whole block is one rambling holding with a single way in. There are hammocks, a cook-fire vented up a chimney that still draws, and nine people who make their living above and their beds down here. Their leader has a good coat and a better knife and the manner of a man about to offer you something.",
+            "first_visit": "Faces at three windows before you have taken two more steps. Nobody reaches for anything, which is its own kind of message.",
+            "ambience": [
+                "The cook-fire draws well. Somebody built that chimney properly.",
+                "A hammock creaks. Whoever is in it does not sit up.",
+                "Coins go into a purse one at a time, slowly, for your benefit.",
+                "Two of them are having a conversation that stops when you look at it."
+            ],
+            "exits": [
+                {"to": "oldcity_tripwire_lane", "label": "Out the way you came"},
+                {"to": "oldcity_thiefs_entry", "label": "North, along the wall-top"}
+            ]
+        },
+        "oldcity_renegades_stash": {
+            "name": "The Renegade's Stash",
+            "type": "room",
+            "map_pos": [62, 30],
+            "hidden_until_visited": true,
+            "description": "A dead-end room off a side-way, and a dead man in the middle of it curled around a lockbox he did not let go of. He has been here a while. The centipedes that found him first have made a nest of him and are still in residence, and they resent the light.",
+            "first_visit": "The smell arrives first and explains itself second.",
+            "ambience": [
+                "Something moves inside the corpse and stops.",
+                "The lockbox has been held so long the fingers have set around it.",
+                "Many small legs, all at once, then nothing."
+            ],
+            "exits": [
+                {"to": "oldcity_tripwire_lane", "label": "Back out to the lane"}
+            ]
+        },
+        "oldcity_watch_tower": {
+            "name": "The Old Watch Tower",
+            "type": "building",
+            "map_pos": [66, 46],
+            "allow_camp": true,
+            "hidden_until_visited": true,
+            "description": "A tower of the older City, standing to its full height because the fill packed in around it never reached the top. The only opening is a window fourteen feet up a sheer face. Inside, out of the wet at last, a stair in good repair climbs toward a boarded ceiling — and, from somewhere below the floor, goes on down.",
+            "first_visit": "Above the boards, faintly, children are playing. They are standing in a condemned ruin in the poor quarter and have no idea what is under them.",
+            "ambience": [
+                "Footsteps overhead, light and quick, and a shriek of laughter.",
+                "The stair is dry. Nothing down here is dry.",
+                "The downward flight goes past the reach of any lamp you have."
+            ],
+            "exits": [
+                {"to": "oldcity_north_causeway", "label": "Out the window, down to the channel"},
+                {"to": "oldcity_drop_hole", "label": "South, to where the channels meet"}
+            ]
+        },
+        "oldcity_goblin_foothold": {
+            "name": "The Goblin Foothold",
+            "type": "room",
+            "map_pos": [80, 14],
+            "random_encounter_pct": 12,
+            "description": "Ten goblins have taken a block of half-collapsed rooms and made it defensible in the way goblins do — badly, but everywhere at once. Sharpened stakes in the doorways, a wall of stacked rubble with a firing gap at the wrong height, a cook-fire burning something that was recently alive. They came down recently, and they have already sent word to their cousins.",
+            "first_visit": "A shriek goes up from somewhere in the rubble and is answered twice, from two different directions. They knew before you did.",
+            "ambience": [
+                "An argument breaks out over something and is settled by hitting.",
+                "Stakes have been driven into a doorway at knee height, which is smart.",
+                "The fire smells wrong.",
+                "Somebody small is counting, out loud, in a language you do not have."
+            ],
+            "exits": [
+                {"to": "oldcity_toads_grotto", "label": "West, back to the pool"},
+                {"to": "oldcity_empty_rooms", "label": "South, through the rubble"}
+            ]
+        },
+        "oldcity_empty_rooms": {
+            "name": "The Empty Rooms",
+            "type": "room",
+            "map_pos": [88, 28],
+            "random_encounter_pct": 15,
+            "description": "Room after room of the older City, some clear, most part-filled, a few packed to the ceiling with the rubble of whatever stood above them. They were houses, and shops, and one of them had a floor of laid stone and a bench along three walls and was something civic. Nothing lives here. Everything has passed through.",
+            "ambience": [
+                "A doorway leads to a room identical to this one.",
+                "Someone has scratched a mark at the corner. It has been scratched over.",
+                "The rubble here is packed to the lintel and going no further.",
+                "A stone bench runs along three walls of the next room, worn in the middle."
+            ],
+            "exits": [
+                {"to": "oldcity_goblin_foothold", "label": "North, back toward the fires"},
+                {"to": "oldcity_crawlway", "label": "East, where the rooms narrow"}
+            ]
+        },
+        "oldcity_crawlway": {
+            "name": "The Crawlway",
+            "type": "room",
+            "map_pos": [95, 40],
+            "description": "Where a wall gave and never fully closed, leaving a way through that has to be taken on hands and knees for a stretch before it opens up again. Beyond it the Old City goes on further east than anyone has mapped. Somebody has been through here recently and going the other way — the dust is disturbed in one direction only, and the marks are small.",
+            "ambience": [
+                "The gap ahead is narrower than the one behind.",
+                "Small handprints in the dust, going east.",
+                "A draught comes through from somewhere and smells of nothing at all.",
+                "Stone settles, a long way off."
+            ],
+            "exits": [
+                {"to": "oldcity_empty_rooms", "label": "West, back to the rooms"},
+                {"to": "oldcity_fugitives_hideout", "label": "Follow the small marks", "hidden": true}
+            ]
+        },
+        "oldcity_fugitives_hideout": {
+            "name": "The Fugitive's Hideout",
+            "type": "room",
+            "map_pos": [97, 54],
+            "hidden_until_visited": true,
+            "description": "A cave barely bigger than a cupboard, with a crack in the roof thirty feet up where two street cobbles have parted. A single blade of daylight comes down it and lands on the floor. Somebody small is sitting in that light with her back to the stone and her arms round her knees, and she has been doing it for some time.",
+            "first_visit": "She does not run. She has worked out that running is what the last one did.",
+            "ambience": [
+                "The blade of daylight moves a finger's width along the floor.",
+                "Far above, a cart goes over the cobbles and grit comes down.",
+                "She has not made a sound since you came in."
+            ],
+            "exits": [
+                {"to": "oldcity_crawlway", "label": "Back through the crawl"}
+            ]
+        },
+        "oldcity_south_causeway": {
+            "name": "The South Causeway",
+            "type": "street",
+            "map_pos": [22, 56],
+            "random_encounter_pct": 12,
+            "description": "The second of the two shored channels, running south of the first and carrying the heavier flow. The ledges are narrower here and in worse repair, and the Engineers have got to this one later; the new stone gives out after a hundred feet and the old stone takes over, wet and green and rounded off at every edge.",
+            "ambience": [
+                "The flow is faster along this stretch, and louder.",
+                "The new stonework ends. After that it is all old.",
+                "A ledge slab rocks under your boot and settles back.",
+                "The torches stop here. Whatever is east of this is unlit."
+            ],
+            "exits": [
+                {"to": "oldcity_west_causeway", "label": "North, back to the fork"},
+                {"to": "oldcity_spider_ante", "label": "South, where the webs start"},
+                {"to": "oldcity_submerged_pit", "label": "East, along the broken ledges"}
+            ]
+        },
+        "oldcity_submerged_pit": {
+            "name": "The Broken Ledges",
+            "type": "street",
+            "map_pos": [54, 63],
+            "random_encounter_pct": 10,
+            "description": "The ledges have gone entirely along this stretch, and someone has laid stepping stones through the flow to replace them — flat slabs, spaced for a longer stride than most people have. The water here is a foot deep and completely opaque, and it is not a foot deep everywhere. There is a fissure under it, ten feet down and seven across, and the stones do not go around it.",
+            "ambience": [
+                "A stepping stone shifts as your weight comes off it.",
+                "The flow slows here for no visible reason, which means it is going somewhere.",
+                "You cannot see your own boots.",
+                "One of the slabs is not a slab. It is a lintel, dropped flat."
+            ],
+            "exits": [
+                {"to": "oldcity_south_causeway", "label": "West, back to the shored stretch"},
+                {"to": "oldcity_drop_hole", "label": "East, toward the roar"}
+            ]
+        },
+        "oldcity_spider_ante": {
+            "name": "The Web Gate",
+            "type": "room",
+            "map_pos": [28, 69],
+            "description": "The street gives out into a cave the collapse opened, and the cave has been furnished. Web is strung wall to wall in sheets and cables, thick enough in places to lean on, and the floor under it is crowded with pale egg-cases in drifts. Bones are worked into the webbing at intervals, held up off the ground. Further in, past all of it, something gleams.",
+            "first_visit": "Four dark shapes shift in the high recesses at once, and then hold perfectly still, which is worse.",
+            "ambience": [
+                "An egg-case creaks. Just the one.",
+                "Something crosses the ceiling and stops directly above you.",
+                "The webs carry the draught in slow waves.",
+                "A dried hand hangs out of the webbing, wearing a ring."
+            ],
+            "exits": [
+                {"to": "oldcity_south_causeway", "label": "Back north to the channel"},
+                {"to": "oldcity_spider_lair", "label": "Toward the gleam"}
+            ]
+        },
+        "oldcity_spider_lair": {
+            "name": "The Feeding Ground",
+            "type": "room",
+            "map_pos": [42, 73],
+            "description": "The web here is not built for catching. It is built for keeping, and what it keeps is arranged — a dozen wrapped shapes hung at intervals along the walls at a comfortable working height. The gleam that brought you is a steel helmet, still on its owner. Tunnels lead off in three directions and all of them are dark, and she is in one of them, and she knows exactly where you are standing.",
+            "first_visit": "The webs move all at once, in every direction, the way a floor moves when something very large steps onto it somewhere else.",
+            "ambience": [
+                "One of the wrapped shapes swings gently and stops.",
+                "Something withdraws into a tunnel mouth without hurry.",
+                "The helmet catches your light and throws it back.",
+                "A great deal of weight settles onto webbing somewhere above."
+            ],
+            "exits": [
+                {"to": "oldcity_spider_ante", "label": "Back out through the egg-drifts"},
+                {"to": "oldcity_gem_cutters", "label": "Force the sealed door behind the webs"}
+            ]
+        },
+        "oldcity_gem_cutters": {
+            "name": "The Gem Cutter's Workshop",
+            "type": "building",
+            "map_pos": [58, 71],
+            "hidden_until_visited": true,
+            "description": "Sealed when the City fell on it and sealed ever since, and the reason the spiders were never the point. A bench with the cutter's wheels still clamped to it. Trays in a graded run from rough to finished. A strongbox under the bench with the old coin in it, and set into the plaster of the wall — because the plaster was where you hid things — small deliberate lumps that are not part of the wall.",
+            "first_visit": "Air that has not been breathed in a very long time comes out past you, dry as paper.",
+            "ambience": [
+                "Dust lies flat and undisturbed on every surface.",
+                "The cutting wheels are still true. Somebody looked after these.",
+                "A tray of rough stones, sorted by size, waiting for a morning that did not come.",
+                "The plaster has small regular blemishes at about chest height."
+            ],
+            "exits": [
+                {"to": "oldcity_spider_lair", "label": "Back out through the webs"}
+            ]
+        },
+        "oldcity_drop_hole": {
+            "name": "The Drop Hole",
+            "type": "site",
+            "map_pos": [76, 62],
+            "random_encounter_pct": 10,
+            "description": "Both causeways arrive here and neither leaves. The whole flow of the Old City gathers, turns once, and goes over the lip into a shaft thirty feet down onto whatever is at the bottom, and the noise of it fills the chamber to the roof. A ledge runs round the drop and off to the south-east, and it is wet the whole way.",
+            "first_visit": "The noise takes over completely. You can see mouths moving and that is all.",
+            "ambience": [
+                "The roar does not vary. It has not varied in a very long time.",
+                "Spray comes back up off the lip in a cold steady drift.",
+                "The ledge is worn smooth by water and by something that uses it.",
+                "Down there, under the noise, something else is going on and you cannot hear it."
+            ],
+            "exits": [
+                {"to": "oldcity_submerged_pit", "label": "West, back along the stones"},
+                {"to": "oldcity_watch_tower", "label": "North, to the tower"},
+                {"to": "oldcity_ogres_lair", "label": "South-east, along the wet ledge"}
+            ]
+        },
+        "oldcity_ogres_lair": {
+            "name": "The Cook-Pot",
+            "type": "room",
+            "map_pos": [90, 71],
+            "description": "The ledge comes out high on the wall of a cave, and what is below is laid out plainly because nothing here has any reason to hide. A cauldron over a fire in the middle of the floor. Around it, in a wide scattered ring, shoes. Small ones. At the back a pen of driven stakes with two boys in it, and between you and them an ogre in a mail shirt with a mace by his hand, and a warg beside him wearing a collar with something cut into it.",
+            "first_visit": "The warg has your scent before your foot leaves the ledge, and does not bark. It just turns its head and waits to see what its master wants to do.",
+            "ambience": [
+                "The cauldron works away, slow and thick.",
+                "One of the boys says something to the other and is told to be quiet.",
+                "The warg's collar has a design worked into it that hurts to look at.",
+                "Bones have been swept into a corner. Someone tidies in here."
+            ],
+            "exits": [
+                {"to": "oldcity_drop_hole", "label": "Back up the ledge"}
+            ]
+        }
+    }
+}

@@ -1,0 +1,13 @@
+{
+    "item_key": "uv_knotted_rag",
+    "name": "A Knotted Rag",
+    "description": "Coin in the corner of a sleeve, knotted twice and knotted again, the way a man carries money he does not want to hear. It went into the spoil basket inside whatever it was in the pocket of.",
+    "item_type": "treasure",
+    "rarity": "common",
+    "weight": 0,
+    "value_gp": 14,
+    "icon": "coin",
+    "place": {
+        "location": "uv_spoil"
+    }
+}

@@ -1,0 +1,127 @@
+{
+    "region_key": "arden_priory",
+    "module": "rivermark",
+    "name": "Arden Priory",
+    "region_type": "town",
+    "description": "A small house of the Order of the Sun's Hour, above the ford on the west bank. Eleven brothers, a hospice, a bell, and more land on paper than they can walk in a day.",
+    "sort_order": 45,
+    "locations": {
+        "priory_gate": {
+            "name": "The Priory Gate",
+            "type": "gate",
+            "map_pos": [86, 40],
+            "description": "A gatehouse built for forty and kept by one. The arch is good stonework and the door in it is new pine, cut to fit an opening it was never meant for, because the original went for something. There is a bench in the shadow of the wall, a bell-rope, and a slot in the wall for alms that has been plugged with a rag from the inside.",
+            "first_visit": "The bell answers before you have finished pulling the rope, which means somebody was already at the other end of it.",
+            "ambience": [
+                "The bell-rope is worn smooth at exactly one height.",
+                "The alms slot has been stopped from the inside with rag.",
+                "The gate door is new pine in an old frame and does not match anything.",
+                "Somebody crosses the yard beyond the arch and does not look over."
+            ],
+            "exits": [
+                {"to": "priory_track", "label": "Back down the track to the ford"},
+                {"to": "priory_cloister", "label": "Through the arch into the cloister"}
+            ]
+        },
+        "priory_cloister": {
+            "name": "The Cloister",
+            "type": "site",
+            "map_pos": [62, 34],
+            "allow_camp": true,
+            "description": "A square of grass with a covered walk round it, one arcade of which has been glazed with whatever glass came to hand and three of which have not. Herbs in the beds, all of them useful, none of them ornamental. The brothers cross it at intervals that have nothing to do with the sun and everything to do with the bell, and they cross it without hurrying, which is the whole discipline in one movement.",
+            "first_visit": "Eleven men, an hour of the day, and a bell. Nobody stops what they are doing to look at you, and nobody pretends not to have seen you either.",
+            "ambience": [
+                "The bell goes and four men change direction at the same moment.",
+                "The herb beds are weeded to the edge. Nothing here is for show.",
+                "Rain has got into the unglazed walk and stands in the flags in the same three places.",
+                "Somebody is sweeping the north walk and has been since you arrived."
+            ],
+            "exits": [
+                {"to": "priory_gate", "label": "Out to the gate"},
+                {"to": "priory_chapel", "label": "North into the chapel"},
+                {"to": "priory_scriptorium", "label": "West to the writing room"},
+                {"to": "priory_infirmary", "label": "South to the infirmary"}
+            ]
+        },
+        "priory_chapel": {
+            "name": "The Chapel",
+            "type": "building",
+            "map_pos": [56, 14],
+            "description": "Plain to the point of severity: whitewash, a stone floor worn in two tracks, benches without backs, and a sun-disc over the altar cut from one piece of pale wood by somebody who could not carve and did it anyway. The east wall has four brackets on it at eye height and three of the brackets are empty. Nobody has filled the holes where the fourth was moved.",
+            "ambience": [
+                "The floor is worn in two tracks, from the door to the altar and back.",
+                "Three empty brackets on the east wall, and one that is not.",
+                "The sun-disc is badly carved and has been kept very clean.",
+                "Somebody is at the back bench, not praying, sitting the hour out."
+            ],
+            "exits": [
+                {"to": "priory_cloister", "label": "South out to the cloister"},
+                {"to": "priory_reliquary", "label": "Through the low door to the reliquary"}
+            ]
+        },
+        "priory_reliquary": {
+            "name": "The Reliquary",
+            "type": "room",
+            "map_pos": [34, 8],
+            "description": "A stone cupboard of a room off the chapel, barrel-vaulted, with a grille instead of a window and shelves cut into the wall. There are seventeen shelf-spaces and nine things on them. Each empty space has a card in it in a careful hand, and the cards are not labels — they are receipts.",
+            "first_visit": "The lamp shows you the shelves one at a time. It takes a moment to work out that the gaps are not damage. The gaps have been filled in with paperwork.",
+            "ambience": [
+                "Nine reliquaries, seventeen spaces, and eight small cards.",
+                "The grille has been re-barred recently, on the inside.",
+                "Cold comes off the stone at a steady rate, like a draught with nowhere to come from.",
+                "One of the remaining nine has been moved along to close a gap. The dust says so."
+            ],
+            "exits": [
+                {"to": "priory_chapel", "label": "Back through the low door"}
+            ]
+        },
+        "priory_scriptorium": {
+            "name": "The Writing Room",
+            "type": "room",
+            "map_pos": [38, 40],
+            "description": "Four desks under the best window in the house, three of them stacked with the priory's ordinary paper — leases, tithe-rolls, letters from houses that no longer exist — and one of them kept clear. Along the north wall the cartulary presses: every deed, grant, boundary and account this order has held since it was founded, bound by decade, in order, and dusted.",
+            "first_visit": "The room smells of oak-gall ink and cold. It is the only room in the priory that is warm, and it is warm because the presses must not damp, not because anybody in it is cold.",
+            "ambience": [
+                "A press is open at a decade and somebody has left a marker in it.",
+                "Ink, iron and cold stone. The fire is banked low and kept low.",
+                "Somebody has copied the same line three times and struck out two.",
+                "The cartulary presses are dusted. Everything else in this house is not."
+            ],
+            "exits": [
+                {"to": "priory_cloister", "label": "East out to the cloister"}
+            ]
+        },
+        "priory_infirmary": {
+            "name": "The Infirmary",
+            "type": "building",
+            "map_pos": [56, 62],
+            "description": "The longest room in the priory and the only one built for other people: twelve beds down one wall, six of them made up, a hearth kept in at both ends, and a door straight out to the yard so nobody has to be carried through the cloister. This is what the order is actually for. The rest of the house is the arrangement that lets this room exist.",
+            "first_visit": "Warmth, boiled linen, and somebody coughing at the far end in a rhythm that has been going on for a long time.",
+            "ambience": [
+                "Somebody at the far end coughs, rests, and coughs again on the same count.",
+                "Six beds made up out of twelve. The other six are stripped and ready.",
+                "A brother turns a patient without waking him. He has done that a great many times.",
+                "The hearths are kept in at both ends and nobody stands at either."
+            ],
+            "exits": [
+                {"to": "priory_cloister", "label": "North to the cloister"},
+                {"to": "teodors_cell", "label": "Through to the end cell"}
+            ]
+        },
+        "teodors_cell": {
+            "name": "The End Cell",
+            "type": "room",
+            "map_pos": [30, 66],
+            "description": "Off the infirmary, through a door that is kept shut for quiet rather than for anything else. A bed, a stool, a shutter, and a shelf with a cup on it. There is a writing-board propped against the wall with an unfinished sheet clipped to it, and the ink on the sheet is old enough that whoever put it down did not expect to be interrupted for this long.",
+            "ambience": [
+                "The shutter is open a hand's width. It has been set there and not moved.",
+                "A writing-board with a sheet on it, half-written, the ink long dry.",
+                "The cup on the shelf is full. Somebody fills it and nobody drinks it.",
+                "Through the door, the infirmary carries on without him."
+            ],
+            "exits": [
+                {"to": "priory_infirmary", "label": "Back into the infirmary"}
+            ]
+        }
+    }
+}

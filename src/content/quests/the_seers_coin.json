@@ -1,0 +1,94 @@
+{
+    "quest_key": "the_seers_coin",
+    "title": "The Seer's Coin",
+    "description": "Nan Vetch has read the same fortune to every smallholder who has sat down in front of her since the spring. She did not think of it herself and she is not sorry, and both of those are worth hearing her say.",
+    "giver": "street_seer",
+    "on_job_board": false,
+    "required_level": 2,
+    "rewards": {
+        "xp": 300,
+        "gold": 50
+    },
+    "stages": {
+        "sit_for_a_reading": {
+            "title": "Sit down in front of her",
+            "objective": "Pay Nan Vetch a copper and listen to what she says.",
+            "journal": "Nan Vetch reads water and weather on the High Street for coppers. She told me the river is coming back for the west bank, that it has done it twice before in her life, and that a wise man sells while the ground is still worth something. She said it the way a woman says a thing she has said four hundred times.",
+            "target": {
+                "location": "high_street"
+            }
+        },
+        "follow_the_coin": {
+            "title": "Who pays her",
+            "objective": "She is paid in something. Find out by whom.",
+            "journal": "Nan is paid two silver a week, in advance, by a clerk who walks down from the counting house on a Tuesday, hands it over without stopping, and has never once given a name or asked her a question. She has never had to say anything untrue. That is what she wants understood: the flats will go under, they always go under, and she has been paid to keep saying so at exactly the moment it is worth the most to somebody.",
+            "target": {
+                "location": "counting_house"
+            }
+        },
+        "she_stopped": {
+            "title": "She stopped",
+            "journal": "Nan gave the last week's silver back, which cost her more than it sounds, and reads only weather now. There is a girl doing cards outside the Flagon within the fortnight who tells anybody from the west bank that the water is coming. Nan says she is not very good and will get better.",
+            "resolution": "she_stopped",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "seers_coin_fate",
+                    "value": "stopped"
+                },
+                {
+                    "approval": {
+                        "aldric": 8,
+                        "ilse": 6,
+                        "sera": -2
+                    }
+                }
+            ]
+        },
+        "traced_the_hand": {
+            "title": "Down to the clerk",
+            "journal": "I waited on the corner three Tuesdays and followed the man with the satchel. He is a hired copyist who works out of a room over the counting house, he is paid by the letter, and he has never met the person whose instructions he carries out. He was frightened of me and had nothing at all to be frightened about. There are, he says, five other standing payments on the same list. He is not allowed to say what they are and had clearly never wondered.",
+            "resolution": "traced_the_hand",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "seers_coin_fate",
+                    "value": "traced"
+                },
+                {
+                    "set_flag": "copyist_found"
+                },
+                {
+                    "approval": {
+                        "sera": 8,
+                        "ilse": 6,
+                        "kessa": 2
+                    }
+                }
+            ]
+        },
+        "turned_her": {
+            "title": "Turned",
+            "journal": "I pay Nan Vetch thirty gold and she reads what I like. She still takes the silver on Tuesdays. She was quite clear that she would, and quite clear that I would want her to, and she was right about both before I was.",
+            "resolution": "turned_her",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "seers_coin_fate",
+                    "value": "turned"
+                },
+                {
+                    "take_gold": 30
+                },
+                {
+                    "approval": {
+                        "kessa": 4,
+                        "sera": 10,
+                        "aldric": -12,
+                        "ilse": -6
+                    }
+                }
+            ]
+        }
+    }
+}

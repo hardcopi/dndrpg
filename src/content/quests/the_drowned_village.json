@@ -1,0 +1,93 @@
+{
+    "quest_key": "the_drowned_village",
+    "title": "The Drowned Village",
+    "description": "Eleven roofs standing out of four feet of water, in two rows, with a street between them. Every house was emptied properly before it went under. Nobody left in a hurry, and nobody in Rivermark can tell you the village's name.",
+    "giver": "cully_tench",
+    "on_job_board": true,
+    "required_level": 3,
+    "rewards": {
+        "xp": 450,
+        "gold": 120
+    },
+    "stages": {
+        "eleven_roofs": {
+            "title": "Eleven roofs",
+            "objective": "Get out to the village in the fen and look at it properly.",
+            "journal": "It is not a ruin. It is a village that was emptied, room by room, with time to spare, and then flooded. There is no furniture in any of the houses and no pots in any of the hearths.",
+            "target": {
+                "location": "drowned_village"
+            }
+        },
+        "the_chapel": {
+            "title": "The chapel",
+            "objective": "The chapel has a stone roof and something on the chancel step. Get to it.",
+            "journal": "The only building with a stone roof, and the only one with an inside. The water in the nave stops a hand's width below the third step, and it has stopped there for forty years. There is a chest on the fourth step, which is dry. Somebody worked out where the water would stand before they carried it up there — which means somebody knew, in advance, how deep it was going to be.",
+            "target": {
+                "location": "drowned_chapel"
+            }
+        },
+        "raised_the_names": {
+            "title": "The village has a name",
+            "journal": "The chest holds the parish register: baptisms, marriages and burials for a hundred and ninety years, dry, in order, and legible. The village was called Ashlade. Two hundred and six people were living in it the year it went under and every one of them is in the book. There is no burial entry for any of them, because they did not die. They were moved, and then the sluice was opened.",
+            "resolution": "raised_the_names",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "village_fate",
+                    "value": "named"
+                },
+                {
+                    "set_flag": "ashlade_named"
+                },
+                {
+                    "xp": 200
+                },
+                {
+                    "approval": {
+                        "aldric": 16,
+                        "ilse": 10,
+                        "sera": 8
+                    }
+                }
+            ]
+        },
+        "cleared_the_nave": {
+            "title": "The nave, cleared",
+            "journal": "Forty years of standing black water in a stone room, and something in it that peat had kept in better condition than it had any business being in. It is down. The nave is a nave again. It is also, now, a room with a chest in it and nothing to stop anyone taking the chest, and I have thought about that more than once since.",
+            "resolution": "cleared_the_nave",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "village_fate",
+                    "value": "cleared"
+                },
+                {
+                    "set_flag": "drowned_nave_clear"
+                },
+                {
+                    "xp": 150
+                },
+                {
+                    "approval": {
+                        "kessa": 12,
+                        "aldric": 6,
+                        "ilse": 4
+                    }
+                }
+            ]
+        },
+        "left_it_under": {
+            "title": "Left under",
+            "journal": "Eleven roofs, two rows and a street. I did not go into the chapel. I have thought about the chest on the fourth step several times since and I have not gone back.",
+            "resolution": "left_it_under",
+            "terminal": true,
+            "outcome": "neutral",
+            "effects": [
+                {
+                    "set_flag": "village_fate",
+                    "value": "under"
+                }
+            ]
+        }
+    }
+}

@@ -1,0 +1,12 @@
+{
+    "npc_key": "fessick",
+    "name": "Fessick",
+    "role": "Indentured Digger",
+    "description": "The oldest man on the headings and the only one who has worked out how the sum ends. He has stopped mentioning it, because mentioning it did not help.",
+    "sprite_key": "fessick",
+    "image_url": "assets/images/npcs/prisoner_1.png",
+    "dialog": "fessick",
+    "place": {
+        "location": "the_undercut"
+    }
+}

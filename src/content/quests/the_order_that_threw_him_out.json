@@ -1,0 +1,103 @@
+{
+    "quest_key": "the_order_that_threw_him_out",
+    "title": "The Order That Threw Him Out",
+    "description": "Arden Priory is above the ford on the west bank: eleven brothers, twelve beds, a bell, and more land on paper than they can afford to walk. It is possible to go and look at it without asking anybody's permission first.",
+    "giver": "prioress_hale",
+    "on_job_board": true,
+    "required_level": 3,
+    "rewards": {
+        "xp": 400,
+        "gold": 100
+    },
+    "stages": {
+        "the_gate": {
+            "title": "The gate",
+            "objective": "Go up the priory track and pull the bell-rope.",
+            "journal": "The priory gate is good stonework with a new pine door in it, cut to fit an opening it was never meant for, because the original went for something. The alms slot in the wall has been plugged with rag from the inside.",
+            "target": {
+                "location": "priory_gate"
+            }
+        },
+        "what_the_house_is_for": {
+            "title": "What the house is for",
+            "objective": "Find out what the priory actually does all day.",
+            "journal": "The rest of the priory is an arrangement that exists to keep one room open: twelve beds, six of them made up, both hearths in, and a door straight out to the yard so nobody has to be carried through the cloister. They take anyone. They have taken anyone for a hundred and forty years, and the reason they own eight fewer relics than they did in spring is that linen and lamp oil have to be bought.",
+            "target": {
+                "location": "priory_infirmary"
+            }
+        },
+        "heard_them_out": {
+            "title": "Heard out",
+            "journal": "I asked the prior about the brother they put out four winters ago and she answered the question I asked, which was not the question I meant. They did not expel him for what he did to a sick woman. They expelled him for refusing an instruction, in front of the house, at the ford, and she would not say what the instruction was, and she said 'would not' rather than 'cannot', and looked at me while she did it.",
+            "resolution": "heard_them_out",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "priory_fate",
+                    "value": "heard"
+                },
+                {
+                    "set_flag": "priory_seen"
+                },
+                {
+                    "set_flag": "priory_refusal_known"
+                },
+                {
+                    "xp": 150
+                },
+                {
+                    "approval": {
+                        "aldric": 10,
+                        "sera": 8,
+                        "ilse": 4
+                    }
+                }
+            ]
+        },
+        "took_their_side": {
+            "title": "Their account, accepted",
+            "journal": "Eleven men, a hospice, and a house that has sold eight relics to buy linen. The prior gave me her account of the ford and I took it, and I told her so, and she thanked me and looked tired rather than relieved. Whatever else this order is, it is not the thing anyone in Rivermark thinks it is.",
+            "resolution": "took_their_side",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "priory_fate",
+                    "value": "priory"
+                },
+                {
+                    "set_flag": "priory_seen"
+                },
+                {
+                    "set_flag": "priory_account_accepted"
+                },
+                {
+                    "approval": {
+                        "aldric": -10,
+                        "sera": 6,
+                        "kessa": -4,
+                        "ilse": 2
+                    }
+                }
+            ]
+        },
+        "asked_nothing": {
+            "title": "Asked nothing",
+            "journal": "I walked the cloister, stood in the infirmary door, watched eleven men keep the hours, and did not ask the question I came up the track with. I have no account of that house except the one I was given by a man who is not allowed in it, and I have now seen the house and still only have his.",
+            "resolution": "asked_nothing",
+            "terminal": true,
+            "outcome": "neutral",
+            "effects": [
+                {
+                    "set_flag": "priory_fate",
+                    "value": "unentered"
+                },
+                {
+                    "approval": {
+                        "aldric": 4,
+                        "sera": -6
+                    }
+                }
+            ]
+        }
+    }
+}

@@ -1,0 +1,12 @@
+{
+    "npc_key": "dessa_kell",
+    "name": "Dessa Kell",
+    "role": "Sitting on the heap",
+    "description": "Comes up the spoil most days and sits where she can see the Mouth. Her brother went down eleven weeks ago with a crew of four and the crew came up without him, and each of the three told her a different gallery.",
+    "sprite_key": "dessa_kell",
+    "is_quest_giver": true,
+    "dialog": "dessa_kell",
+    "place": {
+        "location": "uv_spoil"
+    }
+}

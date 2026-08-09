@@ -1,0 +1,13 @@
+{
+  "item_key": "marked_pauldron",
+  "name": "The Left Pauldron",
+  "description": "A shoulder-piece of good human plate, sized for a big man and worn by somebody a third his weight. The straps have been shortened three times. Punched into the lining plate where nobody would look is a small clean mark: a plumb-line and a square.",
+  "item_type": "armor",
+  "rarity": "uncommon",
+  "weight": 6,
+  "value_gp": 60,
+  "armor_bonus": 0,
+  "armor_type": "shoulder",
+  "properties": {"quest_item": true},
+  "icon": "armor"
+}

@@ -1,0 +1,73 @@
+{
+    "quest_key": "the_landing",
+    "title": "The Landing",
+    "description": "Forty yards of dressed stone quay on a river that does not carry forty yards of trade. Somebody intends it to.",
+    "giver": "gillian_petch",
+    "on_job_board": false,
+    "required_level": 5,
+    "rewards": {
+        "xp": 400,
+        "gold": 90
+    },
+    "stages": {
+        "the_quay": {
+            "title": "The new landing",
+            "objective": "Half the common wharf is idle and the new landing is not. Ask why.",
+            "journal": "Greyhythe has two quays. The old one has four hundred years and four hundred opinions on it and half its berths are empty. The new one has a crane, a bonded shed, an iron fence with an open gate, and men who are paid weekly. Nobody at the old quay will say a word against it and every one of them looks at it.",
+            "target": {
+                "location": "corse_landing"
+            }
+        },
+        "the_shed": {
+            "title": "The bonded shed",
+            "objective": "Count what is in the shed, and what it is all for.",
+            "journal": "Salt, iron, lamp oil, sawn timber, rope, sailcloth and eleven hundred yards of chain. Every one of them a thing you would want if you were going to put two hundred men underground and keep them there. None of it is for sale. All of it is going somewhere, and the somewhere is upriver.",
+            "target": {
+                "location": "tally_shed"
+            }
+        },
+        "counted_the_chain": {
+            "title": "Eleven hundred yards",
+            "journal": "Gillian Petch showed me the book because nobody has ever told her not to, and there is nothing in the book: it is honest to the yard. That is the point of it. Eleven hundred yards of chain, dated, tallied twice, going up a river to a place that does not appear in any document in Greyhythe, because the place does not have a name yet.",
+            "resolution": "counted_the_chain",
+            "terminal": true,
+            "effects": [
+                {
+                    "set_flag": "landing_fate",
+                    "value": "counted"
+                },
+                {
+                    "set_flag": "landing_read"
+                },
+                {
+                    "xp": 100
+                },
+                {
+                    "approval": {
+                        "sera": 12,
+                        "ilse": 6,
+                        "aldric": 4
+                    }
+                }
+            ]
+        },
+        "left_it_alone": {
+            "title": "A quay is a quay",
+            "journal": "A merchant house built a quay. It is the least suspicious thing a merchant house has ever done and I have spent an afternoon looking at it as though it were a body.",
+            "resolution": "left_it_alone",
+            "terminal": true,
+            "outcome": "neutral",
+            "effects": [
+                {
+                    "set_flag": "landing_fate",
+                    "value": "left"
+                },
+                {
+                    "approval": {
+                        "kessa": 4
+                    }
+                }
+            ]
+        }
+    }
+}

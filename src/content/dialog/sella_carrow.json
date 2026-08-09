@@ -1,0 +1,246 @@
+{
+    "npc_key": "sella_carrow",
+    "start": "hail",
+    "nodes": {
+        "hail": [
+            {
+                "conditions": [
+                    {
+                        "flag": "oldcity_boys_freed"
+                    },
+                    {
+                        "flag": "oldcity_nell_found"
+                    }
+                ],
+                "text": "She sees Nell before she sees you.\n\nThere is nothing to describe after that for a while. When she can speak she does it over the top of her daughter's head, without letting go, and she is looking at the two boys standing slightly apart because nobody has come for them yet.\n\n\"Those are Anners' and the Reddick boy,\" she says. \"I'll take them up myself. I'll take them right up.\"",
+                "choices": [
+                    {
+                        "label": "Their people are on Cobble Row.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "oldcity_the_missing_children",
+                                    "stage": "brought_them_up"
+                                }
+                            }
+                        ],
+                        "end": true
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "jimmy_able",
+                        "text": "Jimmy: \"I know her. She counts the stair every time she comes down it. Sixty-one. She has never once been wrong and it has never once helped her.\"",
+                        "once": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "oldcity_nell_found"
+                    }
+                ],
+                "text": "She has Nell up off the ground before you have finished coming down the last step, and for a long moment the stair is the only quiet place in the City.\n\nThen, over her daughter's shoulder, with her eyes shut: \"Was there anyone else down there?\"",
+                "choices": [
+                    {
+                        "label": "Two boys. Still down there.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "oldcity_the_missing_children",
+                                    "stage": "brought_the_girl"
+                                }
+                            },
+                            {
+                                "approval": {
+                                    "jimmy_able": 4
+                                }
+                            }
+                        ],
+                        "next": "still_down_there"
+                    },
+                    {
+                        "label": "No one.",
+                        "next": "no_one_else"
+                    }
+                ]
+            },
+            {
+                "once": true,
+                "text": "There is a woman sitting at the bottom of the stair with her back against the wall, in a coat too good for sitting on stone in. She has been there since the day before yesterday. Each shift that comes down asks her to move along and each shift that comes down gives up on it.\n\n\"You're going in,\" she says. It is not a question; you are carrying the wrong amount of iron for anything else. \"My Nell went off Cobble Row eleven days back. She's the fourth this month and the Watch have four different ways of saying they're looking into it.\"",
+                "choices": [
+                    {
+                        "label": "Tell me about the fourth.",
+                        "next": "the_fourth"
+                    },
+                    {
+                        "label": "We'll look for her.",
+                        "effects": [
+                            {
+                                "start_quest": "oldcity_the_missing_children"
+                            }
+                        ],
+                        "next": "well_look"
+                    },
+                    {
+                        "label": "Not our business.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "oldcity_the_missing_children",
+                        "status": "active"
+                    }
+                ],
+                "text": "\"Anything,\" she says, before you have said anything. Then, more carefully: \"Anything at all.\"",
+                "choices": [
+                    {
+                        "label": "Not yet.",
+                        "end": true
+                    },
+                    {
+                        "label": "We're going back down.",
+                        "end": true
+                    },
+                    {
+                        "label": "We're not going back down.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "oldcity_the_missing_children",
+                                    "stage": "left_them"
+                                }
+                            }
+                        ],
+                        "next": "not_going_back"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "not": {
+                            "quest": "oldcity_the_missing_children",
+                            "status": "active"
+                        }
+                    },
+                    {
+                        "not": {
+                            "flag": "oldcity_children"
+                        }
+                    }
+                ],
+                "text": "Sella Carrow is where she was, with her back against the wall and the coat pulled round her.\n\n\"Nell Carrow,\" she says, as you come past. \"Six years old, off Cobble Row, thirteen days now.\" She says it the way you would read a docket. \"I say it to everybody who goes through that door. One of them is going to be the one who heard it.\"",
+                "choices": [
+                    {
+                        "label": "Tell me about the others.",
+                        "next": "the_fourth"
+                    },
+                    {
+                        "label": "We'll look for her.",
+                        "effects": [
+                            {
+                                "start_quest": "oldcity_the_missing_children"
+                            }
+                        ],
+                        "next": "well_look",
+                        "reoffer": true
+                    },
+                    {
+                        "label": "Not today.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "Sella Carrow is where she was, with her back against the wall.\n\n\"Still here,\" she says.",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_fourth": [
+            {
+                "text": "\"Anners' girl, first. Then the Reddick boy — that's two streets over. Then Hask's, and they've left the City altogether over it. Then mine.\"\n\nShe counts them on her fingers and then looks at her hand as if it had done that by itself.\n\n\"Watch say runaways. Four runaways in eleven days, all of them under eight, none of them ever come back for their dinner. I've stopped arguing with it. I sit here instead. They hate it more.\"",
+                "choices": [
+                    {
+                        "label": "We'll look for her.",
+                        "effects": [
+                            {
+                                "start_quest": "oldcity_the_missing_children"
+                            }
+                        ],
+                        "next": "well_look"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "well_look": [
+            {
+                "text": "She does not thank you, which you gather is deliberate — thanking you now would be a way of settling it, and she is not going to settle it until somebody comes back up that stair with her daughter.\n\n\"Officer Bram has the key and the say-so,\" she says. \"He's not a bad man. He's just got seven of them and he's not spending any.\"",
+                "choices": [
+                    {
+                        "label": "We'll speak to him.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "still_down_there": [
+            {
+                "text": "\"Then go back,\" she says. \"Go back down and get them.\"\n\nShe hears it as she says it and stops, because she knows exactly what she is asking and of whom.\n\n\"I'm sorry. I've no right. But go back.\"",
+                "choices": [
+                    {
+                        "label": "We will.",
+                        "end": true
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "no_one_else": [
+            {
+                "text": "She nods, and does not believe you, and is not going to say so while she is holding her daughter.",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ],
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "oldcity_the_missing_children",
+                            "stage": "brought_the_girl"
+                        }
+                    }
+                ]
+            }
+        ],
+        "not_going_back": [
+            {
+                "text": "\"No,\" she agrees. \"No, why would you.\"\n\nShe says it without any edge at all, which is worse than if she had put one on it, and goes back to watching the door.",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

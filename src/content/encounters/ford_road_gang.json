@@ -1,0 +1,14 @@
+{
+  "encounter_key": "ford_road_gang",
+  "name": "Three Off the Road",
+  "description": "Men in the hedge who were carters last season and have found that the west road is quieter than it used to be.",
+  "difficulty": "medium",
+  "is_random": true,
+  "region": "ford_road",
+  "monsters": [
+    {"monster": "bandit", "quantity": 2, "rank": "front"},
+    {"monster": "kobold", "quantity": 2, "rank": "back"}
+  ],
+  "allow_flee": true,
+  "allow_parley": false
+}

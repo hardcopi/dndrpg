@@ -1,0 +1,11 @@
+{
+    "npc_key": "street_scholar",
+    "name": "A scholar",
+    "role": "Townsfolk",
+    "sprite_key": "wizard",
+    "is_ambient": true,
+    "dialog": "street_scholar",
+    "place": {
+        "location": "high_street"
+    }
+}

@@ -1,0 +1,16 @@
+{
+    "encounter_key": "oldcity_wandering_goblins",
+    "name": "A Goblin Scouting Party",
+    "description": "Five of them, arguing, until one of them sees you and the argument resolves itself.",
+    "difficulty": "medium",
+    "is_random": true,
+    "region": "old_city",
+    "monsters": [
+        {
+            "monster": "goblin",
+            "quantity": 5
+        }
+    ],
+    "allow_flee": true,
+    "allow_parley": false
+}

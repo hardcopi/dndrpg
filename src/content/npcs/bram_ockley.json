@@ -1,0 +1,12 @@
+{
+    "npc_key": "bram_ockley",
+    "name": "Officer Bram Ockley",
+    "role": "Watch Officer",
+    "description": "Twenty years on the gate and six months on this, and he has not decided which is the punishment. Keeps the key to the stair door on a nail where he can see it.",
+    "sprite_key": "bram_ockley",
+    "is_quest_giver": true,
+    "dialog": "bram_ockley",
+    "place": {
+        "location": "oldcity_guardhouse"
+    }
+}

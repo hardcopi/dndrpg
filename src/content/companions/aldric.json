@@ -1,0 +1,51 @@
+{
+  "companion_key": "aldric",
+  "name": "Brother Aldric",
+  "title": "of no house now",
+  "description": "A cleric who was cast out of somewhere he will not name, and who still keeps the hours.",
+  "race": "Human",
+  "class": "Cleric",
+  "background": "Acolyte",
+  "alignment": "Neutral Good",
+  "level": 1,
+  "abilities": {
+    "strength": 12,
+    "dexterity": 10,
+    "constitution": 13,
+    "intelligence": 12,
+    "wisdom": 16,
+    "charisma": 11
+  },
+  "sprite_key": "aldric",
+  "combat_rank": "back",
+  "npc_key": "aldric",
+  "personal_quest": "aldric_absolution",
+  "recruit": {
+    "location": "flagon_common_room",
+    "conditions": [
+      {
+        "flag": "met_aldric"
+      }
+    ]
+  },
+  "approval": {
+    "leave_at": -30,
+    "hostile_at": -60,
+    "romance_at": 30
+  },
+  "romanceable": true,
+  "gear": [
+    "mace",
+    "holy_symbol",
+    "potion_healing"
+  ],
+  "spells": [
+    "guidance",
+    "sacred_flame",
+    "cure_wounds",
+    "bless"
+  ],
+  "feats": [
+    "healer"
+  ]
+}
