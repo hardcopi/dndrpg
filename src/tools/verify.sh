@@ -111,6 +111,7 @@ if [ "$PHP_MODE" != none ]; then
     run "test_dialogue_once"  phprun test_dialogue_once.php
     run "test_dialogue_lint"  phprun test_dialogue_lint.php
     run "test_content_export" phprun test_content_export.php
+    run "test_book"           phprun test_book.php
     run "test_art"            phprun test_art.php
 
     run "image_libs"          phprun check_image_libs.php

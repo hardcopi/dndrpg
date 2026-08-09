@@ -30,7 +30,24 @@ declare(strict_types=1);
 
 final class AdventureBook
 {
+    /**
+     * How many rows a wandering table has, and therefore what you roll on it.
+     *
+     * Six, because that is the size a table wants to be when somebody is
+     * rolling it one-handed with the other on a page.
+     */
+    private const WANDER_DIE = 6;
+
+    /** The table a published adventure assumes it is being read at. */
+    private const PARTY_SIZE = 4;
+
+    /** How hard a wandering table tries for a row it has not already got. */
+    private const WANDER_TRIES = 12;
+
     private PDO $db;
+
+    /** The bestiary, fetched at most once however many floors ask for it. */
+    private ?array $delveRoster = null;
 
     public function __construct(PDO $db)
     {
@@ -40,9 +57,15 @@ final class AdventureBook
     /**
      * The whole book for one module key, or null if there is no such module.
      *
+     * `$delveSeed` is the seed for the specimen dungeon printed with a module
+     * whose levels are generated at play. Passed in rather than rolled here so
+     * that this class stays deterministic — the same arguments always produce
+     * the same book, which is what lets a printed copy carry its seed and be
+     * reprinted exactly. The page decides where the number comes from.
+     *
      * @return array<string, mixed>|null
      */
-    public function build(string $moduleKey): ?array
+    public function build(string $moduleKey, ?int $delveSeed = null): ?array
     {
         $stmt = $this->db->prepare('SELECT * FROM modules WHERE module_key = ?');
         $stmt->execute([$moduleKey]);
@@ -61,6 +84,14 @@ final class AdventureBook
         }
 
         $encounters = $this->encounters($moduleId, $regions);
+        $delve = $this->delve($moduleKey, $delveSeed, $module);
+
+        // The bestiary stats everything the book SENDS, and a specimen delve
+        // sends creatures no encounter row knows about — it is rolled for the
+        // page, not stored. Without this the Undervault printed five levels of
+        // fights, thirty wandering rows, and "0 creatures": every monster named
+        // in the appendix and not one stat block for any of them.
+        $monsters = $this->monsters($encounters, self::delveMonsterKeys($delve));
 
         return [
             'module'     => $module,
@@ -68,12 +99,400 @@ final class AdventureBook
             'cast'       => $this->cast($locationIds),
             'quests'     => $this->quests($locationIds),
             'encounters' => $encounters,
-            'monsters'   => $this->monsters($encounters),
+            'monsters'   => $monsters,
+            'delve'      => $delve,
             'counts'     => [
                 'regions'    => count($regions),
                 'locations'  => count($locationIds),
                 'encounters' => count($encounters),
+                'monsters'   => count($monsters),
+                // What the book actually asks a referee to run, which for a
+                // generated module is nearly all of it and none of it is an
+                // `encounters` row.
+                'rolled'     => self::delveFightCount($delve),
             ],
+        ];
+    }
+
+    /** Every monster key a specimen delve sends, from its rooms and its tables. */
+    private static function delveMonsterKeys(array $delve): array
+    {
+        $keys = [];
+        foreach (($delve['floors'] ?? []) as $floor) {
+            foreach ($floor['rooms'] as $room) {
+                if (!empty($room['holds']['key'])) {
+                    $keys[(string) $room['holds']['key']] = true;
+                }
+            }
+            foreach ($floor['wandering']['rows'] as $row) {
+                if (!empty($row['key'])) {
+                    $keys[(string) $row['key']] = true;
+                }
+            }
+        }
+        return array_keys($keys);
+    }
+
+    /** How many fights a specimen delve holds, rooms and wandering rows alike. */
+    private static function delveFightCount(array $delve): int
+    {
+        $n = 0;
+        foreach (($delve['floors'] ?? []) as $floor) {
+            foreach ($floor['rooms'] as $room) {
+                $n += empty($room['holds']) ? 0 : 1;
+            }
+            $n += count($floor['wandering']['rows']);
+        }
+        return $n;
+    }
+
+    /**
+     * A specimen dungeon, for a module whose levels are made at play.
+     *
+     * The Undervault has four authored locations and a generator, so a book
+     * built only from the database prints the stair head and stops — which is
+     * an accurate account of the rows and a useless account of the adventure.
+     * What is authored here IS the generator, and the only honest way to put
+     * that on paper is to roll one and say which one: every floor carries its
+     * seed, and `?seed=` reprints the same book to the letter.
+     *
+     * One seed, every floor, because that is what a delve is — DelveEngine
+     * rolls the seed once and derives each level from it plus the depth, so
+     * these five ARE a party's five, not five unrelated dungeons.
+     *
+     * Pure: DungeonGen has no PDO and neither does this. The only thing read
+     * from the database is which module was asked for, and that was read by
+     * the caller. Which is why the answer for every other module is null — a
+     * specimen delve in Rivermark's book would be a dungeon that does not
+     * exist in it.
+     *
+     * @return array<string, mixed> empty when this module has nothing generated
+     */
+    private function delve(string $moduleKey, ?int $seed, array $module): array
+    {
+        if ($moduleKey !== DelveEngine::MODULE_KEY || $seed === null) {
+            return [];
+        }
+
+        // What the module says it goes up to, so the nominal party cannot be
+        // sent past the levels this game will actually grant them.
+        $ceiling = max(1, (int) ($module['level_max'] ?? DelveEngine::MAX_DEPTH + 1));
+
+        $floors = [];
+        for ($depth = 1; $depth <= DelveEngine::MAX_DEPTH; $depth++) {
+            $level = DungeonGen::generate($seed, $depth);
+            $plan = DungeonGen::plan($level);
+
+            // Areas numbered as the chapters number them, in room-id order so
+            // the entry, the plan label and any cross reference agree. The
+            // number is what the plan draws, not the name: a room name is nine
+            // words wide at floor-plan scale and the book has the name in the
+            // entry directly beneath.
+            $party = $this->nominalParty($depth, $ceiling);
+            $held = $this->stocked($level, $party);
+
+            $numbers = [];
+            $rooms = [];
+            foreach ($level['rooms'] as $i => $room) {
+                $numbers[(int) $room['id']] = $i + 1;
+                $rooms[] = $room + [
+                    'number' => $i + 1,
+                    'holds'  => $held[(int) $room['id']] ?? null,
+                ];
+            }
+
+            $ways = [];
+            foreach ($level['corridors'] as $corridor) {
+                $ways[] = $corridor + [
+                    'from' => $numbers[(int) $corridor['a']] ?? null,
+                    'to'   => $numbers[(int) $corridor['b']] ?? null,
+                ];
+            }
+
+            $floors[] = [
+                'depth'      => $depth,
+                'seed'       => $seed,
+                'profile'    => $level['profile'],
+                'atmosphere' => $level['atmosphere'],
+                'entrance'   => $numbers[(int) $level['entrance']] ?? null,
+                'stair'      => $numbers[(int) $level['stair']] ?? null,
+                'rooms'      => $rooms,
+                'corridors'  => $ways,
+                'map'        => self::planPayload($level, $plan, $numbers),
+                'party'      => $party,
+                'wandering'  => $this->wanderers($level, $party),
+            ];
+        }
+
+        return [
+            'seed'   => $seed,
+            'floors' => $floors,
+            'party'  => [
+                'size' => self::PARTY_SIZE,
+                'from' => $this->nominalParty(1, $ceiling)['level'],
+                'to'   => $this->nominalParty(DelveEngine::MAX_DEPTH, $ceiling)['level'],
+            ],
+        ];
+    }
+
+    /**
+     * Who the printed fights are sized for.
+     *
+     * A published adventure says who it is for, and an encounter budget has to
+     * be a budget for somebody. Four characters is the assumed table, and the
+     * level walks down with the floors — a fight on level 5 sized for the party
+     * that would be standing on level 1 is not a fight anybody will have — but
+     * stops at what the module advertises, because a book must not send a
+     * referee a level the game will not grant.
+     *
+     * @return array{size:int, level:int, levels:int[]}
+     */
+    private function nominalParty(int $depth, int $ceiling): array
+    {
+        $level = max(1, min($ceiling, $depth + 1));
+        return [
+            'size'   => self::PARTY_SIZE,
+            'level'  => $level,
+            'levels' => array_fill(0, self::PARTY_SIZE, $level),
+        ];
+    }
+
+    /**
+     * The floor's wandering monster table, as a referee rolls it.
+     *
+     * The game already has wandering monsters down here — DelveEngine::wander()
+     * stocks two or three per floor into the region's `is_random` pool, and
+     * every passage carries a roll for them. What it does not have is a TABLE:
+     * the pool is drawn by the travel roll and nobody ever sees the list. A
+     * book has to print one, because the person running it is the die.
+     *
+     * ROLLED FROM THE SEED, not from `random_int`. This is the one place where
+     * the book's needs and the engine's differ in kind. A delve's stocking is
+     * rolled when a party walks down the stair and written into rows, because
+     * it cannot be recovered from the seed afterwards; a printed page has to
+     * come out identical every time the same seed is asked for, or the promise
+     * on the cover of this appendix is false for half of it. So the sizing rule
+     * is shared — DelveEngine::chooseGroup, with the chance passed in — and
+     * only the stream differs.
+     *
+     * Six rows, so it is a d6: the size a table wants to be when somebody is
+     * rolling it at a table with one hand.
+     *
+     * @return array{die:int, chance:int, rows:list<array{roll:int, what:string}>}
+     */
+    private function wanderers(array $level, array $party): array
+    {
+        $depth = (int) $level['depth'];
+        $tier = DungeonGen::PROFILES[$level['profile']]['tier'];
+        $budget = DelveEngine::wanderBudget($party['levels'], $tier, $depth);
+
+        // Its own stream, seeded from the delve's seed and the depth, so the
+        // table is a property of the printed dungeon and not of when it was
+        // printed. Offset clear of the one DungeonGen::generate() uses for the
+        // same seed and depth, or the table would be correlated with the
+        // layout it sits beside.
+        $rng = (((int) $level['seed'] ^ ($depth * 0x85EBCA6B)) + 0x27D4EB2F) & 0xFFFFFFFF;
+
+        $roster = $this->delveRoster();
+        $rand = static function (int $lo, int $hi) use (&$rng): int {
+            return DungeonGen::rint($rng, $lo, $hi);
+        };
+
+        // Six DIFFERENT things, which the picker does not promise on its own.
+        // It rolls a size and then takes the top third of what fits, so on a
+        // shallow floor — where the affordable band is a handful of creatures —
+        // a straight six draws came out as three Stirges and two Centipedes.
+        // That is fine for the game, where each wandering group is met once and
+        // hours apart, and useless in a book, where all six are read at once
+        // and a d6 with three identical results is a d4 with extra steps.
+        // Re-drawn rather than shuffled from a deck: the roster is not a table
+        // of fixed length, it is whatever the budget can afford. Bounded, and
+        // a repeat is accepted at the bound, because a small bestiary must
+        // still fill the table.
+        $rows = [];
+        $seen = [];
+        for ($roll = 1; $roll <= self::WANDER_DIE; $roll++) {
+            $group = [];
+            for ($try = 0; $try < self::WANDER_TRIES; $try++) {
+                $group = DelveEngine::chooseGroup($roster, $budget, $rand);
+                if (!$group || !isset($seen[(string) $group[0]['name']])) {
+                    break;
+                }
+            }
+            if (!$group) {
+                continue;
+            }
+            $seen[(string) $group[0]['name']] = true;
+            $doing = DelveEngine::DOINGS[$rand(0, count(DelveEngine::DOINGS) - 1)];
+            $rows[] = [
+                'roll'     => $roll,
+                'quantity' => (int) $group[0]['quantity'],
+                'key'      => (string) ($group[0]['key'] ?? ''),
+                'monster'  => (string) $group[0]['name'],
+                'doing'    => $doing,
+                'what'     => $group[0]['quantity'] . ' × ' . $group[0]['name'] . ', ' . $doing,
+            ];
+        }
+
+        return [
+            'die'    => self::WANDER_DIE,
+            // The real number the engine puts on every passage of this floor,
+            // read from the engine rather than restated: a book that told a
+            // referee the wrong odds would be wrong where nobody can check it.
+            'chance' => DelveEngine::wanderChance($depth),
+            'rows'   => $rows,
+        ];
+    }
+
+    /**
+     * What is standing in each of the floor's occupied rooms.
+     *
+     * The stocking table calls a third of every level `monster`, `hoard` or
+     * `boss`, and the printed entries said "Something lives here" and stopped —
+     * which is a description of the generator's intent rather than of a room a
+     * referee can run. Worse, it left the book's bestiary EMPTY: the appendix
+     * is built from the encounters a module sends, the Undervault's authored
+     * surface sends none, and so a book with five levels of fights in it
+     * printed "0 creatures" and not one stat block.
+     *
+     * Its OWN seeded stream, separate from the wandering table's. Sharing one
+     * would couple them — adding a room to a profile would silently change what
+     * wanders on that floor — and the two are independent facts about the same
+     * dungeon.
+     *
+     * Deliberately not the same fight the game would put there: a delve's rooms
+     * are stocked with `random_int` against the real party's levels at the
+     * moment somebody descends, and cannot be recovered from the seed. This is
+     * the same rule (DelveEngine::chooseGroup, DelveEngine::roomBudget) rolled
+     * for the nominal party the book is written for, which is what a published
+     * adventure states anyway.
+     *
+     * @return array<int, array{quantity:int, key:string, name:string}>
+     */
+    private function stocked(array $level, array $party): array
+    {
+        $depth = (int) $level['depth'];
+        $tier = DungeonGen::PROFILES[$level['profile']]['tier'];
+        $roster = $this->delveRoster();
+
+        $rng = (((int) $level['seed'] ^ ($depth * 0xC2B2AE35)) + 0x165667B1) & 0xFFFFFFFF;
+        $rand = static function (int $lo, int $hi) use (&$rng): int {
+            return DungeonGen::rint($rng, $lo, $hi);
+        };
+
+        $out = [];
+        foreach ($level['rooms'] as $room) {
+            if (!in_array($room['kind'], ['monster', 'hoard', 'boss'], true)) {
+                continue;
+            }
+            // A boss is the floor's fight and gets the whole hard budget
+            // whatever tier the floor is otherwise on — DelveEngine::stock()'s
+            // rule, because it is the same room.
+            $budget = DelveEngine::roomBudget(
+                $party['levels'],
+                $room['kind'] === 'boss' ? 'hard' : $tier,
+                $depth
+            );
+            $group = DelveEngine::chooseGroup($roster, $budget, $rand);
+            if ($group) {
+                $out[(int) $room['id']] = $group[0];
+            }
+        }
+        return $out;
+    }
+
+    /** The bestiary a delve draws from — DelveEngine's, not a second query. */
+    private function delveRoster(): array
+    {
+        return $this->delveRoster ??= (new DelveEngine($this->db))->roster();
+    }
+
+    /**
+     * The floor plan in the shape `location/state` sends, so the page can hand
+     * it to the shipped renderer instead of growing a second one.
+     *
+     * `window.WorldMap.svg` draws this today for a party standing in it, and
+     * tools/floorplan_preview.php already proves it can be driven from a plain
+     * page with no game behind it. A PHP re-implementation of that drawing —
+     * doors in the old-school grammar, stair ticks, graph-paper ruling — would
+     * be several hundred lines that agree with the screen only until one of
+     * them is fixed. The book skins it for paper in CSS instead.
+     *
+     * Two deliberate differences from what the game sends, and they are the
+     * same difference: this is the GM's copy.
+     *
+     *   - NO FOG. `seen`/`glimpsed` are simply absent, which the renderer's
+     *     `!== false` reads as "draw it" — the case an authored region already
+     *     relies on. The screen draws what one party has found; a book draws
+     *     the floor.
+     *   - No location ids anywhere, so nothing is clickable and nothing is
+     *     "here". Room ids stand in, exactly as the preview bench does, and
+     *     the only thing the renderer needs is that they agree across the
+     *     nodes, the edges and the plan.
+     */
+    private static function planPayload(array $level, array $plan, array $numbers): array
+    {
+        // Passages are locations too, and their ids number from zero
+        // independently of the rooms'. Offset past them exactly as
+        // tools/floorplan_preview.php and DelveEngine's `c` prefix do.
+        $hallId = static fn (int $corridor): int => 1000 + $corridor;
+
+        // Rooms only. A passage node renders as nothing at all unless the
+        // party is standing in it, and there is no party — the run itself is
+        // drawn by floorplan() and carries the passage's whole significance.
+        $nodes = [];
+        foreach ($level['rooms'] as $room) {
+            $id = (int) $room['id'];
+            $nodes[] = [
+                'id'   => $id,
+                'key'  => 'r' . $id,
+                // The number, not the name. A room name is nine words wide at
+                // floor-plan scale and the entry beneath the plan has it.
+                'name' => (string) ($numbers[$id] ?? ''),
+                'type' => $room['role'] === 'stair' ? 'gate' : 'room',
+                'x'    => $room['x'],
+                'y'    => $room['y'],
+                // The label is withheld for an unvisited room, which is the
+                // fog again, one layer up. A book has no fog.
+                'visited' => true,
+                'current' => false,
+            ];
+        }
+
+        $edges = [];
+        foreach ($plan['corridors'] as $corridor) {
+            $edges[] = ['from' => (int) $corridor['a'], 'to' => $hallId((int) $corridor['id'])];
+            $edges[] = ['from' => $hallId((int) $corridor['id']), 'to' => (int) $corridor['b']];
+        }
+
+        foreach ($plan['rooms'] as $i => $room) {
+            $plan['rooms'][$i]['location_id'] = (int) $room['id'];
+        }
+        foreach ($plan['corridors'] as $i => $corridor) {
+            $plan['corridors'][$i]['location_id'] = $hallId((int) $corridor['id']);
+            // A trap arrives from DungeonGen as a bare key and is drawn only
+            // as {kind, state}: planFor() does that conversion for a party,
+            // according to what they have met. Everything is `found` here,
+            // which is the GM's copy — the same view the preview bench calls
+            // `?spoilers=1`. Nothing is hidden in a book: a secret door the
+            // reader cannot see is a secret kept from the referee.
+            if (!empty($corridor['trap'])) {
+                $plan['corridors'][$i]['trap'] = ['kind' => $corridor['trap'], 'state' => 'found'];
+            }
+        }
+
+        return [
+            'region_id'   => 0,
+            'region_key'  => 'specimen_' . (int) $level['depth'],
+            'name'        => 'The Undervault, level ' . (int) $level['depth'],
+            'region_type' => 'dungeon',
+            'nodes'       => $nodes,
+            'edges'       => $edges,
+            'neighbors'   => [],
+            // DelveEngine::fog() is deliberately NOT applied. It is what makes
+            // the screen draw one party's partial knowledge, and there is no
+            // party here.
+            'floorplan'   => $plan,
         ];
     }
 
@@ -95,10 +514,28 @@ final class AdventureBook
      * ordering is the authored `sort_order`, which is the order the content
      * files are written in and therefore the order somebody meant.
      */
+    /**
+     * The module's authored regions, and only those.
+     *
+     * `_dg_%` is a party's generated delve floor, written into the Undervault's
+     * own module id by DelveEngine, and it has no business in a book: it exists
+     * for a few hours, it belongs to one party, and it will not be there
+     * tomorrow. Printing the Undervault while three parties were underground
+     * put three extra chapters in the book — each one another party's scratch
+     * rooms, with their traps and secret doors — and the book changed depending
+     * on who happened to be delving when somebody pressed Print.
+     *
+     * encounters() has excluded the same rows by the same pattern since it was
+     * written; this is that rule, applied where it was missed. What a book
+     * SHOULD say about a generated dungeon is a specimen rolled for the page —
+     * see delve().
+     */
     private function regions(int $moduleId): array
     {
         $stmt = $this->db->prepare(
-            'SELECT * FROM regions WHERE module_id = ? ORDER BY sort_order, id'
+            "SELECT * FROM regions
+              WHERE module_id = ? AND region_key NOT LIKE '\\_dg\\_%'
+              ORDER BY sort_order, id"
         );
         $stmt->execute([$moduleId]);
         $regions = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -296,12 +733,17 @@ final class AdventureBook
      * CLAUDE.md states. So the book prints the sixteen creatures its own fights
      * use, not the whole bestiary.
      */
-    private function monsters(array $encounters): array
+    private function monsters(array $encounters, array $alsoKeys = []): array
     {
         $keys = [];
         foreach ($encounters as $e) {
             foreach ($e['roster'] as $m) {
                 $keys[$m['monster_key']] = true;
+            }
+        }
+        foreach ($alsoKeys as $k) {
+            if ((string) $k !== '') {
+                $keys[(string) $k] = true;
             }
         }
         if (!$keys) {

@@ -703,11 +703,7 @@ final class DelveEngine
                 0,
                 1000 + $id * 10,
                 isset($corridor['trap']) ? json_encode($corridor['trap'], JSON_UNESCAPED_SLASHES) : null,
-                // The wandering roll, per hop through a corridor. Deeper floors
-                // are busier — their traffic is what the deep table's names are
-                // about — but the chance stays a seasoning: at 6 + 2×depth a
-                // full crossing of a middle floor springs roughly one interrupt.
-                6 + 2 * $depth,
+                self::wanderChance($depth),
             ]);
         }
 
@@ -820,7 +816,7 @@ final class DelveEngine
         $depth = (int) $level['depth'];
         $tier = DungeonGen::PROFILES[$level['profile']]['tier'];
         $levels = $this->partyLevels($partyId);
-        $budget = $this->scaled(EncounterBudget::forParty($levels, $tier), $depth);
+        $budget = self::roomBudget($levels, $tier, $depth);
         $roster = $this->roster();
         if (!$roster) {
             return;                       // a bestiary with nothing in it
@@ -843,7 +839,7 @@ final class DelveEngine
             // A boss is the floor's fight and gets the whole hard budget
             // whatever tier the floor is otherwise on.
             $roomBudget = $room['kind'] === 'boss'
-                ? $this->scaled(EncounterBudget::forParty($levels, 'hard'), $depth)
+                ? self::roomBudget($levels, 'hard', $depth)
                 : $budget;
             $group = $this->pick($roster, $roomBudget);
             if (!$group) {
@@ -869,6 +865,66 @@ final class DelveEngine
     }
 
     /**
+     * What a wanderer is doing when you meet it.
+     *
+     * The name of a wandering encounter carries this — "4 x Rat, hunting for
+     * food" — which is the work donjon's tables do: an encounter with a reason
+     * to exist rather than a die result. Shared with the printed book, whose
+     * wandering table is the same list read by a referee instead of by the
+     * travel roll.
+     */
+    public const DOINGS = [
+        'hunting for food',
+        'fleeing something worse',
+        'fighting over the spoils when you interrupt',
+        'that heard the door',
+        'dragging something back the way you came',
+    ];
+
+    /**
+     * The chance, per hop through a passage, that something is already in it.
+     *
+     * Deeper floors are busier — their traffic is what the deep table's names
+     * are about — but the chance stays a seasoning: at 6 + 2xdepth a full
+     * crossing of a middle floor springs roughly one interrupt.
+     *
+     * A named number rather than a literal in write() because the printed book
+     * has to state it, and a book that told a referee the wrong odds would be
+     * wrong in the one place nobody can check it against the code.
+     */
+    public static function wanderChance(int $depth): int
+    {
+        return 6 + 2 * $depth;
+    }
+
+    /**
+     * What a stocked room is sized against.
+     *
+     * Named rather than inline because the printed book stocks a specimen
+     * delve's rooms too, and it has to arrive at the same numbers this does.
+     *
+     * @param int[] $levels one per party member
+     */
+    public static function roomBudget(array $levels, string $tier, int $depth): int
+    {
+        return self::scaled(EncounterBudget::forParty($levels, $tier), $depth);
+    }
+
+    /**
+     * What a wandering group is sized against: six tenths of a room fight.
+     *
+     * An interrupt pays no treasure and guards no stair, so it should not cost
+     * what a stocked room costs. Shared with the book for the same reason
+     * wanderChance() is.
+     *
+     * @param int[] $levels one per party member
+     */
+    public static function wanderBudget(array $levels, string $tier, int $depth): int
+    {
+        return intdiv(self::roomBudget($levels, $tier, $depth) * 6, 10);
+    }
+
+    /**
      * The floor's own traffic: two or three fights with no address.
      *
      * These are the region's `is_random` pool, which LocationEngine's travel
@@ -890,15 +946,8 @@ final class DelveEngine
         }
         $depth = (int) $level['depth'];
         $tier = DungeonGen::PROFILES[$level['profile']]['tier'];
-        $budget = intdiv($this->scaled(EncounterBudget::forParty($levels, $tier), $depth) * 6, 10);
+        $budget = self::wanderBudget($levels, $tier, $depth);
 
-        $doings = [
-            'hunting for food',
-            'fleeing something worse',
-            'fighting over the spoils when you interrupt',
-            'that heard the door',
-            'dragging something back the way you came',
-        ];
 
         $encounter = $this->db->prepare(
             'INSERT INTO encounters
@@ -916,7 +965,7 @@ final class DelveEngine
             if (!$group) {
                 continue;
             }
-            $doing = $doings[random_int(0, count($doings) - 1)];
+            $doing = self::DOINGS[random_int(0, count(self::DOINGS) - 1)];
             $encounter->execute([
                 self::wanderKey($partyId, $depth, $n),
                 $group[0]['name'] . ', ' . $doing,
@@ -1041,7 +1090,7 @@ final class DelveEngine
      * difficulty, it would be a wall. Two hard fights' worth of XP through 5e's
      * group multiplier is already the far end of what a party can take.
      */
-    private function scaled(int $budget, int $depth): int
+    private static function scaled(int $budget, int $depth): int
     {
         $factor = 1.0 + 0.125 * max(0, $depth - 1);
         return (int) round($budget * min($factor, 2.0));
@@ -1084,7 +1133,33 @@ final class DelveEngine
      */
     private function pick(array $roster, int $budget): array
     {
-        $want = self::GROUP_SIZES[random_int(0, count(self::GROUP_SIZES) - 1)];
+        return self::chooseGroup($roster, $budget, static fn (int $lo, int $hi): int
+            => random_int($lo, $hi));
+    }
+
+    /**
+     * pick(), with the chance passed in rather than taken from the system.
+     *
+     * The RULE is the same wherever a group is chosen; the SOURCE of the roll
+     * is not. A delve stocks itself from `random_int` at the moment a party
+     * walks down the stair, and the result is written into rows because it
+     * cannot be recovered from the seed. The printed book has the opposite
+     * requirement — a wandering table has to come out the same every time the
+     * same seed is printed — so it deals from DungeonGen's seeded stream
+     * instead. Splitting the two here is what stops the book growing a second,
+     * drifting copy of the sizing rule; see AdventureBook::wanderers().
+     *
+     * Pure but for `$rand`, so nothing about it needs a database.
+     *
+     * @param  callable(int,int):int $rand inclusive, both ends
+     * @return list<array{id:int, name:string, quantity:int}>
+     */
+    public static function chooseGroup(array $roster, int $budget, callable $rand): array
+    {
+        if (!$roster) {
+            return [];
+        }
+        $want = self::GROUP_SIZES[$rand(0, count(self::GROUP_SIZES) - 1)];
 
         for ($n = min($want, self::MAX_FOES); $n >= 1; $n--) {
             $each = (int) floor($budget / ($n * EncounterBudget::multiplier($n)));
@@ -1099,13 +1174,14 @@ final class DelveEngine
             // the biggest thing affordable and not always the smallest. The
             // roster arrives sorted by XP descending.
             $band = array_slice($fits, 0, max(1, (int) ceil(count($fits) / 3)));
-            $pick = $band[random_int(0, count($band) - 1)];
+            $pick = $band[$rand(0, count($band) - 1)];
             // Asked rather than assumed: bestCount() re-measures the group at
             // each step through the same multiplier, so it is the authority on
             // whether the size that was rolled actually fits.
             $qty = EncounterBudget::bestCount((int) $pick['xp'], $budget, $n, 0, 0, true);
             return [[
                 'id' => (int) $pick['id'],
+                'key' => (string) ($pick['monster_key'] ?? ''),
                 'name' => (string) $pick['name'],
                 'quantity' => max(1, $qty),
             ]];
@@ -1115,7 +1191,12 @@ final class DelveEngine
         // rather than an empty room that the map has already promised is
         // occupied.
         $cheapest = $roster[count($roster) - 1];
-        return [['id' => (int) $cheapest['id'], 'name' => (string) $cheapest['name'], 'quantity' => 1]];
+        return [[
+            'id' => (int) $cheapest['id'],
+            'key' => (string) ($cheapest['monster_key'] ?? ''),
+            'name' => (string) $cheapest['name'],
+            'quantity' => 1,
+        ]];
     }
 
     // =======================================================================
@@ -1317,10 +1398,15 @@ final class DelveEngine
     }
 
     /** The bestiary, dearest first, so `pick()` can take from the top. */
-    private function roster(): array
+    public function roster(): array
     {
+        // `monster_key` is not for the engine — a delve refers to monsters by
+        // id — but for the printed book, which has to find a stat block for
+        // everything a specimen delve sends. Carried here rather than looked up
+        // again so that the bestiary in the book and the creature in the room
+        // cannot be two different answers.
         return $this->db->query(
-            'SELECT id, name, experience_points AS xp FROM monsters
+            'SELECT id, monster_key, name, experience_points AS xp FROM monsters
               WHERE experience_points > 0 ORDER BY experience_points DESC'
         )->fetchAll(PDO::FETCH_ASSOC);
     }

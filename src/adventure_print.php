@@ -127,6 +127,20 @@ $moduleKey = trim((string) ($_GET['module'] ?? ''));
 $fullArt = ($_GET['art'] ?? '') === 'full';
 $autoPrint = ($_GET['print'] ?? '') === '1';
 
+/*
+ * The seed for a module whose levels are made at play.
+ *
+ * Rolled here rather than in AdventureBook, which stays deterministic so that
+ * the same arguments always produce the same book. That is the whole trick:
+ * the seed is printed on the page and `?seed=` reprints it exactly, so a
+ * referee who liked the dungeon they got can hand out the same one again, and
+ * one who did not can reload. Bounded to what DelveEngine itself rolls, so a
+ * printed floor and a played floor cannot come from different ranges.
+ */
+$delveSeed = isset($_GET['seed'])
+    ? max(1, min(0x7FFFFFFF, (int) $_GET['seed']))
+    : random_int(1, 0x7FFFFFFF);
+
 // ---------------------------------------------------------------------------
 // No module named: the picker.
 // ---------------------------------------------------------------------------
@@ -179,7 +193,7 @@ if ($moduleKey === '') {
     exit;
 }
 
-$data = $book->build($moduleKey);
+$data = $book->build($moduleKey, $delveSeed);
 if ($data === null) {
     http_response_code(404);
     echo '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">'
@@ -208,13 +222,39 @@ $cover = art('assets/images/modules/' . $module['module_key'] . '.jpg');
 
 <div class="book-bar">
   <span><b><?= esc($module['name']) ?></b> · <?= esc($data['counts']['regions']) ?> chapters ·
-    <?= esc($data['counts']['locations']) ?> areas ·
+    <?= esc($data['counts']['locations']) ?> areas<?php
+    // A generated module has almost no areas and almost no encounter rows, and
+    // saying so was accurate and useless: the Undervault read "4 areas, 0
+    // creatures" over a book holding five levels of fights. What it rolls
+    // counts, because that is what somebody would be running.
+    if (!empty($data['delve']['floors'])) {
+        echo ' · ' . esc(count($data['delve']['floors'])) . ' rolled levels';
+    } ?> ·
     <?= esc(count($data['monsters'])) ?> creatures</span>
   <button type="button" onclick="window.print()">Print / Save as PDF</button>
+  <?php
+  // Keep whichever options are already on when following one of these, or
+  // adding the plates would silently re-roll the dungeon and printing the
+  // dungeon again would silently drop the plates.
+  $link = static function (array $over) use ($moduleKey, $fullArt, $delveSeed, $data): string {
+      $q = ['module' => $moduleKey];
+      if ($fullArt) {
+          $q['art'] = 'full';
+      }
+      if (!empty($data['delve']['floors'])) {
+          $q['seed'] = $delveSeed;
+      }
+      return '?' . http_build_query(array_merge($q, $over));
+  };
+  ?>
   <?php if (!$fullArt) { ?>
-    <a href="?module=<?= urlencode($moduleKey) ?>&amp;art=full">Add every location plate</a>
+    <a href="<?= esc($link(['art' => 'full'])) ?>">Add every location plate</a>
   <?php } else { ?>
-    <a href="?module=<?= urlencode($moduleKey) ?>">Without the plates</a>
+    <a href="<?= esc($link(['art' => null])) ?>">Without the plates</a>
+  <?php } ?>
+  <?php if (!empty($data['delve']['floors'])) { ?>
+    <span class="book-seed">delve seed <b><?= esc($data['delve']['seed']) ?></b></span>
+    <a href="<?= esc($link(['seed' => null])) ?>">Roll another delve</a>
   <?php } ?>
   <a href="content.php">Back to content</a>
 </div>
@@ -259,7 +299,7 @@ $cover = art('assets/images/modules/' . $module['module_key'] . '.jpg');
     <p class="toc-chapter">
       <b>Appendix C · Bestiary</b><br>
       <span class="toc-areas"><?= esc(count($data['monsters'])) ?> creatures,
-        <?= esc($data['counts']['encounters']) ?> encounters</span>
+        <?= esc($data['counts']['encounters'] + $data['counts']['rolled']) ?> encounters</span>
     </p>
     <p class="toc-chapter">
       <b>Appendix D · Maps to hand out</b><br>
@@ -269,6 +309,14 @@ $cover = art('assets/images/modules/' . $module['module_key'] . '.jpg');
       <b>Appendix E · Cards for the people</b><br>
       <span class="toc-areas">four to a page, to cut out and keep behind the screen</span>
     </p>
+    <?php if (!empty($data['delve']['floors'])) { ?>
+      <p class="toc-chapter">
+        <b>Appendix F · A delve, rolled</b><br>
+        <span class="toc-areas">seed <?= esc($data['delve']['seed']) ?> ·
+          <?= esc(count($data['delve']['floors'])) ?> levels, with plans and
+          <?= esc($data['counts']['rolled']) ?> fights</span>
+      </p>
+    <?php } ?>
   </div>
 </div>
 
@@ -502,14 +550,100 @@ $cover = art('assets/images/modules/' . $module['module_key'] . '.jpg');
       </div>
     <?php } ?>
 
-    <h2>Wandering and set-piece encounters</h2>
-    <?php foreach ($data['encounters'] as $e) { ?>
+    <?php
+    /*
+     * Wandering monsters get a TABLE, because the person running the game is
+     * the die. The engine draws these itself on every travel hop and no player
+     * or GM ever sees the list; on paper that list is the whole point, so the
+     * region's random pool is numbered and given the chance it is rolled at.
+     *
+     * The chance is per location arrived at, not per region — it is a column on
+     * `locations` — so what is stated is the range actually authored, and a
+     * region whose places all agree states one number. Read off the chapters
+     * this book already gathered rather than asked for again.
+     */
+    $wandering = [];
+    foreach ($data['encounters'] as $e) {
+        if ((int) $e['is_random'] === 1) {
+            $wandering[(string) $e['chapter']][] = $e;
+        }
+    }
+    $pct = [];
+    foreach ($data['regions'] as $region) {
+        foreach ($region['locations'] as $loc) {
+            $n = (int) ($loc['random_encounter_pct'] ?? 0);
+            if ($n > 0) {
+                $pct[(string) $region['name']][] = $n;
+            }
+        }
+    }
+    ?>
+    <?php if ($wandering) { ?>
+      <h2>Wandering monsters</h2>
+      <?php foreach ($wandering as $chapter => $rows) {
+          $chances = $pct[$chapter] ?? [];
+          $lo = $chances ? min($chances) : 0;
+          $hi = $chances ? max($chances) : 0;
+          ?>
+        <table class="wander">
+          <?php /* A region with one wandering encounter is not a d1, and one
+                   with two is barely a table. Say what is true instead: the
+                   die when there is something to roll, a plain statement when
+                   there is not. The thinness is the CONTENT's — these chapters
+                   carry one or two wanderers each — and a book that dressed
+                   that up as a table would be hiding it from the only person
+                   who could fix it. */ ?>
+          <caption><?= esc($chapter) ?> ·
+            <?= count($rows) > 1
+                ? 'roll d' . esc(count($rows))
+                : 'the only thing that wanders here' ?><br>
+            <span><?php if ($lo > 0) {
+                echo $lo === $hi
+                    ? esc($lo) . ' in 100 on arriving somewhere in this chapter'
+                    : esc($lo) . '–' . esc($hi) . ' in 100 on arriving, by area';
+            } else {
+                echo 'when the chapter says so';
+            } ?></span></caption>
+          <tbody>
+            <?php foreach (array_values($rows) as $i => $e) { ?>
+              <tr>
+                <?php if (count($rows) > 1) { ?>
+                  <td class="wander-roll"><?= esc($i + 1) ?></td>
+                <?php } ?>
+                <td><b><?= esc(implode(', ', array_map(
+                    static fn ($m) => $m['quantity'] . ' × ' . $m['name'], $e['roster']
+                ))) ?></b> · <?= esc($e['name']) ?>
+                  <span class="tag"><?= esc($e['difficulty']) ?></span></td>
+              </tr>
+            <?php } ?>
+          </tbody>
+        </table>
+      <?php } ?>
+    <?php } ?>
+
+    <?php
+    $setPiece = array_values(array_filter(
+        $data['encounters'],
+        static fn ($e) => (int) $e['is_random'] !== 1
+    ));
+    ?>
+    <?php if ($setPiece) { ?>
+      <h2>Set-piece encounters</h2>
+    <?php } ?>
+    <?php foreach ($setPiece as $e) { ?>
       <p class="stat-line"><b><?= esc($e['name']) ?></b> ·
-        <?= esc($e['location_name'] ?: ($e['chapter'] . ', wandering')) ?> ·
+        <?= esc($e['location_name'] ?: $e['chapter']) ?> ·
         <?= esc($e['difficulty']) ?> ·
         <?= esc(implode(', ', array_map(
             static fn ($m) => $m['quantity'] . '× ' . $m['name'], $e['roster']
         ))) ?></p>
+    <?php } ?>
+
+    <?php if (!$data['encounters'] && !empty($data['delve']['floors'])) { ?>
+      <p class="help-note">Every fight in this adventure is rolled rather than
+        written: the creatures above are the ones the delve in Appendix F sends,
+        in its rooms and on its wandering tables. Nothing here is pinned to a
+        place, because none of the places exist until somebody goes down.</p>
     <?php } ?>
 
     <p class="colophon">
@@ -615,6 +749,159 @@ foreach ($data['quests'] as $q) {
       </div>
     <?php } ?>
   </div>
+<?php } ?>
+
+<!-- ----------------------------------------------- Appendix F: a rolled delve -->
+<?php
+/*
+ * A module whose levels are made at play cannot be printed from its rows: the
+ * Undervault has four authored locations and a generator, and a book built out
+ * of the database prints the stair head and stops. So one delve is rolled for
+ * the page and its seed printed with it — `?seed=` brings the same one back,
+ * to the room.
+ *
+ * The plans are drawn by `window.WorldMap.svg`, the renderer the game itself
+ * uses, handed a payload in the shape `location/state` sends. That is not a
+ * convenience: doors in the old-school grammar, stair ticks and graph-paper
+ * ruling are two hundred lines of drawing, and a PHP copy of them would agree
+ * with the screen exactly until the first time one of the two was fixed.
+ * tools/floorplan_preview.php already drives it from a plain page with no game
+ * behind it; this is the same trick with a paper skin in the stylesheet.
+ */
+if (!empty($data['delve']['floors'])) {
+    $delve = $data['delve'];
+    ?>
+  <div class="book-page">
+    <div class="chapter-head">
+      <h1>Appendix F · A delve, rolled</h1>
+      <p class="lede">The Undervault is not written, it is rolled: four
+        locations at the surface, and everything below them made when a party
+        walks down the stair. No two delves are the same and none of them can
+        be printed in advance — so here is one, whole, with the number that
+        made it.</p>
+      <p class="seed-band">Seed <b><?= esc($delve['seed']) ?></b> ·
+        <?= esc(count($delve['floors'])) ?> levels ·
+        <span class="seed-note">the same seed always makes the same dungeon;
+          print this page again with
+          <code>?module=<?= esc($moduleKey) ?>&amp;seed=<?= esc($delve['seed']) ?></code>
+          and every room is where it was</span></p>
+    </div>
+  </div>
+
+  <?php foreach ($delve['floors'] as $floor) { ?>
+    <div class="book-page">
+      <div class="cols">
+        <div class="chapter-head">
+          <h1>Level <?= esc($floor['depth']) ?></h1>
+          <div class="chapter-map">
+            <div class="floor-plan" data-floor="<?= esc($floor['depth']) ?>"></div>
+          </div>
+          <p class="map-caption">The numbers are the areas below.
+            Seed <?= esc($delve['seed']) ?>, level <?= esc($floor['depth']) ?>.</p>
+          <p class="lede"><?= esc($floor['atmosphere']['label']) ?>.
+            <?= esc($floor['atmosphere']['air']) ?>
+            Down at area <?= esc($floor['stair']) ?>;
+            in at area <?= esc($floor['entrance']) ?>.</p>
+
+          <?php if (!empty($floor['wandering']['rows'])) { ?>
+            <table class="wander">
+              <caption>Wandering monsters · roll d<?= esc($floor['wandering']['die']) ?><br>
+                <span>1 in <?= esc($floor['wandering']['chance']) ?> on entering a passage ·
+                  sized for <?= esc($floor['party']['size']) ?> characters of level
+                  <?= esc($floor['party']['level']) ?></span></caption>
+              <tbody>
+                <?php foreach ($floor['wandering']['rows'] as $row) { ?>
+                  <tr>
+                    <td class="wander-roll"><?= esc($row['roll']) ?></td>
+                    <td><b><?= esc($row['quantity']) ?> × <?= esc($row['monster']) ?></b>,
+                      <?= esc($row['doing']) ?></td>
+                  </tr>
+                <?php } ?>
+              </tbody>
+            </table>
+          <?php } ?>
+        </div>
+
+        <?php foreach ($floor['rooms'] as $room) {
+            $ways = array_values(array_filter(
+                $floor['corridors'],
+                static fn ($c) => (int) $c['a'] === (int) $room['id']
+                    || (int) $c['b'] === (int) $room['id']
+            ));
+            ?>
+          <div class="area">
+            <p class="area-head"><span class="area-num"><?= esc($room['number']) ?>.</span>
+              <?= esc($room['name']) ?>
+              <?php if ($room['role'] === 'stair') { ?><span class="tag">stair down</span><?php } ?>
+              <?php if ($room['role'] === 'entrance') { ?><span class="tag">way in</span><?php } ?>
+            </p>
+            <div class="read-aloud"><p><?= esc($room['description']) ?></p></div>
+            <dl class="notes">
+              <?php if ($ways) { ?>
+                <dt>Ways out</dt>
+                <?php foreach ($ways as $c) {
+                    $far = (int) $c['a'] === (int) $room['id'] ? $c['to'] : $c['from'];
+                    ?>
+                  <dd><?= esc($c['name']) ?> → area <?= esc($far) ?>
+                    <?php if (!empty($c['door']) && $c['door'] !== 'open' && $c['door'] !== 'arch') { ?>
+                      <span class="tag"><?= esc($c['door']) ?></span>
+                    <?php } ?>
+                    <?php if (!empty($c['trap'])) { ?>
+                      <span class="tag">trap: <?= esc($c['trap']['name']) ?>
+                        (<?= esc(strtoupper($c['trap']['save'])) ?> DC <?= esc($c['trap']['dc']) ?>,
+                        <?= esc($c['trap']['damage']) ?>)</span>
+                    <?php } ?>
+                  </dd>
+                <?php } ?>
+              <?php } ?>
+              <?php
+              // DungeonGen::CONTENTS in the words a stocked dungeon uses. The
+              // bare keys are what the generator thinks; a referee reading a
+              // page at speed wants the sentence. `empty` says nothing on
+              // purpose — the room's own description already has.
+              $stocked = [
+                  'monster'  => 'Something lives here.',
+                  'hoard'    => 'Something lives here, and it is sitting on something.',
+                  'treasure' => 'Treasure, unguarded — which is not the same as unprotected.',
+                  'trap'     => 'A trap, in the room rather than on the way in.',
+                  'trick'    => 'A trick: something that is not what it looks like.',
+                  'boss'     => 'The worst thing on this level, and it knows the ground.',
+              ][$room['kind'] ?? ''] ?? null;
+              ?>
+              <?php if ($stocked !== null) { ?>
+                <dt>What is here</dt>
+                <dd><?php if (!empty($room['holds'])) { ?>
+                    <b><?= esc($room['holds']['quantity']) ?> ×
+                      <?= esc($room['holds']['name']) ?></b> —
+                  <?php } ?><?= esc($stocked) ?></dd>
+              <?php } ?>
+            </dl>
+          </div>
+        <?php } ?>
+      </div>
+    </div>
+  <?php } ?>
+
+  <script>
+    /* ui-map.js reaches for Game.esc and nothing else of the game — the same
+       shim tools/floorplan_preview.php uses. */
+    window.Game = { esc: (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+    }[c])) };
+    window.BOOK_FLOORS = <?= json_encode(
+        array_map(static fn ($f) => ['depth' => $f['depth'], 'map' => $f['map']], $delve['floors']),
+        JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
+    ) ?>;
+  </script>
+  <script src="<?= esc(asset('assets/js/ui-map.js')) ?>"></script>
+  <script>
+    /* No `ways` and no party: nothing in a book is somewhere you can walk to
+       from where you are standing, because nobody is standing anywhere. */
+    window.BOOK_FLOORS.forEach((f) => {
+      const host = document.querySelector(`.floor-plan[data-floor="${f.depth}"]`);
+      if (host) host.innerHTML = window.WorldMap.svg(f.map, { ways: new Map() });
+    });
+  </script>
 <?php } ?>
 
 <?php if ($autoPrint) { ?>

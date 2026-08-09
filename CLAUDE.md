@@ -283,6 +283,65 @@ running (`?seed=&depth=` for one, `?n=12` to judge variety);
 `tools/dungeon_preview.php` prints the coarse plan as ASCII, which is the better
 tool for judging the layout itself.
 
+### The Undervault on paper
+
+`/adventure_print.php?module=undervault` prints a **specimen delve**: one seed,
+all five floors, each with a plan. A module whose levels are made at play cannot
+be printed from its rows — the four authored locations are an accurate account
+of the database and a useless account of the adventure — so what is authored
+here is the generator, and the only honest way to put that on paper is to roll
+one and say which one. The seed is printed on the page and `?seed=` reprints it
+to the room.
+
+Two things about it are load-bearing:
+
+- **The plans are drawn by `window.WorldMap.svg`, the game's own renderer.**
+  Not a copy of it: `tools/floorplan_preview.php` already proved that renderer
+  can be driven from a plain page with no game behind it, and a PHP
+  reimplementation of the door grammar, the stair ticks and the graph-paper
+  ruling would agree with the screen exactly until one of the two was fixed.
+  What the book owns is a **skin**, in `assets/css/adventure-print.css` — and
+  it has to be a complete one, because that stylesheet deliberately shares
+  nothing with `style.css`, so none of the plan's base rules (`fill: none` on a
+  corridor, `paint-order` on a label) exist there. Overriding a few colours on
+  top of SVG's own defaults printed the first draft as black slabs.
+- **No fog.** `DelveEngine::fog()` is what makes the screen draw one party's
+  partial knowledge; the book omits `seen`/`glimpsed` entirely, which the
+  renderer reads as "draw it", and every trap is marked found. It is the GM's
+  copy — a secret door the referee cannot see is a secret kept from the referee.
+
+A live party's floor is **not** in the book. `AdventureBook::regions()` excludes
+`_dg_%`, as `encounters()` always has: a generated region is written into the
+Undervault's own module id, so printing while three parties were underground put
+three chapters of somebody else's scratch rooms — traps and secret doors
+included — into the adventure, and the book changed depending on who happened to
+be delving. `tools/test_book.php` puts two parties down a hole and asserts the
+chapter count does not move.
+
+**The specimen's rooms are stocked and its creatures are statted**, and that had
+to be said out loud because the first cut was not. Appendix C is built from the
+encounters a module *sends*, a generated module sends none, and so the
+Undervault's book printed five levels of fights, thirty wandering rows and
+**"0 creatures"** — every monster named, not one stat block. `stocked()` rolls
+each `monster`/`hoard`/`boss` room from its own seeded stream (its own, not the
+wandering table's: sharing one would make adding a room to a profile silently
+change what wanders on that floor), and `monsters()` takes the keys of
+everything the delve names alongside the ones the encounter rows carry. That is
+also why `DelveEngine::roster()` selects `monster_key` the engine never uses.
+
+**Wandering monsters are a table on paper and a pool in play**, and that is the
+one place the two genuinely need different machinery. `DelveEngine::wander()`
+stocks two or three per floor into the region's `is_random` pool and the travel
+roll draws from it, so nobody ever sees a list; the book prints a d6 whose rows
+a referee rolls. The sizing rule is shared — `DelveEngine::chooseGroup()` takes
+the chance as a callable, so `pick()` passes `random_int` and the book passes
+`DungeonGen::rint()` on a seeded stream — because a delve's stocking is rolled
+once when a party descends and written into rows, while a printed page has to
+come out identical every time the same seed is asked for. The odds and the
+budget are read from the engine (`wanderChance()`, `wanderBudget()`) rather than
+restated: a book that told a referee the wrong chance would be wrong in the one
+place nobody can check it against the code.
+
 ## Generated art
 
 Four generators, all talking to the local image model (SANA-Sprint) on

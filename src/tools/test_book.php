@@ -171,5 +171,179 @@ foreach (['rivermark', 'old_city', 'undervault'] as $key) {
     ok('every quest carries its stages', $stagedOk);
 }
 
+// ---------------------------------------------------------------------------
+// A module whose levels are made at play
+// ---------------------------------------------------------------------------
+echo "\nThe rolled delve\n";
+
+// A generated floor is written into the Undervault's own module id and keyed
+// `_dg_<party>_<depth>`. It is one party's scratch, it exists for hours, and it
+// used to arrive in the book as an extra chapter — so the printed adventure
+// changed depending on who happened to be underground. Three parties down meant
+// three chapters of somebody else's rooms, with their traps and secret doors.
+$db->beginTransaction();
+try {
+    $moduleId = (int) $db->query(
+        "SELECT id FROM modules WHERE module_key = '" . DelveEngine::MODULE_KEY . "'"
+    )->fetchColumn();
+    $mouth = (int) $db->query(
+        "SELECT id FROM locations WHERE location_key = 'uv_mouth'"
+    )->fetchColumn();
+
+    $before = count($book->build(DelveEngine::MODULE_KEY, 1)['regions']);
+    foreach ([1, 2] as $n) {
+        $db->prepare('INSERT INTO parties (user_id, module_id, name) VALUES (NULL,?,?)')
+            ->execute([$moduleId, "book delve probe {$n}"]);
+        $partyId = (int) $db->lastInsertId();
+        $db->prepare(
+            "INSERT INTO characters (name, race, class, level, experience, strength, dexterity,
+                constitution, intelligence, wisdom, charisma, max_hp, current_hp, armor_class,
+                proficiency_bonus, is_active, current_location_id)
+             VALUES (?, 'Human', 'Fighter', 3, 0, 12, 12, 12, 12, 12, 12, 25, 25, 14, 2, 1, ?)"
+        )->execute(['_book_probe_' . bin2hex(random_bytes(3)), $mouth]);
+        $characterId = (int) $db->lastInsertId();
+        $db->prepare('INSERT INTO character_party (party_id, character_id, slot) VALUES (?,?,1)')
+            ->execute([$partyId, $characterId]);
+        $db->prepare('UPDATE parties SET leader_character_id = ? WHERE id = ?')
+            ->execute([$characterId, $partyId]);
+        (new DelveEngine($db))->descend($characterId, $partyId);
+    }
+
+    $floors = (int) $db->query(
+        "SELECT COUNT(*) FROM regions WHERE region_key LIKE '\\_dg\\_%'"
+    )->fetchColumn();
+    ok('two parties are really underground', $floors >= 2, (string) $floors);
+
+    $b = $book->build(DelveEngine::MODULE_KEY, 1);
+    same('and the book gained no chapters', $before, count($b['regions']));
+    $scratch = array_values(array_filter(
+        array_map(static fn ($r) => (string) $r['region_key'], $b['regions']),
+        static fn (string $k) => str_starts_with($k, '_dg_')
+    ));
+    same('no generated floor is in it', [], $scratch);
+} finally {
+    $db->rollBack();
+}
+
+// What a book SHOULD say about a generated dungeon: one rolled for the page,
+// with the number that made it, so the same book can be printed again.
+$rolled = $book->build(DelveEngine::MODULE_KEY, 4471)['delve'];
+ok('the Undervault prints a specimen delve', !empty($rolled['floors']));
+same('one seed, and it is the one asked for', 4471, $rolled['seed'] ?? null);
+same('every floor of the delve', DelveEngine::MAX_DEPTH, count($rolled['floors'] ?? []));
+
+$sameAgain = $book->build(DelveEngine::MODULE_KEY, 4471)['delve'];
+$other = $book->build(DelveEngine::MODULE_KEY, 4472)['delve'];
+ok('the same seed reprints the same dungeon', json_encode($rolled) === json_encode($sameAgain));
+ok('a different seed is a different dungeon', json_encode($rolled) !== json_encode($other));
+
+$numbered = true;
+$labelled = true;
+$plans = true;
+foreach (($rolled['floors'] ?? []) as $floor) {
+    foreach (array_values($floor['rooms']) as $i => $room) {
+        if ((int) $room['number'] !== $i + 1) { $numbered = false; }
+        if (trim((string) $room['name']) === '') { $labelled = false; }
+    }
+    // The plan is handed to the game's own renderer, so it has to be the shape
+    // that renderer reads: room shapes to draw, and a node per room carrying
+    // the area number as its label.
+    if (empty($floor['map']['floorplan']['rooms']) || empty($floor['map']['nodes'])) {
+        $plans = false;
+    }
+    $labels = array_map(static fn ($n) => $n['name'], $floor['map']['nodes']);
+    if ($labels !== array_map('strval', range(1, count($floor['rooms'])))) { $plans = false; }
+    // No fog: a book is the GM's copy and draws the whole floor. The renderer
+    // reads `seen === false` as "hide", so the flag must simply be absent.
+    foreach ($floor['map']['floorplan']['rooms'] as $room) {
+        if (array_key_exists('seen', $room)) { $plans = false; }
+    }
+}
+ok('areas are numbered from one on every floor', $numbered);
+ok('and every room is named', $labelled);
+ok('every floor carries a plan the shipped renderer can draw', $plans);
+
+$onlyHere = true;
+foreach (['rivermark', 'old_city'] as $key) {
+    if ($book->build($key, 4471)['delve'] !== []) { $onlyHere = false; }
+}
+ok('no other module gets a dungeon it does not have', $onlyHere);
+
+// --- the wandering table ---------------------------------------------------
+//
+// The game has wandering monsters down here already; what it does not have is
+// a list anybody can read, because the pool is drawn by the travel roll and
+// never shown. A book has to print one — the person running it is the die.
+$tabled = true;
+$distinct = true;
+$odds = true;
+$sized = true;
+$ceiling = 0;
+foreach ($book->catalogue() as $m) {
+    if ($m['module_key'] === DelveEngine::MODULE_KEY) { $ceiling = (int) $m['level_max']; }
+}
+ok('the module advertises a level ceiling to size against', $ceiling > 0);
+foreach (($rolled['floors'] ?? []) as $floor) {
+    $table = $floor['wandering'];
+    if (count($table['rows']) !== $table['die']) { $tabled = false; }
+    // Six identical rows is a d1 wearing a d6's clothes. The picker takes the
+    // top third of what the budget affords, which on a shallow floor is a
+    // handful of creatures, so the rows have to be drawn until they differ.
+    $names = array_map(static fn ($r) => $r['monster'], $table['rows']);
+    if (count(array_unique($names)) !== count($names)) { $distinct = false; }
+    // The odds printed are the odds the engine actually rolls, read from it
+    // rather than restated: a book that told a referee the wrong chance would
+    // be wrong where nobody can check it.
+    if ($table['chance'] !== DelveEngine::wanderChance((int) $floor['depth'])) { $odds = false; }
+    if ($floor['party']['level'] > $ceiling || $floor['party']['level'] < 1) { $sized = false; }
+}
+ok('every floor has a full wandering table', $tabled);
+ok('and no two rows of it are the same creature', $distinct);
+ok('the printed odds are the odds the engine rolls', $odds);
+ok('the fights are sized for a party the module could have', $sized);
+
+// --- the bestiary ----------------------------------------------------------
+//
+// The appendix is built from the encounters a module SENDS, and a generated
+// module sends none — its fights are rolled, not stored. So the Undervault
+// printed five levels of fights, thirty wandering rows and "0 creatures", with
+// not one stat block for anything it named. A book you cannot run.
+$uv = $book->build(DelveEngine::MODULE_KEY, 4471);
+ok('a generated module still has a bestiary', count($uv['monsters']) > 0,
+   count($uv['monsters']) . ' stat blocks');
+ok('and its fights are counted', ($uv['counts']['rolled'] ?? 0) > 0,
+   (string) ($uv['counts']['rolled'] ?? 0));
+
+$statted = [];
+foreach ($uv['monsters'] as $m) {
+    $statted[(string) $m['monster_key']] = true;
+}
+$named = [];
+$emptyRooms = [];
+foreach ($uv['delve']['floors'] as $floor) {
+    foreach ($floor['rooms'] as $room) {
+        // Every room the stocking table calls occupied has to hold something,
+        // or the entry promises a fight the referee has to invent.
+        if (in_array($room['kind'], ['monster', 'hoard', 'boss'], true)) {
+            if (empty($room['holds'])) {
+                $emptyRooms[] = "L{$floor['depth']} area {$room['number']}";
+            } else {
+                $named[(string) $room['holds']['key']] = true;
+            }
+        }
+    }
+    foreach ($floor['wandering']['rows'] as $row) {
+        $named[(string) $row['key']] = true;
+    }
+}
+same('every occupied room holds something', [], $emptyRooms);
+same('and everything the delve names has a stat block',
+     [], array_values(array_diff(array_keys($named), array_keys($statted))));
+
+// The table is part of the seed's promise, so it has to survive a reprint.
+$tablesA = array_map(static fn ($f) => $f['wandering'], $rolled['floors']);
+$tablesB = array_map(static fn ($f) => $f['wandering'], $sameAgain['floors']);
+same('the same seed reprints the same wandering table', $tablesA, $tablesB);
+
 echo "\n" . ($fail === 0 ? "0 failed" : "{$fail} FAILED") . " ({$pass} passed)\n";
 exit($fail === 0 ? 0 : 1);

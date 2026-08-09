@@ -506,3 +506,241 @@ p { margin: 0 0 0.07in; }
 }
 .book-bar b { color: #e8c547; font-weight: 600; }
 @media print { .book-bar { display: none; } }
+
+/* ------------------------------------------------------------------------ */
+/* Appendix F: a rolled delve                                                */
+/* ------------------------------------------------------------------------ */
+
+/*
+ * The floor plans are drawn by `window.WorldMap.svg` — the game's own
+ * renderer, not a copy of it — so what follows is a second SKIN for the
+ * markup the screen already produces, and not a second drawing. That is the
+ * bargain worth keeping: doors in the old-school grammar, stair ticks and
+ * graph-paper ruling are two hundred lines of geometry, and a PHP copy of
+ * them would agree with the game exactly until the first time one of the two
+ * was fixed.
+ *
+ * A COMPLETE skin, not a patch, and that distinction cost a rendering. This
+ * stylesheet deliberately shares nothing with style.css — see the top of the
+ * file — so NONE of the plan's base rules are present here: not `fill: none`
+ * on a corridor polyline, not `paint-order: stroke` on a label, not a stroke
+ * width anywhere. Overriding a few colours on top of nothing gives you SVG's
+ * own defaults underneath, which are "fill black, stroke none", and the first
+ * attempt printed a level as eight black slabs with the numbers knocked out
+ * of them. Everything the floor-plan path emits is therefore given a value
+ * below, whether or not the book wants to change it.
+ *
+ * Paper, not screen. The screen plan is a lit floor inside a dark building;
+ * a book is ink on white, and has to survive a photocopier.
+ */
+
+/* The frame and the ground belong to the BOX, not to the drawing. A level is
+   100 x 75 and the column is not, so the svg letterboxes inside whatever
+   space it is given; with the rock painted only inside the viewBox that left
+   a white band down each side of a plate that is supposed to be solid stone.
+   Giving the wrapper the same colour makes the letterbox invisible instead of
+   fighting the aspect ratio. */
+.floor-plan {
+  background: #ece7dd;
+  border: 0.8pt solid var(--rule);
+  line-height: 0;
+}
+.floor-plan .worldmap {
+  /* Capped by height rather than left to fill the page: the plan shares the
+     chapter-head column with the first entries beneath it. */
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 3.4in;
+  margin: 0 auto;
+  cursor: default;
+}
+
+/* Ink is the whole point of this page. Without this a browser drops every
+   background fill out of the print and the plan comes out as outlines with
+   nothing inside them. */
+.floor-plan .worldmap,
+.floor-plan .worldmap * {
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* --- the ground ---------------------------------------------------------
+
+   The rock the level is cut from is near-black on screen. On paper that is a
+   solid block of toner over a third of the page, so it becomes a pale warm
+   grey: the same reading — stone around a cut floor — at a twentieth of the
+   ink, and it photocopies. The floors then go to true white, which is the
+   contrast the dark rock was providing. */
+
+.floor-plan .wm-rock { fill: #ece7dd; }
+
+.floor-plan .wm-room {
+  fill: #fff;
+  stroke: var(--ink);
+  stroke-width: 0.55;
+}
+/* Where you came in and where you go down, said at a glance from across the
+   page. The stair ticks say it again in glyph. */
+.floor-plan .wm-room.is-stair,
+.floor-plan .wm-room.is-entrance { stroke-dasharray: 1.6 0.8; }
+
+/* A corridor is a wall polyline with a floor polyline drawn over it, both
+   stroked and neither filled — `fill: none` is not decoration here, it is
+   what stops a dogleg being painted in as a solid triangle. */
+.floor-plan .wm-hall-wall,
+.floor-plan .wm-hall {
+  fill: none;
+  stroke-linejoin: miter;
+  stroke-linecap: butt;
+}
+.floor-plan .wm-hall-wall { stroke: var(--ink); }
+.floor-plan .wm-hall { stroke: #fff; }
+
+/* The graph paper. Visible at three and a half inches and still there after a
+   photocopy, which the screen's soft brown is not. */
+.floor-plan .wm-grid-line {
+  fill: none;
+  stroke: rgba(28, 26, 23, 0.28);
+  stroke-width: 0.12;
+}
+
+.floor-plan .wm-stair-ticks line {
+  stroke: var(--ink);
+  stroke-width: 0.3;
+}
+
+/* --- the legend ---------------------------------------------------------
+
+   hollow square = a door · barred = locked · crossed = trapped ·
+   dotted = portcullis · dashed seam with an s = a secret way.
+   The same vocabulary as the screen, because a reader who has played should
+   not have to learn it twice. */
+
+.floor-plan .wm-doorbox {
+  fill: #fff;
+  stroke: var(--ink);
+  stroke-width: 0.3;
+}
+.floor-plan .wm-door-bar {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 0.28;
+}
+.floor-plan .wm-portcullis {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 0.5;
+  stroke-dasharray: 0.35 0.45;
+}
+.floor-plan .wm-door {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 0.5;
+}
+.floor-plan .wm-door.is-stuck { stroke-dasharray: 0.5 0.4; }
+.floor-plan .wm-secret-s {
+  font-family: var(--display);
+  font-size: 2.4px;
+  font-style: italic;
+  fill: var(--ink);
+  stroke: none;
+}
+
+/* The one thing on the plan allowed a colour, because it is the one thing the
+   referee must not read past. */
+.floor-plan .wm-trap { stroke-width: 0.35; }
+.floor-plan .wm-trap.is-found { fill: none; stroke: var(--accent); }
+.floor-plan .wm-trap.is-sprung { fill: var(--accent); stroke: none; }
+
+/* --- the numbers --------------------------------------------------------
+
+   Area numbers, not place names: these are read at a glance while somebody is
+   talking, and the name is in the entry directly beneath the plan. Set in the
+   book's own sans, and knocked out of a white halo so a number crossing a
+   wall stays legible — `paint-order` is what puts the halo behind the figure
+   instead of over it, and without it the numbers print white on black. */
+.floor-plan .wm-label {
+  text-anchor: middle;
+  font-family: var(--sans);
+  font-size: 3.4px;
+  font-weight: 700;
+  fill: var(--ink);
+  paint-order: stroke;
+  stroke: #fff;
+  stroke-width: 0.7;
+}
+.floor-plan .wm-hit { fill: transparent; stroke: none; }
+/* Nothing here is somewhere you can walk to: there is no party. */
+.floor-plan .wm-node { cursor: default; }
+
+/* --- the seed ----------------------------------------------------------- */
+
+.seed-band {
+  font-family: var(--sans);
+  font-size: 8.5pt;
+  color: var(--ink-soft);
+  border-top: 0.6pt solid var(--rule);
+  border-bottom: 0.6pt solid var(--rule);
+  padding: 0.06in 0;
+  margin: 0.1in 0 0;
+}
+.seed-band b { color: var(--ink); font-size: 10pt; letter-spacing: 0.04em; }
+.seed-note { display: block; margin-top: 0.03in; }
+.seed-band code {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 7.6pt;
+}
+
+/* On screen the toolbar says which delve is on the page, so that rolling
+   another is a visible act rather than a page that quietly changed. */
+.book-seed { font-family: var(--sans); font-size: 8.5pt; opacity: 0.85; }
+
+/* --- the wandering table ------------------------------------------------
+
+   A rollable table, not a list: the numbers are down the left because the
+   thing a referee does with this page is roll a die and run a finger. Ruled
+   only under the rows — the vertical rules a spreadsheet wants would make it
+   a spreadsheet. */
+
+.wander {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 8.6pt;
+  margin: 0.1in 0 0.14in;
+  break-inside: avoid;
+}
+.wander caption {
+  caption-side: top;
+  font-family: var(--sans);
+  font-size: 7.4pt;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  text-align: left;
+  padding: 0 0 0.03in;
+  border-bottom: 0.8pt solid var(--ink);
+}
+/* The second line of the caption is the odds and who they are for, which is
+   read once and then not again — so it is set out of the way rather than
+   competing with the rows. */
+.wander caption span {
+  display: block;
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 7.6pt;
+  margin-top: 0.02in;
+}
+.wander td {
+  padding: 0.028in 0.04in;
+  border-bottom: 0.4pt solid var(--rule);
+  vertical-align: baseline;
+}
+.wander tr:last-child td { border-bottom: 0; }
+.wander-roll {
+  font-family: var(--sans);
+  font-weight: 700;
+  text-align: right;
+  width: 0.22in;
+  color: var(--accent);
+}

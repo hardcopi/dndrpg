@@ -1579,7 +1579,15 @@ final class DungeonGen
         return (((($hi * $b) & 0xFFFF) << 16) + ($lo * $b)) & 0xFFFFFFFF;
     }
 
-    private static function rint(int &$state, int $lo, int $hi): int
+    /**
+     * Public because the printed book deals from a seeded stream too.
+     *
+     * AdventureBook rolls a wandering table for a specimen delve and it has to
+     * come out the same every time the same seed is printed, which is this
+     * generator's own discipline — so it uses this rather than growing a
+     * second little LCG that would be one more thing to get subtly wrong.
+     */
+    public static function rint(int &$state, int $lo, int $hi): int
     {
         if ($hi <= $lo) {
             return $lo;
