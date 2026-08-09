@@ -279,6 +279,64 @@
             {
                 "conditions": [
                     {
+                        "flag": "concern_answering"
+                    }
+                ],
+                "once": true,
+                "text": "\"My grain's gone up,\" Mara says. \"Not the price — the price is the price. The man. Fourteen years off the same cart and this week a different one, and the new one wants paying on delivery and won't take the standing order.\" She looks at you levelly, with no accusation in it at all, which is worse. \"I'm not asking what you've been doing. I'd only worry. But I've had to put a penny on the ale and I'd rather you heard that from me than off the board.\"",
+                "choices": [
+                    {
+                        "label": "Tell me about this town.",
+                        "next": "about_town"
+                    },
+                    {
+                        "label": "A room, please.",
+                        "effects": [
+                            {
+                                "rest": "inn"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "concern_asking"
+                    }
+                ],
+                "once": true,
+                "text": "\"Somebody took the corner room,\" Mara says, wiping a glass that is dry. \"Paid four nights, slept two, and asked about you — not by name, at first. By what you'd done. He had a list and he read it out and asked me which of them were true.\" She sets the glass down. \"I said I keep an inn. He said that was a very good answer, and paid for the other two nights on his way out.\"",
+                "choices": [
+                    {
+                        "label": "Did he leave a name?",
+                        "next": "the_corner_room_man"
+                    },
+                    {
+                        "label": "Which ones did you say were true?",
+                        "next": "the_corner_room_man"
+                    },
+                    {
+                        "label": "A room, please.",
+                        "effects": [
+                            {
+                                "rest": "inn"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "sera_arrested"
                     }
                 ],
@@ -1529,6 +1587,21 @@
                                 "rest": "inn"
                             }
                         ]
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_corner_room_man": [
+            {
+                "text": "\"He signed the book,\" Mara says. \"Of course he signed the book. Everyone signs the book and I have never once looked at it twice.\" She gets it out from under the tap and turns it round, and the name is a name, in a good plain hand, and it means nothing to either of you.\n\n\"As to which were true,\" she says, taking it back, \"I told him I keep an inn, and he wrote that down as well, and he did not seem to mind. That's what I keep coming back to. He wasn't fishing. He already had it. He wanted to see what I'd do.\"",
+                "choices": [
+                    {
+                        "label": "Then he'll be back.",
+                        "end": true
                     },
                     {
                         "label": "Goodbye.",

@@ -92,6 +92,9 @@
                     "value": "watch"
                 },
                 {
+                    "pressure": 1
+                },
+                {
                     "take_item": "lading_bill"
                 },
                 {

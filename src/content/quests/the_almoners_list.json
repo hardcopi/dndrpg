@@ -72,6 +72,9 @@
                     "set_flag": "west_holdings_recorded"
                 },
                 {
+                    "pressure": 1
+                },
+                {
                     "take_item": "almoners_list"
                 },
                 {

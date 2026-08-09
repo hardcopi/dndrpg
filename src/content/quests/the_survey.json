@@ -39,6 +39,9 @@
                     "set_flag": "act_two_open"
                 },
                 {
+                    "pressure": 3
+                },
+                {
                     "approval": {
                         "sera": 12,
                         "ilse": 8,
@@ -60,6 +63,9 @@
                 },
                 {
                     "set_flag": "act_two_open"
+                },
+                {
+                    "pressure": 4
                 },
                 {
                     "take_item": "the_valley_survey"
@@ -89,6 +95,9 @@
                 },
                 {
                     "set_flag": "corse_retains_us"
+                },
+                {
+                    "pressure": 1
                 },
                 {
                     "take_item": "the_valley_survey"
@@ -125,6 +134,9 @@
                 },
                 {
                     "set_flag": "rivermark_warned"
+                },
+                {
+                    "pressure": 3
                 },
                 {
                     "approval": {

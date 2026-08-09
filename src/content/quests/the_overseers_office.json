@@ -64,6 +64,9 @@
                     "set_flag": "works_alarmed"
                 },
                 {
+                    "pressure": 3
+                },
+                {
                     "approval": {
                         "kessa": 12,
                         "aldric": -10,

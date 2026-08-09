@@ -141,11 +141,17 @@ class ContentEditor
     /**
      * The art an NPC wears has to be on disk.
      *
-     * check_sprite in tools/load_content.py treats a missing sheet, face or
-     * bust as a hard error, so accepting one here would save an NPC that the
-     * next content load refuses — and in the meantime they render as a hole in
-     * the map. A posed NPC additionally needs the sheet for that pose, which is
-     * the same check tools/load_content.py makes.
+     * check_sprite in tools/load_content.py treats a missing face or bust as a
+     * hard error, so accepting one here would save an NPC that the next content
+     * load refuses — and in the meantime they are a hole in the party rail, the
+     * people list and the dialogue theatre, which are the three screens that
+     * draw them.
+     *
+     * The walk sheet and the pose sheet are deliberately not asked for, and the
+     * `$pose` argument is kept only so the signature still says what the caller
+     * is saving. Nothing has drawn either since the world became a graph of
+     * described scenes; the loader's check_sprite() carries the full account,
+     * and the two must agree or this saves rows that the next load rejects.
      */
     private function assertSpriteArt(string $spriteKey, string $pose): void
     {
@@ -155,17 +161,12 @@ class ContentEditor
             );
         }
         $dir = APP_ROOT . '/assets/images/npcs/';
-        foreach (['_sheet', '_face', '_bust'] as $suffix) {
+        foreach (['_face', '_bust'] as $suffix) {
             if (!is_file($dir . $spriteKey . $suffix . '.png')) {
                 throw new InvalidArgumentException(
                     "No art at assets/images/npcs/{$spriteKey}{$suffix}.png."
                 );
             }
-        }
-        if ($pose !== '' && !is_file($dir . $spriteKey . '_' . $pose . '.png')) {
-            throw new InvalidArgumentException(
-                "{$spriteKey} has no {$pose} sheet (assets/images/npcs/{$spriteKey}_{$pose}.png)."
-            );
         }
     }
 

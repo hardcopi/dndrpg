@@ -40,6 +40,9 @@
                     "set_flag": "long_room_open"
                 },
                 {
+                    "pressure": 2
+                },
+                {
                     "xp": 100
                 },
                 {

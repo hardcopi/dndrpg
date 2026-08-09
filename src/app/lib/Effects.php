@@ -179,6 +179,9 @@ class Effects
             $r['flags_set'][$key] = (string) $now;
             return $r;
         }
+        if (isset($e['pressure'])) {
+            return $this->pressure($partyId, (int) $e['pressure']);
+        }
         if (isset($e['approval'])) {
             return $this->approval($partyId, (array) $e['approval']);
         }
@@ -240,6 +243,35 @@ class Effects
         throw new InvalidArgumentException(
             'Unknown effect: ' . json_encode($e, JSON_UNESCAPED_SLASHES)
         );
+    }
+
+    /**
+     * Charge the Concern for something the party just did to it.
+     *
+     * Spelled as its own verb rather than as `{"increment_flag":
+     * "concern_pressure"}` for two reasons, and the second is the important
+     * one. It reads in the file as what it is — a price, not bookkeeping. And
+     * `increment_flag` takes a negative `by`, `set_flag` takes any value at all
+     * and `clear_flag` takes it away entirely, so a counter reachable through
+     * them is a counter that can come down, which is the one thing this design
+     * settled that it must never do. Content cannot reach the flag by any of
+     * those routes: tools/load_content.py refuses them by name.
+     *
+     * Deliberately silent. Crossing a threshold produces no message, because
+     * every word the player reads about the Concern is authored against the
+     * flag it set — see ConcernPressure. The crossings are still reported in
+     * `flags_set` so that a caller has the same account of this effect as of
+     * any other.
+     */
+    private function pressure(int $partyId, int $by): array
+    {
+        $r = self::blank();
+        $moved = ConcernPressure::raise($this->world, $partyId, $by);
+        $r['flags_set'][ConcernPressure::FLAG] = (string) $moved['total'];
+        foreach ($moved['crossed'] as $flag) {
+            $r['flags_set'][$flag] = '1';
+        }
+        return $r;
     }
 
     /**

@@ -60,6 +60,9 @@
                     "set_flag": "ashe_helped"
                 },
                 {
+                    "pressure": 1
+                },
+                {
                     "approval": {
                         "sera": 10,
                         "kessa": 8,

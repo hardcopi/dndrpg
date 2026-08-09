@@ -125,6 +125,48 @@
             {
                 "conditions": [
                     {
+                        "flag": "concern_answering"
+                    }
+                ],
+                "once": true,
+                "text": "\"I'm to send word if you come through the yard,\" Coyle says, before you have opened your mouth. \"There's a form for it. There's a space on it for the hour.\" She puts the form face down under the ledger, which is not the same as tearing it up, and she does not pretend that it is. \"Word goes at the end of the shift, with the tallies, because that's when word goes.\" She turns the water clock a quarter and sets it down. \"You have until the end of the shift.\"",
+                "choices": [
+                    {
+                        "label": "Why tell me at all?",
+                        "next": "the_end_of_the_shift"
+                    },
+                    {
+                        "label": "Then send it.",
+                        "next": "the_end_of_the_shift"
+                    },
+                    {
+                        "label": "Go.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "concern_asking"
+                    }
+                ],
+                "once": true,
+                "text": "Coyle has a sheet out that is not a time sheet. \"You're on this one,\" she says, and does not turn it round. \"It came up on the wages cart with the pegs. It isn't signed and it doesn't say what it's for, and I've put it in the box with the ones that are signed, because there's nowhere else in this hut to put a thing like that.\" She writes the date in the corner of it. \"I write down what I see. I've written that you were here, and when, and how long, which is what I do for a hundred and four other people, and I'm not going to start doing it differently for you.\"",
+                "choices": [
+                    {
+                        "label": "Whose hand is it?",
+                        "next": "not_my_column"
+                    },
+                    {
+                        "label": "Fair enough.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "dig_fate",
                         "equals": "signed"
                     }
@@ -562,6 +604,17 @@
                 "choices": [
                     {
                         "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_end_of_the_shift": [
+            {
+                "text": "\"Because a hundred and ninety people work under me and every one of them knows exactly what I write down about them,\" Coyle says. \"That is the arrangement. It is the only thing I have that makes the day book worth anything, and I am not spending it on you.\" She looks at the shuttered window and then back at the clock. \"The bell is at the end of the shift. I am not going to ring it early and I am not going to ring it late.\"",
+                "choices": [
+                    {
+                        "label": "Go.",
                         "end": true
                     }
                 ]

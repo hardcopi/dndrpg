@@ -159,6 +159,29 @@
             {
                 "conditions": [
                     {
+                        "flag": "concern_answering"
+                    }
+                ],
+                "once": true,
+                "text": "Tobin is in front of the crate rather than behind it, and he has the door half open at your back before you have said anything. \"I cannot,\" he says. \"Before you ask. My carriage comes up from Greyhythe and this morning it came up with a line on the manifest about who I may sell to, and there is no law in it anywhere, and there does not need to be.\" The brass along his jaw has gone dull. \"Thirty-one years in trade. I have never once been told who my customers are, and I am being told now, politely, by a clerk, in writing.\"",
+                "choices": [
+                    {
+                        "label": "Sell to me anyway.",
+                        "next": "he_will_not_risk_it"
+                    },
+                    {
+                        "label": "I'll have it lifted.",
+                        "next": "he_will_not_risk_it"
+                    },
+                    {
+                        "label": "Leave him be.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "warlord_dead"
                     }
                 ],
@@ -570,6 +593,17 @@
                 "choices": [
                     {
                         "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "he_will_not_risk_it": [
+            {
+                "text": "\"No,\" says Tobin, and it costs him something to say it. \"Because it would not be me they came to. It would be the carriage, and the carriage is four men with families in Greyhythe, and they would not be told either — the price would simply go up and stay up and nobody would ever say why.\" He gets the door the rest of the way open. \"When it changes, come back and I will sell you this whole table at cost and be glad of it. It is not going to change this month.\"",
+                "choices": [
+                    {
+                        "label": "Go.",
                         "end": true
                     }
                 ]

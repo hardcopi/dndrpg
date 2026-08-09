@@ -73,6 +73,9 @@
                     "set_flag": "mearing_recut"
                 },
                 {
+                    "pressure": 2
+                },
+                {
                     "approval": {
                         "kessa": 12,
                         "ilse": 8,

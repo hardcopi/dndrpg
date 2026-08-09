@@ -104,6 +104,7 @@ if [ "$PHP_MODE" != none ]; then
     run "test_spellbook"      phprun test_spellbook.php
     run "test_romance"        phprun test_romance.php
     run "test_haven"          phprun test_haven.php
+    run "test_pressure"       phprun test_pressure.php
     run "test_quest_module"   phprun test_quest_module.php
     run "test_quest_marks"    phprun test_quest_marks.php
     run "test_companions"     phprun test_companions.php

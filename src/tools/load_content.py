@@ -39,6 +39,38 @@ OUT = os.path.join(ROOT, "sql", "content.sql")
 RULES_PHP = os.path.join(ROOT, "app", "lib", "Rules.php")
 FEATS_PHP = os.path.join(ROOT, "app", "lib", "Feats.php")
 
+# Flags written by PHP rather than by any authored effect, as (file, constant).
+# Each constant is read for the strings inside it, so a scalar contributes one
+# name and an array contributes all of them — which is what lets a whole band of
+# threshold flags be declared once, in the class that writes them.
+#
+# Two checkers need this list and neither can derive it: this one, to refuse
+# content that writes a flag the engine owns, and tools/trace_content.py, to
+# stop reporting every gate on one as a dead gate. It lives here because this is
+# the tool that already reads Rules.php and Feats.php for the same reason, and
+# trace_content.py imports it rather than keeping a second copy — two greps for
+# one fact is how one of them ends up agreeing with nothing after a rename.
+ENGINE_FLAG_CONSTANTS = (
+    ("app/lib/DelveEngine.php", "DEPTH_FLAG"),
+    ("app/lib/ConcernPressure.php", "FLAG"),
+    ("app/lib/ConcernPressure.php", "THRESHOLDS"),
+)
+
+# The subset of those that the engine keeps for itself: written by PHP and read
+# back by PHP, and deliberately not part of the vocabulary content gates on.
+#
+# `concern_pressure` is the running total behind the Concern's named
+# thresholds. What content reads is the thresholds — a condition written against
+# the raw number would pin tuning that is expected to move — so "nothing in the
+# corpus reads this" is the intended state here and not a finding, which is what
+# tools/trace_content.py needs this to know. Note it is NOT simply "every flag
+# PHP reads back": DelveEngine reads uv_deepest too, and that one stays off this
+# list, because a depth flag no conversation ever asks about is exactly the dead
+# weight the check exists to report.
+ENGINE_PRIVATE_CONSTANTS = (
+    ("app/lib/ConcernPressure.php", "FLAG"),
+)
+
 NPC_ART = os.path.join(ROOT, "assets", "images", "npcs")
 MONSTER_ART = os.path.join(ROOT, "assets", "images", "monsters")
 
@@ -203,6 +235,10 @@ EFFECT_SPEC = {
     "set_flag":         ({"value"}, "str"),
     "clear_flag":       (set(), "str"),
     "increment_flag":   ({"by"}, "str"),
+    # What an act cost the Corse Concern. Its own verb rather than an
+    # `increment_flag` on the counter because the counter must only ever rise —
+    # see ConcernPressure — and `increment_flag` takes a negative `by`.
+    "pressure":         (set(), "pressure"),
     "approval":         (set(), "approval"),
     "give_item":        ({"quantity"}, "item"),
     "take_item":        ({"quantity"}, "item"),
@@ -222,8 +258,10 @@ EFFECT_SPEC = {
     "travel":           (set(), "travel"),
 }
 
-# Standing animations an NPC may be authored into. Each names a sheet cut by
-# tools/slice_assets.py as <sprite_key>_<pose>.png.
+# Standing animations an NPC may be authored into. The art behind them —
+# <sprite_key>_<pose>.png, cut by tools/slice_assets.py — is no longer required
+# or drawn; see check_sprite(). The vocabulary stays closed anyway, because the
+# value reaches a column and an unknown one could never mean anything.
 POSES = {"sleeping", "kneel"}
 
 # Classes that hold a spell list. Fighter, Rogue, Barbarian and Monk are absent
@@ -361,6 +399,47 @@ def read_feats():
     if not keys:
         raise SystemExit(f"CATALOG in {FEATS_PHP} parsed as empty")
     return tuple(keys)
+
+
+@functools.lru_cache(maxsize=None)
+def read_flag_constants(pairs):
+    """
+    The flag names inside a list of (file, constant), as ((flag, owner), ...).
+
+    Missing is fatal rather than ignorable, and that is the whole reason this
+    reads the source instead of restating the strings. A silently-empty list
+    would leave `tools/trace_content.py` reporting every scene gated on an
+    engine flag as unreachable and this loader accepting content that writes a
+    flag the engine owns — two wrong answers that both look like authoring
+    faults rather than a tool that has been left behind by a rename.
+    """
+    out = []
+    for rel, const in pairs:
+        path = os.path.join(ROOT, rel)
+        src = open(path, encoding="utf-8").read()
+        # Up to the terminating `;`, so a scalar and an array literal are read
+        # by one expression; the strings inside are the flag names either way,
+        # since a THRESHOLDS entry is keyed by an unquoted number.
+        m = re.search(r"const\s+" + re.escape(const) + r"\s*=(.*?);", src, re.S)
+        if not m:
+            raise SystemExit(
+                f"{rel} no longer declares {const} — tools/load_content.py "
+                f"reads it to know which flags the engine sets")
+        names = re.findall(r"'([a-z0-9_]+)'", m.group(1))
+        if not names:
+            raise SystemExit(f"{const} in {rel} parsed as no flag names")
+        out.extend((n, f"{rel} {const}") for n in names)
+    return tuple(out)
+
+
+def read_engine_flags():
+    """Every flag PHP writes, as ((flag, "file CONST"), ...)."""
+    return read_flag_constants(ENGINE_FLAG_CONSTANTS)
+
+
+def read_private_engine_flags():
+    """The engine's own bookkeeping among those — see ENGINE_PRIVATE_CONSTANTS."""
+    return read_flag_constants(ENGINE_PRIVATE_CONSTANTS)
 
 
 def read_busts(path):
@@ -735,10 +814,37 @@ def check_effect(eff, index, p, where):
 
     v = eff[head]
     at = (where[0], jp(where[1], head))
+
+    # The engine's own flags are not content's to write. `set_flag` could put a
+    # threshold flag on without the number that justifies it, `clear_flag`
+    # could take one off, and either spelling of a decrement on the counter is
+    # the decaying pressure the design rejected — see docs/CONCERN_PRESSURE.md.
+    # Refused at the head rather than by convention, because a rule that only
+    # exists in a docblock is a rule the next author will not know about.
+    if head in ("set_flag", "clear_flag", "increment_flag") and isinstance(v, str):
+        for flag, owner in read_engine_flags():
+            if v != flag:
+                continue
+            fix = (' — price the act with {"pressure": n} instead'
+                   if "ConcernPressure" in owner else "")
+            p.err(at, f"{v!r} is written by the engine ({owner}) and must not "
+                      f"be set by content{fix}")
+
     if vtype == "str":
         want_str(v, p, at)
     elif vtype == "int":
         want_int(v, p, at)
+    elif vtype == "pressure":
+        # Positive, whole, and small. Zero is an act that cost the Concern
+        # nothing, which is written by writing no effect; negative is a counter
+        # that comes down. Whole because the engine casts to int and 2.5 would
+        # silently become 2 — want_int alone accepts a float. The cap is not
+        # arithmetic; it is a reminder that the scale is 1 to 5 and that a stage
+        # wanting more than the top threshold in one go has mistaken the units.
+        if want_int(v, p, at) is not None and (not isinstance(v, int) or not 1 <= v <= 5):
+            p.err(at, f"pressure is a whole price from 1 to 5, not {v!r} — the "
+                      f"Concern's ledger only rises, and one act is not the "
+                      f"whole of what it can be made to notice")
     elif vtype == "item":
         want_key(v, "items", index, p, at)
     elif vtype == "quest":
@@ -788,18 +894,31 @@ def check_effect(eff, index, p, where):
 # ---------------------------------------------------------------------------
 def check_sprite(sprite, art_dir, index, p, where, monster=False, ambient=False):
     """
-    The three files a sprite_key resolves to, and its expression count.
+    The files a sprite_key resolves to, and its expression count.
 
     A bust is only mandatory for somebody who can appear in the dialogue
     theatre, which is the one thing that draws it. Monsters have always been
     exempt because the packs ship none for a wolf; ambient townsfolk are exempt
     for the stronger reason that they never open a conversation at all. That is
     what lets the pack's children be used — they ship a Face and no Bust.
+
+    `<key>_sheet.png` is deliberately NOT checked, and neither is a pose sheet.
+    A walk sheet is eight facings of a figure crossing a tile, and there has
+    been nothing to cross since the world became a graph of described scenes on
+    2026-08-01: the client asks for `_face` and `_bust` and nothing else, and
+    the only `_sheet` left in the JavaScript is create.js compositing paperdoll
+    LAYER files, which never pass through here. Requiring one was a rule the
+    game had stopped meaning, and it was not free — it refused to write
+    content.sql at all over fifty walk sheets that no screen would have drawn,
+    which is the loudest possible complaint about the least consequential
+    missing art. Paperdoll::bake() still writes a sheet for a created
+    character, and create.js still previews the layers; both are outside this
+    check and stay as they are.
     """
     if want_str(sprite, p, where) is None:
         return
     needs_bust = not monster and not ambient
-    for suffix, fatal in (("_sheet", True), ("_face", True), ("_bust", needs_bust)):
+    for suffix, fatal in (("_face", True), ("_bust", needs_bust)):
         f = os.path.join(art_dir, f"{sprite}{suffix}.png")
         if os.path.exists(f):
             continue
@@ -1334,17 +1453,16 @@ def validate_npcs(index, p):
             check_sprite(obj["sprite_key"], NPC_ART, index, p, (rel, "$.sprite_key"),
                          ambient=bool(obj.get("is_ambient")))
         if "pose" in obj:
-            # A closed set, because it names a file: a typo would be a sprite
-            # that silently never loads and an NPC frozen on their walk frame.
+            # Still a closed set, because the column is still written and an
+            # unknown value would be a word nothing could ever act on. The art
+            # behind it is no longer checked: a pose is a variant walk sheet,
+            # and check_sprite() above says why there is nothing left that
+            # draws one. The field survives its renderer on purpose — it
+            # records that this NPC is asleep or kneeling, which is true of the
+            # scene whether or not a picture of it is ever shown.
             pose = want_str(obj["pose"], p, (rel, "$.pose"))
             if pose is not None and pose not in POSES:
                 p.err((rel, "$.pose"), f"pose {pose!r} is not one of {sorted(POSES)}")
-            elif pose is not None and "sprite_key" in obj:
-                f = os.path.join(NPC_ART, f"{obj['sprite_key']}_{pose}.png")
-                if not os.path.exists(f):
-                    p.err((rel, "$.pose"),
-                          f"sprite_key {obj['sprite_key']!r} has no "
-                          f"{os.path.relpath(f, ROOT)} — re-cut with tools/slice_assets.py")
         if "shop" in obj:
             # A shop is a list of stocked items. Every reference is resolved
             # now, because a dangling item key would otherwise surface as an

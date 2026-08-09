@@ -128,10 +128,16 @@ A key is lowercase, `[a-z0-9_]`, and unique within its kind.
 }
 ```
 
-`sprite_key` names an art set under `assets/images/npcs/` — `<key>_sheet.png`,
-`<key>_face.png`, `<key>_bust.png`. The loader checks all three exist and reads
-the expression count from `assets/images/npcs/busts.json`, so a dialogue node
-cannot ask for an expression that was never cut.
+`sprite_key` names an art set under `assets/images/npcs/` — `<key>_face.png` and
+`<key>_bust.png`. The loader checks both exist and reads the expression count
+from `assets/images/npcs/busts.json`, so a dialogue node cannot ask for an
+expression that was never cut. (`tools/rebuild_busts.py --check` is what to run
+when that count is suspected; it counts the folder and needs no art packs.)
+
+A `<key>_sheet.png` may also be on disk and is neither required nor drawn. A
+walk sheet is eight facings of a figure crossing a tile and there has been
+nothing to cross since the world became a location graph; the client asks for
+`_face` and `_bust` and nothing else. The same goes for the art behind `pose`.
 
 `dialog` names a file in `content/dialog/`. Omit it for an NPC who is scenery.
 
@@ -627,6 +633,7 @@ background, lowercased with spaces as underscores — `half_orc`, `wood_elf`,
 | `{"set_flag": "k", "value": "v"}` | `value` defaults to `"1"` |
 | `{"clear_flag": "k"}` | |
 | `{"increment_flag": "k", "by": 1}` | counters, for "how many did you spare" |
+| `{"pressure": 2}` | what this act cost the Corse Concern — see below |
 | `{"approval": {"kessa": 5, "aldric": -10}}` | only applies to recruited companions |
 | `{"give_item": "k", "quantity": 1}` / `{"take_item": "k"}` | |
 | `{"give_gold": 50}` / `{"take_gold": 25}` | |
@@ -643,6 +650,49 @@ background, lowercased with spaces as underscores — `half_orc`, `wood_elf`,
 
 Effects run in file order. An effect naming something that does not exist is a
 load error, not a runtime shrug.
+
+### `pressure`: what an act cost the Concern
+
+`{"pressure": n}` charges the valley's antagonist for something the party has
+just done to it — a purchase blocked, a note voided, a boundary re-cut, three
+years of survey work burned. `n` is a price from **1 to 5**: 1 is a thing the
+Concern will hear about eventually, 3 is a loss it has to answer, 5 is the
+scale of the whole act.
+
+The engine adds them up and nothing else. Crossing a named total sets a flag,
+and every reaction the player ever sees is authored against that flag exactly
+as every other conditional line is:
+
+```json
+{ "conditions": [{"flag": "concern_asking"}], "once": true,
+  "text": "\"Somebody asked,\" Finch says, and makes nothing of it. ..." }
+```
+
+| Flag | Set at | What it means |
+|---|---|---|
+| `concern_noticed` | 3 | you are a cost, and the cost has been written down |
+| `concern_asking` | 8 | a polite man is up from downriver with your description |
+| `concern_answering` | 15 | the asking is over; doors shut and prices move |
+
+The totals live in `ConcernPressure::THRESHOLDS` and are expected to move, so
+**gate on the flags rather than on the number**. `{"flag": "concern_pressure",
+"at_least": 8}` works and always will, and it pins tuning into a dialogue file.
+
+Three rules the loader enforces rather than asking you to remember:
+
+- **The counter only rises.** `set_flag`, `clear_flag` and `increment_flag` are
+  all refused on `concern_pressure` and on the threshold flags — those are the
+  engine's to write. `docs/CONCERN_PRESSURE.md` argues why pressure that
+  decays would make the correct play "interfere, then wait".
+- **A price is positive.** An act that cost the Concern nothing is written by
+  writing no effect.
+- **One number, valley-wide.** There is no per-holding pressure and there is not
+  going to be. The Concern is one organisation reading one set of books.
+
+`tools/test_pressure.php` asserts the ratchet, and that the acts priced in
+`content/quests/` can still pay for the top band — so raising a threshold past
+what the corpus charges fails there rather than as a band of writing nobody
+can reach.
 
 ---
 

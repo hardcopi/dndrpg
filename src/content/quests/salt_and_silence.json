@@ -40,6 +40,9 @@
                     "set_flag": "salt_iron_exposed"
                 },
                 {
+                    "pressure": 2
+                },
+                {
                     "xp": 100
                 },
                 {
@@ -67,6 +70,9 @@
                 },
                 {
                     "set_flag": "knows_paymaster"
+                },
+                {
+                    "pressure": 2
                 },
                 {
                     "xp": 150

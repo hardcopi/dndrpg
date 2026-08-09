@@ -40,6 +40,9 @@
                     "set_flag": "landing_read"
                 },
                 {
+                    "pressure": 1
+                },
+                {
                     "xp": 100
                 },
                 {

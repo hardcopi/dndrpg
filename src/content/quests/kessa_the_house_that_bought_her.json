@@ -58,6 +58,9 @@
                     "set_flag": "kessa_names_known"
                 },
                 {
+                    "pressure": 2
+                },
+                {
                     "approval": {
                         "kessa": 14,
                         "sera": 8,

@@ -125,6 +125,63 @@
             {
                 "conditions": [
                     {
+                        "flag": "concern_answering"
+                    }
+                ],
+                "once": true,
+                "text": "Finch is standing, with his coat on, which you have not seen him do. \"I have been sent a schedule of names and instructions about them,\" he says. \"I am not going to read it to you, and you may draw whatever conclusion you like from the fact that I am standing here telling you it exists.\" He puts a coin on the bar for a drink he has not had. \"I collect debts. I am good at it and it is the whole of what I do. There is a man who does the other thing, and he was on the Greyhythe boat this morning.\"",
+                "choices": [
+                    {
+                        "label": "What other thing?",
+                        "next": "the_other_book"
+                    },
+                    {
+                        "label": "Let him come.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "concern_asking"
+                    }
+                ],
+                "once": true,
+                "text": "\"Somebody asked,\" Finch says, and makes nothing of it. \"Down on the Tuesday boat, bought me a drink I did not want, and went through the front of my book with me a name at a time until he reached yours, at which point he stopped being interested in the others.\" He turns the cup. \"I told him what I had, which is what you have done in this town and not one word beyond it, because that is all I had. I would like you to be clear that the shortness of the answer was not loyalty.\"",
+                "choices": [
+                    {
+                        "label": "Who was he?",
+                        "next": "the_other_book"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "concern_noticed"
+                    }
+                ],
+                "once": true,
+                "text": "Finch has the book open at a page that is not figures, and closes it without hurrying. \"You have gone into the front of it,\" he says. \"That is where I write down anything I might be asked about later. I have written you down, and I am telling you because you would find out and think worse of me for the finding.\" He drinks. \"Nobody has asked yet.\"",
+                "choices": [
+                    {
+                        "label": "Which book is that?",
+                        "next": "the_other_book"
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "met_garrow"
                     }
                 ],

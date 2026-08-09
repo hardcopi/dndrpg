@@ -40,6 +40,9 @@
                     "set_flag": "fen_draining"
                 },
                 {
+                    "pressure": 3
+                },
+                {
                     "give_item": "sluice_ledger",
                     "quantity": 1
                 },
@@ -89,6 +92,9 @@
                 },
                 {
                     "set_flag": "sluice_wage_intercepted"
+                },
+                {
+                    "pressure": 1
                 },
                 {
                     "give_gold": 180

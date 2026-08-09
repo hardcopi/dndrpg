@@ -40,6 +40,9 @@
                     "set_flag": "priory_paper_kept"
                 },
                 {
+                    "pressure": 2
+                },
+                {
                     "xp": 150
                 },
                 {
@@ -90,6 +93,9 @@
                 },
                 {
                     "set_flag": "cartulary_held"
+                },
+                {
+                    "pressure": 2
                 },
                 {
                     "take_gold": 90

@@ -63,6 +63,9 @@
                     "set_flag": "stone_recut_known"
                 },
                 {
+                    "pressure": 1
+                },
+                {
                     "approval": {
                         "ilse": 8,
                         "aldric": 8,

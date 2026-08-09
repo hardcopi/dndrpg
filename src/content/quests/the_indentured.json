@@ -36,6 +36,9 @@
                     "value": "bought"
                 },
                 {
+                    "pressure": 1
+                },
+                {
                     "take_gold": 150
                 },
                 {
@@ -60,6 +63,9 @@
                 },
                 {
                     "set_flag": "diggers_told"
+                },
+                {
+                    "pressure": 3
                 },
                 {
                     "give_item": "indenture_paper",

@@ -269,6 +269,52 @@
             {
                 "conditions": [
                     {
+                        "flag": "concern_answering"
+                    }
+                ],
+                "once": true,
+                "text": "\"There is a letter about you,\" Corse says, and does not reach for it. \"It came from the house rather than from me, which is the part I would like you to take seriously — I am the factor for this valley and it went round me.\" He moves the chair out, because he always does. \"It sets out what has been lost, by date, in the order it happened, and totals it. The total is correct; I checked it, because I check totals.\" He sits. \"Then it says what is to be done. I am not going to tell you what that is, because you would ask whether I intend to do it, and I have not decided.\"",
+                "choices": [
+                    {
+                        "label": "Decide now.",
+                        "next": "he_has_not_decided"
+                    },
+                    {
+                        "label": "What is there to decide?",
+                        "next": "he_has_not_decided"
+                    },
+                    {
+                        "label": "Then I'll go.",
+                        "next": "he_sees_you_out"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "concern_asking"
+                    }
+                ],
+                "once": true,
+                "text": "\"You have cost the house eleven hundred and sixty gold,\" Corse says, as though continuing a conversation you were both already in. \"I say it with no feeling in it whatever. It is a figure I was sent, I have checked it, and it is fair.\" He indicates the chair. \"I tell you because otherwise you will build an idea of your own importance out of rumour, and rumour is always flattering. Eleven hundred and sixty gold is a bad quarter. It is not a war.\"",
+                "choices": [
+                    {
+                        "label": "Sit down.",
+                        "next": "the_chair"
+                    },
+                    {
+                        "label": "And at a good deal more than that?",
+                        "next": "a_bad_quarter"
+                    },
+                    {
+                        "label": "Leave.",
+                        "next": "he_sees_you_out"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "worth_fate",
                         "equals": "found"
                     }
@@ -1411,6 +1457,40 @@
                     {
                         "label": "Leave.",
                         "end": true
+                    }
+                ]
+            }
+        ],
+        "a_bad_quarter": [
+            {
+                "text": "\"At a good deal more than that,\" Corse says, \"it stops being mine.\" He says it exactly as he says everything. \"Understand what I am: I am a man with a district and a figure I am answerable for. While the loss is a figure I can carry, the whole of it is between you and me and I will go on giving you the chair and the ham. When it is not, it goes downriver in the quarter's return, and men who have never walked this valley read it against eleven others and decide what is to be done about the valley that is losing money.\" He turns his glass. \"They are not cruel. They have never seen it. That is very much worse and I have watched it happen twice.\"",
+                "choices": [
+                    {
+                        "label": "Sit down.",
+                        "next": "the_chair"
+                    },
+                    {
+                        "label": "Leave.",
+                        "next": "he_sees_you_out"
+                    }
+                ]
+            }
+        ],
+        "he_has_not_decided": [
+            {
+                "text": "\"Whether to write back,\" Corse says. \"That is all it is. There is no other decision available to me and I would not want you to leave here thinking there was.\" He looks at the window and the crane beyond it. \"If I write back, I am a factor who argues with the house about four people who walked here, and I have precisely one of those letters in me and I have been saving it for eleven years. If I do not, it is done in the ordinary way by ordinary people and nobody in it will ever have met you.\"\n\nHe turns back.\n\n\"I am telling you because you have never once lied to me in this room, and I find I mind about that. Do not mistake it for an alliance. I would like you to leave the valley.\"",
+                "choices": [
+                    {
+                        "label": "Then write back.",
+                        "next": "he_sees_you_out"
+                    },
+                    {
+                        "label": "We're not leaving.",
+                        "next": "he_sees_you_out"
+                    },
+                    {
+                        "label": "Go.",
+                        "next": "he_sees_you_out"
                     }
                 ]
             }

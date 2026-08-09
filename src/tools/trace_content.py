@@ -55,6 +55,8 @@ import re
 import sys
 from collections import defaultdict
 
+import load_content
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CONTENT = os.path.join(ROOT, "content")
 
@@ -288,22 +290,14 @@ def engine_flags():
     flag into a dead-gate finding, which is precisely the noise this exists to
     stop, and it would look like an authoring fault rather than a tooling one.
 
-    DialogueLint::ENGINE_FLAGS is the same list for the same reason, and the
-    two are kept in step by both naming the constant instead of the string.
+    Read out of the PHP by load_content.read_engine_flags(), which needs the
+    same list to refuse content that WRITES one of these. Imported rather than
+    reimplemented: this used to be a second grep for the same fact, and two
+    greps are two things a rename can leave quietly agreeing with nothing.
+    DialogueLint::ENGINE_FLAGS is the third reader, kept in step by naming the
+    constants rather than copying the strings.
     """
-    out = []
-    for rel, const in (("app/lib/DelveEngine.php", "DEPTH_FLAG"),):
-        path = os.path.join(ROOT, rel)
-        with open(path, encoding="utf-8") as fh:
-            src = fh.read()
-        m = re.search(
-            r"const\s+" + re.escape(const) + r"\s*=\s*'([^']+)'", src)
-        if not m:
-            sys.exit(f"{rel} no longer declares {const} — "
-                     f"tools/trace_content.py reads it to know which flags "
-                     f"the engine sets")
-        out.append((m.group(1), f"{rel} {const}"))
-    return out
+    return list(load_content.read_engine_flags())
 
 
 def flag_ledger(tree, effects, conditions):
@@ -821,6 +815,13 @@ def main():
     # --- flags ------------------------------------------------------------
     if full or args.flags:
         rule("Flags: set by / read by")
+    # The engine's own counters are exempt from "read nowhere" and from nothing
+    # else. `concern_pressure` is written by PHP and read straight back by PHP,
+    # and content is told to gate on the named thresholds instead of the raw
+    # number — so nothing in the corpus reading it is the design working, not a
+    # flag somebody forgot to finish. The thresholds themselves are NOT exempt:
+    # a band of pressure nobody wrote a reaction for is exactly this finding.
+    private = {f for f, _ in load_content.read_private_engine_flags()}
     for flag in sorted(set(setters) | set(readers)):
         s, r = setters.get(flag, []), readers.get(flag, [])
         if full or args.flags:
@@ -836,7 +837,7 @@ def main():
         if not s:
             rep.find("flag", f"{flag!r} is read in {len(r)} place(s) and set nowhere — "
                              f"every variant guarding it is dead")
-        if not r:
+        if not r and flag not in private:
             rep.find("flag", f"{flag!r} is set in {len(s)} place(s) and read nowhere — "
                              f"nothing in the act changes because of it")
 

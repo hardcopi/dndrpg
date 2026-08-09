@@ -73,9 +73,17 @@ class DialogueLint
      * everything that happened to look like one. Add to this only when an
      * engine genuinely writes a flag content is meant to gate on — the cost of
      * a wrong entry is a dead scene nobody is told about.
+     *
+     * The Concern's pressure is the second, and it arrives as a whole band of
+     * flags rather than one: the counter, and a flag per named threshold. They
+     * are unpacked from ConcernPressure::THRESHOLDS rather than listed, so
+     * adding a threshold cannot leave this agreeing with one fewer flag than
+     * the engine writes.
      */
     private const ENGINE_FLAGS = [
         DelveEngine::DEPTH_FLAG,
+        ConcernPressure::FLAG,
+        ...ConcernPressure::THRESHOLDS,
     ];
 
     /** load_content.py:45 */

@@ -88,6 +88,71 @@
             {
                 "conditions": [
                     {
+                        "flag": "concern_answering"
+                    }
+                ],
+                "once": true,
+                "text": "Pyke has no chain. The coil-hook on the granary wall is empty and he is sitting on the steps beside it with his hands on his knees. \"They have taken the work off me,\" he says, flatly, as a fact about a Tuesday. \"No reason given and there will not be one. There is a young man come up from Greyhythe who has been given the ground, and my instrument with it.\" He looks at the hook. \"I am not blaming you. I have thought about it and I cannot get the blame to sit on you and stay there. But I have had to work at that, and I would rather you knew I had.\"",
+                "choices": [
+                    {
+                        "label": "I'll get it back for you.",
+                        "next": "no_such_thing"
+                    },
+                    {
+                        "label": "I'm sorry.",
+                        "next": "no_such_thing"
+                    },
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "concern_asking"
+                    }
+                ],
+                "once": true,
+                "text": "Pyke sees you coming and puts the plumb-bob away in his pocket, which is not a thing he does. \"You'll want to hear about the man,\" he says.",
+                "choices": [
+                    {
+                        "label": "What man?",
+                        "next": "they_are_asking"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "concern_noticed"
+                    }
+                ],
+                "once": true,
+                "text": "Pyke has the chain out along the lane and is not measuring anything with it. \"There's a line on my docket that isn't about my wages,\" he says. \"Different hand from the counting house. It's a question — whether the chainman at Rivermark has been keeping company.\" He straightens up, slowly, the way he does everything. \"Three years I've been paid on the day and nobody's wanted anything off me but chain. I've not answered it. There's a space and I've left the space.\"",
+                "choices": [
+                    {
+                        "label": "Answer it honestly.",
+                        "next": "no_such_thing"
+                    },
+                    {
+                        "label": "Leave the space.",
+                        "next": "no_such_thing"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "quest": "the_polite_man",
                         "status": "completed"
                     }

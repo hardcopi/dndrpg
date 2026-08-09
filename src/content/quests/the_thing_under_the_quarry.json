@@ -40,6 +40,9 @@
                     "set_flag": "saw_what_it_is"
                 },
                 {
+                    "pressure": 3
+                },
+                {
                     "xp": 200
                 },
                 {
@@ -61,6 +64,9 @@
                 {
                     "set_flag": "undercut_fate",
                     "value": "down"
+                },
+                {
+                    "pressure": 4
                 },
                 {
                     "approval": {

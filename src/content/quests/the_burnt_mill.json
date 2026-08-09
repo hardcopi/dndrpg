@@ -40,6 +40,9 @@
                     "set_flag": "mill_fire_was_set"
                 },
                 {
+                    "pressure": 1
+                },
+                {
                     "xp": 100
                 },
                 {

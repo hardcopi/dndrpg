@@ -38,7 +38,7 @@
             ],
             "exits": [
                 {"to": "towpath_end", "label": "Back to the towpath"},
-                {"to": "salt_house", "label": "Up the lane to the Salt House"},
+                {"to": "salt_house", "label": "Up the lane to the Salt House", "conditions": [{"not": {"flag": "concern_answering"}}]},
                 {"to": "corse_landing", "label": "Down the bank to the new landing"},
                 {"to": "packet_stair", "label": "Along to the packet stair"}
             ]
@@ -106,7 +106,7 @@
             ],
             "exits": [
                 {"to": "the_hythe", "label": "Back along the bank"},
-                {"to": "salt_house", "label": "Up the back lane to the Salt House"}
+                {"to": "salt_house", "label": "Up the back lane to the Salt House", "conditions": [{"not": {"flag": "concern_answering"}}]}
             ]
         },
         "factors_house": {

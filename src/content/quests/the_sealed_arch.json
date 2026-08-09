@@ -45,6 +45,9 @@
                     "set_flag": "arch_reopened"
                 },
                 {
+                    "pressure": 1
+                },
+                {
                     "approval": {
                         "ilse": 10,
                         "kessa": 8,

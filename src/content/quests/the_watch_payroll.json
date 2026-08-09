@@ -86,6 +86,9 @@
                     "set_flag": "watch_knows"
                 },
                 {
+                    "pressure": 1
+                },
+                {
                     "approval": {
                         "ilse": 6,
                         "kessa": 8,

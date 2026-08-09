@@ -110,6 +110,29 @@
                 ]
             },
             {
+                "conditions": [
+                    {
+                        "flag": "concern_answering"
+                    }
+                ],
+                "once": true,
+                "text": "Petch does not come down off the tally step. \"I'm not to log you in,\" she says, and looks unhappier about the grammar of it than about you. \"That's the instruction, word for word. Not 'keep them off' — I'd have argued with that, I've a quay to run and I argue about the quay. 'Not to log you in.'\" She holds the board against her chest. \"So you're not on the quay. You're standing on it and you're not on it, and if anything happens to you at this end of the river there's no paper anywhere that says you were ever down here.\"",
+                "choices": [
+                    {
+                        "label": "Then log me in.",
+                        "next": "not_on_the_quay"
+                    },
+                    {
+                        "label": "Who told you to?",
+                        "next": "not_on_the_quay"
+                    },
+                    {
+                        "label": "Understood.",
+                        "end": true
+                    }
+                ]
+            },
+            {
                 "text": "A young woman in a coat that is a size too good for her, going down forty yards of dressed stone quay at a fast walk with a tally board, calling numbers to a crane crew who call them back. She stops when she sees you, entirely pleased to have somebody to explain the quay to. \"Petch,\" she says. \"Landing clerk. You are not carrying anything, so you are either lost or you are here about the crane.\"",
                 "on_enter": [
                     {
@@ -289,6 +312,17 @@
                 "choices": [
                     {
                         "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "not_on_the_quay": [
+            {
+                "text": "\"It came down from the house on the same sheet as the crane oil,\" Petch says, \"which is the bit I keep chewing on. Same sheet. Half of it is oil.\" She gets down off the step at last, and does not open the book. \"I'm twenty-three and I run the best quay on this river and I've never in my life been given an instruction I couldn't ask about. I asked. The answer was that it isn't a question for the landing.\"",
+                "choices": [
+                    {
+                        "label": "Leave her to it.",
                         "end": true
                     }
                 ]

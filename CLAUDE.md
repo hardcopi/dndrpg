@@ -134,6 +134,20 @@ party rail, the people list, the dialogue theatre and the combat cards — but
 disk and referenced by nothing. The `*_sheet.png` walk sheets are still baked
 by `Paperdoll.php` and previewed in the creator, so they stay.
 
+They are no longer **required**, and that mattered more than it sounds.
+`load_content.py` went on treating a missing `<sprite_key>_sheet.png` as a hard
+error long after the last thing that drew one was deleted, so fifty walk sheets
+nobody would ever have seen — for a giant spider, a peat ooze, thirty-three
+named townspeople — stopped `sql/content.sql` being written at all, and could
+not be replaced either: `slice_assets.py` cuts them from a licensed pack tree
+that is not on this machine, and `Paperdoll::bake()` draws only humanoids and
+would overwrite the painted busts and faces while it did it. `check_sprite()`
+now asks for `_face` and `_bust`, which are what the client actually requests,
+and `ContentEditor::assertSpriteArt` matches it — the two have to, or the
+editor saves rows the next load refuses. The art behind `pose` went the same
+way; the column stays, because "this NPC is asleep" is true of the scene
+whether or not a picture of it is drawn.
+
 Combat survived that pivot untouched — it was rank-based (party/foe ×
 front/back) with no grid, which is most of why the pivot was cheap. **It has
 since grown a grid of its own, and the two are unrelated.** Fights are fought on

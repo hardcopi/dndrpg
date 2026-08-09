@@ -63,6 +63,63 @@
             {
                 "conditions": [
                     {
+                        "flag": "concern_answering"
+                    }
+                ],
+                "once": true,
+                "text": "Ashe puts the pen down before you have crossed the floor, which he has not once done. \"I am instructed not to draw for you,\" he says. \"Not refused — instructed. It is a different word and it is the correct one. I have written to ask on whose authority and I shall have an answer in about nine days that will be perfectly courteous and will name nobody.\" He squares the ledger. \"Your money is in this house. I am simply not the man who is allowed to hand it to you.\"",
+                "choices": [
+                    {
+                        "label": "Then who is?",
+                        "next": "he_will_not_say"
+                    },
+                    {
+                        "label": "Leave it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "concern_asking"
+                    }
+                ],
+                "once": true,
+                "text": "\"A man came to the second desk on the Tuesday and asked to see the standing orders,\" Ashe says, and goes on writing. \"He had every right to. He is a factor's clerk of a house we honour paper for, he asked properly, and I fetched them.\" He turns a page. \"He read four years of them, copied nothing, and asked me one question, which was whether you had ever been paid out of this house. I said no. That was true on the Tuesday. I have thought about it every day since and I find that I would like it to go on being true.\"",
+                "choices": [
+                    {
+                        "label": "Which house?",
+                        "next": "he_will_not_say"
+                    },
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "concern_noticed"
+                    }
+                ],
+                "once": true,
+                "text": "\"There is a note against you in the margin,\" Ashe says, without looking up and without stopping. \"Not a debt. Not a caution. A note. It came down with the quarter's corrections, in the same hand as the corrections, which is a hand I have read for four years and have never met.\" He finishes the line and blots it. \"It sets out what you have done, in the order you did it. It is accurate. That is the part I would think about.\"",
+                "choices": [
+                    {
+                        "label": "Accurate how?",
+                        "next": "he_will_not_say"
+                    },
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "copyist_found"
                     }
                 ],
@@ -520,6 +577,17 @@
                 "choices": [
                     {
                         "label": "Go back down.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "he_will_not_say": [
+            {
+                "text": "\"I do not know,\" Ashe says, \"and I should like to be exact about that, because a clerk who says he does not know is usually saying something else. I have the hand. I have four years of the hand. I do not have a name, and I have looked, in my own time, on a Sunday, more than once.\" He picks the pen back up. \"There is a very great deal of paper in this room and not one sheet of it says who is at the other end of the paper. I assumed for years that that was an accident.\"",
+                "choices": [
+                    {
+                        "label": "Leave him to it.",
                         "end": true
                     }
                 ]

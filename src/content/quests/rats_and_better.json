@@ -37,6 +37,9 @@
                     "value": "shut"
                 },
                 {
+                    "pressure": 2
+                },
+                {
                     "approval": {
                         "aldric": 6,
                         "sera": 4,
