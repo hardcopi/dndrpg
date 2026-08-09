@@ -1,0 +1,1181 @@
+{
+  "layer_order": [
+    "body",
+    "feet",
+    "pants",
+    "dress",
+    "gloves",
+    "top",
+    "facialhair",
+    "hair",
+    "head",
+    "accessory"
+  ],
+  "optional": [
+    "accessory",
+    "dress",
+    "facialhair",
+    "feet",
+    "gloves",
+    "hair",
+    "head",
+    "pants",
+    "top"
+  ],
+  "sexes": {
+    "female": {
+      "categories": {
+        "accessory": {
+          "label": "Accessory",
+          "optional": true,
+          "styles": {
+            "1": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": false,
+                  "key": "accessory_1"
+                }
+              ]
+            },
+            "2": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": true,
+                  "key": "accessory_2"
+                }
+              ]
+            },
+            "3": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": true,
+                  "key": "accessory_3"
+                }
+              ]
+            },
+            "4": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": false,
+                  "key": "accessory_4"
+                }
+              ]
+            },
+            "5": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": false,
+                  "key": "accessory_5"
+                }
+              ]
+            },
+            "6": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": false,
+                  "key": "accessory_6"
+                }
+              ]
+            },
+            "7": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": true,
+                  "key": "accessory_7"
+                }
+              ]
+            },
+            "8": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": true,
+                  "key": "accessory_8"
+                }
+              ]
+            }
+          }
+        },
+        "body": {
+          "label": "Build",
+          "optional": false,
+          "styles": {
+            "1": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": true,
+                  "key": "body_1"
+                }
+              ]
+            },
+            "2": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": true,
+                  "key": "body_2"
+                }
+              ]
+            },
+            "3": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": true,
+                  "key": "body_3"
+                }
+              ]
+            }
+          }
+        },
+        "dress": {
+          "label": "Dress",
+          "optional": true,
+          "styles": {
+            "1": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": true,
+                  "key": "dress_1"
+                }
+              ]
+            },
+            "2": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": true,
+                  "key": "dress_2"
+                }
+              ]
+            },
+            "3": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": true,
+                  "key": "dress_3"
+                }
+              ]
+            },
+            "4": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": true,
+                  "key": "dress_4"
+                }
+              ]
+            },
+            "5": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": true,
+                  "key": "dress_5"
+                }
+              ]
+            }
+          }
+        },
+        "feet": {
+          "label": "Boots",
+          "optional": true,
+          "styles": {
+            "1": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": false,
+                  "face": false,
+                  "key": "feet_1"
+                }
+              ]
+            },
+            "2": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": false,
+                  "face": false,
+                  "key": "feet_2"
+                }
+              ]
+            }
+          }
+        },
+        "gloves": {
+          "label": "Gloves",
+          "optional": true,
+          "styles": {
+            "1": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": false,
+                  "key": "gloves_1"
+                }
+              ]
+            }
+          }
+        },
+        "hair": {
+          "label": "Hair",
+          "optional": false,
+          "styles": {
+            "1": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_1"
+                },
+                {
+                  "alt": "1",
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_1_alt1"
+                },
+                {
+                  "alt": "2",
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_1_alt2"
+                },
+                {
+                  "alt": "3",
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_1_alt3"
+                },
+                {
+                  "alt": "4",
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_1_alt4"
+                }
+              ]
+            },
+            "2": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_2"
+                },
+                {
+                  "alt": "1",
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_2_alt1"
+                },
+                {
+                  "alt": "2",
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_2_alt2"
+                },
+                {
+                  "alt": "3",
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_2_alt3"
+                },
+                {
+                  "alt": "4",
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_2_alt4"
+                }
+              ]
+            },
+            "3": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_3"
+                },
+                {
+                  "alt": "1",
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_3_alt1"
+                },
+                {
+                  "alt": "2",
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_3_alt2"
+                },
+                {
+                  "alt": "3",
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_3_alt3"
+                },
+                {
+                  "alt": "4",
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_3_alt4"
+                }
+              ]
+            },
+            "4": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_4"
+                },
+                {
+                  "alt": "1",
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_4_alt1"
+                },
+                {
+                  "alt": "2",
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_4_alt2"
+                },
+                {
+                  "alt": "3",
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_4_alt3"
+                },
+                {
+                  "alt": "4",
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_4_alt4"
+                }
+              ]
+            },
+            "5": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_5"
+                },
+                {
+                  "alt": "1",
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_5_alt1"
+                },
+                {
+                  "alt": "2",
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_5_alt2"
+                },
+                {
+                  "alt": "3",
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_5_alt3"
+                },
+                {
+                  "alt": "4",
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_5_alt4"
+                }
+              ]
+            },
+            "6": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_6"
+                },
+                {
+                  "alt": "1",
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_6_alt1"
+                },
+                {
+                  "alt": "2",
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_6_alt2"
+                },
+                {
+                  "alt": "3",
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_6_alt3"
+                },
+                {
+                  "alt": "4",
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_6_alt4"
+                }
+              ]
+            },
+            "7": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_7"
+                },
+                {
+                  "alt": "1",
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_7_alt1"
+                },
+                {
+                  "alt": "2",
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_7_alt2"
+                },
+                {
+                  "alt": "3",
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_7_alt3"
+                },
+                {
+                  "alt": "4",
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_7_alt4"
+                }
+              ]
+            }
+          }
+        },
+        "pants": {
+          "label": "Trousers",
+          "optional": true,
+          "styles": {
+            "1": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": false,
+                  "key": "pants_1"
+                }
+              ]
+            },
+            "2": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": false,
+                  "key": "pants_2"
+                }
+              ]
+            },
+            "3": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": false,
+                  "key": "pants_3"
+                }
+              ]
+            }
+          }
+        },
+        "top": {
+          "label": "Top",
+          "optional": true,
+          "styles": {
+            "1": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": false,
+                  "key": "top_1"
+                }
+              ]
+            },
+            "2": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": true,
+                  "key": "top_2"
+                }
+              ]
+            },
+            "3": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": true,
+                  "key": "top_3"
+                }
+              ]
+            },
+            "4": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": true,
+                  "key": "top_4"
+                }
+              ]
+            },
+            "5": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": true,
+                  "key": "top_5"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "male": {
+      "categories": {
+        "accessory": {
+          "label": "Accessory",
+          "optional": true,
+          "styles": {
+            "1": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": false,
+                  "key": "accessory_1"
+                }
+              ]
+            },
+            "2": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": false,
+                  "key": "accessory_2"
+                }
+              ]
+            },
+            "3": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": false,
+                  "key": "accessory_3"
+                }
+              ]
+            },
+            "4": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": true,
+                  "key": "accessory_4"
+                }
+              ]
+            },
+            "5": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": false,
+                  "key": "accessory_5"
+                }
+              ]
+            }
+          }
+        },
+        "body": {
+          "label": "Build",
+          "optional": false,
+          "styles": {
+            "1": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": true,
+                  "key": "body_1"
+                }
+              ]
+            },
+            "2": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": true,
+                  "key": "body_2"
+                }
+              ]
+            },
+            "3": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": true,
+                  "key": "body_3"
+                }
+              ]
+            }
+          }
+        },
+        "facialhair": {
+          "label": "Beard",
+          "optional": true,
+          "styles": {
+            "1": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": true,
+                  "key": "facialhair_1"
+                },
+                {
+                  "alt": "1",
+                  "bust": true,
+                  "face": true,
+                  "key": "facialhair_1_alt1"
+                },
+                {
+                  "alt": "2",
+                  "bust": true,
+                  "face": true,
+                  "key": "facialhair_1_alt2"
+                },
+                {
+                  "alt": "3",
+                  "bust": true,
+                  "face": true,
+                  "key": "facialhair_1_alt3"
+                },
+                {
+                  "alt": "4",
+                  "bust": true,
+                  "face": true,
+                  "key": "facialhair_1_alt4"
+                }
+              ]
+            },
+            "2": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": true,
+                  "key": "facialhair_2"
+                },
+                {
+                  "alt": "1",
+                  "bust": true,
+                  "face": true,
+                  "key": "facialhair_2_alt1"
+                },
+                {
+                  "alt": "2",
+                  "bust": true,
+                  "face": true,
+                  "key": "facialhair_2_alt2"
+                },
+                {
+                  "alt": "3",
+                  "bust": true,
+                  "face": true,
+                  "key": "facialhair_2_alt3"
+                },
+                {
+                  "alt": "4",
+                  "bust": true,
+                  "face": true,
+                  "key": "facialhair_2_alt4"
+                }
+              ]
+            }
+          }
+        },
+        "feet": {
+          "label": "Boots",
+          "optional": true,
+          "styles": {
+            "1": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": false,
+                  "face": false,
+                  "key": "feet_1"
+                }
+              ]
+            },
+            "2": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": false,
+                  "face": false,
+                  "key": "feet_2"
+                }
+              ]
+            },
+            "3": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": false,
+                  "face": false,
+                  "key": "feet_3"
+                }
+              ]
+            }
+          }
+        },
+        "hair": {
+          "label": "Hair",
+          "optional": false,
+          "styles": {
+            "1": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_1"
+                },
+                {
+                  "alt": "1",
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_1_alt1"
+                },
+                {
+                  "alt": "2",
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_1_alt2"
+                },
+                {
+                  "alt": "3",
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_1_alt3"
+                },
+                {
+                  "alt": "4",
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_1_alt4"
+                }
+              ]
+            },
+            "2": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_2"
+                },
+                {
+                  "alt": "1",
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_2_alt1"
+                },
+                {
+                  "alt": "2",
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_2_alt2"
+                },
+                {
+                  "alt": "3",
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_2_alt3"
+                },
+                {
+                  "alt": "4",
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_2_alt4"
+                }
+              ]
+            },
+            "3": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_3"
+                },
+                {
+                  "alt": "1",
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_3_alt1"
+                },
+                {
+                  "alt": "2",
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_3_alt2"
+                },
+                {
+                  "alt": "3",
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_3_alt3"
+                },
+                {
+                  "alt": "4",
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_3_alt4"
+                }
+              ]
+            },
+            "4": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_4"
+                },
+                {
+                  "alt": "1",
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_4_alt1"
+                },
+                {
+                  "alt": "2",
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_4_alt2"
+                },
+                {
+                  "alt": "3",
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_4_alt3"
+                },
+                {
+                  "alt": "4",
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_4_alt4"
+                }
+              ]
+            },
+            "5": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_5"
+                },
+                {
+                  "alt": "1",
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_5_alt1"
+                },
+                {
+                  "alt": "2",
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_5_alt2"
+                },
+                {
+                  "alt": "3",
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_5_alt3"
+                },
+                {
+                  "alt": "4",
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_5_alt4"
+                }
+              ]
+            },
+            "6": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_6"
+                },
+                {
+                  "alt": "1",
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_6_alt1"
+                },
+                {
+                  "alt": "2",
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_6_alt2"
+                },
+                {
+                  "alt": "3",
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_6_alt3"
+                },
+                {
+                  "alt": "4",
+                  "bust": true,
+                  "face": true,
+                  "key": "hair_6_alt4"
+                }
+              ]
+            }
+          }
+        },
+        "head": {
+          "label": "Headwear",
+          "optional": true,
+          "styles": {
+            "1": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": true,
+                  "key": "head_1"
+                }
+              ]
+            },
+            "2": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": true,
+                  "key": "head_2"
+                }
+              ]
+            }
+          }
+        },
+        "pants": {
+          "label": "Trousers",
+          "optional": true,
+          "styles": {
+            "1": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": false,
+                  "key": "pants_1"
+                }
+              ]
+            },
+            "2": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": false,
+                  "key": "pants_2"
+                }
+              ]
+            },
+            "3": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": false,
+                  "key": "pants_3"
+                }
+              ]
+            },
+            "4": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": false,
+                  "key": "pants_4"
+                }
+              ]
+            },
+            "5": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": false,
+                  "key": "pants_5"
+                }
+              ]
+            }
+          }
+        },
+        "top": {
+          "label": "Tunic",
+          "optional": true,
+          "styles": {
+            "1": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": true,
+                  "key": "top_1"
+                }
+              ]
+            },
+            "2": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": true,
+                  "key": "top_2"
+                }
+              ]
+            },
+            "3": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": true,
+                  "key": "top_3"
+                }
+              ]
+            },
+            "4": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": true,
+                  "key": "top_4"
+                }
+              ]
+            },
+            "5": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": true,
+                  "key": "top_5"
+                }
+              ]
+            },
+            "6": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": true,
+                  "key": "top_6"
+                }
+              ]
+            },
+            "7": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": true,
+                  "key": "top_7"
+                }
+              ]
+            },
+            "8": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": true,
+                  "key": "top_8"
+                }
+              ]
+            },
+            "9": {
+              "colours": [
+                {
+                  "alt": null,
+                  "bust": true,
+                  "face": true,
+                  "key": "top_9"
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}
