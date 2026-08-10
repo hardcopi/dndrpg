@@ -66,7 +66,7 @@ h1, h2, h3 { color: var(--gold); font-weight: 600; letter-spacing: 0.03em; margi
 }
 
 .hero h1 {
-  font-size: 2.4rem;
+  font-size: var(--fs-3xl);
   text-shadow: 0 0 24px rgba(212, 168, 75, 0.35);
 }
 
@@ -78,10 +78,10 @@ h1, h2, h3 { color: var(--gold); font-weight: 600; letter-spacing: 0.03em; margi
   color: var(--gold);
   border: 1px solid var(--gold-dim);
   padding: 0.55rem 1.2rem;
-  border-radius: 4px;
+  border-radius: var(--r-md);
   cursor: pointer;
   font-family: inherit;
-  font-size: 0.95rem;
+  font-size: var(--fs-md);
   transition: background 0.15s, box-shadow 0.15s;
 }
 
@@ -103,10 +103,10 @@ h1, h2, h3 { color: var(--gold); font-weight: 600; letter-spacing: 0.03em; margi
   color: var(--danger);
 }
 
-.btn-small { padding: 0.3rem 0.7rem; font-size: 0.85rem; }
+.btn-small { padding: 0.3rem 0.7rem; font-size: var(--fs-sm); }
 /* The one button on a landing page, which has a screen to itself and should
    not be the size of a toolbar control. */
-.btn-lg { padding: 0.7rem 1.5rem; font-size: 1rem; letter-spacing: 0.02em; }
+.btn-lg { padding: 0.7rem 1.5rem; font-size: var(--fs-md); letter-spacing: 0.02em; }
 /* A glyph in front of a label. `.btn` is inline-block, so the two would sit on
    the text baseline with the icon hanging below it.
 
@@ -123,13 +123,13 @@ h1, h2, h3 { color: var(--gold); font-weight: 600; letter-spacing: 0.03em; margi
 .panel {
   background: var(--bg-panel);
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: var(--r-md);
   padding: 1rem 1.25rem;
   margin-bottom: 1rem;
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
 }
 
-.panel h2 { font-size: 1.1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.4rem; margin-bottom: 0.75rem; }
+.panel h2 { font-size: var(--fs-lg); border-bottom: 1px solid var(--border); padding-bottom: 0.4rem; margin-bottom: 0.75rem; }
 
 .grid-2 {
   display: grid;
@@ -152,7 +152,7 @@ h1, h2, h3 { color: var(--gold); font-weight: 600; letter-spacing: 0.03em; margi
  * here rather than worked around at each call site. */
 [hidden] { display: none !important; }
 
-label { display: block; color: var(--text-dim); font-size: 0.85rem; margin-bottom: 0.25rem; }
+label { display: block; color: var(--text-dim); font-size: var(--fs-sm); margin-bottom: 0.25rem; }
 /* textarea belongs here too. It was left out, so every multi-line field fell
  * back to the browser default — a white box, sized to its `cols` rather than
  * its container, sitting beside its own label instead of under it. Nothing in
@@ -164,7 +164,7 @@ input, select, textarea {
   border: 1px solid var(--border);
   color: var(--text);
   padding: 0.45rem 0.6rem;
-  border-radius: 4px;
+  border-radius: var(--r-md);
   font-family: inherit;
   margin-bottom: 0.75rem;
 }
@@ -196,12 +196,12 @@ input:focus, select:focus, textarea:focus { outline: 1px solid var(--gold-dim); 
 .ability-box {
   background: var(--bg);
   border: 1px solid var(--border);
-  border-radius: 4px;
+  border-radius: var(--r-md);
   padding: 0.5rem;
   text-align: center;
 }
-.ability-box strong { display: block; color: var(--gold); font-size: 1.2rem; }
-.ability-box span { font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase; }
+.ability-box strong { display: block; color: var(--gold); font-size: var(--fs-lg); }
+.ability-box span { font-size: var(--fs-2xs); color: var(--text-dim); text-transform: uppercase; }
 
 .tabs {
   display: flex;
@@ -214,7 +214,7 @@ input:focus, select:focus, textarea:focus { outline: 1px solid var(--gold-dim); 
   border: 1px solid var(--border);
   color: var(--text-dim);
   padding: 0.4rem 0.8rem;
-  border-radius: 4px;
+  border-radius: var(--r-md);
   cursor: pointer;
   font-family: inherit;
 }
@@ -303,7 +303,7 @@ body.game-page {
   overflow: hidden;
   background: var(--ornament-well);
   border: 1px solid var(--ornament);
-  border-radius: 5px;
+  border-radius: var(--r-md);
   padding: 0.4rem 0.45rem 0.45rem;
 }
 .rail-pane-head {
@@ -312,7 +312,7 @@ body.game-page {
   align-items: center;
   margin: 0 0 0.35rem;
   font-family: var(--font-ui, var(--font-display));
-  font-size: 0.66rem;
+  font-size: var(--fs-2xs);
   font-weight: 600;
   letter-spacing: 0.09em;
   text-transform: uppercase;
@@ -368,7 +368,7 @@ body.game-page {
   -webkit-backdrop-filter: blur(7px) saturate(1.1);
   backdrop-filter: blur(7px) saturate(1.1);
   border: 1px solid var(--ornament);
-  border-radius: 5px;
+  border-radius: var(--r-md);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.06),
     0 3px 14px rgba(0, 0, 0, 0.55);
@@ -383,7 +383,7 @@ body.game-page {
   position: absolute;
   inset: 2px;
   border: 1px solid rgba(160, 131, 71, 0.22);
-  border-radius: 3px;
+  border-radius: var(--r-sm);
   pointer-events: none;
 }
 .hud-quest, .hud-log, .hud-icons { position: relative; }
@@ -404,7 +404,7 @@ body.game-page {
   height: 2rem;
   padding: 0;
   border: 1px solid transparent;
-  border-radius: 4px;
+  border-radius: var(--r-md);
   background: none;
   color: var(--text-dim);
   cursor: pointer;
@@ -471,9 +471,9 @@ body.game-page {
   width: 32px;
   height: 32px;
 }
-.hud-people .person-name { font-size: 0.8rem; }
+.hud-people .person-name { font-size: var(--fs-xs); }
 .hud-people .person-role {
-  font-size: 0.7rem;
+  font-size: var(--fs-2xs);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -481,7 +481,7 @@ body.game-page {
 }
 .hud-people .people-crowd h3 {
   margin: 0.35rem 0 0.2rem;
-  font-size: 0.62rem;
+  font-size: var(--fs-2xs);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-dim);
@@ -489,7 +489,7 @@ body.game-page {
 }
 .hud-people .help-hint {
   margin: 0.25rem 0.1rem;
-  font-size: 0.78rem;
+  font-size: var(--fs-xs);
 }
 
 .hud-party .party-card {
@@ -506,7 +506,7 @@ body.game-page {
   text-align: left;
   background: var(--ornament-well);
   border: 1px solid var(--ornament);
-  border-radius: 5px;
+  border-radius: var(--r-md);
   cursor: pointer;
   transition: border-color 120ms ease, background 120ms ease;
 }
@@ -522,7 +522,7 @@ body.game-page {
   grid-area: face;
   width: 42px;
   height: 42px;
-  border-radius: 4px;
+  border-radius: var(--r-md);
   object-fit: cover;
   object-position: center top;
   border: 1px solid var(--ornament);
@@ -531,7 +531,7 @@ body.game-page {
 
 .hud-party .party-name {
   grid-area: name;
-  font-size: 0.82rem;
+  font-size: var(--fs-xs);
   font-weight: 600;
   color: var(--text);
   white-space: nowrap;
@@ -545,7 +545,7 @@ body.game-page {
   grid-area: hp;
   height: 7px;
   margin: 0.1rem 0 0.12rem;
-  border-radius: 4px;
+  border-radius: var(--r-md);
 }
 
 .hud-party .party-stats {
@@ -553,7 +553,7 @@ body.game-page {
   display: flex;
   gap: 0.4rem;
   font-family: var(--font-mono, ui-monospace, monospace);
-  font-size: 0.66rem;
+  font-size: var(--fs-2xs);
   color: var(--text-dim);
 }
 .hud-party .party-hp { color: var(--text); }
@@ -564,7 +564,7 @@ body.game-page {
 .hud-party .party-downed {
   grid-area: stat;
   justify-self: end;
-  font-size: 0.62rem;
+  font-size: var(--fs-2xs);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--danger);
@@ -602,7 +602,7 @@ body.game-page {
   width: 8px;
   height: 8px;
   padding: 0;
-  border-radius: 50%;
+  border-radius: var(--r-circle);
   background: currentColor;
   /* Hides the label text without hiding the element from a screen reader. */
   font-size: 0;
@@ -643,10 +643,10 @@ body.game-page {
   min-height: 0;
   padding: 0.4rem;
   border: 1px dashed var(--ornament);
-  border-radius: 5px;
+  border-radius: var(--r-md);
   color: var(--text-faint);
   text-decoration: none;
-  font-size: 0.78rem;
+  font-size: var(--fs-xs);
 }
 .hud-party .party-add-plus { font-size: 1rem; }
 .hud-party .party-add:hover { color: var(--gold); border-color: var(--gold); }
@@ -675,7 +675,7 @@ body.game-page {
 .track-others { margin-top: 0.7rem; border-top: 1px solid var(--ornament); padding-top: 0.5rem; }
 .track-others h3 {
   margin: 0 0 0.35rem;
-  font-size: 0.66rem;
+  font-size: var(--fs-2xs);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--text-dim);
@@ -691,15 +691,15 @@ body.game-page {
   padding: 0.25rem 0.4rem;
   background: none;
   border: 1px solid transparent;
-  border-radius: 4px;
+  border-radius: var(--r-md);
   text-align: left;
   color: inherit;
   font: inherit;
   cursor: pointer;
 }
 .track-pick:hover { border-color: var(--ornament); background: var(--ornament-well); }
-.track-pick-title { font-size: 0.78rem; color: var(--text); }
-.track-pick-stage { font-size: 0.68rem; color: var(--text-dim); }
+.track-pick-title { font-size: var(--fs-xs); color: var(--text); }
+.track-pick-stage { font-size: var(--fs-2xs); color: var(--text-dim); }
 
 /* --- Quest tracker ---------------------------------------------------- */
 .hud-quest {
@@ -708,14 +708,14 @@ body.game-page {
      be sized so it did not cover it. The rail sizes it now. */
   width: 100%;
   padding: 0.45rem 0.55rem;
-  font-size: 0.78rem;
+  font-size: var(--fs-xs);
 }
 /* The tracker emits its own <h2>; the small-caps treatment used to come from a
    rule scoped to the context rail, which no longer exists. */
 .hud-quest h2 {
   margin: 0 0 0.3rem;
   font-family: var(--font-ui);
-  font-size: 0.66rem;
+  font-size: var(--fs-2xs);
   font-weight: 600;
   letter-spacing: 0.09em;
   text-transform: uppercase;
@@ -743,7 +743,7 @@ body.game-page {
   max-height: 40vh;
   overflow-wrap: anywhere;
   overflow-y: auto;
-  font-size: 0.76rem;
+  font-size: var(--fs-xs);
   /* Fades into the panel at the top rather than ending on a hard edge, so a
      scrolled log reads as continuing rather than as clipped. */
   mask-image: linear-gradient(to bottom, transparent, #000 14px);
@@ -929,7 +929,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .loc-foot {
   background: var(--ornament-well);
   border: 1px solid var(--ornament);
-  border-radius: 5px;
+  border-radius: var(--r-md);
   padding: 0.6rem 0.7rem 0.7rem;
   display: flex;
   flex-direction: column;
@@ -950,7 +950,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   position: relative;
   min-height: 14rem;
   border: 1px solid var(--ornament);
-  border-radius: 5px;
+  border-radius: var(--r-md);
   background: var(--parchment-well, var(--bg-inset));
   overflow: hidden;
 }
@@ -971,7 +971,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   padding: 0.15rem;
   background: color-mix(in srgb, var(--bg-panel) 88%, transparent);
   border: 1px solid var(--border);
-  border-radius: 5px;
+  border-radius: var(--r-md);
   opacity: 0.5;
   transition: opacity 0.12s;
 }
@@ -987,13 +987,13 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   height: 1.5rem;
   font-family: var(--font-display, serif);
   font-style: italic;
-  font-size: 0.95rem;
+  font-size: var(--fs-md);
   font-weight: 600;
   line-height: 1;
   color: var(--gold-dim);
   background: color-mix(in srgb, var(--bg-panel) 88%, transparent);
   border: 1px solid var(--border);
-  border-radius: 50%;
+  border-radius: var(--r-circle);
   opacity: 0.5;
   transition: opacity 0.12s, color 0.12s;
 }
@@ -1028,7 +1028,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .loc-art {
   margin: 0;
   border: 1px solid var(--ornament);
-  border-radius: 5px;
+  border-radius: var(--r-md);
   overflow: hidden;
   background: var(--bg-inset);
   max-width: 62ch;
@@ -1045,14 +1045,14 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 }
 .loc-name {
   font-family: var(--font-display);
-  font-size: 1.7rem;
+  font-size: var(--fs-2xl);
   line-height: 1.15;
   margin: 0;
   color: var(--gold);
   letter-spacing: 0.01em;
 }
 .loc-region {
-  font-size: 0.76rem;
+  font-size: var(--fs-xs);
   letter-spacing: 0.09em;
   text-transform: uppercase;
   color: var(--text-dim);
@@ -1065,7 +1065,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
    work the tile art used to do. */
 .loc-prose p {
   margin: 0 0 0.7rem;
-  font-size: 1.02rem;
+  font-size: var(--fs-md);
   line-height: 1.62;
   color: var(--text);
 }
@@ -1085,7 +1085,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
    rather than true in general, and it must not be mistaken for a fact about
    the place. */
 .loc-ambience {
-  font-size: 0.9rem !important;
+  font-size: var(--fs-sm) !important;
   color: var(--text-dim);
   font-style: italic;
 }
@@ -1097,7 +1097,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   display: flex;
   align-items: center;
   font-family: var(--font-display);
-  font-size: 0.78rem;
+  font-size: var(--fs-xs);
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--text-dim);
@@ -1122,10 +1122,10 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
    list can be scrolled out of sight. */
 .loc-count {
   font-family: var(--font-mono, ui-monospace, monospace);
-  font-size: 0.7rem;
+  font-size: var(--fs-2xs);
   color: var(--text-dim);
   border: 1px solid var(--ornament);
-  border-radius: 999px;
+  border-radius: var(--r-pill);
   padding: 0.02rem 0.36rem;
   margin-left: 0.35rem;
 }
@@ -1138,7 +1138,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   padding: 0.28rem 0.45rem;
   background: var(--ornament-well);
   border: 1px solid transparent;
-  border-radius: 5px;
+  border-radius: var(--r-md);
   color: inherit;
   font: inherit;
   text-align: left;
@@ -1158,7 +1158,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   width: 36px;
   height: 36px;
   flex: 0 0 auto;
-  border-radius: 4px;
+  border-radius: var(--r-md);
   object-fit: cover;
   object-position: 50% 15%;
   background: var(--bg-inset);
@@ -1177,17 +1177,17 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   gap: 0.35rem;
 }
 .person-role {
-  font-size: 0.76rem;
+  font-size: var(--fs-xs);
   color: var(--text-dim);
   line-height: 1.35;
 }
 
 /* Tags earn their place by changing what the player would do next. */
 .person-tag {
-  font-size: 0.7rem;
+  font-size: var(--fs-2xs);
   line-height: 1;
   padding: 0.12rem 0.28rem;
-  border-radius: 3px;
+  border-radius: var(--r-sm);
   border: 1px solid currentColor;
 }
 .person-tag.is-shop { color: var(--gold); }
@@ -1217,8 +1217,14 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   width: auto;
   min-width: 34px;
   gap: 0.4rem;
-  padding: 0 0.55rem 0 0.45rem;
-  font-size: 0.8rem;
+  /* The right padding reserves the corner the key hint sits in.
+     It used to be 0.55rem, which was enough when the hint was 8.8px type in
+     the corner of a 34px square. Raising the type floor to 12px put a legible
+     letter into a space measured for an illegible one, and it landed on the
+     end of the label — "Take Rusted Key" ran under its own L. The floor is
+     right; the button simply has to make room for what it now draws. */
+  padding: 0 1.15rem 0 0.45rem;
+  font-size: var(--fs-xs);
   color: var(--text);
 }
 .loc-act-label { white-space: nowrap; }
@@ -1240,7 +1246,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   right: 3px;
   bottom: 1px;
   font-family: var(--font-mono, ui-monospace, monospace);
-  font-size: 0.55rem;
+  font-size: var(--fs-2xs);
   line-height: 1;
   color: var(--text-faint);
   background: none;
@@ -1264,7 +1270,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   gap: 0.1rem;
 }
 .pit-label { font-weight: 600; }
-.pit-sample { font-size: 0.78rem; color: var(--text-dim); }
+.pit-sample { font-size: var(--fs-xs); color: var(--text-dim); }
 .pit-bout:hover .pit-sample { color: var(--text); }
 
 /* Ways the chart could not draw, listed in the scene instead. Sits above the
@@ -1308,7 +1314,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 
 .modal-map .map-body {
   border: 1px solid var(--ornament);
-  border-radius: 5px;
+  border-radius: var(--r-md);
   overflow: hidden;
   background:
     radial-gradient(ellipse at 50% 40%, #efe0c0 0%, #e3d2ae 55%, #d6c298 100%);
@@ -1348,17 +1354,17 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .map-expand kbd {
   padding: 0.05rem 0.3rem;
   font-family: var(--font-mono, ui-monospace, monospace);
-  font-size: 0.7rem;
+  font-size: var(--fs-2xs);
   border: 1px solid currentColor;
-  border-radius: 3px;
+  border-radius: var(--r-sm);
   opacity: 0.75;
 }
 .map-toggle kbd {
   padding: 0.05rem 0.3rem;
   font-family: var(--font-mono, ui-monospace, monospace);
-  font-size: 0.7rem;
+  font-size: var(--fs-2xs);
   border: 1px solid currentColor;
-  border-radius: 3px;
+  border-radius: var(--r-sm);
   opacity: 0.7;
 }
 
@@ -1409,7 +1415,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 }
 .map-zoom .icon-btn {
   font-family: var(--font-mono, ui-monospace, monospace);
-  font-size: 0.95rem;
+  font-size: var(--fs-md);
   line-height: 1;
   min-width: 1.9rem;
 }
@@ -1424,9 +1430,9 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   margin: 0;
   font-family: var(--font-display);
   color: var(--gold);
-  font-size: 1.2rem;
+  font-size: var(--fs-lg);
 }
-.modal-map-hint { font-size: 0.78rem; color: var(--text-dim); }
+.modal-map-hint { font-size: var(--fs-xs); color: var(--text-dim); }
 
 /* Roads. Dashed and ink-brown; a road between two places you have both seen
    is drawn solid, so the chart fills in as the party learns the country. */
@@ -1712,14 +1718,14 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   padding: 0.4rem 0.55rem;
   background: var(--bg-panel);
   border: 1px solid var(--gold-dim);
-  border-radius: 5px;
+  border-radius: var(--r-md);
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
   pointer-events: none;
 }
 .wm-tip.is-below { transform: translate(-50%, 0); }
 .wm-tip[hidden] { display: none; }
-.wm-tip-name { color: var(--gold); font-size: 0.82rem; }
-.wm-tip-why { color: var(--text-dim); font-size: 0.72rem; }
+.wm-tip-name { color: var(--gold); font-size: var(--fs-xs); }
+.wm-tip-why { color: var(--text-dim); font-size: var(--fs-2xs); }
 .wm-quest.is-tracked {
   fill: var(--gold-bright, #f0d478);
   animation: wm-quest-pin 1.9s ease-in-out infinite;
@@ -1943,10 +1949,10 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .wiz-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
 .wiz-titles h1 {
   margin: 0;
-  font-size: 1.6rem;
+  font-size: var(--fs-2xl);
   color: var(--gold);
 }
-.wiz-titles p { margin: 0.1rem 0 0; color: var(--text-dim); font-size: 0.85rem; }
+.wiz-titles p { margin: 0.1rem 0 0; color: var(--text-dim); font-size: var(--fs-sm); }
 
 /* The step rail: progress and navigation in one. */
 .wiz-rail {
@@ -1964,11 +1970,11 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   gap: 0.45rem;
   padding: 0.4rem 0.55rem;
   font: inherit;
-  font-size: 0.78rem;
+  font-size: var(--fs-xs);
   color: var(--text-dim);
   background: var(--bg-inset);
   border: 1px solid var(--border);
-  border-radius: 5px;
+  border-radius: var(--r-md);
   cursor: pointer;
   text-align: left;
 }
@@ -1990,8 +1996,8 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   flex: 0 0 auto;
   width: 1.25rem; height: 1.25rem;
   display: grid; place-items: center;
-  border-radius: 50%;
-  font-size: 0.7rem;
+  border-radius: var(--r-circle);
+  font-size: var(--fs-2xs);
   background: rgba(0, 0, 0, 0.35);
 }
 .wiz-pip.on .wiz-pip-n, .wiz-pip.done .wiz-pip-n { background: var(--gold-dim); color: #1a1206; }
@@ -2003,7 +2009,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   overflow: auto;   /* the escape hatch for short windows, not the design */
   background: var(--bg-panel);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--r-lg);
   padding: 1.1rem 1.25rem;
 }
 /* Steps whose content is mostly form fields do not want to be 1100px wide —
@@ -2052,7 +2058,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   font-family: var(--font-display);
   color: var(--text-dim);
   line-height: 1.6;
-  font-size: 0.92rem;
+  font-size: var(--fs-sm);
   margin: 0.75rem 0 0;
   padding: 0.7rem 0.9rem;
   border-left: 2px solid var(--ornament);
@@ -2072,7 +2078,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   display: block;
   width: 100%;
   border: 1px solid var(--ornament);
-  border-radius: 5px;
+  border-radius: var(--r-md);
   background: var(--bg-inset);
 }
 .wiz-race-art[hidden] { display: none; }
@@ -2085,11 +2091,11 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .wiz-nav #wiz-back { margin-right: auto; }
 .wiz-reason {
   margin: 0;
-  font-size: 0.82rem;
+  font-size: var(--fs-xs);
   color: var(--gold-dim);
   text-align: right;
 }
-.field-note { margin: 0.2rem 0 0.6rem; font-size: 0.78rem; min-height: 1.1em; color: var(--text-dim); }
+.field-note { margin: 0.2rem 0 0.6rem; font-size: var(--fs-xs); min-height: 1.1em; color: var(--text-dim); }
 .field-note.is-ok { color: var(--green, #7fb069); }
 .field-note.is-bad, .help-hint.is-bad { color: var(--red, #c0563f); }
 
@@ -2132,7 +2138,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   overflow: hidden;
   background: var(--bg-inset);
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: var(--r-md);
   transform: scale(var(--pd-zoom));
   transform-origin: top center;
 }
@@ -2157,7 +2163,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   overflow: hidden;
   background: radial-gradient(ellipse at 50% 35%, var(--bg-raised), var(--bg-inset) 70%);
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: var(--r-md);
 }
 .pd-bust-layer {
   position: absolute;
@@ -2186,17 +2192,17 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   margin-bottom: 0.7rem;
 }
 .pd-group h3 {
-  font-size: 0.72rem; color: var(--text-dim); margin: 0 0 0.3rem;
+  font-size: var(--fs-2xs); color: var(--text-dim); margin: 0 0 0.3rem;
   font-family: var(--font-ui); font-weight: 500;
 }
-.pd-opt { color: var(--text-faint); font-size: 0.66rem; }
+.pd-opt { color: var(--text-faint); font-size: var(--fs-2xs); }
 .pd-swatches { display: flex; gap: 0.3rem; flex-wrap: wrap; }
 
 .pd-chip {
   min-width: 30px; height: 30px; padding: 0 0.4rem;
   background: var(--bg-panel-2); border: 1px solid var(--border);
-  color: var(--text-dim); border-radius: 4px; cursor: pointer;
-  font-family: var(--mono); font-size: 0.68rem;
+  color: var(--text-dim); border-radius: var(--r-md); cursor: pointer;
+  font-family: var(--mono); font-size: var(--fs-2xs);
 }
 .pd-chip:hover { border-color: var(--border-strong); color: var(--text); }
 .pd-chip.on { border-color: var(--gold); color: var(--gold); background: var(--gold-well); }
@@ -2208,7 +2214,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
    before that resolves, or if a canvas read is refused. */
 .pd-colour {
   width: 30px; height: 30px; padding: 0;
-  border-radius: 50%;
+  border-radius: var(--r-circle);
   background-repeat: no-repeat;
   background-size: 300%;
   background-position: -32px -18px;
@@ -2275,7 +2281,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   box-shadow: inset 0 0 0 1px rgba(20, 14, 4, 0.55);
 }
 .die20 .die-face { font-size: 2.1rem; }
-.die6 .die-face { font-size: 1.55rem; border-radius: 6px; }
+.die6 .die-face { font-size: 1.55rem; border-radius: var(--r-md); }
 /* The hit dice. Sized against the room each face shape actually leaves rather
    than against its box: a triangle wastes most of its corners, a pentagon
    almost none, so the d12's smaller box still carries the larger numeral for
@@ -2318,10 +2324,10 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   align-items: center;
   gap: 0.7rem;
 }
-.roll-tray-pick { margin: 0; padding: 0.25rem 0.4rem; font-size: 0.8rem; }
+.roll-tray-pick { margin: 0; padding: 0.25rem 0.4rem; font-size: var(--fs-xs); }
 .roll-tray-mod {
   font-family: var(--mono);
-  font-size: 0.9rem;
+  font-size: var(--fs-sm);
   color: var(--text-dim);
   text-align: center;
 }
@@ -2337,7 +2343,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   min-width: 2.4rem;
   text-align: center;
   font-family: var(--mono);
-  font-size: 1.15rem;
+  font-size: var(--fs-lg);
   color: var(--gold);
 }
 .roll-tray-total.is-pending { color: var(--text-faint); }
@@ -2347,7 +2353,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
    --------------------------------------------------------------------------- */
 .review-layout { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 1.5rem; }
 .review-portrait { text-align: center; }
-.review-portrait h2 { margin: 0.6rem 0 0; font-size: 1.15rem; color: var(--gold); }
+.review-portrait h2 { margin: 0.6rem 0 0; font-size: var(--fs-lg); color: var(--gold); }
 .review-facts { display: flex; flex-direction: column; gap: 0.9rem; }
 
 /* The racial bonus is called out rather than folded silently into the total,
@@ -2355,7 +2361,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
    changed without explanation reads as a bug. */
 .ability-bump {
   display: block;
-  font-size: 0.62rem;
+  font-size: var(--fs-2xs);
   font-style: normal;
   color: var(--gold-dim);
 }
@@ -2363,19 +2369,19 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .review-stat {
   background: var(--bg-inset);
   border: 1px solid var(--border);
-  border-radius: 5px;
+  border-radius: var(--r-md);
   padding: 0.45rem 0.5rem;
   text-align: center;
 }
-.review-stat span { display: block; font-size: 0.66rem; color: var(--text-dim); }
-.review-stat strong { font-size: 1.1rem; color: var(--gold); }
+.review-stat span { display: block; font-size: var(--fs-2xs); color: var(--text-dim); }
+.review-stat strong { font-size: var(--fs-lg); color: var(--gold); }
 
 .review-list {
   margin: 0;
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
   gap: 0.2rem 0.75rem;
-  font-size: 0.8rem;
+  font-size: var(--fs-xs);
 }
 .review-list dt { color: var(--text-dim); }
 .review-list dd { margin: 0; }
@@ -2413,7 +2419,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  font-size: 0.7rem;
+  font-size: var(--fs-2xs);
   color: var(--text-dim);
   cursor: pointer;
   user-select: none;
@@ -2439,7 +2445,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
    the loudest thing on screen. */
 .map-marker.quest {
   color: var(--gold-dim);
-  font-size: 1.1rem;
+  font-size: var(--fs-lg);
   text-shadow: 0 0 4px #000, 0 0 2px #000;
   pointer-events: none;
 }
@@ -2454,7 +2460,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 
 .track-where {
   margin-top: 0.35rem;
-  font-size: 0.7rem;
+  font-size: var(--fs-2xs);
   color: var(--text-dim);
   display: flex;
   flex-direction: column;
@@ -2466,7 +2472,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .track-here-what { color: var(--text); }
 .track-here-what strong { color: var(--gold); font-weight: 600; }
 .track-via { color: var(--gold); }
-.track-far { color: var(--text-faint); font-size: 0.66rem; }
+.track-far { color: var(--text-faint); font-size: var(--fs-2xs); }
 
 @media (prefers-reduced-motion: reduce) {
   .map-marker.quest.tracked { animation: none; }
@@ -2481,7 +2487,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   display: block;
   height: 6px;
   background: var(--bg-inset);
-  border-radius: 3px;
+  border-radius: var(--r-sm);
   overflow: hidden;
 }
 .xp-bar > span {
@@ -2502,10 +2508,10 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   gap: 0.6rem;
   margin: 0.4rem 0;
 }
-.bar-row .bar-label { font-size: 0.72rem; color: var(--text-dim); }
+.bar-row .bar-label { font-size: var(--fs-2xs); color: var(--text-dim); }
 .bar-row .bar-value {
   font-family: var(--mono);
-  font-size: 0.7rem;
+  font-size: var(--fs-2xs);
   color: var(--text-dim);
   white-space: nowrap;
 }
@@ -2522,7 +2528,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   position: relative;
   height: 8px;
   background: var(--bg-inset);
-  border-radius: 3px;
+  border-radius: var(--r-sm);
   overflow: hidden;
 }
 /* Zero. Deliberately the brightest thing on the track. */
@@ -2550,7 +2556,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   position: absolute;
   top: 0;
   bottom: 0;
-  border-radius: 2px;
+  border-radius: var(--r-sm);
   background: var(--gold-dim);
   transition: left 0.3s ease, width 0.3s ease;
 }
@@ -2576,7 +2582,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   display: block;
   height: 8px;
   background: var(--bg-inset);
-  border-radius: 4px;
+  border-radius: var(--r-md);
   overflow: hidden;
   margin-top: 0.35rem;
 }
@@ -2602,7 +2608,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .stat-row {
   display: flex;
   justify-content: space-between;
-  font-size: 0.85rem;
+  font-size: var(--fs-sm);
   padding: 0.15rem 0;
   border-bottom: 1px solid rgba(61,74,99,0.4);
 }
@@ -2631,7 +2637,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .modal {
   background: var(--bg-panel);
   border: 1px solid var(--gold-dim);
-  border-radius: 8px;
+  border-radius: var(--r-lg);
   max-width: 560px;
   width: 100%;
   max-height: 86vh;
@@ -2688,12 +2694,12 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   margin: 0;
   font-family: var(--font-display);
   color: var(--gold);
-  font-size: 1.15rem;
+  font-size: var(--fs-lg);
 }
 .modal-x {
   margin-left: auto;
   flex: 0 0 auto;
-  font-size: 1.15rem;
+  font-size: var(--fs-lg);
   line-height: 1;
 }
 
@@ -2719,7 +2725,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   width: 74px;
   padding: 0.3rem;
   border: 1px solid var(--border);
-  border-radius: 4px;
+  border-radius: var(--r-md);
   background: var(--bg-panel);
 }
 .foe-face {
@@ -2727,16 +2733,16 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   height: 52px;
   object-fit: cover;
   object-position: center 28%;
-  border-radius: 3px;
+  border-radius: var(--r-sm);
   background: linear-gradient(180deg, var(--bg-panel), var(--bg));
 }
 .foe-name {
-  font-size: 0.72rem;
+  font-size: var(--fs-2xs);
   line-height: 1.2;
   text-align: center;
   color: var(--text-dim);
 }
-.foe-count { font-size: 0.72rem; color: var(--gold); }
+.foe-count { font-size: var(--fs-2xs); color: var(--gold); }
 
 .modal-actions {
   display: flex;
@@ -2769,10 +2775,10 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   padding: 0.4rem 0.3rem 0.5rem;
   background: var(--bg);
   border: 1px solid var(--border);
-  border-radius: 5px;
+  border-radius: var(--r-md);
   color: var(--text-dim);
   font-family: inherit;
-  font-size: 0.7rem;
+  font-size: var(--fs-2xs);
   line-height: 1.2;
   text-align: center;
   cursor: pointer;
@@ -2783,7 +2789,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   height: 72px;
   object-fit: cover;
   object-position: center top;
-  border-radius: 4px;
+  border-radius: var(--r-md);
   background: linear-gradient(180deg, var(--bg-panel), var(--bg));
 }
 .avatar-option:hover:not(:disabled) {
@@ -2809,17 +2815,17 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   padding: 0.7rem 0.8rem;
   background: var(--bg);
   border: 1px solid var(--border);
-  border-radius: 5px;
+  border-radius: var(--r-md);
   color: var(--text-dim);
   font-family: inherit;
-  font-size: 0.8rem;
+  font-size: var(--fs-xs);
   line-height: 1.35;
   text-align: left;
   cursor: pointer;
   transition: border-color 0.15s, box-shadow 0.15s, background 0.15s, color 0.15s;
 }
-.gift-card strong { color: var(--text); font-size: 0.85rem; }
-.gift-card em.help-hint { font-style: italic; font-size: 0.72rem; }
+.gift-card strong { color: var(--text); font-size: var(--fs-sm); }
+.gift-card em.help-hint { font-style: italic; font-size: var(--fs-2xs); }
 .gift-card:hover {
   border-color: var(--gold-dim);
   background: var(--bg-panel);
@@ -2836,11 +2842,11 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
    bar. Small on purpose — it is a fact, not a fanfare. */
 .camp-heart {
   color: var(--gold-bright, #f0d478);
-  font-size: 0.8rem;
+  font-size: var(--fs-xs);
   line-height: 1;
 }
 .camp-heart.is-locked { color: var(--text-dim); }
-.sheet-romance { color: var(--gold); font-size: 0.78rem; margin: 0.1rem 0 0; }
+.sheet-romance { color: var(--gold); font-size: var(--fs-xs); margin: 0.1rem 0 0; }
 .sheet-romance.is-locked { color: var(--text-dim); }
 .camp-talk { align-self: flex-start; }
 
@@ -2849,10 +2855,10 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .spell-upcast-btn {
   background: var(--bg);
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--r-pill);
   color: var(--text-dim);
   font: inherit;
-  font-size: 0.72rem;
+  font-size: var(--fs-2xs);
   padding: 0.15rem 0.6rem;
   cursor: pointer;
 }
@@ -2866,17 +2872,17 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   background: var(--bg);
   color: var(--text);
   border: 1px solid var(--border);
-  border-radius: 4px;
+  border-radius: var(--r-md);
   padding: 0.25rem 0.4rem;
   font: inherit;
-  font-size: 0.78rem;
+  font-size: var(--fs-xs);
 }
 
 .sheet-bust {
   width: 150px;
   height: 190px;
   flex-shrink: 0;
-  border-radius: 6px;
+  border-radius: var(--r-md);
   object-fit: cover;
   object-position: center top;
   border: 1px solid var(--gold-dim);
@@ -2898,12 +2904,12 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 }
 .sheet-title {
   margin: 0 0 0.25rem;
-  font-size: 1.4rem;
+  font-size: var(--fs-xl);
 }
 .sheet-subtitle {
   margin: 0.15rem 0;
   color: var(--text-dim);
-  font-size: 0.9rem;
+  font-size: var(--fs-sm);
 }
 .sheet-combat-row {
   display: flex;
@@ -2914,21 +2920,21 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .sheet-stat-pill {
   background: var(--bg);
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: var(--r-md);
   padding: 0.35rem 0.65rem;
   min-width: 4.5rem;
   text-align: center;
 }
 .sheet-stat-pill span {
   display: block;
-  font-size: 0.7rem;
+  font-size: var(--fs-2xs);
   color: var(--text-dim);
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
 .sheet-stat-pill strong {
   color: var(--gold);
-  font-size: 1rem;
+  font-size: var(--fs-md);
 }
 .sheet-hp {
   margin-bottom: 0.85rem;
@@ -2938,7 +2944,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   margin-top: 1rem;
 }
 .sheet-section h3 {
-  font-size: 0.95rem;
+  font-size: var(--fs-md);
   color: var(--gold);
   border-bottom: 1px solid var(--border);
   padding-bottom: 0.3rem;
@@ -2957,7 +2963,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   display: block;
   font-style: normal;
   color: var(--accent);
-  font-size: 0.8rem;
+  font-size: var(--fs-xs);
 }
 .sheet-item-actions {
   display: flex;
@@ -2974,11 +2980,11 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .quest-item, .inv-item, .shop-item {
   background: var(--bg);
   border: 1px solid var(--border);
-  border-radius: 4px;
+  border-radius: var(--r-md);
   padding: 0.6rem;
   margin-bottom: 0.45rem;
 }
-.quest-item h3, .inv-item strong { color: var(--gold); font-size: 0.95rem; margin: 0 0 0.25rem; }
+.quest-item h3, .inv-item strong { color: var(--gold); font-size: var(--fs-md); margin: 0 0 0.25rem; }
 
 /* A quest, shut. The summary is the whole entry until you ask for more: which
    quest, how it stands, and — while it is the one you are on — what to do
@@ -3010,11 +3016,11 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   flex: 1 1 auto;
   min-width: 0;
 }
-.quest-title { color: var(--gold-dim); font-size: 0.95rem; font-weight: 600; }
+.quest-title { color: var(--gold-dim); font-size: var(--fs-md); font-weight: 600; }
 /* One line while shut, so every entry is the same height and the list can be
    scanned; the full objective is inside anyway. */
 .quest-gist {
-  font-size: 0.8rem;
+  font-size: var(--fs-xs);
   color: var(--text-dim);
   white-space: nowrap;
   overflow: hidden;
@@ -3032,8 +3038,8 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 @media (prefers-reduced-motion: reduce) {
   .quest-summary::before { transition: none; }
 }
-.quest-item p, .inv-item p { margin: 0; font-size: 0.85rem; color: var(--text-dim); }
-.inv-desc { font-size: 0.8rem; color: var(--text-dim); }
+.quest-item p, .inv-item p { margin: 0; font-size: var(--fs-sm); color: var(--text-dim); }
+.inv-desc { font-size: var(--fs-xs); color: var(--text-dim); }
 
 /* --- The bag ------------------------------------------------------------
 
@@ -3057,7 +3063,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   padding: 0.3rem 0.2rem;
   background: var(--bg-inset);
   border: 1px solid var(--border);
-  border-radius: 5px;
+  border-radius: var(--r-md);
   color: var(--text-dim);
   font: inherit;
   cursor: pointer;
@@ -3093,7 +3099,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 /* Two lines of name under the glyph. Enough to tell a Longsword from a Longbow
    without opening either; the full name is in the tooltip and the panel. */
 .bag-label {
-  font-size: 0.58rem;
+  font-size: var(--fs-2xs);
   line-height: 1.15;
   text-align: center;
   color: var(--text-dim);
@@ -3108,16 +3114,16 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   bottom: 2px;
   padding: 0 3px;
   font-family: var(--mono);
-  font-size: 0.55rem;
+  font-size: var(--fs-2xs);
   color: var(--text);
   background: rgba(0, 0, 0, 0.72);
-  border-radius: 3px;
+  border-radius: var(--r-sm);
 }
 .bag-worn {
   position: absolute;
   top: 2px;
   right: 3px;
-  font-size: 0.5rem;
+  font-size: var(--fs-2xs);
   line-height: 1;
   color: var(--success);
 }
@@ -3130,16 +3136,16 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   min-height: 7.5rem;
   background: var(--bg-panel);
   border: 1px solid var(--border);
-  border-radius: 5px;
+  border-radius: var(--r-md);
 }
 .bag-detail-head { display: flex; align-items: center; gap: 0.4rem; }
-.bag-detail-name { color: var(--gold); font-size: 0.95rem; }
+.bag-detail-name { color: var(--gold); font-size: var(--fs-md); }
 .bag-detail-name.is-uncommon { color: var(--success); }
 .bag-detail-name.is-rare { color: var(--accent); }
 .bag-detail-facts {
   margin: 0.15rem 0 0.35rem;
   font-family: var(--mono);
-  font-size: 0.7rem;
+  font-size: var(--fs-2xs);
   color: var(--text-faint);
 }
 .bag-give {
@@ -3152,7 +3158,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   border-top: 1px solid var(--border);
 }
 .bag-give-label {
-  font-size: 0.72rem;
+  font-size: var(--fs-2xs);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-faint);
@@ -3162,18 +3168,18 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
-  font-size: 0.72rem;
+  font-size: var(--fs-2xs);
   color: var(--text-dim);
 }
 .bag-qty-pick input {
   width: 3.4rem;
   padding: 0.15rem 0.3rem;
   font-family: var(--mono);
-  font-size: 0.75rem;
+  font-size: var(--fs-2xs);
   color: var(--text);
   background: var(--bg-inset);
   border: 1px solid var(--border);
-  border-radius: 3px;
+  border-radius: var(--r-sm);
 }
 .quest-objective { margin-top: 0.35rem; color: var(--text); }
 .quest-meta { margin-top: 0.35rem; }
@@ -3195,13 +3201,13 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   flex-shrink: 0;
   margin-bottom: 0;
   padding: 0.4rem 0.6rem;
-  font-size: 0.85rem;
+  font-size: var(--fs-sm);
 }
 
 .footer-legal {
   text-align: center;
   color: var(--text-dim);
-  font-size: 0.8rem;
+  font-size: var(--fs-xs);
   padding: 1.5rem;
   border-top: 1px solid var(--border);
 }
@@ -3211,7 +3217,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   margin: 0 auto;
   line-height: 1.55;
   color: var(--text-dim);
-  font-size: 0.9rem;
+  font-size: var(--fs-sm);
   white-space: pre-wrap;
 }
 
@@ -3220,9 +3226,9 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   background: var(--bg-panel-2);
   border: 1px solid var(--border);
   color: var(--text-dim);
-  font-size: 0.75rem;
+  font-size: var(--fs-2xs);
   padding: 0.1rem 0.4rem;
-  border-radius: 3px;
+  border-radius: var(--r-sm);
 }
 .badge.ok { color: var(--success); border-color: var(--success); }
 .badge.done { color: var(--gold); }
@@ -3234,12 +3240,12 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   border: 1px solid var(--danger);
   color: var(--danger);
   padding: 0.6rem 0.8rem;
-  border-radius: 4px;
+  border-radius: var(--r-md);
   margin-bottom: 0.75rem;
 }
 
 .help-hint {
-  font-size: 0.8rem;
+  font-size: var(--fs-xs);
   color: var(--text-dim);
   margin-top: 0.5rem;
 }
@@ -3253,11 +3259,11 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .pill {
   display: inline-block;
   padding: 0.08rem 0.38rem;
-  border-radius: 999px;
+  border-radius: var(--r-pill);
   border: 1px solid var(--border);
   background: var(--bg-panel-2);
   color: var(--text-dim);
-  font-size: 0.68rem;
+  font-size: var(--fs-2xs);
   letter-spacing: 0.04em;
   white-space: nowrap;
 }
@@ -3277,12 +3283,12 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   display: inline-block;
   min-width: 1.35em;
   padding: 0 0.15rem;
-  border-radius: 3px;
+  border-radius: var(--r-sm);
   border: 1px solid var(--danger);
   background: var(--danger-well);
   color: var(--danger);
   font-family: var(--mono);
-  font-size: 0.6rem;
+  font-size: var(--fs-2xs);
   text-align: center;
   line-height: 1.5;
 }
@@ -3306,10 +3312,10 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   padding: 0.4rem 0.35rem 0.45rem;
   background: var(--bg);
   border: 1px solid var(--border);
-  border-radius: 5px;
+  border-radius: var(--r-md);
   color: var(--text);
   font-family: inherit;
-  font-size: 0.72rem;
+  font-size: var(--fs-2xs);
   text-align: center;
   cursor: pointer;
   transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
@@ -3331,7 +3337,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   height: 74px;
   object-fit: cover;
   object-position: center top;
-  border-radius: 4px;
+  border-radius: var(--r-md);
   border: 1px solid var(--border);
   background: linear-gradient(180deg, var(--bg-panel), var(--bg));
 }
@@ -3340,7 +3346,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
      a person" rather than as an accent competing with the check pills. */
   color: var(--text);
   font-weight: 600;
-  font-size: 0.74rem;
+  font-size: var(--fs-2xs);
   line-height: 1.25;
   /* Two lines rather than an ellipsis: "Elara Stormwind" is an ordinary name
      and truncating it to "Elara Stormwind…" in a 118px column made the rail
@@ -3359,12 +3365,12 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   justify-content: space-between;
   color: var(--text-dim);
   font-family: var(--mono);
-  font-size: 0.65rem;
+  font-size: var(--fs-2xs);
 }
 .party-approval {
-  border-radius: 3px;
+  border-radius: var(--r-sm);
   padding: 0.05rem 0.2rem;
-  font-size: 0.62rem;
+  font-size: var(--fs-2xs);
   letter-spacing: 0.05em;
   text-transform: uppercase;
 }
@@ -3379,7 +3385,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
    without it a player has no way to tell whether the last hour helped. */
 .approval-drift {
   font-family: var(--mono);
-  font-size: 0.62rem;
+  font-size: var(--fs-2xs);
   line-height: 1;
   letter-spacing: 0;
 }
@@ -3402,7 +3408,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
    the thing you click is the person. */
 .camp-scene { display: flex; flex-direction: column; gap: 0.9rem; }
 .camp-head { margin: 0; }
-.camp-intro { margin: 0; color: var(--text-dim); font-size: 0.9rem; font-style: italic; }
+.camp-intro { margin: 0; color: var(--text-dim); font-size: var(--fs-sm); font-style: italic; }
 
 .camp-seats {
   display: grid;
@@ -3421,7 +3427,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 }
 .camp-march {
   align-self: flex-start;
-  font-size: 0.72rem;
+  font-size: var(--fs-2xs);
   padding: 0.2rem 0.55rem;
 }
 .camp-march:disabled { opacity: 0.45; cursor: not-allowed; }
@@ -3435,7 +3441,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   text-align: left;
   background: var(--ornament-well);
   border: 1px solid var(--ornament);
-  border-radius: 6px;
+  border-radius: var(--r-md);
   color: inherit;
   font: inherit;
   cursor: pointer;
@@ -3473,7 +3479,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   display: block;
   margin-top: 0.25rem;
   color: var(--warn);
-  font-size: 0.72rem;
+  font-size: var(--fs-2xs);
   line-height: 1.3;
 }
 .camp-warning {
@@ -3482,9 +3488,9 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   border-left: 3px solid var(--warn);
   background: var(--danger-well);
   color: var(--warn);
-  font-size: 0.85rem;
+  font-size: var(--fs-sm);
 }
-.camp-waiting { font-size: 0.68rem; color: var(--text-faint); font-style: italic; }
+.camp-waiting { font-size: var(--fs-2xs); color: var(--text-faint); font-style: italic; }
 
 /* A row at the fire who is not a companion with controls: a party member, or
    somebody who has gone. Had no layout rule at all — the face and the name
@@ -3502,14 +3508,14 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   width: 44px;
   height: 44px;
   flex: 0 0 auto;
-  border-radius: 0.3rem;
+  border-radius: var(--r-md);
   object-fit: cover;
   object-position: center top;
   border: 1px solid var(--ornament);
 }
 .camp-ident { min-width: 0; }
 .camp-ident strong { color: var(--text); font-weight: 600; }
-.camp-ident .sub { font-size: 0.74rem; color: var(--text-dim); line-height: 1.4; }
+.camp-ident .sub { font-size: var(--fs-2xs); color: var(--text-dim); line-height: 1.4; }
 .camp-row.is-gone { opacity: 0.6; }
 
 /* The player's own characters, listed under the companions rather than among
@@ -3548,7 +3554,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 /* A warm floor under the text so a bright fire cannot wash the line out. */
 .dlg-panel.is-camp .dlg-script {
   background: linear-gradient(90deg, rgba(22, 17, 13, 0.82), rgba(22, 17, 13, 0.6));
-  border-radius: 6px;
+  border-radius: var(--r-md);
   padding: 0.6rem 0.75rem;
 }
 
@@ -3573,7 +3579,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   color: var(--danger);
   font-weight: 700;
   letter-spacing: 0.1em;
-  font-size: 0.62rem;
+  font-size: var(--fs-2xs);
 }
 
 .party-add {
@@ -3597,15 +3603,15 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
    panel treatment are up with the rest of the HUD; what is left here is what
    they are made of rather than where they sit. */
 
-.track-title { color: var(--gold); font-size: 0.82rem; line-height: 1.25; }
-.track-stage { color: var(--accent); font-size: 0.7rem; margin-top: 0.1rem; }
+.track-title { color: var(--gold); font-size: var(--fs-xs); line-height: 1.25; }
+.track-stage { color: var(--accent); font-size: var(--fs-2xs); margin-top: 0.1rem; }
 .track-objective {
   margin: 0.3rem 0 0;
-  font-size: 0.75rem;
+  font-size: var(--fs-2xs);
   line-height: 1.35;
   color: var(--text);
 }
-.track-where { margin-top: 0.25rem; font-size: 0.68rem; color: var(--text-dim); }
+.track-where { margin-top: 0.25rem; font-size: var(--fs-2xs); color: var(--text-dim); }
 
 .log-filters { display: flex; gap: 0.2rem; }
 .chip {
@@ -3613,10 +3619,10 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   padding: 0.1rem 0.25rem;
   background: var(--bg-panel-2);
   border: 1px solid var(--border);
-  border-radius: 3px;
+  border-radius: var(--r-sm);
   color: var(--text-dim);
   font-family: inherit;
-  font-size: 0.65rem;
+  font-size: var(--fs-2xs);
   cursor: pointer;
 }
 .chip.on { color: var(--gold); border-color: var(--gold-dim); background: var(--bg-panel); }
@@ -3628,8 +3634,8 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   background: var(--bg-inset);
   border: 1px solid var(--border);
   border-left-width: 3px;
-  border-radius: 3px;
-  font-size: 0.68rem;
+  border-radius: var(--r-sm);
+  font-size: var(--fs-2xs);
 }
 .roll-row.outcome-critical { border-left-color: var(--gold); }
 .roll-row.outcome-success  { border-left-color: var(--success); }
@@ -3637,7 +3643,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .roll-row.outcome-fumble   { border-left-color: var(--danger-dim); }
 .roll-head { display: flex; justify-content: space-between; gap: 0.3rem; }
 .roll-head strong { color: var(--gold); }
-.roll-verdict { color: var(--text-dim); text-transform: uppercase; font-size: 0.6rem; }
+.roll-verdict { color: var(--text-dim); text-transform: uppercase; font-size: var(--fs-2xs); }
 .roll-sum {
   display: flex;
   align-items: baseline;
@@ -3648,10 +3654,10 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 }
 .roll-nat {
   color: var(--text);
-  font-size: 0.95rem;
+  font-size: var(--fs-md);
   font-weight: 700;
 }
-.roll-who { color: var(--text-dim); font-size: 0.62rem; margin-top: 0.1rem; }
+.roll-who { color: var(--text-dim); font-size: var(--fs-2xs); margin-top: 0.1rem; }
 
 /* ====================================================================
    The action bar
@@ -3716,7 +3722,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   overflow-y: auto;
   background: linear-gradient(180deg, rgba(30, 23, 18, 0.98), rgba(22, 17, 13, 0.99));
   border: 1px solid var(--gold-dim);
-  border-radius: 8px;
+  border-radius: var(--r-lg);
   box-shadow: 0 24px 64px rgba(0, 0, 0, 0.7);
 }
 
@@ -3745,15 +3751,15 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   height: 210px;
   object-fit: cover;
   object-position: center top;
-  border-radius: 6px;
+  border-radius: var(--r-md);
   border: 1px solid var(--gold-dim);
   background: linear-gradient(180deg, var(--bg-panel), var(--bg));
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.55);
 }
 /* Seeded NPCs with no painted bust fall back to their map sprite. */
 .dlg-bust.is-sprite { object-fit: contain; object-position: center bottom; }
-.dlg-name { margin-top: 0.4rem; color: var(--gold); font-size: 1rem; font-family: var(--font-display); }
-.dlg-role { color: var(--text-dim); font-size: 0.75rem; }
+.dlg-name { margin-top: 0.4rem; color: var(--gold); font-size: var(--fs-md); font-family: var(--font-display); }
+.dlg-role { color: var(--text-dim); font-size: var(--fs-2xs); }
 
 .dlg-script { min-width: 0; display: flex; flex-direction: column; }
 
@@ -3761,7 +3767,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
    which would make the whole conversation twitch. */
 .dlg-line {
   margin: 0;
-  font-size: 1.05rem;
+  font-size: var(--fs-md);
   line-height: 1.6;
   min-height: 4.8em;
 }
@@ -3790,10 +3796,10 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 }
 .dlg-next-hint {
   font-family: var(--font-mono, ui-monospace, monospace);
-  font-size: 0.68rem;
+  font-size: var(--fs-2xs);
   color: var(--text-dim);
   border: 1px solid var(--border);
-  border-radius: 3px;
+  border-radius: var(--r-sm);
   padding: 0.02rem 0.3rem;
 }
 
@@ -3805,7 +3811,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   border-left: 2px solid var(--accent);
   color: var(--text-dim);
   font-style: italic;
-  font-size: 0.88rem;
+  font-size: var(--fs-sm);
   line-height: 1.4;
 }
 .dlg-aside-who { color: var(--accent); font-style: normal; margin-right: 0.35rem; }
@@ -3826,7 +3832,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   gap: 0.45rem;
   text-align: left;
   padding: 0.4rem 0.6rem;
-  font-size: 0.92rem;
+  font-size: var(--fs-sm);
 }
 .dlg-key {
   flex: 0 0 auto;
@@ -3834,12 +3840,12 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   height: 1.3rem;
   line-height: 1.3rem;
   text-align: center;
-  border-radius: 3px;
+  border-radius: var(--r-sm);
   background: var(--bg-panel-2);
   border: 1px solid var(--border);
   color: var(--text-dim);
   font-family: var(--mono);
-  font-size: 0.7rem;
+  font-size: var(--fs-2xs);
 }
 .dlg-label { flex: 1 1 auto; min-width: 0; }
 
@@ -3899,7 +3905,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   padding: 1.1rem 1.25rem 1.25rem;
   background: var(--bg-panel);
   border: 1px solid var(--gold-dim);
-  border-radius: 10px;
+  border-radius: var(--r-lg);
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
 }
 
@@ -3916,35 +3922,35 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   height: 116px;
   object-fit: cover;
   object-position: center top;
-  border-radius: 5px;
+  border-radius: var(--r-md);
   border: 1px solid var(--border);
   background: linear-gradient(180deg, var(--bg-panel), var(--bg));
 }
-.check-who { color: var(--text-dim); font-size: 0.8rem; }
-.check-title h2 { margin: 0.1rem 0 0.25rem; font-size: 1.3rem; }
+.check-who { color: var(--text-dim); font-size: var(--fs-xs); }
+.check-title h2 { margin: 0.1rem 0 0.25rem; font-size: var(--fs-xl); }
 .check-mode {
   display: inline-block;
   padding: 0.05rem 0.4rem;
-  border-radius: 999px;
+  border-radius: var(--r-pill);
   border: 1px solid var(--border);
   color: var(--text-dim);
-  font-size: 0.7rem;
+  font-size: var(--fs-2xs);
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
 .check-mode.mode-advantage { border-color: var(--success); color: var(--success); }
 .check-mode.mode-disadvantage { border-color: var(--danger); color: var(--danger); }
-.check-reasons { margin: 0.25rem 0 0; color: var(--text-dim); font-size: 0.75rem; }
+.check-reasons { margin: 0.25rem 0 0; color: var(--text-dim); font-size: var(--fs-2xs); }
 
 .check-dc {
   text-align: center;
   padding: 0.35rem 0.7rem;
   border: 1px solid var(--gold-dim);
-  border-radius: 6px;
+  border-radius: var(--r-md);
   background: var(--bg-inset);
 }
-.check-dc span { display: block; font-size: 0.65rem; color: var(--text-dim); letter-spacing: 0.1em; }
-.check-dc strong { font-size: 1.8rem; color: var(--gold); line-height: 1.1; }
+.check-dc span { display: block; font-size: var(--fs-2xs); color: var(--text-dim); letter-spacing: 0.1em; }
+.check-dc strong { font-size: var(--fs-2xl); color: var(--gold); line-height: 1.1; }
 
 .check-body {
   display: grid;
@@ -3953,7 +3959,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   margin-top: 0.85rem;
 }
 .check-body h3, .check-boosts h3 {
-  font-size: 0.75rem;
+  font-size: var(--fs-2xs);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-dim);
@@ -3966,7 +3972,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   justify-content: space-between;
   gap: 0.5rem;
   padding: 0.12rem 0;
-  font-size: 0.85rem;
+  font-size: var(--fs-sm);
   color: var(--text-dim);
 }
 .mod-part em { font-style: normal; font-family: var(--mono); color: var(--text); }
@@ -3979,10 +3985,10 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .mod-total em { color: var(--gold); font-weight: 700; }
 .mod-dc em { color: var(--gold-dim); }
 
-.check-chance-value { font-size: 2rem; color: var(--gold); line-height: 1.1; }
+.check-chance-value { font-size: var(--fs-3xl); color: var(--gold); line-height: 1.1; }
 .check-chance-bar {
   height: 8px;
-  border-radius: 4px;
+  border-radius: var(--r-md);
   background: var(--bg-inset);
   overflow: hidden;
 }
@@ -4003,10 +4009,10 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   padding: 0.4rem 0.55rem;
   background: var(--bg);
   border: 1px solid var(--border);
-  border-radius: 5px;
+  border-radius: var(--r-md);
   color: var(--text-dim);
   font-family: inherit;
-  font-size: 0.82rem;
+  font-size: var(--fs-xs);
   text-align: left;
   cursor: pointer;
 }
@@ -4018,9 +4024,9 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   box-shadow: inset 0 0 0 1px rgba(212, 180, 90, 0.3);
 }
 .boost-name { color: var(--gold); }
-.boost-detail { font-size: 0.75rem; }
+.boost-detail { font-size: var(--fs-2xs); }
 .boost-adds { font-family: var(--mono); color: var(--accent); }
-.boost-cost { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.05em; }
+.boost-cost { font-size: var(--fs-2xs); text-transform: uppercase; letter-spacing: 0.05em; }
 .cost-free { color: var(--success); }
 .cost-use { color: var(--gold-dim); }
 .cost-concentration { color: var(--warn); }
@@ -4060,7 +4066,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   line-height: 1;
 }
 .d20-tag {
-  font-size: 0.6rem;
+  font-size: var(--fs-2xs);
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--text-dim);
@@ -4091,7 +4097,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 }
 .throw-verdict {
   margin-top: 0.9rem;
-  font-size: 1.5rem;
+  font-size: var(--fs-xl);
   font-weight: 700;
   letter-spacing: 0.04em;
   text-shadow: 0 2px 8px #000;
@@ -4100,13 +4106,13 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .verdict-failure { color: var(--text-dim); }
 .verdict-critical {
   color: var(--gold);
-  font-size: 2.1rem;
+  font-size: var(--fs-3xl);
   text-shadow: 0 0 20px rgba(232, 197, 71, 0.6), 0 2px 8px #000;
   animation: verdict-pop 0.5s ease-out;
 }
 .verdict-fumble {
   color: var(--danger);
-  font-size: 2.1rem;
+  font-size: var(--fs-3xl);
   text-shadow: 0 0 18px rgba(176, 80, 64, 0.6), 0 2px 8px #000;
   animation: verdict-shudder 0.5s ease-out;
 }
@@ -4232,7 +4238,7 @@ body.in-combat .cbt-top {
   height: 2.4rem;
   object-fit: cover;
   object-position: center 22%;
-  border-radius: 50%;
+  border-radius: var(--r-circle);
   border: 2px solid var(--border);
   background: linear-gradient(180deg, var(--bg-panel), var(--bg));
 }
@@ -4250,13 +4256,13 @@ body.in-combat .cbt-top {
   min-width: 15px;
   padding: 0 3px;
   font-family: var(--mono);
-  font-size: 0.52rem;
+  font-size: var(--fs-2xs);
   line-height: 1.35;
   text-align: center;
   color: var(--text);
   background: rgba(0, 0, 0, 0.82);
   border: 1px solid var(--border);
-  border-radius: 7px;
+  border-radius: var(--r-md);
 }
 /* `.ribbon-name` lived here — a name under each token, truncated from its front
    so the trailing number that tells six bandits apart survived the ellipsis.
@@ -4268,7 +4274,7 @@ body.in-combat .cbt-top {
   gap: 0.75rem;
   align-items: baseline;
   flex-shrink: 0;
-  font-size: 0.85rem;
+  font-size: var(--fs-sm);
   color: var(--text-dim);
 }
 .cbt-head strong { color: var(--gold); }
@@ -4312,7 +4318,7 @@ body.in-combat .cbt-top {
   padding: 0.5rem;
   background: var(--bg-panel);
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: var(--r-md);
   /* Each side scrolls inside itself. The fighting pit will happily send six
      foes, which grew the box past the height the row gave it and painted
      straight over the action bar underneath. `min-height: 0` is the half that
@@ -4325,7 +4331,7 @@ body.in-combat .cbt-top {
 .cbt-roster h3 {
   margin: 0;
   align-self: stretch;
-  font-size: 0.72rem;
+  font-size: var(--fs-2xs);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--text-dim);
@@ -4354,7 +4360,7 @@ body.in-combat .cbt-top {
   padding: 0.4rem;
   background: var(--bg-inset);
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: var(--r-md);
 }
 /* An SVG at `height: 100%` with no definite height on its parent falls back to
    its own aspect ratio and overflows — the same trap the world map's modal
@@ -4391,7 +4397,7 @@ body.bm-pan-ready .battlemap { cursor: grab; }
   padding: 0.15rem;
   background: color-mix(in srgb, var(--bg-panel) 88%, transparent);
   border: 1px solid var(--border);
-  border-radius: 5px;
+  border-radius: var(--r-md);
   /* Quiet until wanted: it is furniture beside a fight, and three lit keys in
      the corner of the board compete with the fight for attention. */
   opacity: 0.45;
@@ -4575,17 +4581,17 @@ body.bm-pan-ready .battlemap { cursor: grab; }
   align-items: center;
   gap: 0.5rem;
   padding: 0.35rem 0.6rem;
-  font-size: 0.75rem;
+  font-size: var(--fs-2xs);
   background: var(--bg-panel);
   border: 1px solid var(--warn);
-  border-radius: 5px;
+  border-radius: var(--r-md);
   z-index: 3;
 }
 
 /* The distance line on a card. Green is a clean shot, red is one you can take
    and will regret — the same reading as the inspector's, kept in step because
    they are looking at the same `ui.targets` entry. */
-.cbt-dist { font-family: var(--mono); font-size: 0.58rem; color: var(--text-dim); }
+.cbt-dist { font-family: var(--mono); font-size: var(--fs-2xs); color: var(--text-dim); }
 .cbt-dist.is-disadvantage { color: var(--danger); }
 .cbt-dist.is-advantage { color: var(--gold); }
 .econ.is-on { color: var(--success); border-color: var(--success); }
@@ -4640,10 +4646,10 @@ body.bm-pan-ready .battlemap { cursor: grab; }
   padding: 0.35rem;
   background: var(--bg);
   border: 1px solid var(--border);
-  border-radius: 5px;
+  border-radius: var(--r-md);
   color: var(--text);
   font-family: inherit;
-  font-size: 0.65rem;
+  font-size: var(--fs-2xs);
   text-align: left;
   cursor: pointer;
   overflow: visible;
@@ -4664,7 +4670,7 @@ body.bm-pan-ready .battlemap { cursor: grab; }
   inset: 0;
   border: 2px solid rgba(232, 197, 71, 0.55);
   /* One inside the card's own 5px, so the corners nest instead of cutting. */
-  border-radius: 4px;
+  border-radius: var(--r-md);
   pointer-events: none;
 }
 .cbt-card.is-downed { opacity: 0.5; filter: grayscale(0.8); }
@@ -4711,7 +4717,7 @@ body.bm-pan-ready .battlemap { cursor: grab; }
   width: 11px;
   height: 11px;
   border: 2px solid var(--gold);
-  border-radius: 50%;
+  border-radius: var(--r-circle);
   /* The centre pip, so the shape reads as a target and not as a bullet. */
   background: radial-gradient(circle at 50% 50%,
               var(--gold) 0 1.6px, transparent 1.7px);
@@ -4739,7 +4745,7 @@ body.bm-pan-ready .battlemap { cursor: grab; }
   flex: 0 0 auto;
   object-fit: cover;
   object-position: center 22%;
-  border-radius: 50%;
+  border-radius: var(--r-circle);
   border: 2px solid var(--ornament);
   background: linear-gradient(180deg, var(--bg-panel), var(--bg));
   /* The turn ring on `.is-actor` is drawn round the card; this keeps the token
@@ -4782,7 +4788,7 @@ body.bm-pan-ready .battlemap { cursor: grab; }
 }
 .slot-grp > b {
   font-family: var(--mono);
-  font-size: 0.55rem;
+  font-size: var(--fs-2xs);
   font-weight: 600;
   color: var(--text-faint);
 }
@@ -4792,7 +4798,7 @@ body.bm-pan-ready .battlemap { cursor: grab; }
 .slot-pip {
   width: 6px;
   height: 6px;
-  border-radius: 50%;
+  border-radius: var(--r-circle);
   border: 1px solid var(--accent-dim);
   background: transparent;
 }
@@ -4817,7 +4823,7 @@ body.bm-pan-ready .battlemap { cursor: grab; }
   max-width: 100%;
 }
 .cbt-card .hp-bar { height: 5px; margin-top: 0.1rem; }
-.cbt-nums { font-family: var(--mono); color: var(--text-dim); font-size: 0.6rem; }
+.cbt-nums { font-family: var(--mono); color: var(--text-dim); font-size: var(--fs-2xs); }
 .cbt-conds { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.1rem; }
 
 /* Death saves. Three held and three against, on the one card the player needs
@@ -4827,7 +4833,7 @@ body.bm-pan-ready .battlemap { cursor: grab; }
   align-items: center;
   justify-content: center;
   gap: 0.12rem;
-  font-size: 0.58rem;
+  font-size: var(--fs-2xs);
   color: var(--danger);
   letter-spacing: 0.04em;
 }
@@ -4836,7 +4842,7 @@ body.bm-pan-ready .battlemap { cursor: grab; }
 .death-dot {
   width: 6px;
   height: 6px;
-  border-radius: 50%;
+  border-radius: var(--r-circle);
   border: 1px solid var(--border);
   background: transparent;
 }
@@ -4867,7 +4873,7 @@ body.in-combat .cbt-inspector {
   padding: 0.5rem;
   background: var(--ornament-well);
   border: 1px solid var(--ornament);
-  border-radius: 5px;
+  border-radius: var(--r-md);
   text-align: center;
   overflow-y: auto;
   scrollbar-width: thin;
@@ -4886,27 +4892,27 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
 .cbt-inspect-shot {
   align-self: stretch;
   padding: 0.25rem 0.35rem;
-  border-radius: 4px;
-  font-size: 0.68rem;
+  border-radius: var(--r-md);
+  font-size: var(--fs-2xs);
   background: rgba(0, 0, 0, 0.25);
   border-left: 2px solid var(--success);
 }
 .cbt-inspect-shot.is-disadvantage { border-left-color: var(--danger); }
 .cbt-inspect-shot.is-advantage { border-left-color: var(--gold); }
-.cbt-inspect-shot em { display: block; color: var(--text-dim); font-size: 0.62rem; }
+.cbt-inspect-shot em { display: block; color: var(--text-dim); font-size: var(--fs-2xs); }
 .cbt-battler {
   max-width: 100%;
   max-height: 220px;
   object-fit: contain;
   filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.6));
 }
-.cbt-inspect-name { color: var(--gold); font-size: 0.95rem; }
-.cbt-inspect-line { color: var(--text-dim); font-size: 0.7rem; }
+.cbt-inspect-name { color: var(--gold); font-size: var(--fs-md); }
+.cbt-inspect-line { color: var(--text-dim); font-size: var(--fs-2xs); }
 .cbt-inspect-stats {
   display: flex;
   gap: 0.5rem;
   font-family: var(--mono);
-  font-size: 0.75rem;
+  font-size: var(--fs-2xs);
   color: var(--text);
 }
 /* The inspector's effect list: one row per thing riding on somebody, each
@@ -4919,7 +4925,7 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
   margin-top: 0.4rem;
 }
 .cbt-inspect-conds.help-hint { text-align: center; }
-.cbt-inspect-conds .pip { font-size: 0.6rem; min-width: 0; padding: 0 0.3rem; }
+.cbt-inspect-conds .pip { font-size: var(--fs-2xs); min-width: 0; padding: 0 0.3rem; }
 
 .cbt-effect {
   border-left: 2px solid var(--text-faint);
@@ -4936,17 +4942,17 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
   gap: 0.35rem;
   flex-wrap: wrap;
 }
-.cbt-effect-head strong { font-size: 0.74rem; }
+.cbt-effect-head strong { font-size: var(--fs-2xs); }
 .cbt-effect-rounds {
   margin-left: auto;
   font-family: var(--mono);
-  font-size: 0.62rem;
+  font-size: var(--fs-2xs);
   color: var(--text-dim);
   white-space: nowrap;
 }
 .cbt-effect p {
   margin: 0.15rem 0 0;
-  font-size: 0.68rem;
+  font-size: var(--fs-2xs);
   line-height: 1.35;
   color: var(--text-dim);
 }
@@ -4972,13 +4978,13 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
   padding: 0.3rem 0.5rem;
   background: var(--bg-panel);
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: var(--r-md);
 }
 .cbt-economy {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  font-size: 0.68rem;
+  font-size: var(--fs-2xs);
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
@@ -4991,17 +4997,17 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
 .econ {
   padding: 0.05rem 0.4rem;
   border: 1px solid var(--success);
-  border-radius: 999px;
+  border-radius: var(--r-pill);
   color: var(--success);
 }
 .econ.spent { border-color: var(--border); color: var(--text-dim); text-decoration: line-through; }
 .econ-slots { display: flex; gap: 0.5rem; margin-left: auto; }
 .slot-group { display: inline-flex; align-items: center; gap: 0.12rem; color: var(--text-dim); }
-.slot-group b { margin-right: 0.15rem; color: var(--gold-dim); font-size: 0.62rem; }
+.slot-group b { margin-right: 0.15rem; color: var(--gold-dim); font-size: var(--fs-2xs); }
 .slot-dot {
   width: 8px;
   height: 8px;
-  border-radius: 50%;
+  border-radius: var(--r-circle);
   border: 1px solid var(--gold-dim);
   background: var(--gold);
 }
@@ -5018,7 +5024,7 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
 }
 .sheet-slots .slot-group { gap: 0.2rem; }
 .sheet-slots .slot-dot { width: 10px; height: 10px; }
-.slot-count { margin-left: 0.3rem; font-size: 0.75rem; color: var(--text-dim); }
+.slot-count { margin-left: 0.3rem; font-size: var(--fs-2xs); color: var(--text-dim); }
 .waiting { color: var(--text-dim); text-transform: none; letter-spacing: 0; }
 
 /* --- The action bar ----------------------------------------------------
@@ -5054,7 +5060,7 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
      inset shadows rather than a border image so it costs no asset. */
   background: linear-gradient(180deg, #23201a, #14120f);
   border: 1px solid var(--border);
-  border-radius: 5px;
+  border-radius: var(--r-md);
   box-shadow:
     inset 0 1px 0 rgba(245, 236, 214, 0.09),
     inset 0 -2px 4px rgba(0, 0, 0, 0.55),
@@ -5109,7 +5115,7 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
   right: 2px;
   bottom: 1px;
   font-family: var(--mono);
-  font-size: 0.6rem;
+  font-size: var(--fs-2xs);
   color: var(--text);
   text-shadow: 0 1px 2px #000;
 }
@@ -5136,13 +5142,13 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
   padding: 0.4rem 0.55rem;
   background: var(--bg-panel);
   border: 1px solid var(--gold-dim);
-  border-radius: 5px;
+  border-radius: var(--r-md);
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
   pointer-events: none;
 }
 .act-tip.is-on { display: flex; }
-.act-tip-name { color: var(--gold); font-size: 0.82rem; }
-.act-tip-why { color: var(--text-dim); font-size: 0.72rem; }
+.act-tip-name { color: var(--gold); font-size: var(--fs-xs); }
+.act-tip-why { color: var(--text-dim); font-size: var(--fs-2xs); }
 /* Why you cannot, in the colour the rest of the board uses for cannot. */
 .act-tip-why.is-blocked { color: var(--danger); }
 
@@ -5151,7 +5157,7 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
   align-items: center;
   gap: 0.75rem;
 }
-.cbt-outcome strong { font-size: 1.3rem; }
+.cbt-outcome strong { font-size: var(--fs-xl); }
 .cbt-outcome.outcome-victory strong { color: var(--gold); }
 .cbt-outcome.outcome-defeat strong { color: var(--danger); }
 .cbt-outcome .btn { margin-left: auto; }
@@ -5165,20 +5171,20 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
   padding: 0.45rem 0.6rem;
   background: var(--bg);
   border: 1px solid var(--border);
-  border-radius: 5px;
+  border-radius: var(--r-md);
   color: var(--text);
   font-family: inherit;
-  font-size: 0.88rem;
+  font-size: var(--fs-sm);
   text-align: left;
   cursor: pointer;
 }
 .spell-row:hover:not(:disabled) { border-color: var(--gold-dim); }
 .spell-row:disabled { opacity: 0.42; cursor: not-allowed; }
 .spell-name { flex: 1 1 auto; color: var(--gold); }
-.spell-cost { font-family: var(--mono); font-size: 0.72rem; color: var(--accent); }
+.spell-cost { font-family: var(--mono); font-size: var(--fs-2xs); color: var(--accent); }
 .spell-cost.gone { color: var(--danger); }
-.spell-dice { font-family: var(--mono); font-size: 0.72rem; color: var(--text-dim); }
-.spell-note { font-size: 0.68rem; color: var(--text-dim); }
+.spell-dice { font-family: var(--mono); font-size: var(--fs-2xs); color: var(--text-dim); }
+.spell-note { font-size: var(--fs-2xs); color: var(--text-dim); }
 
 /* --- combat feedback --- */
 
@@ -5189,22 +5195,22 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
   transform: translateX(-50%);
   z-index: 5;
   font-weight: 700;
-  font-size: 0.9rem;
+  font-size: var(--fs-sm);
   white-space: nowrap;
   pointer-events: none;
   text-shadow: 0 1px 3px #000, 0 0 6px #000;
   animation: float-up 1.1s ease-out forwards;
 }
 .cbt-float.float-dmg { color: var(--danger); }
-.cbt-float.float-crit { color: var(--gold-bright); font-size: 1.25rem; }
+.cbt-float.float-crit { color: var(--gold-bright); font-size: var(--fs-xl); }
 .cbt-float.float-heal { color: var(--success); }
-.cbt-float.float-miss { color: var(--text-dim); font-size: 0.78rem; }
-.cbt-float.float-cast { color: var(--accent); font-size: 0.78rem; }
-.cbt-float.float-cond { color: var(--warn); font-size: 0.72rem; }
+.cbt-float.float-miss { color: var(--text-dim); font-size: var(--fs-xs); }
+.cbt-float.float-cast { color: var(--accent); font-size: var(--fs-xs); }
+.cbt-float.float-cond { color: var(--warn); font-size: var(--fs-2xs); }
 /* Green, matching .pip-boon: a boon and a condition read as opposites here. */
-.cbt-float.float-boon { color: var(--success); font-size: 0.72rem; }
-.cbt-float.float-save-ok { color: var(--success); font-size: 0.72rem; }
-.cbt-float.float-save-bad { color: var(--danger); font-size: 0.72rem; }
+.cbt-float.float-boon { color: var(--success); font-size: var(--fs-2xs); }
+.cbt-float.float-save-ok { color: var(--success); font-size: var(--fs-2xs); }
+.cbt-float.float-save-bad { color: var(--danger); font-size: var(--fs-2xs); }
 
 .cbt-card.hit-flash { animation: cbt-hit 0.45s ease; }
 .cbt-card.crit-flash { animation: cbt-crit 0.55s ease; }
@@ -5297,31 +5303,31 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
 }
 .levelup-eyebrow {
   margin: 0;
-  font-size: 0.7rem;
+  font-size: var(--fs-2xs);
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--gold);
 }
-.levelup-title { margin: 0.25rem 0 0; font-size: 1.5rem; }
-.levelup-sub { margin: 0.15rem 0 0; color: var(--text-dim); font-size: 0.9rem; }
+.levelup-title { margin: 0.25rem 0 0; font-size: var(--fs-xl); }
+.levelup-sub { margin: 0.15rem 0 0; color: var(--text-dim); font-size: var(--fs-sm); }
 
-.levelup-step h3 { margin: 0 0 0.4rem; font-size: 1.1rem; }
+.levelup-step h3 { margin: 0 0 0.4rem; font-size: var(--fs-lg); }
 .levelup-step h4 {
   margin: 1rem 0 0.4rem;
-  font-size: 0.75rem;
+  font-size: var(--fs-2xs);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--text-faint);
 }
-.levelup-note { margin: 0 0 1rem; color: var(--text-dim); font-size: 0.88rem; }
-.levelup-error { margin: 0.6rem 0 0; color: var(--danger); font-size: 0.85rem; min-height: 1.2em; }
+.levelup-note { margin: 0 0 1rem; color: var(--text-dim); font-size: var(--fs-sm); }
+.levelup-error { margin: 0.6rem 0 0; color: var(--danger); font-size: var(--fs-sm); min-height: 1.2em; }
 .levelup-actions { margin-top: 1.2rem; display: flex; justify-content: flex-end; gap: 0.6rem; }
 
 /* --- the hit die ------------------------------------------------------- */
 .levelup-dice { display: grid; place-items: center; min-height: 150px; }
-.levelup-result { text-align: center; font-size: 1.15rem; min-height: 1.6em; margin: 0.6rem 0 0; }
+.levelup-result { text-align: center; font-size: var(--fs-lg); min-height: 1.6em; margin: 0.6rem 0 0; }
 .levelup-result strong { color: var(--gold-bright); }
-.levelup-grim { color: var(--danger); font-size: 0.85rem; }
+.levelup-grim { color: var(--danger); font-size: var(--fs-sm); }
 
 /* The die drawn when the 3D roller has no geometry for this many sides. Hit
    dice are d6, d8, d10 and d12 and only the d6 is a solid here, so this is what
@@ -5332,7 +5338,7 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
   height: 104px;
   display: grid;
   place-items: center;
-  border-radius: 14px;
+  border-radius: var(--r-lg);
   background: linear-gradient(160deg, var(--bg-raised), var(--bg-panel-2));
   border: 1px solid var(--border-strong);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 6px 18px rgba(0, 0, 0, 0.45);
@@ -5367,18 +5373,18 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
   padding: 0.5rem 0.65rem;
   background: var(--bg-inset);
   border: 1px solid var(--border-soft);
-  border-radius: 7px;
+  border-radius: var(--r-md);
 }
 .levelup-ability.is-raised { border-color: var(--gold); cursor: pointer; }
 .levelup-ability.is-capped { opacity: 0.5; }
-.levelup-ability-name { font-size: 0.85rem; color: var(--text-dim); }
-.levelup-ability-score { font-size: 1.1rem; font-variant-numeric: tabular-nums; }
+.levelup-ability-name { font-size: var(--fs-sm); color: var(--text-dim); }
+.levelup-ability-score { font-size: var(--fs-lg); font-variant-numeric: tabular-nums; }
 .levelup-ability.is-raised .levelup-ability-score { color: var(--gold-bright); }
-.levelup-ability-spent { color: var(--gold); font-size: 0.8rem; min-width: 1.6em; }
+.levelup-ability-spent { color: var(--gold); font-size: var(--fs-xs); min-width: 1.6em; }
 .levelup-remaining {
   margin: 0.8rem 0 0;
   text-align: right;
-  font-size: 0.82rem;
+  font-size: var(--fs-xs);
   color: var(--text-faint);
 }
 
@@ -5392,7 +5398,7 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
   margin-bottom: 0.4rem;
   background: var(--bg-inset);
   border: 1px solid var(--border-soft);
-  border-radius: 7px;
+  border-radius: var(--r-md);
   cursor: pointer;
 }
 .levelup-feat:has(input:checked),
@@ -5404,17 +5410,17 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
 .levelup-feat-name,
 .levelup-spell-name { font-weight: 600; }
 .levelup-feat-text,
-.levelup-spell-text { grid-column: 2; font-size: 0.83rem; color: var(--text-dim); }
-.levelup-spell-school { grid-column: 2; font-size: 0.72rem; color: var(--text-faint); }
-.levelup-feat-warn { grid-column: 2; font-size: 0.78rem; color: var(--danger); }
-.levelup-feat-note { grid-column: 2; font-size: 0.78rem; color: var(--text-faint); font-style: italic; }
+.levelup-spell-text { grid-column: 2; font-size: var(--fs-xs); color: var(--text-dim); }
+.levelup-spell-school { grid-column: 2; font-size: var(--fs-2xs); color: var(--text-faint); }
+.levelup-feat-warn { grid-column: 2; font-size: var(--fs-xs); color: var(--danger); }
+.levelup-feat-note { grid-column: 2; font-size: var(--fs-xs); color: var(--text-faint); font-style: italic; }
 /* A feat nothing in the game reads yet says so louder than one that only
    half applies — it is the difference between "this does less than the book
    says" and "this does nothing at all". */
 .levelup-feat-note.is-inert { color: var(--danger); font-style: normal; }
 .levelup-feat-req {
   grid-column: 2;
-  font-size: 0.72rem;
+  font-size: var(--fs-2xs);
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--text-faint);
@@ -5429,7 +5435,7 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
    this the filter narrows nothing and looks broken. */
 .levelup-feat[hidden],
 .levelup-feat-group[hidden] { display: none; }
-.levelup-empty { color: var(--text-faint); font-size: 0.85rem; padding: 0.6rem 0.2rem; }
+.levelup-empty { color: var(--text-faint); font-size: var(--fs-sm); padding: 0.6rem 0.2rem; }
 
 /* The filter over a thirty-entry list. Deliberately plain: it is a way to
    find a name you already have in mind, not a second way to browse. */
@@ -5439,10 +5445,10 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
   padding: 0.45rem 0.6rem;
   background: var(--bg-inset);
   border: 1px solid var(--border-soft);
-  border-radius: 7px;
+  border-radius: var(--r-md);
   color: var(--text);
   font: inherit;
-  font-size: 0.85rem;
+  font-size: var(--fs-sm);
 }
 .levelup-filter:focus { outline: none; border-color: var(--gold); }
 
@@ -5479,36 +5485,36 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
   width: min(26rem, 100%);
   background: var(--bg-panel);
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: var(--r-lg);
   padding: 1.75rem;
   box-shadow: 0 18px 50px rgba(0, 0, 0, 0.5);
 }
 .auth-head { text-align: center; margin-bottom: 1.4rem; }
 .auth-eyebrow {
   margin: 0;
-  font-size: 0.68rem;
+  font-size: var(--fs-2xs);
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--gold);
 }
-.auth-card h1 { margin: 0.3rem 0 0; font-size: 1.5rem; }
-.auth-sub { margin: 0.3rem 0 0; color: var(--text-dim); font-size: 0.88rem; }
+.auth-card h1 { margin: 0.3rem 0 0; font-size: var(--fs-xl); }
+.auth-sub { margin: 0.3rem 0 0; color: var(--text-dim); font-size: var(--fs-sm); }
 
 .auth-field { margin-bottom: 0.9rem; }
 .auth-field > span { display: block; margin-bottom: 0.3rem; }
 .auth-field em { color: var(--text-faint); font-style: normal; }
 
-.auth-error { min-height: 1.3em; margin: 0.2rem 0 0.6rem; color: var(--danger); font-size: 0.85rem; }
+.auth-error { min-height: 1.3em; margin: 0.2rem 0 0.6rem; color: var(--danger); font-size: var(--fs-sm); }
 .auth-submit { width: 100%; }
 
 .auth-switch {
   margin: 1.1rem 0 0;
   text-align: center;
-  font-size: 0.87rem;
+  font-size: var(--fs-sm);
   color: var(--text-dim);
 }
 .auth-closed { color: var(--text-faint); }
-.auth-foot { margin: 1.4rem 0 0; text-align: center; font-size: 0.78rem; }
+.auth-foot { margin: 1.4rem 0 0; text-align: center; font-size: var(--fs-xs); }
 .auth-foot a { color: var(--text-faint); }
 
 /* --- accounts ---------------------------------------------------------- */
@@ -5529,7 +5535,7 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
 .admin-panel {
   background: var(--bg-panel);
   border: 1px solid var(--border-soft);
-  border-radius: 9px;
+  border-radius: var(--r-lg);
   padding: 1.1rem 1.2rem;
   margin-bottom: 1.2rem;
 }
@@ -5540,18 +5546,18 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
   gap: 1rem;
   margin-bottom: 0.7rem;
 }
-.admin-panel h2 { margin: 0; font-size: 1.05rem; }
-.admin-note { margin: 0 0 0.7rem; color: var(--text-dim); font-size: 0.85rem; }
+.admin-panel h2 { margin: 0; font-size: var(--fs-md); }
+.admin-note { margin: 0 0 0.7rem; color: var(--text-dim); font-size: var(--fs-sm); }
 .admin-toggle { display: flex; align-items: center; gap: 0.5rem; margin: 0; }
 .admin-toggle input { width: auto; margin: 0; }
 
 /* The table is the one thing here that can outgrow a narrow screen, so it
    scrolls inside its own box rather than pushing the page sideways. */
 .admin-table-wrap { overflow-x: auto; }
-.admin-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+.admin-table { width: 100%; border-collapse: collapse; font-size: var(--fs-sm); }
 .admin-table th {
   text-align: left;
-  font-size: 0.68rem;
+  font-size: var(--fs-2xs);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--text-faint);
@@ -5565,11 +5571,11 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
 }
 .admin-table tr.is-off { opacity: 0.5; }
 .admin-table select { width: auto; min-width: 6rem; }
-.admin-sub { font-size: 0.76rem; color: var(--text-faint); }
-.admin-warn { font-size: 0.76rem; color: var(--danger); }
+.admin-sub { font-size: var(--fs-xs); color: var(--text-faint); }
+.admin-warn { font-size: var(--fs-xs); color: var(--danger); }
 .admin-actions { display: flex; gap: 0.4rem; justify-content: flex-end; }
-.admin-error { min-height: 1.3em; color: var(--danger); font-size: 0.85rem; }
-.hero-who { margin: 0.9rem 0 0; font-size: 0.82rem; color: var(--text-faint); }
+.admin-error { min-height: 1.3em; color: var(--danger); font-size: var(--fs-sm); }
+.hero-who { margin: 0.9rem 0 0; font-size: var(--fs-xs); color: var(--text-faint); }
 .hero-who strong { color: var(--text-dim); font-weight: 600; }
 
 /* ===========================================================================
@@ -5593,7 +5599,7 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
 .ce-list {
   background: var(--bg-panel);
   border: 1px solid var(--border-soft);
-  border-radius: 9px;
+  border-radius: var(--r-lg);
   padding: 0.4rem;
   max-height: 74vh;
   overflow-y: auto;
@@ -5606,7 +5612,7 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
   padding: 0.55rem 0.65rem;
   background: none;
   border: 1px solid transparent;
-  border-radius: 6px;
+  border-radius: var(--r-md);
   color: inherit;
   cursor: pointer;
   font: inherit;
@@ -5614,31 +5620,31 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
 .ce-row:hover { background: var(--bg-raised); }
 .ce-row.is-on { background: var(--gold-well); border-color: var(--gold); }
 .ce-row-name { font-weight: 600; }
-.ce-row-sub { font-size: 0.76rem; color: var(--text-faint); }
+.ce-row-sub { font-size: var(--fs-xs); color: var(--text-faint); }
 .ce-row-tags { display: flex; gap: 0.35rem; flex-wrap: wrap; }
 .ce-row-tags em {
   font-style: normal;
-  font-size: 0.66rem;
+  font-size: var(--fs-2xs);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--gold-dim);
   border: 1px solid var(--border-soft);
-  border-radius: 3px;
+  border-radius: var(--r-sm);
   padding: 0 0.3rem;
 }
 
 .ce-detail {
   background: var(--bg-panel);
   border: 1px solid var(--border-soft);
-  border-radius: 9px;
+  border-radius: var(--r-lg);
   padding: 1.2rem;
   min-height: 20rem;
 }
-.ce-title { margin: 0 0 1rem; font-size: 1.2rem; }
-.ce-title code { font-size: 0.75rem; color: var(--text-faint); font-weight: 400; }
+.ce-title { margin: 0 0 1rem; font-size: var(--fs-lg); }
+.ce-title code { font-size: var(--fs-2xs); color: var(--text-faint); font-weight: 400; }
 .ce-sub {
   margin: 1.6rem 0 0.6rem;
-  font-size: 0.72rem;
+  font-size: var(--fs-2xs);
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--text-faint);
@@ -5680,7 +5686,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
 .site-bar {
   border-bottom: 1px solid var(--border-soft);
   background: var(--bg-inset);
-  font-size: 0.78rem;
+  font-size: var(--fs-xs);
 }
 .site-bar-in {
   max-width: 1200px;
@@ -5719,7 +5725,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
    paragraph in here and would outrank a bare class. */
 .hero-home .hero-eyebrow {
   font-family: var(--font-ui);
-  font-size: 0.72rem;
+  font-size: var(--fs-2xs);
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--text-faint);
@@ -5747,7 +5753,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
 .hero-home p {
   max-width: 44rem;
   color: var(--text-dim);
-  font-size: 1.02rem;
+  font-size: var(--fs-md);
   line-height: 1.6;
   margin: 0 auto;
 }
@@ -5797,13 +5803,13 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
 }
 .section-head h2 {
   margin: 0;
-  font-size: 1.15rem;
+  font-size: var(--fs-lg);
   letter-spacing: 0.06em;
 }
 .section-hint {
   margin: 0;
   color: var(--text-faint);
-  font-size: 0.82rem;
+  font-size: var(--fs-xs);
   flex: 1 1 12rem;
   /* The hairline runs from the end of the sentence to the edge of the row, so
      the heading sits on a line instead of floating above the cards. Drawn on
@@ -5893,12 +5899,12 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
   top: 0.05rem;
   width: 1.6rem;
   height: 1.6rem;
-  border-radius: 50%;
+  border-radius: var(--r-circle);
   border: 1px solid var(--ornament);
   background: var(--bg-inset);
   color: var(--ornament-bright);
   font-family: var(--font-ui);
-  font-size: 0.8rem;
+  font-size: var(--fs-xs);
   font-weight: 600;
   display: flex;
   align-items: center;
@@ -5919,7 +5925,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
    of squeezing, and the sub-line is allowed to break. */
 .char-card {
   border: 1px solid var(--border-soft);
-  border-radius: 0.35rem;
+  border-radius: var(--r-md);
   padding: 0.6rem 0.7rem;
   margin-bottom: 0.6rem;
   background: rgba(0, 0, 0, 0.12);
@@ -5934,7 +5940,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
 .char-card .char-body { min-width: 0; flex: 1; }
 .char-card .name { color: var(--gold); font-weight: 600; line-height: 1.3; }
 .char-card .sub {
-  font-size: 0.76rem;
+  font-size: var(--fs-xs);
   color: var(--text-dim);
   line-height: 1.45;
   /* No bottom margin: it used to hold the buttons off the text below it, and
@@ -5950,7 +5956,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
   width: 3rem;
   height: 3rem;
   flex: 0 0 auto;
-  border-radius: 0.3rem;
+  border-radius: var(--r-md);
   object-fit: cover;
   object-position: center top;
   border: 1px solid var(--ornament);
@@ -5978,7 +5984,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
 /* An unfilled module slot. Says what it is rather than being a hole. */
 .module-slot-empty {
   border: 1px dashed var(--border-soft);
-  border-radius: 8px;
+  border-radius: var(--r-lg);
   padding: 1rem;
   display: flex;
   align-items: center;
@@ -5986,7 +5992,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
   text-align: center;
   min-height: 12rem;
   color: var(--text-faint);
-  font-size: 0.82rem;
+  font-size: var(--fs-xs);
   line-height: 1.5;
   /* Faint enough that a shelf with one module on it does not read as a shelf
      with two things missing off it. */
@@ -6073,7 +6079,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
 .module-name {
   font-family: var(--font-display);
   color: var(--gold);
-  font-size: 1.2rem;
+  font-size: var(--fs-lg);
   font-weight: 600;
   line-height: 1.2;
   /* Legible over whatever the bottom of the painting happens to be, without a
@@ -6083,7 +6089,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
 .module-card:hover .module-name { color: var(--gold-bright); }
 .module-levels {
   font-family: var(--font-ui);
-  font-size: 0.68rem;
+  font-size: var(--fs-2xs);
   letter-spacing: 0.09em;
   text-transform: uppercase;
   color: var(--text-dim);
@@ -6101,13 +6107,13 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
   top: 0.6rem;
   right: 0.6rem;
   padding: 0.18rem 0.5rem;
-  border-radius: 999px;
+  border-radius: var(--r-pill);
   border: 1px solid var(--gold-dim);
   background: color-mix(in srgb, var(--gold-well) 82%, transparent);
   backdrop-filter: blur(2px);
   color: var(--gold);
   font-family: var(--font-ui);
-  font-size: 0.7rem;
+  font-size: var(--fs-2xs);
   letter-spacing: 0.04em;
 }
 
@@ -6118,7 +6124,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
   margin: 0;
 }
 .module-credit {
-  font-size: 0.66rem;
+  font-size: var(--fs-2xs);
   color: var(--text-faint);
   line-height: 1.45;
   margin: 0.7rem 0 0;
@@ -6186,7 +6192,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
 }
 .party-count {
   color: var(--text-faint);
-  font-size: 0.78rem;
+  font-size: var(--fs-xs);
   white-space: nowrap;
 }
 /* The one Play on the page for this game — it belongs to the party, not to any
@@ -6241,7 +6247,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
    renders when there is more than one module to tell apart. */
 .ce-module {
   margin: 2rem 0 0.2rem;
-  font-size: 0.82rem;
+  font-size: var(--fs-xs);
   letter-spacing: 0.08em;
   color: var(--gold);
 }
@@ -6254,7 +6260,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
 .ce-checks { display: flex; flex-wrap: wrap; gap: 0.5rem 1.2rem; margin: 0.8rem 0; }
 .ce-check { display: flex; align-items: center; gap: 0.4rem; margin: 0; }
 .ce-check input { width: auto; margin: 0; }
-.ce-hint { font-size: 0.76rem; color: var(--text-faint); }
+.ce-hint { font-size: var(--fs-xs); color: var(--text-faint); }
 .ce-hint.is-ok { color: var(--success); }
 .ce-hint.is-bad { color: var(--danger); }
 .ce-actions { display: flex; align-items: center; justify-content: flex-end; gap: 0.6rem; margin-top: 0.8rem; }
@@ -6263,7 +6269,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
    the only structure a reader has to go on. */
 .ce-code {
   font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-  font-size: 0.78rem;
+  font-size: var(--fs-xs);
   line-height: 1.5;
   white-space: pre;
   overflow-x: auto;
@@ -6273,13 +6279,13 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
 .ce-stage {
   background: var(--bg-inset);
   border: 1px solid var(--border-soft);
-  border-radius: 7px;
+  border-radius: var(--r-md);
   margin-bottom: 0.5rem;
   padding: 0.5rem 0.7rem;
 }
 .ce-stage summary { cursor: pointer; display: flex; gap: 0.6rem; align-items: baseline; flex-wrap: wrap; }
-.ce-stage summary code { font-size: 0.72rem; color: var(--text-faint); }
-.ce-terminal { font-style: normal; font-size: 0.72rem; color: var(--gold-dim); }
+.ce-stage summary code { font-size: var(--fs-2xs); color: var(--text-faint); }
+.ce-terminal { font-style: normal; font-size: var(--fs-2xs); color: var(--gold-dim); }
 .ce-stage-body { padding-top: 0.7rem; }
 
 /* ====================================================================
@@ -6296,7 +6302,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
 .dg-frame {
   position: relative;
   border: 1px solid var(--border-soft);
-  border-radius: 4px;
+  border-radius: var(--r-md);
   background: var(--bg-inset);
   overflow: hidden;
   min-height: 22rem;
@@ -6329,7 +6335,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
 .dg-dangling-label {
   fill: var(--danger);
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: var(--fs-2xs);
 }
 
 .dg-node { cursor: pointer; }
@@ -6341,17 +6347,17 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
 .dg-key {
   fill: var(--text);
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: var(--fs-2xs);
 }
 .dg-text {
   fill: var(--text-dim);
   font-family: var(--font-ui);
-  font-size: 11px;
+  font-size: var(--fs-2xs);
 }
 .dg-badge {
   fill: var(--text-faint);
   font-family: var(--mono);
-  font-size: 10px;
+  font-size: var(--fs-2xs);
   text-anchor: end;
 }
 .dg-badge.is-check { fill: var(--accent); }
@@ -6400,18 +6406,18 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
   align-items: baseline;
   padding: 0.3rem 0.45rem;
   border-left: 2px solid var(--border);
-  font-size: 0.76rem;
+  font-size: var(--fs-xs);
 }
 .dg-finding.is-error { border-left-color: var(--danger); background: var(--danger-well); }
 .dg-finding.is-warning { border-left-color: var(--warn); }
 .dg-finding code {
   font-family: var(--mono);
-  font-size: 0.7rem;
+  font-size: var(--fs-2xs);
   color: var(--text-dim);
   cursor: pointer;
   text-decoration: underline dotted;
 }
-.dg-clean { color: var(--success); font-size: 0.8rem; }
+.dg-clean { color: var(--success); font-size: var(--fs-xs); }
 
 /* ---------------------------------------------------------------------------
    Walking a conversation
@@ -6438,7 +6444,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
   flex: 1 1 auto;
   min-width: 0;
   font-family: var(--mono);
-  font-size: 0.68rem;
+  font-size: var(--fs-2xs);
   color: var(--text-faint);
   white-space: nowrap;
   overflow: hidden;
@@ -6458,29 +6464,29 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
 .dw-node { margin: 0 0 0.6rem; }
 .dw-node code {
   font-family: var(--mono);
-  font-size: 0.74rem;
+  font-size: var(--fs-2xs);
   color: var(--text-dim);
 }
 .dw-node em {
   font-style: normal;
-  font-size: 0.68rem;
+  font-size: var(--fs-2xs);
   margin-left: 0.5rem;
   padding: 0.05rem 0.4rem;
   border: 1px solid var(--gold-dim);
-  border-radius: 999px;
+  border-radius: var(--r-pill);
   color: var(--gold);
 }
 
-.dw-pick { display: block; margin: 0 0 0.7rem; font-size: 0.78rem; color: var(--text-dim); }
-.dw-pick select { width: 100%; margin: 0.2rem 0 0.15rem; font-family: var(--mono); font-size: 0.74rem; }
+.dw-pick { display: block; margin: 0 0 0.7rem; font-size: var(--fs-xs); color: var(--text-dim); }
+.dw-pick select { width: 100%; margin: 0.2rem 0 0.15rem; font-family: var(--mono); font-size: var(--fs-2xs); }
 
 .dw-chips { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.7rem; }
 .dw-chip {
-  font-size: 0.68rem;
+  font-size: var(--fs-2xs);
   font-family: var(--mono);
   padding: 0.1rem 0.45rem;
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--r-pill);
   color: var(--text-faint);
 }
 .dw-chip.is-effect { border-color: var(--accent-dim); color: var(--accent); }
@@ -6489,7 +6495,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
 /* The line itself. This is what the panel is for, so it gets the room. */
 .dw-text {
   max-width: 62ch;
-  font-size: 1rem;
+  font-size: var(--fs-md);
   line-height: 1.65;
   color: var(--text);
 }
@@ -6502,9 +6508,9 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
   padding: 0.5rem 0.75rem;
   border-left: 2px solid var(--gold-dim);
   background: var(--bg-raised);
-  font-size: 0.92rem;
+  font-size: var(--fs-sm);
 }
-.dw-aside strong { color: var(--gold); font-size: 0.8rem; }
+.dw-aside strong { color: var(--gold); font-size: var(--fs-xs); }
 .dw-aside p { margin: 0.3rem 0 0; }
 
 .dw-choices { display: flex; flex-direction: column; gap: 0.4rem; margin-top: 1.1rem; }
@@ -6517,7 +6523,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
   text-align: left;
   padding: 0.55rem 0.7rem;
   border: 1px solid var(--border);
-  border-radius: 5px;
+  border-radius: var(--r-md);
   background: var(--bg-raised);
   color: var(--text);
   cursor: pointer;
@@ -6537,20 +6543,20 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
   display: grid;
   place-items: center;
   border: 1px solid var(--border);
-  border-radius: 4px;
+  border-radius: var(--r-md);
   font-family: var(--mono);
-  font-size: 0.7rem;
+  font-size: var(--fs-2xs);
   color: var(--text-faint);
 }
 .dw-go:hover .dw-num { border-color: var(--gold); color: var(--gold); }
 
-.dw-label { font-size: 0.92rem; }
+.dw-label { font-size: var(--fs-sm); }
 .dw-meta {
   display: flex;
   align-items: center;
   gap: 0.35rem;
   flex-wrap: wrap;
-  font-size: 0.7rem;
+  font-size: var(--fs-2xs);
   font-family: var(--mono);
   color: var(--text-faint);
 }
@@ -6562,12 +6568,12 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
   gap: 0.1rem;
   padding: 0.55rem 0.7rem 0.55rem 2.65rem;
   border: 1px dashed var(--border);
-  border-radius: 5px;
+  border-radius: var(--r-md);
   color: var(--text-dim);
 }
 
 .dw-actions { flex: 0 0 auto; align-items: center; }
-.dw-keys { margin-right: auto; font-size: 0.68rem; }
+.dw-keys { margin-right: auto; font-size: var(--fs-2xs); }
 
 @media (max-width: 640px) {
   .dw-trail { display: none; }
@@ -6579,7 +6585,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
    replies that happen to share their wording. */
 .dw-choice.is-fork {
   border: 1px solid var(--border);
-  border-radius: 5px;
+  border-radius: var(--r-md);
   padding: 0.5rem 0.55rem 0.55rem;
 }
 .dw-forkhead {
@@ -6596,8 +6602,8 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
   padding: 0.35rem 0.6rem;
 }
 .dw-choice.is-fork .dw-go + .dw-go { margin-top: 0.3rem; }
-.dw-choice.is-fork .dw-label { font-size: 0.84rem; color: var(--text-dim); }
-.dw-forkhead .dw-label { font-size: 0.92rem; color: var(--text); }
+.dw-choice.is-fork .dw-label { font-size: var(--fs-xs); color: var(--text-dim); }
+.dw-forkhead .dw-label { font-size: var(--fs-sm); color: var(--text); }
 
 /* The speaker beside their line.
    Sticky rather than scrolling away: on a variant that runs to a thousand
@@ -6622,7 +6628,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
   height: 277px;                  /* the busts are cut 384x512 — keep the ratio */
   object-fit: cover;
   object-position: center top;
-  border-radius: 6px;
+  border-radius: var(--r-md);
   border: 1px solid var(--gold-dim);
   background: linear-gradient(180deg, var(--bg-panel), var(--bg));
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.55);
@@ -6630,7 +6636,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
 .dw-portrait figcaption {
   margin-top: 0.4rem;
   font-family: var(--mono);
-  font-size: 0.68rem;
+  font-size: var(--fs-2xs);
   color: var(--text-faint);
   text-align: center;
 }
@@ -6641,7 +6647,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
   width: 30px;
   height: 30px;
   flex: 0 0 auto;
-  border-radius: 50%;
+  border-radius: var(--r-circle);
   object-fit: cover;
   object-position: center top;
   border: 1px solid var(--gold-dim);
@@ -6672,12 +6678,12 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
   align-self: center;
   padding: 0.2rem 0.5rem;
   border: 1px solid var(--border-soft);
-  border-radius: 4px;
+  border-radius: var(--r-md);
   background: none;
   color: var(--gold-dim);
   cursor: pointer;
   font: inherit;
-  font-size: 0.68rem;
+  font-size: var(--fs-2xs);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   /* Held back until the row is under the pointer: on a list of sixty people a

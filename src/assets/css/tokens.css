@@ -283,10 +283,29 @@
   --z-raised: 10;
   --z-rail: 20;
   --z-topbar: 30;
-  --z-overlay: 100;             /* the dialogue theatre, the combat board */
-  --z-modal: 200;
-  --z-check: 300;               /* the d20 ceremony, over a modal */
-  --z-toast: 400;
+  --z-combat: 100;              /* the board takes the scene */
+  --z-tip: 150;                 /* .wm-tip, over the chart it explains */
+  --z-dialogue: 200;            /* a conversation opens over a fight */
+  --z-modal: 300;
+  --z-check: 400;               /* the d20 ceremony, over a modal */
+  --z-toast: 500;
+
+  /*
+   * These eight are NOT yet applied, and the first attempt is why.
+   *
+   * The eleven raw z-indexes in style.css are two different things wearing one
+   * property. Five are a global ladder — .combat-screen 20, .wm-tip 40,
+   * .dialogue-theatre 50, .modal-backdrop 100, .check-root 300 — and the other
+   * six (0, 1, 2, 3, 5, 6 on .modal-head, .dlg-close, .cbt-float, .act-tip,
+   * .module-cap and friends) are LOCAL stacking, valid only against their own
+   * siblings. Tokenising those would be nonsense.
+   *
+   * Worse, the first draft of this scale had one --z-overlay for both the
+   * combat board and the dialogue theatre, which are 20 and 50 today —
+   * a conversation opens over a fight, and collapsing them would have put the
+   * theatre behind the board. Named per surface now, in the order the
+   * interface actually stacks.
+   */
 
   /* ==================================================================
    * MOTION

@@ -1,0 +1,174 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Style snapshot — computed values across every bench</title>
+<!--
+  What the stylesheet actually resolves to, everywhere, as one comparable text.
+
+  This exists because there is no UI test in this repo. verify.sh runs 40
+  harnesses and not one of them asserts on a class name, a colour or a size —
+  the whole suite is orthogonal to markup, which is what makes it safe to
+  restyle and also what makes it useless for telling you whether you did.
+
+  So: load every bench that renders without a session, walk each one, and
+  write down what the browser COMPUTED for the properties a restyle touches.
+  Two runs of this either differ or they do not, and the diff is the change.
+  Nothing here is a design opinion; it is a fingerprint.
+
+  Element identity is a DOM path (tag + nth-of-type chain), which is stable so
+  long as the markup does not move. That is the right sensitivity for porting
+  CSS onto tokens: it should catch a value changing and ignore nothing.
+
+  Capture:
+
+    google-chrome --headless --no-sandbox --disable-gpu \
+      --force-device-scale-factor=1 --window-size=1440,900 \
+      --virtual-time-budget=20000 --dump-dom \
+      http://localhost:8081/tools/style_snapshot.html \
+      > /tmp/snap.html
+
+  then extract the <pre id="out"> from it. tools/style_snapshot.sh does both
+  and writes a plain text file ready for diff(1).
+
+  A reading bench. It renders nothing of its own and writes nothing.
+-->
+<style>
+  body { margin: 0; background: #0b0d10; color: #cfd6e0;
+         font: 12px/1.5 ui-monospace, SFMono-Regular, monospace; }
+  #frames { position: absolute; left: -20000px; top: 0; }
+  iframe { border: 0; display: block; }
+  #status { padding: 10px 14px; border-bottom: 1px solid #3a424e; color: #e8c979; }
+  pre { margin: 0; padding: 10px 14px; white-space: pre; }
+</style>
+
+<div id="status">loading benches…</div>
+<div id="frames"></div>
+<pre id="out"></pre>
+
+<script>
+/*
+ * The benches, and the width each is measured at.
+ *
+ * One width per bench rather than the sweep shell_probe.php does: this is a
+ * value fingerprint, not a layout probe, and eight widths of the same rule
+ * resolving to the same 12px is eight times the noise for no extra signal.
+ * 1440 is the width the interface was drawn at.
+ */
+const BENCHES = [
+  ['home_preview.php', 1440],
+  ['home_preview.php?case=bare', 1440],
+  ['home_preview.php?page=characters', 1440],
+  ['home_preview.php?page=characters&case=big', 1440],
+  ['shell_probe.php?w=1440', 1440],
+  ['shell_probe.php?w=430', 430],
+  ['scene_preview.html', 1440],
+  ['scene_preview.html?case=delve', 1440],
+  ['sheet_preview.html', 1440],
+  ['combat_field_preview.html', 1440],
+  ['combat_bar_preview.html', 1440],
+  ['battlemap_preview.html', 1440],
+  ['dice_preview.html', 1440],
+  ['floorplan_preview.php?seed=4242&depth=3', 1440],
+];
+
+/*
+ * The properties a restyle moves. Deliberately not "every computed property":
+ * getComputedStyle exposes ~340 of them, most of which are initial values that
+ * would bury the handful that matter in noise no one will read.
+ */
+const PROPS = [
+  'font-size', 'font-weight', 'line-height', 'letter-spacing', 'font-family',
+  'color', 'background-color',
+  'border-top-left-radius', 'border-bottom-right-radius',
+  'border-top-width', 'border-top-color',
+  'box-shadow', 'z-index',
+  'padding-top', 'padding-left', 'margin-top', 'margin-left',
+  'gap', 'outline-color', 'outline-width', 'min-height', 'min-width',
+];
+
+/** A stable path to an element: tag + nth-of-type, root downwards. */
+function path(el) {
+  const parts = [];
+  for (let n = el; n && n.nodeType === 1 && n !== n.ownerDocument.documentElement; n = n.parentElement) {
+    const tag = n.tagName.toLowerCase();
+    let i = 1;
+    for (let s = n.previousElementSibling; s; s = s.previousElementSibling) {
+      if (s.tagName === n.tagName) i++;
+    }
+    parts.unshift(i > 1 ? `${tag}:${i}` : tag);
+  }
+  return parts.join('>');
+}
+
+/** Classes, so a diff line says what the element IS, not only where it is. */
+function classesOf(el) {
+  const c = (el.className && el.className.baseVal !== undefined)
+    ? el.className.baseVal : (el.className || '');
+  return String(c).trim().split(/\s+/).filter(Boolean).sort().join('.');
+}
+
+function walk(doc, label, out) {
+  const els = doc.querySelectorAll('body *');
+  let n = 0;
+  for (const el of els) {
+    // Only what is actually drawn. An element with no box has no resolved
+    // appearance worth comparing, and hidden subtrees are most of the DOM here.
+    const r = el.getBoundingClientRect();
+    if (r.width < 1 && r.height < 1) continue;
+    const cs = getComputedStyle(el);
+    const vals = PROPS.map((p) => {
+      let v = cs.getPropertyValue(p).trim();
+      // Font stacks resolve to the full list; keep the first family only, or
+      // every line carries 60 characters of fallbacks that never change.
+      if (p === 'font-family') v = v.split(',')[0].replace(/["']/g, '');
+      return `${p}:${v}`;
+    }).join(' ');
+    const cls = classesOf(el);
+    out.push(`${label} | ${path(el)}${cls ? ' .' + cls : ''} | ${vals}`);
+    n++;
+  }
+  return n;
+}
+
+const host = document.getElementById('frames');
+const status = document.getElementById('status');
+
+/* Frames are loaded one at a time and measured on load. Loading all fourteen
+   at once raced: several reported zero elements because their own scripts had
+   not run by the time the walk happened. */
+(async function run() {
+  const out = [];
+  const counts = [];
+  for (const [url, w] of BENCHES) {
+    status.textContent = `measuring ${url} …`;
+    const f = document.createElement('iframe');
+    f.width = w;
+    f.height = 900;
+    f.src = url;
+    host.appendChild(f);
+    await new Promise((res) => {
+      f.addEventListener('load', res, { once: true });
+      setTimeout(res, 6000);                 // a bench that never fires load
+    });
+    // One more beat for scripts that render on rAF or a short timeout.
+    await new Promise((res) => setTimeout(res, 400));
+    let n = 0;
+    try {
+      n = walk(f.contentDocument, url, out);
+    } catch (e) {
+      out.push(`${url} | (unreadable: ${e.message})`);
+    }
+    counts.push(`${url} ${n}`);
+    f.remove();                              // keep memory flat across fourteen
+  }
+
+  /* Sorted, so the file is a set rather than a sequence: a bench that changes
+     how fast it renders must not reorder five thousand lines and read as a
+     total rewrite. */
+  out.sort();
+  const header = ['# style snapshot', '# benches: ' + counts.join(', '),
+                  '# elements: ' + out.length, ''];
+  document.getElementById('out').textContent = header.concat(out).join('\n');
+  status.textContent = `done — ${out.length} elements across ${BENCHES.length} benches`;
+  document.title = 'SNAPSHOT COMPLETE';
+})();
+</script>
