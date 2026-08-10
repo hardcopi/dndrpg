@@ -1,0 +1,471 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Design system — tokens.css</title>
+<!--
+  The token scale, drawn.
+
+  This page loads the real tokens.css and is built out of nothing else: every
+  colour, size, radius, shadow and duration below is a var(), so a page that
+  looks right here is a scale that holds together, and a page that looks wrong
+  is the scale being wrong rather than a mock-up disagreeing with it.
+
+  The contrast numbers are MEASURED in the browser from the resolved token
+  values, not written down. A design system that states its own ratios is a
+  design system that can be quietly wrong about them — which is how
+  --text-faint sat at 2.50:1 through 42 uses.
+
+    http://localhost:8081/tools/system_preview.html
+-->
+<link rel="stylesheet" href="../assets/css/tokens.css">
+<style>
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-ui);
+    font-size: var(--fs-md);
+    line-height: var(--lh-normal);
+  }
+
+  .wrap { max-width: 72rem; margin: 0 auto; padding: var(--sp-5) var(--sp-4) var(--sp-8); }
+
+  h1 {
+    font-family: var(--font-display);
+    font-size: var(--fs-4xl);
+    line-height: var(--lh-tight);
+    letter-spacing: var(--ls-tight);
+    color: var(--gold);
+    margin: 0 0 var(--sp-2);
+  }
+  .lede { color: var(--text-dim); max-width: 46rem; margin: 0 0 var(--sp-6); }
+
+  h2 {
+    font-family: var(--font-ui);
+    font-size: var(--fs-2xs);
+    font-weight: var(--fw-semibold);
+    letter-spacing: var(--ls-caps);
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin: var(--sp-7) 0 var(--sp-3);
+    padding-bottom: var(--sp-2);
+    border-bottom: 1px solid var(--border-soft);
+  }
+  h3 { font-size: var(--fs-sm); font-weight: var(--fw-semibold); margin: var(--sp-5) 0 var(--sp-2); }
+  p  { margin: 0 0 var(--sp-3); }
+  .note { color: var(--text-dim); font-size: var(--fs-sm); max-width: 46rem; }
+  .note b { color: var(--gold); font-weight: var(--fw-semibold); }
+
+  .panel {
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    box-shadow: var(--sh-2);
+    padding: var(--sp-4);
+  }
+
+  /* --- swatches ------------------------------------------------------- */
+  .swatches { display: grid; gap: var(--sp-2);
+              grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); }
+  .sw {
+    display: flex; align-items: center; gap: var(--sp-3);
+    padding: var(--sp-2) var(--sp-3);
+    background: var(--bg-panel);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--r-md);
+  }
+  .sw i {
+    flex: 0 0 auto; width: 2.25rem; height: 2.25rem;
+    border-radius: var(--r-sm);
+    border: 1px solid var(--border);
+  }
+  .sw .k { font-family: var(--mono); font-size: var(--fs-2xs); }
+  .sw .v { color: var(--text-dim); font-family: var(--mono); font-size: var(--fs-2xs); }
+  .sw .r { margin-left: auto; font-family: var(--mono); font-size: var(--fs-2xs);
+           padding: 1px var(--sp-2); border-radius: var(--r-pill); }
+  .r.pass { color: var(--success-ink); background: var(--success-well); }
+  .r.mark { color: var(--warn-ink);    background: var(--warn-well); }
+  .r.fail { color: var(--danger-ink);  background: var(--danger-well); }
+
+  /* --- the text ramp, on every surface -------------------------------- */
+  .ramp { display: grid; gap: 1px; background: var(--border-soft);
+          border: 1px solid var(--border); border-radius: var(--r-md); overflow: hidden; }
+  .ramp > div { padding: var(--sp-3); }
+  .on-bg { background: var(--bg); } .on-panel { background: var(--bg-panel); }
+  .on-panel2 { background: var(--bg-panel-2); } .on-raised { background: var(--bg-raised); }
+  .ramp .t1 { color: var(--text); }
+  .ramp .t2 { color: var(--text-dim); }
+  .ramp .t3 { color: var(--text-dim); font-size: var(--fs-xs); }
+
+  /* --- type ------------------------------------------------------------ */
+  .type-row { display: flex; align-items: baseline; gap: var(--sp-4);
+              padding: var(--sp-2) 0; border-bottom: 1px solid var(--border-soft); }
+  .type-row .k { flex: 0 0 6.5rem; font-family: var(--mono);
+                 font-size: var(--fs-2xs); color: var(--text-dim); }
+  .type-row .px { margin-left: auto; font-family: var(--mono);
+                  font-size: var(--fs-2xs); color: var(--text-dim); }
+  .serif { font-family: var(--font-display); }
+
+  /* --- scales ---------------------------------------------------------- */
+  .bars { display: grid; gap: var(--sp-2); }
+  .bar { display: flex; align-items: center; gap: var(--sp-3); }
+  .bar .k { flex: 0 0 5rem; font-family: var(--mono); font-size: var(--fs-2xs); color: var(--text-dim); }
+  .bar b { display: block; height: 0.75rem; background: var(--ornament); border-radius: var(--r-sm); }
+  .bar .v { font-family: var(--mono); font-size: var(--fs-2xs); color: var(--text-dim); }
+
+  .radii, .shadows { display: flex; flex-wrap: wrap; gap: var(--sp-4); }
+  .radii div, .shadows div { text-align: center; font-family: var(--mono); font-size: var(--fs-2xs);
+                             color: var(--text-dim); }
+  .radii span { display: block; width: 5rem; height: 3.5rem; margin-bottom: var(--sp-2);
+                background: var(--bg-raised); border: 1px solid var(--border-strong); }
+  .shadows span { display: block; width: 7rem; height: 4rem; margin-bottom: var(--sp-2);
+                  background: var(--bg-panel); border: 1px solid var(--border-soft);
+                  border-radius: var(--r-md); }
+
+  /* --- tap targets ------------------------------------------------------ */
+  .taps { display: flex; align-items: flex-end; gap: var(--sp-5); flex-wrap: wrap; }
+  .tap { text-align: center; font-family: var(--mono); font-size: var(--fs-2xs); color: var(--text-dim); }
+  .tap i { display: grid; place-items: center; margin: 0 auto var(--sp-2);
+           border-radius: var(--r-md); border: 1px solid var(--border-strong);
+           background: var(--bg-raised); color: var(--text-dim); }
+  .tap.now i { width: 32px; height: 32px; border-color: var(--danger); }
+  .tap.person i { width: 120px; height: 25px; border-color: var(--danger); }
+  .tap.add i { width: 120px; height: 15px; border-color: var(--danger); }
+  .tap.floor i { width: var(--tap-min); height: var(--tap-min); border-color: var(--success); }
+
+  /* --- the eight pills --------------------------------------------------- */
+  .pills { display: flex; flex-wrap: wrap; gap: var(--sp-3); align-items: center; }
+  .pills > span { font-family: var(--font-ui); font-size: var(--fs-2xs); }
+  /* Transcribed from style.css as it stands, to show them together — this is
+     the one block on this page that is NOT built from tokens, because the
+     point of it is that these values are not on any scale. */
+  .p-badge { padding: 2px 6px; border-radius: 3px; background: #272c34; color: #98a1ae; }
+  .p-pill  { padding: 2px 10px; border-radius: 999px; background: #2a2416; color: #d8b45c; }
+  .p-chip  { padding: 3px 9px; border-radius: 3px; background: #1e2229;
+             border: 1px solid #3a424e; color: #98a1ae; }
+  .p-tag   { padding: 1px 5px; border-radius: 4px; background: #1a2130; color: #7f9bd0; }
+  .p-econ  { padding: 2px 8px; border-radius: 999px; background: #313842; color: #e6e9ee; }
+  .p-mode  { padding: 2px 7px; border-radius: 999px; background: #0f1114; color: #98a1ae; }
+  .p-stat  { padding: 3px 7px; border-radius: 5px; background: #272c34; color: #e6e9ee; }
+  .p-pip   { padding: 1px 4px; border-radius: 2px; background: #7a3128; color: #e6e9ee; }
+  .after .one { padding: var(--sp-1) var(--sp-3); border-radius: var(--r-pill);
+                background: var(--bg-panel-2); color: var(--text-dim);
+                font-size: var(--fs-2xs); border: 1px solid var(--border-soft); }
+  .after .one.is-gold { background: var(--gold-well); color: var(--gold); border-color: var(--gold-dim); }
+  .after .one.is-bad  { background: var(--danger-well); color: var(--danger-ink); border-color: var(--danger-dim); }
+  .after .one.is-ok   { background: var(--success-well); color: var(--success-ink); border-color: var(--success-dim); }
+
+  /* --- focus, everywhere ------------------------------------------------- */
+  :is(a, button, [tabindex]):focus-visible {
+    outline: var(--focus-ring);
+    outline-offset: var(--focus-offset);
+  }
+
+  code { font-family: var(--mono); font-size: 0.9em; color: var(--gold); }
+  .grid2 { display: grid; gap: var(--sp-4); grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr)); }
+</style>
+
+<div class="wrap">
+  <h1>The scale</h1>
+  <p class="lede">
+    Everything below is a <code>var()</code> out of <code>assets/css/tokens.css</code>,
+    including this page's own layout. Contrast ratios are measured in the browser
+    from the resolved values — nothing here states a number about itself.
+  </p>
+
+  <!-- ================= colour ================= -->
+  <h2>Surfaces</h2>
+  <div class="swatches" id="surfaces"></div>
+
+  <h2>Text — two greys, not three</h2>
+  <p class="note">
+    <code>--text-faint</code> was <code>#6b7480</code>: <b>2.50:1</b> on the lightest
+    surface, used 42 times, and 21 runs of it were also set below 12px. Corrected to
+    the 4.5:1 floor it becomes <code>#99a0aa</code> — and <code>--text-dim</code> is
+    <code>#98a1ae</code>. They are the same grey. On surfaces this close together
+    there is room for exactly two legible weights, so the third level comes from
+    size and weight instead.
+  </p>
+  <div class="ramp">
+    <div class="on-bg"><span class="t1">Primary on --bg</span> · <span class="t2">secondary</span> · <span class="t3">the third level, by size</span></div>
+    <div class="on-panel"><span class="t1">Primary on --bg-panel</span> · <span class="t2">secondary</span> · <span class="t3">the third level, by size</span></div>
+    <div class="on-panel2"><span class="t1">Primary on --bg-panel-2</span> · <span class="t2">secondary</span> · <span class="t3">the third level, by size</span></div>
+    <div class="on-raised"><span class="t1">Primary on --bg-raised</span> · <span class="t2">secondary</span> · <span class="t3">the third level, by size</span></div>
+  </div>
+
+  <h2>Signals — mark and ink</h2>
+  <p class="note">
+    A colour used as a <b>mark</b> (border, icon, fill) has to clear 3:1. The same
+    colour used as <b>ink</b> (running text) has to clear 4.5:1. One value cannot do
+    both without washing out: <code>--danger</code> lifted to 4.5:1 turns a red into a
+    pink, and an error that does not look alarming has stopped working. So each
+    signal has two forms. Gold and warn already clear both, so their ink is an alias.
+  </p>
+  <div class="swatches" id="signals"></div>
+
+  <h2>Ornament — the one place the floor argues with the design</h2>
+  <p class="note">
+    Unlit brass, for frames and filigree, deliberately not gold — gold means "you can
+    act on this" and an ornate border in gold spends that signal on decoration. It was
+    <code>#6f5a34</code>, <b>2.23:1</b>, and it is the border of every HUD panel.
+    Raised to exactly 3:1 and no further. This is the single change on this page that
+    fights the stated intent: "metal at rest" wants to be dim. If the frames now read
+    as too present, the honest fix is to stop using ornament as a load-bearing border,
+    not to put it back under the line.
+  </p>
+  <div class="swatches" id="ornament"></div>
+
+  <h2>Parchment — the map's own palette</h2>
+  <p class="note">
+    76 raw hex values were living outside <code>:root</code>, in a file whose own
+    comment forbade it, and almost all of them were here. The consequence was
+    concrete: the map is the middle of the play screen and it was the one part of
+    the interface that could not be re-themed with the rest of it.
+  </p>
+  <div class="swatches" id="parchment"></div>
+
+  <h2>Terrain — what survived the tile map</h2>
+  <p class="note">
+    These four read as dead weight in an audit and are not: <code>BattleMapGen</code>
+    still generates rough ground, water, low cover and tall cover, and
+    <code>.bm-cell.is-*</code> still paints them. They were named for a world map that
+    stopped existing around them. Eight genuinely dead colours went with this pass.
+  </p>
+  <div class="swatches" id="terrain"></div>
+
+  <!-- ================= type ================= -->
+  <h2>Type — nine steps, replacing 63 values</h2>
+  <p class="note">
+    <code>--fs-2xs</code> is a <b>floor</b>, not the smallest thing available. The shell
+    probe found 21 runs of live text below 12px at every width from 360px to 1440px,
+    smallest 9.6px, none of it scaling with the viewport. The three display sizes are
+    fluid because a 48px hero on a 360px phone wraps four times.
+  </p>
+  <div class="panel" id="type"></div>
+
+  <h3>The two faces, and what each is for</h3>
+  <div class="grid2">
+    <div class="panel">
+      <p class="serif" style="font-size: var(--fs-lg); margin:0 0 var(--sp-2)">
+        “The quarry has not paid a wage in six weeks, and the foreman has stopped
+        coming down to the gate to say why.”</p>
+      <p class="note" style="margin:0">
+        <code>--font-display</code> — voice. What somebody says, what they are called,
+        the headings that name a place.</p>
+    </div>
+    <div class="panel">
+      <p style="margin:0 0 var(--sp-2)">
+        <b style="color:var(--text)">Athletics</b> +5 · <b style="color:var(--text)">HP</b> 34/38 ·
+        <b style="color:var(--text)">AC</b> 16 · Move 30 ft</p>
+      <p class="note" style="margin:0">
+        <code>--font-ui</code> — chrome. Everything the interface says about itself:
+        buttons, labels, tabs, stat lines. A book serif on a button is the loudest
+        dated-web signal there is.</p>
+    </div>
+  </div>
+
+  <!-- ================= space, radius, elevation ================= -->
+  <h2>Space — eight steps on a 4px base</h2>
+  <div class="bars" id="space"></div>
+
+  <h2>Radius — five, replacing seventeen</h2>
+  <p class="note">
+    The file currently spells the same "small radius" idea four ways
+    <b>86 times</b>: 5px×31, 4px×23, 3px×17, 6px×15 — plus 7, 8, 9, 10, 14px,
+    0.3rem, 0.35rem and three one-off corner pairs.
+  </p>
+  <div class="radii" id="radii"></div>
+
+  <h2>Elevation — four, replacing forty-three</h2>
+  <p class="note">
+    On a dark interface a cast shadow is barely visible, so each of these pairs one
+    with a hairline of light along the top edge. That hairline is what actually reads
+    as "raised" here.
+  </p>
+  <div class="shadows" id="shadows"></div>
+
+  <h2>Layers — named, replacing eleven raw values</h2>
+  <div class="bars" id="layers"></div>
+
+  <!-- ================= controls ================= -->
+  <h2>Tap targets — the 44px floor</h2>
+  <p class="note">
+    Measured by <code>tools/shell_probe.php</code> against the real shell, at actual
+    size below. Every one of these is <b>identical at 1440px and at 360px</b> — nothing
+    about the controls responds to the viewport at all.
+  </p>
+  <div class="taps">
+    <div class="tap now"><i>32</i>.icon-btn<br>32×32</div>
+    <div class="tap person"><i>25</i>.person<br>120×25</div>
+    <div class="tap add"><i></i>.party-add<br>120×15</div>
+    <div class="tap floor"><i>44</i>--tap-min<br>44×44</div>
+  </div>
+
+  <!-- ================= the pill ================= -->
+  <h2>One pill, not eight</h2>
+  <p class="note">
+    Eight independent implementations of "a small labelled fact", transcribed from
+    style.css as it stands. Eight radii, eight paddings, eight type sizes, no two
+    agreeing. This is the only block on this page not built from tokens — that is
+    the point of it.
+  </p>
+  <div class="panel">
+    <h3 style="margin-top:0">Now</h3>
+    <div class="pills">
+      <span class="p-badge">3 quests</span>
+      <span class="p-pill">Persuasion</span>
+      <span class="p-chip">Combat</span>
+      <span class="p-tag">merchant</span>
+      <span class="p-econ">Action</span>
+      <span class="p-mode">advantage</span>
+      <span class="p-stat">AC 16</span>
+      <span class="p-pip">Pr</span>
+    </div>
+    <h3>One component, four intents</h3>
+    <div class="pills after">
+      <span class="one">3 quests</span>
+      <span class="one is-gold">Persuasion</span>
+      <span class="one is-ok">Action</span>
+      <span class="one is-bad">Prone</span>
+    </div>
+  </div>
+
+  <h2>Focus — one ring, everywhere</h2>
+  <p class="note">
+    19 <code>:focus-visible</code> rules exist today and nine of them kill the outline
+    and replace it with a colour change alone; there is no global fallback, so the ring
+    is a different shape on every control. <code>--focus-ring</code> is one value.
+    Tab through this page.
+  </p>
+  <div class="pills">
+    <button class="one" style="font:inherit;background:var(--bg-panel-2);color:var(--text);
+      border:1px solid var(--border);border-radius:var(--r-md);padding:var(--sp-2) var(--sp-4)">A button</button>
+    <a href="#" style="color:var(--gold)">A link</a>
+    <span class="one" tabindex="0">A focusable chip</span>
+  </div>
+</div>
+
+<script>
+/* Everything below reads the resolved tokens and measures them. Nothing is
+   written down twice: if a value moves in tokens.css, this page moves with it. */
+const root = getComputedStyle(document.documentElement);
+const tok = (n) => root.getPropertyValue(n).trim();
+
+function hx(h) {
+  h = h.trim();
+  const m = h.match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i);
+  if (!m) return null;
+  let s = m[1];
+  if (s.length === 3) s = s.split('').map((c) => c + c).join('');
+  return [0, 2, 4].map((i) => parseInt(s.slice(i, i + 2), 16));
+}
+const lin = (c) => { c /= 255; return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4; };
+const lum = ([r, g, b]) => 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b);
+function ratio(a, b) {
+  const A = hx(a), B = hx(b);
+  if (!A || !B) return null;
+  const la = lum(A), lb = lum(B);
+  return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
+}
+
+/** One swatch. `against` is the token it must be legible on; `floor` its target. */
+function sw(name, against, floor) {
+  const v = tok(name);
+  const d = document.createElement('div');
+  d.className = 'sw';
+  let badge = '';
+  if (against) {
+    const r = ratio(v, tok(against));
+    if (r !== null) {
+      const cls = r >= 4.5 ? 'pass' : (r >= 3 ? 'mark' : 'fail');
+      const shown = floor ? (r >= floor ? (r >= 4.5 ? 'pass' : 'mark') : 'fail') : cls;
+      badge = `<span class="r ${shown}">${r.toFixed(2)}</span>`;
+    }
+  }
+  d.innerHTML = `<i style="background:${v}"></i>`
+    + `<span><span class="k">${name}</span><br><span class="v">${v}</span></span>${badge}`;
+  return d;
+}
+
+const fill = (id, items) => {
+  const host = document.getElementById(id);
+  items.forEach(([n, a, f]) => host.appendChild(sw(n, a, f)));
+};
+
+fill('surfaces', [['--bg'], ['--bg-panel'], ['--bg-panel-2'], ['--bg-inset'],
+                  ['--bg-raised'], ['--border-soft'], ['--border'], ['--border-strong']]);
+
+fill('signals', [
+  ['--gold', '--bg-raised', 4.5], ['--gold-bright', '--bg-raised', 4.5],
+  ['--danger', '--bg-raised', 3], ['--danger-ink', '--bg-raised', 4.5],
+  ['--success', '--bg-raised', 3], ['--success-ink', '--bg-raised', 4.5],
+  ['--accent', '--bg-raised', 3], ['--accent-ink', '--bg-raised', 4.5],
+  ['--warn', '--bg-raised', 4.5],
+]);
+
+fill('ornament', [['--ornament', '--bg-raised', 3], ['--ornament-bright', '--bg-raised', 3],
+                  ['--gold-dim', '--bg-raised', 3]]);
+
+fill('parchment', [['--pg-paper'], ['--pg-paper-lit'], ['--pg-paper-dim'],
+                   ['--pg-ink', '--pg-paper', 4.5], ['--pg-ink-soft', '--pg-paper', 4.5],
+                   ['--pg-rule', '--pg-paper', 4.5], ['--pg-label', '--pg-paper', 4.5],
+                   ['--pg-rock']]);
+
+fill('terrain', [['--terrain-rough'], ['--terrain-water'], ['--terrain-low'], ['--terrain-tall']]);
+
+/* Type: render each step and report what it actually computes to. */
+const TYPE = [['--fs-2xs', 'The floor. Nothing smaller ships.'],
+              ['--fs-xs', 'Dense readouts, rail rows'],
+              ['--fs-sm', 'Labels, secondary text'],
+              ['--fs-md', 'Body'],
+              ['--fs-lg', 'Lead paragraph'],
+              ['--fs-xl', 'Section heading'],
+              ['--fs-2xl', 'Screen title'],
+              ['--fs-3xl', 'Page title'],
+              ['--fs-4xl', 'The hero']];
+const typeHost = document.getElementById('type');
+for (const [n, why] of TYPE) {
+  const row = document.createElement('div');
+  row.className = 'type-row';
+  row.innerHTML = `<span class="k">${n}</span>`
+    + `<span style="font-size:var(${n});line-height:var(--lh-tight)">${why}</span>`
+    + `<span class="px" data-fs="${n}"></span>`;
+  typeHost.appendChild(row);
+}
+// Measure what each step really resolves to at this viewport (the top three clamp).
+for (const el of typeHost.querySelectorAll('[data-fs]')) {
+  const probe = el.parentElement.querySelector('span[style]');
+  el.textContent = Math.round(parseFloat(getComputedStyle(probe).fontSize) * 100) / 100 + 'px';
+}
+
+const bars = (id, names, scale) => {
+  const host = document.getElementById(id);
+  for (const n of names) {
+    const v = tok(n);
+    const px = parseFloat(v) * (v.endsWith('rem') ? 16 : 1);
+    const row = document.createElement('div');
+    row.className = 'bar';
+    row.innerHTML = `<span class="k">${n}</span>`
+      + `<b style="width:${scale(px)}px"></b><span class="v">${v}</span>`;
+    host.appendChild(row);
+  }
+};
+bars('space', ['--sp-1', '--sp-2', '--sp-3', '--sp-4', '--sp-5', '--sp-6', '--sp-7', '--sp-8'], (p) => p * 4);
+bars('layers', ['--z-base', '--z-raised', '--z-rail', '--z-topbar', '--z-overlay',
+                '--z-modal', '--z-check', '--z-toast'], (p) => Math.max(2, p * 0.9));
+
+const radiiHost = document.getElementById('radii');
+for (const n of ['--r-sm', '--r-md', '--r-lg', '--r-pill', '--r-circle']) {
+  const d = document.createElement('div');
+  d.innerHTML = `<span style="border-radius:var(${n})"></span>${n}<br>${tok(n)}`;
+  radiiHost.appendChild(d);
+}
+const shHost = document.getElementById('shadows');
+for (const n of ['--sh-1', '--sh-2', '--sh-3', '--sh-glow']) {
+  const d = document.createElement('div');
+  d.innerHTML = `<span style="box-shadow:var(${n})"></span>${n}`;
+  shHost.appendChild(d);
+}
+</script>

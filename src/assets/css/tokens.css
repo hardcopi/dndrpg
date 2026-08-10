@@ -1,0 +1,372 @@
+/*
+ * The design tokens. Every value the interface is built out of, in one place.
+ *
+ * WHY THIS FILE EXISTS
+ *
+ * style.css already carried a semantic colour palette with a real argument
+ * behind it — gold means "you can act on this", ornament is unlit brass so
+ * decoration does not spend that signal, the chrome is cold so the warm art
+ * comes forward. That thesis is kept here unchanged. What it never had was a
+ * scale for anything that is not a colour, and the cost was measurable:
+ *
+ *     63 distinct font-size values      (0.55, 0.58, 0.6, 0.62, 0.65, 0.66 …)
+ *     17 border-radius variants
+ *     43 hand-written box-shadows
+ *     11 raw z-index values
+ *     spacing as raw rem, everywhere
+ *
+ * With no scale, ~94% of style.css became per-feature namespaces re-deciding
+ * the same questions: `background: var(--bg-panel)` written out 28 times,
+ * `border: 1px solid var(--border)` 47 times, the small-caps section label
+ * idiom 29 times, and eight separate implementations of a pill. A restyle was
+ * a 6,800-line find-and-replace, which is the same as saying it never happened.
+ *
+ * The rule this file exists to make true: NOTHING outside it holds a raw
+ * colour, size, radius, shadow, duration or z-index. style.css said that about
+ * colour and was broken 76 times — see "Parchment" below, which is where most
+ * of them were hiding.
+ */
+
+:root {
+  /* ==================================================================
+   * SURFACES, LINES, TEXT
+   *
+   * "Cold iron" — neutral slate chrome, warm art. The frame used to be the
+   * same warm brown as the art beside it and neither read as foreground.
+   * ================================================================== */
+
+  --bg: #14161a;
+  --bg-panel: #1e2229;
+  --bg-panel-2: #272c34;
+  --bg-inset: #0f1114;          /* wells: the log, HP tracks, sunken lists */
+  --bg-raised: #313842;         /* hover, active tab — the LIGHTEST surface */
+
+  --border: #3a424e;
+  --border-soft: #2b313a;
+  --border-strong: #4d5766;
+
+  /*
+   * Two greys, not three.
+   *
+   * There were three — text, dim, faint — and `--text-faint` (#6b7480)
+   * measured 3.37:1 on `--bg-panel` and 2.50:1 on `--bg-raised`, against a
+   * 4.5:1 floor for body text. It was used 42 times, and 21 runs of it were
+   * also set below 12px.
+   *
+   * Correcting it to the floor produced #99a0aa. `--text-dim` is #98a1ae.
+   * They are the same grey. That is not a rounding artefact — it is the
+   * finding: on surfaces this close together there is room for exactly two
+   * legible text weights, and a third was only ever available by being
+   * illegible.
+   *
+   * So the ramp is two, and the third level of hierarchy comes from size and
+   * weight (--fs-xs, --fw-normal against --fw-semibold) rather than from a
+   * grey nobody can read. `--text-faint` is kept as an alias so no existing
+   * rule breaks; it should not be used in new work.
+   */
+  --text: #e6e9ee;              /* 9.72:1 on --bg-raised */
+  --text-dim: #98a1ae;          /* 4.53:1 on --bg-raised — the floor */
+  --text-faint: var(--text-dim);          /* deprecated: was #6b7480, 2.50:1 */
+
+  /* ==================================================================
+   * SIGNAL COLOURS
+   *
+   * Each has two forms, and the split is the point. A colour used as TEXT
+   * must clear 4.5:1; the same colour used as a border, an icon or a fill
+   * only has to clear 3:1. Correcting one value to satisfy both washes the
+   * signal out — `--danger` lifted to 4.5:1 turns a red into a pink, and an
+   * error that does not look alarming has stopped doing its job.
+   *
+   * So: the base token is the SIGNAL (borders, fills, icons, rules), and
+   * `-ink` is the same hue lifted to be readable as running text. Ratios in
+   * comments are against --bg-raised, the worst case.
+   * ================================================================== */
+
+  /* Gold and warn already clear 4.5:1 as they stand, so their ink form is the
+     colour itself. The alias exists so a rule that means "this is text" can
+     say so, and so the day one of them is retuned there is one place to look. */
+  --gold: #d8b45c;              /* 5.97 — mark AND ink */
+  --gold-bright: #f0cf7a;       /* 7.84 */
+  --gold-ink: var(--gold);
+  --gold-dim: #8a6f2e;          /* 2.48 — decorative only; never text */
+  --gold-well: #2a2416;         /* tinted panel behind something gold */
+
+  --danger: #c25d4e;            /* 2.80 as a mark — borders, fills, icons */
+  --danger-ink: #d48e83;        /* 4.51 — error text */
+  --danger-dim: #7a3128;
+  --danger-well: #271a18;
+
+  --success: #6aa05c;           /* 3.83 as a mark */
+  --success-ink: #7cac6f;       /* 4.50 */
+  --success-dim: #3f6b38;
+  --success-well: #1a2318;
+
+  --warn: #c9ab45;              /* 5.29 — mark AND ink */
+  --warn-ink: var(--warn);
+  --warn-dim: #8a7526;
+  --warn-well: #26221a;
+
+  --accent: #7f9bd0;            /* 4.23 as a mark */
+  --accent-ink: #86a1d3;        /* 4.54 */
+  --accent-dim: #46587c;
+  --accent-well: #1a2130;
+
+  /*
+   * Ornament — unlit brass, for frames and filigree.
+   *
+   * Deliberately NOT gold: gold means "you can act on this", and an ornate
+   * frame drawn in gold spends that signal on decoration.
+   *
+   * Raised from #6f5a34 to clear 3:1 on the lightest surface it borders
+   * (2.23 → 3.00). This is the ONE place the accessibility floor argues with
+   * the stated design intent — "metal at rest" wants to be dim, and this is
+   * measurably less dim. It is the minimum that clears the floor, and it is
+   * flagged rather than settled: if the frames now read as too present, the
+   * honest fix is to stop using ornament as a load-bearing border and let it
+   * be pure decoration, not to put it back below the line.
+   */
+  --ornament: #997c48;          /* 3.00 on --bg-raised */
+  --ornament-bright: #a08347;
+  --ornament-well: rgba(20, 22, 26, 0.82);   /* glass behind a HUD panel */
+
+  /* ==================================================================
+   * PARCHMENT — the map's own palette
+   *
+   * The region chart and the dungeon floor plan are drawn on paper, inside an
+   * interface that is otherwise a dark room lit by gold. They need their own
+   * ramp and always did.
+   *
+   * What they did not need was to keep it as raw hex inside the `.wm-*`
+   * rules. style.css declared "nothing outside :root should hold a hex value,
+   * or swapping the palette becomes a find-and-replace again" and then held
+   * 76 of them, almost all of them here. The consequence was concrete: the
+   * map is the middle of the play screen, and it was the one region of the
+   * interface that could not be re-themed with the rest of it.
+   * ================================================================== */
+
+  --pg-paper: #e9e1cd;          /* room fill, corridor floor */
+  --pg-paper-lit: #f2e5c2;      /* the room the party is standing in */
+  --pg-paper-dim: #d6c298;      /* seen, not visited */
+  --pg-ink: #0d0803;            /* wall lines */
+  --pg-ink-soft: #5b4526;       /* door frames, secret-door marks */
+  --pg-rule: #6b4210;           /* graph-paper ruling, stair ticks, traps */
+  --pg-label: #1f1a12;          /* text on parchment */
+  --pg-rock: #1a1510;           /* the stone the level is cut out of */
+
+  /* ==================================================================
+   * TERRAIN — the battlefield's 16×12 board
+   *
+   * These four are the only colours that survived the tile map, and they
+   * survived for a reason: BattleMapGen still generates rough ground, water,
+   * low cover and tall cover, and `.bm-cell.is-*` still paints them. They
+   * were simply named for a world map that stopped existing around them —
+   * which is why they read as dead weight in an audit and are not.
+   *
+   * The eight that WERE dead went with this pass: --floor, --road, --door,
+   * --hearth, --npc, --enemy, --item (never referenced), and --hud-log-w /
+   * --hud-log-clear, where the only consumer of the first was the second and
+   * nothing consumed either.
+   * ================================================================== */
+
+  --terrain-rough: #3a5a34;
+  --terrain-water: #3a5a6a;
+  --terrain-low: #5a4a40;       /* low cover — crates, a wall you can see over */
+  --terrain-tall: #4a453c;      /* tall cover — the edge stroke on a blocker */
+
+  /* The names the `.bm-cell` rules still use. Aliases rather than a rename,
+     because renaming them is a style.css change and this file is the floor
+     that change stands on. */
+  --grass: var(--terrain-rough);
+  --water: var(--terrain-water);
+  --building: var(--terrain-low);
+  --wall: var(--terrain-tall);
+
+  /*
+   * Whose turn it is, in a fight. One rule uses it: `.cbt-turn`.
+   *
+   * Pointed at gold deliberately. "The current turn" is the canonical example
+   * the palette gives of something gold is FOR, and this was a second, nearly
+   * identical yellow (#e8c547) sitting beside it doing the same job — which is
+   * how a signal colour stops being a signal.
+   */
+  --player: var(--gold);
+
+  /* ==================================================================
+   * TYPE
+   *
+   * Nine steps replacing 63 values.
+   *
+   * --fs-2xs is a FLOOR, not the smallest thing available: 0.75rem is 12px,
+   * and the probe found 21 runs of live text below that at every width from
+   * 360px to 1440px — smallest 9.6px — none of which scaled with the
+   * viewport. Anything that wants to be quieter than the floor should get
+   * there with weight or colour, not by shrinking further.
+   *
+   * The display sizes are fluid because they are the only ones large enough
+   * for the difference to matter, and because a 48px hero on a 360px phone is
+   * a headline that wraps four times.
+   * ================================================================== */
+
+  --font-display: "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+  --font-ui: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: "Cascadia Code", "Consolas", ui-monospace, monospace;
+  --font: var(--font-display);            /* the historical alias */
+
+  --fs-2xs: 0.75rem;            /* 12px — the floor. Nothing smaller ships. */
+  --fs-xs: 0.8125rem;           /* 13 */
+  --fs-sm: 0.875rem;            /* 14 */
+  --fs-md: 1rem;                /* 16 — body */
+  --fs-lg: 1.125rem;            /* 18 */
+  --fs-xl: 1.375rem;            /* 22 */
+  --fs-2xl: clamp(1.5rem, 1.2rem + 1.5vw, 1.75rem);
+  --fs-3xl: clamp(1.75rem, 1.3rem + 2.2vw, 2.25rem);
+  --fs-4xl: clamp(2rem, 1.2rem + 4vw, 3rem);        /* the hero */
+
+  --fw-normal: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+
+  --lh-tight: 1.2;              /* headings */
+  --lh-snug: 1.4;               /* dense readouts, rail rows */
+  --lh-normal: 1.6;             /* running text */
+  --lh-prose: 1.75;             /* the scene description, the book */
+
+  --ls-tight: -0.01em;
+  --ls-normal: 0;
+  --ls-caps: 0.08em;            /* the small-caps section label, all 29 of them */
+
+  /* ==================================================================
+   * SPACE — a 4px base, eight steps
+   * ================================================================== */
+
+  --sp-1: 0.25rem;   /*  4 */
+  --sp-2: 0.5rem;    /*  8 */
+  --sp-3: 0.75rem;   /* 12 */
+  --sp-4: 1rem;      /* 16 */
+  --sp-5: 1.5rem;    /* 24 */
+  --sp-6: 2rem;      /* 32 */
+  --sp-7: 3rem;      /* 48 */
+  --sp-8: 4rem;      /* 64 */
+
+  /* ==================================================================
+   * RADIUS — five, replacing seventeen
+   * ================================================================== */
+
+  --r-sm: 3px;                  /* chips, pips, small inputs */
+  --r-md: 6px;                  /* buttons, cards */
+  --r-lg: 10px;                 /* panels, modals */
+  --r-pill: 999px;
+  --r-circle: 50%;
+
+  /* ==================================================================
+   * ELEVATION — four, replacing forty-three
+   *
+   * On a dark interface a shadow is barely visible, so each of these pairs a
+   * cast shadow with a hairline of light along the top edge. That hairline is
+   * what actually reads as "raised" here.
+   * ================================================================== */
+
+  --sh-1: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --sh-2: 0 2px 8px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  --sh-3: 0 12px 40px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  --sh-glow: 0 0 0 1px var(--gold), 0 0 12px rgba(216, 180, 92, 0.25);
+
+  /* ==================================================================
+   * LAYERS — named, replacing eleven raw values between 0 and 300
+   *
+   * The gaps are deliberate: something that has to sit between two of these
+   * gets its own name here rather than a hand-picked number at the callsite.
+   * ================================================================== */
+
+  --z-base: 0;
+  --z-raised: 10;
+  --z-rail: 20;
+  --z-topbar: 30;
+  --z-overlay: 100;             /* the dialogue theatre, the combat board */
+  --z-modal: 200;
+  --z-check: 300;               /* the d20 ceremony, over a modal */
+  --z-toast: 400;
+
+  /* ==================================================================
+   * MOTION
+   *
+   * Every rule using these still belongs inside the existing
+   * `prefers-reduced-motion` blocks — this file sets durations, it does not
+   * decide whether a thing animates.
+   * ================================================================== */
+
+  --dur-fast: 120ms;
+  --dur: 200ms;
+  --dur-slow: 400ms;
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ==================================================================
+   * CONTROLS
+   *
+   * --tap-min is 44px because that is the size a finger hits reliably, and
+   * the shell probe found every `.icon-btn` at 32×32, `.person` rows at 25px
+   * and `.party-add` at 15px — unchanged from 1440px down to 360px. It is a
+   * token rather than a number in a media query so the floor can be asserted:
+   * tools/shell_probe.php fails on anything interactive below it at phone
+   * widths.
+   * ================================================================== */
+
+  --tap-min: 44px;
+  --control-h: 2.25rem;         /* the resting height of a button on a desktop */
+  --focus-ring: 2px solid var(--gold);
+  --focus-offset: 2px;
+
+  /*
+   * Party portrait diameter. Currently referenced by nothing: the rail hard-
+   * codes 38px and 42px, which is how `.party-face` once rendered at 145px
+   * inside a 38px card without anything looking wrong in the source. Wiring
+   * the rail to it is porting work, not token work — it is declared here
+   * because it names a real constant, and left honest about being unused.
+   */
+  --portrait: 38px;
+
+  /* ==================================================================
+   * LAYOUT CONSTANTS
+   *
+   * These two were already being used as tokens — `var(--rail-w, 390px)` in
+   * two rules, `var(--cbt-roster-w, 200px)` in one — and neither was ever
+   * declared. Every use carried the same fallback, so the interface has been
+   * running on the fallback and looks exactly the same declared. Making them
+   * real costs nothing and means changing the rail width is one edit.
+   * ================================================================== */
+
+  --rail-w: 390px;              /* the right rail: tracker, log, actions */
+  --cbt-roster-w: 200px;        /* the party/foe card columns beside the board */
+}
+
+/*
+ * KNOWN PHANTOMS — referenced, never declared, deliberately still not.
+ *
+ * Four more tokens are used with a fallback and have no declaration anywhere:
+ *
+ *   --text-soft        line 1079 falls back to --text, line 3773 to --text-dim
+ *   --font-mono        7 rules, all falling back to `ui-monospace, monospace`
+ *   --green / --red    one rule each, hex fallbacks, on .field-note
+ *   --parchment-well   one rule, falls back to --bg-inset
+ *
+ * None of these are declared here, and that is the decision rather than an
+ * oversight. Declaring any of them CHANGES what renders:
+ *
+ *   --text-soft is asked for with two different intents in two rules, so
+ *     there is no value that leaves both as they are. It is not a token
+ *     somebody forgot to declare; it is two different ideas under one name.
+ *
+ *   --font-mono clearly means --mono, and pointing it there would put
+ *     Cascadia Code and Consolas back into seven rules that have been
+ *     rendering in the bare system monospace since they were written.
+ *
+ *   --green and --red duplicate --success and --danger at slightly different
+ *     values, which is the palette thesis being quietly undone on one
+ *     component.
+ *
+ * Each is a real fix and each is a visible change, so each belongs to the
+ * screen it lives on, decided when that screen is ported — not smuggled in
+ * under a token rename. Listed here so the next person finds them.
+ */

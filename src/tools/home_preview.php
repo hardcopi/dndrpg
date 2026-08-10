@@ -43,8 +43,26 @@ $body = substr($src, strpos($src, '<!DOCTYPE'));
    Written without quoting a closing tag, and this is not fussiness: a `?>`
    inside a `//` comment ENDS the PHP block. The first draft of this comment
    quoted one to say what it was stripping, and the rest of this file was
-   served to the browser as text. */
-$body = preg_replace('/<\?php.*?\?>/s', '', $body);
+   served to the browser as text.
+
+   Both opening forms, and the short echo is the one that mattered: this
+   matched only the long one, so index.php's "Signed in as" line — a short-tag
+   echo — survived the strip and was handed to the browser. The browser then
+   ate `<?= htmlspecialchars((string) auth()->` as a bogus tag, because such a
+   tag ends at the first `>` and there is one in the arrow operator, and
+   printed the remaining half of the expression as the signed-in user's name.
+   A stray `?>` is loud; this was quiet, and sat in the account bar of the one
+   page this bench is mostly used for. */
+$body = preg_replace('/<\?(?:php\b|=).*?\?>/s', '', $body);
+
+/* Nothing may survive that. A page that grows a third opening form, or a
+   block this cuts unevenly, would otherwise serve PHP source as page text
+   again — which is exactly the failure above, and the bench cannot be trusted
+   to show a layout while it is happening. */
+if (str_contains($body, '<?')) {
+    http_response_code(500);
+    exit('preview: PHP left in ' . $page . '.php after stripping — the bench would render source as text');
+}
 
 // Assets are referenced relatively ("assets/css/style.css"), and this is served
 // one directory down. Root them rather than moving the preview.
@@ -158,7 +176,30 @@ $stub = <<<HTML
 </script>
 HTML;
 
-$body = str_replace('<script src="/assets/js/api.js"></script>', $stub, $body);
+/* Matched as a tag rather than as one exact string, and asserted.
+
+   This was a literal `str_replace` of the whole script element. A literal
+   match fails silently: the stub is simply not installed, the page's own
+   script then finds the REAL `API`, fetches `session/modules` with no session,
+   gets a 401, and draws an empty shelf. The bench renders, so it looks like it
+   worked, and what you are judging is a layout that never received any data.
+   Adding a cache-busting `?v=` to that tag — which game.php and create.php
+   already do to theirs, and which the other pages are one tidy-up away from —
+   would have been enough to cause it.
+
+   A callback rather than a replacement string: `preg_replace` reads `$1` and
+   `\1` in the replacement, and the fixture JSON carries authored prose. */
+$body = preg_replace_callback(
+    '#<script\s[^>]*\bsrc="/assets/js/api\.js[^"]*"[^>]*>\s*</script>#i',
+    static fn (): string => $stub,
+    $body,
+    1,
+    $stubbed
+);
+if (!$stubbed) {
+    http_response_code(500);
+    exit('preview: no api.js script tag in ' . $page . '.php — the fixture would not be installed');
+}
 
 /* A banner, so nobody mistakes the bench for the site.
 

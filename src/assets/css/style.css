@@ -1,126 +1,22 @@
 /* 5e Browser RPG – dark classic fantasy UI */
 
-:root {
-  /*
-   * "Cold iron" — neutral slate chrome, warm art.
-   *
-   * The frame used to be the same warm brown as the tiles, so a wooden inn
-   * floor and the panel beside it sat in the same hue and neither read as
-   * foreground. Pulling the chrome to a cold neutral leaves the PVGames art as
-   * the only warm thing on screen, which is the whole trick: the interface
-   * recedes and the world comes forward.
-   *
-   * Gold is now reserved for things you can act on — a selected option, a live
-   * check, the current turn. It was previously on headings, links, names,
-   * borders and the player token at once, which meant it signalled nothing.
-   *
-   * Every colour below is semantic. Nothing outside this block should hold a
-   * hex value, or swapping the palette becomes a find-and-replace again.
-   */
-  --bg: #14161a;
-  --bg-panel: #1e2229;
-  --bg-panel-2: #272c34;
-  --bg-inset: #0f1114;          /* wells: the log, HP tracks, sunken lists */
-  --bg-raised: #313842;         /* hover, active tab */
+/*
+ * The tokens moved out.
+ *
+ * Everything this file is built from — colour, type, space, radius,
+ * elevation, layer, motion — now lives in tokens.css, which is the single
+ * source and the only place a raw value belongs. The `:root` block that stood
+ * here held colour and nothing else, which is why 63 font sizes, 17 radii, 43
+ * shadows and 11 z-indexes accumulated below it with nowhere to be declared.
+ *
+ * Imported rather than linked because there is no build step here and eight
+ * pages link this file with three different cache-busting strategies (and one
+ * with none). One import is one place to be right; eight <link> edits are
+ * eight places to drift. The cost is one serialised request, which is the
+ * cheaper of the two mistakes.
+ */
+@import url('tokens.css');
 
-  --border: #3a424e;
-  --border-soft: #2b313a;
-  --border-strong: #4d5766;
-
-  --text: #e6e9ee;
-  --text-dim: #98a1ae;
-  --text-faint: #6b7480;
-
-  --gold: #d8b45c;
-  --gold-dim: #8a6f2e;
-  --gold-bright: #f0cf7a;
-  --gold-well: #2a2416;         /* tinted panel behind something gold */
-
-  /*
-   * Ornament — unlit brass, for the HUD's frames and filigree.
-   *
-   * Deliberately NOT gold. The rule above is that gold means "you can act on
-   * this", and an ornate frame drawn in gold would spend that signal on
-   * decoration, which is exactly the mistake the palette was rewritten to undo.
-   * This is browner and darker: it reads as metal at rest, and a live check
-   * still stands out against a panel edged in it.
-   */
-  --ornament: #6f5a34;
-  --ornament-bright: #a08347;
-  --ornament-well: rgba(20, 22, 26, 0.82);   /* the glass behind a HUD panel */
-
-  /*
-   * What the floating HUD covers, so the camera can centre the party in the
-   * space that is actually visible rather than in the middle of the element.
-   * Read by opticalCentre() in game.js — change them here only.
-   */
-  --hud-inset-left: 72px;
-  --hud-inset-right: 190px;
-  --hud-inset-top: 56px;
-  --hud-inset-bottom: 72px;
-
-  /*
-   * The log's footprint in the bottom-left. Combat draws its own bar across the
-   * bottom of the board and the log floats above it, so the bar is inset by
-   * this much to clear it. One number so the two cannot drift apart — widening
-   * the log without moving the bar puts the log back over the buttons.
-   */
-  --hud-log-w: 340px;
-  --hud-log-clear: calc(var(--hud-log-w) + 1.4rem);
-
-  /*
-   * Party portrait diameter.
-   *
-   * Sized against the *logical* viewport, which is 1280x720 here because the
-   * display runs at 1.5x — not against the 1920x1080 panel. That is the whole
-   * trick: 58px looked reasonable as a number and took a third of the screen
-   * height once four of them stacked up. Keep it in one place so the column,
-   * the recruit slot and the camera's left inset cannot drift apart.
-   */
-  --portrait: 38px;
-
-  --accent: #7f9bd0;
-  --accent-dim: #46587c;
-  --accent-well: #1a2130;
-
-  --danger: #c25d4e;
-  --danger-dim: #7a3128;
-  --danger-well: #271a18;
-
-  --success: #6aa05c;
-  --success-dim: #3f6b38;
-  --success-well: #1a2318;
-
-  --warn: #c9ab45;
-  --warn-dim: #8a7526;
-  --warn-well: #26221a;
-  --wall: #4a453c;
-  --floor: #6a5a42;
-  --road: #6a6358;
-  --grass: #3a5a34;
-  --water: #3a5a6a;
-  --hearth: #a05030;
-  --building: #5a4a40;
-  --player: #e8c547;
-  --npc: #c9a84c;
-  --enemy: #c06050;
-  --item: #90b060;
-  --door: #8b6914;
-
-  /*
-   * Two faces, split by job. The serif is for things a person says or is
-   * called — dialogue, names, headings — where it reads as voice. The sans is
-   * for everything the interface says about itself: buttons, labels, tabs,
-   * stat lines. A book serif on a button is the loudest dated-web signal in
-   * the stylesheet, and it was previously on all of them.
-   */
-  --font-display: "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
-  --font-ui: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --mono: "Cascadia Code", "Consolas", ui-monospace, monospace;
-
-  /* Retained: plenty of rules still say var(--font) for prose. */
-  --font: var(--font-display);
-}
 
 * { box-sizing: border-box; }
 
