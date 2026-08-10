@@ -208,6 +208,20 @@ h1, h2, h3 { color: var(--gold); font-weight: 600; letter-spacing: 0.03em; margi
 }
 
 .btn-small { padding: 0.3rem 0.7rem; font-size: 0.85rem; }
+/* The one button on a landing page, which has a screen to itself and should
+   not be the size of a toolbar control. */
+.btn-lg { padding: 0.7rem 1.5rem; font-size: 1rem; letter-spacing: 0.02em; }
+/* A glyph in front of a label. `.btn` is inline-block, so the two would sit on
+   the text baseline with the icon hanging below it.
+
+   The paint is on an opt-in class rather than on `.btn > svg`: the other
+   icon-in-a-button on the site is a stroke-only symbol that sets its own
+   `fill: none`, and it only survives a blanket `fill: currentColor` here
+   because it happens to be declared later in this file. That is a coin toss to
+   leave lying in a stylesheet. */
+.btn:has(svg) { display: inline-flex; align-items: center; gap: 0.5rem; }
+.btn > svg { width: 0.85em; height: 0.85em; flex: 0 0 auto; }
+.btn > .btn-glyph { fill: currentColor; stroke: none; }
 .btn:disabled { opacity: 0.45; cursor: not-allowed; box-shadow: none; }
 
 .panel {
@@ -2100,6 +2114,72 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
    a text input that long is harder to read, not easier. */
 .wiz-narrow { max-width: 560px; }
 .wiz-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+
+/* Fields on the left, the picture on the right.
+
+   Wider than `.wiz-narrow` on purpose, but only the LEFT column is allowed to
+   be narrow: the reason that cap exists is that a long text input is harder to
+   read, and that argument is about the input, not about the step. So the form
+   column keeps its measure and the aside takes what is left.
+
+   The aside is capped rather than proportional. A 4:3 plate given half of an
+   1100px step is 550px wide and taller than the form beside it, which makes
+   the picture the subject of the page and the character creation an annotation
+   on it. */
+.wiz-split {
+  display: grid;
+  grid-template-columns: minmax(0, 34rem) minmax(0, 24rem);
+  gap: 1.5rem;
+  align-items: start;
+}
+.wiz-split-main { min-width: 0; }
+.wiz-split-aside { min-width: 0; }
+
+/* No plate, no column. Without this the grid holds a 24rem track open for an
+   element with nothing in it, and the form sits off-centre against a void for
+   every race nobody has painted yet. */
+.wiz-split:has(#racial-art[hidden]) { grid-template-columns: minmax(0, 34rem); }
+
+/* One column, picture last: the selects are what you came to this step to
+   operate, and on a phone they should not be below a landscape painting. */
+@media (max-width: 62rem) {
+  .wiz-split { grid-template-columns: minmax(0, 1fr); }
+  .wiz-split-aside { max-width: 34rem; }
+}
+
+/* Who a race is, above the line of numbers it grants. Serif, because it is
+   voice rather than interface, and set on a quiet inset so it reads as a note
+   about the world instead of another field label. Only the races we wrote
+   carry one — `:empty` keeps an SRD race from leaving a lit box with nothing
+   in it. */
+.wiz-lore {
+  font-family: var(--font-display);
+  color: var(--text-dim);
+  line-height: 1.6;
+  font-size: 0.92rem;
+  margin: 0.75rem 0 0;
+  padding: 0.7rem 0.9rem;
+  border-left: 2px solid var(--ornament);
+  background: rgba(0, 0, 0, 0.16);
+  border-radius: 0 4px 4px 0;
+}
+.wiz-lore:empty { display: none; }
+
+/* The race plate: a man and a woman of that people, back to back. Framed in
+   unlit brass, because it is a picture of the world rather than a control —
+   the same treatment a module cover gets on the shelf.
+
+   No top margin: it is the first thing in its own column now and sits level
+   with the Name label, not below anything. `hidden` needs saying here or the
+   `display: block` above would override the attribute. */
+.wiz-race-art {
+  display: block;
+  width: 100%;
+  border: 1px solid var(--ornament);
+  border-radius: 5px;
+  background: var(--bg-inset);
+}
+.wiz-race-art[hidden] { display: none; }
 
 .wiz-nav {
   display: flex;
@@ -5669,12 +5749,187 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
   border-top: 1px solid var(--border-soft);
   padding-top: 0.9rem;
 }
-/* ---------------------------------------------------------------------------
-   The landing page: three columns, then one full-width row.
+/* ===========================================================================
+   The landing page — a shelf of books.
 
-   Column 1 is the saved characters; the other two are modules, with any unused
-   one drawn as a placeholder. "How to Play" spans the lot underneath.
-   --------------------------------------------------------------------------- */
+   Three things in a column: a hero that is mostly air, the module shelf, and
+   the how-to. It used to be a hero of five identical grey buttons over a grid
+   whose first cell was a flat list of every character on the account; the list
+   went to characters.php and the buttons went to the bar at the top, and what
+   is left is the one row that matters plus the one action that continues it.
+
+   The palette rule holds here as everywhere: gold is for things you can act on
+   (the two buttons on a card, the title of the game), brass ornament is for
+   frames and rules, and the only warm thing with any saturation in it is the
+   painting.
+   =========================================================================== */
+
+/* The footer sits on the fold on a tall screen rather than halfway up it. An
+   install with one module and no how-to is a short page, and a rule across the
+   middle of a black field reads as content that failed to arrive. */
+body.home-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+/* The hero already ends in a rule and 3rem of air; the container's own 1.5rem
+   on top of that puts the shelf heading right on the seam. */
+body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
+
+/* --- The account bar --------------------------------------------------
+   Housekeeping: who you are, the legal page, the admin doors, the way out.
+   Quiet by construction — these are links, not buttons, because every one of
+   them drawn as a button is a button competing with the one that starts a
+   game. */
+.site-bar {
+  border-bottom: 1px solid var(--border-soft);
+  background: var(--bg-inset);
+  font-size: 0.78rem;
+}
+.site-bar-in {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0.5rem 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 1.1rem;
+  /* The name to the left, the doors to the right: `.site-who` takes the slack
+     so nothing has to be told its own width. */
+  justify-content: flex-end;
+}
+.site-who { color: var(--text-faint); margin-right: auto; }
+.site-who strong { color: var(--text-dim); font-weight: 600; }
+.site-bar a { color: var(--text-dim); }
+.site-bar a:hover { color: var(--gold); text-decoration: none; }
+
+/* --- The hero ---------------------------------------------------------
+   A title, a rule, a sentence and a button. The lighting is three stacked
+   gradients rather than an image: a low warm glow where the title sits, a cool
+   wash off the top, and a vignette that closes the sides so the column of text
+   is the only lit thing on the page above the shelf. */
+.hero-home {
+  padding: 4rem 1.5rem 3.25rem;
+  background:
+    radial-gradient(ellipse 42rem 18rem at 50% 8%,
+                    color-mix(in srgb, var(--gold) 7%, transparent) 0%, transparent 70%),
+    radial-gradient(ellipse 60rem 26rem at 50% 0%, var(--bg-panel) 0%, transparent 65%),
+    radial-gradient(ellipse 90rem 40rem at 50% 40%, transparent 40%, rgba(0, 0, 0, 0.45) 100%),
+    var(--bg);
+  border-bottom: 1px solid var(--border-soft);
+}
+
+/* Qualified, because `.hero p` sets a measure, a colour and a margin on every
+   paragraph in here and would outrank a bare class. */
+.hero-home .hero-eyebrow {
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin: 0 0 0.9rem;
+  max-width: none;
+}
+
+/* Struck metal: the fill runs bright at the top edge to dark at the foot, which
+   is what a raised letter does under a light above it. `background-clip` needs
+   a transparent colour to show through, so the glow moves to a drop-shadow —
+   a text-shadow would be clipped away with the fill. */
+.hero-home h1 {
+  font-size: clamp(2.4rem, 6vw, 3.6rem);
+  line-height: 1.05;
+  letter-spacing: 0.02em;
+  margin: 0;
+  background: linear-gradient(178deg, var(--gold-bright) 12%, var(--gold) 48%, var(--gold-dim) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: none;
+  filter: drop-shadow(0 0 28px color-mix(in srgb, var(--gold) 22%, transparent));
+}
+
+.hero-home p {
+  max-width: 44rem;
+  color: var(--text-dim);
+  font-size: 1.02rem;
+  line-height: 1.6;
+  margin: 0 auto;
+}
+
+.hero-home .hero-actions { margin-top: 1.8rem; }
+
+/* A brass rule with a lozenge on it, in the ornament colour rather than gold:
+   the palette spends gold on things you can press, and this is a divider. Two
+   segments and a diamond, so it reads as a struck line rather than a border
+   that lost its box. */
+.rule-orn {
+  --orn-w: 15rem;
+  width: var(--orn-w);
+  height: 0.5rem;
+  margin: 1.4rem auto 1.3rem;
+  position: relative;
+  background:
+    linear-gradient(90deg, transparent, var(--ornament) 22%, var(--ornament) 78%, transparent);
+  /* The line itself is a hairline in the middle of the box; the box is only
+     tall enough to hold the lozenge. */
+  background-size: 100% 1px;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+}
+.rule-orn::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0.42rem;
+  height: 0.42rem;
+  margin: -0.21rem 0 0 -0.21rem;
+  transform: rotate(45deg);
+  background: var(--ornament-bright);
+  box-shadow: 0 0 0 0.28rem var(--bg);
+}
+
+/* --- What names a row -------------------------------------------------
+   A heading with a rule running off it to the right, so the shelf reads as a
+   labelled section and not as three cards adrift under the hero. */
+.section-head {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.9rem;
+  margin: 0.25rem 0 1rem;
+}
+.section-head h2 {
+  margin: 0;
+  font-size: 1.15rem;
+  letter-spacing: 0.06em;
+}
+.section-hint {
+  margin: 0;
+  color: var(--text-faint);
+  font-size: 0.82rem;
+  flex: 1 1 12rem;
+  /* The hairline runs from the end of the sentence to the edge of the row, so
+     the heading sits on a line instead of floating above the cards. Drawn on
+     the hint rather than as a third element because the hint is what has the
+     slack: at a narrow width it wraps under the heading and takes the rule
+     with it. */
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+.section-hint::after {
+  content: "";
+  flex: 1 1 auto;
+  height: 1px;
+  background: linear-gradient(90deg, var(--border), transparent);
+}
+/* Once the hint wraps to its own two lines there is no line left to finish —
+   the rule comes out as a stub hanging off the last word. */
+@media (max-width: 40rem) {
+  .section-hint::after { display: none; }
+}
+
 .home-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -5695,9 +5950,6 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
    teaching the script where in the grid to splice each cell. */
 .home-modules { display: contents; }
 
-/* Full width, wherever the row happens to end. */
-.home-wide { grid-column: 1 / -1; }
-
 /* Two-up before one-up. The threshold is lower than it was at four columns,
    because three share the same width more generously and stay readable further
    down — dropping to two while there is still room for three wastes half the
@@ -5711,19 +5963,58 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
 
 .home-cell { display: flex; flex-direction: column; }
 
+/* The how-to, as five numbered steps.
+
+   Columns rather than one list, because full width is a very long measure and a
+   numbered list running the width of a desktop is hard to track back to the
+   next line. The markers are drawn from a counter instead of the list's own:
+   `columns` reflows the items between the two tracks, and a browser marker sits
+   outside the padding box where the second column's edge cuts it off. */
 .howto {
   color: var(--text-dim);
   line-height: 1.6;
-  padding-left: 1.2rem;
   margin: 0;
-  /* Full width means a very long measure on a wide screen, and a numbered list
-     running the width of a desktop is hard to track back to the next line. */
+  padding: 0;
+  list-style: none;
+  counter-reset: howto;
   columns: 2;
   column-gap: 2.5rem;
 }
-.howto li { break-inside: avoid; margin-bottom: 0.3rem; }
+.howto li {
+  break-inside: avoid;
+  counter-increment: howto;
+  position: relative;
+  padding-left: 2.4rem;
+  margin-bottom: 0.85rem;
+}
+.howto li:last-child { margin-bottom: 0; }
+/* A brass disc, aligned to the cap height of the first line rather than its
+   box: 1.6 line-height puts the text a couple of pixels down inside it. */
+.howto li::before {
+  content: counter(howto);
+  position: absolute;
+  left: 0;
+  top: 0.05rem;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 50%;
+  border: 1px solid var(--ornament);
+  background: var(--bg-inset);
+  color: var(--ornament-bright);
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .howto strong { color: var(--gold); }
 @media (max-width: 52rem) { .howto { columns: 1; } }
+
+/* The how-to sits under the shelf and is not part of its grid. Held to a
+   reading measure and centred: five steps across 1200px is a line nobody
+   finishes. */
+.home-howto { margin-top: 1.75rem; }
 
 /* A saved character.
 
@@ -5791,7 +6082,7 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
 /* An unfilled module slot. Says what it is rather than being a hole. */
 .module-slot-empty {
   border: 1px dashed var(--border-soft);
-  border-radius: 0.4rem;
+  border-radius: 8px;
   padding: 1rem;
   display: flex;
   align-items: center;
@@ -5801,40 +6092,150 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
   color: var(--text-faint);
   font-size: 0.82rem;
   line-height: 1.5;
+  /* Faint enough that a shelf with one module on it does not read as a shelf
+     with two things missing off it. */
+  opacity: 0.55;
 }
 
-/* A module cell is a panel, like the characters cell beside it: four columns
-   on one row that are all "a thing you can act on" should not be three
-   different kinds of box. The card supplies the internals, the panel supplies
-   the frame. */
+/* --- A module card ----------------------------------------------------
+   The painting is the top two thirds of it with the name lying across the
+   bottom of the picture; then the blurb, the credit, and the doors on the
+   card's own baseline. The name sat in a line of text under the plate and the
+   card read as a picture with a caption stuck below it — a book has its title
+   on the cover. */
 .module-card {
   display: flex;
   flex-direction: column;
-  /* So the button sits on the baseline in every card regardless of how long
-     the blurb ran — a ragged row of buttons reads as a rendering fault. */
-  align-items: flex-start;
+  align-items: stretch;
+  /* The plate is flush to the frame, so the padding moves inside. */
+  padding: 0;
+  overflow: hidden;
+  transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
 }
+.module-card:hover {
+  border-color: var(--ornament);
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.45);
+  transform: translateY(-2px);
+}
+
+/* The whole painting is the door. Sized by its own aspect-ratio rather than by
+   the image, so a module with no cover on disk is a dark plate with a title on
+   it and not a card half the height of the two beside it. */
+.module-plate {
+  position: relative;
+  display: block;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  background: var(--bg-inset);
+  border-bottom: 1px solid var(--border);
+  color: inherit;
+}
+.module-plate:hover { text-decoration: none; }
+.module-cover {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.35s ease;
+}
+.module-card:hover .module-cover { transform: scale(1.035); }
+
+/* The scrim the title lies on. A gradient over the foot of the painting rather
+   than a bar across it: the covers are painted with their interest in the
+   middle and their ground at the bottom, so the darkening lands on dirt and
+   sky rather than on somebody's face. */
+.module-plate::after {
+  content: "";
+  position: absolute;
+  inset: 40% 0 0;
+  background: linear-gradient(180deg, transparent, rgba(8, 9, 11, 0.88) 82%);
+  pointer-events: none;
+}
+/* No painting on disk: the plate stops reserving 3:2 of nothing and becomes a
+   title bar. Holding the shape would draw a dark rectangle two thirds the
+   height of the card with a caption at the bottom of it, which reads as a
+   picture that failed rather than as a module nobody has painted yet — and the
+   scrim would be a fade from nothing into black. */
+.module-plate.no-art { aspect-ratio: auto; background: var(--bg-panel-2); }
+.module-plate.no-art::after { display: none; }
+.module-plate.no-art .module-cap { position: static; padding-top: 1rem; }
+.module-plate.no-art .module-name,
+.module-plate.no-art .module-levels { text-shadow: none; }
+
+.module-cap {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  padding: 0.85rem 1.15rem 0.8rem;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+.module-name {
+  font-family: var(--font-display);
+  color: var(--gold);
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1.2;
+  /* Legible over whatever the bottom of the painting happens to be, without a
+     box behind it — same trick the map labels use. */
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.95), 0 0 12px rgba(0, 0, 0, 0.8);
+}
+.module-card:hover .module-name { color: var(--gold-bright); }
+.module-levels {
+  font-family: var(--font-ui);
+  font-size: 0.68rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  white-space: nowrap;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.95);
+}
+
+/* How many of your parties are in here, in the corner of the painting. It was
+   a line of body text under the blurb, which is a lot of prose for a number,
+   and it only ever renders when the number is not zero — a card with no badge
+   and a "Start a game here" button has already said so twice. */
+.module-badge {
+  position: absolute;
+  z-index: 1;
+  top: 0.6rem;
+  right: 0.6rem;
+  padding: 0.18rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid var(--gold-dim);
+  background: color-mix(in srgb, var(--gold-well) 82%, transparent);
+  backdrop-filter: blur(2px);
+  color: var(--gold);
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+}
+
+.module-body { padding: 0.9rem 1.15rem 0; }
+.module-blurb {
+  color: var(--text-dim);
+  line-height: 1.55;
+  margin: 0;
+}
+.module-credit {
+  font-size: 0.66rem;
+  color: var(--text-faint);
+  line-height: 1.45;
+  margin: 0.7rem 0 0;
+}
+
 /* Both buttons sit on the card's baseline together, so a row of cards has one
    line of buttons across it however long the blurbs ran. */
 .module-actions {
   margin-top: auto;
+  padding: 1rem 1.15rem 1.15rem;
   display: flex;
   flex-wrap: wrap;
   gap: 0.4rem;
-}
-
-/* Full-bleed to the panel's edges: the painting is the thing being chosen
-   between, and a stamp-sized one inset in a box is not. Negative margins undo
-   the panel's padding rather than the panel losing it, because every other
-   panel on the page wants it. */
-.module-cover {
-  display: block;
-  width: calc(100% + 2.5rem);
-  margin: -1rem -1.25rem 0.85rem;
-  aspect-ratio: 3 / 2;
-  object-fit: cover;
-  border-bottom: 1px solid var(--border);
-  border-radius: 6px 6px 0 0;
 }
 
 /* ------------------------------------------------------------------ *
@@ -5932,37 +6333,11 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
 /* The grid's own gap does the spacing; .panel's bottom margin would add to it
    and only on some rows. */
 .home-grid > .panel { margin-bottom: 0; }
-.module-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 0.75rem;
-  width: 100%;
-}
-.module-name { color: var(--gold); font-size: 1.05rem; font-weight: 600; }
-.module-levels {
-  font-size: 0.7rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--text-faint);
-  white-space: nowrap;
-}
-.module-blurb {
-  color: var(--text-dim);
-  line-height: 1.55;
-  margin: 0.55rem 0 0.7rem;
-}
-.module-count {
-  font-size: 0.78rem;
-  color: var(--text-dim);
-  margin: 0 0 0.3rem;
-}
-.module-credit {
-  font-size: 0.68rem;
-  color: var(--text-faint);
-  line-height: 1.45;
-  margin: 0 0 0.8rem;
-}
+/* The module cell's own rules — the plate, the title on it, the badge — are up
+   with the rest of the landing page. They lived here, after it, which is the
+   only reason a second `.module-name` further up would ever have been worth
+   noticing: the later rule wins, and two copies of a card's styling in one
+   stylesheet is one of them being fixed and the other not. */
 .char-module { color: var(--gold); }
 
 /* Which game the regions below belong to. Sits above .ce-sub and outranks it,

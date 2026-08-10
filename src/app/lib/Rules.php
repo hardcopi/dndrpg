@@ -497,6 +497,20 @@ class Rules
      *                        the SRD limits it to stonework; nothing here can
      *                        tell what a check is about, so a dwarf gets it on
      *                        all of History. A small over-grant, on purpose.
+     *   quarry_built         Athletics proficiency (skillProficient) — the
+     *                        Sarsen copy of what keen_senses does for
+     *                        Perception, and implemented at the same line
+     *   set_fast             the contest to resist a grapple or a shove is
+     *                        rolled with advantage (CombatEngine::doContest).
+     *                        Defensive only: a Sarsen is hard to move, not
+     *                        better at moving other people — the offensive
+     *                        half of that contest is an Athletics check, and
+     *                        quarry_built is already in it.
+     *
+     * The Sarsen's third printed trait, Load-Bearing, is deliberately absent:
+     * carrying capacity is not a limit anywhere in this game, so a key for it
+     * would be the same lie Darkvision would be. The sheet prints it without
+     * "Applied by the game", which is the honest answer.
      */
     public const RACE_FEATURES = [
         'Dragonborn'     => ['draconic_resistance'],
@@ -507,6 +521,7 @@ class Rules
         'Half-Orc'       => ['relentless_endurance', 'savage_attacks'],
         'Halfling'       => ['halfling_luck', 'brave'],
         'Halfling/Stout' => ['stout_resilience'],
+        'Sarsen'         => ['quarry_built', 'set_fast'],
         'Tiefling'       => ['hellish_resistance'],
     ];
 
@@ -1550,6 +1565,15 @@ class Rules
         // whatever the character already had, outside the explicit/derived
         // split for the same reason the feat grants are.
         if ($skill === 'perception' && self::raceFeature($actor, 'keen_senses')) {
+            return true;
+        }
+
+        // Quarry-Built is Keen Senses' shape for Athletics, and sits here for
+        // the third time for the same reason: a Sarsen rogue whose explicit
+        // skills list says stealth and sleight of hand would otherwise return
+        // false at the `is_array($explicit)` branch below and lose the trait
+        // exactly on the characters who wrote their proficiencies down.
+        if ($skill === 'athletics' && self::raceFeature($actor, 'quarry_built')) {
             return true;
         }
 

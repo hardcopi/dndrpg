@@ -921,6 +921,37 @@
       if (parseInt(r[k], 10)) bonuses.push(`${label} +${r[k]}`);
     });
     $('#racial-preview').textContent = `Speed ${r.speed} ft. Bonuses: ${bonuses.join(', ') || 'none'}. ${r.traits || ''}`;
+    // textContent, not innerHTML: this is prose out of a database column that
+    // an admin can edit, and the creator is the one page it is read on.
+    const lore = $('#racial-lore');
+    if (lore) lore.textContent = r.description || '';
+    showRaceArt(r.name);
+  }
+
+  /**
+   * The race plate, if one has been painted.
+   *
+   * Keyed off the race NAME, not the subrace: a Wood Elf and a High Elf are
+   * both elves and there is one painting of elves. The filename rule is the
+   * same one WorldState::tag() uses server-side — lowercased, and anything
+   * that is not a letter or a digit becomes an underscore — so "Half-Orc"
+   * looks for `half_orc.png` and nothing has to carry a second key column.
+   *
+   * `hidden` goes back on before the load rather than after the failure: the
+   * element is reused as the player scrolls through the list, and a race with
+   * no plate would otherwise keep showing the previous race's people. The
+   * vhost answers a missing file with the homepage HTML and a 200, so `error`
+   * is the only signal that there is no painting — a status check would pass.
+   */
+  function showRaceArt(name) {
+    const img = $('#racial-art');
+    if (!img) return;
+    const key = String(name || '').toLowerCase().replace(/[^a-z0-9]+/g, '_');
+    img.hidden = true;
+    if (!key) return;
+    img.onload = () => { img.hidden = false; };
+    img.onerror = () => { img.hidden = true; };
+    img.src = `assets/images/races/${encodeURIComponent(key)}.png`;
   }
 
   $('#race')?.addEventListener?.('change', updateRacialPreview);

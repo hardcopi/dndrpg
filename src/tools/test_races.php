@@ -103,6 +103,82 @@ ok('a Human wizard with the same list is not',
     !Rules::isSkillProficient(['race' => 'Human', 'class' => 'Wizard',
         'background' => '', 'level' => 1, 'skills' => ['athletics']], 'perception'));
 
+echo "\nQuarry-Built\n";
+
+ok('a Sarsen is proficient in Athletics with no other grant',
+    Rules::isSkillProficient(['race' => 'Sarsen', 'class' => 'Wizard',
+        'background' => '', 'level' => 1], 'athletics'));
+ok('Quarry-Built survives an explicit skills list that omits it',
+    Rules::isSkillProficient(['race' => 'Sarsen', 'class' => 'Rogue',
+        'background' => '', 'level' => 1,
+        'skills' => ['stealth', 'sleight_of_hand']], 'athletics'));
+ok('and it is Athletics only, not Acrobatics beside it',
+    !Rules::isSkillProficient(['race' => 'Sarsen', 'class' => 'Wizard',
+        'background' => '', 'level' => 1, 'skills' => []], 'acrobatics'));
+ok('a Human wizard with the same list is not proficient in Athletics',
+    !Rules::isSkillProficient(['race' => 'Human', 'class' => 'Wizard',
+        'background' => '', 'level' => 1, 'skills' => []], 'athletics'));
+
+echo "\nSet Fast\n";
+
+ok('a Sarsen carries both traits and nothing else',
+    Rules::raceFeatures('Sarsen') === ['quarry_built', 'set_fast']);
+ok('Load-Bearing is printed but not enforced — no key for it',
+    !Rules::raceFeature(['race' => 'Sarsen'], 'load_bearing'));
+ok('Set Fast carries no damage resistance',
+    Rules::raceResistances(['set_fast']) === []);
+
+/* The contest itself, driven through doContest() rather than by re-rolling its
+   dice here: the whole question is whether the trait is wired into the method
+   the game calls, and a copy of the arithmetic in this file would pass with
+   the hook deleted.
+ *
+ * The two defenders differ by `set_fast` and nothing else — both carry
+ * `quarry_built`, so the Athletics proficiency it grants is in both defences
+ * and what is left in the gap is the advantage. Statistical, like Halfling
+ * Luck below: 300 shoves at even odds lands near 150 for the plain defender
+ * and near 220 for the Sarsen, so a margin of 30 is wide enough to be certain
+ * and loose enough to survive a bad run. */
+$shoveState = function (array $raceFeatures) {
+    $them = subject(['cid' => 'stone', 'name' => 'Stone', 'side' => 'party',
+                     'x' => 4, 'y' => 5, 'hp' => 20, 'max_hp' => 20, 'alive' => true,
+                     'race_features' => $raceFeatures]);
+    $bully = subject(['cid' => 'bully', 'name' => 'Bully', 'side' => 'foe',
+                      'x' => 5, 'y' => 5, 'hp' => 20, 'max_hp' => 20, 'alive' => true,
+                      'reach_ft' => 5]);
+    return [
+        'combatants' => [$bully, $them],
+        'order'      => ['bully', 'stone'],
+        'turn_index' => 0,
+        'round'      => 1,
+        'log'        => [],
+        'events'     => [],
+        'grid'       => ['w' => BattleGrid::W, 'h' => BattleGrid::H,
+                         'cell_ft' => 5, 'terrain' => []],
+    ];
+};
+$heldGround = function (array $raceFeatures) use ($invoke, $shoveState): int {
+    $held = 0;
+    for ($i = 0; $i < 300; $i++) {
+        $after = $invoke('doContest', $shoveState($raceFeatures), 'stone', 'shove');
+        $target = null;
+        foreach ($after['combatants'] as $c) {
+            if ($c['cid'] === 'stone') {
+                $target = $c;
+            }
+        }
+        if (!Conditions::has($target, 'prone')) {
+            $held++;
+        }
+    }
+    return $held;
+};
+$plainHeld = $heldGround(['quarry_built']);
+$stoneHeld = $heldGround(['quarry_built', 'set_fast']);
+ok('a Sarsen keeps their feet far more often than the same body without the trait',
+    $stoneHeld > $plainHeld + 30,
+    "without set fast {$plainHeld}, with it {$stoneHeld}, of 300");
+
 echo "\nThe save-side instincts, through rollSave\n";
 
 $mode = fn (array $s, string $ability, array $tags = []) =>

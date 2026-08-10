@@ -17,6 +17,8 @@
  * two API routes and nothing else.
  *
  *   /tools/home_preview.php                      the module shelf
+ *   /tools/home_preview.php?case=bare            a module with no cover on disk
+ *   /tools/home_preview.php?case=empty           an install with no modules
  *   /tools/home_preview.php?page=characters      one module's parties
  *   /tools/home_preview.php?page=characters&case=empty
  *   /tools/home_preview.php?page=characters&case=big
@@ -70,6 +72,30 @@ $modules = [
      'attribution' => 'Dungeon levels are generated at play, in the manner of the random dungeon tables in the 1979 Dungeon Masters Guide (Appendix A).',
      'level_min' => 1, 'level_max' => 6, 'party_count' => 1],
 ];
+
+/* The two cases the shelf gets wrong if nobody looks at them.
+ *
+ * `bare` is a module whose cover is not on disk — the card keeps its plate and
+ * puts the title on a dark board, because the alternative is one card half the
+ * height of the two beside it. The key is deliberately one that will never
+ * exist, so this stays true however the art directory fills up.
+ *
+ * `empty` is a fresh install: no modules, three placeholders, and the hero's
+ * "Start a New Game" left in place — it is removed only when there are module
+ * cards to ask the question instead. */
+$bare = [
+    ['id' => 9, 'module_key' => 'no_such_module_art', 'name' => 'A Module With No Cover',
+     'blurb' => 'Nothing has been painted for this one yet.',
+     'attribution' => null,
+     'level_min' => 2, 'level_max' => 4, 'party_count' => 0],
+];
+
+/* Index only: characters.php looks its own module up in this same list, and
+   `case=empty` there means "an account with no characters in it", not "an
+   install with no modules". */
+if ($page === 'index') {
+    $modules = ['bare' => $bare, 'empty' => []][$case] ?? $modules;
+}
 
 function pc(int $id, string $party, ?string $pname, string $name, string $race,
             string $cls, int $lvl, int $hp, int $max, string $sprite): array
@@ -134,13 +160,23 @@ HTML;
 
 $body = str_replace('<script src="/assets/js/api.js"></script>', $stub, $body);
 
-// A banner, so nobody mistakes the bench for the site.
+/* A banner, so nobody mistakes the bench for the site.
+
+   Matched as a tag rather than as the literal string "<body>": index.php grew
+   a class on it and the banner silently stopped appearing on the one page this
+   bench is mostly used for. A bench that quietly turns into an unlabelled copy
+   of the site is worse than one that fails. */
 $note = htmlspecialchars("preview · {$page}.php · case: {$case}", ENT_QUOTES);
-$body = str_replace('<body>', '<body>
+$banner = '
   <div style="position:fixed;top:0;left:0;right:0;z-index:99;background:#3a2c12;
               color:#e8c979;font:600 12px/1.9 monospace;text-align:center;
               border-bottom:1px solid #6b5426">' . $note . '</div>
-  <div style="height:26px"></div>', $body);
+  <div style="height:26px"></div>';
+$body = preg_replace('/(<body\b[^>]*>)/i', '$1' . $banner, $body, 1, $hit);
+if (!$hit) {
+    http_response_code(500);
+    exit('preview: no <body> in ' . $page . '.php');
+}
 
 header('Content-Type: text/html; charset=utf-8');
 echo $body;

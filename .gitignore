@@ -28,3 +28,9 @@ src/assets/images/tiles/
 src/assets/images/decor/
 src/assets/images/buildings/
 src/assets/images/anim/
+
+# The manifest of those four, and nothing else: every one of its 193 entries is
+# under decor/, tiles/ or buildings/. It follows what it describes — a list of
+# the intrinsic sizes of files no clone will contain is not a list of anything.
+# tools/make_art_manifest.py rebuilds it from the disk if they ever come back.
+src/assets/images/art.json

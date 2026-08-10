@@ -10,14 +10,42 @@ require_signed_in_page();
   <title>Rivermark Chronicles — Open 5e RPG</title>
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
-<body>
-  <header class="hero">
+<body class="home-page">
+  <!--
+    Account chrome, out of the hero.
+
+    It used to sit in the middle of the hero's button row — "Continue
+    Adventure", "About / Legal", "Accounts", "Content" all drawn as the same
+    grey rectangle, with "signed in as" in small print underneath. Four equal
+    buttons is four equal offers, and only one of them is why anybody opened
+    this page. Housekeeping goes up here as quiet links; the hero keeps the one
+    button that continues a game.
+  -->
+  <div class="site-bar">
+    <nav class="site-bar-in">
+      <span class="site-who">Signed in as
+        <strong><?= htmlspecialchars((string) auth()->currentUser()['username'], ENT_QUOTES) ?></strong></span>
+      <a href="about.php">About &amp; legal</a>
+<?php if (auth()->isAdmin()): ?>
+      <a href="admin.php">Accounts</a>
+      <a href="content.php">Content</a>
+      <a href="adventure_print.php">Books</a>
+<?php endif; ?>
+      <a href="#" id="btn-signout">Sign out</a>
+    </nav>
+  </div>
+
+  <header class="hero hero-home">
+    <p class="hero-eyebrow">Open 5e SRD &middot; single player &middot; in the browser</p>
     <h1>Rivermark Chronicles</h1>
+    <div class="rule-orn" aria-hidden="true"></div>
     <p>
-      A single-player, browser-based RPG inspired by classic gold-box exploration and tactical combat.
-      Powered by the open 5e system rules (SRD). All maps, monsters, quests, and items live in the database.
+      A single-player RPG in the manner of the old gold-box games: talk your way
+      around a town, walk out of it, and fight what is waiting on a battlefield
+      of five-foot squares. The world — every room, every face, every quest —
+      lives in the database.
     </p>
-    <div style="display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap">
+    <div class="hero-actions">
       <!--
         This starts a new party, which is to say a new game — quests, flags and
         companions are all party-scoped. It is labelled that way because it used
@@ -30,18 +58,12 @@ require_signed_in_page();
         new game" without saying which game is exactly the question those cells
         exist to ask. It survives only on an install with no modules at all.
       -->
-      <a class="btn btn-primary" href="create.php" id="new-game-btn">Start a New Game</a>
-      <a class="btn" href="game.php" id="continue-btn">Continue Adventure</a>
-      <a class="btn" href="about.php">About / Legal</a>
-<?php if (auth()->isAdmin()): ?>
-      <a class="btn" href="admin.php">Accounts</a>
-      <a class="btn" href="content.php">Content</a>
-<?php endif; ?>
+      <a class="btn btn-primary btn-lg" href="create.php" id="new-game-btn">Start a New Game</a>
+      <a class="btn btn-lg" href="game.php" id="continue-btn">
+        <svg class="btn-glyph" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
+        Continue where you left off
+      </a>
     </div>
-    <p class="hero-who">
-      Signed in as <strong><?= htmlspecialchars((string) auth()->currentUser()['username'], ENT_QUOTES) ?></strong>
-      &middot; <a href="#" id="btn-signout">Sign out</a>
-    </p>
   </header>
 
   <!--
@@ -66,7 +88,7 @@ require_signed_in_page();
 
     <!--
       One card per module across the top, then the how-to full width.
-      
+
       This page used to spend its first column on a flat list of every
       character the account had ever made. That answered neither of the
       questions it was being asked — which game is this one in, and who do they
@@ -74,24 +96,30 @@ require_signed_in_page();
       list moved to characters.php, one module at a time and grouped by party,
       and the modules took the row back.
     -->
+    <div class="section-head">
+      <h2>The shelf</h2>
+      <p class="section-hint">Each card is a separate game. A party is made in
+        one and stays in it.</p>
+    </div>
+
     <div class="home-grid">
       <!-- Filled by renderModules(); one cell per module. -->
       <div id="module-slots" class="home-modules"></div>
-
-      <section class="panel home-wide">
-        <h2>How to Play</h2>
-        <ol class="howto">
-          <li>Create a hero (or a party of up to 4) using point buy, standard array, or random rolls.</li>
-          <li>You begin wherever your chosen module opens — for Rivermark
-            Chronicles, the <strong>Golden Flagon</strong> inn.</li>
-          <li>Talk to NPCs, buy gear from the merchant, and take work from
-            <strong>Available work</strong> in your journal (J).
-            The board carries only your own module's work.</li>
-          <li>Follow the map outward — every way on is an exit somebody wrote.</li>
-          <li>Fight turn-based tactical battles, loot treasure, return to rest.</li>
-        </ol>
-      </section>
     </div>
+
+    <section class="panel home-howto">
+      <h2>How to Play</h2>
+      <ol class="howto">
+        <li>Create a hero (or a party of up to 4) using point buy, standard array, or random rolls.</li>
+        <li>You begin wherever your chosen module opens — for Rivermark
+          Chronicles, the <strong>Golden Flagon</strong> inn.</li>
+        <li>Talk to NPCs, buy gear from the merchant, and take work from
+          <strong>Available work</strong> in your journal (J).
+          The board carries only your own module's work.</li>
+        <li>Follow the map outward — every way on is an exit somebody wrote.</li>
+        <li>Fight turn-based tactical battles, loot treasure, return to rest.</li>
+      </ol>
+    </section>
   </main>
 
   <footer class="footer-legal">
@@ -124,9 +152,16 @@ require_signed_in_page();
     /**
      * The module cells.
      *
-     * Each is a panel in the top row, sitting beside the saved characters at
-     * the same size — the two questions this page answers are "who am I already
-     * playing" and "what else could I play", and they deserve equal billing.
+     * A card is a book on a shelf: the painting is the whole top of it, with
+     * the name and the level band lying across the bottom of the picture
+     * rather than in a line of text underneath. That is the shape a player
+     * already knows how to read, and it puts the one thing worth looking at —
+     * the art — at the size it was drawn for.
+     *
+     * The plate is itself the door, and it leads wherever the loud button
+     * leads: to your parties if you have some here, to the creator if you do
+     * not. A picture of a place you can play, that does nothing when pressed,
+     * is a picture that has to be explained.
      *
      * The header's "Start a New Game" goes away as soon as the modules are
      * drawn: starting a game without saying which game is precisely the
@@ -147,24 +182,39 @@ require_signed_in_page();
       host.innerHTML = '';
       modules.forEach((m) => {
         const n = Number(m.party_count) || 0;
+        const key = encodeURIComponent(m.module_key);
+        const played = 'characters.php?module=' + key;
+        const fresh = 'create.php?module=' + key;
+
         const card = document.createElement('section');
         card.className = 'panel home-cell module-card';
         // Cover art is by convention rather than by a column: the file is named
         // for the module key, and a module without one simply has no <img>.
-        // `onerror` removes it rather than leaving a broken-image glyph — the
-        // vhost answers a missing file with the homepage HTML and a 200, so the
-        // browser gets a document where it wanted a picture.
+        // The plate keeps its 3:2 whatever happens, so a missing painting is a
+        // dark board with the title on it rather than a card that collapses to
+        // half the height of the two beside it — the vhost answers a missing
+        // file with the homepage HTML and a 200, so the browser gets a
+        // document where it wanted a picture and `onerror` is the only warning.
         card.innerHTML = `
-          <img class="module-cover" alt=""
-               src="assets/images/modules/${encodeURIComponent(m.module_key)}.jpg"
-               onerror="this.remove()">
-          <div class="module-head">
-            <span class="module-name">${esc(m.name)}</span>
-            <span class="module-levels">Levels ${esc(m.level_min)}–${esc(m.level_max)}</span>
-          </div>
-          ${m.blurb ? `<p class="module-blurb">${esc(m.blurb)}</p>` : ''}
-          <p class="module-count">${n ? `${n} part${n === 1 ? 'y' : 'ies'} of yours here` : 'Nothing started here yet'}</p>
-          ${m.attribution ? `<p class="module-credit">${esc(m.attribution)}</p>` : ''}`;
+          <a class="module-plate" href="${n ? played : fresh}">
+            <img class="module-cover" alt="" src="assets/images/modules/${key}.jpg">
+            ${n ? `<span class="module-badge">${n} part${n === 1 ? 'y' : 'ies'}</span>` : ''}
+            <span class="module-cap">
+              <span class="module-name">${esc(m.name)}</span>
+              <span class="module-levels">Levels ${esc(m.level_min)}–${esc(m.level_max)}</span>
+            </span>
+          </a>
+          <div class="module-body">
+            ${m.blurb ? `<p class="module-blurb">${esc(m.blurb)}</p>` : ''}
+            ${m.attribution ? `<p class="module-credit">${esc(m.attribution)}</p>` : ''}
+          </div>`;
+
+        const cover = card.querySelector('.module-cover');
+        cover.addEventListener('error', () => {
+          cover.remove();
+          card.querySelector('.module-plate').classList.add('no-art');
+        });
+
         // Two doors, and which one is the loud one depends on whether there
         // is anything behind it. With parties here, Play is the thing you came
         // for; with none, Play would open an empty page and Create is the only
@@ -175,14 +225,14 @@ require_signed_in_page();
         if (n) {
           const play = document.createElement('a');
           play.className = 'btn btn-small btn-primary';
-          play.href = 'characters.php?module=' + encodeURIComponent(m.module_key);
+          play.href = played;
           play.textContent = 'Play';
           actions.appendChild(play);
         }
 
         const start = document.createElement('a');
         start.className = 'btn btn-small' + (n ? '' : ' btn-primary');
-        start.href = 'create.php?module=' + encodeURIComponent(m.module_key);
+        start.href = fresh;
         start.textContent = n ? 'New party' : 'Start a game here';
         actions.appendChild(start);
 
@@ -200,6 +250,14 @@ require_signed_in_page();
       }
       return modules;
     }
+
+    /* Was an <a href="#"> with nothing listening: it scrolled to the top of the
+       page and left you signed in. admin.php has always had the real one. */
+    document.getElementById('btn-signout').addEventListener('click', async (e) => {
+      e.preventDefault();
+      try { await API.post('auth/logout', {}); } catch (err) { /* going anyway */ }
+      location.href = 'login.php';
+    });
 
     (async function () {
       await renderModules();

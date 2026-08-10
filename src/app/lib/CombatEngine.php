@@ -4640,12 +4640,18 @@ class CombatEngine
             Rules::skillCheck($target, 'athletics')['total'],
             Rules::skillCheck($target, 'acrobatics')['total']
         );
-        $defence = Dice::d20($theirs);
+        // Set Fast: a Sarsen defends this contest with advantage. It is the one
+        // racial instinct that cannot go through rollSave() with the others,
+        // because being shoved is not a saving throw here — it is an opposed
+        // check, and this is the only place one is rolled.
+        $setFast = Rules::raceFeature($target, 'set_fast');
+        $defence = Dice::d20Mode($theirs, $setFast ? 'advantage' : 'normal');
         $won = (int) $mine['total'] > (int) $defence['total'];
 
         $verb = $kind === 'grapple' ? 'grapple' : 'shove';
         $state['log'][] = "{$actor['name']} tries to {$verb} {$target['name']}: "
-            . "{$mine['total']} against {$defence['total']}.";
+            . "{$mine['total']} against {$defence['total']}"
+            . ($setFast ? " — {$target['name']} is set fast." : '.');
         $state = $this->emit($state, [
             'type' => 'contest', 'actor' => (string) $actor['cid'], 'target' => $targetCid,
             'kind' => $kind, 'attacker' => (int) $mine['total'],

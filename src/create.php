@@ -48,23 +48,45 @@ require_signed_in_page();
     <div class="wiz-body">
       <!-- 1. Who they are -->
       <section class="wiz-step" data-step="identity" hidden>
-        <div class="wiz-narrow">
-          <label for="name">Name</label>
-          <input id="name" name="name" maxlength="50" autocomplete="off"
-                 placeholder="e.g. Elara Stormwind">
-          <p id="name-check" class="field-note"></p>
+        <!--
+          Two columns: what you fill in on the left, who you would be on the
+          right. The plate is 4:3 and was reading as a banner across a 560px
+          column — the picture is a third of the step's height there and pushes
+          the description and the trait line below the fold.
 
-          <div class="wiz-pair">
-            <div>
-              <label for="race">Race</label>
-              <select id="race"></select>
+          The aside collapses to nothing when there is no plate (see
+          `.wiz-split:has()`), so a race nobody has painted gets the single
+          column this step had before rather than a column of empty air.
+        -->
+        <div class="wiz-split">
+          <div class="wiz-split-main">
+            <label for="name">Name</label>
+            <input id="name" name="name" maxlength="50" autocomplete="off"
+                   placeholder="e.g. Elara Stormwind">
+            <p id="name-check" class="field-note"></p>
+
+            <div class="wiz-pair">
+              <div>
+                <label for="race">Race</label>
+                <select id="race"></select>
+              </div>
+              <div>
+                <label for="subrace">Subrace</label>
+                <select id="subrace"></select>
+              </div>
             </div>
-            <div>
-              <label for="subrace">Subrace</label>
-              <select id="subrace"></select>
-            </div>
+            <!-- Only the races we wrote carry a description; an SRD race
+                 leaves it empty and the paragraph collapses. -->
+            <p id="racial-lore" class="wiz-lore"></p>
+            <p id="racial-preview" class="help-hint"></p>
           </div>
-          <p id="racial-preview" class="help-hint"></p>
+
+          <!-- The art is by filename rather than by a column — the same
+               convention the module covers use — so `onerror` is what decides
+               there isn't one. -->
+          <div class="wiz-split-aside">
+            <img id="racial-art" class="wiz-race-art" alt="" hidden>
+          </div>
         </div>
       </section>
 

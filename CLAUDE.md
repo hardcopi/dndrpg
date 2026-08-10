@@ -342,9 +342,78 @@ budget are read from the engine (`wanderChance()`, `wanderBudget()`) rather than
 restated: a book that told a referee the wrong chance would be wrong in the one
 place nobody can check it against the code.
 
+## Races, and the one that is ours
+
+The `races` table is the whole catalogue and the creator is driven off it —
+`meta/races` is a `SELECT *`, `create.js` builds both selects from what comes
+back — so **a row is a playable race and no code has to change to add one**.
+What code decides is which of a race's traits the game actually enforces.
+
+- **`Rules::RACE_FEATURES` is an honesty rule, not a lookup table.** Only
+  implemented traits go in it. `races.traits` stays prose, and the SRD races'
+  Darkvision is the standing example of the gap: there is no light or darkness
+  anywhere in the engine, so a key for it would be a lie in either direction.
+- **The sheet says which is which.** `CharacterSheet::traitImplemented()` prints
+  "Applied by the game." against a trait it can find a feature key for, and
+  finds that key by lowercasing the printed name and turning spaces and hyphens
+  into underscores. So "Quarry-Built" and `quarry_built` agreeing is a
+  requirement and not a coincidence — rename one and the sheet quietly stops
+  crediting the trait.
+- **`races.source`** carries provenance per row, because the licence
+  obligations differ by row and the footer's attribution is only honest if we
+  can say which rows it covers.
+- **`races.description` is ours by construction.** The SRD's own prose is a
+  licensed document, so the column holds what this valley makes of these people
+  — who lends money, who witnesses contracts, who the priory disapproves of —
+  written here. One per ROW rather than per race: the creator shows the row for
+  the race *and subrace* selected, so a Wood Elf reading the High Elf's
+  paragraph would be reading about somebody else.
+- **The plate is per RACE, not per row**, and by filename rather than by a
+  column: `assets/images/races/<name>.png`, lowercased with non-alphanumerics
+  underscored, which is `WorldState::tag()`'s rule applied client-side in
+  `showRaceArt()`. A Wood Elf and a High Elf are both elves and there is one
+  painting of elves. A race with no plate on disk is normal, not broken — the
+  aside collapses and the step goes back to one column.
+
+**The Sarsen exist because the SRD has no big people in it.** Goliath is the
+obvious answer and is not in SRD 5.1; rather than reach for a licence this
+project does not have, they are a quarry-cut people written for Rivermark, out
+of things already in the world and previously nobody's — the haul-road, the
+boundary stones, the Old City's masonry. `source` says `Rivermark`, and they
+are the only row that does.
+
+Two of their three traits are enforced, and the third deliberately is not:
+
+- `quarry_built` — Athletics proficiency, granted at the same line in
+  `Rules::skillProficient()` that Keen Senses uses for Perception, and *above*
+  the explicit-skills branch. Below it, a Sarsen who wrote their proficiencies
+  down would lose the trait exactly for having done so.
+- `set_fast` — the contest to resist a grapple or a shove is rolled with
+  advantage. **This is the one racial instinct that cannot live in
+  `rollSave()`** with the others: being shoved is not a saving throw here, it is
+  an opposed check, and `CombatEngine::doContest()` is the only place one is
+  rolled. Defensive only — the attacking half of that contest is an Athletics
+  check, and `quarry_built` is already in it.
+- Load-Bearing — printed, unenforced. Nothing in this game weighs a pack
+  against a limit, so it sits where Darkvision sits.
+
+`tools/test_races.php` covers the table, both actor shapes, and every hook.
+The Set Fast test drives `doContest()` itself rather than re-rolling its dice
+in the test file, and the two defenders it compares differ by that one trait —
+delete the hook and it fails, which was checked by deleting it.
+
+**Adding a race to a database somebody is playing on needs doing by hand.**
+Races live in `sql/seed_data.sql`, which only runs on an empty volume, and
+`apply_content_safely.py` covers `content/` and not this. The safe pattern —
+used to load these descriptions without retyping them — is to strip the
+`USE rpg_5e;` line out of `schema.sql` and `seed_data.sql`, load them into a
+scratch database, copy the columns across with a join on `(name, subrace)`, and
+drop the scratch. That also proves the seed files reproduce what is in the live
+database, which nothing else checks.
+
 ## Generated art
 
-Four generators, all talking to the local image model (SANA-Sprint) on
+Five generators, all talking to the local image model (SANA-Sprint) on
 `127.0.0.1:7860`, override with `QWEN_URL`:
 
 | Tool | Draws | Into |
@@ -353,6 +422,7 @@ Four generators, all talking to the local image model (SANA-Sprint) on
 | `tools/gen_region_map.py` | one 4:3 map per region | `assets/images/maps/<region_key>.png` |
 | `tools/gen_npc_art.py` | one bust per sprite key | `assets/images/npcs/<key>_bust.png` |
 | `tools/gen_module_cover.py` | one 3:2 cover per module | `assets/images/modules/<module_key>.jpg` |
+| `tools/gen_race_art.py` | a man and a woman of one people, back to back | `assets/images/races/<race_name>.png` |
 
 Faces are **cut** from busts by `tools/cut_face.py`, never generated separately —
 two generations of "a weathered miner" are two different men, and the party rail
@@ -363,7 +433,7 @@ without classifier-free guidance, so there is no unconditional branch for a
 negative to push against. Proved rather than assumed: regenerating with nine
 extra anti-letterbox terms produced a byte-identical PNG. Anything that must be
 true has to be in the *positive* prompt, and **early** — the model weights what
-it reads first. Three bugs came from getting that wrong:
+it reads first. Four bugs came from getting that wrong:
 
 - Old City plates came back with **open sky** over a dungeon thirty feet
   underground, because the art direction keyed off the location's `type` and
@@ -387,6 +457,43 @@ it reads first. Three bugs came from getting that wrong:
   to lead with the man; he came back standing. `FRAMING` is the floor, not a
   guarantee, and a character description should be leading with who somebody is
   in any case.
+- The Sarsen race plate came back as **two ordinary humans on a pale studio
+  wall** — no stone skin, no veining, no chisel marks, and a background the
+  opposite of the "plain dark neutral" asked for. Both instructions were in the
+  prompt and both were behind ninety words of pose. This one is worth reading
+  the comments in `gen_race_art.py` for, because the fix is not "put it first"
+  a fourth time:
+
+  **Prompt clauses compete for a budget, and length is displacement rather than
+  emphasis.** Lengthening the race clause to insist harder cost the pose — three
+  seeds came back face to face, full length, one of them two men. Shortening it
+  to thirty words gave the pose back and lost the stone again. The clauses were
+  trading off against each other on length alone, and no ratio satisfied both.
+  What worked was **saying the requirement twice in two places** — once early
+  where it is weighted, once after `PERIOD` where there is room — which is the
+  same trick that made "back to back" survive against "both faces visible".
+  Fifteen images over five revisions; the composition was right on the first
+  seed and never the problem.
+
+  With the shape settled, **six of the nine SRD races came right on the first
+  seed** — that is what the fifteen bought. The three that did not each failed
+  the same way, and it is worth knowing which races will: **a race whose
+  identifying feature is small, or shared with a neighbour, loses it to the
+  model's nearest common template.** Dragonborn came back with one scaled
+  figure and one smooth grey elf; half-orc came back as elves with no tusks.
+  Both were fixed by naming the feature the model was *substituting* — "no
+  pointed elf ears", "round ears, not pointed" — rather than by describing the
+  right one harder. Gnome was different again: a pile of caricature cues (wild
+  hair, laugh lines, bright eyes) reads as a *genre*, and the genre arrived
+  with its own composition, standing them side by side facing the viewer in a
+  whimsical folk-art hand nothing else here uses. Cutting the clause to three
+  features fixed the pose with it.
+
+  One thing to watch across all of them: the word "plate" in the leading clause
+  occasionally gets taken literally, and a seed comes back as a cast relief
+  hanging on a wall. It is seed-dependent rather than systematic, so it is
+  cheaper to re-roll than to reword the clause that finally got the background
+  right.
 
 A module cover must **match the shelf**, which is the opposite constraint and
 for the same reason — three cards in a row are read as one row. The Undervault's
@@ -519,6 +626,27 @@ cover plate, the level band, how many of your parties are in it, and two doors:
 A module you have nothing in draws only the second, because Play would open an
 empty page.
 
+A card is drawn as a book: the painting is the top of it with the name and the
+level band lying across the bottom of the picture, the party count is a badge in
+its corner, and the plate itself is a link to whichever door is the loud one.
+Three things about that shape are load-bearing.
+
+- **The plate keeps its 3:2 with no image in it, until there is no image at
+  all.** A cover is named for the module key and nothing declares one, so a
+  module without a painting is normal rather than broken — and the vhost answers
+  a missing file with the homepage HTML and a `200`, so `onerror` is the only
+  warning the browser gets. Holding 3:2 would then draw a dark rectangle two
+  thirds of the card high with a caption under it, which reads as a picture that
+  failed; `.module-plate.no-art` drops the ratio and the scrim and becomes a
+  title bar. `?case=bare` on the preview is that card.
+- **Account chrome is links in a bar, not buttons in the hero.** "Continue",
+  "About", "Accounts" and "Content" were four identical grey rectangles in a row
+  under the title, which is four equal offers where only one of them is why
+  anybody opened the page.
+- **Gold still means "you can act on this".** The hero's rule and the how-to's
+  numbered discs are drawn in `--ornament` — unlit brass — for the same reason
+  the HUD's filigree is: an ornament in gold spends the signal on decoration.
+
 `characters.php` is one module's worth of your characters, **grouped by the
 party they march in**, with anyone party-less collected at the bottom. It
 groups client-side over `session/list` rather than issuing its own query: that
@@ -547,10 +675,14 @@ Three things about it that look like details and are not:
   party_name` now.
 
 `tools/home_preview.php` draws both pages against fixtures, with no account and
-no session, so the empty case and the six-member case can be looked at without
-arranging a database to produce them. It serves the pages' own markup and their
-own inline scripts and fakes only the two API routes, so a layout fault visible
-there is a layout fault in the game. `tools/test_characters_page.sh` covers the
+no session, so the awkward cases — an install with no modules (`?case=empty`), a
+module with no cover on disk (`?case=bare`), a party of six
+(`?page=characters&case=big`) — can be looked at without arranging a database to
+produce them. It serves the pages' own markup and their own inline scripts and
+fakes only the two API routes, so a layout fault visible there is a layout fault
+in the game. It finds the page's `<body>` by tag rather than by the literal
+string `<body>`: index.php grew a class on it and the "preview" banner silently
+stopped drawing on the one page the bench is mostly used for. `tools/test_characters_page.sh` covers the
 guard, the catalogue, the cover art and the grouping contract over real HTTP.
 
 The front page used to spend its first column on a flat list of every character

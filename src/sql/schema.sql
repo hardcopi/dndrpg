@@ -1013,6 +1013,16 @@ CREATE TABLE races (
     wis_bonus TINYINT DEFAULT 0,
     cha_bonus TINYINT DEFAULT 0,
     traits TEXT,
+    -- Who these people are, in this world's own words. NULL for the SRD races:
+    -- their prose is in the SRD and copying it here would put a licensed
+    -- document in a column, so the creator simply shows nothing for them.
+    -- Filled in for anything of our own, where it is the only place the race
+    -- exists as more than six numbers.
+    description TEXT NULL,
+    -- '5e SRD' for anything taken from the SRD under CC-BY, and the provenance
+    -- of anything that is not. Worth a column rather than a comment: the
+    -- licence obligations differ by row, and the footer's attribution is only
+    -- honest if we can tell which rows it covers.
     source VARCHAR(50) DEFAULT '5e SRD'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
