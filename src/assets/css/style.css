@@ -6700,3 +6700,71 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
 @media (hover: none) {
   .ce-row-walk { opacity: 1; }
 }
+
+/* ===========================================================================
+ * TOUCH SIZING — the 44px floor, below the fold only
+ *
+ * Every interactive control in this interface was drawn for a mouse and never
+ * looked at again: tools/shell_probe.php measured `.icon-btn` at 32x32,
+ * `.person` rows at 25px, `.party-add` at 15px and `.act-slot` at 34px — and
+ * measured them IDENTICALLY at 1440px and at 360px. Nothing about the controls
+ * responded to the viewport at all. 44px is the size a finger hits reliably.
+ *
+ * Width-conditional, and deliberately so. Applying the floor everywhere makes
+ * the desktop rails and the action bar markedly chunkier to fix a problem
+ * desktop does not have — a mouse hits 32px perfectly well. So this rides the
+ * shell's own fold at 760px, where the three columns already become one: below
+ * it you are on a phone holding a single column, and the controls should be
+ * thumbable; above it nothing changes at all, which the style snapshot asserts.
+ *
+ * The honest caveat: width is a proxy for touch, not touch itself. A tablet in
+ * landscape at 1024px with no mouse gets the mouse sizing. The fix for that is
+ * `(pointer: coarse)` alongside the width — deliberately not added here,
+ * because it would also catch a desktop with a touchscreen and make its UI
+ * chunky for a pointer it is not being driven with.
+ *
+ * `--tap-min` is a token so the probe and the stylesheet cannot disagree about
+ * what the floor is.
+ * =========================================================================== */
+
+@media (max-width: 760px) {
+  .icon-btn,
+  .icon-btn-sm {
+    width: var(--tap-min);
+    height: var(--tap-min);
+  }
+  /* The glyph does not grow with its target — a 44px button exists to be hit,
+     not to shout. Kept at the size it reads best and simply given more room. */
+  .icon-btn-sm svg { width: 1.1rem; height: 1.1rem; }
+
+  /* Rows, which grow by their padding rather than by a height: the label has to
+     stay vertically centred against a portrait that is not changing size. */
+  .person,
+  .action-btn,
+  .act-slot,
+  .loc-act {
+    min-height: var(--tap-min);
+  }
+  .act-slot,
+  .loc-act { width: auto; min-width: var(--tap-min); }
+
+  /* min-WIDTH as well as min-height: the log's filters are "All", "Combat" and
+     "Story", and padding alone left the short one at 41px — tall enough to hit
+     and a finger's width too narrow. A target is a box, not a height. */
+  .chip {
+    min-height: var(--tap-min);
+    min-width: var(--tap-min);
+    padding: 0.4rem 0.8rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Beats `.hud-party .party-add { min-height: 0 }`, which is what flattened
+     the recruit slot to fifteen pixels — a min-* floor from the old rail that
+     the rewrite zeroed rather than removed. */
+  .hud-party .party-add,
+  .party-add {
+    min-height: var(--tap-min);
+  }
+}
