@@ -6768,3 +6768,98 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
     min-height: var(--tap-min);
   }
 }
+
+/* ===========================================================================
+ * PHONE LAYOUT — the scene first, and the page allowed to scroll
+ *
+ * Below the fold the shell already collapsed to one column, but it collapsed
+ * in DOM order onto `grid-template-rows: auto 1fr auto` — and the DOM order is
+ * cbt-top, rail-left, scene, rail-right. So the 1fr, the one flexible row,
+ * landed on the PARTY RAIL, and the scene took an `auto` row sized to whatever
+ * its content happened to be. shell_probe.php measured the result at 430px:
+ * party rail 241px, the game itself 240px, log and tracker 331px. The thing
+ * you opened the game for was the smallest band on the screen, under two
+ * pieces of furniture.
+ *
+ * That was an off-by-one in a row assignment, not a decision anybody made,
+ * which is exactly the kind of thing a layout only confesses to when something
+ * measures it.
+ *
+ * Two changes, and the second is the one that matters:
+ *
+ *   The rows are placed explicitly, so "which band is the game" is written
+ *   down rather than inherited from the order the markup happens to be in.
+ *
+ *   The page scrolls. The desktop shell is a single viewport with
+ *   `overflow: hidden` and `100dvh`, which is right for three columns side by
+ *   side and wrong for four stacked: it meant everything below the fold had to
+ *   fit in one screen, so every band was squeezed to make room for the others.
+ *   Let it scroll and the scene can simply have the first screen.
+ *
+ * Reading order after the scene is tracker, actions, log, then party and the
+ * people here — what you are doing, what you can do, what happened, who is
+ * with you. The action bar is lifted above the log inside the rail rather than
+ * left underneath it, because a log is a thing you consult and a button row is
+ * a thing you reach for.
+ * =========================================================================== */
+
+@media (max-width: 760px) {
+  html:has(body.game-page),
+  body.game-page {
+    height: auto;
+    min-height: 100dvh;
+    overflow: visible;
+  }
+
+  .game-shell {
+    grid-template-columns: minmax(0, 1fr);
+    /* Named rows so an added child cannot silently take the scene's place the
+       way the party rail took the 1fr. */
+    grid-template-rows: auto auto auto auto;
+    height: auto;
+    min-height: 100dvh;
+    overflow: visible;
+  }
+
+  .cbt-top    { grid-row: 1; }
+  .scene      { grid-row: 2; }
+  .rail-right { grid-row: 3; }
+  .rail-left  { grid-row: 4; }
+
+  /* The first screenful is the game. Not 100dvh — a band that exactly fills
+     the viewport gives no hint that anything follows it, and the rails below
+     are then only found by accident. */
+  .scene {
+    min-height: 68vh;
+    overflow: visible;
+  }
+
+  /* The rails stop being panes-that-scroll-inside-themselves and become
+     sections of a page. Inner scrollers inside an outer scroller is the thing
+     that makes a phone layout feel broken. */
+  .rail,
+  .rail-left,
+  .rail-right {
+    overflow: visible;
+    max-height: none;
+    height: auto;
+  }
+  .rail-right { display: flex; flex-direction: column; }
+  .rail-left  { max-height: none; }
+  .rail-pane  { overflow: visible; }
+  .hud-party  { flex-direction: row; flex-wrap: wrap; }
+
+  /* Actions above the log, inside the rail. */
+  .rail-bottom .action-bar { order: -1; }
+
+  /* The log keeps a cap: it is the one band with unbounded content, and left
+     to grow it would put the party rail an arbitrary distance down the page. */
+  .hud-log .log { max-height: 40vh; }
+
+  /* A fight takes the screen back — the board is the game at that moment, and
+     it is the one thing here that genuinely wants a fixed viewport. */
+  body.in-combat.game-page,
+  html:has(body.in-combat.game-page) { height: 100dvh; overflow: hidden; }
+  body.in-combat .game-shell { height: 100dvh; overflow: hidden; }
+  body.in-combat .scene { min-height: 0; }
+}
