@@ -47,18 +47,18 @@ button, input, select, textarea { font-family: var(--font-ui); }
 a { color: var(--gold); text-decoration: none; }
 a:hover { text-decoration: underline; }
 
-h1, h2, h3 { color: var(--gold); font-weight: 600; letter-spacing: 0.03em; margin: 0 0 0.5rem; }
+h1, h2, h3 { color: var(--gold); font-weight: 600; letter-spacing: 0.03em; margin: 0 0 var(--sp-8); }
 
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 1.5rem;
+  padding: var(--sp-24);
 }
 
 /* Landing */
 .hero {
   text-align: center;
-  padding: 3rem 1rem 2rem;
+  padding: var(--sp-48) var(--sp-16) var(--sp-32);
   background:
     radial-gradient(ellipse at 50% 0%, var(--bg-panel) 0%, transparent 60%),
     var(--bg);
@@ -70,14 +70,14 @@ h1, h2, h3 { color: var(--gold); font-weight: 600; letter-spacing: 0.03em; margi
   text-shadow: 0 0 24px rgba(212, 168, 75, 0.35);
 }
 
-.hero p { color: var(--text-dim); max-width: 560px; margin: 0.75rem auto 1.5rem; line-height: 1.5; }
+.hero p { color: var(--text-dim); max-width: 560px; margin: var(--sp-12) auto var(--sp-24); line-height: 1.5; }
 
 .btn {
   display: inline-block;
   background: linear-gradient(180deg, var(--border), var(--border-soft));
   color: var(--gold);
   border: 1px solid var(--gold-dim);
-  padding: 0.55rem 1.2rem;
+  padding: var(--sp-8) var(--sp-20);
   border-radius: var(--r-md);
   cursor: pointer;
   font-family: inherit;
@@ -103,10 +103,10 @@ h1, h2, h3 { color: var(--gold); font-weight: 600; letter-spacing: 0.03em; margi
   color: var(--danger);
 }
 
-.btn-small { padding: 0.3rem 0.7rem; font-size: var(--fs-sm); }
+.btn-small { padding: var(--sp-4) var(--sp-12); font-size: var(--fs-sm); }
 /* The one button on a landing page, which has a screen to itself and should
    not be the size of a toolbar control. */
-.btn-lg { padding: 0.7rem 1.5rem; font-size: var(--fs-md); letter-spacing: 0.02em; }
+.btn-lg { padding: var(--sp-12) var(--sp-24); font-size: var(--fs-md); letter-spacing: 0.02em; }
 /* A glyph in front of a label. `.btn` is inline-block, so the two would sit on
    the text baseline with the icon hanging below it.
 
@@ -115,7 +115,7 @@ h1, h2, h3 { color: var(--gold); font-weight: 600; letter-spacing: 0.03em; margi
    `fill: none`, and it only survives a blanket `fill: currentColor` here
    because it happens to be declared later in this file. That is a coin toss to
    leave lying in a stylesheet. */
-.btn:has(svg) { display: inline-flex; align-items: center; gap: 0.5rem; }
+.btn:has(svg) { display: inline-flex; align-items: center; gap: var(--sp-8); }
 .btn > svg { width: 0.85em; height: 0.85em; flex: 0 0 auto; }
 .btn > .btn-glyph { fill: currentColor; stroke: none; }
 .btn:disabled { opacity: 0.45; cursor: not-allowed; box-shadow: none; }
@@ -124,17 +124,17 @@ h1, h2, h3 { color: var(--gold); font-weight: 600; letter-spacing: 0.03em; margi
   background: var(--bg-panel);
   border: 1px solid var(--border);
   border-radius: var(--r-md);
-  padding: 1rem 1.25rem;
-  margin-bottom: 1rem;
+  padding: var(--sp-16) var(--sp-20);
+  margin-bottom: var(--sp-16);
   box-shadow: var(--sh-bevel);
 }
 
-.panel h2 { font-size: var(--fs-lg); border-bottom: 1px solid var(--border); padding-bottom: 0.4rem; margin-bottom: 0.75rem; }
+.panel h2 { font-size: var(--fs-lg); border-bottom: 1px solid var(--border); padding-bottom: var(--sp-6); margin-bottom: var(--sp-12); }
 
 .grid-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+  gap: var(--sp-16);
 }
 
 @media (max-width: 800px) {
@@ -152,7 +152,7 @@ h1, h2, h3 { color: var(--gold); font-weight: 600; letter-spacing: 0.03em; margi
  * here rather than worked around at each call site. */
 [hidden] { display: none !important; }
 
-label { display: block; color: var(--text-dim); font-size: var(--fs-sm); margin-bottom: 0.25rem; }
+label { display: block; color: var(--text-dim); font-size: var(--fs-sm); margin-bottom: var(--sp-4); }
 /* textarea belongs here too. It was left out, so every multi-line field fell
  * back to the browser default — a white box, sized to its `cols` rather than
  * its container, sitting beside its own label instead of under it. Nothing in
@@ -163,10 +163,10 @@ input, select, textarea {
   background: var(--bg);
   border: 1px solid var(--border);
   color: var(--text);
-  padding: 0.45rem 0.6rem;
+  padding: var(--sp-8) var(--sp-10);
   border-radius: var(--r-md);
   font-family: inherit;
-  margin-bottom: 0.75rem;
+  margin-bottom: var(--sp-12);
 }
 textarea {
   display: block;
@@ -191,13 +191,13 @@ input:focus, select:focus, textarea:focus { outline: 1px solid var(--gold-dim); 
 .ability-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 0.5rem;
+  gap: var(--sp-8);
 }
 .ability-box {
   background: var(--bg);
   border: 1px solid var(--border);
   border-radius: var(--r-md);
-  padding: 0.5rem;
+  padding: var(--sp-8);
   text-align: center;
 }
 .ability-box strong { display: block; color: var(--gold); font-size: var(--fs-lg); }
@@ -205,15 +205,15 @@ input:focus, select:focus, textarea:focus { outline: 1px solid var(--gold-dim); 
 
 .tabs {
   display: flex;
-  gap: 0.4rem;
-  margin-bottom: 1rem;
+  gap: var(--sp-6);
+  margin-bottom: var(--sp-16);
   flex-wrap: wrap;
 }
 .tab {
   background: var(--bg-panel-2);
   border: 1px solid var(--border);
   color: var(--text-dim);
-  padding: 0.4rem 0.8rem;
+  padding: var(--sp-6) var(--sp-12);
   border-radius: var(--r-md);
   cursor: pointer;
   font-family: inherit;
@@ -251,10 +251,10 @@ body.game-page {
 .game-shell {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) var(--rail-w, 390px);
-  gap: 1rem;
+  gap: var(--sp-16);
   height: 100vh;
   height: 100dvh;
-  padding: 0.75rem;
+  padding: var(--sp-12);
   overflow: hidden;
   /* Capped and centred rather than full-bleed. Left to fill a 2560px monitor
      the middle column becomes a 600px measure of text marooned in the middle
@@ -266,7 +266,7 @@ body.game-page {
 .rail {
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
+  gap: var(--sp-10);
   min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
@@ -280,7 +280,7 @@ body.game-page {
 .rail-right {
   display: grid;
   grid-template-rows: 1fr 1fr;
-  gap: 0.6rem;
+  gap: var(--sp-10);
   overflow: hidden;
 }
 /* Width comes from the grid column, not from here — setting both is how the
@@ -293,7 +293,7 @@ body.game-page {
 .rail-left {
   width: 200px;
   overflow: hidden;
-  gap: 0.45rem;
+  gap: var(--sp-8);
 }
 .rail-pane {
   flex: 1 1 50%;
@@ -304,13 +304,13 @@ body.game-page {
   background: var(--ornament-well);
   border: 1px solid var(--ornament);
   border-radius: var(--r-md);
-  padding: 0.4rem 0.45rem 0.45rem;
+  padding: var(--sp-6) var(--sp-8) var(--sp-8);
 }
 .rail-pane-head {
   flex: 0 0 auto;
   display: flex;
   align-items: center;
-  margin: 0 0 0.35rem;
+  margin: 0 0 var(--sp-6);
   font-family: var(--font-ui, var(--font-display));
   font-size: var(--fs-2xs);
   font-weight: 600;
@@ -335,7 +335,7 @@ body.game-page {
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
+  gap: var(--sp-10);
   min-height: 0;
   min-width: 0;
 }
@@ -390,8 +390,8 @@ body.game-page {
 .hud-icons {
   display: flex;
   align-items: center;
-  gap: 0.15rem;
-  padding: 0.25rem 0.4rem;
+  gap: var(--sp-2);
+  padding: var(--sp-4) var(--sp-6);
 }
 
 .icon-btn {
@@ -431,7 +431,7 @@ body.game-page {
 .icon-sep {
   width: 1px;
   height: 1.1rem;
-  margin: 0 0.25rem;
+  margin: 0 var(--sp-4);
   background: var(--ornament);
   opacity: 0.55;
 }
@@ -447,7 +447,7 @@ body.game-page {
 .hud-party {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: var(--sp-6);
   width: 100%;
 }
 
@@ -456,13 +456,13 @@ body.game-page {
 .hud-people {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: var(--sp-6);
   width: 100%;
 }
-.hud-people .people-list { gap: 0.2rem; }
+.hud-people .people-list { gap: var(--sp-4); }
 .hud-people .person {
-  padding: 0.22rem 0.3rem;
-  gap: 0.4rem;
+  padding: var(--sp-4) var(--sp-4);
+  gap: var(--sp-6);
   background: transparent;
 }
 .hud-people .person-face {
@@ -478,7 +478,7 @@ body.game-page {
   overflow: hidden;
 }
 .hud-people .people-crowd h3 {
-  margin: 0.35rem 0 0.2rem;
+  margin: var(--sp-6) 0 var(--sp-4);
   font-size: var(--fs-2xs);
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -486,7 +486,7 @@ body.game-page {
   font-weight: 600;
 }
 .hud-people .help-hint {
-  margin: 0.25rem 0.1rem;
+  margin: var(--sp-4) var(--sp-2);
   font-size: var(--fs-xs);
 }
 
@@ -498,9 +498,9 @@ body.game-page {
     "face hp"
     "face stat";
   align-items: center;
-  gap: 0.1rem 0.55rem;
+  gap: var(--sp-2) var(--sp-8);
   width: 100%;
-  padding: 0.4rem 0.5rem;
+  padding: var(--sp-6) var(--sp-8);
   text-align: left;
   background: var(--ornament-well);
   border: 1px solid var(--ornament);
@@ -542,14 +542,14 @@ body.game-page {
 .hud-party .party-card .hp-bar {
   grid-area: hp;
   height: 7px;
-  margin: 0.1rem 0 0.12rem;
+  margin: var(--sp-2) 0 var(--sp-2);
   border-radius: var(--r-md);
 }
 
 .hud-party .party-stats {
   grid-area: stat;
   display: flex;
-  gap: 0.4rem;
+  gap: var(--sp-6);
   font-family: var(--font-mono, ui-monospace, monospace);
   font-size: var(--fs-2xs);
   color: var(--text-dim);
@@ -574,7 +574,7 @@ body.game-page {
   align-self: end;
   display: flex;
   flex-wrap: wrap;
-  gap: 1px;
+  gap: var(--sp-1);
   justify-content: center;
 }
 .hud-party .cond-pips:empty { display: none; }
@@ -594,7 +594,7 @@ body.game-page {
   align-self: center;
   display: flex;
   align-items: center;
-  gap: 0.2rem;
+  gap: var(--sp-4);
 }
 .hud-party .party-approval {
   width: 8px;
@@ -626,7 +626,7 @@ body.game-page {
 }
 
 /* Leaves room for the dot so a long name ellipsises before it collides. */
-.hud-party .party-name { padding-right: 0.9rem; }
+.hud-party .party-name { padding-right: var(--sp-14); }
 
 /* The XP bar is hidden here — levelling is not what a glance at the rail is
    for, and the character sheet shows it in full. */
@@ -636,10 +636,10 @@ body.game-page {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.4rem;
+  gap: var(--sp-6);
   width: 100%;
   min-height: 0;
-  padding: 0.4rem;
+  padding: var(--sp-6);
   border: 1px dashed var(--ornament);
   border-radius: var(--r-md);
   color: var(--text-faint);
@@ -656,7 +656,7 @@ body.game-page {
 .rail-bottom {
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
+  gap: var(--sp-10);
   min-height: 0;
 }
 .rail-bottom .hud-log { flex: 1 1 auto; min-height: 0; }
@@ -667,12 +667,12 @@ body.game-page {
   min-height: 0;
   overflow-y: auto;
   scrollbar-width: thin;
-  padding-right: 0.3rem;
+  padding-right: var(--sp-4);
 }
-.track-current { padding-bottom: 0.2rem; }
-.track-others { margin-top: 0.7rem; border-top: 1px solid var(--ornament); padding-top: 0.5rem; }
+.track-current { padding-bottom: var(--sp-4); }
+.track-others { margin-top: var(--sp-12); border-top: 1px solid var(--ornament); padding-top: var(--sp-8); }
 .track-others h3 {
-  margin: 0 0 0.35rem;
+  margin: 0 0 var(--sp-6);
   font-size: var(--fs-2xs);
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -680,13 +680,13 @@ body.game-page {
   font-weight: 500;
   opacity: 0.8;
 }
-.track-others ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.2rem; }
+.track-others ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--sp-4); }
 .track-pick {
   display: flex;
   flex-direction: column;
   width: 100%;
-  gap: 0.05rem;
-  padding: 0.25rem 0.4rem;
+  gap: var(--sp-1);
+  padding: var(--sp-4) var(--sp-6);
   background: none;
   border: 1px solid transparent;
   border-radius: var(--r-md);
@@ -705,13 +705,13 @@ body.game-page {
      HUD, where the tracker was a small card sitting over the map and had to
      be sized so it did not cover it. The rail sizes it now. */
   width: 100%;
-  padding: 0.45rem 0.55rem;
+  padding: var(--sp-8) var(--sp-8);
   font-size: var(--fs-xs);
 }
 /* The tracker emits its own <h2>; the small-caps treatment used to come from a
    rule scoped to the context rail, which no longer exists. */
 .hud-quest h2 {
-  margin: 0 0 0.3rem;
+  margin: 0 0 var(--sp-4);
   font-family: var(--font-ui);
   font-size: var(--fs-2xs);
   font-weight: 600;
@@ -726,16 +726,16 @@ body.game-page {
      sized, and a fixed width here is what pushed the panel off the edge of
      the shell. */
   width: 100%;
-  padding: 0.35rem 0.45rem 0.45rem;
+  padding: var(--sp-6) var(--sp-8) var(--sp-8);
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  gap: var(--sp-4);
 }
 .hud-log-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.4rem;
+  gap: var(--sp-6);
 }
 .hud-log .log {
   max-height: 40vh;
@@ -787,7 +787,7 @@ body.in-combat .game-shell {
      and the board it belongs to, which reads as two screens rather than one
      and is 16px of the thing that is short. Rows get a quarter of it; columns
      keep what they had. */
-  gap: 0.25rem 1rem;
+  gap: var(--sp-4) var(--sp-16);
   /* Wider than anywhere else in the game, and only here.
 
      The 1400px cap exists to keep a line of prose readable, and a tactical map
@@ -808,7 +808,7 @@ body.in-combat .cbt-top { grid-column: 1 / -1; grid-row: 1; }
 /* The scene's own stack — the icon toolbar, then the board — closes up too.
    0.6rem is written for a page of prose with panels down it; here it is one
    more band between the ribbon and the board, and the board is what is short. */
-body.in-combat .scene { gap: 0.25rem; }
+body.in-combat .scene { gap: var(--sp-4); }
 
 /* And the log takes the whole of what is left. With the quest tracker hidden
    it is alone in a 300px column, and `max-height: 40vh` — a cap written for a
@@ -851,10 +851,10 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .loc-inner {
   max-width: 62ch;
   margin: 0 auto;
-  padding: 0.25rem 0.5rem 2rem;
+  padding: var(--sp-4) var(--sp-8) var(--sp-32);
   display: flex;
   flex-direction: column;
-  gap: 1.15rem;
+  gap: var(--sp-20);
 }
 
 /* ====================================================================
@@ -875,7 +875,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
     max-width: none;
     height: 100%;
     min-height: 0;
-    padding-bottom: 0.25rem;
+    padding-bottom: var(--sp-4);
   }
   .loc-text { height: 100%; }
 
@@ -884,7 +884,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
     display: flex;
     flex-direction: column;
     min-height: 0;
-    gap: 0.9rem;
+    gap: var(--sp-14);
   }
   .loc-header { flex: 0 0 auto; }
   .loc-foot   { flex: 0 0 auto; }
@@ -914,7 +914,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .loc-text, .loc-foot {
   display: flex;
   flex-direction: column;
-  gap: 1.15rem;
+  gap: var(--sp-20);
 }
 @media (max-width: 1179px) {
   .loc-text, .loc-foot { display: contents; }
@@ -928,12 +928,12 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   background: var(--ornament-well);
   border: 1px solid var(--ornament);
   border-radius: var(--r-md);
-  padding: 0.6rem 0.7rem 0.7rem;
+  padding: var(--sp-10) var(--sp-12) var(--sp-12);
   display: flex;
   flex-direction: column;
-  gap: 0.55rem;
+  gap: var(--sp-8);
 }
-.loc-actions h2 { margin-bottom: 0.35rem; }
+.loc-actions h2 { margin-bottom: var(--sp-6); }
 
 /* --- The chart, in the scene -------------------------------------------
    It was a modal opened with M, and the space it now occupies held the
@@ -966,7 +966,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   top: 0.4rem;
   right: 0.4rem;
   margin-left: 0;
-  padding: 0.15rem;
+  padding: var(--sp-2);
   background: color-mix(in srgb, var(--bg-panel) 88%, transparent);
   border: 1px solid var(--border);
   border-radius: var(--r-md);
@@ -1007,14 +1007,14 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .loc-desc-body {
   display: flex;
   flex-direction: column;
-  gap: 0.85rem;
+  gap: var(--sp-14);
   max-width: 68ch;
 }
 
 /* --- Heading ---------------------------------------------------------- */
 .loc-header {
   border-bottom: 1px solid var(--ornament);
-  padding-bottom: 0.5rem;
+  padding-bottom: var(--sp-8);
 }
 
 /* Optional establishing painting. Generated separately and dropped in as
@@ -1054,7 +1054,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   letter-spacing: 0.09em;
   text-transform: uppercase;
   color: var(--text-dim);
-  margin-top: 0.15rem;
+  margin-top: var(--sp-2);
 }
 
 /* --- Prose ------------------------------------------------------------
@@ -1062,7 +1062,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
    generous line height, because in a text game this paragraph is doing the
    work the tile art used to do. */
 .loc-prose p {
-  margin: 0 0 0.7rem;
+  margin: 0 0 var(--sp-12);
   font-size: var(--fs-md);
   line-height: 1.62;
   color: var(--text);
@@ -1076,7 +1076,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   font-style: italic;
   color: var(--text-soft, var(--text));
   border-left: 2px solid var(--gold);
-  padding-left: 0.85rem;
+  padding-left: var(--sp-14);
 }
 
 /* One rotating line of flavour. Dimmer and smaller: it is true right now
@@ -1099,7 +1099,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--text-dim);
-  margin: 0 0 0.5rem;
+  margin: 0 0 var(--sp-8);
   font-weight: 600;
 }
 
@@ -1113,7 +1113,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  gap: var(--sp-4);
 }
 
 /* How many are here, beside the heading. A count is worth having the moment a
@@ -1124,16 +1124,16 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   color: var(--text-dim);
   border: 1px solid var(--ornament);
   border-radius: var(--r-pill);
-  padding: 0.02rem 0.36rem;
-  margin-left: 0.35rem;
+  padding: var(--sp-1) var(--sp-6);
+  margin-left: var(--sp-6);
 }
 
 .person {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: var(--sp-10);
   width: 100%;
-  padding: 0.28rem 0.45rem;
+  padding: var(--sp-4) var(--sp-8);
   background: var(--ornament-well);
   border: 1px solid transparent;
   border-radius: var(--r-md);
@@ -1172,7 +1172,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   color: var(--text);
   display: flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: var(--sp-6);
 }
 .person-role {
   font-size: var(--fs-xs);
@@ -1184,7 +1184,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .person-tag {
   font-size: var(--fs-2xs);
   line-height: 1;
-  padding: 0.12rem 0.28rem;
+  padding: var(--sp-2) var(--sp-4);
   border-radius: var(--r-sm);
   border: 1px solid currentColor;
 }
@@ -1192,7 +1192,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .person-tag.is-quest { color: var(--accent); font-weight: 700; }
 
 /* The crowd: present, talkable, and quieter than the authored cast. */
-.people-crowd .person { background: transparent; padding: 0.16rem 0.45rem; }
+.people-crowd .person { background: transparent; padding: var(--sp-2) var(--sp-8); }
 .people-list.is-crowd .person-face { width: 26px; height: 26px; }
 .people-list.is-crowd .person-name { font-weight: 500; color: var(--text-dim); }
 
@@ -1203,7 +1203,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.3rem;
+  gap: var(--sp-4);
 }
 
 /* The keys themselves are `.act-slot`, the combat bar's — same bevel, same
@@ -1214,14 +1214,14 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .loc-act.has-label {
   width: auto;
   min-width: 34px;
-  gap: 0.4rem;
+  gap: var(--sp-6);
   /* The right padding reserves the corner the key hint sits in.
      It used to be 0.55rem, which was enough when the hint was 8.8px type in
      the corner of a 34px square. Raising the type floor to 12px put a legible
      letter into a space measured for an illegible one, and it landed on the
      end of the label — "Take Rusted Key" ran under its own L. The floor is
      right; the button simply has to make room for what it now draws. */
-  padding: 0 1.15rem 0 0.45rem;
+  padding: 0 var(--sp-20) 0 var(--sp-8);
   font-size: var(--fs-xs);
   color: var(--text);
 }
@@ -1258,14 +1258,14 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
    "what can I fight" and "where can I go" stay two separate reads. Each bout
    is two lines: the tier, and roughly what it will send. */
 .loc-pit {
-  margin-bottom: 0.6rem;
-  padding-bottom: 0.6rem;
+  margin-bottom: var(--sp-10);
+  padding-bottom: var(--sp-10);
   border-bottom: 1px solid var(--ornament);
 }
 .pit-bout {
   flex-direction: column;
   align-items: flex-start;
-  gap: 0.1rem;
+  gap: var(--sp-2);
 }
 .pit-label { font-weight: 600; }
 .pit-sample { font-size: var(--fs-xs); color: var(--text-dim); }
@@ -1275,8 +1275,8 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
    actions with a hairline between, so travel and doing-things stay two
    separate reads even when they share a footer. Normally absent. */
 .loc-ways {
-  margin-bottom: 0.6rem;
-  padding-bottom: 0.6rem;
+  margin-bottom: var(--sp-10);
+  padding-bottom: var(--sp-10);
   border-bottom: 1px solid var(--ornament);
 }
 
@@ -1322,7 +1322,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .map-toggle {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: var(--sp-6);
   background: none;
   border: 0;
   padding: 0;
@@ -1337,7 +1337,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .map-expand {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: var(--sp-6);
   background: none;
   border: 0;
   padding: 0;
@@ -1350,7 +1350,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 }
 .map-expand:hover { color: var(--gold); }
 .map-expand kbd {
-  padding: 0.05rem 0.3rem;
+  padding: var(--sp-1) var(--sp-4);
   font-family: var(--font-mono, ui-monospace, monospace);
   font-size: var(--fs-2xs);
   border: 1px solid currentColor;
@@ -1358,7 +1358,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   opacity: 0.75;
 }
 .map-toggle kbd {
-  padding: 0.05rem 0.3rem;
+  padding: var(--sp-1) var(--sp-4);
   font-family: var(--font-mono, ui-monospace, monospace);
   font-size: var(--fs-2xs);
   border: 1px solid currentColor;
@@ -1403,12 +1403,12 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 0.5rem 1rem;
-  margin-bottom: 0.6rem;
+  gap: var(--sp-8) var(--sp-16);
+  margin-bottom: var(--sp-10);
 }
 .map-zoom {
   display: flex;
-  gap: 0.2rem;
+  gap: var(--sp-4);
   margin-left: auto;
 }
 .map-zoom .icon-btn {
@@ -1720,9 +1720,9 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   transform: translate(-50%, -100%);
   display: flex;
   flex-direction: column;
-  gap: 0.15rem;
+  gap: var(--sp-2);
   max-width: 300px;
-  padding: 0.4rem 0.55rem;
+  padding: var(--sp-6) var(--sp-8);
   background: var(--bg-panel);
   border: 1px solid var(--gold-dim);
   border-radius: var(--r-md);
@@ -1906,7 +1906,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   .game-shell {
     grid-template-columns: minmax(0, 1fr);
     grid-template-rows: auto 1fr auto;
-    padding: 0.5rem;
+    padding: var(--sp-8);
   }
   .rail-left {
     width: auto;
@@ -1948,18 +1948,18 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   width: 100%;
   max-width: 1100px;
   margin: 0 auto;
-  padding: 1rem 1.25rem 1.1rem;
-  gap: 0.75rem;
+  padding: var(--sp-16) var(--sp-20) var(--sp-16);
+  gap: var(--sp-12);
   min-height: 0;   /* lets .wiz-body actually shrink inside the flex column */
 }
 
-.wiz-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
+.wiz-head { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--sp-16); }
 .wiz-titles h1 {
   margin: 0;
   font-size: var(--fs-2xl);
   color: var(--gold);
 }
-.wiz-titles p { margin: 0.1rem 0 0; color: var(--text-dim); font-size: var(--fs-sm); }
+.wiz-titles p { margin: var(--sp-2) 0 0; color: var(--text-dim); font-size: var(--fs-sm); }
 
 /* The step rail: progress and navigation in one. */
 .wiz-rail {
@@ -1967,15 +1967,15 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   list-style: none;
   margin: 0;
   padding: 0;
-  gap: 0.35rem;
+  gap: var(--sp-6);
 }
 .wiz-rail li { flex: 1 1 0; min-width: 0; }
 .wiz-pip {
   width: 100%;
   display: flex;
   align-items: center;
-  gap: 0.45rem;
-  padding: 0.4rem 0.55rem;
+  gap: var(--sp-8);
+  padding: var(--sp-6) var(--sp-8);
   font: inherit;
   font-size: var(--fs-xs);
   color: var(--text-dim);
@@ -2017,12 +2017,12 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   background: var(--bg-panel);
   border: 1px solid var(--border);
   border-radius: var(--r-lg);
-  padding: 1.1rem 1.25rem;
+  padding: var(--sp-16) var(--sp-20);
 }
 /* Steps whose content is mostly form fields do not want to be 1100px wide —
    a text input that long is harder to read, not easier. */
 .wiz-narrow { max-width: 560px; }
-.wiz-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+.wiz-pair { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-12); }
 
 /* Fields on the left, the picture on the right.
 
@@ -2038,7 +2038,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .wiz-split {
   display: grid;
   grid-template-columns: minmax(0, 34rem) minmax(0, 24rem);
-  gap: 1.5rem;
+  gap: var(--sp-24);
   align-items: start;
 }
 .wiz-split-main { min-width: 0; }
@@ -2066,8 +2066,8 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   color: var(--text-dim);
   line-height: 1.6;
   font-size: var(--fs-sm);
-  margin: 0.75rem 0 0;
-  padding: 0.7rem 0.9rem;
+  margin: var(--sp-12) 0 0;
+  padding: var(--sp-12) var(--sp-14);
   border-left: 2px solid var(--ornament);
   background: rgba(0, 0, 0, 0.16);
   border-radius: 0 4px 4px 0;
@@ -2093,7 +2093,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .wiz-nav {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: var(--sp-16);
 }
 .wiz-nav #wiz-back { margin-right: auto; }
 .wiz-reason {
@@ -2102,7 +2102,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   color: var(--gold-dim);
   text-align: right;
 }
-.field-note { margin: 0.2rem 0 0.6rem; font-size: var(--fs-xs); min-height: 1.1em; color: var(--text-dim); }
+.field-note { margin: var(--sp-4) 0 var(--sp-10); font-size: var(--fs-xs); min-height: 1.1em; color: var(--text-dim); }
 .field-note.is-ok { color: var(--green, #7fb069); }
 .field-note.is-bad, .help-hint.is-bad { color: var(--red, #c0563f); }
 
@@ -2123,7 +2123,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
    because nothing in the sliced library is trimmed, so every layer shares the
    base body's coordinate space — the one rule the whole feature rests on.
    --------------------------------------------------------------------------- */
-.pd-layout { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 1.25rem; }
+.pd-layout { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: var(--sp-20); }
 
 .pd-stage { text-align: center; }
 .pd-preview {
@@ -2166,7 +2166,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   width: 100%;
   max-width: 200px;
   aspect-ratio: 1 / 1;
-  margin: 0 auto 0.75rem;
+  margin: 0 auto var(--sp-12);
   overflow: hidden;
   background: radial-gradient(ellipse at 50% 35%, var(--bg-raised), var(--bg-inset) 70%);
   border: 1px solid var(--border);
@@ -2181,7 +2181,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
      walk frames deliberately are not smoothed the same way. */
   image-rendering: auto;
 }
-.pd-stage-actions { display: flex; gap: 0.5rem; justify-content: center; margin-bottom: 0.4rem; }
+.pd-stage-actions { display: flex; gap: var(--sp-8); justify-content: center; margin-bottom: var(--sp-6); }
 
 /* Nine categories in one column ran off the bottom of any screen.
 
@@ -2192,21 +2192,21 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
    laptop, one on a phone, with no breakpoints to keep in sync. */
 .pd-pickers {
   columns: 230px;
-  column-gap: 1.25rem;
+  column-gap: var(--sp-20);
 }
 .pd-pickers .pd-group {
   break-inside: avoid;   /* a category split across the column break is unusable */
-  margin-bottom: 0.7rem;
+  margin-bottom: var(--sp-12);
 }
 .pd-group h3 {
-  font-size: var(--fs-2xs); color: var(--text-dim); margin: 0 0 0.3rem;
+  font-size: var(--fs-2xs); color: var(--text-dim); margin: 0 0 var(--sp-4);
   font-family: var(--font-ui); font-weight: 500;
 }
 .pd-opt { color: var(--text-faint); font-size: var(--fs-2xs); }
-.pd-swatches { display: flex; gap: 0.3rem; flex-wrap: wrap; }
+.pd-swatches { display: flex; gap: var(--sp-4); flex-wrap: wrap; }
 
 .pd-chip {
-  min-width: 30px; height: 30px; padding: 0 0.4rem;
+  min-width: 30px; height: 30px; padding: 0 var(--sp-6);
   background: var(--bg-panel-2); border: 1px solid var(--border);
   color: var(--text-dim); border-radius: var(--r-md); cursor: pointer;
   font-family: var(--mono); font-size: var(--fs-2xs);
@@ -2236,7 +2236,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   border-color: transparent;
   box-shadow: var(--sh-ring-dark), 0 0 0 2px var(--gold);
 }
-.pd-colours { margin-top: 0.35rem; gap: 0.4rem; }
+.pd-colours { margin-top: var(--sp-6); gap: var(--sp-6); }
 
 @media (max-width: 720px) {
   .pd-layout { grid-template-columns: 1fr; }
@@ -2332,9 +2332,9 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   display: grid;
   grid-template-columns: 5rem 1fr 2.6rem 2.4rem;
   align-items: center;
-  gap: 0.7rem;
+  gap: var(--sp-12);
 }
-.roll-tray-pick { margin: 0; padding: 0.25rem 0.4rem; font-size: var(--fs-xs); }
+.roll-tray-pick { margin: 0; padding: var(--sp-4) var(--sp-6); font-size: var(--fs-xs); }
 .roll-tray-mod {
   font-family: var(--mono);
   font-size: var(--fs-sm);
@@ -2361,10 +2361,10 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 /* ---------------------------------------------------------------------------
    The review step: the finished character before committing to them.
    --------------------------------------------------------------------------- */
-.review-layout { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 1.5rem; }
+.review-layout { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: var(--sp-24); }
 .review-portrait { text-align: center; }
-.review-portrait h2 { margin: 0.6rem 0 0; font-size: var(--fs-lg); color: var(--gold); }
-.review-facts { display: flex; flex-direction: column; gap: 0.9rem; }
+.review-portrait h2 { margin: var(--sp-10) 0 0; font-size: var(--fs-lg); color: var(--gold); }
+.review-facts { display: flex; flex-direction: column; gap: var(--sp-14); }
 
 /* The racial bonus is called out rather than folded silently into the total,
    because the previous three steps showed the base score and a number that
@@ -2375,12 +2375,12 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   font-style: normal;
   color: var(--gold-dim);
 }
-.review-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; }
+.review-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--sp-8); }
 .review-stat {
   background: var(--bg-inset);
   border: 1px solid var(--border);
   border-radius: var(--r-md);
-  padding: 0.45rem 0.5rem;
+  padding: var(--sp-8) var(--sp-8);
   text-align: center;
 }
 .review-stat span { display: block; font-size: var(--fs-2xs); color: var(--text-dim); }
@@ -2390,7 +2390,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   margin: 0;
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
-  gap: 0.2rem 0.75rem;
+  gap: var(--sp-4) var(--sp-12);
   font-size: var(--fs-xs);
 }
 .review-list dt { color: var(--text-dim); }
@@ -2428,13 +2428,13 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .cbt-manual, .check-automate {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: var(--sp-6);
   font-size: var(--fs-2xs);
   color: var(--text-dim);
   cursor: pointer;
   user-select: none;
 }
-.cbt-manual { margin-right: 0.35rem; }
+.cbt-manual { margin-right: var(--sp-6); }
 .cbt-manual input, .check-automate input { accent-color: var(--gold); margin: 0; }
 .cbt-manual:hover, .check-automate:hover { color: var(--text); }
 /* Its own row, hard-aligned left. `width: 100%` on an inline-flex label let the
@@ -2443,8 +2443,8 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  margin: 0.75rem 0 0;
-  padding-top: 0.6rem;
+  margin: var(--sp-12) 0 0;
+  padding-top: var(--sp-10);
   border-top: 1px solid var(--border-soft);
 }
 .check-automate input { flex: 0 0 auto; }
@@ -2469,12 +2469,12 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 }
 
 .track-where {
-  margin-top: 0.35rem;
+  margin-top: var(--sp-6);
   font-size: var(--fs-2xs);
   color: var(--text-dim);
   display: flex;
   flex-direction: column;
-  gap: 0.1rem;
+  gap: var(--sp-2);
 }
 .track-where.is-here { color: var(--success); }
 /* What is in front of you, once you have arrived. Not dimmed like the route
@@ -2506,7 +2506,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   background: linear-gradient(90deg, var(--gold-dim), var(--gold));
   transition: width 0.3s ease;
 }
-.party-card .rail-xp { height: 3px; margin-top: 0.2rem; }
+.party-card .rail-xp { height: 3px; margin-top: var(--sp-4); }
 .party-lv { color: var(--text-faint); }
 
 /* A labelled bar: what it measures, the bar, and the numbers behind it. An
@@ -2515,8 +2515,8 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   display: grid;
   grid-template-columns: 5.5rem minmax(0, 1fr) auto;
   align-items: center;
-  gap: 0.6rem;
-  margin: 0.4rem 0;
+  gap: var(--sp-10);
+  margin: var(--sp-6) 0;
 }
 .bar-row .bar-label { font-size: var(--fs-2xs); color: var(--text-dim); }
 .bar-row .bar-value {
@@ -2594,7 +2594,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   background: var(--bg-inset);
   border-radius: var(--r-md);
   overflow: hidden;
-  margin-top: 0.35rem;
+  margin-top: var(--sp-6);
 }
 .hp-bar > span {
   display: block;
@@ -2619,7 +2619,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   display: flex;
   justify-content: space-between;
   font-size: var(--fs-sm);
-  padding: 0.15rem 0;
+  padding: var(--sp-2) 0;
   border-bottom: 1px solid rgba(61,74,99,0.4);
 }
 
@@ -2632,7 +2632,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   align-items: center;
   justify-content: center;
   z-index: var(--z-modal);
-  padding: 1rem;
+  padding: var(--sp-16);
 }
 .modal-backdrop.hidden { display: none; }
 
@@ -2652,7 +2652,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   width: 100%;
   max-height: 86vh;
   overflow-y: auto;
-  padding: 1.25rem;
+  padding: var(--sp-20);
   box-shadow: var(--sh-4);
 }
 .modal.modal-wide { max-width: 780px; }
@@ -2664,7 +2664,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .modal.modal-map {
   max-width: min(1200px, 94vw);
   height: 94vh;
-  padding: 0.9rem 1rem 1rem;
+  padding: var(--sp-14) var(--sp-16) var(--sp-16);
   display: flex;
   flex-direction: column;
   /* The chart letterboxes itself inside whatever box it is given, so there is
@@ -2693,9 +2693,9 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   z-index: 2;            /* local: over the modal body scrolling under it */
   display: flex;
   align-items: center;
-  gap: 1rem;
-  margin: 0 -1.25rem 0.9rem;
-  padding: 0.85rem 1.25rem 0.7rem;
+  gap: var(--sp-16);
+  margin: 0 calc(-1 * var(--sp-20)) var(--sp-14);
+  padding: var(--sp-14) var(--sp-20) var(--sp-12);
   background: var(--bg-panel);
   border-bottom: 1px solid var(--ornament);
   border-radius: 8px 8px 0 0;
@@ -2722,18 +2722,18 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .foe-lineup {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: var(--sp-8);
   list-style: none;
-  margin: 0.75rem 0 0;
+  margin: var(--sp-12) 0 0;
   padding: 0;
 }
 .foe-card {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.15rem;
+  gap: var(--sp-2);
   width: 74px;
-  padding: 0.3rem;
+  padding: var(--sp-4);
   border: 1px solid var(--border);
   border-radius: var(--r-md);
   background: var(--bg-panel);
@@ -2756,9 +2756,9 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 
 .modal-actions {
   display: flex;
-  gap: 0.5rem;
+  gap: var(--sp-8);
   justify-content: flex-end;
-  margin-top: 1rem;
+  margin-top: var(--sp-16);
 }
 
 /* Character sheet */
@@ -2766,23 +2766,23 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 1rem;
-  margin-bottom: 0.75rem;
+  gap: var(--sp-16);
+  margin-bottom: var(--sp-12);
   border-bottom: 1px solid var(--border);
-  padding-bottom: 0.75rem;
+  padding-bottom: var(--sp-12);
 }
 /* Avatar picker on the character sheet */
 .avatar-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
-  gap: 0.5rem;
+  gap: var(--sp-8);
 }
 .avatar-option {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.3rem;
-  padding: 0.4rem 0.3rem 0.5rem;
+  gap: var(--sp-4);
+  padding: var(--sp-6) var(--sp-4) var(--sp-8);
   background: var(--bg);
   border: 1px solid var(--border);
   border-radius: var(--r-md);
@@ -2821,8 +2821,8 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .gift-card {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
-  padding: 0.7rem 0.8rem;
+  gap: var(--sp-6);
+  padding: var(--sp-12) var(--sp-12);
   background: var(--bg);
   border: 1px solid var(--border);
   border-radius: var(--r-md);
@@ -2856,12 +2856,12 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   line-height: 1;
 }
 .camp-heart.is-locked { color: var(--text-dim); }
-.sheet-romance { color: var(--gold); font-size: var(--fs-xs); margin: 0.1rem 0 0; }
+.sheet-romance { color: var(--gold); font-size: var(--fs-xs); margin: var(--sp-2) 0 0; }
 .sheet-romance.is-locked { color: var(--text-dim); }
 .camp-talk { align-self: flex-start; }
 
 /* Upcast chips under a spell row in the combat picker. */
-.spell-upcast { display: flex; gap: 0.35rem; margin: -0.2rem 0 0.35rem 1.2rem; flex-wrap: wrap; }
+.spell-upcast { display: flex; gap: var(--sp-6); margin: calc(-1 * var(--sp-4)) 0 var(--sp-6) var(--sp-20); flex-wrap: wrap; }
 .spell-upcast-btn {
   background: var(--bg);
   border: 1px solid var(--border);
@@ -2869,13 +2869,13 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   color: var(--text-dim);
   font: inherit;
   font-size: var(--fs-2xs);
-  padding: 0.15rem 0.6rem;
+  padding: var(--sp-2) var(--sp-10);
   cursor: pointer;
 }
 .spell-upcast-btn:hover { border-color: var(--gold-dim); color: var(--text); }
 
 /* Casting from the sheet: one row under a healing spell. */
-.sheet-cast-row { display: flex; gap: 0.4rem; margin-top: 0.35rem; align-items: center; }
+.sheet-cast-row { display: flex; gap: var(--sp-6); margin-top: var(--sp-6); align-items: center; }
 .sheet-cast-row select {
   flex: 1 1 auto;
   min-width: 0;
@@ -2883,7 +2883,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   color: var(--text);
   border: 1px solid var(--border);
   border-radius: var(--r-md);
-  padding: 0.25rem 0.4rem;
+  padding: var(--sp-4) var(--sp-6);
   font: inherit;
   font-size: var(--fs-xs);
 }
@@ -2907,31 +2907,31 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  gap: 0.35rem;
+  gap: var(--sp-6);
   align-items: flex-start;
   justify-content: flex-end;
   align-self: flex-start;
 }
 .sheet-title {
-  margin: 0 0 0.25rem;
+  margin: 0 0 var(--sp-4);
   font-size: var(--fs-xl);
 }
 .sheet-subtitle {
-  margin: 0.15rem 0;
+  margin: var(--sp-2) 0;
   color: var(--text-dim);
   font-size: var(--fs-sm);
 }
 .sheet-combat-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.45rem;
-  margin: 0.75rem 0 0.4rem;
+  gap: var(--sp-8);
+  margin: var(--sp-12) 0 var(--sp-6);
 }
 .sheet-stat-pill {
   background: var(--bg);
   border: 1px solid var(--border);
   border-radius: var(--r-md);
-  padding: 0.35rem 0.65rem;
+  padding: var(--sp-6) var(--sp-10);
   min-width: 4.5rem;
   text-align: center;
 }
@@ -2947,18 +2947,18 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   font-size: var(--fs-md);
 }
 .sheet-hp {
-  margin-bottom: 0.85rem;
+  margin-bottom: var(--sp-14);
   height: 10px;
 }
 .sheet-section {
-  margin-top: 1rem;
+  margin-top: var(--sp-16);
 }
 .sheet-section h3 {
   font-size: var(--fs-md);
   color: var(--gold);
   border-bottom: 1px solid var(--border);
-  padding-bottom: 0.3rem;
-  margin: 0 0 0.6rem;
+  padding-bottom: var(--sp-4);
+  margin: 0 0 var(--sp-10);
 }
 .sheet-abilities {
   grid-template-columns: repeat(6, 1fr);
@@ -2967,7 +2967,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   .sheet-abilities { grid-template-columns: repeat(3, 1fr); }
 }
 .sheet-ab {
-  padding: 0.4rem 0.25rem;
+  padding: var(--sp-6) var(--sp-4);
 }
 .sheet-ab em {
   display: block;
@@ -2977,12 +2977,12 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 }
 .sheet-item-actions {
   display: flex;
-  gap: 0.3rem;
+  gap: var(--sp-4);
   flex-wrap: wrap;
-  margin-top: 0.35rem;
+  margin-top: var(--sp-6);
 }
 .sheet-spells .inv-item .badge {
-  margin-left: 0.35rem;
+  margin-left: var(--sp-6);
 }
 
 .modal h2 { margin-top: 0; }
@@ -2991,10 +2991,10 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   background: var(--bg);
   border: 1px solid var(--border);
   border-radius: var(--r-md);
-  padding: 0.6rem;
-  margin-bottom: 0.45rem;
+  padding: var(--sp-10);
+  margin-bottom: var(--sp-8);
 }
-.quest-item h3, .inv-item strong { color: var(--gold); font-size: var(--fs-md); margin: 0 0 0.25rem; }
+.quest-item h3, .inv-item strong { color: var(--gold); font-size: var(--fs-md); margin: 0 0 var(--sp-4); }
 
 /* A quest, shut. The summary is the whole entry until you ask for more: which
    quest, how it stands, and — while it is the one you are on — what to do
@@ -3002,7 +3002,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .quest-summary {
   display: flex;
   align-items: center;
-  gap: 0.55rem;
+  gap: var(--sp-8);
   cursor: pointer;
   list-style: none;
 }
@@ -3040,8 +3040,8 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .quest-summary .badge { flex: 0 0 auto; }
 
 .quest-body {
-  margin-top: 0.55rem;
-  padding-top: 0.55rem;
+  margin-top: var(--sp-8);
+  padding-top: var(--sp-8);
   border-top: 1px solid var(--border);
 }
 
@@ -3060,7 +3060,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .bag-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(4.6rem, 1fr));
-  gap: 0.4rem;
+  gap: var(--sp-6);
 }
 .bag-slot {
   position: relative;
@@ -3069,8 +3069,8 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.15rem;
-  padding: 0.3rem 0.2rem;
+  gap: var(--sp-2);
+  padding: var(--sp-4) var(--sp-4);
   background: var(--bg-inset);
   border: 1px solid var(--border);
   border-radius: var(--r-md);
@@ -3122,7 +3122,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   position: absolute;
   right: 2px;
   bottom: 2px;
-  padding: 0 3px;
+  padding: 0 var(--sp-2);
   font-family: var(--mono);
   font-size: var(--fs-2xs);
   color: var(--text);
@@ -3141,19 +3141,19 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 /* One item, said in full. Holds its height whether something is picked or not,
    so choosing does not shove the rest of the sheet down the page. */
 .bag-detail {
-  margin-top: 0.6rem;
-  padding: 0.6rem;
+  margin-top: var(--sp-10);
+  padding: var(--sp-10);
   min-height: 7.5rem;
   background: var(--bg-panel);
   border: 1px solid var(--border);
   border-radius: var(--r-md);
 }
-.bag-detail-head { display: flex; align-items: center; gap: 0.4rem; }
+.bag-detail-head { display: flex; align-items: center; gap: var(--sp-6); }
 .bag-detail-name { color: var(--gold); font-size: var(--fs-md); }
 .bag-detail-name.is-uncommon { color: var(--success); }
 .bag-detail-name.is-rare { color: var(--accent); }
 .bag-detail-facts {
-  margin: 0.15rem 0 0.35rem;
+  margin: var(--sp-2) 0 var(--sp-6);
   font-family: var(--mono);
   font-size: var(--fs-2xs);
   color: var(--text-faint);
@@ -3162,9 +3162,9 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 0.4rem;
-  margin-top: 0.5rem;
-  padding-top: 0.5rem;
+  gap: var(--sp-6);
+  margin-top: var(--sp-8);
+  padding-top: var(--sp-8);
   border-top: 1px solid var(--border);
 }
 .bag-give-label {
@@ -3173,17 +3173,17 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   text-transform: uppercase;
   color: var(--text-faint);
 }
-.bag-give-who { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+.bag-give-who { display: flex; flex-wrap: wrap; gap: var(--sp-4); }
 .bag-qty-pick {
   display: inline-flex;
   align-items: center;
-  gap: 0.3rem;
+  gap: var(--sp-4);
   font-size: var(--fs-2xs);
   color: var(--text-dim);
 }
 .bag-qty-pick input {
   width: 3.4rem;
-  padding: 0.15rem 0.3rem;
+  padding: var(--sp-2) var(--sp-4);
   font-family: var(--mono);
   font-size: var(--fs-2xs);
   color: var(--text);
@@ -3191,11 +3191,11 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   border: 1px solid var(--border);
   border-radius: var(--r-sm);
 }
-.quest-objective { margin-top: 0.35rem; color: var(--text); }
-.quest-meta { margin-top: 0.35rem; }
+.quest-objective { margin-top: var(--sp-6); color: var(--text); }
+.quest-meta { margin-top: var(--sp-6); }
 .journal-entry {
-  margin: 0.35rem 0 0;
-  padding-left: 0.6rem;
+  margin: var(--sp-6) 0 0;
+  padding-left: var(--sp-10);
   border-left: 2px solid var(--border);
   font-style: italic;
   color: var(--text-dim);
@@ -3210,7 +3210,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .game-page .error-banner {
   flex-shrink: 0;
   margin-bottom: 0;
-  padding: 0.4rem 0.6rem;
+  padding: var(--sp-6) var(--sp-10);
   font-size: var(--fs-sm);
 }
 
@@ -3218,7 +3218,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   text-align: center;
   color: var(--text-dim);
   font-size: var(--fs-xs);
-  padding: 1.5rem;
+  padding: var(--sp-24);
   border-top: 1px solid var(--border);
 }
 
@@ -3237,7 +3237,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   border: 1px solid var(--border);
   color: var(--text-dim);
   font-size: var(--fs-2xs);
-  padding: 0.1rem 0.4rem;
+  padding: var(--sp-2) var(--sp-6);
   border-radius: var(--r-sm);
 }
 .badge.ok { color: var(--success); border-color: var(--success); }
@@ -3249,15 +3249,15 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   background: var(--danger-well);
   border: 1px solid var(--danger);
   color: var(--danger);
-  padding: 0.6rem 0.8rem;
+  padding: var(--sp-10) var(--sp-12);
   border-radius: var(--r-md);
-  margin-bottom: 0.75rem;
+  margin-bottom: var(--sp-12);
 }
 
 .help-hint {
   font-size: var(--fs-xs);
   color: var(--text-dim);
-  margin-top: 0.5rem;
+  margin-top: var(--sp-8);
 }
 
 /* ====================================================================
@@ -3268,7 +3268,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
    badge's louder cousin and shares its palette on purpose. */
 .pill {
   display: inline-block;
-  padding: 0.08rem 0.38rem;
+  padding: var(--sp-1) var(--sp-6);
   border-radius: var(--r-pill);
   border: 1px solid var(--border);
   background: var(--bg-panel-2);
@@ -3292,7 +3292,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .pip {
   display: inline-block;
   min-width: 1.35em;
-  padding: 0 0.15rem;
+  padding: 0 var(--sp-2);
   border-radius: var(--r-sm);
   border: 1px solid var(--danger);
   background: var(--danger-well);
@@ -3318,8 +3318,8 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: 0.18rem;
-  padding: 0.4rem 0.35rem 0.45rem;
+  gap: var(--sp-2);
+  padding: var(--sp-6) var(--sp-6) var(--sp-8);
   background: var(--bg);
   border: 1px solid var(--border);
   border-radius: var(--r-md);
@@ -3369,7 +3369,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 /* Gold marks the character you are currently playing, and nothing else in the
    rail. The class is `is-active`, set in renderPartyRail(). */
 .party-card.is-active .party-name { color: var(--gold); }
-.party-card .hp-bar { margin-top: 0.15rem; height: 6px; }
+.party-card .hp-bar { margin-top: var(--sp-2); height: 6px; }
 .party-stats {
   display: flex;
   justify-content: space-between;
@@ -3379,7 +3379,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 }
 .party-approval {
   border-radius: var(--r-sm);
-  padding: 0.05rem 0.2rem;
+  padding: var(--sp-1) var(--sp-4);
   font-size: var(--fs-2xs);
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -3416,14 +3416,14 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
    The fire, and whoever is sitting at it. Companions are seats you can take
    rather than rows in a roster: the point of camping is the conversation, so
    the thing you click is the person. */
-.camp-scene { display: flex; flex-direction: column; gap: 0.9rem; }
+.camp-scene { display: flex; flex-direction: column; gap: var(--sp-14); }
 .camp-head { margin: 0; }
 .camp-intro { margin: 0; color: var(--text-dim); font-size: var(--fs-sm); font-style: italic; }
 
 .camp-seats {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
-  gap: 0.6rem;
+  gap: var(--sp-10);
 }
 
 /* A seat and the one decision you can make about it. The wrapper is the grid
@@ -3432,13 +3432,13 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .camp-seat-wrap {
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  gap: var(--sp-4);
   min-width: 0;
 }
 .camp-march {
   align-self: flex-start;
   font-size: var(--fs-2xs);
-  padding: 0.2rem 0.55rem;
+  padding: var(--sp-4) var(--sp-8);
 }
 .camp-march:disabled { opacity: 0.45; cursor: not-allowed; }
 
@@ -3478,23 +3478,23 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .camp-seat-body {
   display: flex;
   flex-direction: column;
-  gap: 0.15rem;
-  padding: 0.55rem 0.7rem;
+  gap: var(--sp-2);
+  padding: var(--sp-8) var(--sp-12);
   min-width: 0;
 }
 .camp-seat-name { font-weight: 600; color: var(--text); }
-.camp-seat-meta { display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; }
+.camp-seat-meta { display: flex; align-items: center; gap: var(--sp-6); flex-wrap: wrap; }
 /* Said on the seat itself, because the seat is the thing that fixes it. */
 .camp-seat-risk {
   display: block;
-  margin-top: 0.25rem;
+  margin-top: var(--sp-4);
   color: var(--warn);
   font-size: var(--fs-2xs);
   line-height: 1.3;
 }
 .camp-warning {
   margin: 0;
-  padding: 0.5rem 0.7rem;
+  padding: var(--sp-8) var(--sp-12);
   border-left: 3px solid var(--warn);
   background: var(--danger-well);
   color: var(--warn);
@@ -3509,8 +3509,8 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .camp-row {
   display: flex;
   align-items: center;
-  gap: 0.7rem;
-  padding: 0.45rem 0.2rem;
+  gap: var(--sp-12);
+  padding: var(--sp-8) var(--sp-4);
   border-bottom: 1px solid var(--border-soft);
 }
 .camp-row:last-child { border-bottom: 0; }
@@ -3530,12 +3530,12 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 
 /* The player's own characters, listed under the companions rather than among
    them: they are at the fire, but there is nothing to sit down and say. */
-.camp-party h3 { margin-bottom: 0.35rem; }
-.camp-rest { border-top: 1px solid var(--ornament); padding-top: 0.7rem; }
+.camp-party h3 { margin-bottom: var(--sp-6); }
+.camp-rest { border-top: 1px solid var(--ornament); padding-top: var(--sp-12); }
 .camp-rest-actions .btn:disabled { opacity: 0.45; cursor: not-allowed; }
 /* Only shown where neither kind of rest is possible, so it says where one is
    rather than leaving two dead buttons and no explanation. */
-.camp-nowhere { margin-top: 0.5rem; font-style: italic; }
+.camp-nowhere { margin-top: var(--sp-8); font-style: italic; }
 
 /* The campfire behind a camp conversation. Sits under the panel's own
    background at low opacity — it is the room the scene happens in, not the
@@ -3565,7 +3565,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .dlg-panel.is-camp .dlg-script {
   background: linear-gradient(90deg, rgba(22, 17, 13, 0.82), rgba(22, 17, 13, 0.6));
   border-radius: var(--r-md);
-  padding: 0.6rem 0.75rem;
+  padding: var(--sp-10) var(--sp-12);
 }
 
 .camp-face {
@@ -3577,7 +3577,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 0.12rem;
+  gap: var(--sp-2);
   min-height: 0.2rem;
 }
 
@@ -3597,7 +3597,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.2rem;
+  gap: var(--sp-4);
   min-height: 74px;
   border-style: dashed;
   color: var(--text-dim);
@@ -3614,19 +3614,19 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
    they are made of rather than where they sit. */
 
 .track-title { color: var(--gold); font-size: var(--fs-xs); line-height: 1.25; }
-.track-stage { color: var(--accent); font-size: var(--fs-2xs); margin-top: 0.1rem; }
+.track-stage { color: var(--accent); font-size: var(--fs-2xs); margin-top: var(--sp-2); }
 .track-objective {
-  margin: 0.3rem 0 0;
+  margin: var(--sp-4) 0 0;
   font-size: var(--fs-2xs);
   line-height: 1.35;
   color: var(--text);
 }
-.track-where { margin-top: 0.25rem; font-size: var(--fs-2xs); color: var(--text-dim); }
+.track-where { margin-top: var(--sp-4); font-size: var(--fs-2xs); color: var(--text-dim); }
 
-.log-filters { display: flex; gap: 0.2rem; }
+.log-filters { display: flex; gap: var(--sp-4); }
 .chip {
   flex: 1 1 auto;
-  padding: 0.1rem 0.25rem;
+  padding: var(--sp-2) var(--sp-4);
   background: var(--bg-panel-2);
   border: 1px solid var(--border);
   border-radius: var(--r-sm);
@@ -3639,8 +3639,8 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 
 .roll-list { max-height: 60vh; overflow-y: auto; }
 .roll-row {
-  padding: 0.35rem 0.4rem;
-  margin-bottom: 0.3rem;
+  padding: var(--sp-6) var(--sp-6);
+  margin-bottom: var(--sp-4);
   background: var(--bg-inset);
   border: 1px solid var(--border);
   border-left-width: 3px;
@@ -3651,14 +3651,14 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .roll-row.outcome-success  { border-left-color: var(--success); }
 .roll-row.outcome-failure  { border-left-color: var(--danger); }
 .roll-row.outcome-fumble   { border-left-color: var(--danger-dim); }
-.roll-head { display: flex; justify-content: space-between; gap: 0.3rem; }
+.roll-head { display: flex; justify-content: space-between; gap: var(--sp-4); }
 .roll-head strong { color: var(--gold); }
 .roll-verdict { color: var(--text-dim); text-transform: uppercase; font-size: var(--fs-2xs); }
 .roll-sum {
   display: flex;
   align-items: baseline;
-  gap: 0.3rem;
-  margin-top: 0.15rem;
+  gap: var(--sp-4);
+  margin-top: var(--sp-2);
   font-family: var(--mono);
   color: var(--text-dim);
 }
@@ -3667,7 +3667,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   font-size: var(--fs-md);
   font-weight: 700;
 }
-.roll-who { color: var(--text-dim); font-size: var(--fs-2xs); margin-top: 0.1rem; }
+.roll-who { color: var(--text-dim); font-size: var(--fs-2xs); margin-top: var(--sp-2); }
 
 /* ====================================================================
    The action bar
@@ -3680,7 +3680,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   display: flex;
   flex-wrap: wrap;
   flex-shrink: 0;
-  gap: 0.35rem;
+  gap: var(--sp-6);
 }
 .action-btn { flex: 1 1 auto; min-width: 4.5rem; }
 
@@ -3704,7 +3704,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   z-index: var(--z-dialogue);
   display: grid;
   place-items: center;
-  padding: 1.5rem;
+  padding: var(--sp-24);
   background: rgba(8, 6, 5, 0.72);
   -webkit-backdrop-filter: blur(3px);
   backdrop-filter: blur(3px);
@@ -3714,7 +3714,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   position: relative;
   display: grid;
   grid-template-columns: 168px minmax(0, 1fr);
-  gap: 1.25rem;
+  gap: var(--sp-20);
   width: min(880px, 100%);
   /* 90% of the window, and no pixel ceiling.
    *
@@ -3728,7 +3728,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
    * panel cannot be told to be taller than the space it is being centred in.
    * Identical to a flat 90vh on anything above about 480px tall. */
   max-height: min(90vh, calc(100vh - 3rem));
-  padding: 1.2rem 1.35rem;
+  padding: var(--sp-20) var(--sp-20);
   overflow-y: auto;
   background: linear-gradient(180deg, rgba(30, 23, 18, 0.98), rgba(22, 17, 13, 0.99));
   border: 1px solid var(--gold-dim);
@@ -3768,7 +3768,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 }
 /* Seeded NPCs with no painted bust fall back to their map sprite. */
 .dlg-bust.is-sprite { object-fit: contain; object-position: center bottom; }
-.dlg-name { margin-top: 0.4rem; color: var(--gold); font-size: var(--fs-md); font-family: var(--font-display); }
+.dlg-name { margin-top: var(--sp-6); color: var(--gold); font-size: var(--fs-md); font-family: var(--font-display); }
 .dlg-role { color: var(--text-dim); font-size: var(--fs-2xs); }
 
 .dlg-script { min-width: 0; display: flex; flex-direction: column; }
@@ -3788,7 +3788,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   font-style: italic;
   color: var(--text-soft, var(--text-dim));
   border-left: 2px solid var(--accent);
-  padding-left: 0.85rem;
+  padding-left: var(--sp-14);
 }
 .dlg-line.is-aside.ap-bad,
 .dlg-line.is-aside.ap-low { border-left-color: var(--danger); }
@@ -3796,13 +3796,13 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .dlg-line.is-aside.ap-good { border-left-color: var(--success); }
 
 /* Next: the beat between one speaker and the next. */
-.dlg-advance { margin-top: auto; padding-top: 0.9rem; }
+.dlg-advance { margin-top: auto; padding-top: var(--sp-14); }
 .dlg-advance:empty { padding-top: 0; }
 .dlg-next {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.4rem 1rem;
+  gap: var(--sp-8);
+  padding: var(--sp-6) var(--sp-16);
 }
 .dlg-next-hint {
   font-family: var(--font-mono, ui-monospace, monospace);
@@ -3810,38 +3810,38 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   color: var(--text-dim);
   border: 1px solid var(--border);
   border-radius: var(--r-sm);
-  padding: 0.02rem 0.3rem;
+  padding: var(--sp-1) var(--sp-4);
 }
 
 /* A companion's aside: indented, italic, and hung off a rule, so it reads as
    somebody leaning in rather than as part of what the NPC said. */
 .dlg-aside {
-  margin: 0.5rem 0 0 1.2rem;
-  padding-left: 0.7rem;
+  margin: var(--sp-8) 0 0 var(--sp-20);
+  padding-left: var(--sp-12);
   border-left: 2px solid var(--accent);
   color: var(--text-dim);
   font-style: italic;
   font-size: var(--fs-sm);
   line-height: 1.4;
 }
-.dlg-aside-who { color: var(--accent); font-style: normal; margin-right: 0.35rem; }
+.dlg-aside-who { color: var(--accent); font-style: normal; margin-right: var(--sp-6); }
 .dlg-aside.ap-bad, .dlg-aside.ap-low { border-left-color: var(--danger); }
 .dlg-aside.ap-high, .dlg-aside.ap-good { border-left-color: var(--success); }
 
 .dlg-choices {
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  gap: var(--sp-4);
   margin-top: auto;
-  padding-top: 0.9rem;
+  padding-top: var(--sp-14);
 }
 .dlg-choices:empty { padding-top: 0; }
 .dlg-choice {
   display: flex;
   align-items: center;
-  gap: 0.45rem;
+  gap: var(--sp-8);
   text-align: left;
-  padding: 0.4rem 0.6rem;
+  padding: var(--sp-6) var(--sp-10);
   font-size: var(--fs-sm);
 }
 .dlg-key {
@@ -3889,6 +3889,9 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
    speech run underneath the button and lose their last word — and only long
    speeches show it, so it survives any amount of testing on short ones. */
 .dlg-close { position: absolute; top: 0.5rem; right: 0.6rem; z-index: 2; }   /* local: over the line of dialogue */
+/* Clearance, not rhythm: .dlg-close is absolutely positioned in this
+   corner and this is its width plus air. It answers to the button, not to
+   the spacing scale. */
 .dlg-line { padding-right: 4.25rem; }
 
 /* ====================================================================
@@ -3902,7 +3905,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem;
+  padding: var(--sp-16);
   background: rgba(6, 4, 2, 0.82);
 }
 .check-root.hidden { display: none; }
@@ -3912,7 +3915,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   max-width: 620px;
   max-height: 92vh;
   overflow-y: auto;
-  padding: 1.1rem 1.25rem 1.25rem;
+  padding: var(--sp-16) var(--sp-20) var(--sp-20);
   background: var(--bg-panel);
   border: 1px solid var(--gold-dim);
   border-radius: var(--r-lg);
@@ -3922,9 +3925,9 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .check-head {
   display: grid;
   grid-template-columns: 92px minmax(0, 1fr) auto;
-  gap: 0.85rem;
+  gap: var(--sp-14);
   align-items: center;
-  padding-bottom: 0.75rem;
+  padding-bottom: var(--sp-12);
   border-bottom: 1px solid var(--border);
 }
 .check-bust {
@@ -3937,10 +3940,10 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   background: linear-gradient(180deg, var(--bg-panel), var(--bg));
 }
 .check-who { color: var(--text-dim); font-size: var(--fs-xs); }
-.check-title h2 { margin: 0.1rem 0 0.25rem; font-size: var(--fs-xl); }
+.check-title h2 { margin: var(--sp-2) 0 var(--sp-4); font-size: var(--fs-xl); }
 .check-mode {
   display: inline-block;
-  padding: 0.05rem 0.4rem;
+  padding: var(--sp-1) var(--sp-6);
   border-radius: var(--r-pill);
   border: 1px solid var(--border);
   color: var(--text-dim);
@@ -3950,11 +3953,11 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 }
 .check-mode.mode-advantage { border-color: var(--success); color: var(--success); }
 .check-mode.mode-disadvantage { border-color: var(--danger); color: var(--danger); }
-.check-reasons { margin: 0.25rem 0 0; color: var(--text-dim); font-size: var(--fs-2xs); }
+.check-reasons { margin: var(--sp-4) 0 0; color: var(--text-dim); font-size: var(--fs-2xs); }
 
 .check-dc {
   text-align: center;
-  padding: 0.35rem 0.7rem;
+  padding: var(--sp-6) var(--sp-12);
   border: 1px solid var(--gold-dim);
   border-radius: var(--r-md);
   background: var(--bg-inset);
@@ -3965,8 +3968,8 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .check-body {
   display: grid;
   grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
-  gap: 1rem;
-  margin-top: 0.85rem;
+  gap: var(--sp-16);
+  margin-top: var(--sp-14);
 }
 .check-body h3, .check-boosts h3 {
   font-size: var(--fs-2xs);
@@ -3974,21 +3977,21 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   text-transform: uppercase;
   color: var(--text-dim);
   border-bottom: 1px solid var(--border);
-  padding-bottom: 0.2rem;
-  margin: 0 0 0.4rem;
+  padding-bottom: var(--sp-4);
+  margin: 0 0 var(--sp-6);
 }
 .mod-part {
   display: flex;
   justify-content: space-between;
-  gap: 0.5rem;
-  padding: 0.12rem 0;
+  gap: var(--sp-8);
+  padding: var(--sp-2) 0;
   font-size: var(--fs-sm);
   color: var(--text-dim);
 }
 .mod-part em { font-style: normal; font-family: var(--mono); color: var(--text); }
 .mod-total {
-  margin-top: 0.25rem;
-  padding-top: 0.25rem;
+  margin-top: var(--sp-4);
+  padding-top: var(--sp-4);
   border-top: 1px solid var(--border);
   color: var(--text);
 }
@@ -4009,14 +4012,14 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   transition: width 0.18s ease;
 }
 
-.check-boosts { margin-top: 0.9rem; }
-.boost-list { display: flex; flex-direction: column; gap: 0.3rem; }
+.check-boosts { margin-top: var(--sp-14); }
+.boost-list { display: flex; flex-direction: column; gap: var(--sp-4); }
 .boost-row {
   display: grid;
   grid-template-columns: minmax(6rem, auto) minmax(0, 1fr) auto auto;
-  gap: 0.5rem;
+  gap: var(--sp-8);
   align-items: center;
-  padding: 0.4rem 0.55rem;
+  padding: var(--sp-6) var(--sp-8);
   background: var(--bg);
   border: 1px solid var(--border);
   border-radius: var(--r-md);
@@ -4043,15 +4046,15 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 
 .check-actions {
   display: flex;
-  gap: 0.5rem;
+  gap: var(--sp-8);
   justify-content: flex-end;
-  margin-top: 1rem;
+  margin-top: var(--sp-16);
 }
 
 /* --- phase two --- */
 
-.check-throw { text-align: center; padding: 0.5rem 0 0; }
-.dice-row { display: flex; gap: 1rem; justify-content: center; }
+.check-throw { text-align: center; padding: var(--sp-8) 0 0; }
+.dice-row { display: flex; gap: var(--sp-16); justify-content: center; }
 
 .d20 {
   position: relative;
@@ -4098,15 +4101,15 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .die-holder:not(.is-kept) .d20-face { color: var(--text-dim); }
 /* The check panel stacks a die and its kept/dropped tag; the ability trays lay
    theirs out in a row. Only the former wants a column. */
-.dice-row .die-holder { display: grid; justify-items: center; gap: 0.3rem; }
+.dice-row .die-holder { display: grid; justify-items: center; gap: var(--sp-4); }
 
 .throw-breakdown {
   max-width: 320px;
-  margin: 1rem auto 0;
+  margin: var(--sp-16) auto 0;
   text-align: left;
 }
 .throw-verdict {
-  margin-top: 0.9rem;
+  margin-top: var(--sp-14);
   font-size: var(--fs-xl);
   font-weight: 700;
   letter-spacing: 0.04em;
@@ -4147,8 +4150,8 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   z-index: var(--z-combat);
   display: flex;
   flex-direction: column;
-  gap: 0.45rem;
-  padding: 0.5rem;
+  gap: var(--sp-8);
+  padding: var(--sp-8);
   overflow: auto;
   background:
     radial-gradient(ellipse at 50% 0%, var(--bg-panel) 0%, transparent 60%),
@@ -4170,7 +4173,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 body.in-combat .cbt-top {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: var(--sp-12);
   flex-shrink: 0;
   min-width: 0;
 }
@@ -4198,7 +4201,7 @@ body.in-combat .cbt-top {
    turn-based fight is unplayable without. */
 .cbt-ribbon {
   display: flex;
-  gap: 0.25rem;
+  gap: var(--sp-4);
   /* `0` and not `auto`: the ribbon's content is as wide as the fight is long,
      so an `auto` basis made it the biggest thing in the row and every pixel the
      row was short came off both of them proportionally — squeezing the header
@@ -4211,7 +4214,7 @@ body.in-combat .cbt-top {
      platform-default scrollbar under the tokens is a third of what the names
      cost before them. */
   scrollbar-width: thin;
-  padding-bottom: 0.1rem;
+  padding-bottom: var(--sp-2);
 }
 /* A token per slot, the same round counter the party rail uses, so a face on
    the ribbon and a face on a card are recognisably the same object. The slot
@@ -4223,7 +4226,7 @@ body.in-combat .cbt-top {
      used to set this width is gone; see ribbonEntry(). */
   width: 2.9rem;
   text-align: center;
-  padding: 0.15rem 0.1rem 0.25rem;
+  padding: var(--sp-2) var(--sp-2) var(--sp-4);
   border: 0;
   background: none;
 }
@@ -4264,7 +4267,7 @@ body.in-combat .cbt-top {
   bottom: -3px;
   transform: translateX(-50%);
   min-width: 15px;
-  padding: 0 3px;
+  padding: 0 var(--sp-2);
   font-family: var(--mono);
   font-size: var(--fs-2xs);
   line-height: 1.35;
@@ -4281,7 +4284,7 @@ body.in-combat .cbt-top {
 
 .cbt-head {
   display: flex;
-  gap: 0.75rem;
+  gap: var(--sp-12);
   align-items: baseline;
   flex-shrink: 0;
   font-size: var(--fs-sm);
@@ -4309,7 +4312,7 @@ body.in-combat .cbt-top {
   grid-template-areas: "party map map foe";
   flex: 1 1 auto;
   min-height: 0;
-  gap: 0.5rem;
+  gap: var(--sp-8);
 }
 /* Placed by name. The trap documented at `body.in-combat .game-shell` is that a
    `display: none` grid item stops being a grid item at all and the survivors
@@ -4324,8 +4327,8 @@ body.in-combat .cbt-top {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.35rem;
-  padding: 0.5rem;
+  gap: var(--sp-6);
+  padding: var(--sp-8);
   background: var(--bg-panel);
   border: 1px solid var(--border);
   border-radius: var(--r-md);
@@ -4350,13 +4353,13 @@ body.in-combat .cbt-top {
   position: sticky;
   top: -0.5rem;
   z-index: 1;            /* local: over the roster cards scrolling under it */
-  margin: -0.5rem -0.5rem 0;
-  padding: 0.5rem 0.5rem 0.3rem;
+  margin: calc(-1 * var(--sp-8)) calc(-1 * var(--sp-8)) 0;
+  padding: var(--sp-8) var(--sp-8) var(--sp-4);
   background: var(--bg-panel);
 }
 .side-party { border-left: 3px solid var(--accent); }
 .side-foe { border-right: 3px solid var(--danger); }
-.rank-empty { color: var(--text-dim); padding: 0.5rem 0.2rem; }
+.rank-empty { color: var(--text-dim); padding: var(--sp-8) var(--sp-4); }
 
 /* --- the battlefield --------------------------------------------------- */
 
@@ -4367,7 +4370,7 @@ body.in-combat .cbt-top {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0.4rem;
+  padding: var(--sp-6);
   background: var(--bg-inset);
   border: 1px solid var(--border);
   border-radius: var(--r-md);
@@ -4404,7 +4407,7 @@ body.bm-pan-ready .battlemap { cursor: grab; }
   right: 0.5rem;
   z-index: 2;            /* local: over the board it zooms */
   margin-left: 0;
-  padding: 0.15rem;
+  padding: var(--sp-2);
   background: color-mix(in srgb, var(--bg-panel) 88%, transparent);
   border: 1px solid var(--border);
   border-radius: var(--r-md);
@@ -4589,8 +4592,8 @@ body.bm-pan-ready .battlemap { cursor: grab; }
   transform: translateX(-50%);
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.35rem 0.6rem;
+  gap: var(--sp-8);
+  padding: var(--sp-6) var(--sp-10);
   font-size: var(--fs-2xs);
   background: var(--bg-panel);
   border: 1px solid var(--warn);
@@ -4652,8 +4655,8 @@ body.bm-pan-ready .battlemap { cursor: grab; }
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 0.45rem;
-  padding: 0.35rem;
+  gap: var(--sp-8);
+  padding: var(--sp-6);
   background: var(--bg);
   border: 1px solid var(--border);
   border-radius: var(--r-md);
@@ -4776,7 +4779,7 @@ body.bm-pan-ready .battlemap { cursor: grab; }
    top-right corner — that used to be empty plate above a portrait and is now
    the end of the name. Reserved on every card rather than added when one is
    picked, so selecting does not re-flow the word underneath the cursor. */
-.cbt-card .cbt-name { padding-right: 0.85rem; }
+.cbt-card .cbt-name { padding-right: var(--sp-14); }
 .cbt-card .cbt-slots { justify-content: flex-start; }
 .cbt-card .hp-bar { align-self: stretch; }
 
@@ -4788,13 +4791,13 @@ body.bm-pan-ready .battlemap { cursor: grab; }
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 0.1rem 0.25rem;
-  margin-top: 0.15rem;
+  gap: var(--sp-2) var(--sp-4);
+  margin-top: var(--sp-2);
 }
 .slot-grp {
   display: inline-flex;
   align-items: center;
-  gap: 0.1rem;
+  gap: var(--sp-2);
 }
 .slot-grp > b {
   font-family: var(--mono);
@@ -4820,7 +4823,7 @@ body.bm-pan-ready .battlemap { cursor: grab; }
 .cbt-body {
   display: flex;
   flex-direction: column;
-  gap: 0.12rem;
+  gap: var(--sp-2);
   min-width: 0;
 }
 .cbt-name {
@@ -4832,9 +4835,9 @@ body.bm-pan-ready .battlemap { cursor: grab; }
      ellipsis has nothing to trigger against. */
   max-width: 100%;
 }
-.cbt-card .hp-bar { height: 5px; margin-top: 0.1rem; }
+.cbt-card .hp-bar { height: 5px; margin-top: var(--sp-2); }
 .cbt-nums { font-family: var(--mono); color: var(--text-dim); font-size: var(--fs-2xs); }
-.cbt-conds { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.1rem; }
+.cbt-conds { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--sp-2); }
 
 /* Death saves. Three held and three against, on the one card the player needs
    to look at before anything else on the board. */
@@ -4842,13 +4845,13 @@ body.bm-pan-ready .battlemap { cursor: grab; }
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.12rem;
+  gap: var(--sp-2);
   font-size: var(--fs-2xs);
   color: var(--danger);
   letter-spacing: 0.04em;
 }
 .cbt-death.is-stable { color: var(--success); text-transform: uppercase; }
-.cbt-death b { color: var(--text-dim); margin: 0 0.1rem; }
+.cbt-death b { color: var(--text-dim); margin: 0 var(--sp-2); }
 .death-dot {
   width: 6px;
   height: 6px;
@@ -4879,8 +4882,8 @@ body.in-combat .cbt-inspector {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.2rem;
-  padding: 0.5rem;
+  gap: var(--sp-4);
+  padding: var(--sp-8);
   background: var(--ornament-well);
   border: 1px solid var(--ornament);
   border-radius: var(--r-md);
@@ -4901,7 +4904,7 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
 
 .cbt-inspect-shot {
   align-self: stretch;
-  padding: 0.25rem 0.35rem;
+  padding: var(--sp-4) var(--sp-6);
   border-radius: var(--r-md);
   font-size: var(--fs-2xs);
   background: rgba(0, 0, 0, 0.25);
@@ -4920,7 +4923,7 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
 .cbt-inspect-line { color: var(--text-dim); font-size: var(--fs-2xs); }
 .cbt-inspect-stats {
   display: flex;
-  gap: 0.5rem;
+  gap: var(--sp-8);
   font-family: var(--mono);
   font-size: var(--fs-2xs);
   color: var(--text);
@@ -4930,16 +4933,16 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
 .cbt-inspect-conds {
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  gap: var(--sp-4);
   text-align: left;
-  margin-top: 0.4rem;
+  margin-top: var(--sp-6);
 }
 .cbt-inspect-conds.help-hint { text-align: center; }
-.cbt-inspect-conds .pip { font-size: var(--fs-2xs); min-width: 0; padding: 0 0.3rem; }
+.cbt-inspect-conds .pip { font-size: var(--fs-2xs); min-width: 0; padding: 0 var(--sp-4); }
 
 .cbt-effect {
   border-left: 2px solid var(--text-faint);
-  padding: 0.25rem 0 0.25rem 0.45rem;
+  padding: var(--sp-4) 0 var(--sp-4) var(--sp-8);
   background: rgba(0, 0, 0, 0.18);
   border-radius: 0 3px 3px 0;
 }
@@ -4949,7 +4952,7 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
 .cbt-effect-head {
   display: flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: var(--sp-6);
   flex-wrap: wrap;
 }
 .cbt-effect-head strong { font-size: var(--fs-2xs); }
@@ -4961,7 +4964,7 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
   white-space: nowrap;
 }
 .cbt-effect p {
-  margin: 0.15rem 0 0;
+  margin: var(--sp-2) 0 0;
   font-size: var(--fs-2xs);
   line-height: 1.35;
   color: var(--text-dim);
@@ -4976,7 +4979,7 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: var(--sp-6);
   /* No left margin. There used to be one the width of the log, from when the
      log floated over the board's bottom-left; in a fight it does not float at
      all — `body.in-combat .game-shell` gives it a grid column of its own on the
@@ -4985,7 +4988,7 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
   /* Tight, because this row is paid for by the board. The bar holds one row of
      keys now — what the turn has left moved into the header — and the padding
      is the only other thing in here with a say in its height. */
-  padding: 0.3rem 0.5rem;
+  padding: var(--sp-4) var(--sp-8);
   background: var(--bg-panel);
   border: 1px solid var(--border);
   border-radius: var(--r-md);
@@ -4993,7 +4996,7 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
 .cbt-economy {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: var(--sp-6);
   font-size: var(--fs-2xs);
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -5005,15 +5008,15 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
 .cbt-head .cbt-economy { align-self: center; }
 .cbt-head .econ-slots { margin-left: 0; }
 .econ {
-  padding: 0.05rem 0.4rem;
+  padding: var(--sp-1) var(--sp-6);
   border: 1px solid var(--success);
   border-radius: var(--r-pill);
   color: var(--success);
 }
 .econ.spent { border-color: var(--border); color: var(--text-dim); text-decoration: line-through; }
-.econ-slots { display: flex; gap: 0.5rem; margin-left: auto; }
-.slot-group { display: inline-flex; align-items: center; gap: 0.12rem; color: var(--text-dim); }
-.slot-group b { margin-right: 0.15rem; color: var(--gold-dim); font-size: var(--fs-2xs); }
+.econ-slots { display: flex; gap: var(--sp-8); margin-left: auto; }
+.slot-group { display: inline-flex; align-items: center; gap: var(--sp-2); color: var(--text-dim); }
+.slot-group b { margin-right: var(--sp-2); color: var(--gold-dim); font-size: var(--fs-2xs); }
 .slot-dot {
   width: 8px;
   height: 8px;
@@ -5029,12 +5032,12 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
 .sheet-slots {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem 1.1rem;
-  padding: 0.15rem 0;
+  gap: var(--sp-6) var(--sp-16);
+  padding: var(--sp-2) 0;
 }
-.sheet-slots .slot-group { gap: 0.2rem; }
+.sheet-slots .slot-group { gap: var(--sp-4); }
 .sheet-slots .slot-dot { width: 10px; height: 10px; }
-.slot-count { margin-left: 0.3rem; font-size: var(--fs-2xs); color: var(--text-dim); }
+.slot-count { margin-left: var(--sp-4); font-size: var(--fs-2xs); color: var(--text-dim); }
 .waiting { color: var(--text-dim); text-transform: none; letter-spacing: 0; }
 
 /* --- The action bar ----------------------------------------------------
@@ -5049,7 +5052,7 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.3rem;
+  gap: var(--sp-4);
 }
 
 .act-slot {
@@ -5130,7 +5133,7 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
   flex: 0 0 auto;
   width: 1px;
   height: 22px;
-  margin: 0 0.35rem;
+  margin: 0 var(--sp-6);
   background: var(--border);
 }
 
@@ -5141,9 +5144,9 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
   z-index: 6;            /* local: over the action bar it belongs to */
   display: none;
   flex-direction: column;
-  gap: 0.15rem;
+  gap: var(--sp-2);
   max-width: 280px;
-  padding: 0.4rem 0.55rem;
+  padding: var(--sp-6) var(--sp-8);
   background: var(--bg-panel);
   border: 1px solid var(--gold-dim);
   border-radius: var(--r-md);
@@ -5159,7 +5162,7 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
 .cbt-outcome {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: var(--sp-12);
 }
 .cbt-outcome strong { font-size: var(--fs-xl); }
 .cbt-outcome.outcome-victory strong { color: var(--gold); }
@@ -5167,12 +5170,12 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
 .cbt-outcome .btn { margin-left: auto; }
 
 /* Spell and item pickers */
-.spell-list { display: flex; flex-direction: column; gap: 0.3rem; }
+.spell-list { display: flex; flex-direction: column; gap: var(--sp-4); }
 .spell-row {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.45rem 0.6rem;
+  gap: var(--sp-8);
+  padding: var(--sp-8) var(--sp-10);
   background: var(--bg);
   border: 1px solid var(--border);
   border-radius: var(--r-md);
@@ -5301,8 +5304,8 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
 */
 .levelup-head {
   text-align: center;
-  padding-bottom: 0.9rem;
-  margin-bottom: 1.1rem;
+  padding-bottom: var(--sp-14);
+  margin-bottom: var(--sp-16);
   border-bottom: 1px solid var(--border-soft);
 }
 .levelup-eyebrow {
@@ -5312,24 +5315,24 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
   text-transform: uppercase;
   color: var(--gold);
 }
-.levelup-title { margin: 0.25rem 0 0; font-size: var(--fs-xl); }
-.levelup-sub { margin: 0.15rem 0 0; color: var(--text-dim); font-size: var(--fs-sm); }
+.levelup-title { margin: var(--sp-4) 0 0; font-size: var(--fs-xl); }
+.levelup-sub { margin: var(--sp-2) 0 0; color: var(--text-dim); font-size: var(--fs-sm); }
 
-.levelup-step h3 { margin: 0 0 0.4rem; font-size: var(--fs-lg); }
+.levelup-step h3 { margin: 0 0 var(--sp-6); font-size: var(--fs-lg); }
 .levelup-step h4 {
-  margin: 1rem 0 0.4rem;
+  margin: var(--sp-16) 0 var(--sp-6);
   font-size: var(--fs-2xs);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--text-faint);
 }
-.levelup-note { margin: 0 0 1rem; color: var(--text-dim); font-size: var(--fs-sm); }
-.levelup-error { margin: 0.6rem 0 0; color: var(--danger); font-size: var(--fs-sm); min-height: 1.2em; }
-.levelup-actions { margin-top: 1.2rem; display: flex; justify-content: flex-end; gap: 0.6rem; }
+.levelup-note { margin: 0 0 var(--sp-16); color: var(--text-dim); font-size: var(--fs-sm); }
+.levelup-error { margin: var(--sp-10) 0 0; color: var(--danger); font-size: var(--fs-sm); min-height: 1.2em; }
+.levelup-actions { margin-top: var(--sp-20); display: flex; justify-content: flex-end; gap: var(--sp-10); }
 
 /* --- the hit die ------------------------------------------------------- */
 .levelup-dice { display: grid; place-items: center; min-height: 150px; }
-.levelup-result { text-align: center; font-size: var(--fs-lg); min-height: 1.6em; margin: 0.6rem 0 0; }
+.levelup-result { text-align: center; font-size: var(--fs-lg); min-height: 1.6em; margin: var(--sp-10) 0 0; }
 .levelup-result strong { color: var(--gold-bright); }
 .levelup-grim { color: var(--danger); font-size: var(--fs-sm); }
 
@@ -5367,14 +5370,14 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
 .levelup-abilities {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-  gap: 0.5rem;
+  gap: var(--sp-8);
 }
 .levelup-ability {
   display: grid;
   grid-template-columns: 1fr auto auto auto;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 0.65rem;
+  gap: var(--sp-8);
+  padding: var(--sp-8) var(--sp-10);
   background: var(--bg-inset);
   border: 1px solid var(--border-soft);
   border-radius: var(--r-md);
@@ -5386,7 +5389,7 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
 .levelup-ability.is-raised .levelup-ability-score { color: var(--gold-bright); }
 .levelup-ability-spent { color: var(--gold); font-size: var(--fs-xs); min-width: 1.6em; }
 .levelup-remaining {
-  margin: 0.8rem 0 0;
+  margin: var(--sp-12) 0 0;
   text-align: right;
   font-size: var(--fs-xs);
   color: var(--text-faint);
@@ -5397,9 +5400,9 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
 .levelup-spell {
   display: grid;
   grid-template-columns: auto 1fr;
-  gap: 0.15rem 0.6rem;
-  padding: 0.6rem 0.7rem;
-  margin-bottom: 0.4rem;
+  gap: var(--sp-2) var(--sp-10);
+  padding: var(--sp-10) var(--sp-12);
+  margin-bottom: var(--sp-6);
   background: var(--bg-inset);
   border: 1px solid var(--border-soft);
   border-radius: var(--r-md);
@@ -5410,7 +5413,7 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
 .levelup-feat.is-blocked,
 .levelup-spell:has(input:disabled) { opacity: 0.45; cursor: not-allowed; }
 .levelup-feat input,
-.levelup-spell input { grid-row: 1 / span 3; align-self: start; margin-top: 0.2rem; }
+.levelup-spell input { grid-row: 1 / span 3; align-self: start; margin-top: var(--sp-4); }
 .levelup-feat-name,
 .levelup-spell-name { font-weight: 600; }
 .levelup-feat-text,
@@ -5431,22 +5434,22 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
 }
 
 .levelup-spells,
-.levelup-feats { max-height: 46vh; overflow-y: auto; padding-right: 0.3rem; }
-.levelup-spell-group { margin-bottom: 0.6rem; }
-.levelup-feat-group { margin-bottom: 0.6rem; }
+.levelup-feats { max-height: 46vh; overflow-y: auto; padding-right: var(--sp-4); }
+.levelup-spell-group { margin-bottom: var(--sp-10); }
+.levelup-feat-group { margin-bottom: var(--sp-10); }
 /* The filter sets `hidden` on rows and groups, and `hidden` loses to any
    explicit display — .levelup-feat is a grid — so it has to be said. Without
    this the filter narrows nothing and looks broken. */
 .levelup-feat[hidden],
 .levelup-feat-group[hidden] { display: none; }
-.levelup-empty { color: var(--text-faint); font-size: var(--fs-sm); padding: 0.6rem 0.2rem; }
+.levelup-empty { color: var(--text-faint); font-size: var(--fs-sm); padding: var(--sp-10) var(--sp-4); }
 
 /* The filter over a thirty-entry list. Deliberately plain: it is a way to
    find a name you already have in mind, not a second way to browse. */
 .levelup-filter {
   width: 100%;
-  margin-bottom: 0.6rem;
-  padding: 0.45rem 0.6rem;
+  margin-bottom: var(--sp-10);
+  padding: var(--sp-8) var(--sp-10);
   background: var(--bg-inset);
   border: 1px solid var(--border-soft);
   border-radius: var(--r-md);
@@ -5461,15 +5464,15 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
    click from re-toggling the radio above it. */
 .levelup-asi-panel {
   grid-column: 2;
-  margin-top: 0.6rem;
-  padding-top: 0.6rem;
+  margin-top: var(--sp-10);
+  padding-top: var(--sp-10);
   border-top: 1px solid var(--border-soft);
 }
 .levelup-asi-panel[hidden] { display: none; }
-.levelup-asi-panel .levelup-note { margin-bottom: 0.6rem; }
+.levelup-asi-panel .levelup-note { margin-bottom: var(--sp-10); }
 
 /* --- the summary ------------------------------------------------------- */
-.levelup-summary { margin: 0.8rem 0 0; padding-left: 1.1rem; line-height: 1.7; }
+.levelup-summary { margin: var(--sp-12) 0 0; padding-left: var(--sp-16); line-height: 1.7; }
 .levelup-summary strong { color: var(--gold-bright); }
 
 /* ===========================================================================
@@ -5483,17 +5486,17 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
   display: grid;
   place-items: center;
   min-height: 100vh;
-  padding: 1.5rem;
+  padding: var(--sp-24);
 }
 .auth-card {
   width: min(26rem, 100%);
   background: var(--bg-panel);
   border: 1px solid var(--border);
   border-radius: var(--r-lg);
-  padding: 1.75rem;
+  padding: var(--sp-28);
   box-shadow: var(--sh-4);
 }
-.auth-head { text-align: center; margin-bottom: 1.4rem; }
+.auth-head { text-align: center; margin-bottom: var(--sp-24); }
 .auth-eyebrow {
   margin: 0;
   font-size: var(--fs-2xs);
@@ -5501,58 +5504,58 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
   text-transform: uppercase;
   color: var(--gold);
 }
-.auth-card h1 { margin: 0.3rem 0 0; font-size: var(--fs-xl); }
-.auth-sub { margin: 0.3rem 0 0; color: var(--text-dim); font-size: var(--fs-sm); }
+.auth-card h1 { margin: var(--sp-4) 0 0; font-size: var(--fs-xl); }
+.auth-sub { margin: var(--sp-4) 0 0; color: var(--text-dim); font-size: var(--fs-sm); }
 
-.auth-field { margin-bottom: 0.9rem; }
-.auth-field > span { display: block; margin-bottom: 0.3rem; }
+.auth-field { margin-bottom: var(--sp-14); }
+.auth-field > span { display: block; margin-bottom: var(--sp-4); }
 .auth-field em { color: var(--text-faint); font-style: normal; }
 
-.auth-error { min-height: 1.3em; margin: 0.2rem 0 0.6rem; color: var(--danger); font-size: var(--fs-sm); }
+.auth-error { min-height: 1.3em; margin: var(--sp-4) 0 var(--sp-10); color: var(--danger); font-size: var(--fs-sm); }
 .auth-submit { width: 100%; }
 
 .auth-switch {
-  margin: 1.1rem 0 0;
+  margin: var(--sp-16) 0 0;
   text-align: center;
   font-size: var(--fs-sm);
   color: var(--text-dim);
 }
 .auth-closed { color: var(--text-faint); }
-.auth-foot { margin: 1.4rem 0 0; text-align: center; font-size: var(--fs-xs); }
+.auth-foot { margin: var(--sp-24) 0 0; text-align: center; font-size: var(--fs-xs); }
 .auth-foot a { color: var(--text-faint); }
 
 /* --- accounts ---------------------------------------------------------- */
-.admin-page { padding: 1.5rem; max-width: 62rem; margin: 0 auto; }
+.admin-page { padding: var(--sp-24); max-width: 62rem; margin: 0 auto; }
 .admin-head {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  gap: 1rem;
+  gap: var(--sp-16);
   flex-wrap: wrap;
-  padding-bottom: 1rem;
-  margin-bottom: 1.4rem;
+  padding-bottom: var(--sp-16);
+  margin-bottom: var(--sp-24);
   border-bottom: 1px solid var(--border-soft);
 }
-.admin-head h1 { margin: 0.2rem 0 0; }
-.admin-nav { display: flex; gap: 0.5rem; }
+.admin-head h1 { margin: var(--sp-4) 0 0; }
+.admin-nav { display: flex; gap: var(--sp-8); }
 
 .admin-panel {
   background: var(--bg-panel);
   border: 1px solid var(--border-soft);
   border-radius: var(--r-lg);
-  padding: 1.1rem 1.2rem;
-  margin-bottom: 1.2rem;
+  padding: var(--sp-16) var(--sp-20);
+  margin-bottom: var(--sp-20);
 }
 .admin-panel-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
-  margin-bottom: 0.7rem;
+  gap: var(--sp-16);
+  margin-bottom: var(--sp-12);
 }
 .admin-panel h2 { margin: 0; font-size: var(--fs-md); }
-.admin-note { margin: 0 0 0.7rem; color: var(--text-dim); font-size: var(--fs-sm); }
-.admin-toggle { display: flex; align-items: center; gap: 0.5rem; margin: 0; }
+.admin-note { margin: 0 0 var(--sp-12); color: var(--text-dim); font-size: var(--fs-sm); }
+.admin-toggle { display: flex; align-items: center; gap: var(--sp-8); margin: 0; }
 .admin-toggle input { width: auto; margin: 0; }
 
 /* The table is the one thing here that can outgrow a narrow screen, so it
@@ -5565,11 +5568,11 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--text-faint);
-  padding: 0 0.6rem 0.5rem;
+  padding: 0 var(--sp-10) var(--sp-8);
   white-space: nowrap;
 }
 .admin-table td {
-  padding: 0.6rem;
+  padding: var(--sp-10);
   border-top: 1px solid var(--border-soft);
   vertical-align: middle;
 }
@@ -5577,34 +5580,34 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
 .admin-table select { width: auto; min-width: 6rem; }
 .admin-sub { font-size: var(--fs-xs); color: var(--text-faint); }
 .admin-warn { font-size: var(--fs-xs); color: var(--danger); }
-.admin-actions { display: flex; gap: 0.4rem; justify-content: flex-end; }
+.admin-actions { display: flex; gap: var(--sp-6); justify-content: flex-end; }
 .admin-error { min-height: 1.3em; color: var(--danger); font-size: var(--fs-sm); }
-.hero-who { margin: 0.9rem 0 0; font-size: var(--fs-xs); color: var(--text-faint); }
+.hero-who { margin: var(--sp-14) 0 0; font-size: var(--fs-xs); color: var(--text-faint); }
 .hero-who strong { color: var(--text-dim); font-weight: 600; }
 
 /* ===========================================================================
    Content editors
    =========================================================================== */
-.ce-tabs { display: flex; gap: 0.4rem; margin: 0 0 1rem; }
+.ce-tabs { display: flex; gap: var(--sp-6); margin: 0 0 var(--sp-16); }
 .ce-tab {
   background: var(--bg-panel);
   border: 1px solid var(--border-soft);
   border-radius: 7px 7px 0 0;
   color: var(--text-dim);
-  padding: 0.5rem 1.1rem;
+  padding: var(--sp-8) var(--sp-16);
   cursor: pointer;
   font: inherit;
 }
 .ce-tab.is-on { color: var(--gold-bright); border-color: var(--gold); background: var(--gold-well); }
 
-.ce-main { display: grid; grid-template-columns: minmax(15rem, 22rem) 1fr; gap: 1.2rem; align-items: start; }
+.ce-main { display: grid; grid-template-columns: minmax(15rem, 22rem) 1fr; gap: var(--sp-20); align-items: start; }
 @media (max-width: 60rem) { .ce-main { grid-template-columns: 1fr; } }
 
 .ce-list {
   background: var(--bg-panel);
   border: 1px solid var(--border-soft);
   border-radius: var(--r-lg);
-  padding: 0.4rem;
+  padding: var(--sp-6);
   max-height: 74vh;
   overflow-y: auto;
 }
@@ -5612,8 +5615,8 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
   display: grid;
   width: 100%;
   text-align: left;
-  gap: 0.1rem;
-  padding: 0.55rem 0.65rem;
+  gap: var(--sp-2);
+  padding: var(--sp-8) var(--sp-10);
   background: none;
   border: 1px solid transparent;
   border-radius: var(--r-md);
@@ -5625,7 +5628,7 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
 .ce-row.is-on { background: var(--gold-well); border-color: var(--gold); }
 .ce-row-name { font-weight: 600; }
 .ce-row-sub { font-size: var(--fs-xs); color: var(--text-faint); }
-.ce-row-tags { display: flex; gap: 0.35rem; flex-wrap: wrap; }
+.ce-row-tags { display: flex; gap: var(--sp-6); flex-wrap: wrap; }
 .ce-row-tags em {
   font-style: normal;
   font-size: var(--fs-2xs);
@@ -5634,26 +5637,26 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
   color: var(--gold-dim);
   border: 1px solid var(--border-soft);
   border-radius: var(--r-sm);
-  padding: 0 0.3rem;
+  padding: 0 var(--sp-4);
 }
 
 .ce-detail {
   background: var(--bg-panel);
   border: 1px solid var(--border-soft);
   border-radius: var(--r-lg);
-  padding: 1.2rem;
+  padding: var(--sp-20);
   min-height: 20rem;
 }
-.ce-title { margin: 0 0 1rem; font-size: var(--fs-lg); }
+.ce-title { margin: 0 0 var(--sp-16); font-size: var(--fs-lg); }
 .ce-title code { font-size: var(--fs-2xs); color: var(--text-faint); font-weight: 400; }
 .ce-sub {
-  margin: 1.6rem 0 0.6rem;
+  margin: var(--sp-24) 0 var(--sp-10);
   font-size: var(--fs-2xs);
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--text-faint);
   border-top: 1px solid var(--border-soft);
-  padding-top: 0.9rem;
+  padding-top: var(--sp-14);
 }
 /* ===========================================================================
    The landing page — a shelf of books.
@@ -5680,7 +5683,7 @@ body.home-page {
 }
 /* The hero already ends in a rule and 3rem of air; the container's own 1.5rem
    on top of that puts the shelf heading right on the seam. */
-body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
+body.home-page > main { flex: 1 0 auto; padding-top: var(--sp-32); }
 
 /* --- The account bar --------------------------------------------------
    Housekeeping: who you are, the legal page, the admin doors, the way out.
@@ -5695,11 +5698,11 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
 .site-bar-in {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0.5rem 1.5rem;
+  padding: var(--sp-8) var(--sp-24);
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.4rem 1.1rem;
+  gap: var(--sp-6) var(--sp-16);
   /* The name to the left, the doors to the right: `.site-who` takes the slack
      so nothing has to be told its own width. */
   justify-content: flex-end;
@@ -5715,7 +5718,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
    wash off the top, and a vignette that closes the sides so the column of text
    is the only lit thing on the page above the shelf. */
 .hero-home {
-  padding: 4rem 1.5rem 3.25rem;
+  padding: var(--sp-64) var(--sp-24) var(--sp-48);
   background:
     radial-gradient(ellipse 42rem 18rem at 50% 8%,
                     color-mix(in srgb, var(--gold) 7%, transparent) 0%, transparent 70%),
@@ -5733,7 +5736,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--text-faint);
-  margin: 0 0 0.9rem;
+  margin: 0 0 var(--sp-14);
   max-width: none;
 }
 
@@ -5762,7 +5765,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
   margin: 0 auto;
 }
 
-.hero-home .hero-actions { margin-top: 1.8rem; }
+.hero-home .hero-actions { margin-top: var(--sp-28); }
 
 /* A brass rule with a lozenge on it, in the ornament colour rather than gold:
    the palette spends gold on things you can press, and this is a divider. Two
@@ -5772,7 +5775,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
   --orn-w: 15rem;
   width: var(--orn-w);
   height: 0.5rem;
-  margin: 1.4rem auto 1.3rem;
+  margin: var(--sp-24) auto var(--sp-20);
   position: relative;
   background:
     linear-gradient(90deg, transparent, var(--ornament) 22%, var(--ornament) 78%, transparent);
@@ -5789,7 +5792,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
   top: 50%;
   width: 0.42rem;
   height: 0.42rem;
-  margin: -0.21rem 0 0 -0.21rem;
+  margin: calc(-1 * var(--sp-4)) 0 0 calc(-1 * var(--sp-4));
   transform: rotate(45deg);
   background: var(--ornament-bright);
   /* Not elevation and not a ring: a disc of the PAGE colour, punching a gap
@@ -5806,8 +5809,8 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
   display: flex;
   align-items: baseline;
   flex-wrap: wrap;
-  gap: 0.25rem 0.9rem;
-  margin: 0.25rem 0 1rem;
+  gap: var(--sp-4) var(--sp-14);
+  margin: var(--sp-4) 0 var(--sp-16);
 }
 .section-head h2 {
   margin: 0;
@@ -5826,7 +5829,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
      with it. */
   display: flex;
   align-items: center;
-  gap: 0.9rem;
+  gap: var(--sp-14);
 }
 .section-hint::after {
   content: "";
@@ -5843,7 +5846,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
 .home-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1rem;
+  gap: var(--sp-16);
   /* Stretch, not start. `.module-card` pushes its buttons down with
      `margin-top: auto`, which does nothing unless the card is taller than its
      content — and with `align-items: start` it never is. The row came out with
@@ -5888,14 +5891,14 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
   list-style: none;
   counter-reset: howto;
   columns: 2;
-  column-gap: 2.5rem;
+  column-gap: var(--sp-40);
 }
 .howto li {
   break-inside: avoid;
   counter-increment: howto;
   position: relative;
-  padding-left: 2.4rem;
-  margin-bottom: 0.85rem;
+  padding-left: 2.4rem;   /* clearance for the numbered disc, not rhythm */
+  margin-bottom: var(--sp-14);
 }
 .howto li:last-child { margin-bottom: 0; }
 /* A brass disc, aligned to the cap height of the first line rather than its
@@ -5924,7 +5927,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
 /* The how-to sits under the shelf and is not part of its grid. Held to a
    reading measure and centred: five steps across 1200px is a line nobody
    finishes. */
-.home-howto { margin-top: 1.75rem; }
+.home-howto { margin-top: var(--sp-28); }
 
 /* A saved character.
 
@@ -5934,14 +5937,14 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
 .char-card {
   border: 1px solid var(--border-soft);
   border-radius: var(--r-md);
-  padding: 0.6rem 0.7rem;
-  margin-bottom: 0.6rem;
+  padding: var(--sp-10) var(--sp-12);
+  margin-bottom: var(--sp-10);
   background: rgba(0, 0, 0, 0.12);
   /* Portrait beside the body. Flex rather than a two-column grid because the
      portrait is removed outright when the file is missing, and a grid would be
      left holding an empty column and its gap. */
   display: flex;
-  gap: 0.6rem;
+  gap: var(--sp-10);
   align-items: flex-start;
 }
 .char-card:last-child { margin-bottom: 0; }
@@ -5954,7 +5957,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
   /* No bottom margin: it used to hold the buttons off the text below it, and
      they are in the corner now — left in, it is trailing space inside a card
      whose height is set by the portrait beside it. */
-  margin: 0.15rem 0 0;
+  margin: var(--sp-2) 0 0;
 }
 
 /* The cut face, at the size the party rail uses it. Fixed rather than fluid:
@@ -5978,7 +5981,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
 .char-actions {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: var(--sp-6);
   flex: 0 0 auto;
 }
 /* Icon-only, so they need the border the transparent .icon-btn does not carry
@@ -5993,7 +5996,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
 .module-slot-empty {
   border: 1px dashed var(--border-soft);
   border-radius: var(--r-lg);
-  padding: 1rem;
+  padding: var(--sp-16);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -6068,7 +6071,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
    scrim would be a fade from nothing into black. */
 .module-plate.no-art { aspect-ratio: auto; background: var(--bg-panel-2); }
 .module-plate.no-art::after { display: none; }
-.module-plate.no-art .module-cap { position: static; padding-top: 1rem; }
+.module-plate.no-art .module-cap { position: static; padding-top: var(--sp-16); }
 .module-plate.no-art .module-name,
 .module-plate.no-art .module-levels { text-shadow: none; }
 
@@ -6078,11 +6081,11 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
   right: 0;
   bottom: 0;
   z-index: 1;            /* local: the caption, over its own plate */
-  padding: 0.85rem 1.15rem 0.8rem;
+  padding: var(--sp-14) var(--sp-20) var(--sp-12);
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: 0.75rem;
+  gap: var(--sp-12);
 }
 .module-name {
   font-family: var(--font-display);
@@ -6114,7 +6117,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
   z-index: 1;            /* local: the badge, over its own plate */
   top: 0.6rem;
   right: 0.6rem;
-  padding: 0.18rem 0.5rem;
+  padding: var(--sp-2) var(--sp-8);
   border-radius: var(--r-pill);
   border: 1px solid var(--gold-dim);
   background: color-mix(in srgb, var(--gold-well) 82%, transparent);
@@ -6125,7 +6128,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
   letter-spacing: 0.04em;
 }
 
-.module-body { padding: 0.9rem 1.15rem 0; }
+.module-body { padding: var(--sp-14) var(--sp-20) 0; }
 .module-blurb {
   color: var(--text-dim);
   line-height: 1.55;
@@ -6135,17 +6138,17 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
   font-size: var(--fs-2xs);
   color: var(--text-faint);
   line-height: 1.45;
-  margin: 0.7rem 0 0;
+  margin: var(--sp-12) 0 0;
 }
 
 /* Both buttons sit on the card's baseline together, so a row of cards has one
    line of buttons across it however long the blurbs ran. */
 .module-actions {
   margin-top: auto;
-  padding: 1rem 1.15rem 1.15rem;
+  padding: var(--sp-16) var(--sp-20) var(--sp-20);
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem;
+  gap: var(--sp-6);
 }
 
 /* ------------------------------------------------------------------ *
@@ -6159,8 +6162,8 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
 
 /* The hero, minus the full-height drama it has on the home page — this is a
    page you pass through on the way to a character, not one to sit and read. */
-.hero-slim { padding: 1.6rem 1rem 1.3rem; }
-.hero-slim h1 { margin-bottom: 0.3rem; }
+.hero-slim { padding: var(--sp-24) var(--sp-16) var(--sp-20); }
+.hero-slim h1 { margin-bottom: var(--sp-4); }
 .hero-sub {
   color: var(--text-dim);
   max-width: 46rem;
@@ -6171,21 +6174,21 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
 .hero-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: var(--sp-8);
   justify-content: center;
-  margin-top: 1rem;
+  margin-top: var(--sp-16);
 }
 
-.party-block { margin-bottom: 1.1rem; }
+.party-block { margin-bottom: var(--sp-16); }
 /* The name and the headcount on one line, the count pushed right and quiet:
    it is the answer to "is anybody missing", not a label worth reading first. */
 .party-head {
   display: flex;
   align-items: baseline;
-  gap: 0.6rem;
+  gap: var(--sp-10);
   border-bottom: 1px solid var(--border-soft);
-  padding-bottom: 0.5rem;
-  margin-bottom: 0.8rem;
+  padding-bottom: var(--sp-8);
+  margin-bottom: var(--sp-12);
 }
 /* No border of its own: `.panel h2` carries an underline, and inside a flex
    row that underline stops where the heading stops — so the rule ran to just
@@ -6211,7 +6214,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
   align-self: center;
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: var(--sp-6);
 }
 .party-play svg {
   width: 0.85rem;
@@ -6230,7 +6233,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
 .party-members {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
-  gap: 0.6rem;
+  gap: var(--sp-10);
 }
 /* The grid's gap spaces them; .char-card's own bottom margin would double it
    on every row but the last. */
@@ -6254,24 +6257,24 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
    because a module is a bigger division than a region — and it only ever
    renders when there is more than one module to tell apart. */
 .ce-module {
-  margin: 2rem 0 0.2rem;
+  margin: var(--sp-32) 0 var(--sp-4);
   font-size: var(--fs-xs);
   letter-spacing: 0.08em;
   color: var(--gold);
 }
-.ce-module + .ce-sub { border-top: 0; padding-top: 0; margin-top: 0.4rem; }
+.ce-module + .ce-sub { border-top: 0; padding-top: 0; margin-top: var(--sp-6); }
 
-.ce-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.7rem; }
+.ce-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-12); }
 .ce-grid-3 { grid-template-columns: 2fr 1fr 1fr; }
 @media (max-width: 40rem) { .ce-grid, .ce-grid-3 { grid-template-columns: 1fr; } }
 
-.ce-checks { display: flex; flex-wrap: wrap; gap: 0.5rem 1.2rem; margin: 0.8rem 0; }
-.ce-check { display: flex; align-items: center; gap: 0.4rem; margin: 0; }
+.ce-checks { display: flex; flex-wrap: wrap; gap: var(--sp-8) var(--sp-20); margin: var(--sp-12) 0; }
+.ce-check { display: flex; align-items: center; gap: var(--sp-6); margin: 0; }
 .ce-check input { width: auto; margin: 0; }
 .ce-hint { font-size: var(--fs-xs); color: var(--text-faint); }
 .ce-hint.is-ok { color: var(--success); }
 .ce-hint.is-bad { color: var(--danger); }
-.ce-actions { display: flex; align-items: center; justify-content: flex-end; gap: 0.6rem; margin-top: 0.8rem; }
+.ce-actions { display: flex; align-items: center; justify-content: flex-end; gap: var(--sp-10); margin-top: var(--sp-12); }
 
 /* The dialogue document. Monospace because it is JSON and the indentation is
    the only structure a reader has to go on. */
@@ -6288,13 +6291,13 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
   background: var(--bg-inset);
   border: 1px solid var(--border-soft);
   border-radius: var(--r-md);
-  margin-bottom: 0.5rem;
-  padding: 0.5rem 0.7rem;
+  margin-bottom: var(--sp-8);
+  padding: var(--sp-8) var(--sp-12);
 }
-.ce-stage summary { cursor: pointer; display: flex; gap: 0.6rem; align-items: baseline; flex-wrap: wrap; }
+.ce-stage summary { cursor: pointer; display: flex; gap: var(--sp-10); align-items: baseline; flex-wrap: wrap; }
 .ce-stage summary code { font-size: var(--fs-2xs); color: var(--text-faint); }
 .ce-terminal { font-style: normal; font-size: var(--fs-2xs); color: var(--gold-dim); }
-.ce-stage-body { padding-top: 0.7rem; }
+.ce-stage-body { padding-top: var(--sp-12); }
 
 /* ====================================================================
    The conversation graph
@@ -6402,17 +6405,17 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
   right: 0.5rem;
   bottom: 0.5rem;
   display: flex;
-  gap: 0.25rem;
+  gap: var(--sp-4);
   z-index: 1;            /* local: over the chart it zooms */
 }
 
 /* The findings list under the chart. */
-.dg-findings { margin-top: 0.6rem; max-height: 12rem; overflow-y: auto; }
+.dg-findings { margin-top: var(--sp-10); max-height: 12rem; overflow-y: auto; }
 .dg-finding {
   display: flex;
-  gap: 0.5rem;
+  gap: var(--sp-8);
   align-items: baseline;
-  padding: 0.3rem 0.45rem;
+  padding: var(--sp-4) var(--sp-8);
   border-left: 2px solid var(--border);
   font-size: var(--fs-xs);
 }
@@ -6460,16 +6463,16 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
   text-align: right;
 }
 .dw-trail > * { direction: ltr; unicode-bidi: embed; }
-.dw-trail i { opacity: 0.5; padding: 0 0.3rem; font-style: normal; }
+.dw-trail i { opacity: 0.5; padding: 0 var(--sp-4); font-style: normal; }
 .dw-trail .is-here { color: var(--gold); }
 
 .dw-body {
   flex: 1 1 auto;
   overflow-y: auto;
-  padding: 0.2rem 0.15rem 0.4rem;
+  padding: var(--sp-4) var(--sp-2) var(--sp-6);
 }
 
-.dw-node { margin: 0 0 0.6rem; }
+.dw-node { margin: 0 0 var(--sp-10); }
 .dw-node code {
   font-family: var(--mono);
   font-size: var(--fs-2xs);
@@ -6478,21 +6481,21 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
 .dw-node em {
   font-style: normal;
   font-size: var(--fs-2xs);
-  margin-left: 0.5rem;
-  padding: 0.05rem 0.4rem;
+  margin-left: var(--sp-8);
+  padding: var(--sp-1) var(--sp-6);
   border: 1px solid var(--gold-dim);
   border-radius: var(--r-pill);
   color: var(--gold);
 }
 
-.dw-pick { display: block; margin: 0 0 0.7rem; font-size: var(--fs-xs); color: var(--text-dim); }
-.dw-pick select { width: 100%; margin: 0.2rem 0 0.15rem; font-family: var(--mono); font-size: var(--fs-2xs); }
+.dw-pick { display: block; margin: 0 0 var(--sp-12); font-size: var(--fs-xs); color: var(--text-dim); }
+.dw-pick select { width: 100%; margin: var(--sp-4) 0 var(--sp-2); font-family: var(--mono); font-size: var(--fs-2xs); }
 
-.dw-chips { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.7rem; }
+.dw-chips { display: flex; flex-wrap: wrap; gap: var(--sp-6); margin-bottom: var(--sp-12); }
 .dw-chip {
   font-size: var(--fs-2xs);
   font-family: var(--mono);
-  padding: 0.1rem 0.45rem;
+  padding: var(--sp-2) var(--sp-8);
   border: 1px solid var(--border);
   border-radius: var(--r-pill);
   color: var(--text-faint);
@@ -6507,29 +6510,29 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
   line-height: 1.65;
   color: var(--text);
 }
-.dw-text p { margin: 0 0 0.85rem; }
+.dw-text p { margin: 0 0 var(--sp-14); }
 
 /* A companion cutting in. Set apart because it is a different mouth. */
 .dw-aside {
   max-width: 62ch;
-  margin: 0 0 0.85rem;
-  padding: 0.5rem 0.75rem;
+  margin: 0 0 var(--sp-14);
+  padding: var(--sp-8) var(--sp-12);
   border-left: 2px solid var(--gold-dim);
   background: var(--bg-raised);
   font-size: var(--fs-sm);
 }
 .dw-aside strong { color: var(--gold); font-size: var(--fs-xs); }
-.dw-aside p { margin: 0.3rem 0 0; }
+.dw-aside p { margin: var(--sp-4) 0 0; }
 
-.dw-choices { display: flex; flex-direction: column; gap: 0.4rem; margin-top: 1.1rem; }
+.dw-choices { display: flex; flex-direction: column; gap: var(--sp-6); margin-top: var(--sp-16); }
 .dw-choice { display: block; }
 .dw-go {
   display: grid;
   grid-template-columns: auto 1fr;
-  gap: 0.1rem 0.6rem;
+  gap: var(--sp-2) var(--sp-10);
   width: 100%;
   text-align: left;
-  padding: 0.55rem 0.7rem;
+  padding: var(--sp-8) var(--sp-12);
   border: 1px solid var(--border);
   border-radius: var(--r-md);
   background: var(--bg-raised);
@@ -6562,7 +6565,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
 .dw-meta {
   display: flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: var(--sp-6);
   flex-wrap: wrap;
   font-size: var(--fs-2xs);
   font-family: var(--mono);
@@ -6573,8 +6576,10 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
 .dw-choice.is-end {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 0.1rem;
-  padding: 0.55rem 0.7rem 0.55rem 2.65rem;
+  gap: var(--sp-2);
+  /* The last value is clearance for the end-glyph in the corner; the other
+     three are rhythm. */
+  padding: var(--sp-8) var(--sp-12) var(--sp-8) 2.65rem;
   border: 1px dashed var(--border);
   border-radius: var(--r-md);
   color: var(--text-dim);
@@ -6594,22 +6599,22 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
 .dw-choice.is-fork {
   border: 1px solid var(--border);
   border-radius: var(--r-md);
-  padding: 0.5rem 0.55rem 0.55rem;
+  padding: var(--sp-8) var(--sp-8) var(--sp-8);
 }
 .dw-forkhead {
   display: flex;
   align-items: baseline;
-  gap: 0.5rem;
+  gap: var(--sp-8);
   flex-wrap: wrap;
-  margin: 0 0 0.45rem;
-  padding-left: 0.15rem;
+  margin: 0 0 var(--sp-8);
+  padding-left: var(--sp-2);
 }
 .dw-choice.is-fork .dw-go {
-  margin-left: 1.1rem;
+  margin-left: var(--sp-16);
   width: calc(100% - 1.1rem);
-  padding: 0.35rem 0.6rem;
+  padding: var(--sp-6) var(--sp-10);
 }
-.dw-choice.is-fork .dw-go + .dw-go { margin-top: 0.3rem; }
+.dw-choice.is-fork .dw-go + .dw-go { margin-top: var(--sp-4); }
 .dw-choice.is-fork .dw-label { font-size: var(--fs-xs); color: var(--text-dim); }
 .dw-forkhead .dw-label { font-size: var(--fs-sm); color: var(--text); }
 
@@ -6620,7 +6625,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
 .dw-scene {
   display: grid;
   grid-template-columns: 208px minmax(0, 1fr);
-  gap: 1.4rem;
+  gap: var(--sp-24);
   align-items: start;
 }
 .dw-scene.is-faceless { grid-template-columns: minmax(0, 1fr); }
@@ -6642,7 +6647,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
   box-shadow: var(--sh-2);
 }
 .dw-portrait figcaption {
-  margin-top: 0.4rem;
+  margin-top: var(--sp-6);
   font-family: var(--mono);
   font-size: var(--fs-2xs);
   color: var(--text-faint);
@@ -6678,13 +6683,13 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
 /* A person's row, with the way into their conversation beside it.
    The pair is the grid cell; the row keeps all the flexible width and Read
    takes only what it needs, so names of any length still line up. */
-.ce-row-pair { display: flex; align-items: stretch; gap: 0.2rem; }
+.ce-row-pair { display: flex; align-items: stretch; gap: var(--sp-4); }
 .ce-row-pair .ce-row { flex: 1 1 auto; min-width: 0; }
 
 .ce-row-walk {
   flex: 0 0 auto;
   align-self: center;
-  padding: 0.2rem 0.5rem;
+  padding: var(--sp-4) var(--sp-8);
   border: 1px solid var(--border-soft);
   border-radius: var(--r-md);
   background: none;
@@ -6762,7 +6767,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
   .chip {
     min-height: var(--tap-min);
     min-width: var(--tap-min);
-    padding: 0.4rem 0.8rem;
+    padding: var(--sp-6) var(--sp-12);
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -6854,7 +6859,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
   }
   .rail-right { display: flex; flex-direction: column; }
   .rail-left  { max-height: none; }
-  .rail-pane  { overflow: visible; }
+  .rail-pane  { overflow: visible; min-width: 0; }
   .hud-party  { flex-direction: row; flex-wrap: wrap; }
 
   /* Actions above the log, inside the rail. */

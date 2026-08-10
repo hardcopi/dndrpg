@@ -344,17 +344,58 @@
   --ls-caps: 0.08em;            /* the small-caps section label, all 29 of them */
 
   /* ==================================================================
-   * SPACE — a 4px base, eight steps
+   * SPACE
+   *
+   * This was eight steps on a 4px base — 4, 8, 12, 16, 24, 32, 48, 64 — and
+   * it was written for a roomier interface than this one. Measured against
+   * the 609 spacing declarations actually in style.css:
+   *
+   *     77% of them are under 12px
+   *     47% of them — 284 declarations — fall BETWEEN the first three steps
+   *
+   * 0.3rem is used 46 times, 0.35rem 46 times, 0.4rem 62, 0.45rem 25,
+   * 0.55rem 19, 0.6rem 57, 0.7rem 29. Every one of those is a gap in a HUD
+   * rail, a chip's padding, the space between a portrait and a name — and on
+   * a 4px grid each would have had to move by up to a fifth of itself. In a
+   * layout this dense, and nested three deep, that compounds: the phone
+   * layout was cramped enough to need its own commit two weeks ago.
+   *
+   * So the base is 2px, where the interface actually lives, and the step
+   * DOUBLES as the numbers grow — 2px apart up to 16, 4px to 32, 8px to 48,
+   * 16px beyond. Nothing moves by more than 1.6px, most by less than one.
+   *
+   * Named for the pixel value at the default root size rather than by
+   * ordinal, because `--sp-10` is a number anyone can picture and `--sp-5`
+   * is a lookup. Values stay in rem so a reader who scales their text scales
+   * the gaps with it. (The old --sp-1..--sp-8 were ordinals; nothing had ever
+   * referenced one, so there is nothing to migrate — but a --sp-8 in this
+   * file's history means 4rem and here means 8px.)
+   *
+   * WHAT DOES NOT BELONG ON THIS SCALE: space that is clearance for a
+   * specific object rather than rhythm. `.pill-locked` reserves 4.25rem on
+   * its right because a button of that width is absolutely positioned there;
+   * `.howto li` reserves 2.4rem on its left for a numbered disc. Those are
+   * geometry, they answer to the thing they make room for, and rounding them
+   * to a rhythm step is how a label ends up under an icon. They stay raw and
+   * say so at the callsite.
    * ================================================================== */
 
-  --sp-1: 0.25rem;   /*  4 */
-  --sp-2: 0.5rem;    /*  8 */
-  --sp-3: 0.75rem;   /* 12 */
-  --sp-4: 1rem;      /* 16 */
-  --sp-5: 1.5rem;    /* 24 */
-  --sp-6: 2rem;      /* 32 */
-  --sp-7: 3rem;      /* 48 */
-  --sp-8: 4rem;      /* 64 */
+  --sp-1: 0.0625rem;  /*  1 — a hairline between stacked pips */
+  --sp-2: 0.125rem;   /*  2 */
+  --sp-4: 0.25rem;    /*  4 */
+  --sp-6: 0.375rem;   /*  6 */
+  --sp-8: 0.5rem;     /*  8 */
+  --sp-10: 0.625rem;  /* 10 */
+  --sp-12: 0.75rem;   /* 12 */
+  --sp-14: 0.875rem;  /* 14 */
+  --sp-16: 1rem;      /* 16 — the base of the type scale, and of this one */
+  --sp-20: 1.25rem;   /* 20 */
+  --sp-24: 1.5rem;    /* 24 */
+  --sp-28: 1.75rem;   /* 28 */
+  --sp-32: 2rem;      /* 32 */
+  --sp-40: 2.5rem;    /* 40 */
+  --sp-48: 3rem;      /* 48 */
+  --sp-64: 4rem;      /* 64 */
 
   /* ==================================================================
    * RADIUS — five, replacing seventeen
