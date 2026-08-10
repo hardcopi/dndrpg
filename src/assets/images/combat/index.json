@@ -1,0 +1,552 @@
+{
+ "bandit_attack1": {
+  "frames": 3,
+  "h": 102,
+  "w": 108
+ },
+ "bandit_dead1": {
+  "frames": 3,
+  "h": 69,
+  "w": 94
+ },
+ "bandit_magic": {
+  "frames": 3,
+  "h": 101,
+  "w": 89
+ },
+ "bandit_shooting": {
+  "frames": 3,
+  "h": 109,
+  "w": 101
+ },
+ "bandit_stance1": {
+  "frames": 3,
+  "h": 96,
+  "w": 51
+ },
+ "bandit_victory1": {
+  "frames": 3,
+  "h": 89,
+  "w": 91
+ },
+ "barbarian_attack1": {
+  "frames": 3,
+  "h": 96,
+  "w": 88
+ },
+ "barbarian_dead1": {
+  "frames": 3,
+  "h": 55,
+  "w": 91
+ },
+ "barbarian_magic": {
+  "frames": 3,
+  "h": 94,
+  "w": 66
+ },
+ "barbarian_shooting": {
+  "frames": 3,
+  "h": 88,
+  "w": 66
+ },
+ "barbarian_stance1": {
+  "frames": 3,
+  "h": 93,
+  "w": 54
+ },
+ "barbarian_victory1": {
+  "frames": 3,
+  "h": 86,
+  "w": 67
+ },
+ "bard_attack1": {
+  "frames": 3,
+  "h": 86,
+  "w": 78
+ },
+ "bard_dead1": {
+  "frames": 3,
+  "h": 47,
+  "w": 85
+ },
+ "bard_magic": {
+  "frames": 3,
+  "h": 88,
+  "w": 55
+ },
+ "bard_shooting": {
+  "frames": 3,
+  "h": 84,
+  "w": 55
+ },
+ "bard_stance1": {
+  "frames": 3,
+  "h": 89,
+  "w": 46
+ },
+ "bard_victory1": {
+  "frames": 3,
+  "h": 82,
+  "w": 58
+ },
+ "captain_attack1": {
+  "frames": 3,
+  "h": 118,
+  "w": 128
+ },
+ "captain_dead1": {
+  "frames": 3,
+  "h": 45,
+  "w": 99
+ },
+ "captain_magic": {
+  "frames": 3,
+  "h": 117,
+  "w": 85
+ },
+ "captain_shooting": {
+  "frames": 3,
+  "h": 113,
+  "w": 76
+ },
+ "captain_stance1": {
+  "frames": 3,
+  "h": 98,
+  "w": 59
+ },
+ "captain_victory1": {
+  "frames": 3,
+  "h": 92,
+  "w": 91
+ },
+ "cleric_attack1": {
+  "frames": 3,
+  "h": 105,
+  "w": 111
+ },
+ "cleric_dead1": {
+  "frames": 3,
+  "h": 51,
+  "w": 85
+ },
+ "cleric_magic": {
+  "frames": 3,
+  "h": 101,
+  "w": 85
+ },
+ "cleric_shooting": {
+  "frames": 3,
+  "h": 107,
+  "w": 60
+ },
+ "cleric_stance1": {
+  "frames": 3,
+  "h": 87,
+  "w": 46
+ },
+ "cleric_victory1": {
+  "frames": 3,
+  "h": 81,
+  "w": 94
+ },
+ "druid_attack1": {
+  "frames": 3,
+  "h": 95,
+  "w": 128
+ },
+ "druid_dead1": {
+  "frames": 3,
+  "h": 58,
+  "w": 93
+ },
+ "druid_magic": {
+  "frames": 3,
+  "h": 93,
+  "w": 56
+ },
+ "druid_stance1": {
+  "frames": 3,
+  "h": 93,
+  "w": 123
+ },
+ "druid_victory1": {
+  "frames": 3,
+  "h": 87,
+  "w": 66
+ },
+ "fighter_attack1": {
+  "frames": 3,
+  "h": 97,
+  "w": 128
+ },
+ "fighter_dead1": {
+  "frames": 3,
+  "h": 53,
+  "w": 92
+ },
+ "fighter_magic": {
+  "frames": 3,
+  "h": 103,
+  "w": 104
+ },
+ "fighter_shooting": {
+  "frames": 3,
+  "h": 101,
+  "w": 62
+ },
+ "fighter_stance1": {
+  "frames": 3,
+  "h": 94,
+  "w": 123
+ },
+ "fighter_victory1": {
+  "frames": 3,
+  "h": 97,
+  "w": 111
+ },
+ "goblin_attack1": {
+  "frames": 3,
+  "h": 92,
+  "w": 99
+ },
+ "goblin_dead1": {
+  "frames": 3,
+  "h": 58,
+  "w": 75
+ },
+ "goblin_magic": {
+  "frames": 3,
+  "h": 93,
+  "w": 74
+ },
+ "goblin_shooting": {
+  "frames": 3,
+  "h": 74,
+  "w": 65
+ },
+ "goblin_stance1": {
+  "frames": 3,
+  "h": 76,
+  "w": 115
+ },
+ "goblin_victory1": {
+  "frames": 3,
+  "h": 73,
+  "w": 81
+ },
+ "innkeeper_attack1": {
+  "frames": 3,
+  "h": 81,
+  "w": 76
+ },
+ "innkeeper_dead1": {
+  "frames": 3,
+  "h": 44,
+  "w": 81
+ },
+ "innkeeper_magic": {
+  "frames": 3,
+  "h": 84,
+  "w": 54
+ },
+ "innkeeper_shooting": {
+  "frames": 3,
+  "h": 80,
+  "w": 53
+ },
+ "innkeeper_stance1": {
+  "frames": 3,
+  "h": 85,
+  "w": 44
+ },
+ "innkeeper_victory1": {
+  "frames": 3,
+  "h": 79,
+  "w": 57
+ },
+ "kobold_attack1": {
+  "frames": 3,
+  "h": 76,
+  "w": 93
+ },
+ "kobold_dead1": {
+  "frames": 3,
+  "h": 45,
+  "w": 70
+ },
+ "kobold_magic": {
+  "frames": 3,
+  "h": 81,
+  "w": 75
+ },
+ "kobold_shooting": {
+  "frames": 3,
+  "h": 69,
+  "w": 54
+ },
+ "kobold_stance1": {
+  "frames": 3,
+  "h": 74,
+  "w": 44
+ },
+ "kobold_victory1": {
+  "frames": 3,
+  "h": 71,
+  "w": 74
+ },
+ "merchant_attack1": {
+  "frames": 3,
+  "h": 88,
+  "w": 86
+ },
+ "merchant_dead1": {
+  "frames": 3,
+  "h": 60,
+  "w": 87
+ },
+ "merchant_magic": {
+  "frames": 3,
+  "h": 90,
+  "w": 56
+ },
+ "merchant_shooting": {
+  "frames": 3,
+  "h": 88,
+  "w": 54
+ },
+ "merchant_stance1": {
+  "frames": 3,
+  "h": 87,
+  "w": 52
+ },
+ "merchant_victory1": {
+  "frames": 3,
+  "h": 85,
+  "w": 60
+ },
+ "monk_attack1": {
+  "frames": 3,
+  "h": 95,
+  "w": 128
+ },
+ "monk_dead1": {
+  "frames": 3,
+  "h": 53,
+  "w": 93
+ },
+ "monk_magic": {
+  "frames": 3,
+  "h": 93,
+  "w": 56
+ },
+ "monk_stance1": {
+  "frames": 3,
+  "h": 93,
+  "w": 123
+ },
+ "monk_victory1": {
+  "frames": 3,
+  "h": 86,
+  "w": 66
+ },
+ "ogre_attack1": {
+  "frames": 3,
+  "h": 151,
+  "w": 192
+ },
+ "ogre_dead1": {
+  "frames": 3,
+  "h": 89,
+  "w": 135
+ },
+ "ogre_magic": {
+  "frames": 3,
+  "h": 153,
+  "w": 140
+ },
+ "ogre_shooting": {
+  "frames": 3,
+  "h": 128,
+  "w": 106
+ },
+ "ogre_stance1": {
+  "frames": 3,
+  "h": 134,
+  "w": 88
+ },
+ "ogre_victory1": {
+  "frames": 3,
+  "h": 126,
+  "w": 192
+ },
+ "paladin_attack1": {
+  "frames": 3,
+  "h": 112,
+  "w": 128
+ },
+ "paladin_dead1": {
+  "frames": 3,
+  "h": 64,
+  "w": 100
+ },
+ "paladin_magic": {
+  "frames": 3,
+  "h": 114,
+  "w": 91
+ },
+ "paladin_shooting": {
+  "frames": 3,
+  "h": 113,
+  "w": 81
+ },
+ "paladin_stance1": {
+  "frames": 3,
+  "h": 112,
+  "w": 126
+ },
+ "paladin_victory1": {
+  "frames": 3,
+  "h": 106,
+  "w": 128
+ },
+ "ranger_attack1": {
+  "frames": 3,
+  "h": 104,
+  "w": 114
+ },
+ "ranger_dead1": {
+  "frames": 3,
+  "h": 60,
+  "w": 94
+ },
+ "ranger_magic": {
+  "frames": 3,
+  "h": 109,
+  "w": 70
+ },
+ "ranger_shooting": {
+  "frames": 3,
+  "h": 109,
+  "w": 52
+ },
+ "ranger_stance1": {
+  "frames": 3,
+  "h": 102,
+  "w": 49
+ },
+ "ranger_victory1": {
+  "frames": 3,
+  "h": 97,
+  "w": 97
+ },
+ "rogue_attack1": {
+  "frames": 3,
+  "h": 95,
+  "w": 128
+ },
+ "rogue_dead1": {
+  "frames": 3,
+  "h": 55,
+  "w": 94
+ },
+ "rogue_magic": {
+  "frames": 3,
+  "h": 98,
+  "w": 56
+ },
+ "rogue_stance1": {
+  "frames": 3,
+  "h": 101,
+  "w": 123
+ },
+ "rogue_victory1": {
+  "frames": 3,
+  "h": 97,
+  "w": 66
+ },
+ "sorcerer_attack1": {
+  "frames": 3,
+  "h": 110,
+  "w": 99
+ },
+ "sorcerer_dead1": {
+  "frames": 3,
+  "h": 51,
+  "w": 86
+ },
+ "sorcerer_magic": {
+  "frames": 3,
+  "h": 97,
+  "w": 80
+ },
+ "sorcerer_shooting": {
+  "frames": 3,
+  "h": 98,
+  "w": 56
+ },
+ "sorcerer_stance1": {
+  "frames": 3,
+  "h": 88,
+  "w": 47
+ },
+ "sorcerer_victory1": {
+  "frames": 3,
+  "h": 82,
+  "w": 85
+ },
+ "warlock_attack1": {
+  "frames": 3,
+  "h": 89,
+  "w": 83
+ },
+ "warlock_dead1": {
+  "frames": 3,
+  "h": 53,
+  "w": 86
+ },
+ "warlock_magic": {
+  "frames": 3,
+  "h": 90,
+  "w": 53
+ },
+ "warlock_stance1": {
+  "frames": 3,
+  "h": 88,
+  "w": 49
+ },
+ "warlock_victory1": {
+  "frames": 3,
+  "h": 84,
+  "w": 62
+ },
+ "wizard_attack1": {
+  "frames": 3,
+  "h": 118,
+  "w": 128
+ },
+ "wizard_dead1": {
+  "frames": 3,
+  "h": 72,
+  "w": 101
+ },
+ "wizard_magic": {
+  "frames": 3,
+  "h": 104,
+  "w": 101
+ },
+ "wizard_shooting": {
+  "frames": 3,
+  "h": 113,
+  "w": 90
+ },
+ "wizard_stance1": {
+  "frames": 3,
+  "h": 98,
+  "w": 123
+ },
+ "wizard_victory1": {
+  "frames": 3,
+  "h": 94,
+  "w": 97
+ }
+}
