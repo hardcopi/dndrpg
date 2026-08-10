@@ -260,17 +260,86 @@
   --r-circle: 50%;
 
   /* ==================================================================
-   * ELEVATION — four, replacing forty-three
+   * ELEVATION, AND THE FOUR OTHER JOBS box-shadow WAS DOING
    *
-   * On a dark interface a shadow is barely visible, so each of these pairs a
-   * cast shadow with a hairline of light along the top edge. That hairline is
-   * what actually reads as "raised" here.
+   * The first draft of this block was three cast shadows and a glow, invented
+   * from what an elevation scale usually looks like. Nothing in style.css
+   * ever read one of them, and when the thirty-five real shadows were finally
+   * laid out side by side they were not that shape at all: only fourteen were
+   * elevation. The rest were a lit bevel, a pressed well, a selection ring, a
+   * gold glow and a dark halo — five different ideas sharing one property
+   * because CSS gives them no other place to live.
+   *
+   * So they are named apart here. A rule that wants a card to float says
+   * --sh-2; a rule that wants a card to look CHOSEN says --sh-ring, and the
+   * two compose. Under one scale they could only be spelled as one blob of
+   * numbers, which is how "selected" came to be drawn eight different ways.
+   *
+   * The four cast steps are the medians of what was in use, not new values,
+   * and they answer to the same question the layer scale does — how far off
+   * the page is this thing.
    * ================================================================== */
 
-  --sh-1: 0 1px 2px rgba(0, 0, 0, 0.4);
-  --sh-2: 0 2px 8px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.03);
-  --sh-3: 0 12px 40px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.04);
-  --sh-glow: 0 0 0 1px var(--gold), 0 0 12px rgba(216, 180, 92, 0.25);
+  --sh-1: 0 2px 6px rgba(0, 0, 0, 0.5);      /* a control resting on a panel */
+  --sh-2: 0 4px 16px rgba(0, 0, 0, 0.55);    /* a card lifted off the page */
+  --sh-3: 0 6px 18px rgba(0, 0, 0, 0.55);    /* floating over the scene */
+  --sh-4: 0 20px 56px rgba(0, 0, 0, 0.65);   /* a surface that takes the screen */
+
+  /*
+   * Bevels. On a dark interface a cast shadow is nearly invisible — dark on
+   * dark — and the hairline of light along the top edge is what actually
+   * reads as "raised". It is a separate token because only three of the
+   * fourteen lifted things had one, and giving it to the other eleven is a
+   * design decision to make deliberately rather than by inheriting a blob.
+   *
+   * --sh-key is the action bar's keycap: lit along the top, dark along the
+   * floor, which is the whole of what makes a square read as a key you press
+   * rather than a coloured box. Its -lit form is the same bevel with the top
+   * edge brought up, for hover and focus.
+   */
+  --sh-bevel: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  --sh-key: inset 0 1px 0 rgba(245, 236, 214, 0.09),
+            inset 0 -2px 4px rgba(0, 0, 0, 0.55);
+  --sh-key-lit: inset 0 1px 0 rgba(245, 236, 214, 0.14),
+                inset 0 -2px 4px rgba(0, 0, 0, 0.55);
+  --sh-pressed: inset 0 2px 5px rgba(0, 0, 0, 0.7);
+
+  /*
+   * "This one." Two idioms, and both are needed: a ring reads as a permanent
+   * state on something with a boundary, a glow reads as attention on
+   * something without one (a portrait, a bust, a die). They were the same
+   * intent written eight ways — three different golds and six alphas across
+   * .avatar-option.selected, .gift-card.selected, .party-card.is-active,
+   * .bag-slot.is-picked, .boost-row.on, .ribbon-slot.is-now and
+   * .cbt-card.is-selected.
+   *
+   * Mixed from --gold rather than hard-coded, so the day gold is retuned
+   * these follow it. Two of the three golds in use were #d4a84b, a more
+   * orange gold from a palette that no longer exists anywhere else in the
+   * file — nothing chose it, it was simply never updated.
+   */
+  --sh-ring: inset 0 0 0 1px color-mix(in srgb, var(--gold) 30%, transparent);
+  --sh-ring-on: inset 0 0 0 1px var(--gold);     /* held, not merely selected */
+  --sh-glow-sm: 0 0 10px color-mix(in srgb, var(--gold) 25%, transparent);
+  --sh-glow: 0 0 14px color-mix(in srgb, var(--gold) 55%, transparent);
+
+  /*
+   * Hairlines and halos — the shadows that are not about depth at all.
+   *
+   * --sh-ring-dark is a 1px line drawn INSIDE the edge, for something whose
+   * own fill goes to the boundary and would otherwise bleed into the panel: a
+   * colour swatch, a die face.
+   *
+   * --sh-halo is the opposite job — a dark outline drawn outside a mark so it
+   * stays legible over ground of any brightness.
+   *
+   * --sh-vignette darkens the edge of the map modal. Its colour is a
+   * parchment brown and belongs to that ramp; it is written out here until
+   * the ramp is designed.
+   */
+  --sh-ring-dark: inset 0 0 0 1px rgba(0, 0, 0, 0.5);
+  --sh-halo: 0 0 0 1px rgba(0, 0, 0, 0.85), 0 0 4px rgba(0, 0, 0, 0.7);
+  --sh-vignette: inset 0 0 34px rgba(90, 62, 28, 0.35);
 
   /* ==================================================================
    * LAYERS — the five surfaces that stack against the whole interface
