@@ -54,6 +54,11 @@ run "content_trace"   python3 tools/trace_content.py
 # match what the generator would produce now. The browser's agreement with those
 # numbers is a separate claim and needs a browser: /tools/dice_preview.html.
 run "dice_geometry"   python3 tools/gen_dice_css.py --check
+# Every var() resolves to a declaration. This is the one CSS claim that can be
+# checked without a browser, and it is worth checking here because the failure
+# it catches is silent: a token nobody declared renders its fallback and looks
+# like it worked. Six had accumulated that way.
+run "token_check"     python3 tools/token_check.py
 
 # The PHP harnesses. There is no PHP CLI on the dev host, so when `php` is
 # absent they run inside the compose stack's php container instead — same

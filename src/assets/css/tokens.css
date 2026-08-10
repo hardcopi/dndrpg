@@ -592,13 +592,20 @@
   --focus-offset: 2px;
 
   /*
-   * Party portrait diameter. Currently referenced by nothing: the rail hard-
-   * codes 38px and 42px, which is how `.party-face` once rendered at 145px
-   * inside a 38px card without anything looking wrong in the source. Wiring
-   * the rail to it is porting work, not token work — it is declared here
-   * because it names a real constant, and left honest about being unused.
+   * Party portrait diameter, and the width of the column it sits in.
+   *
+   * Declared as 38px and referenced by nothing, while the rail hard-coded 42px
+   * in two places — the card's first grid column and `.party-face` itself. So
+   * the token was not merely unused, it was WRONG, and being unused is what
+   * let it be: a value nothing reads cannot disagree with anything. The 38px
+   * is a fossil of the size this was before the rail was rebuilt.
+   *
+   * Now 42, and read by all three, which is the point of it. The face and the
+   * column it occupies have to be the same number — that is the whole reason
+   * this is a constant, and `.party-face` once rendering at 145px inside its
+   * card is what happens when they are two numbers that agree by hand.
    */
-  --portrait: 38px;
+  --portrait: 42px;
 
   /* ==================================================================
    * LAYOUT CONSTANTS
@@ -615,31 +622,43 @@
 }
 
 /*
- * KNOWN PHANTOMS — referenced, never declared, deliberately still not.
+* PHANTOMS — resolved.
  *
- * Four more tokens are used with a fallback and have no declaration anywhere:
+ * Six tokens were referenced by style.css and declared nowhere, each one
+ * running on its fallback. The list was kept here rather than fixed, on the
+ * reasoning that declaring any of them changes what renders and so each
+ * belonged to the screen it lives on. That was the right instinct and the
+ * wrong conclusion: a token with a fallback is not a decision deferred, it is
+ * a rule whose real value is written at the callsite where nobody will look
+ * for it, and the two --text-soft rules had already drifted to two different
+ * fallbacks by the time anyone noticed.
  *
- *   --text-soft        line 1079 falls back to --text, line 3773 to --text-dim
- *   --font-mono        7 rules, all falling back to `ui-monospace, monospace`
- *   --green / --red    one rule each, hex fallbacks, on .field-note
- *   --parchment-well   one rule, falls back to --bg-inset
+ * All six are gone, and the changes they were hiding are these:
  *
- * None of these are declared here, and that is the decision rather than an
- * oversight. Declaring any of them CHANGES what renders:
+ *   --font-mono meant --mono, which is declared and read by 39 other rules.
+ *     Seven rules — numeric readouts and key hints — have been rendering in
+ *     the bare system monospace while everything beside them used Cascadia
+ *     Code. They match now.
  *
- *   --text-soft is asked for with two different intents in two rules, so
- *     there is no value that leaves both as they are. It is not a token
- *     somebody forgot to declare; it is two different ideas under one name.
+ *   --text-soft was a THIRD grey, and it is deleted rather than declared.
+ *     The palette already found there is room for exactly two legible weights
+ *     on these surfaces; that is why --text-faint became an alias. Both rules
+ *     that wanted it — a first-visit description, an aside in dialogue — are
+ *     italic with a coloured rule down the left, so the change of register is
+ *     already carried by something other than a grey nobody can name.
  *
- *   --font-mono clearly means --mono, and pointing it there would put
- *     Cascadia Code and Consolas back into seven rules that have been
- *     rendering in the bare system monospace since they were written.
+ *   --green and --red were an older green and red, duplicating the palette at
+ *     slightly different values. Both are running text at --fs-xs, which has
+ *     to clear 4.5:1, and that is exactly what --success-ink and --danger-ink
+ *     exist for. They had no consumer until now.
  *
- *   --green and --red duplicate --success and --danger at slightly different
- *     values, which is the palette thesis being quietly undone on one
- *     component.
+ *   --parchment-well was one rule behind the scene's inline chart. The chart
+ *     draws its own plate or its own floor, so what shows behind it is a dark
+ *     well like every other: --bg-inset, which was the fallback.
  *
- * Each is a real fix and each is a visible change, so each belongs to the
- * screen it lives on, decided when that screen is ported — not smuggled in
- * under a token rename. Listed here so the next person finds them.
+ * SIX MORE look like phantoms to a naive scan and are not: --die-box,
+ * --die6-rest and --die6-tumble are declared in the generated assets/css/
+ * dice.css, and --die-throw, --dx and --dy are set on elements at runtime by
+ * dice3d.js and ui-battlemap.js. A checker that does not know the difference
+ * reports six false alarms, so tools/token_check.py knows.
  */

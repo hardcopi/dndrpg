@@ -492,7 +492,7 @@ body.game-page {
 
 .hud-party .party-card {
   display: grid;
-  grid-template-columns: 42px minmax(0, 1fr);
+  grid-template-columns: var(--portrait) minmax(0, 1fr);
   grid-template-areas:
     "face name"
     "face hp"
@@ -518,8 +518,8 @@ body.game-page {
 
 .hud-party .party-face {
   grid-area: face;
-  width: 42px;
-  height: 42px;
+  width: var(--portrait);
+  height: var(--portrait);
   border-radius: var(--r-md);
   object-fit: cover;
   object-position: center top;
@@ -550,7 +550,7 @@ body.game-page {
   grid-area: stat;
   display: flex;
   gap: var(--sp-6);
-  font-family: var(--font-mono, ui-monospace, monospace);
+  font-family: var(--mono);
   font-size: var(--fs-2xs);
   color: var(--text-dim);
 }
@@ -949,7 +949,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   min-height: 14rem;
   border: 1px solid var(--ornament);
   border-radius: var(--r-md);
-  background: var(--parchment-well, var(--bg-inset));
+  background: var(--bg-inset);
   overflow: hidden;
 }
 .loc-map .worldmap { display: block; width: 100%; height: 100%; }
@@ -1074,7 +1074,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
    place was like when you first walked in, not what it is like. */
 .loc-first {
   font-style: italic;
-  color: var(--text-soft, var(--text));
+  color: var(--text);
   border-left: 2px solid var(--gold);
   padding-left: var(--sp-14);
 }
@@ -1119,7 +1119,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 /* How many are here, beside the heading. A count is worth having the moment a
    list can be scrolled out of sight. */
 .loc-count {
-  font-family: var(--font-mono, ui-monospace, monospace);
+  font-family: var(--mono);
   font-size: var(--fs-2xs);
   color: var(--text-dim);
   border: 1px solid var(--ornament);
@@ -1243,7 +1243,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   position: absolute;
   right: 3px;
   bottom: 1px;
-  font-family: var(--font-mono, ui-monospace, monospace);
+  font-family: var(--mono);
   font-size: var(--fs-2xs);
   line-height: 1;
   color: var(--text-faint);
@@ -1351,7 +1351,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .map-expand:hover { color: var(--gold); }
 .map-expand kbd {
   padding: var(--sp-1) var(--sp-4);
-  font-family: var(--font-mono, ui-monospace, monospace);
+  font-family: var(--mono);
   font-size: var(--fs-2xs);
   border: 1px solid currentColor;
   border-radius: var(--r-sm);
@@ -1359,7 +1359,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 }
 .map-toggle kbd {
   padding: var(--sp-1) var(--sp-4);
-  font-family: var(--font-mono, ui-monospace, monospace);
+  font-family: var(--mono);
   font-size: var(--fs-2xs);
   border: 1px solid currentColor;
   border-radius: var(--r-sm);
@@ -1412,7 +1412,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   margin-left: auto;
 }
 .map-zoom .icon-btn {
-  font-family: var(--font-mono, ui-monospace, monospace);
+  font-family: var(--mono);
   font-size: var(--fs-md);
   line-height: 1;
   min-width: 1.9rem;
@@ -2103,8 +2103,8 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   text-align: right;
 }
 .field-note { margin: var(--sp-4) 0 var(--sp-10); font-size: var(--fs-xs); min-height: 1.1em; color: var(--text-dim); }
-.field-note.is-ok { color: var(--green, #7fb069); }
-.field-note.is-bad, .help-hint.is-bad { color: var(--red, #c0563f); }
+.field-note.is-ok { color: var(--success-ink); }
+.field-note.is-bad, .help-hint.is-bad { color: var(--danger-ink); }
 
 /* Re-dressing an existing character is the look step with the wizard removed. */
 .redress-mode .wiz-nav { justify-content: flex-end; }
@@ -3786,7 +3786,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
    set apart so it never reads as the NPC still talking. */
 .dlg-line.is-aside {
   font-style: italic;
-  color: var(--text-soft, var(--text-dim));
+  color: var(--text-dim);
   border-left: 2px solid var(--accent);
   padding-left: var(--sp-14);
 }
@@ -3805,7 +3805,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   padding: var(--sp-6) var(--sp-16);
 }
 .dlg-next-hint {
-  font-family: var(--font-mono, ui-monospace, monospace);
+  font-family: var(--mono);
   font-size: var(--fs-2xs);
   color: var(--text-dim);
   border: 1px solid var(--border);
