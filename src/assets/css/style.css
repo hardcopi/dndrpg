@@ -1189,7 +1189,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   border: 1px solid currentColor;
 }
 .person-tag.is-shop { color: var(--gold); }
-.person-tag.is-quest { color: var(--accent, #c98b3a); font-weight: 700; }
+.person-tag.is-quest { color: var(--accent); font-weight: 700; }
 
 /* The crowd: present, talkable, and quieter than the authored cast. */
 .people-crowd .person { background: transparent; padding: 0.16rem 0.45rem; }
@@ -1249,7 +1249,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   color: var(--text-faint);
   background: none;
   border: 0;
-  text-shadow: 0 1px 2px #000;
+  text-shadow: var(--th-1);
   pointer-events: none;
 }
 .loc-act:hover kbd { color: var(--gold); }
@@ -1289,11 +1289,11 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .loc-act[disabled]:hover kbd { color: var(--text-dim); border-color: var(--ornament); }
 
 .loc-act.is-danger {
-  border-color: var(--danger, #b4453a);
-  color: var(--danger, #b4453a);
+  border-color: var(--danger);
+  color: var(--danger);
 }
 .loc-act.is-danger:hover {
-  background: color-mix(in srgb, var(--danger, #b4453a) 14%, transparent);
+  background: color-mix(in srgb, var(--danger) 14%, transparent);
 }
 
 /* ====================================================================
@@ -1315,7 +1315,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   border-radius: var(--r-md);
   overflow: hidden;
   background:
-    radial-gradient(ellipse at 50% 40%, #efe0c0 0%, #e3d2ae 55%, #d6c298 100%);
+    radial-gradient(ellipse at 50% 40%, var(--pg-paper-lit) 0%, var(--pg-paper) 55%, var(--pg-paper-dim) 100%);
   box-shadow: var(--sh-vignette);
 }
 
@@ -1435,7 +1435,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 /* Roads. Dashed and ink-brown; a road between two places you have both seen
    is drawn solid, so the chart fills in as the party learns the country. */
 .wm-edge {
-  stroke: #8a6b42;
+  stroke: var(--pg-road);
   stroke-width: 0.4;
   stroke-dasharray: 1.4 1.1;
   opacity: 0.55;
@@ -1452,13 +1452,13 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
    "Ways out" list. Brighter and slightly thicker so the eye finds "where can
    I go" before it finds the rest of the country. */
 .wm-edge.is-way {
-  stroke: #a06a28;
+  stroke: var(--pg-road-open);
   stroke-width: 0.85;
   stroke-dasharray: none;
   opacity: 1;
 }
 .wm-edge.is-way.is-locked {
-  stroke: #8a6b42;
+  stroke: var(--pg-road);
   stroke-dasharray: 1.2 1;
   opacity: 0.55;
 }
@@ -1480,27 +1480,27 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 
 /* The rock the level is cut from. Warm near-black, not #000 — pure black
    beside the parchment frame reads as a dead screen region, not as stone. */
-.wm-rock { fill: #191008; pointer-events: none; }
+.wm-rock { fill: var(--pg-rock); pointer-events: none; }
 
 /* A room: paper. The stroke is the wall, heavier than the corridor walls so
    the eye reads rooms first — the same hierarchy the old plates got from
    hand-inked outlines. Square corners; cut stone is not a rounded rectangle. */
 .wm-room {
-  fill: #e9e1cd;
-  stroke: #0d0803;
+  fill: var(--pg-paper);
+  stroke: var(--pg-ink);
   stroke-width: 0.55;
   pointer-events: none;   /* the NAME is the click target, here as everywhere */
 }
 /* The room the party is standing in: warmed, not recoloured — the party's
    own faces are standing on it, and they are most of the highlight. */
 .wm-room.is-here {
-  fill: #f2e5c2;
-  stroke: #a06a28;
+  fill: var(--pg-paper-lit);
+  stroke: var(--pg-road-open);
   stroke-width: 0.8;
 }
 /* Where you came in and where you go down. The stair ticks say it in glyph;
    the dashed wall says it at a glance from across the chart. */
-.wm-room.is-stair { stroke: #c8963c; stroke-dasharray: 1.6 0.8; }
+.wm-room.is-stair { stroke: var(--pg-stair); stroke-dasharray: 1.6 0.8; }
 .wm-room.is-entrance { stroke-dasharray: 1.6 0.8; }
 
 /* --- the fog ------------------------------------------------------------
@@ -1515,30 +1515,30 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
    behind it, so it gets the wall and the dark stays showing through. */
 .wm-room.is-glimpsed {
   fill: none;
-  stroke: rgba(233, 225, 205, 0.4);
+  stroke: var(--pg-glimpse);
   stroke-width: 0.4;
   stroke-dasharray: 1.2 1;
 }
-.wm-hall.is-glimpsed { stroke: rgba(233, 225, 205, 0.38); }
+.wm-hall.is-glimpsed { stroke: var(--pg-glimpse); }
 /* The wall under a glimpsed run goes with it: a black casing round a passage
    nobody has walked draws it more firmly than the room it leads to. It carries
    its own class rather than being selected through the run, because the walls
    are one group and the floors another — they are drawn in two passes so every
    casing sits under every floor, and no wall is a sibling of its own run. */
-.wm-hall-wall.is-glimpsed { stroke: rgba(13, 8, 3, 0.45); }
+.wm-hall-wall.is-glimpsed { stroke: var(--pg-glimpse-wall); }
 
 /* The ruling, one <path> of hairlines per chart. Faint: texture, not
    information. */
 .wm-grid-line {
   fill: none;
-  stroke: rgba(56, 40, 22, 0.25);
+  stroke: var(--pg-rule);
   stroke-width: 0.12;
   pointer-events: none;
 }
 
 /* The stairs. Ink on paper, like the doors. */
 .wm-stair-ticks line {
-  stroke: #3a2c18;
+  stroke: var(--pg-label);
   stroke-width: 0.3;
   pointer-events: none;
 }
@@ -1547,8 +1547,8 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
    off. Nothing is drawn for a trap they have not met — the map is the
    player's, not the GM's. */
 .wm-trap { pointer-events: none; }
-.wm-trap.is-found { fill: none; stroke: #8a2f23; stroke-width: 0.3; }
-.wm-trap.is-sprung { fill: #8a2f23; stroke: none; }
+.wm-trap.is-found { fill: none; stroke: var(--pg-red); stroke-width: 0.3; }
+.wm-trap.is-sprung { fill: var(--pg-red); stroke: none; }
 
 /* A floor plan is denser than any authored region: eleven to fourteen rooms
    on a field the towns use for six or seven, every one of them named. At the
@@ -1583,14 +1583,14 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   stroke-linecap: butt;
   pointer-events: none;
 }
-.wm-hall-wall { stroke: #0d0803; }
-.wm-hall { stroke: #e9e1cd; }
+.wm-hall-wall { stroke: var(--pg-ink); }
+.wm-hall { stroke: var(--pg-paper); }
 
 /* The passage the party is standing in, lit like the room they would be in. */
-.wm-hall.is-here { stroke: #f2e5c2; }
+.wm-hall.is-here { stroke: var(--pg-paper-lit); }
 /* A passage they can step into from here. */
-.wm-hall.is-way { stroke: #fdf3d7; }
-.wm-hall.is-locked { stroke: #a99a7e; }
+.wm-hall.is-way { stroke: var(--pg-line); }
+.wm-hall.is-locked { stroke: var(--pg-paper-out); }
 /* A secret way nobody has found: present, dim, and saying nothing. The glyph
    and the `s` are withheld server-side; this is only the run's own hush. */
 /* `.wm-hall.is-unfound` lived here, for a secret passage drawn dimmed. There
@@ -1603,42 +1603,51 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .wm-hall-g[data-map-node] { cursor: pointer; }
 .wm-hall-g[data-map-node] .wm-hall { pointer-events: stroke; }
 .wm-hall-g:hover .wm-hall.is-way,
-.wm-hall-g:focus-visible .wm-hall.is-way { stroke: #fff3cf; }
+.wm-hall-g:focus-visible .wm-hall.is-way { stroke: var(--pg-line-on); }
 .wm-hall-g:focus-visible { outline: none; }
+/* ...and the casing goes brown, because the line above does nothing.
+   --pg-line-on is two units of red and eight of blue from --pg-line: naming
+   the ramp is what made that visible, and it means a corridor is a clickable
+   thing whose keyboard focus could not be seen. Brightening it further is not
+   available — a walkable corridor is already the brightest paper on the
+   chart, which is the whole of how it says "walkable". So the focus lands on
+   the WALL instead, which is near-black and has the entire ramp to move
+   through. Same idiom as a focused place-name, same colour. */
+.wm-hall-g:focus-visible .wm-hall-wall { stroke: var(--pg-focus); }
 
 /* The door glyphs — the plate's legend, learned once:
    hollow square = a door · barred = locked · crossed = known-trapped ·
    dotted = portcullis · dashed seam + s = a found secret way. */
 .wm-doorbox {
-  fill: #e9e1cd;
-  stroke: #0d0803;
+  fill: var(--pg-paper);
+  stroke: var(--pg-ink);
   stroke-width: 0.3;
   pointer-events: none;
 }
 .wm-door-bar {
-  stroke: #0d0803;
+  stroke: var(--pg-ink);
   stroke-width: 0.28;
   pointer-events: none;
 }
 .wm-portcullis {
-  stroke: #0d0803;
+  stroke: var(--pg-ink);
   stroke-width: 0.5;
   stroke-dasharray: 0.35 0.45;
   pointer-events: none;
 }
 .wm-door {
-  stroke: #d8c9a6;
+  stroke: var(--pg-paper-dim);
   stroke-width: 0.55;
   pointer-events: none;
 }
 .wm-door.is-stuck {
-  stroke: #b08438;
+  stroke: var(--pg-door);
   stroke-dasharray: 0.5 0.4;
 }
 .wm-secret-s {
   font-family: var(--font-display);
   font-size: 2.2px;
-  fill: #b08438;
+  fill: var(--pg-door);
   pointer-events: none;
 }
 
@@ -1647,14 +1656,14 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .wm-node { cursor: pointer; }
 .wm-node[data-map-node]:hover .wm-label,
 .wm-node[data-map-node]:focus-visible .wm-label {
-  fill: #1f1a12;
+  fill: var(--pg-label-on);
   font-weight: 700;
-  stroke: rgba(255, 248, 230, 0.95);
+  stroke: var(--pg-halo);
 }
 .wm-node:focus-visible { outline: none; }
 .wm-node:focus-visible .wm-hit {
-  fill: rgba(122, 92, 52, 0.14);
-  stroke: #7a5c34;
+  fill: color-mix(in srgb, var(--pg-focus) 14%, transparent);
+  stroke: var(--pg-focus);
   stroke-width: 0.25;
 }
 
@@ -1665,9 +1674,9 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   text-anchor: middle;
   font-family: var(--font-display, Georgia, serif);
   font-size: 3.1px;
-  fill: #3d2e18;
+  fill: var(--pg-label);
   paint-order: stroke;
-  stroke: rgba(245, 236, 214, 0.92);
+  stroke: var(--pg-halo);
   stroke-width: 0.85;
 }
 
@@ -1677,7 +1686,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .wm-node.is-unknown .wm-label {
   opacity: 0.72;
   font-style: italic;
-  fill: #5b4526;
+  fill: var(--pg-ink-soft);
 }
 
 /* A stage wants the party here. Yellow, above the place-name, and the tracked
@@ -1690,7 +1699,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   font-weight: 700;
   text-anchor: middle;
   paint-order: stroke;
-  stroke: rgba(20, 16, 8, 0.85);
+  stroke: var(--pg-halo-dark);
   stroke-width: 0.9;
   pointer-events: none;
 }
@@ -1725,7 +1734,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .wm-tip-name { color: var(--gold); font-size: var(--fs-xs); }
 .wm-tip-why { color: var(--text-dim); font-size: var(--fs-2xs); }
 .wm-quest.is-tracked {
-  fill: var(--gold-bright, #f0d478);
+  fill: var(--gold-bright);
   animation: wm-quest-pin 1.9s ease-in-out infinite;
 }
 @keyframes wm-quest-pin {
@@ -1747,23 +1756,23 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
    way to do something the name above it already does. */
 .wm-pc { pointer-events: all; cursor: default; }
 .wm-pc-disc {
-  fill: #efe3c6;
+  fill: var(--pg-paper-lit);
   stroke: none;
 }
 .wm-pc-ring {
   fill: none;
-  stroke: #8c2f22;
+  stroke: var(--pg-red);
   stroke-width: 0.32;
 }
 .wm-pc.is-active .wm-pc-ring {
-  stroke: var(--gold-bright, #f0d478);
+  stroke: var(--gold-bright);
   stroke-width: 0.45;
 }
 /* Somebody at 0 hp is greyed and outlined dark: on a map at this size the ring
    colour is the only channel there is, so it says the one thing worth saying
    about a party member from across the region. */
 .wm-pc.is-down { opacity: 0.55; }
-.wm-pc.is-down .wm-pc-ring { stroke: #4a3520; }
+.wm-pc.is-down .wm-pc-ring { stroke: var(--pg-ink-soft); }
 .wm-pc.is-down .wm-pc-face { filter: grayscale(1); }
 /* The letter under the portrait. Shows through only when the face fails to
    load and removes itself — a missing file on this host serves the homepage
@@ -1772,9 +1781,9 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   text-anchor: middle;
   font-family: var(--font-display, Georgia, serif);
   font-weight: 700;
-  fill: #6b4210;
+  fill: var(--pg-way-ink);
 }
-.wm-pc.is-more .wm-pc-disc { fill: #d9c9a4; }
+.wm-pc.is-more .wm-pc-disc { fill: var(--pg-paper-dim); }
 
 /* On the move. The transform is driven frame by frame from ui-map.js, so
    there is no CSS transition here to fight it — this is only the look. The
@@ -1785,27 +1794,27 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .wm-party.is-walking .wm-pc.is-active .wm-pc-ring { stroke-width: 0.55; }
 
 .wm-node.is-here .wm-label {
-  fill: #8c2f22;
+  fill: var(--pg-red);
   font-weight: 700;
   font-size: 3.35px;
-  stroke: rgba(255, 245, 230, 0.95);
+  stroke: var(--pg-halo);
   stroke-width: 1.05;
 }
 
 /* A place you can walk to from here. Gold weight on the name; the number key
    is already in the label text (see ui-map.js). */
 .wm-node.is-way .wm-label {
-  fill: #6b4210;
+  fill: var(--pg-way-ink);
   font-weight: 700;
   font-size: 3.25px;
   opacity: 1;
   font-style: normal;
-  stroke: rgba(255, 248, 220, 0.95);
+  stroke: var(--pg-halo);
   stroke-width: 1;
 }
 .wm-node.is-way:hover .wm-label,
 .wm-node.is-way:focus-visible .wm-label {
-  fill: #4a2e08;
+  fill: var(--pg-label);
 }
 
 /* A way out to somewhere we have not been. An empty ring: it has no name yet,
@@ -1813,19 +1822,19 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
    This used to be the exit's number key set as the whole label, which renumbered
    itself every time the party moved. */
 .wm-unwalked {
-  fill: rgba(245, 236, 214, 0.55);
-  stroke: #6b4210;
+  fill: color-mix(in srgb, var(--pg-paper-hi) 55%, transparent);
+  stroke: var(--pg-way-ink);
   stroke-width: 0.5;
 }
 .wm-node.is-unnamed:hover .wm-unwalked,
 .wm-node.is-unnamed:focus-visible .wm-unwalked {
-  fill: rgba(255, 248, 220, 0.95);
-  stroke: #4a2e08;
+  fill: var(--pg-halo);
+  stroke: var(--pg-label);
   stroke-width: 0.7;
 }
 .wm-node.is-unnamed.is-locked .wm-unwalked {
   fill: none;
-  stroke: #5b4526;
+  stroke: var(--pg-ink-soft);
   stroke-dasharray: 0.6 0.5;
 }
 
@@ -1834,7 +1843,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .wm-node.is-way.is-locked .wm-label {
   opacity: 0.55;
   font-weight: 500;
-  fill: #5b4526;
+  fill: var(--pg-ink-soft);
 }
 
 /* A road leaving the region, captioned with where it goes. An uncrossed one
@@ -1844,27 +1853,27 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .wm-out-label {
   font-family: var(--font-display, Georgia, serif);
   font-size: 2.7px;
-  fill: #5b4526;
+  fill: var(--pg-ink-soft);
   font-style: italic;
   paint-order: stroke;
-  stroke: rgba(245, 236, 214, 0.9);
+  stroke: var(--pg-halo);
   stroke-width: 0.7;
 }
 .wm-neighbor:hover .wm-out-label,
-.wm-neighbor:focus-visible .wm-out-label { fill: #1f1a12; font-weight: 700; }
+.wm-neighbor:focus-visible .wm-out-label { fill: var(--pg-label-on); font-weight: 700; }
 .wm-neighbor:hover .wm-edge.is-out { opacity: 0.95; }
 .wm-neighbor.is-way .wm-out-label {
-  fill: #6b4210;
+  fill: var(--pg-way-ink);
   font-weight: 700;
   font-style: normal;
   font-size: 2.9px;
-  stroke: rgba(255, 248, 220, 0.95);
+  stroke: var(--pg-halo);
   stroke-width: 0.95;
 }
 .wm-neighbor.is-way.is-locked .wm-out-label {
   opacity: 0.55;
   font-weight: 500;
-  fill: #5b4526;
+  fill: var(--pg-ink-soft);
 }
 
 /* --- The tracker's "set off this way" button -------------------------- */
@@ -1998,7 +2007,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   font-size: var(--fs-2xs);
   background: rgba(0, 0, 0, 0.35);
 }
-.wiz-pip.on .wiz-pip-n, .wiz-pip.done .wiz-pip-n { background: var(--gold-dim); color: #1a1206; }
+.wiz-pip.on .wiz-pip-n, .wiz-pip.done .wiz-pip-n { background: var(--gold-dim); color: var(--ink-on-gold); }
 .wiz-pip-l { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 .wiz-body {
@@ -2274,7 +2283,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   backface-visibility: hidden;
   font-family: var(--mono);
   font-weight: 700;
-  color: #241a08;
+  color: var(--ink-on-gold);
   background: linear-gradient(155deg, var(--gold), var(--gold-dim) 62%, var(--gold-well));
   /* A hairline of the page colour along each edge reads as the bevel between
      faces. Without it neighbouring faces of similar brightness merge and the
@@ -2447,7 +2456,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .map-marker.quest {
   color: var(--gold-dim);
   font-size: var(--fs-lg);
-  text-shadow: 0 0 4px #000, 0 0 2px #000;
+  text-shadow: var(--th-halo);
   pointer-events: none;
 }
 .map-marker.quest.tracked {
@@ -2564,8 +2573,8 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .ap-bar.ap-high .ap-fill { background: linear-gradient(90deg, var(--gold-dim), var(--gold)); }
 .ap-bar.ap-good .ap-fill { background: var(--success); }
 .ap-bar.ap-mid  .ap-fill { background: var(--text-dim); }
-.ap-bar.ap-low  .ap-fill { background: #b98a3a; }
-.ap-bar.ap-risk .ap-fill { background: #d08a2a; }
+.ap-bar.ap-low  .ap-fill { background: var(--meter-low); }
+.ap-bar.ap-risk .ap-fill { background: var(--meter-risk); }
 .ap-bar.ap-bad  .ap-fill { background: var(--danger); }
 .bar-row .ap-arrow { font-style: normal; opacity: 0.85; }
 
@@ -2842,7 +2851,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 /* Romance: the heart on a camp seat, and the line under the sheet's approval
    bar. Small on purpose — it is a fact, not a fanfare. */
 .camp-heart {
-  color: var(--gold-bright, #f0d478);
+  color: var(--gold-bright);
   font-size: var(--fs-xs);
   line-height: 1;
 }
@@ -4101,20 +4110,20 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   font-size: var(--fs-xl);
   font-weight: 700;
   letter-spacing: 0.04em;
-  text-shadow: 0 2px 8px #000;
+  text-shadow: var(--th-2);
 }
 .verdict-success { color: var(--success); }
 .verdict-failure { color: var(--text-dim); }
 .verdict-critical {
   color: var(--gold);
   font-size: var(--fs-3xl);
-  text-shadow: 0 0 20px rgba(232, 197, 71, 0.6), 0 2px 8px #000;
+  text-shadow: 0 0 20px color-mix(in srgb, var(--gold) 60%, transparent), var(--th-2);
   animation: verdict-pop 0.5s ease-out;
 }
 .verdict-fumble {
   color: var(--danger);
   font-size: var(--fs-3xl);
-  text-shadow: 0 0 18px rgba(176, 80, 64, 0.6), 0 2px 8px #000;
+  text-shadow: 0 0 18px color-mix(in srgb, var(--danger) 60%, transparent), var(--th-2);
   animation: verdict-shudder 0.5s ease-out;
 }
 @keyframes verdict-pop {
@@ -4425,7 +4434,7 @@ body.bm-pan-ready .battlemap { cursor: grab; }
 .bm-cell.is-low   { fill: color-mix(in srgb, var(--building) 70%, transparent); stroke: var(--border); stroke-width: 0.03; }
 .bm-cell.is-tall  { fill: var(--building); stroke: var(--wall); stroke-width: 0.05; }
 .bm-cell.is-wall  { fill: var(--wall); }
-.bm-cell.is-pit   { fill: #0b0a08; }
+.bm-cell.is-pit   { fill: var(--pit); }
 
 .bm-zone { fill: none; stroke-width: 0.06; stroke-dasharray: 0.3 0.2; opacity: 0.55; }
 .bm-zone.is-party { stroke: var(--accent); }
@@ -5059,7 +5068,7 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
   /* The bevel: a lit top edge and a dark floor, which is the whole of what
      makes a square read as a raised key rather than a coloured box. Drawn with
      inset shadows rather than a border image so it costs no asset. */
-  background: linear-gradient(180deg, #23201a, #14120f);
+  background: linear-gradient(180deg, var(--key-top), var(--key-bottom));
   border: 1px solid var(--border);
   border-radius: var(--r-md);
   box-shadow: var(--sh-key), var(--sh-1);
@@ -5112,7 +5121,7 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
   font-family: var(--mono);
   font-size: var(--fs-2xs);
   color: var(--text);
-  text-shadow: 0 1px 2px #000;
+  text-shadow: var(--th-1);
 }
 
 /* Flee, Parley and End turn are not attacks and are the ones a misclick costs
@@ -5193,7 +5202,7 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
   font-size: var(--fs-sm);
   white-space: nowrap;
   pointer-events: none;
-  text-shadow: 0 1px 3px #000, 0 0 6px #000;
+  text-shadow: var(--th-halo);
   animation: float-up 1.1s ease-out forwards;
 }
 .cbt-float.float-dmg { color: var(--danger); }

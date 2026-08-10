@@ -87,9 +87,19 @@ const PROPS = [
   'color', 'background-color',
   'border-top-left-radius', 'border-bottom-right-radius',
   'border-top-width', 'border-top-color',
-  'box-shadow', 'z-index',
+  'box-shadow', 'text-shadow', 'z-index',
   'padding-top', 'padding-left', 'margin-top', 'margin-left',
   'gap', 'outline-color', 'outline-width', 'min-height', 'min-width',
+  /*
+   * `fill` and `stroke`, because a third of this interface is drawn in SVG
+   * and none of the properties above touch it. The region chart, the dungeon
+   * floor plan, the battlefield and every icon are painted with these two,
+   * and the map is the middle of the play screen — so a restyle of the whole
+   * parchment ramp moved 39 values and this fingerprint reported nothing but
+   * a die face. The elements were being walked all along; only their colours
+   * were not being read.
+   */
+  'fill', 'stroke', 'stroke-width',
 ];
 
 /** A stable path to an element: tag + nth-of-type, root downwards. */

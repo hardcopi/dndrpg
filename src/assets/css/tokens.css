@@ -90,6 +90,12 @@
   --gold-ink: var(--gold);
   --gold-dim: #8a6f2e;          /* 2.48 — decorative only; never text */
   --gold-well: #2a2416;         /* tinted panel behind something gold */
+  /* Text ON a gold fill, where the whole ramp above is the background and
+     none of the greys will do. Two values were doing this — #241a08 on a die
+     face, #1a1206 on a lit wizard pip — for want of a name. The darker wins:
+     it is the one that also clears --gold-dim, which is the dimmer of the two
+     grounds it has to sit on. */
+  --ink-on-gold: #1a1206;
 
   --danger: #c25d4e;            /* 2.80 as a mark — borders, fills, icons */
   --danger-ink: #d48e83;        /* 4.51 — error text */
@@ -110,6 +116,17 @@
   --accent-ink: #86a1d3;        /* 4.54 */
   --accent-dim: #46587c;
   --accent-well: #1a2130;
+
+  /*
+   * Two steps that exist because a meter needs more resolution than a signal
+   * does. `.ap-bar` has six states — high, good, mid, low, risk, bad — and
+   * the palette has four signal colours, so the two in the middle of the
+   * slide from "fine" to "you cannot afford this" had nowhere to come from
+   * and were written as hex. They are a ramp position rather than a meaning,
+   * which is why they are named for the meter and not for a feeling.
+   */
+  --meter-low: #b98a3a;
+  --meter-risk: #d08a2a;
 
   /*
    * Ornament — unlit brass, for frames and filigree.
@@ -144,14 +161,99 @@
    * interface that could not be re-themed with the rest of it.
    * ================================================================== */
 
-  --pg-paper: #e9e1cd;          /* room fill, corridor floor */
+  /*
+   * These eight were sampled by eye from the .wm-* rules, and three of them
+   * were named after something the map does not do with them. --pg-rock held
+   * #1a1510 where the rock is #191008. --pg-label held #1f1a12, which is a
+   * place name being HOVERED; a resting one is #3d2e18. --pg-rule said
+   * "graph-paper ruling, stair ticks, traps" and held #6b4210, which is none
+   * of the three — it is the ink a walkable name is written in. The ruling is
+   * #382816 at a quarter opacity, the ticks are #3a2c18 and a trap is red.
+   *
+   * That is what "sample the file and name what you find" costs when the file
+   * has thirty-nine values in it. So this is the ramp instead: paper, ink,
+   * road, mark, each as a scale with a rule for reading it.
+   *
+   * ---- PAPER: the ground, and how known this bit of the world is ----------
+   *
+   * Brighter means better known. The party's own room is the brightest fill
+   * on the chart; somewhere glimpsed through a doorway is not filled at all.
+   */
   --pg-paper-lit: #f2e5c2;      /* the room the party is standing in */
-  --pg-paper-dim: #d6c298;      /* seen, not visited */
-  --pg-ink: #0d0803;            /* wall lines */
-  --pg-ink-soft: #5b4526;       /* door frames, secret-door marks */
-  --pg-rule: #6b4210;           /* graph-paper ruling, stair ticks, traps */
-  --pg-label: #1f1a12;          /* text on parchment */
-  --pg-rock: #1a1510;           /* the stone the level is cut out of */
+  --pg-paper: #e9e1cd;          /* walked: room fill, corridor floor */
+  --pg-paper-dim: #d6c298;      /* seen, not visited; a door glyph */
+  --pg-paper-out: #a99a7e;      /* a way that is shut */
+
+  /*
+   * Paper drawn as a LINE rather than an area. A corridor is a half-unit
+   * stroke on near-black rock, and at that width the same paper reads
+   * markedly darker than it does as a room fill — so the top of the ramp is
+   * brighter than --pg-paper-lit rather than equal to it.
+   *
+   * --pg-line-on is where the hover and focus of a walkable corridor land,
+   * and it is worth saying plainly that it does almost nothing: two units of
+   * red and eight of blue away from --pg-line. Keyboard focus on a corridor
+   * is therefore invisible, which is a real defect and not a palette one —
+   * the ramp has simply run out of headroom above "you can walk here". The
+   * fix in style.css is a casing in --pg-focus on the corridor's WALL, which
+   * is the same idiom a focused place-name already uses; these two stay
+   * distinct so the intent survives in the rule.
+   */
+  --pg-line: #fdf3d7;           /* a corridor you can step into */
+  --pg-line-on: #fff3cf;        /* hovered or focused — see above */
+  --pg-paper-hi: #fff8e6;       /* the brightest paper: halos, an open ring */
+
+  /*
+   * ---- INK: what is drawn on the paper -----------------------------------
+   *
+   * Four weights, and hovering a name moves it one step DOWN this ramp
+   * towards the walls: an unknown name is --pg-ink-soft, a walkable one is
+   * --pg-way-ink, hovering either lands on --pg-label, and hovering an
+   * ordinary name lands on --pg-label-on. That was the behaviour already; it
+   * was six hex values and no rule.
+   */
+  --pg-ink: #0d0803;            /* wall lines: the darkest thing on the map */
+  --pg-label-on: #1f1a12;       /* a place name, hovered */
+  --pg-label: #3d2e18;          /* a place name; the stair ticks */
+  --pg-way-ink: #6b4210;        /* the name of somewhere you can walk to */
+  --pg-ink-soft: #5b4526;       /* a name you do not know yet, or a shut way */
+  --pg-rule: rgba(56, 40, 22, 0.25);   /* graph-paper ruling: texture, not information */
+
+  /*
+   * ---- ROADS AND DOORS: the warm ramp ------------------------------------
+   *
+   * Warmer and brighter as the way becomes more available, ending at the
+   * stair, which is the one exit a floor plan is really about.
+   */
+  --pg-road: #8a6b42;           /* a road; dashed until both ends are known */
+  --pg-road-open: #a06a28;      /* a way out of this scene, and its room's wall */
+  --pg-door: #b08438;           /* a stuck door, a secret that has been found */
+  --pg-stair: #c8963c;
+
+  /*
+   * ---- MARKS -------------------------------------------------------------
+   *
+   * --pg-red is the party's own pin AND a sprung trap. They were #8c2f22 and
+   * #8a2f23, which is one colour written twice, so nothing is lost by saying
+   * so — but it is flagged rather than settled: "you are here" and "this will
+   * hurt you" reading identically on a map is a design question, and the
+   * answer is a second hue rather than a rename.
+   */
+  --pg-red: #8c2f22;
+  --pg-focus: #7a5c34;          /* the keyboard's mark: a wash and a casing */
+  --pg-rock: #191008;           /* the stone the level is cut out of */
+
+  /* A name has to stay readable over a road, a wall or another name, so it is
+     drawn twice — `paint-order: stroke` puts a fat paper-coloured stroke under
+     the fill. Six near-identical off-whites at three alphas were doing this;
+     it is one idea and now one value. */
+  --pg-halo: color-mix(in srgb, var(--pg-paper-hi) 95%, transparent);
+  --pg-halo-dark: rgba(20, 16, 8, 0.85);   /* the same, under the gold quest pin */
+
+  /* Glimpsed: a doorway and a guess at what is behind it. Unfilled, so the
+     rock shows through, with the shape's own line at part strength. */
+  --pg-glimpse: color-mix(in srgb, var(--pg-paper) 40%, transparent);
+  --pg-glimpse-wall: color-mix(in srgb, var(--pg-ink) 45%, transparent);
 
   /* ==================================================================
    * TERRAIN — the battlefield's 16×12 board
@@ -172,6 +274,10 @@
   --terrain-water: #3a5a6a;
   --terrain-low: #5a4a40;       /* low cover — crates, a wall you can see over */
   --terrain-tall: #4a453c;      /* tall cover — the edge stroke on a blocker */
+  /* The fifth cell type, and the one that never got a name here. Darker than
+     any surface in the interface on purpose: a pit is the absence of floor,
+     and every other cell is floor of some kind. */
+  --terrain-pit: #0b0a08;
 
   /* The names the `.bm-cell` rules still use. Aliases rather than a rename,
      because renaming them is a style.css change and this file is the floor
@@ -180,6 +286,7 @@
   --water: var(--terrain-water);
   --building: var(--terrain-low);
   --wall: var(--terrain-tall);
+  --pit: var(--terrain-pit);
 
   /*
    * Whose turn it is, in a fight. One rule uses it: `.cbt-turn`.
@@ -341,6 +448,23 @@
   --sh-halo: 0 0 0 1px rgba(0, 0, 0, 0.85), 0 0 4px rgba(0, 0, 0, 0.7);
   --sh-vignette: inset 0 0 34px rgba(90, 62, 28, 0.35);
 
+  /*
+   * TEXT SHADOWS — the same two ideas again, for type.
+   *
+   * A cast shadow lifts a word off what is behind it; a halo keeps it legible
+   * over ground of any brightness. Both are pure black rather than a palette
+   * colour, and deliberately: they are not describing a light source, they
+   * are buying contrast against an image nobody chose — a location plate, a
+   * portrait, a battlefield.
+   *
+   * --th-halo also takes over `.cbt-float`, which had 0 1px 3px + 0 0 6px.
+   * The one-pixel offset on a damage number that rises and fades in 1.1s was
+   * not doing work worth a fourth value.
+   */
+  --th-1: 0 1px 2px #000;
+  --th-2: 0 2px 8px #000;
+  --th-halo: 0 0 4px #000, 0 0 2px #000;
+
   /* ==================================================================
    * LAYERS — the five surfaces that stack against the whole interface
    *
@@ -416,6 +540,13 @@
 
   --tap-min: 44px;
   --control-h: 2.25rem;         /* the resting height of a button on a desktop */
+
+  /* The action bar's keycap face. Warm and nearly black, against chrome that
+     is cold and nearly black: the one control in this interface drawn as a
+     physical object rather than a panel, which is why it does not reach for
+     --bg-panel. Its bevel is --sh-key. */
+  --key-top: #23201a;
+  --key-bottom: #14120f;
   --focus-ring: 2px solid var(--gold);
   --focus-offset: 2px;
 
