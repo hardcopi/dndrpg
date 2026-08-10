@@ -68,6 +68,13 @@ const BENCHES = [
   ['battlemap_preview.html', 1440],
   ['dice_preview.html', 1440],
   ['floorplan_preview.php?seed=4242&depth=3', 1440],
+  /* Four of the five surfaces that stack over everything — .combat-screen,
+     .dialogue-theatre, .check-root and .wm-tip — were drawn by no bench at
+     all, so a port of the layer scale moved nothing here and looked clean.
+     layer_probe.html mounts all five. It has its own verdict about paint
+     order; what it adds HERE is simply that those surfaces get fingerprinted
+     like everything else. */
+  ['layer_probe.html', 1440],
 ];
 
 /*

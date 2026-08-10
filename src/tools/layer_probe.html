@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<!--
+  The five surfaces that stack against the whole interface, mounted at once,
+  with the browser asked which one is actually on top.
+
+  WHY THIS EXISTS
+
+  tokens.css names five layers — combat, tip, dialogue, modal, check — and
+  style.css now reads them instead of the five raw numbers it used to hold.
+  Nothing measured that port. The style snapshot walks fourteen benches and
+  only one of the five surfaces appears in any of them (.modal-backdrop, in
+  scene_preview and sheet_preview); the other four are only drawn by a real
+  session, over a real fight or a real conversation. So the renumbering — 20,
+  40, 50, 100, 300 becoming 100, 150, 200, 300, 400 — was argued from reading
+  the file and not from watching the browser, and "I preserved the order" is
+  exactly the claim an off-by-one hides inside.
+
+  WHAT IT MEASURES, AND WHAT THAT IS WORTH
+
+  A z-index only means something against the elements it shares a stacking
+  context with, so the value is not the thing to assert — the paint order is.
+  This page nests the five exactly as game.php nests them:
+
+      body > .game-shell > main.scene > .combat-screen      (absolute)
+                                      > .dialogue-theatre   (fixed)
+      body > .modal-backdrop                                (fixed)
+      body > .check-root                                    (fixed)
+      body > .wm-tip                                        (fixed, from JS)
+
+  and then asks `document.elementsFromPoint` what covers a point all five
+  overlap. That answer accounts for stacking contexts, which reading the
+  numbers does not: if some ancestor ever grows a `transform` or an `opacity`,
+  the scene becomes a context of its own, .dialogue-theatre stops being able
+  to rise above a sibling of .game-shell, and every number in the file stays
+  correct while the interface is wrong. This bench fails that day. That is the
+  case it is really here for; the renumbering is the easy half.
+
+  Nesting is transcribed rather than rendered, which is this bench's one piece
+  of fixture and its one weakness — game.php could move a surface and this page
+  would go on testing where it used to be. It is kept to a five-line skeleton
+  for that reason, and the skeleton is asserted against the real ladder rather
+  than against itself.
+
+  .wm-tip is given `pointer-events: auto` here. In the game it is `none`, which
+  keeps a tooltip from eating the click meant for the pin under it — a fact
+  about the tip and not about the layer it paints on, and hit-testing is the
+  only way to ask the browser about paint order. Nothing else is overridden.
+
+    /tools/layer_probe.html      the ladder, top to bottom, with a verdict
+
+  A drawing bench. It reads nothing and writes nothing.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <base href="../">
+  <title>Layer probe — what is on top of what</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    /* The verdict panel is the bench's own furniture and deliberately uses no
+       token: it has to stay readable when the thing under test is broken. */
+    .lp-verdict {
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: 2147483647;
+      margin: 0; padding: 10px 14px; max-height: 45vh; overflow: auto;
+      background: #0b0d10; color: #cfd6e0; border-top: 2px solid #3a424e;
+      font: 12px/1.6 ui-monospace, SFMono-Regular, monospace; white-space: pre;
+    }
+    .lp-ok   { color: #7cac6f; }
+    .lp-bad  { color: #d48e83; }
+    .lp-note { color: #98a1ae; }
+    /* Each surface says its own name in the middle of itself, so the page is
+       legible as a picture and not only as a readout. */
+    .lp-tag {
+      position: absolute; left: 50%; transform: translateX(-50%);
+      padding: 2px 8px; border-radius: 6px;
+      background: rgba(0,0,0,0.65); color: #e8c979;
+      font: 11px/1.6 ui-monospace, monospace;
+    }
+  </style>
+</head>
+<body class="game-page">
+
+<div class="game-shell">
+  <aside class="rail rail-left"></aside>
+  <main class="scene">
+    <div class="screen combat-screen" id="lp-combat"><span class="lp-tag" style="top:4px">.combat-screen</span></div>
+    <div class="dialogue-theatre" id="lp-dialogue"><span class="lp-tag" style="top:28px">.dialogue-theatre</span></div>
+  </main>
+  <aside class="rail rail-right"></aside>
+</div>
+
+<div class="modal-backdrop" id="lp-modal"><span class="lp-tag" style="top:76px">.modal-backdrop</span></div>
+<div class="check-root" id="lp-check"><span class="lp-tag" style="top:100px">.check-root</span></div>
+<div class="wm-tip" id="lp-tip" role="tooltip"><span class="wm-tip-name">.wm-tip</span></div>
+
+<pre class="lp-verdict" id="out">measuring…</pre>
+
+<script>
+/*
+ * The ladder, top of the interface downwards. This is the ORDER the game is
+ * meant to stack in, written as an order rather than as five numbers — the
+ * numbers are tokens.css's business and this bench should keep passing if
+ * every one of them changes by a hundred.
+ */
+const LADDER = [
+  ['lp-check',    '.check-root',       'the d20 ceremony'],
+  ['lp-modal',    '.modal-backdrop',   'a modal'],
+  ['lp-dialogue', '.dialogue-theatre', 'a conversation'],
+  ['lp-tip',      '.wm-tip',           'a quest tip'],
+  ['lp-combat',   '.combat-screen',    'the board'],
+];
+
+/*
+ * The tip is placed over the probe point and made hittable; see the header for
+ * why it has to be.
+ *
+ * It is the one surface here that is not `inset: 0` — it is a tooltip a couple
+ * of lines tall, positioned at a pin — so it has to be aimed, and its
+ * transform is `translate(-50%, -100%)`: the coordinates it is given are the
+ * point it hangs ABOVE, not the point it covers. Naively placing it at the
+ * probe point put it entirely above the probe point, and the bench reported a
+ * missing surface for a fault that was its own. Its height is measured and
+ * added back, so the tip is centred on what is being tested.
+ */
+function placeTip(x, y) {
+  const tip = document.getElementById('lp-tip');
+  tip.style.pointerEvents = 'auto';
+  tip.style.left = x + 'px';
+  tip.style.top = y + 'px';
+  tip.style.top = (y + tip.getBoundingClientRect().height / 2) + 'px';
+}
+
+function run() {
+  const out = document.getElementById('out');
+  const lines = [];
+
+  /* A point every surface covers. .combat-screen is `absolute; inset: 0`
+     inside .scene, so it is the smallest of the five and its own centre is
+     the only point guaranteed to be inside all of them. */
+  const box = document.getElementById('lp-combat').getBoundingClientRect();
+  const x = Math.round(box.left + box.width / 2);
+  const y = Math.round(box.top + box.height / 2);
+  placeTip(x, y);
+
+  const ids = new Set(LADDER.map((r) => r[0]));
+  /* elementsFromPoint returns every element under the point, deepest first,
+     in paint order. Map each hit up to whichever of the five contains it — a
+     surface's own tag span is what actually gets hit, not the surface. */
+  const seen = [];
+  for (const el of document.elementsFromPoint(x, y)) {
+    for (let n = el; n; n = n.parentElement) {
+      if (ids.has(n.id) && !seen.includes(n.id)) { seen.push(n.id); break; }
+    }
+  }
+
+  lines.push(`probe point: ${x},${y}   (the centre of .combat-screen)`);
+  lines.push('');
+  lines.push('painted, top first:');
+
+  const expected = LADDER.map((r) => r[0]);
+  let rank = 0;
+  for (const id of seen) {
+    const row = LADDER.find((r) => r[0] === id);
+    const z = getComputedStyle(document.getElementById(id)).zIndex;
+    const want = expected[rank];
+    const ok = id === want;
+    lines.push(`  ${ok ? ' ' : '!'} ${String(rank + 1).padStart(2)}. `
+      + `${row[1].padEnd(20)} z-index ${String(z).padEnd(5)} ${row[2]}`
+      + (ok ? '' : `   <- expected ${LADDER.find((r) => r[0] === want)[1]}`));
+    rank++;
+  }
+
+  const missing = expected.filter((id) => !seen.includes(id));
+  for (const id of missing) {
+    const row = LADDER.find((r) => r[0] === id);
+    lines.push(`  ! ${row[1]} never covered the probe point — it is not `
+      + `painting where the game paints it`);
+  }
+
+  const order = seen.join(',') === expected.join(',');
+  const pass = order && missing.length === 0;
+  lines.push('');
+  lines.push(pass
+    ? 'OK   the five surfaces stack in the order the interface means'
+    : 'FAIL the paint order is not the ladder in tokens.css');
+
+  if (!pass) {
+    lines.push('');
+    lines.push('A surface out of order here is usually not a wrong number. Check');
+    lines.push('first whether an ancestor grew a transform, filter, opacity or');
+    lines.push('contain — any of those makes a stacking context, and a child');
+    lines.push('cannot rise out of one however large its z-index is.');
+  }
+
+  out.innerHTML = '';
+  out.appendChild(document.createTextNode(lines.join('\n')));
+  out.className = 'lp-verdict ' + (pass ? 'lp-ok' : 'lp-bad');
+}
+
+/*
+ * On load, then a beat, so the fixed surfaces have laid out before anything is
+ * asked which of them is on top.
+ *
+ * A timer rather than requestAnimationFrame: headless Chrome with
+ * --virtual-time-budget advances timers and does not necessarily produce
+ * animation frames, and the first cut of this bench dumped the word
+ * "measuring…" — a bench that silently never runs is worse than no bench.
+ */
+window.addEventListener('load', () => setTimeout(run, 50));
+</script>
+</body>
+</html>

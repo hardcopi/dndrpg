@@ -273,38 +273,51 @@
   --sh-glow: 0 0 0 1px var(--gold), 0 0 12px rgba(216, 180, 92, 0.25);
 
   /* ==================================================================
-   * LAYERS — named, replacing eleven raw values between 0 and 300
+   * LAYERS — the five surfaces that stack against the whole interface
+   *
+   * There is exactly one ladder here and it is short, because only five
+   * things in this game are drawn over everything else. They are listed in
+   * the order they cover each other, and that order is the whole content of
+   * the scale: the board covers the scene, a tip covers the chart it
+   * explains, a conversation opens over a fight, a modal covers the
+   * conversation, and the d20 ceremony is rolled over the modal.
    *
    * The gaps are deliberate: something that has to sit between two of these
    * gets its own name here rather than a hand-picked number at the callsite.
    * ================================================================== */
 
-  --z-base: 0;
-  --z-raised: 10;
-  --z-rail: 20;
-  --z-topbar: 30;
-  --z-combat: 100;              /* the board takes the scene */
+  --z-combat: 100;              /* .combat-screen — the board takes the scene */
   --z-tip: 150;                 /* .wm-tip, over the chart it explains */
-  --z-dialogue: 200;            /* a conversation opens over a fight */
-  --z-modal: 300;
-  --z-check: 400;               /* the d20 ceremony, over a modal */
-  --z-toast: 500;
+  --z-dialogue: 200;            /* .dialogue-theatre, over a fight */
+  --z-modal: 300;               /* .modal-backdrop */
+  --z-check: 400;               /* .check-root — the d20, over a modal */
 
   /*
-   * These eight are NOT yet applied, and the first attempt is why.
+   * WHAT IS DELIBERATELY NOT HERE.
    *
-   * The eleven raw z-indexes in style.css are two different things wearing one
-   * property. Five are a global ladder — .combat-screen 20, .wm-tip 40,
-   * .dialogue-theatre 50, .modal-backdrop 100, .check-root 300 — and the other
-   * six (0, 1, 2, 3, 5, 6 on .modal-head, .dlg-close, .cbt-float, .act-tip,
-   * .module-cap and friends) are LOCAL stacking, valid only against their own
-   * siblings. Tokenising those would be nonsense.
+   * Nineteen raw z-indexes in style.css were two different things wearing one
+   * property. Five are the ladder above. The other fourteen — 0, 1, 2, 3, 5
+   * and 6, on .modal-head, .dlg-close, .cbt-float, .act-tip, .clip-window,
+   * .bm-zoom, .dg-zoom, .module-cap, .module-badge and friends — are LOCAL
+   * stacking, meaningful only against their own siblings inside a stacking
+   * context a few hundred pixels wide. `.dlg-close: 2` does not mean "two
+   * rungs up the interface", it means "over the line of dialogue behind it",
+   * and a token would assert a relationship to .modal-head that does not
+   * exist. They stay raw, and each is now commented at its callsite so the
+   * next reader can tell a value that was left alone from one that was
+   * missed.
    *
-   * Worse, the first draft of this scale had one --z-overlay for both the
-   * combat board and the dialogue theatre, which are 20 and 50 today —
-   * a conversation opens over a fight, and collapsing them would have put the
-   * theatre behind the board. Named per surface now, in the order the
-   * interface actually stacks.
+   * The first draft of this scale had one --z-overlay for both the combat
+   * board and the dialogue theatre, which were 20 and 50 — collapsing them
+   * would have put a conversation behind the fight that opened it. Hence one
+   * name per surface.
+   *
+   * Four rungs are also gone rather than applied: --z-base, --z-raised,
+   * --z-rail and --z-topbar named nothing. The rail and the topbar do not set
+   * z-index at all, and a token whose value is never read is a claim about
+   * the interface that no rule is keeping. --z-toast went the same way: the
+   * one thing resembling a toast is .error-banner, and it sits in the flow of
+   * the scene rather than over it.
    */
 
   /* ==================================================================

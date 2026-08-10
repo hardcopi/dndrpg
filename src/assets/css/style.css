@@ -1709,7 +1709,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
    game.js so pan and zoom cannot strand it. */
 .wm-tip {
   position: fixed;
-  z-index: 40;
+  z-index: var(--z-tip);
   transform: translate(-50%, -100%);
   display: flex;
   flex-direction: column;
@@ -2621,7 +2621,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 100;
+  z-index: var(--z-modal);
   padding: 1rem;
 }
 .modal-backdrop.hidden { display: none; }
@@ -2680,7 +2680,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .modal-head {
   position: sticky;
   top: 0;
-  z-index: 2;
+  z-index: 2;            /* local: over the modal body scrolling under it */
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -3547,10 +3547,10 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   opacity: 0.28;
   filter: saturate(0.9);
   pointer-events: none;
-  z-index: 0;
+  z-index: 0;            /* local: the painted backdrop, under the panel it fills */
 }
 /* Everything else in the panel rides above it. */
-.dlg-panel.is-camp > *:not(.dlg-camp-scene) { position: relative; z-index: 1; }
+.dlg-panel.is-camp > *:not(.dlg-camp-scene) { position: relative; z-index: 1; }   /* local: over the backdrop */
 /* A warm floor under the text so a bright fire cannot wash the line out. */
 .dlg-panel.is-camp .dlg-script {
   background: linear-gradient(90deg, rgba(22, 17, 13, 0.82), rgba(22, 17, 13, 0.6));
@@ -3691,7 +3691,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .dialogue-theatre {
   position: fixed;
   inset: 0;
-  z-index: 50;
+  z-index: var(--z-dialogue);
   display: grid;
   place-items: center;
   padding: 1.5rem;
@@ -3878,7 +3878,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
    short of it. Without the reserved gutter the first two lines of every long
    speech run underneath the button and lose their last word — and only long
    speeches show it, so it survives any amount of testing on short ones. */
-.dlg-close { position: absolute; top: 0.5rem; right: 0.6rem; z-index: 2; }
+.dlg-close { position: absolute; top: 0.5rem; right: 0.6rem; z-index: 2; }   /* local: over the line of dialogue */
 .dlg-line { padding-right: 4.25rem; }
 
 /* ====================================================================
@@ -3888,7 +3888,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .check-root {
   position: fixed;
   inset: 0;
-  z-index: 300;
+  z-index: var(--z-check);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -4134,7 +4134,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .combat-screen {
   position: absolute;
   inset: 0;
-  z-index: 20;
+  z-index: var(--z-combat);
   display: flex;
   flex-direction: column;
   gap: 0.45rem;
@@ -4339,7 +4339,7 @@ body.in-combat .cbt-top {
      you looking at cards with no idea whose they are. */
   position: sticky;
   top: -0.5rem;
-  z-index: 1;
+  z-index: 1;            /* local: over the roster cards scrolling under it */
   margin: -0.5rem -0.5rem 0;
   padding: 0.5rem 0.5rem 0.3rem;
   background: var(--bg-panel);
@@ -4392,7 +4392,7 @@ body.bm-pan-ready .battlemap { cursor: grab; }
   position: absolute;
   top: 0.5rem;
   right: 0.5rem;
-  z-index: 2;
+  z-index: 2;            /* local: over the board it zooms */
   margin-left: 0;
   padding: 0.15rem;
   background: color-mix(in srgb, var(--bg-panel) 88%, transparent);
@@ -4585,7 +4585,7 @@ body.bm-pan-ready .battlemap { cursor: grab; }
   background: var(--bg-panel);
   border: 1px solid var(--warn);
   border-radius: var(--r-md);
-  z-index: 3;
+  z-index: 3;            /* local: over the board and its zoom buttons */
 }
 
 /* The distance line on a card. Green is a clean shot, red is one you can take
@@ -5134,7 +5134,7 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
   position: absolute;
   left: 0;
   bottom: calc(100% + 8px);
-  z-index: 6;
+  z-index: 6;            /* local: over the action bar it belongs to */
   display: none;
   flex-direction: column;
   gap: 0.15rem;
@@ -5193,7 +5193,7 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
   left: 50%;
   top: 0;
   transform: translateX(-50%);
-  z-index: 5;
+  z-index: 5;            /* local: over the card the number rises from */
   font-weight: 700;
   font-size: var(--fs-sm);
   white-space: nowrap;
@@ -5244,7 +5244,7 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
   transform: translateX(-50%);
   overflow: hidden;
   pointer-events: none;
-  z-index: 6;
+  z-index: 6;            /* local: over the board it crops */
   filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.6));
 }
 .clip-window .clip-strip {
@@ -6069,7 +6069,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 1;
+  z-index: 1;            /* local: the caption, over its own plate */
   padding: 0.85rem 1.15rem 0.8rem;
   display: flex;
   align-items: baseline;
@@ -6103,7 +6103,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
    and a "Start a game here" button has already said so twice. */
 .module-badge {
   position: absolute;
-  z-index: 1;
+  z-index: 1;            /* local: the badge, over its own plate */
   top: 0.6rem;
   right: 0.6rem;
   padding: 0.18rem 0.5rem;
@@ -6395,7 +6395,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: 2.25rem; }
   bottom: 0.5rem;
   display: flex;
   gap: 0.25rem;
-  z-index: 1;
+  z-index: 1;            /* local: over the chart it zooms */
 }
 
 /* The findings list under the chart. */
