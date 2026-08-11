@@ -93,6 +93,15 @@
    * conversation: the difference between talking to a portrait and sitting
    * with somebody at a fire.
    *
+   * `opts.fromCamp` is the OTHER half of that, and they are separate because
+   * the camp screen has two doors. The seat sits you down at the fire, which
+   * both paints the scene and owes you a way back to it. "Talk" draws the
+   * companion aside for their whole tree — no fireside backdrop, its own
+   * button says as much — and it was returning you to the location instead of
+   * the fire, because the only thing that had ever asked for the fire back was
+   * the scene key. One flag meant two things, so the door that wanted only one
+   * of them got neither.
+   *
    * @returns {Promise<void>} resolves when the conversation closes
    */
   function openNode(npcKey, nodeKey, opts = {}) {
@@ -111,6 +120,8 @@
       session = {
         npc: { npc_key: npcKey }, release: null, done, closing: false,
         camp: opts.camp || null,
+        // Where this conversation came from, as opposed to how it is dressed.
+        fromCamp: !!(opts.camp || opts.fromCamp),
       };
       session.release = window.UI.pushOverlay(el, () => close());
       document.addEventListener('keydown', onNumberKey, true);
@@ -158,7 +169,7 @@
     el.innerHTML = '';
     if (session.release) session.release();
     const done = session.done;
-    const camp = session.camp;
+    const fromCamp = session.fromCamp;
     session = null;
     if (done) done();
 
@@ -167,7 +178,7 @@
     // the level waits here, for the moment the talking is over.
     if (window.LevelUp) window.LevelUp.checkPending();
 
-    if (camp && !opts.handoff) returnToCamp();
+    if (fromCamp && !opts.handoff) returnToCamp();
   }
 
   /**
@@ -609,7 +620,7 @@
 
     // close: possibly handing off to something that is not a conversation.
     const handoff = !!(r.combat || r.shop || r.travel);
-    const wasCamp = !!(session && session.camp);
+    const wasCamp = !!(session && session.fromCamp);
     close({ handoff });
     if (r.combat) {
       await G().startCombat({ encounter_key: r.combat });

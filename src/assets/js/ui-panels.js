@@ -1190,7 +1190,11 @@
     $$('[data-talk-start]', el).forEach((b) => {
       b.addEventListener('click', () => {
         closeTopModal();
-        window.Dialog.openNode(b.dataset.talkStart, null, { name: b.dataset.name });
+        // fromCamp, not camp: drawing somebody aside is not a fireside scene
+        // and should not be painted as one — but it still owes you the fire
+        // back when it ends, which is what this door was missing.
+        window.Dialog.openNode(b.dataset.talkStart, null,
+          { name: b.dataset.name, fromCamp: true });
       });
     });
 
