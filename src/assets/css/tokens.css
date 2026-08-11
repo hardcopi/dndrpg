@@ -317,7 +317,6 @@
   --font-display: "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
   --font-ui: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --mono: "Cascadia Code", "Consolas", ui-monospace, monospace;
-  --font: var(--font-display);            /* the historical alias */
 
   --fs-2xs: 0.75rem;            /* 12px — the floor. Nothing smaller ships. */
   --fs-xs: 0.8125rem;           /* 13 */
@@ -327,21 +326,70 @@
   --fs-xl: 1.375rem;            /* 22 */
   --fs-2xl: clamp(1.5rem, 1.2rem + 1.5vw, 1.75rem);
   --fs-3xl: clamp(1.75rem, 1.3rem + 2.2vw, 2.25rem);
-  --fs-4xl: clamp(2rem, 1.2rem + 4vw, 3rem);        /* the hero */
+  /*
+   * The home page's hero, and the one step of this scale that was never read
+   * by the thing it is named for: --fs-4xl said `clamp(2rem, 1.2rem + 4vw,
+   * 3rem)` while `.hero-home h1` had a clamp of its own at 2.4/6vw/3.6rem.
+   * Corrected to what the hero actually is, then wired — the same order as
+   * --portrait, and for the same reason. A token no rule reads is free to
+   * disagree with the interface indefinitely.
+   *
+   * It keeps the hero's own bare-vw middle term rather than being rewritten
+   * into the `rem + vw` form the two steps above use. That form is the better
+   * one — it keeps scaling when a reader enlarges their default text — and
+   * changing it here would resize the hero, which is a design decision and
+   * not a port.
+   */
+  --fs-4xl: clamp(2.4rem, 6vw, 3.6rem);
+
+  /* ------------------------------------------------------------------
+   * WEIGHT, LEADING, TRACKING
+   *
+   * The type pass ported font-SIZE — 267 declarations onto nine steps — and
+   * left the other three properties raw, so these scales sat here for a
+   * fortnight being read by nothing. What that cost is visible now they have
+   * been measured against the file: two of the three were guesses, and only
+   * weight was right.
+   *
+   * WEIGHT was right. 46 declarations, four values, 400/500/600/700 exactly.
+   * Nothing moves.
+   *
+   * LEADING was four steps against 18 values, and the two that matter were
+   * both wrong. --lh-normal said 1.6 where the file's normal is 1.5, and
+   * --lh-prose said 1.75 where the actual running prose — `.loc-prose p`, the
+   * scene description this token was named after — is 1.62. Six steps now,
+   * from the measured clusters. --lh-flush is new and is the biggest of them:
+   * `line-height: 1` appears ten times, on kbd hints, icon buttons, a die
+   * face, the recruit slot. It is not "tight leading", it is a box that
+   * should be exactly its glyph, and it had no name at all.
+   *
+   * TRACKING was three steps against 14 values, and one of the three named
+   * nothing: --ls-tight was -0.01em and there is not one negative tracking
+   * value in the stylesheet. It is deleted. What is actually there is a
+   * ladder of uppercase labels, and the rule behind it is that the smaller
+   * and shorter the caps, the more air they need — an eyebrow of five
+   * letters at 12px wants 0.22em, a section heading wants a third of that.
+   * Five steps, and the widest three are all one component idea each.
+   * ------------------------------------------------------------------ */
 
   --fw-normal: 400;
   --fw-medium: 500;
   --fw-semibold: 600;
   --fw-bold: 700;
 
-  --lh-tight: 1.2;              /* headings */
-  --lh-snug: 1.4;               /* dense readouts, rail rows */
-  --lh-normal: 1.6;             /* running text */
-  --lh-prose: 1.75;             /* the scene description, the book */
+  --lh-flush: 1;                /* a box that is exactly its glyph */
+  --lh-display: 1.1;            /* the hero, a stat total, a big number */
+  --lh-tight: 1.2;              /* names and headings */
+  --lh-snug: 1.35;              /* dense readouts, rail rows, card sublines */
+  --lh-normal: 1.5;             /* interface text that runs to a second line */
+  --lh-prose: 1.6;              /* the scene description, dialogue, lore */
 
-  --ls-tight: -0.01em;
   --ls-normal: 0;
-  --ls-caps: 0.08em;            /* the small-caps section label, all 29 of them */
+  --ls-display: 0.02em;         /* a whisker of air under a display face */
+  --ls-wide: 0.05em;            /* pills, badges, stat labels */
+  --ls-caps: 0.09em;            /* the small-caps section label */
+  --ls-caps-wide: 0.13em;       /* the same, at the sizes that need more */
+  --ls-eyebrow: 0.22em;         /* the line above a title, on three pages */
 
   /* ==================================================================
    * SPACE
@@ -580,7 +628,15 @@
    * ================================================================== */
 
   --tap-min: 44px;
-  --control-h: 2.25rem;         /* the resting height of a button on a desktop */
+  /*
+   * --control-h was declared here as 2.25rem, "the resting height of a button
+   * on a desktop", and read by nothing — because no button in this interface
+   * sets a height. They are sized by their padding and their line box, which
+   * is the right way to build a control that has to hold one word or three.
+   * A token for a height nothing has is a claim about the interface that is
+   * not true, so it is gone rather than wired. --font went with it: an alias
+   * for --font-display that no rule had ever used.
+   */
 
   /* The action bar's keycap face. Warm and nearly black, against chrome that
      is cold and nearly black: the one control in this interface drawn as a

@@ -47,7 +47,7 @@ button, input, select, textarea { font-family: var(--font-ui); }
 a { color: var(--gold); text-decoration: none; }
 a:hover { text-decoration: underline; }
 
-h1, h2, h3 { color: var(--gold); font-weight: 600; letter-spacing: 0.03em; margin: 0 0 var(--sp-8); }
+h1, h2, h3 { color: var(--gold); font-weight: var(--fw-semibold); letter-spacing: var(--ls-display); margin: 0 0 var(--sp-8); }
 
 .container {
   max-width: 1200px;
@@ -70,7 +70,7 @@ h1, h2, h3 { color: var(--gold); font-weight: 600; letter-spacing: 0.03em; margi
   text-shadow: 0 0 24px rgba(212, 168, 75, 0.35);
 }
 
-.hero p { color: var(--text-dim); max-width: 560px; margin: var(--sp-12) auto var(--sp-24); line-height: 1.5; }
+.hero p { color: var(--text-dim); max-width: 560px; margin: var(--sp-12) auto var(--sp-24); line-height: var(--lh-normal); }
 
 .btn {
   display: inline-block;
@@ -106,7 +106,7 @@ h1, h2, h3 { color: var(--gold); font-weight: 600; letter-spacing: 0.03em; margi
 .btn-small { padding: var(--sp-4) var(--sp-12); font-size: var(--fs-sm); }
 /* The one button on a landing page, which has a screen to itself and should
    not be the size of a toolbar control. */
-.btn-lg { padding: var(--sp-12) var(--sp-24); font-size: var(--fs-md); letter-spacing: 0.02em; }
+.btn-lg { padding: var(--sp-12) var(--sp-24); font-size: var(--fs-md); letter-spacing: var(--ls-display); }
 /* A glyph in front of a label. `.btn` is inline-block, so the two would sit on
    the text baseline with the icon hanging below it.
 
@@ -171,7 +171,7 @@ input, select, textarea {
 textarea {
   display: block;
   resize: vertical;
-  line-height: 1.5;
+  line-height: var(--lh-normal);
 }
 /* A checkbox is not a text field, and everything above was written for text
    fields. `width: 100%` on one makes it swallow its whole row and squeeze the
@@ -313,8 +313,8 @@ body.game-page {
   margin: 0 0 var(--sp-6);
   font-family: var(--font-ui, var(--font-display));
   font-size: var(--fs-2xs);
-  font-weight: 600;
-  letter-spacing: 0.09em;
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-caps);
   text-transform: uppercase;
   color: var(--text-dim);
 }
@@ -480,10 +480,10 @@ body.game-page {
 .hud-people .people-crowd h3 {
   margin: var(--sp-6) 0 var(--sp-4);
   font-size: var(--fs-2xs);
-  letter-spacing: 0.08em;
+  letter-spacing: var(--ls-caps);
   text-transform: uppercase;
   color: var(--text-dim);
-  font-weight: 600;
+  font-weight: var(--fw-semibold);
 }
 .hud-people .help-hint {
   margin: var(--sp-4) var(--sp-2);
@@ -530,7 +530,7 @@ body.game-page {
 .hud-party .party-name {
   grid-area: name;
   font-size: var(--fs-xs);
-  font-weight: 600;
+  font-weight: var(--fw-semibold);
   color: var(--text);
   white-space: nowrap;
   overflow: hidden;
@@ -563,7 +563,7 @@ body.game-page {
   grid-area: stat;
   justify-self: end;
   font-size: var(--fs-2xs);
-  letter-spacing: 0.08em;
+  letter-spacing: var(--ls-caps);
   text-transform: uppercase;
   color: var(--danger);
 }
@@ -603,6 +603,10 @@ body.game-page {
   border-radius: var(--r-circle);
   background: currentColor;
   /* Hides the label text without hiding the element from a screen reader. */
+  /* Not type: this collapses the row to nothing when there is no drift to
+     show. A height of zero written in the two properties that give a line
+     box its height — neither is a leading or a size, and neither belongs
+     on the type scale. */
   font-size: 0;
   line-height: 0;
   overflow: hidden;
@@ -674,10 +678,10 @@ body.game-page {
 .track-others h3 {
   margin: 0 0 var(--sp-6);
   font-size: var(--fs-2xs);
-  letter-spacing: 0.1em;
+  letter-spacing: var(--ls-caps);
   text-transform: uppercase;
   color: var(--text-dim);
-  font-weight: 500;
+  font-weight: var(--fw-medium);
   opacity: 0.8;
 }
 .track-others ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--sp-4); }
@@ -714,8 +718,8 @@ body.game-page {
   margin: 0 0 var(--sp-4);
   font-family: var(--font-ui);
   font-size: var(--fs-2xs);
-  font-weight: 600;
-  letter-spacing: 0.09em;
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-caps);
   text-transform: uppercase;
   color: var(--text-dim);
 }
@@ -986,8 +990,8 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   font-family: var(--font-display, serif);
   font-style: italic;
   font-size: var(--fs-md);
-  font-weight: 600;
-  line-height: 1;
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-flush);
   color: var(--gold-dim);
   background: color-mix(in srgb, var(--bg-panel) 88%, transparent);
   border: 1px solid var(--border);
@@ -1044,14 +1048,14 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .loc-name {
   font-family: var(--font-display);
   font-size: var(--fs-2xl);
-  line-height: 1.15;
+  line-height: var(--lh-display);
   margin: 0;
   color: var(--gold);
-  letter-spacing: 0.01em;
+  letter-spacing: var(--ls-display);
 }
 .loc-region {
   font-size: var(--fs-xs);
-  letter-spacing: 0.09em;
+  letter-spacing: var(--ls-caps);
   text-transform: uppercase;
   color: var(--text-dim);
   margin-top: var(--sp-2);
@@ -1064,7 +1068,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .loc-prose p {
   margin: 0 0 var(--sp-12);
   font-size: var(--fs-md);
-  line-height: 1.62;
+  line-height: var(--lh-prose);
   color: var(--text);
 }
 .loc-prose p:last-child { margin-bottom: 0; }
@@ -1096,11 +1100,11 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   align-items: center;
   font-family: var(--font-display);
   font-size: var(--fs-xs);
-  letter-spacing: 0.14em;
+  letter-spacing: var(--ls-caps-wide);
   text-transform: uppercase;
   color: var(--text-dim);
   margin: 0 0 var(--sp-8);
-  font-weight: 600;
+  font-weight: var(--fw-semibold);
 }
 
 /* --- People -----------------------------------------------------------
@@ -1168,7 +1172,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 
 .person-text { display: flex; flex-direction: column; min-width: 0; }
 .person-name {
-  font-weight: 600;
+  font-weight: var(--fw-semibold);
   color: var(--text);
   display: flex;
   align-items: center;
@@ -1177,24 +1181,24 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .person-role {
   font-size: var(--fs-xs);
   color: var(--text-dim);
-  line-height: 1.35;
+  line-height: var(--lh-snug);
 }
 
 /* Tags earn their place by changing what the player would do next. */
 .person-tag {
   font-size: var(--fs-2xs);
-  line-height: 1;
+  line-height: var(--lh-flush);
   padding: var(--sp-2) var(--sp-4);
   border-radius: var(--r-sm);
   border: 1px solid currentColor;
 }
 .person-tag.is-shop { color: var(--gold); }
-.person-tag.is-quest { color: var(--accent); font-weight: 700; }
+.person-tag.is-quest { color: var(--accent); font-weight: var(--fw-bold); }
 
 /* The crowd: present, talkable, and quieter than the authored cast. */
 .people-crowd .person { background: transparent; padding: var(--sp-2) var(--sp-8); }
 .people-list.is-crowd .person-face { width: 26px; height: 26px; }
-.people-list.is-crowd .person-name { font-weight: 500; color: var(--text-dim); }
+.people-list.is-crowd .person-name { font-weight: var(--fw-medium); color: var(--text-dim); }
 
 /* --- Actions ---------------------------------------------------------- */
 /* A bar, not a column. See actionKey() in game.js for why the ones that name
@@ -1245,7 +1249,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   bottom: 1px;
   font-family: var(--mono);
   font-size: var(--fs-2xs);
-  line-height: 1;
+  line-height: var(--lh-flush);
   color: var(--text-faint);
   background: none;
   border: 0;
@@ -1267,7 +1271,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   align-items: flex-start;
   gap: var(--sp-2);
 }
-.pit-label { font-weight: 600; }
+.pit-label { font-weight: var(--fw-semibold); }
 .pit-sample { font-size: var(--fs-xs); color: var(--text-dim); }
 .pit-bout:hover .pit-sample { color: var(--text); }
 
@@ -1414,7 +1418,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .map-zoom .icon-btn {
   font-family: var(--mono);
   font-size: var(--fs-md);
-  line-height: 1;
+  line-height: var(--lh-flush);
   min-width: 1.9rem;
 }
 
@@ -1657,7 +1661,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .wm-node[data-map-node]:hover .wm-label,
 .wm-node[data-map-node]:focus-visible .wm-label {
   fill: var(--pg-label-on);
-  font-weight: 700;
+  font-weight: var(--fw-bold);
   stroke: var(--pg-halo);
 }
 .wm-node:focus-visible { outline: none; }
@@ -1696,7 +1700,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .wm-quest {
   fill: var(--gold-dim);
   font-size: 4.2px;
-  font-weight: 700;
+  font-weight: var(--fw-bold);
   text-anchor: middle;
   paint-order: stroke;
   stroke: var(--pg-halo-dark);
@@ -1780,7 +1784,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .wm-pc-initial {
   text-anchor: middle;
   font-family: var(--font-display, Georgia, serif);
-  font-weight: 700;
+  font-weight: var(--fw-bold);
   fill: var(--pg-way-ink);
 }
 .wm-pc.is-more .wm-pc-disc { fill: var(--pg-paper-dim); }
@@ -1795,7 +1799,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 
 .wm-node.is-here .wm-label {
   fill: var(--pg-red);
-  font-weight: 700;
+  font-weight: var(--fw-bold);
   font-size: 3.35px;
   stroke: var(--pg-halo);
   stroke-width: 1.05;
@@ -1805,7 +1809,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
    is already in the label text (see ui-map.js). */
 .wm-node.is-way .wm-label {
   fill: var(--pg-way-ink);
-  font-weight: 700;
+  font-weight: var(--fw-bold);
   font-size: 3.25px;
   opacity: 1;
   font-style: normal;
@@ -1842,7 +1846,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
    quieter so it does not look like the next click. */
 .wm-node.is-way.is-locked .wm-label {
   opacity: 0.55;
-  font-weight: 500;
+  font-weight: var(--fw-medium);
   fill: var(--pg-ink-soft);
 }
 
@@ -1860,11 +1864,11 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   stroke-width: 0.7;
 }
 .wm-neighbor:hover .wm-out-label,
-.wm-neighbor:focus-visible .wm-out-label { fill: var(--pg-label-on); font-weight: 700; }
+.wm-neighbor:focus-visible .wm-out-label { fill: var(--pg-label-on); font-weight: var(--fw-bold); }
 .wm-neighbor:hover .wm-edge.is-out { opacity: 0.95; }
 .wm-neighbor.is-way .wm-out-label {
   fill: var(--pg-way-ink);
-  font-weight: 700;
+  font-weight: var(--fw-bold);
   font-style: normal;
   font-size: 2.9px;
   stroke: var(--pg-halo);
@@ -1872,7 +1876,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 }
 .wm-neighbor.is-way.is-locked .wm-out-label {
   opacity: 0.55;
-  font-weight: 500;
+  font-weight: var(--fw-medium);
   fill: var(--pg-ink-soft);
 }
 
@@ -2064,7 +2068,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .wiz-lore {
   font-family: var(--font-display);
   color: var(--text-dim);
-  line-height: 1.6;
+  line-height: var(--lh-prose);
   font-size: var(--fs-sm);
   margin: var(--sp-12) 0 0;
   padding: var(--sp-12) var(--sp-14);
@@ -2200,7 +2204,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 }
 .pd-group h3 {
   font-size: var(--fs-2xs); color: var(--text-dim); margin: 0 0 var(--sp-4);
-  font-family: var(--font-ui); font-weight: 500;
+  font-family: var(--font-ui); font-weight: var(--fw-medium);
 }
 .pd-opt { color: var(--text-faint); font-size: var(--fs-2xs); }
 .pd-swatches { display: flex; gap: var(--sp-4); flex-wrap: wrap; }
@@ -2282,7 +2286,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
      what makes the solid read as solid without any depth sorting. */
   backface-visibility: hidden;
   font-family: var(--mono);
-  font-weight: 700;
+  font-weight: var(--fw-bold);
   color: var(--ink-on-gold);
   background: linear-gradient(155deg, var(--gold), var(--gold-dim) 62%, var(--gold-well));
   /* A hairline of the page colour along each edge reads as the bevel between
@@ -2480,7 +2484,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 /* What is in front of you, once you have arrived. Not dimmed like the route
    chain — it is the instruction, not the footnote. */
 .track-here-what { color: var(--text); }
-.track-here-what strong { color: var(--gold); font-weight: 600; }
+.track-here-what strong { color: var(--gold); font-weight: var(--fw-semibold); }
 .track-via { color: var(--gold); }
 .track-far { color: var(--text-faint); font-size: var(--fs-2xs); }
 
@@ -2710,10 +2714,10 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   margin-left: auto;
   flex: 0 0 auto;
   font-size: var(--fs-lg);
-  line-height: 1;
+  line-height: var(--lh-flush);
 }
 
-.modal-body { line-height: 1.5; color: var(--text-dim); }
+.modal-body { line-height: var(--lh-normal); color: var(--text-dim); }
 
 /* What is waiting, in the ambush warning. Wraps rather than scrolls: a scaled
    roster can be eight or nine species deep and a row that slides sideways
@@ -2748,7 +2752,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 }
 .foe-name {
   font-size: var(--fs-2xs);
-  line-height: 1.2;
+  line-height: var(--lh-tight);
   text-align: center;
   color: var(--text-dim);
 }
@@ -2789,7 +2793,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   color: var(--text-dim);
   font-family: inherit;
   font-size: var(--fs-2xs);
-  line-height: 1.2;
+  line-height: var(--lh-tight);
   text-align: center;
   cursor: pointer;
   transition: border-color 0.15s, box-shadow 0.15s, background 0.15s, color 0.15s;
@@ -2829,7 +2833,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   color: var(--text-dim);
   font-family: inherit;
   font-size: var(--fs-xs);
-  line-height: 1.35;
+  line-height: var(--lh-snug);
   text-align: left;
   cursor: pointer;
   transition: border-color 0.15s, box-shadow 0.15s, background 0.15s, color 0.15s;
@@ -2853,7 +2857,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .camp-heart {
   color: var(--gold-bright);
   font-size: var(--fs-xs);
-  line-height: 1;
+  line-height: var(--lh-flush);
 }
 .camp-heart.is-locked { color: var(--text-dim); }
 .sheet-romance { color: var(--gold); font-size: var(--fs-xs); margin: var(--sp-2) 0 0; }
@@ -2940,7 +2944,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   font-size: var(--fs-2xs);
   color: var(--text-dim);
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: var(--ls-wide);
 }
 .sheet-stat-pill strong {
   color: var(--gold);
@@ -3026,7 +3030,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   flex: 1 1 auto;
   min-width: 0;
 }
-.quest-title { color: var(--gold-dim); font-size: var(--fs-md); font-weight: 600; }
+.quest-title { color: var(--gold-dim); font-size: var(--fs-md); font-weight: var(--fw-semibold); }
 /* One line while shut, so every entry is the same height and the list can be
    scanned; the full objective is inside anyway. */
 .quest-gist {
@@ -3110,7 +3114,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
    without opening either; the full name is in the tooltip and the panel. */
 .bag-label {
   font-size: var(--fs-2xs);
-  line-height: 1.15;
+  line-height: var(--lh-display);
   text-align: center;
   color: var(--text-dim);
   display: -webkit-box;
@@ -3134,7 +3138,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   top: 2px;
   right: 3px;
   font-size: var(--fs-2xs);
-  line-height: 1;
+  line-height: var(--lh-flush);
   color: var(--success);
 }
 
@@ -3169,7 +3173,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 }
 .bag-give-label {
   font-size: var(--fs-2xs);
-  letter-spacing: 0.08em;
+  letter-spacing: var(--ls-caps);
   text-transform: uppercase;
   color: var(--text-faint);
 }
@@ -3225,7 +3229,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .legal-text {
   max-width: 800px;
   margin: 0 auto;
-  line-height: 1.55;
+  line-height: var(--lh-normal);
   color: var(--text-dim);
   font-size: var(--fs-sm);
   white-space: pre-wrap;
@@ -3274,7 +3278,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   background: var(--bg-panel-2);
   color: var(--text-dim);
   font-size: var(--fs-2xs);
-  letter-spacing: 0.04em;
+  letter-spacing: var(--ls-wide);
   white-space: nowrap;
 }
 .pill-check {
@@ -3300,7 +3304,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   font-family: var(--mono);
   font-size: var(--fs-2xs);
   text-align: center;
-  line-height: 1.5;
+  line-height: var(--lh-normal);
 }
 .pip-unconscious { border-color: var(--text-faint); background: var(--bg-panel-2); color: var(--text-dim); }
 .pip-invisible { border-color: var(--accent-dim); background: var(--accent-well); color: var(--accent); }
@@ -3355,9 +3359,9 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   /* Names are the one place the rail still uses gold, so it reads as "this is
      a person" rather than as an accent competing with the check pills. */
   color: var(--text);
-  font-weight: 600;
+  font-weight: var(--fw-semibold);
   font-size: var(--fs-2xs);
-  line-height: 1.25;
+  line-height: var(--lh-tight);
   /* Two lines rather than an ellipsis: "Elara Stormwind" is an ordinary name
      and truncating it to "Elara Stormwind…" in a 118px column made the rail
      look broken. Three-word names still clip, which is the right trade. */
@@ -3381,7 +3385,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   border-radius: var(--r-sm);
   padding: var(--sp-1) var(--sp-4);
   font-size: var(--fs-2xs);
-  letter-spacing: 0.05em;
+  letter-spacing: var(--ls-wide);
   text-transform: uppercase;
 }
 .ap-high { background: var(--success-well); color: var(--success); }
@@ -3396,8 +3400,8 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .approval-drift {
   font-family: var(--mono);
   font-size: var(--fs-2xs);
-  line-height: 1;
-  letter-spacing: 0;
+  line-height: var(--lh-flush);
+  letter-spacing: var(--ls-normal);
 }
 .approval-drift.is-up { color: var(--success); }
 .approval-drift.is-down { color: var(--danger); }
@@ -3482,7 +3486,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   padding: var(--sp-8) var(--sp-12);
   min-width: 0;
 }
-.camp-seat-name { font-weight: 600; color: var(--text); }
+.camp-seat-name { font-weight: var(--fw-semibold); color: var(--text); }
 .camp-seat-meta { display: flex; align-items: center; gap: var(--sp-6); flex-wrap: wrap; }
 /* Said on the seat itself, because the seat is the thing that fixes it. */
 .camp-seat-risk {
@@ -3490,7 +3494,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   margin-top: var(--sp-4);
   color: var(--warn);
   font-size: var(--fs-2xs);
-  line-height: 1.3;
+  line-height: var(--lh-snug);
 }
 .camp-warning {
   margin: 0;
@@ -3524,8 +3528,8 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   border: 1px solid var(--ornament);
 }
 .camp-ident { min-width: 0; }
-.camp-ident strong { color: var(--text); font-weight: 600; }
-.camp-ident .sub { font-size: var(--fs-2xs); color: var(--text-dim); line-height: 1.4; }
+.camp-ident strong { color: var(--text); font-weight: var(--fw-semibold); }
+.camp-ident .sub { font-size: var(--fs-2xs); color: var(--text-dim); line-height: var(--lh-snug); }
 .camp-row.is-gone { opacity: 0.6; }
 
 /* The player's own characters, listed under the companions rather than among
@@ -3587,8 +3591,8 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .party-card.is-down { border-style: dashed; opacity: 0.85; }
 .party-downed {
   color: var(--danger);
-  font-weight: 700;
-  letter-spacing: 0.1em;
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-caps);
   font-size: var(--fs-2xs);
 }
 
@@ -3604,7 +3608,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   text-decoration: none;
 }
 .party-add:hover { text-decoration: none; }
-.party-add-plus { font-size: 1.6rem; line-height: 1; color: var(--gold-dim); }
+.party-add-plus { font-size: 1.6rem; line-height: var(--lh-flush); color: var(--gold-dim); }
 
 /* ====================================================================
    Quest tracker and log
@@ -3613,12 +3617,12 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
    panel treatment are up with the rest of the HUD; what is left here is what
    they are made of rather than where they sit. */
 
-.track-title { color: var(--gold); font-size: var(--fs-xs); line-height: 1.25; }
+.track-title { color: var(--gold); font-size: var(--fs-xs); line-height: var(--lh-tight); }
 .track-stage { color: var(--accent); font-size: var(--fs-2xs); margin-top: var(--sp-2); }
 .track-objective {
   margin: var(--sp-4) 0 0;
   font-size: var(--fs-2xs);
-  line-height: 1.35;
+  line-height: var(--lh-snug);
   color: var(--text);
 }
 .track-where { margin-top: var(--sp-4); font-size: var(--fs-2xs); color: var(--text-dim); }
@@ -3665,7 +3669,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .roll-nat {
   color: var(--text);
   font-size: var(--fs-md);
-  font-weight: 700;
+  font-weight: var(--fw-bold);
 }
 .roll-who { color: var(--text-dim); font-size: var(--fs-2xs); margin-top: var(--sp-2); }
 
@@ -3778,7 +3782,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .dlg-line {
   margin: 0;
   font-size: var(--fs-md);
-  line-height: 1.6;
+  line-height: var(--lh-prose);
   min-height: 4.8em;
 }
 
@@ -3822,7 +3826,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   color: var(--text-dim);
   font-style: italic;
   font-size: var(--fs-sm);
-  line-height: 1.4;
+  line-height: var(--lh-snug);
 }
 .dlg-aside-who { color: var(--accent); font-style: normal; margin-right: var(--sp-6); }
 .dlg-aside.ap-bad, .dlg-aside.ap-low { border-left-color: var(--danger); }
@@ -3848,7 +3852,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   flex: 0 0 auto;
   width: 1.3rem;
   height: 1.3rem;
-  line-height: 1.3rem;
+  line-height: 1.3rem;   /* a fixed line BOX, sizing the key badge — not leading */
   text-align: center;
   border-radius: var(--r-sm);
   background: var(--bg-panel-2);
@@ -3949,7 +3953,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   color: var(--text-dim);
   font-size: var(--fs-2xs);
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: var(--ls-wide);
 }
 .check-mode.mode-advantage { border-color: var(--success); color: var(--success); }
 .check-mode.mode-disadvantage { border-color: var(--danger); color: var(--danger); }
@@ -3962,8 +3966,8 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   border-radius: var(--r-md);
   background: var(--bg-inset);
 }
-.check-dc span { display: block; font-size: var(--fs-2xs); color: var(--text-dim); letter-spacing: 0.1em; }
-.check-dc strong { font-size: var(--fs-2xl); color: var(--gold); line-height: 1.1; }
+.check-dc span { display: block; font-size: var(--fs-2xs); color: var(--text-dim); letter-spacing: var(--ls-caps); }
+.check-dc strong { font-size: var(--fs-2xl); color: var(--gold); line-height: var(--lh-display); }
 
 .check-body {
   display: grid;
@@ -3973,7 +3977,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 }
 .check-body h3, .check-boosts h3 {
   font-size: var(--fs-2xs);
-  letter-spacing: 0.08em;
+  letter-spacing: var(--ls-caps);
   text-transform: uppercase;
   color: var(--text-dim);
   border-bottom: 1px solid var(--border);
@@ -3995,10 +3999,10 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   border-top: 1px solid var(--border);
   color: var(--text);
 }
-.mod-total em { color: var(--gold); font-weight: 700; }
+.mod-total em { color: var(--gold); font-weight: var(--fw-bold); }
 .mod-dc em { color: var(--gold-dim); }
 
-.check-chance-value { font-size: var(--fs-3xl); color: var(--gold); line-height: 1.1; }
+.check-chance-value { font-size: var(--fs-3xl); color: var(--gold); line-height: var(--lh-display); }
 .check-chance-bar {
   height: 8px;
   border-radius: var(--r-md);
@@ -4039,7 +4043,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .boost-name { color: var(--gold); }
 .boost-detail { font-size: var(--fs-2xs); }
 .boost-adds { font-family: var(--mono); color: var(--accent); }
-.boost-cost { font-size: var(--fs-2xs); text-transform: uppercase; letter-spacing: 0.05em; }
+.boost-cost { font-size: var(--fs-2xs); text-transform: uppercase; letter-spacing: var(--ls-wide); }
 .cost-free { color: var(--success); }
 .cost-use { color: var(--gold-dim); }
 .cost-concentration { color: var(--warn); }
@@ -4073,15 +4077,15 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 }
 .d20-face {
   font-size: 2.6rem;
-  font-weight: 700;
+  font-weight: var(--fw-bold);
   color: var(--gold);
   font-family: var(--mono);
-  line-height: 1;
+  line-height: var(--lh-flush);
 }
 .d20-tag {
   font-size: var(--fs-2xs);
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: var(--ls-caps);
   color: var(--text-dim);
 }
 .d20.landed { animation: die-land 0.3s ease-out; }
@@ -4111,8 +4115,8 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .throw-verdict {
   margin-top: var(--sp-14);
   font-size: var(--fs-xl);
-  font-weight: 700;
-  letter-spacing: 0.04em;
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-wide);
   text-shadow: var(--th-2);
 }
 .verdict-success { color: var(--success); }
@@ -4243,7 +4247,9 @@ body.in-combat .cbt-top {
 }
 .ribbon-slot.is-out { opacity: 0.35; filter: grayscale(1); }
 /* Shrink-wrapped to the token so the badge below can hang off the circle
-   rather than off the corner of a box wider than it. */
+   rather than off the corner of a box wider than it. `line-height: 0` is
+   the descender trick, not a leading: an inline-block holding one <img>
+   is otherwise a few pixels taller than the image. */
 .ribbon-art { position: relative; display: inline-block; line-height: 0; }
 .ribbon-slot img {
   display: block;
@@ -4270,7 +4276,7 @@ body.in-combat .cbt-top {
   padding: 0 var(--sp-2);
   font-family: var(--mono);
   font-size: var(--fs-2xs);
-  line-height: 1.35;
+  line-height: var(--lh-snug);
   text-align: center;
   color: var(--text);
   background: rgba(0, 0, 0, 0.82);
@@ -4345,7 +4351,7 @@ body.in-combat .cbt-top {
   margin: 0;
   align-self: stretch;
   font-size: var(--fs-2xs);
-  letter-spacing: 0.1em;
+  letter-spacing: var(--ls-caps);
   text-transform: uppercase;
   color: var(--text-dim);
   /* Stays put while its own side scrolls, so a long enemy list never leaves
@@ -4481,7 +4487,7 @@ body.bm-pan-ready .battlemap { cursor: grab; }
   font-size: 0.34px;
   fill: var(--bg);
   text-anchor: middle;
-  font-weight: 700;
+  font-weight: var(--fw-bold);
   pointer-events: none;
 }
 .bm-path { pointer-events: none; }
@@ -4519,7 +4525,7 @@ body.bm-pan-ready .battlemap { cursor: grab; }
 .bm-float text {
   font-family: var(--mono);
   font-size: 0.5px;
-  font-weight: 700;
+  font-weight: var(--fw-bold);
   text-anchor: middle;
   fill: var(--text);
   /* Legible over a portrait, a wall or bare floor without a panel behind it.
@@ -4706,8 +4712,8 @@ body.bm-pan-ready .battlemap { cursor: grab; }
  * and cannot be cancelled by a border colour, so both facts stay readable at
  * once: red says you can reach it, gold says you are pointing at it. */
 .cbt-card.is-selected {
-  outline: 2px solid var(--gold);
-  outline-offset: 2px;
+  outline: var(--focus-ring);
+  outline-offset: var(--focus-offset);
   box-shadow: var(--sh-glow);
 }
 /* And a mark on the card itself, for anyone who cannot pick gold from red.
@@ -4802,7 +4808,7 @@ body.bm-pan-ready .battlemap { cursor: grab; }
 .slot-grp > b {
   font-family: var(--mono);
   font-size: var(--fs-2xs);
-  font-weight: 600;
+  font-weight: var(--fw-semibold);
   color: var(--text-faint);
 }
 /* Hollow is spent, filled is yours. Both are drawn: a level whose slots are
@@ -4848,7 +4854,7 @@ body.bm-pan-ready .battlemap { cursor: grab; }
   gap: var(--sp-2);
   font-size: var(--fs-2xs);
   color: var(--danger);
-  letter-spacing: 0.04em;
+  letter-spacing: var(--ls-wide);
 }
 .cbt-death.is-stable { color: var(--success); text-transform: uppercase; }
 .cbt-death b { color: var(--text-dim); margin: 0 var(--sp-2); }
@@ -4966,7 +4972,7 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
 .cbt-effect p {
   margin: var(--sp-2) 0 0;
   font-size: var(--fs-2xs);
-  line-height: 1.35;
+  line-height: var(--lh-snug);
   color: var(--text-dim);
 }
 
@@ -4999,7 +5005,7 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
   gap: var(--sp-6);
   font-size: var(--fs-2xs);
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: var(--ls-wide);
 }
 /* In the header now. `align-self` because that row aligns on the baseline for
    its text and a row of pills has no useful one; `margin-left: 0` because the
@@ -5038,7 +5044,7 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
 .sheet-slots .slot-group { gap: var(--sp-4); }
 .sheet-slots .slot-dot { width: 10px; height: 10px; }
 .slot-count { margin-left: var(--sp-4); font-size: var(--fs-2xs); color: var(--text-dim); }
-.waiting { color: var(--text-dim); text-transform: none; letter-spacing: 0; }
+.waiting { color: var(--text-dim); text-transform: none; letter-spacing: var(--ls-normal); }
 
 /* --- The action bar ----------------------------------------------------
    Icon slots rather than a row of words, which is what every game with a
@@ -5201,7 +5207,7 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
   top: 0;
   transform: translateX(-50%);
   z-index: 5;            /* local: over the card the number rises from */
-  font-weight: 700;
+  font-weight: var(--fw-bold);
   font-size: var(--fs-sm);
   white-space: nowrap;
   pointer-events: none;
@@ -5311,7 +5317,7 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
 .levelup-eyebrow {
   margin: 0;
   font-size: var(--fs-2xs);
-  letter-spacing: 0.22em;
+  letter-spacing: var(--ls-eyebrow);
   text-transform: uppercase;
   color: var(--gold);
 }
@@ -5322,7 +5328,7 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
 .levelup-step h4 {
   margin: var(--sp-16) 0 var(--sp-6);
   font-size: var(--fs-2xs);
-  letter-spacing: 0.12em;
+  letter-spacing: var(--ls-caps-wide);
   text-transform: uppercase;
   color: var(--text-faint);
 }
@@ -5415,7 +5421,7 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
 .levelup-feat input,
 .levelup-spell input { grid-row: 1 / span 3; align-self: start; margin-top: var(--sp-4); }
 .levelup-feat-name,
-.levelup-spell-name { font-weight: 600; }
+.levelup-spell-name { font-weight: var(--fw-semibold); }
 .levelup-feat-text,
 .levelup-spell-text { grid-column: 2; font-size: var(--fs-xs); color: var(--text-dim); }
 .levelup-spell-school { grid-column: 2; font-size: var(--fs-2xs); color: var(--text-faint); }
@@ -5428,7 +5434,7 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
 .levelup-feat-req {
   grid-column: 2;
   font-size: var(--fs-2xs);
-  letter-spacing: 0.04em;
+  letter-spacing: var(--ls-wide);
   text-transform: uppercase;
   color: var(--text-faint);
 }
@@ -5472,7 +5478,7 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
 .levelup-asi-panel .levelup-note { margin-bottom: var(--sp-10); }
 
 /* --- the summary ------------------------------------------------------- */
-.levelup-summary { margin: var(--sp-12) 0 0; padding-left: var(--sp-16); line-height: 1.7; }
+.levelup-summary { margin: var(--sp-12) 0 0; padding-left: var(--sp-16); line-height: var(--lh-prose); }
 .levelup-summary strong { color: var(--gold-bright); }
 
 /* ===========================================================================
@@ -5500,7 +5506,7 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
 .auth-eyebrow {
   margin: 0;
   font-size: var(--fs-2xs);
-  letter-spacing: 0.22em;
+  letter-spacing: var(--ls-eyebrow);
   text-transform: uppercase;
   color: var(--gold);
 }
@@ -5565,7 +5571,7 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
 .admin-table th {
   text-align: left;
   font-size: var(--fs-2xs);
-  letter-spacing: 0.12em;
+  letter-spacing: var(--ls-caps-wide);
   text-transform: uppercase;
   color: var(--text-faint);
   padding: 0 var(--sp-10) var(--sp-8);
@@ -5583,7 +5589,7 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
 .admin-actions { display: flex; gap: var(--sp-6); justify-content: flex-end; }
 .admin-error { min-height: 1.3em; color: var(--danger); font-size: var(--fs-sm); }
 .hero-who { margin: var(--sp-14) 0 0; font-size: var(--fs-xs); color: var(--text-faint); }
-.hero-who strong { color: var(--text-dim); font-weight: 600; }
+.hero-who strong { color: var(--text-dim); font-weight: var(--fw-semibold); }
 
 /* ===========================================================================
    Content editors
@@ -5626,13 +5632,13 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
 }
 .ce-row:hover { background: var(--bg-raised); }
 .ce-row.is-on { background: var(--gold-well); border-color: var(--gold); }
-.ce-row-name { font-weight: 600; }
+.ce-row-name { font-weight: var(--fw-semibold); }
 .ce-row-sub { font-size: var(--fs-xs); color: var(--text-faint); }
 .ce-row-tags { display: flex; gap: var(--sp-6); flex-wrap: wrap; }
 .ce-row-tags em {
   font-style: normal;
   font-size: var(--fs-2xs);
-  letter-spacing: 0.06em;
+  letter-spacing: var(--ls-wide);
   text-transform: uppercase;
   color: var(--gold-dim);
   border: 1px solid var(--border-soft);
@@ -5648,11 +5654,11 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
   min-height: 20rem;
 }
 .ce-title { margin: 0 0 var(--sp-16); font-size: var(--fs-lg); }
-.ce-title code { font-size: var(--fs-2xs); color: var(--text-faint); font-weight: 400; }
+.ce-title code { font-size: var(--fs-2xs); color: var(--text-faint); font-weight: var(--fw-normal); }
 .ce-sub {
   margin: var(--sp-24) 0 var(--sp-10);
   font-size: var(--fs-2xs);
-  letter-spacing: 0.14em;
+  letter-spacing: var(--ls-caps-wide);
   text-transform: uppercase;
   color: var(--text-faint);
   border-top: 1px solid var(--border-soft);
@@ -5708,7 +5714,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: var(--sp-32); }
   justify-content: flex-end;
 }
 .site-who { color: var(--text-faint); margin-right: auto; }
-.site-who strong { color: var(--text-dim); font-weight: 600; }
+.site-who strong { color: var(--text-dim); font-weight: var(--fw-semibold); }
 .site-bar a { color: var(--text-dim); }
 .site-bar a:hover { color: var(--gold); text-decoration: none; }
 
@@ -5733,7 +5739,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: var(--sp-32); }
 .hero-home .hero-eyebrow {
   font-family: var(--font-ui);
   font-size: var(--fs-2xs);
-  letter-spacing: 0.22em;
+  letter-spacing: var(--ls-eyebrow);
   text-transform: uppercase;
   color: var(--text-faint);
   margin: 0 0 var(--sp-14);
@@ -5745,9 +5751,9 @@ body.home-page > main { flex: 1 0 auto; padding-top: var(--sp-32); }
    a transparent colour to show through, so the glow moves to a drop-shadow —
    a text-shadow would be clipped away with the fill. */
 .hero-home h1 {
-  font-size: clamp(2.4rem, 6vw, 3.6rem);
-  line-height: 1.05;
-  letter-spacing: 0.02em;
+  font-size: var(--fs-4xl);
+  line-height: var(--lh-display);
+  letter-spacing: var(--ls-display);
   margin: 0;
   background: linear-gradient(178deg, var(--gold-bright) 12%, var(--gold) 48%, var(--gold-dim) 100%);
   -webkit-background-clip: text;
@@ -5761,7 +5767,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: var(--sp-32); }
   max-width: 44rem;
   color: var(--text-dim);
   font-size: var(--fs-md);
-  line-height: 1.6;
+  line-height: var(--lh-prose);
   margin: 0 auto;
 }
 
@@ -5815,7 +5821,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: var(--sp-32); }
 .section-head h2 {
   margin: 0;
   font-size: var(--fs-lg);
-  letter-spacing: 0.06em;
+  letter-spacing: var(--ls-wide);
 }
 .section-hint {
   margin: 0;
@@ -5885,7 +5891,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: var(--sp-32); }
    outside the padding box where the second column's edge cuts it off. */
 .howto {
   color: var(--text-dim);
-  line-height: 1.6;
+  line-height: var(--lh-prose);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -5916,7 +5922,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: var(--sp-32); }
   color: var(--ornament-bright);
   font-family: var(--font-ui);
   font-size: var(--fs-xs);
-  font-weight: 600;
+  font-weight: var(--fw-semibold);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -5949,11 +5955,11 @@ body.home-page > main { flex: 1 0 auto; padding-top: var(--sp-32); }
 }
 .char-card:last-child { margin-bottom: 0; }
 .char-card .char-body { min-width: 0; flex: 1; }
-.char-card .name { color: var(--gold); font-weight: 600; line-height: 1.3; }
+.char-card .name { color: var(--gold); font-weight: var(--fw-semibold); line-height: var(--lh-snug); }
 .char-card .sub {
   font-size: var(--fs-xs);
   color: var(--text-dim);
-  line-height: 1.45;
+  line-height: var(--lh-snug);
   /* No bottom margin: it used to hold the buttons off the text below it, and
      they are in the corner now — left in, it is trailing space inside a card
      whose height is set by the portrait beside it. */
@@ -6004,7 +6010,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: var(--sp-32); }
   min-height: 12rem;
   color: var(--text-faint);
   font-size: var(--fs-xs);
-  line-height: 1.5;
+  line-height: var(--lh-normal);
   /* Faint enough that a shelf with one module on it does not read as a shelf
      with two things missing off it. */
   opacity: 0.55;
@@ -6091,8 +6097,8 @@ body.home-page > main { flex: 1 0 auto; padding-top: var(--sp-32); }
   font-family: var(--font-display);
   color: var(--gold);
   font-size: var(--fs-lg);
-  font-weight: 600;
-  line-height: 1.2;
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-tight);
   /* Legible over whatever the bottom of the painting happens to be, without a
      box behind it — same trick the map labels use. */
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.95), 0 0 12px rgba(0, 0, 0, 0.8);
@@ -6101,7 +6107,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: var(--sp-32); }
 .module-levels {
   font-family: var(--font-ui);
   font-size: var(--fs-2xs);
-  letter-spacing: 0.09em;
+  letter-spacing: var(--ls-caps);
   text-transform: uppercase;
   color: var(--text-dim);
   white-space: nowrap;
@@ -6125,19 +6131,19 @@ body.home-page > main { flex: 1 0 auto; padding-top: var(--sp-32); }
   color: var(--gold);
   font-family: var(--font-ui);
   font-size: var(--fs-2xs);
-  letter-spacing: 0.04em;
+  letter-spacing: var(--ls-wide);
 }
 
 .module-body { padding: var(--sp-14) var(--sp-20) 0; }
 .module-blurb {
   color: var(--text-dim);
-  line-height: 1.55;
+  line-height: var(--lh-normal);
   margin: 0;
 }
 .module-credit {
   font-size: var(--fs-2xs);
   color: var(--text-faint);
-  line-height: 1.45;
+  line-height: var(--lh-snug);
   margin: var(--sp-12) 0 0;
 }
 
@@ -6168,7 +6174,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: var(--sp-32); }
   color: var(--text-dim);
   max-width: 46rem;
   margin: 0 auto;
-  line-height: 1.5;
+  line-height: var(--lh-normal);
 }
 .hero-sub:empty { display: none; }   /* a module with no blurb leaves no gap */
 .hero-actions {
@@ -6241,7 +6247,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: var(--sp-32); }
 
 /* Bloodied. The list is where you notice somebody needs a rest, and a number
    that is only ever grey does not tell you. */
-.char-hp.is-hurt { color: var(--danger); font-weight: 600; }
+.char-hp.is-hurt { color: var(--danger); font-weight: var(--fw-semibold); }
 
 /* The grid's own gap does the spacing; .panel's bottom margin would add to it
    and only on some rows. */
@@ -6259,7 +6265,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: var(--sp-32); }
 .ce-module {
   margin: var(--sp-32) 0 var(--sp-4);
   font-size: var(--fs-xs);
-  letter-spacing: 0.08em;
+  letter-spacing: var(--ls-caps);
   color: var(--gold);
 }
 .ce-module + .ce-sub { border-top: 0; padding-top: 0; margin-top: var(--sp-6); }
@@ -6279,9 +6285,9 @@ body.home-page > main { flex: 1 0 auto; padding-top: var(--sp-32); }
 /* The dialogue document. Monospace because it is JSON and the indentation is
    the only structure a reader has to go on. */
 .ce-code {
-  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-family: var(--mono);
   font-size: var(--fs-xs);
-  line-height: 1.5;
+  line-height: var(--lh-normal);
   white-space: pre;
   overflow-x: auto;
   tab-size: 2;
@@ -6507,7 +6513,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: var(--sp-32); }
 .dw-text {
   max-width: 62ch;
   font-size: var(--fs-md);
-  line-height: 1.65;
+  line-height: var(--lh-prose);
   color: var(--text);
 }
 .dw-text p { margin: 0 0 var(--sp-14); }
@@ -6697,7 +6703,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: var(--sp-32); }
   cursor: pointer;
   font: inherit;
   font-size: var(--fs-2xs);
-  letter-spacing: 0.06em;
+  letter-spacing: var(--ls-wide);
   text-transform: uppercase;
   /* Held back until the row is under the pointer: on a list of sixty people a
      button on every line reads as sixty things to do. */

@@ -115,12 +115,26 @@ def scan():
             for tok in set(JS_INLINE.findall(js)):
                 runtime.setdefault(tok, name + ' (inline style)')
 
+    # Usage, across every SHIPPED stylesheet — not style.css alone. The first
+    # draft read only style.css and tokens.css, and reported as unread a dozen
+    # tokens that sheet-print.css and adventure-print.css use 148 times
+    # between them. An orphan list that is wrong in that direction is worse
+    # than none: it invites deleting a token the print sheets depend on.
+    #
+    # tools/ is deliberately NOT counted. system_preview.html reads nearly
+    # every token in the file because its job is to DRAW the scale, so
+    # counting it would empty the orphan list by construction. A token whose
+    # only reader is the catalogue of tokens is still a token nothing uses.
     used = {}
-    for css_name, css in (('style.css', style_css), ('tokens.css', tokens_css)):
+    for name in sorted(os.listdir(CSS_DIR)):
+        if not name.endswith('.css'):
+            continue
+        css = strip_comments(read(os.path.join(CSS_DIR, name)))
         for m in USE.finditer(css):
-            rec = used.setdefault(m.group(1), {'n': 0, 'fallback': False})
+            rec = used.setdefault(m.group(1), {'n': 0, 'fallback': False, 'where': set()})
             rec['n'] += 1
             rec['fallback'] |= bool(m.group(2))
+            rec['where'].add(name)
 
     phantoms = {
         k: v for k, v in used.items()
