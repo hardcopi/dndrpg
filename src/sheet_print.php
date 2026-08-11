@@ -42,7 +42,7 @@ function sheet_refuse(int $status, string $heading, string $detail): void
     echo '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">'
         . '<meta name="viewport" content="width=device-width, initial-scale=1">'
         . '<title>No such sheet — Rivermark Chronicles</title>'
-        . '<link rel="stylesheet" href="assets/css/style.css"></head>'
+        . '<link rel="stylesheet" href="<?= asset('assets/css/style.css') ?>"></head>'
         . '<body class="auth-page"><main class="auth-card">'
         . '<h1>' . htmlspecialchars($heading, ENT_QUOTES) . '</h1>'
         . '<p class="auth-sub">' . htmlspecialchars($detail, ENT_QUOTES) . '</p>'
@@ -98,12 +98,6 @@ function fmt_mod(int $value): string
     return sprintf('%+d', $value);
 }
 
-/** Cache-bust an asset by its own modification time — as game.php does. */
-function asset(string $path): string
-{
-    $full = __DIR__ . '/' . $path;
-    return $path . '?v=' . (is_file($full) ? filemtime($full) : '0');
-}
 
 /**
  * The bust portrait, or null if this character has no art on disk.

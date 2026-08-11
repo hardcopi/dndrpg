@@ -5,17 +5,6 @@ if (!session_character_id()) {
     // Allow landing; JS will redirect if no session
 }
 
-/**
- * Cache-bust an asset by its own modification time.
- *
- * filemtime rather than a hand-bumped constant because the one thing certain
- * about a version constant is that somebody will forget it.
- */
-function asset(string $path): string
-{
-    $full = __DIR__ . '/' . $path;
-    return $path . '?v=' . (is_file($full) ? filemtime($full) : '0');
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">

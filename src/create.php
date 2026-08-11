@@ -8,7 +8,7 @@ require_signed_in_page();
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Create Character — Rivermark Chronicles</title>
-  <link rel="stylesheet" href="assets/css/style.css?v=<?= filemtime(__DIR__ . '/assets/css/style.css') ?>">
+  <link rel="stylesheet" href="<?= asset('assets/css/style.css') ?>">
   <!-- Generated geometry for the 3D dice; see tools/gen_dice_css.py. -->
   <link rel="stylesheet" href="assets/css/dice.css?v=<?= filemtime(__DIR__ . '/assets/css/dice.css') ?>">
 </head>

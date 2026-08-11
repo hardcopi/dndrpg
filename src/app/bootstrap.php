@@ -163,3 +163,49 @@ function set_active_character(int $characterId, ?int $partyId = null): void
         $_SESSION['party_id'] = $partyId;
     }
 }
+
+/**
+ * Cache-bust an asset by its own modification time.
+ *
+ * filemtime rather than a hand-bumped constant because the one thing certain
+ * about a version constant is that somebody will forget it.
+ *
+ * This lived as three byte-identical copies — in game.php, sheet_print.php and
+ * adventure_print.php — while the other seven pages linked `style.css` with no
+ * version at all. That is not a tidiness point. The first deploy of the
+ * rebuilt interface went out and returning browsers went on using July's
+ * 47KB stylesheet, which has no rule for `.module-card`, `.rail-pane` or
+ * `.cbt-float` because those components did not exist when it was written: new
+ * markup, old paint. nginx sends no `Cache-Control` for CSS, only an ETag and
+ * a Last-Modified, so a browser falls back to heuristic freshness — roughly a
+ * tenth of the file's age — and a two-week-old stylesheet at an unchanging URL
+ * is not re-fetched for over a day.
+ *
+ * THE tokens.css CASE. style.css pulls the design tokens in with
+ * `@import url('tokens.css')`, and a relative @import resolves without the
+ * query string, so there is no URL for a caller to version. Folding tokens'
+ * mtime in here is the answer available without a build step: a change to the
+ * tokens alone still moves style.css's URL, and since both files are written
+ * by the same deploy their Last-Modified is the same minute, which leaves the
+ * import's heuristic freshness at nearly zero and the browser revalidates it.
+ * That is a strong mitigation rather than a guarantee — the guarantee is a
+ * `Cache-Control` header on the server, which is not in this repository.
+ *
+ * The @import stays regardless: thirteen benches under tools/ link style.css
+ * and nothing else, and it is what makes the stylesheet self-sufficient.
+ */
+function asset(string $path): string
+{
+    $root = dirname(__DIR__);
+    $full = $root . '/' . $path;
+    $v = is_file($full) ? filemtime($full) : 0;
+
+    if (str_ends_with($path, 'assets/css/style.css')) {
+        $tokens = $root . '/assets/css/tokens.css';
+        if (is_file($tokens)) {
+            $v = max($v, filemtime($tokens));
+        }
+    }
+
+    return $path . '?v=' . $v;
+}

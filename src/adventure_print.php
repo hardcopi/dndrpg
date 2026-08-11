@@ -40,12 +40,6 @@ function esc($value): string
     return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
 }
 
-/** Cache-bust an asset by its own modification time — as game.php does. */
-function asset(string $path): string
-{
-    $full = __DIR__ . '/' . $path;
-    return $path . '?v=' . (is_file($full) ? filemtime($full) : '0');
-}
 
 /**
  * An image path, or null when there is no such file.
@@ -152,7 +146,7 @@ if ($moduleKey === '') {
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <title>Export an adventure — Rivermark Chronicles</title>
-      <link rel="stylesheet" href="assets/css/style.css">
+      <link rel="stylesheet" href="<?= asset('assets/css/style.css') ?>">
     </head>
     <body class="admin-page">
       <header class="admin-head">
@@ -198,7 +192,7 @@ if ($data === null) {
     http_response_code(404);
     echo '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">'
         . '<title>No such adventure — Rivermark Chronicles</title>'
-        . '<link rel="stylesheet" href="assets/css/style.css"></head>'
+        . '<link rel="stylesheet" href="<?= asset('assets/css/style.css') ?>"></head>'
         . '<body class="auth-page"><main class="auth-card">'
         . '<h1>No such adventure</h1>'
         . '<p class="auth-sub">There is no module with that key.</p>'
