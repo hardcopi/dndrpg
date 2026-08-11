@@ -243,6 +243,14 @@
   --pg-focus: #7a5c34;          /* the keyboard's mark: a wash and a casing */
   --pg-rock: #191008;           /* the stone the level is cut out of */
 
+  /* The dialogue panel's own ground — warm, unlike the cold chrome, because a
+     conversation is staged rather than administered. Two stops of a gradient,
+     named because the sticky speaker row on a phone has to repeat the top one
+     to stay opaque, and a second copy of a colour is how two copies come to
+     disagree. */
+  --dlg-panel-top: rgba(30, 23, 18, 0.98);
+  --dlg-panel-bottom: rgba(22, 17, 13, 0.99);
+
   /* A name has to stay readable over a road, a wall or another name, so it is
      drawn twice — `paint-order: stroke` puts a fat paper-coloured stroke under
      the fill. Six near-identical off-whites at three alphas were doing this;

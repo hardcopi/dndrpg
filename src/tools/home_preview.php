@@ -53,6 +53,19 @@ $body = substr($src, strpos($src, '<!DOCTYPE'));
    printed the remaining half of the expression as the signed-in user's name.
    A stray `?>` is loud; this was quiet, and sat in the account bar of the one
    page this bench is mostly used for. */
+/* Resolve `asset()` BEFORE the strip, rather than losing it to the strip.
+   
+   The pages emit `<link rel="stylesheet" href="<?= asset('assets/css/style.css') ?>">`
+   so the browser refetches the CSS when it changes. Stripped as PHP, that
+   leaves `href=""` — and a bench with no stylesheet does not look obviously
+   broken, it looks like a page whose layout regressed: every `hidden` element
+   gains a box, and the snapshot's element count silently rises. Which is how
+   it was found: 74 elements became 77.
+   
+   The bench does not want the version, only the path, so the call is reduced
+   to its argument. Nothing else here executes PHP and this does not either. */
+$body = preg_replace("/<\\?=\\s*asset\\(\\s*'([^']+)'\\s*\\)\\s*\\?>/", '$1', $body);
+
 $body = preg_replace('/<\?(?:php\b|=).*?\?>/s', '', $body);
 
 /* Nothing may survive that. A page that grows a third opening form, or a

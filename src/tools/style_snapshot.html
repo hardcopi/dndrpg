@@ -81,6 +81,13 @@ const BENCHES = [
      each of them, paused, so the duration scale is fingerprinted like
      everything else. Its own verdict is about whether they resolve at all. */
   ['motion_probe.html', 1440],
+  /* The theatre, at the width the fault was in. Everything else here is
+     measured at 1440 because this is a value fingerprint rather than a layout
+     probe — but the dialogue panel's whole bug was a column that never changed
+     with the viewport, and a bench that only ever renders it wide would have
+     gone on agreeing with itself. */
+  ['dialogue_preview.html', 1440],
+  ['dialogue_preview.html?case=long', 430],
 ];
 
 /*

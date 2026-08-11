@@ -3737,7 +3737,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   max-height: min(90vh, calc(100vh - 3rem));
   padding: var(--sp-20) var(--sp-20);
   overflow-y: auto;
-  background: linear-gradient(180deg, rgba(30, 23, 18, 0.98), rgba(22, 17, 13, 0.99));
+  background: linear-gradient(180deg, var(--dlg-panel-top), var(--dlg-panel-bottom));
   border: 1px solid var(--gold-dim);
   border-radius: var(--r-lg);
   box-shadow: var(--sh-4);
@@ -3776,6 +3776,65 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 /* Seeded NPCs with no painted bust fall back to their map sprite. */
 .dlg-bust.is-sprite { object-fit: contain; object-position: center bottom; }
 .dlg-name { margin-top: var(--sp-6); color: var(--gold); font-size: var(--fs-md); font-family: var(--font-display); }
+
+/*
+ * The theatre on a phone.
+ *
+ * `.dlg-panel` was `168px minmax(0, 1fr)` at EVERY width — the portrait column
+ * a fixed 168px whatever the viewport, and the words given whatever was left.
+ * At 360px what is left is 82 pixels: 360 less the theatre's 48 of padding,
+ * the panel's 40, the 20 gap and the 168 portrait. About ten characters. One
+ * word a line, for a screen whose entire purpose is a paragraph of speech.
+ *
+ * It survived because the theatre had no bench. Every other screen in this
+ * game has a preview and a conversation needs an NPC, a quest state and a live
+ * session to reach, so nobody had ever looked at one narrow. It is
+ * tools/dialogue_preview.html now, and that page prints the character count.
+ *
+ * Below the fold the panel is one column and the speaker becomes a ROW: a
+ * small bust beside the name, still sticky at the top of the scroll so you can
+ * see who is talking, with the script full width beneath. Stacking the
+ * portrait at its full 168x210 instead would have spent two thirds of a phone
+ * screen before the first word — the same fault in a different direction.
+ *
+ * 760px is the shell's own fold, reused rather than tuned. The measure argues
+ * for about 660 (below that the two-column cannot give 45 characters), but one
+ * fold in an interface is easier to hold in the head than two, and the stacked
+ * layout is no worse at 700px than the split one.
+ */
+@media (max-width: 760px) {
+  /* The theatre's own padding is a frame around the panel, and on a phone it
+     is 48px of the 360 spent on air outside the thing being read. Half of it
+     back is four more characters a line. */
+  .dialogue-theatre { padding: var(--sp-12); }
+
+  .dlg-panel {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--sp-12);
+    padding: var(--sp-12);
+  }
+
+  /* Sticky, and therefore opaque: the panel's own gradient starts here, so
+     lines scrolling underneath do not show through the name. */
+  .dlg-speaker {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas: "bust name" "bust role";
+    align-items: center;
+    gap: 0 var(--sp-10);
+    text-align: left;
+    padding: var(--sp-2) 4.25rem var(--sp-8) 0;   /* the right is .dlg-close's clearance */
+    background: var(--dlg-panel-top);
+    border-bottom: 1px solid var(--border-soft);
+  }
+  .dlg-bust { grid-area: bust; width: 56px; height: 70px; }
+  .dlg-name { grid-area: name; margin-top: 0; }
+  .dlg-role { grid-area: role; }
+
+  /* The line no longer needs to dodge the close button: it is below the
+     speaker row now, and that row is carrying the clearance. */
+  .dlg-line { padding-right: 0; }
+}
 .dlg-role { color: var(--text-dim); font-size: var(--fs-2xs); }
 
 .dlg-script { min-width: 0; display: flex; flex-direction: column; }

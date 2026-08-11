@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<!--
+  The dialogue theatre, with no game behind it.
+
+  WHY THIS EXISTS
+
+  The theatre had no bench at all, and that is how a fixed 168px portrait
+  column survived into production untouched by any responsive rule. `.dlg-panel`
+  is `grid-template-columns: 168px minmax(0, 1fr)` at EVERY width. On a 360px
+  phone the arithmetic is:
+
+      360  viewport
+      -48  the theatre's own padding, both sides
+      -40  the panel's padding, both sides
+      -20  the grid gap
+     -168  the portrait
+     ----
+       84  left for the words
+
+  Eighty-four pixels is about ten characters a line, which is what "the text is
+  too thin to read" means. Nothing measured it because nothing drew it: every
+  other screen in this game has a preview, and a conversation needs an NPC, a
+  quest state and a live session to reach.
+
+  The markup is the markup ui-dialog.js builds — same classes, same nesting,
+  copied from the template at its line 309 rather than approximated, because a
+  bench whose boxes differ from the real ones measures its own layout.
+
+    /tools/dialogue_preview.html            a speech, with choices
+    /tools/dialogue_preview.html?case=long  the longest authored beat
+    /tools/dialogue_preview.html?case=short a one-line exchange
+
+  Resize the window; the panel is the whole point. A drawing bench: it reads
+  nothing and writes nothing.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <base href="../">
+  <title>Dialogue preview — the theatre at any width</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    .bench-note {
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: 2147483647;
+      margin: 0; padding: 6px 10px; background: #0b0d10; color: #98a1ae;
+      border-top: 1px solid #3a424e;
+      font: 11px/1.5 ui-monospace, SFMono-Regular, monospace;
+    }
+    .bench-note b { color: #e8c979; }
+  </style>
+</head>
+<body class="game-page">
+
+<div class="dialogue-theatre">
+  <div class="dlg-panel">
+    <div class="dlg-speaker">
+      <img class="dlg-bust" alt="" src="assets/images/npcs/quarry_foreman_bust.png">
+      <div class="dlg-name">Foreman Aldric</div>
+      <div class="dlg-role">Quarry Foreman</div>
+    </div>
+    <div class="dlg-script">
+      <p class="dlg-line" id="line" aria-live="polite"></p>
+      <div class="dlg-advance" id="dlg-advance"></div>
+      <div class="dlg-choices" id="dlg-choices"></div>
+    </div>
+    <button type="button" class="dlg-close btn btn-small" data-close
+            aria-label="End the conversation">Esc</button>
+  </div>
+</div>
+
+<p class="bench-note" id="note"></p>
+
+<script>
+const CASES = {
+  normal: {
+    line: 'The cut stopped paying eleven days ago. Not slowed — stopped. We put a '
+        + 'shift down the eastern face on the Tuesday and they came back up with '
+        + 'nothing but water in the buckets, and Hesper swears she heard the wheel '
+        + 'turning somewhere below her, which is not a thing that can be true.',
+    choices: ['Ask the foreman what changed', 'Ask about Hesper', 'Say you will look at the eastern face', 'Leave it for now'],
+  },
+  long: {
+    line: 'I will tell you what I told the priory, and you may make of it what they '
+        + 'did not. The boundary stones on the haul-road have been moved. Not '
+        + 'toppled, not broken — MOVED, and set again, square and level, by hands '
+        + 'that knew the trade. A stone that size takes four men and a sledge, and '
+        + 'nobody on my books signed out a sledge. So either somebody is working my '
+        + 'road at night for reasons I cannot fathom, or the road is being surveyed '
+        + 'by somebody who does not need a sledge, and I would rather it were the '
+        + 'first. Either way the Concern will hear of it before the month turns, '
+        + 'and then it will not be my problem, it will be everyone’s.',
+    choices: ['Who else knows about the stones?', 'Offer to walk the haul-road tonight', 'Ask what the Concern would do', 'Say nothing'],
+  },
+  short: { line: 'Aye?', choices: ['Ask about the quarry', 'Leave'] },
+};
+
+const which = new URLSearchParams(location.search).get('case') || 'normal';
+const data = CASES[which] || CASES.normal;
+document.getElementById('line').textContent = data.line;
+document.getElementById('dlg-choices').innerHTML = data.choices
+  .map((c, i) => `<button type="button" class="dlg-choice">
+      <span class="dlg-key">${i + 1}</span><span class="dlg-label">${c}</span></button>`)
+  .join('');
+
+/* The measurement the bench exists for: how much room the words actually get.
+   Reported rather than eyeballed, because "too thin" is a number. */
+function measure() {
+  const script = document.querySelector('.dlg-script');
+  const bust = document.querySelector('.dlg-bust');
+  const panel = document.querySelector('.dlg-panel');
+  const w = Math.round(script.getBoundingClientRect().width);
+  const ch = Math.round(w / parseFloat(getComputedStyle(script).fontSize) * 1.9);
+  document.getElementById('note').innerHTML =
+    `case <b>${which}</b> &middot; viewport <b>${window.innerWidth}px</b>`
+    + ` &middot; panel <b>${Math.round(panel.getBoundingClientRect().width)}px</b>`
+    + ` &middot; portrait <b>${Math.round(bust.getBoundingClientRect().width)}px</b>`
+    + ` &middot; text column <b>${w}px</b> (~${ch} characters)`
+    + (ch < 30 ? ' &middot; <b>TOO NARROW</b> — prose wants 45–75' : '');
+}
+addEventListener('resize', measure);
+addEventListener('load', () => setTimeout(measure, 30));
+</script>
+</body>
+</html>
