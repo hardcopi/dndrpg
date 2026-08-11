@@ -41,6 +41,15 @@
 
     <h2>A barbarian, two rages left</h2>
     <div class="cbt-bar"><div class="cbt-actions" id="bar-barb"></div></div>
+
+    <h2>Armed, waiting for the second click</h2>
+    <p class="note">Dodge, Dash, Disengage and the bonus actions spend the turn the
+      instant they land and there is no undo in a fight, so they arm first. The
+      state has to read as a CHANGE while the pointer is still sitting on the
+      slot — that is why it adds a ring rather than only warming the border the
+      way hover does. Every bar on this page is live: click one and it arms,
+      click again and it clears, or wait three seconds and it forgets.</p>
+    <div class="cbt-bar"><div class="cbt-actions" id="bar-armed"></div></div>
   </div>
 
   <script>
@@ -69,7 +78,8 @@
 
   function slotHtml(b) {
     if (b.sep) return '<span class="act-sep" aria-hidden="true"></span>';
-    const cls = ['act-slot', b.bonus ? 'is-bonus' : '', b.ok ? '' : 'is-closed'].filter(Boolean).join(' ');
+    const cls = ['act-slot', b.bonus ? 'is-bonus' : '', b.ok ? '' : 'is-closed',
+      b.armed ? 'is-armed' : ''].filter(Boolean).join(' ');
     return `<button type="button" class="${cls}" data-act="${esc(b.key)}"
       ${b.ok ? '' : 'disabled'}
       data-label="${esc(b.label)}" data-why="${esc(b.why)}" aria-label="${esc(b.label)}">
@@ -111,7 +121,25 @@
     { key: 'end_turn', label: 'End turn', icon: 'i-hourglass', why: 'Pass to the next in the order' },
   ];
 
-  for (const [id, spec] of [['bar-all', ROGUE], ['bar-spent', SPENT], ['bar-barb', BARB]]) {
+  // The same set ui-combat.js keeps, transcribed for the same reason showTip is.
+  const ARM_FIRST = new Set(['dash', 'dodge', 'disengage', 'surge', 'channel', 'divine_sense', 'bonus']);
+  const ARMED = ROGUE.map((b) => (b.key === 'dodge' ? { ...b, armed: true } : b));
+
+  let armTimer = null;
+  function disarmSlot(el) {
+    if (!el || !el.classList.contains('is-armed')) return;
+    el.classList.remove('is-armed');
+    el.dataset.why = el.dataset.whyWas || '';
+    delete el.dataset.whyWas;
+  }
+  function disarmAll(scope) {
+    clearTimeout(armTimer);
+    armTimer = null;
+    scope.querySelectorAll('.act-slot.is-armed').forEach(disarmSlot);
+  }
+
+  for (const [id, spec] of [['bar-all', ROGUE], ['bar-spent', SPENT], ['bar-barb', BARB],
+                            ['bar-armed', ARMED]]) {
     const box = document.getElementById(id);
     box.innerHTML = spec.map((b) => slotHtml(b.sep ? b : { ok: true, ...b })).join('')
       + '<div class="act-tip" role="tooltip" aria-hidden="true"></div>';
@@ -131,6 +159,27 @@
       b.addEventListener('focus', show);
       b.addEventListener('mouseleave', () => tip.classList.remove('is-on'));
       b.addEventListener('blur', () => tip.classList.remove('is-on'));
+
+      // Arming, transcribed from armSlot()/disarmSlot()/disarmAll() so the
+      // interaction can be felt here rather than three clicks into a fight.
+      // Nothing fires — the bench has no engine to fire at — so the second
+      // click just clears it.
+      //
+      // Disarming goes through disarmSlot rather than stripping the class in
+      // place, which is not a stylistic preference: the first draft of this
+      // block removed the class directly when a SECOND slot stole the arming
+      // and left the confirm text sitting in `why`, so the disarmed slot went
+      // on asking a question it was no longer holding.
+      if (b.disabled || !ARM_FIRST.has(b.dataset.act)) return;
+      b.addEventListener('click', () => {
+        if (b.classList.contains('is-armed')) { disarmAll(box); return; }
+        disarmAll(box);
+        b.dataset.whyWas = b.dataset.why;
+        b.dataset.why = 'Click again to confirm — this spends it';
+        b.classList.add('is-armed');
+        show();
+        armTimer = setTimeout(() => disarmSlot(b), 3000);
+      });
     });
   }
   </script>

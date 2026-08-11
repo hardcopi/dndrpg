@@ -52,6 +52,31 @@
     'cunning_action:disengage': 'i-disengage',
   };
 
+  /**
+   * Slots that arm before they fire.
+   *
+   * Every other action on the bar has a step between the click and the spending:
+   * Attack, Grapple, Help and the rest refuse to fire without a target selected,
+   * and Cast and Item open a picker that can be closed. These have neither —
+   * they commit the instant they are clicked, and spend an action, a bonus
+   * action or a daily use doing it. There is no undo in a fight, so a stray
+   * click on Dodge cost the whole turn.
+   *
+   * One click arms the slot, the second commits it, and anything else puts it
+   * back: a different slot, a few seconds' pause, or the bar redrawing under it.
+   * Attack is deliberately NOT here — it is the verb the bar exists for, and
+   * making the common case cost two clicks to save the rare one is a bad trade.
+   */
+  const ARM_FIRST = new Set([
+    'dash', 'dodge', 'disengage', 'surge', 'channel', 'divine_sense', 'bonus',
+  ]);
+
+  /** How long an armed slot waits for its second click before forgetting. */
+  const ARM_MS = 3000;
+
+  /** The pending disarm, so that arming a second slot cancels the first's. */
+  let armTimer = null;
+
   const ui = {
     selected: null,   // cid the player is pointing at
     hovered: null,    // cid under the cursor, for the inspector
@@ -1160,13 +1185,22 @@
     if (manual) manual.onchange = () => { ui.manualRolls = manual.checked; };
 
     $$('[data-act]', bar).forEach((b) => {
-      b.onclick = () => onAction(b.dataset.act, actor, {
-        spells,
-        potions,
-        // A bonus action has to say WHICH one; everything else is unambiguous
-        // from the verb alone.
-        extra: b.dataset.extra ? JSON.parse(b.dataset.extra) : null,
-      });
+      b.onclick = () => {
+        // Arm on the first click, commit on the second — for the slots that
+        // would otherwise spend the turn on the way down. See ARM_FIRST.
+        if (ARM_FIRST.has(b.dataset.act) && !b.classList.contains('is-armed')) {
+          armSlot(b, bar);
+          return;
+        }
+        disarmAll(bar);
+        onAction(b.dataset.act, actor, {
+          spells,
+          potions,
+          // A bonus action has to say WHICH one; everything else is unambiguous
+          // from the verb alone.
+          extra: b.dataset.extra ? JSON.parse(b.dataset.extra) : null,
+        });
+      };
       // Hover AND focus, because a slot reachable by Tab has to explain itself
       // to somebody who never touches the mouse. `title` is deliberately gone:
       // the browser's own tooltip cannot be styled, cannot say why a thing is
@@ -1227,6 +1261,39 @@
     if (!tip) return;
     tip.classList.remove('is-on');
     tip.setAttribute('aria-hidden', 'true');
+  }
+
+  /**
+   * Hold a slot one click short of spending it. See ARM_FIRST.
+   *
+   * The tooltip is refreshed rather than left to the next hover: the pointer is
+   * already sitting on the slot that was just clicked, so no `mouseenter` is
+   * coming and the tip would otherwise go on offering the reason to press a
+   * button that is now asking a question. `why` and the label are swapped rather
+   * than rewritten, so disarming restores exactly what slotHtml wrote.
+   */
+  function armSlot(btn, scope) {
+    disarmAll(scope);
+    btn.dataset.whyWas = btn.dataset.why || '';
+    btn.dataset.why = 'Click again to confirm — this spends it';
+    btn.setAttribute('aria-label', `${btn.dataset.label || ''} — click again to confirm`);
+    btn.classList.add('is-armed');
+    showTip(btn);
+    armTimer = setTimeout(() => disarmSlot(btn), ARM_MS);
+  }
+
+  function disarmSlot(btn) {
+    if (!btn || !btn.classList.contains('is-armed')) return;
+    btn.classList.remove('is-armed');
+    btn.dataset.why = btn.dataset.whyWas || '';
+    delete btn.dataset.whyWas;
+    btn.setAttribute('aria-label', btn.dataset.label || '');
+  }
+
+  function disarmAll(scope) {
+    clearTimeout(armTimer);
+    armTimer = null;
+    $$('.act-slot.is-armed', scope || root()).forEach(disarmSlot);
   }
 
   function outcomeTitle(status) {
@@ -1388,8 +1455,10 @@
   /**
    * Send one action and play back what it did.
    *
-   * The log lines added by this action are printed and its `events` animated;
-   * the two are independent, which is the point of `events` existing. The
+   * The log lines added by this action are printed as its `events` animate,
+   * paced by the `log_at` mark each event carries. They remain independent in
+   * the way that matters — nothing here reads the prose, which is the point of
+   * `events` existing — but they no longer arrive as two separate batches. The
    * engine clears `events` at the start of every action, so whatever comes back
    * is exactly this action's doing.
    */
@@ -1407,8 +1476,13 @@
       ui.sheets.clear();
 
       const s = st();
-      (s?.log || []).slice(before).forEach((line) => G().log(line, '', 'combat'));
 
+      // The log rides along with the playback rather than preceding it. Printing
+      // this action's lines here dropped the whole round's prose in before the
+      // first swing animated — "the rat dies" while its bar was still visibly
+      // stepping down — which reads as the board lagging the log. playEvents
+      // flushes each line as the event it belongs to plays.
+      //
       // Deliberately NOT rendered before the playback.
       //
       // render() paints the board at the end of the whole exchange, so calling
@@ -1417,7 +1491,7 @@
       // happened. Four rats in one round read as one instant deletion. The old
       // board stays up, each blow steps the bar it belongs to, and the real
       // render happens once the dust has settled.
-      await playEvents(s?.events || []);
+      await playEvents(s?.events || [], s?.log || [], before);
 
       render();
       // Hit points move in combat state, not on the `characters` rows the rail
@@ -1500,12 +1574,32 @@
    * with regexes, so "Name hits Target" had to keep saying exactly that or the
    * hit stopped flashing; nothing here reads a word of prose.
    */
-  async function playEvents(events) {
-    if (!events.length) return;
+  async function playEvents(events, log, from) {
+    // The log is printed as the events play rather than in one batch before
+    // them. Each event carries `log_at` — how many lines the server's log held
+    // when it happened — so flushing up to that mark lands the line describing
+    // a blow on the same beat as the blow. Absolute indices on both sides: the
+    // server counts into the whole log and `sent` starts at this action's
+    // baseline, so the two agree without either doing arithmetic on the other.
+    //
+    // Optional, because the pending-check replay drives this with events alone.
+    const lines = log || [];
+    let sent = from || 0;
+    const flushTo = (mark) => {
+      const to = Math.min(mark == null ? lines.length : mark, lines.length);
+      for (; sent < to; sent++) G().log(lines[sent], '', 'combat');
+    };
+
+    if (!events.length) {
+      // No animation to interleave with, but the prose still has to arrive.
+      flushTo(null);
+      return;
+    }
     await loadClips();
     const reduced = G().reducedMotion();
 
     for (const ev of events) {
+      flushTo(ev.log_at);
       let wait = 0;
       switch (ev.type) {
         case 'cast':
@@ -1638,6 +1732,10 @@
       }
       if (!reduced) await G().sleep(Math.max(180, Math.min(wait, 520)));
     }
+
+    // Anything the engine said after its last event — a death, the round
+    // turning over — which has no beat of its own to ride in on.
+    flushTo(null);
   }
 
   /**

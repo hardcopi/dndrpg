@@ -2151,8 +2151,24 @@ class CombatEngine
         return null;
     }
 
+    /**
+     * Record one thing that happened, and where the log had got to when it did.
+     *
+     * `log_at` is how many lines the log held at the moment of the event. The
+     * client flushes up to that mark before playing the event, so a blow's
+     * description and the bar it steps arrive on the same beat — the whole
+     * round's prose used to be printed before the first animation started, which
+     * read as the log running ahead of the board.
+     *
+     * An INDEX, deliberately, not the line itself: playEvents' contract is that
+     * nothing in the client reads a word of the prose, and a count is a fact
+     * about the log rather than its content. Stamped here because this is the
+     * one place an event is ever appended — a mark left at each call site would
+     * be forty chances to forget one.
+     */
     private function emit(array $state, array $event): array
     {
+        $event['log_at'] = count($state['log'] ?? []);
         $state['events'][] = $event;
         return $state;
     }
