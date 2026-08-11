@@ -79,7 +79,18 @@ phprun() {
 }
 
 if [ "$PHP_MODE" != none ]; then
-    # Statics first: pure arithmetic over the rules tables, no PDO behind them.
+    # Before anything is executed: does every PHP file in the tree parse?
+    #
+    # This is first because it is the cheapest question and the one whose
+    # absence cost the most. lint_php.py above is a cross-reference checker and
+    # says in its own docstring that it is not a parser; every harness below
+    # runs one file and exercises the engine. So the forty pages a player
+    # actually requests were the only PHP nothing looked at, and two of them
+    # shipped with a parse error that nobody saw until the live site returned a
+    # 500 for a character sheet.
+    run "php_syntax"          phprun lint_syntax.php
+
+    # Statics next: pure arithmetic over the rules tables, no PDO behind them.
     run "test_rules"          phprun test_rules.php
     run "test_checks"         phprun test_checks.php
     run "test_combat"         phprun test_combat.php

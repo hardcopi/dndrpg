@@ -42,7 +42,7 @@ function sheet_refuse(int $status, string $heading, string $detail): void
     echo '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">'
         . '<meta name="viewport" content="width=device-width, initial-scale=1">'
         . '<title>No such sheet — Rivermark Chronicles</title>'
-        . '<link rel="stylesheet" href="<?= asset('assets/css/style.css') ?>"></head>'
+        . '<link rel="stylesheet" href="' . asset('assets/css/style.css') . '"></head>'
         . '<body class="auth-page"><main class="auth-card">'
         . '<h1>' . htmlspecialchars($heading, ENT_QUOTES) . '</h1>'
         . '<p class="auth-sub">' . htmlspecialchars($detail, ENT_QUOTES) . '</p>'

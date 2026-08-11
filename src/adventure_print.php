@@ -192,7 +192,7 @@ if ($data === null) {
     http_response_code(404);
     echo '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">'
         . '<title>No such adventure — Rivermark Chronicles</title>'
-        . '<link rel="stylesheet" href="<?= asset('assets/css/style.css') ?>"></head>'
+        . '<link rel="stylesheet" href="' . asset('assets/css/style.css') . '"></head>'
         . '<body class="auth-page"><main class="auth-card">'
         . '<h1>No such adventure</h1>'
         . '<p class="auth-sub">There is no module with that key.</p>'
