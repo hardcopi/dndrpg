@@ -45,22 +45,26 @@
        would be drawing the half of this that did not change. */
     body { margin: 0; padding: 0.8rem; background: var(--bg-inset); }
     .bench-note {
-      color: var(--text-dim); font-size: 0.75rem; margin: 0 0 0.6rem;
-      font-family: var(--mono);
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: 2147483647;
+      margin: 0; padding: 3px 8px; background: #0b0d10;
+      border-top: 1px solid #3a424e;
+      color: var(--text-dim); font-size: 0.7rem; font-family: var(--mono);
     }
-    .bench-shell {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 300px;
-      /* The top line spans both columns, as it does in the shell. */
-      grid-template-rows: auto minmax(0, 1fr);
-      /* Row gap tight, column gap not — the same split the shell makes in a
-         fight, so the space above the board here is the space above it there. */
-      gap: 0.25rem 0.6rem;
-      height: calc(100vh - 3.4rem);
-    }
-    #cbt-top { grid-column: 1 / -1; grid-row: 1; }
-    .scene { grid-column: 1; grid-row: 2; }
-    .rail-right { grid-column: 2; grid-row: 2; }
+    /* The shell is the REAL `.game-shell`, not a copy of it.
+     
+       It was a local `.bench-shell` at `minmax(0, 1fr) 300px` with its own row
+       and column placement — an accurate transcription of the desktop shell,
+       and therefore a bench that could not see a single one of the responsive
+       rules. `body.in-combat .game-shell` collapses to one column at 760px and
+       places all three children explicitly; none of that reached a class
+       called .bench-shell, so at 360px this page crushed the board into a
+       fifty-pixel strip and rendered the log one letter per line. That is the
+       bench's fault and not the game's, and a bench that invents a layout
+       fault is worse than no bench: it sends you to fix the wrong thing.
+     
+       So the only thing overridden here is the height, because the game's
+       shell is 100dvh and this page has a note pinned under it. */
+    .game-shell { height: calc(100dvh - 2.2rem); }
     #combat-root { display: flex; flex-direction: column; gap: 0.5rem; min-height: 0; min-width: 0;
                    flex: 1 1 auto; }
     /* `.scene`'s own rules come from the stylesheet; it only needs a height
@@ -74,7 +78,7 @@
 </head>
 <body class="game-page in-combat">
   <p class="bench-note" id="note"></p>
-  <div class="bench-shell">
+  <div class="game-shell">
     <!-- Shell furniture, like the rail below: ui-combat.js draws the turn order
          into this by id, and it spans both columns so the ribbon gets the whole
          width. -->
@@ -256,8 +260,27 @@
     'Round 3 — Wren Kingsley is up. 20 ft of movement.',
   ].map((t) => `<div class="line cat-combat">${window.Game.esc(t)}</div>`).join('');
 
-  document.getElementById('note').textContent =
-    `bench · combat board · ${FOES} foe(s) · ` + (IDLE ? 'nobody pointed at' : 'the captain inspected');
+  /* The board's actual size, reported rather than eyeballed.
+   
+     The board is the screen. Everything else here — rosters, log, inspector —
+     is a caption on it, so the one number that says whether this layout works
+     is how many pixels the battlefield got. A 16x12 grid of five-foot squares
+     needs roughly 20px a cell to be readable and clickable at all; below that
+     the tokens overlap their own outlines. */
+  function measure() {
+    const map = document.querySelector('.cbt-map');
+    const svg = document.querySelector('.battlemap') || map;
+    const r = svg ? svg.getBoundingClientRect() : { width: 0, height: 0 };
+    const cell = Math.min(r.width / 16, r.height / 12);
+    document.getElementById('note').innerHTML =
+      `bench · ${FOES} foe(s) · ` + (IDLE ? 'nobody pointed at' : 'the captain inspected')
+      + ` · viewport <b>${window.innerWidth}px</b>`
+      + ` · board <b>${Math.round(r.width)}×${Math.round(r.height)}</b>`
+      + ` · cell <b>${cell.toFixed(1)}px</b>`
+      + (cell < 14 ? ' · <b>BOARD UNUSABLE</b>' : '');
+  }
+  addEventListener('resize', measure);
+  setTimeout(measure, 60);
 
   Combat.render();
 

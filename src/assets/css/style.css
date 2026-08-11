@@ -837,10 +837,35 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   body.in-combat .cbt-top { grid-column: 1; grid-row: 1; }
   body.in-combat .scene { grid-column: 1; grid-row: 2; }
   body.in-combat .rail-right { grid-column: 1; grid-row: 3; }
-  /* Here the rail is a strip along the bottom holding the log, and the log is
-     the one thing in it that has to stay readable. A picture of whoever you are
-     pointing at is not worth a third of that strip on a phone. */
-  body.in-combat .cbt-inspector { display: none; }
+  /* And the rail is CAPPED, which is the difference between a board and no
+     board. The rows are `auto 1fr auto`, and a `1fr` track carries an
+     automatic minimum — so it yields to any `auto` track whose content is
+     taller. The rail's content is the log plus (until the line above) the
+     inspector: measured at 488px of a 740px phone, which left the scene 142,
+     the topbar took 54 of that, and the battlefield was rendered 318x0. The
+     log scrolls inside itself already; it only needed to be told how much of
+     the screen it may have. */
+  body.in-combat .rail-right { max-height: 16vh; overflow: hidden; }
+
+  /* And the rosters. Same shape of fault one level down: `.cbt-field` is
+     `minmax(0, 1fr) auto` — map above, the two rosters below — and an `auto`
+     row sizes to its content, so six wrapped 88px cards took 184px of the
+     field's 192 and left the board fourteen. Capped and scrolling, they are a
+     strip you swipe rather than a wall.
+   
+     The whole screen is a budget on a phone and this is where it is spent:
+     board 240 (a 16-wide grid needs that much height for square cells at
+     360px), action bar 150, initiative 86, topbar 54, rosters 90, log 90.
+     That is 710 of 740, and the log is what gives — mid-fight it is the last
+     four things that happened, and it still scrolls. */
+  body.in-combat .cbt-roster { max-height: 12vh; overflow-y: auto; }
+  /* The rule that hid the inspector here was dead for as long as it existed.
+     `body.in-combat .cbt-inspector { display: none }` inside a media query has
+     exactly the specificity of `body.in-combat .cbt-inspector { display: flex }`
+     4,100 lines further down, and a media query adds none — so the later one
+     won and the inspector kept its 252px on a 740px phone. It is hidden beside
+     its own definition now, where nothing can quietly out-order it. See the
+     phone block after `.cbt-inspector`. */
 }
 
 /* ====================================================================
@@ -4963,6 +4988,21 @@ body.in-combat .cbt-inspector {
    open by an invisible box reads as a layout fault; the same box holding one
    line of grey text reads as a panel waiting for you. */
 body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--text-faint); }
+
+/* On a phone the inspector does not get a third of the screen.
+ *
+ * This is the hide that used to live in the shell's own 760 block and never
+ * applied: same specificity as the `display: flex` above, 4,100 lines earlier
+ * in the file, and a media query does not break that tie. Here it is after the
+ * rule it has to beat, which is the only thing that decides it.
+ *
+ * What it costs: the "40 feet — a clean shot" readout. That is a real loss and
+ * the alternative was worse — it was taking 252px of a 740px screen and the
+ * battlefield was getting none. Every fact in it is also on the card you
+ * tapped. */
+@media (max-width: 760px) {
+  body.in-combat .cbt-inspector { display: none; }
+}
 
 /* Whatever is left after the name, the numbers and the shot — the art is the
    part worth shrinking, because everything under it is a fact you came here to

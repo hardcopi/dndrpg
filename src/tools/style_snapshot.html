@@ -64,6 +64,10 @@ const BENCHES = [
   ['scene_preview.html?case=delve', 1440],
   ['sheet_preview.html', 1440],
   ['combat_field_preview.html', 1440],
+  /* And at a phone width. The board was rendered 318x0 there — height-starved
+     to nothing by an `auto` grid row above it — while every desktop bench went
+     on agreeing the combat screen was fine. */
+  ['combat_field_preview.html?w=430', 430],
   ['combat_bar_preview.html', 1440],
   ['battlemap_preview.html', 1440],
   ['dice_preview.html', 1440],
