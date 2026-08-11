@@ -312,7 +312,7 @@ body {
 .name-block .char-name {
   margin: 0;
   font-family: var(--serif);
-  font-size: 20pt;
+  font-size: 16pt;
   line-height: 1.05;
   font-weight: 600;
   letter-spacing: 0.005em;
