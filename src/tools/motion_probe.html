@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<!--
+  Every animation this interface can play, mounted at once, with two things
+  asked about each: does it resolve, and does it stop when asked to.
+
+  WHY THIS EXISTS
+
+  The style snapshot walks fifteen benches and in every one of them, on all
+  2,862 elements, `animation-duration` is 0s. Not one animation is exercised
+  anywhere — they fire on a crit, a killing blow, a tracked quest, a
+  conversation opening, and no bench reaches those states. So the duration
+  scale could be ported across 25 declarations and the fingerprint would move
+  by nothing, which is the same blindness that let a whole parchment ramp
+  re-colour itself without the instrument noticing.
+
+  Two of the 25 turned out to be dead. `.cbt-float` asked for keyframes named
+  `float-up` and `.combat-screen.screen-shake` for `screen-shake`, and neither
+  was defined in any stylesheet. CSS does not treat that as an error: the
+  animation resolves to nothing, the element sits still, and the rule goes on
+  looking correct forever. That is the first thing this page checks, and it is
+  a check no amount of reading the durations would have produced.
+
+  The second is the reduced-motion contract. style.css carries eleven
+  `animation: none` overrides inside `prefers-reduced-motion` blocks, and
+  nothing has ever verified that they cover everything that moves. Run this
+  page under a browser with the preference set — Chrome takes
+  `--force-prefers-reduced-motion` — and it asserts that nothing is left
+  running. The one legitimate exception is `bm-hold`, which is deliberately
+  NOT none: a battlefield float still needs to appear and go away, so under
+  reduced motion it holds for its duration on `steps(1)` and jumps once
+  instead of rising. A check that demanded silence everywhere would have to be
+  taught about that, so it is taught: an animation passes if it is absent, or
+  if it moves in a single step.
+
+  WHAT IT DOES NOT DO. It does not judge whether an animation looks right; it
+  cannot, since it never plays one to the eye. Every element here is mounted
+  with `animation-play-state: paused` so the page is stable to capture, and
+  what is read is the computed name, duration and timing function.
+
+    /tools/motion_probe.html      the roster, with a verdict
+
+  A drawing bench. It reads nothing and writes nothing.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <base href="../">
+  <title>Motion probe — what moves, and what stops</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    /* The bench's own furniture, in no token: it has to stay readable when the
+       thing under test is broken. */
+    body { margin: 0; background: #0b0d10; color: #cfd6e0;
+           font: 12px/1.6 ui-monospace, SFMono-Regular, monospace; }
+    #out { margin: 0; padding: 12px 16px; white-space: pre; }
+    .mp-ok { color: #7cac6f; }
+    .mp-bad { color: #d48e83; }
+    /* Off-screen, and paused: every animated element is mounted for measuring,
+       not for watching. Left running they would repaint this page forever. */
+    #stage { position: absolute; left: -20000px; top: 0; width: 1200px; }
+    #stage * { animation-play-state: paused !important; }
+  </style>
+</head>
+<body>
+<pre id="out">measuring…</pre>
+<div id="stage" aria-hidden="true"></div>
+
+<script>
+/*
+ * Every rule in style.css that sets `animation`, as the markup needed to make
+ * it apply. Transcribed, which is this bench's one weakness and the reason
+ * each entry names the selector it stands for — the roster is checked against
+ * the stylesheet's own @keyframes below, so a rule that is RENAMED shows up as
+ * an entry that stopped matching, but a rule that is ADDED will not appear
+ * here until somebody adds it.
+ */
+const CASES = [
+  ['.party-approval.ap-bad',     'ap-pulse',        '<div class="hud-party"><span class="party-approval ap-bad">-1</span></div>'],
+  ['.wm-quest.is-tracked',       'wm-quest-pin',    '<svg><text class="wm-quest is-tracked">?</text></svg>'],
+  ['.map-marker.quest.tracked',  'quest-pin',       '<span class="map-marker quest tracked">?</span>'],
+  ['.dlg-speaker.is-entering',   'dlg-enter',       '<div class="dlg-speaker is-entering"><img class="dlg-bust" alt=""></div>'],
+  ['.d20.landed',                'die-land',        '<div class="d20 landed"></div>'],
+  ['.verdict-critical',          'verdict-pop',     '<p class="throw-verdict verdict-critical">Critical</p>'],
+  ['.verdict-fumble',            'verdict-shudder', '<p class="throw-verdict verdict-fumble">Fumble</p>'],
+  ['.bm-float text',             'bm-rise',         '<svg><g class="bm-float"><text>7</text></g></svg>'],
+  ['.bm-bolt',                   'bm-fly',          '<svg><circle class="bm-bolt" r="1"/></svg>'],
+  ['.bm-trail',                  'bm-trail',        '<svg><path class="bm-trail" d="M0 0 L1 1"/></svg>'],
+  ['.cbt-float',                 'float-up',        '<span class="cbt-float float-dmg">7</span>'],
+  ['.cbt-card.hit-flash',        'cbt-hit',         '<div class="cbt-card hit-flash"></div>'],
+  ['.cbt-card.crit-flash',       'cbt-crit',        '<div class="cbt-card crit-flash"></div>'],
+  ['.cbt-card.heal-flash',       'cbt-heal',        '<div class="cbt-card heal-flash"></div>'],
+  ['.cbt-card.death-flash',      'cbt-death',       '<div class="cbt-card death-flash"></div>'],
+  ['.combat-screen.screen-shake', 'screen-shake',   '<div class="combat-screen screen-shake"></div>'],
+];
+
+/** Every @keyframes name the loaded stylesheets actually define. */
+function definedKeyframes() {
+  const names = new Set();
+  for (const sheet of document.styleSheets) {
+    let rules;
+    try { rules = sheet.cssRules; } catch (e) { continue; }   // cross-origin
+    for (const r of rules || []) {
+      if (r.type === CSSRule.KEYFRAMES_RULE || r.constructor.name === 'CSSKeyframesRule') {
+        names.add(r.name);
+      }
+    }
+  }
+  return names;
+}
+
+function run() {
+  const stage = document.getElementById('stage');
+  const out = document.getElementById('out');
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const defined = definedKeyframes();
+  const lines = [];
+  const bad = [];
+
+  lines.push(`prefers-reduced-motion: ${reduced ? 'REDUCE' : 'no-preference'}`);
+  lines.push(`@keyframes defined by the stylesheet: ${defined.size}`);
+  lines.push('');
+  lines.push(reduced
+    ? 'under REDUCE, every animation must be absent or move in one step:'
+    : 'each rule, and the keyframes it names:');
+  lines.push('');
+
+  for (const [sel, wants, html] of CASES) {
+    const host = document.createElement('div');
+    host.innerHTML = html;
+    stage.appendChild(host);
+    // The animated element is the deepest one the case builds.
+    const el = host.querySelector('*:last-child') && host.querySelectorAll('*');
+    const target = el[el.length - 1];
+    const cs = getComputedStyle(target);
+    const name = cs.animationName;
+    const dur = cs.animationDuration;
+    const ease = cs.animationTimingFunction;
+
+    let note = '';
+    if (!reduced) {
+      if (name === 'none' || name === '') {
+        note = 'NOT APPLIED — the rule did not match this markup';
+      } else if (!defined.has(name.split(',')[0].trim())) {
+        note = `NO @keyframes NAMED "${name}" — this animates nothing`;
+      } else if (name.split(',')[0].trim() !== wants) {
+        note = `expected ${wants}`;
+      }
+    } else {
+      const stopped = name === 'none' || dur === '0s';
+      const oneStep = /steps\(1/.test(ease);
+      if (!stopped && !oneStep) {
+        note = 'STILL MOVING under reduced motion';
+      }
+    }
+    if (note) bad.push(`${sel}: ${note}`);
+    lines.push(`  ${note ? '!' : ' '} ${sel.padEnd(30)} ${String(name).padEnd(16)}`
+      + ` ${String(dur).padEnd(8)} ${ease}${note ? '   <- ' + note : ''}`);
+  }
+
+  lines.push('');
+  lines.push(bad.length
+    ? `FAIL  ${bad.length} problem(s)`
+    : (reduced ? 'OK   nothing is left moving under reduced motion'
+               : 'OK   every animation resolves to keyframes that exist'));
+
+  out.textContent = lines.join('\n');
+  out.className = bad.length ? 'mp-bad' : 'mp-ok';
+}
+
+/* A timer, not requestAnimationFrame: headless Chrome with
+   --virtual-time-budget advances timers and does not reliably produce frames,
+   and a bench that silently never runs is worse than no bench. */
+window.addEventListener('load', () => setTimeout(run, 50));
+</script>
+</body>
+</html>

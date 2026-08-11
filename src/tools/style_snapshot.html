@@ -75,6 +75,12 @@ const BENCHES = [
      order; what it adds HERE is simply that those surfaces get fingerprinted
      like everything else. */
   ['layer_probe.html', 1440],
+  /* Same reason again, for motion: every element in every bench above reports
+     `animation-duration: 0s`, because the 25 animations fire on a crit, a
+     killing blow, a tracked quest — states no bench reaches. This one mounts
+     each of them, paused, so the duration scale is fingerprinted like
+     everything else. Its own verdict is about whether they resolve at all. */
+  ['motion_probe.html', 1440],
 ];
 
 /*
@@ -100,6 +106,18 @@ const PROPS = [
    * were not being read.
    */
   'fill', 'stroke', 'stroke-width',
+  /*
+   * Motion, for the same reason as fill and stroke: 33 transitions and 25
+   * animations were outside everything this file was reading, so a port of
+   * the duration and easing scales would have moved nothing measurable.
+   *
+   * Durations and curves only. Not `transition-property` or `animation-name`,
+   * which say WHAT moves rather than how fast — a restyle does not touch
+   * them, and animation-name in particular is a keyframes identifier that
+   * would put noise in every diff for no signal.
+   */
+  'transition-duration', 'transition-timing-function',
+  'animation-duration', 'animation-timing-function',
 ];
 
 /** A stable path to an element: tag + nth-of-type, root downwards. */

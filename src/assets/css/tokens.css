@@ -607,14 +607,54 @@
    *
    * Every rule using these still belongs inside the existing
    * `prefers-reduced-motion` blocks — this file sets durations, it does not
-   * decide whether a thing animates.
+   * decide whether a thing animates. Nothing below changes that: the eleven
+   * `transition: none` and `animation: none` overrides in those blocks stay
+   * exactly as they are, because "none" is not a duration.
+   *
+   * Three steps — 120/200/400 — against the 19 durations actually in use, and
+   * the middle one matched nothing at all. What the file has instead is six
+   * tiers with clear boundaries, because motion duration here is not a scale
+   * of sizes, it is a scale of WHAT IS MOVING:
+   *
+   *   under your finger      80–120ms   a key pressing, a row lighting up
+   *   a card noticing you    150ms      hover on a button, a card, a plate
+   *   a surface arriving     220ms      the dialogue theatre opening
+   *   a value moving         250–350ms  a bar filling, a die settling
+   *   crossing the screen    400ms      a bolt's trail
+   *   a flourish             450–600ms  a crit, a shudder
+   *   a number rising        1.1s       damage floating off a card
+   *   an ambient loop        1.9–2.2s   a quest pin breathing
+   *
+   * So they are named for the tier rather than the millisecond. Nothing moves
+   * by more than 50ms except the two pin pulses, which lose 100ms and 200ms
+   * off a loop that never stops and has no start for an eye to catch.
+   *
+   * THE EASINGS ARE THE KEYWORDS, and that is deliberate. --ease-out was
+   * declared as cubic-bezier(0.2, 0.8, 0.2, 1) and --ease-in-out as
+   * cubic-bezier(0.4, 0, 0.2, 1), and neither was ever read; meanwhile 33 of
+   * the 35 easings in the stylesheet are the plain CSS keywords. Those curves
+   * decelerate considerably harder than `ease-out` does — adopting them would
+   * have re-timed seven animations, which is a design change somebody should
+   * make while watching it happen, not a side effect of a port. The tokens
+   * name what the interface does; the day the curves are retuned, there is
+   * now one line to do it on.
    * ================================================================== */
 
-  --dur-fast: 120ms;
-  --dur: 200ms;
-  --dur-slow: 400ms;
-  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
-  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --dur-tap: 90ms;              /* a control moving under the pointer */
+  --dur-fast: 120ms;            /* a control's colour changing */
+  --dur: 150ms;                 /* a card noticing the pointer */
+  --dur-enter: 220ms;           /* a surface arriving */
+  --dur-fill: 300ms;            /* a bar moving to a new value */
+  --dur-slow: 400ms;            /* something crossing the screen */
+  --dur-flourish: 550ms;        /* a crit, a shudder — plays once, wants noticing */
+  --dur-rise: 1100ms;           /* a number floating off a card and fading */
+  --dur-pulse: 2000ms;          /* an ambient loop, running until you leave */
+
+  --ease: ease;                 /* a value changing */
+  --ease-out: ease-out;         /* something arriving */
+  --ease-in-out: ease-in-out;   /* a loop, soft at both ends */
+  --ease-linear: linear;        /* constant speed: a projectile */
+  --ease-throw: cubic-bezier(0.18, 0.8, 0.26, 1.03);   /* a die, with overshoot */
 
   /* ==================================================================
    * CONTROLS

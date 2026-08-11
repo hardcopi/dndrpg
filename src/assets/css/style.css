@@ -82,7 +82,7 @@ h1, h2, h3 { color: var(--gold); font-weight: var(--fw-semibold); letter-spacing
   cursor: pointer;
   font-family: inherit;
   font-size: var(--fs-md);
-  transition: background 0.15s, box-shadow 0.15s;
+  transition: background var(--dur), box-shadow var(--dur);
 }
 
 .btn:hover {
@@ -406,7 +406,7 @@ body.game-page {
   background: none;
   color: var(--text-dim);
   cursor: pointer;
-  transition: color 0.12s, background 0.12s, border-color 0.12s;
+  transition: color var(--dur-fast), background var(--dur-fast), border-color var(--dur-fast);
 }
 .icon-btn svg {
   width: 1.15rem;
@@ -506,7 +506,7 @@ body.game-page {
   border: 1px solid var(--ornament);
   border-radius: var(--r-md);
   cursor: pointer;
-  transition: border-color 120ms ease, background 120ms ease;
+  transition: border-color var(--dur-fast) var(--ease), background var(--dur-fast) var(--ease);
 }
 .hud-party .party-card:hover { border-color: var(--gold-dim); background: var(--bg-panel); }
 
@@ -622,7 +622,7 @@ body.game-page {
    the rail. Everything else here is deliberately still, so this reads as an
    alarm rather than as decoration. */
 .hud-party .party-approval.ap-risk,
-.hud-party .party-approval.ap-bad { animation: ap-pulse 2.2s ease-in-out infinite; }
+.hud-party .party-approval.ap-bad { animation: ap-pulse var(--dur-pulse) var(--ease-in-out) infinite; }
 @keyframes ap-pulse { 50% { opacity: 0.35; } }
 @media (prefers-reduced-motion: reduce) {
   .hud-party .party-approval.ap-risk,
@@ -975,7 +975,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   border: 1px solid var(--border);
   border-radius: var(--r-md);
   opacity: 0.5;
-  transition: opacity 0.12s;
+  transition: opacity var(--dur-fast);
 }
 /* A letter in a ring, drawn rather than typed. ⓘ is a glyph in a decorative
    role — its ink sits differently inside its em box in every face, so it
@@ -997,7 +997,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   border: 1px solid var(--border);
   border-radius: var(--r-circle);
   opacity: 0.5;
-  transition: opacity 0.12s, color 0.12s;
+  transition: opacity var(--dur-fast), color var(--dur-fast);
 }
 .loc-map:hover .map-zoom,
 .loc-map:hover .map-info,
@@ -1145,7 +1145,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   font: inherit;
   text-align: left;
   cursor: pointer;
-  transition: border-color 120ms ease, background 120ms ease, transform 120ms ease;
+  transition: border-color var(--dur-fast) var(--ease), background var(--dur-fast) var(--ease), transform var(--dur-fast) var(--ease);
 }
 .person:hover,
 .person:focus-visible {
@@ -1739,7 +1739,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .wm-tip-why { color: var(--text-dim); font-size: var(--fs-2xs); }
 .wm-quest.is-tracked {
   fill: var(--gold-bright);
-  animation: wm-quest-pin 1.9s ease-in-out infinite;
+  animation: wm-quest-pin var(--dur-pulse) var(--ease-in-out) infinite;
 }
 @keyframes wm-quest-pin {
   0%, 100% { transform: translateY(0); opacity: 1; }
@@ -2273,7 +2273,10 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   height: var(--die-box);
   transform-style: preserve-3d;
   /* Overshoot slightly and settle, so it lands rather than arrives. */
-  transition: transform var(--die-throw, 900ms) cubic-bezier(0.18, 0.8, 0.26, 1.03);
+  /* The only duration here that is not on the scale, and it should not be:
+     dice3d.js sets --die-throw per throw, so 900ms is the value when no
+     throw is in flight rather than a tier of this interface's motion. */
+  transition: transform var(--die-throw, 900ms) var(--ease-throw);
   will-change: transform;
 }
 .die-face {
@@ -2307,7 +2310,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 /* The dice the throw did not keep — 4d6 drop lowest, and the unkept die of an
    advantage pair. Dimmed and shrunk aside rather than removed, because the
    point of rolling four is seeing which three counted. */
-.die-holder { transition: opacity 0.35s ease, transform 0.35s ease; }
+.die-holder { transition: opacity var(--dur-fill) var(--ease), transform var(--dur-fill) var(--ease); }
 .die-holder.is-dropped { opacity: 0.3; transform: scale(0.72); }
 .die-holder.is-dropped .die-face { filter: grayscale(0.8); }
 
@@ -2465,7 +2468,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 }
 .map-marker.quest.tracked {
   color: var(--gold-bright);
-  animation: quest-pin 1.9s ease-in-out infinite;
+  animation: quest-pin var(--dur-pulse) var(--ease-in-out) infinite;
 }
 @keyframes quest-pin {
   0%, 100% { transform: translateY(0); opacity: 1; }
@@ -2508,7 +2511,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   display: block;
   height: 100%;
   background: linear-gradient(90deg, var(--gold-dim), var(--gold));
-  transition: width 0.3s ease;
+  transition: width var(--dur-fill) var(--ease);
 }
 .party-card .rail-xp { height: 3px; margin-top: var(--sp-4); }
 .party-lv { color: var(--text-faint); }
@@ -2572,7 +2575,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   bottom: 0;
   border-radius: var(--r-sm);
   background: var(--gold-dim);
-  transition: left 0.3s ease, width 0.3s ease;
+  transition: left var(--dur-fill) var(--ease), width var(--dur-fill) var(--ease);
 }
 .ap-bar.ap-high .ap-fill { background: linear-gradient(90deg, var(--gold-dim), var(--gold)); }
 .ap-bar.ap-good .ap-fill { background: var(--success); }
@@ -2606,7 +2609,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   /* Bare fill is red on purpose: a bar drawn without one of the band classes
      below reads as somebody about to die, which is a bug that shows itself. */
   background: linear-gradient(90deg, var(--danger-dim), var(--danger));
-  transition: width 0.25s ease;
+  transition: width var(--dur-enter) var(--ease);
 }
 
 /* Health bands. Colour is not the only channel — the numeric HP sits beside
@@ -2796,7 +2799,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   line-height: var(--lh-tight);
   text-align: center;
   cursor: pointer;
-  transition: border-color 0.15s, box-shadow 0.15s, background 0.15s, color 0.15s;
+  transition: border-color var(--dur), box-shadow var(--dur), background var(--dur), color var(--dur);
 }
 .avatar-option img {
   width: 72px;
@@ -2836,7 +2839,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   line-height: var(--lh-snug);
   text-align: left;
   cursor: pointer;
-  transition: border-color 0.15s, box-shadow 0.15s, background 0.15s, color 0.15s;
+  transition: border-color var(--dur), box-shadow var(--dur), background var(--dur), color var(--dur);
 }
 .gift-card strong { color: var(--text); font-size: var(--fs-sm); }
 .gift-card em.help-hint { font-style: italic; font-size: var(--fs-2xs); }
@@ -3019,7 +3022,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   content: '▸';
   flex: 0 0 auto;
   color: var(--gold-dim);
-  transition: transform 120ms ease;
+  transition: transform var(--dur-fast) var(--ease);
 }
 .quest-item[open] > .quest-summary::before { transform: rotate(90deg); }
 .quest-summary:hover .quest-title { color: var(--gold); }
@@ -3332,7 +3335,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   font-size: var(--fs-2xs);
   text-align: center;
   cursor: pointer;
-  transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+  transition: border-color var(--dur), box-shadow var(--dur), background var(--dur);
 }
 .party-card:hover,
 .party-card:focus-visible {
@@ -3459,7 +3462,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   color: inherit;
   font: inherit;
   cursor: pointer;
-  transition: border-color 120ms ease, transform 120ms ease;
+  transition: border-color var(--dur-fast) var(--ease), transform var(--dur-fast) var(--ease);
 }
 .camp-seat:hover:not(:disabled),
 .camp-seat:focus-visible { border-color: var(--gold); transform: translateY(-1px); }
@@ -3751,7 +3754,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
  * this the portrait scrolls off and you are reading unattributed prose, which
  * is precisely the staging the theatre exists to provide. */
 .dlg-speaker { text-align: center; align-self: start; position: sticky; top: 0; }
-.dlg-speaker.is-entering .dlg-bust { animation: dlg-enter 220ms ease-out; }
+.dlg-speaker.is-entering .dlg-bust { animation: dlg-enter var(--dur-enter) var(--ease-out); }
 @keyframes dlg-enter {
   from { opacity: 0; transform: translateY(10px); }
   to   { opacity: 1; transform: none; }
@@ -4013,7 +4016,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   display: block;
   height: 100%;
   background: linear-gradient(90deg, var(--success), var(--success));
-  transition: width 0.18s ease;
+  transition: width var(--dur) var(--ease);
 }
 
 .check-boosts { margin-top: var(--sp-14); }
@@ -4088,7 +4091,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   letter-spacing: var(--ls-caps);
   color: var(--text-dim);
 }
-.d20.landed { animation: die-land 0.3s ease-out; }
+.d20.landed { animation: die-land var(--dur-fill) var(--ease-out); }
 @keyframes die-land {
   0% { transform: scale(1.18); }
   60% { transform: scale(0.95); }
@@ -4125,13 +4128,13 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   color: var(--gold);
   font-size: var(--fs-3xl);
   text-shadow: 0 0 20px color-mix(in srgb, var(--gold) 60%, transparent), var(--th-2);
-  animation: verdict-pop 0.5s ease-out;
+  animation: verdict-pop var(--dur-flourish) var(--ease-out);
 }
 .verdict-fumble {
   color: var(--danger);
   font-size: var(--fs-3xl);
   text-shadow: 0 0 18px color-mix(in srgb, var(--danger) 60%, transparent), var(--th-2);
-  animation: verdict-shudder 0.5s ease-out;
+  animation: verdict-shudder var(--dur-flourish) var(--ease-out);
 }
 @keyframes verdict-pop {
   from { transform: scale(0.6); opacity: 0; }
@@ -4420,7 +4423,7 @@ body.bm-pan-ready .battlemap { cursor: grab; }
   /* Quiet until wanted: it is furniture beside a fight, and three lit keys in
      the corner of the board compete with the fight for attention. */
   opacity: 0.45;
-  transition: opacity 0.12s;
+  transition: opacity var(--dur-fast);
 }
 .cbt-map:hover .bm-zoom,
 .bm-zoom:focus-within { opacity: 1; }
@@ -4502,7 +4505,7 @@ body.bm-pan-ready .battlemap { cursor: grab; }
    reason: `.bm-ring` is which side, `.is-selected` is what Attack will hit,
    `.bm-turn` is whose turn it is. SVG has no ::before, so the turn marker has
    to be a real element — the one place the card technique does not port. */
-.bm-token { cursor: pointer; transition: transform 90ms linear; }
+.bm-token { cursor: pointer; transition: transform var(--dur-tap) var(--ease-linear); }
 .bm-hit-token { fill: transparent; }
 .bm-ring { fill: var(--bg); stroke-width: 0.07; }
 .bm-token.is-party .bm-ring { stroke: var(--accent); }
@@ -4533,7 +4536,7 @@ body.bm-pan-ready .battlemap { cursor: grab; }
   stroke: rgba(0, 0, 0, 0.85);
   stroke-width: 0.06px;
   paint-order: stroke fill;
-  animation: bm-rise 1.1s ease-out forwards;
+  animation: bm-rise var(--dur-rise) var(--ease-out) forwards;
 }
 .bm-float.float-dmg text { fill: var(--danger); }
 .bm-float.float-crit text { fill: var(--gold-bright); font-size: 0.72px; }
@@ -4554,13 +4557,13 @@ body.bm-pan-ready .battlemap { cursor: grab; }
 
 .bm-bolt {
   fill: var(--gold-bright);
-  animation: bm-fly 220ms linear forwards;
+  animation: bm-fly var(--dur-enter) var(--ease-linear) forwards;
 }
 .bm-trail {
   stroke: var(--gold);
   stroke-width: 0.035;
   opacity: 0;
-  animation: bm-trail 400ms ease-out forwards;
+  animation: bm-trail var(--dur-slow) var(--ease-out) forwards;
 }
 /* Aimed rather than thrown: a spell attack at range gets the accent colour the
    rest of the board uses for magic. */
@@ -4581,7 +4584,7 @@ body.bm-pan-ready .battlemap { cursor: grab; }
    floats keep their place and lose only the drift. The bolt is decoration and
    goes entirely. */
 @media (prefers-reduced-motion: reduce) {
-  .bm-float text { animation: bm-hold 1.1s steps(1) forwards; }
+  .bm-float text { animation: bm-hold var(--dur-rise) steps(1) forwards; }
   .bm-bolt, .bm-trail { animation: none; opacity: 0; }
   @keyframes bm-hold { 0%, 80% { opacity: 1; } 100% { opacity: 0; } }
 }
@@ -5082,7 +5085,7 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
   border-radius: var(--r-md);
   box-shadow: var(--sh-key), var(--sh-1);
   cursor: pointer;
-  transition: color 0.12s, border-color 0.12s, transform 0.08s, box-shadow 0.12s;
+  transition: color var(--dur-fast), border-color var(--dur-fast), transform var(--dur-tap), box-shadow var(--dur-fast);
 }
 .act-icon {
   width: 18px;
@@ -5212,7 +5215,7 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
   white-space: nowrap;
   pointer-events: none;
   text-shadow: var(--th-halo);
-  animation: float-up 1.1s ease-out forwards;
+  animation: float-up var(--dur-rise) var(--ease-out) forwards;
 }
 .cbt-float.float-dmg { color: var(--danger); }
 .cbt-float.float-crit { color: var(--gold-bright); font-size: var(--fs-xl); }
@@ -5225,10 +5228,10 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
 .cbt-float.float-save-ok { color: var(--success); font-size: var(--fs-2xs); }
 .cbt-float.float-save-bad { color: var(--danger); font-size: var(--fs-2xs); }
 
-.cbt-card.hit-flash { animation: cbt-hit 0.45s ease; }
-.cbt-card.crit-flash { animation: cbt-crit 0.55s ease; }
-.cbt-card.heal-flash { animation: cbt-heal 0.5s ease; }
-.cbt-card.death-flash { animation: cbt-death 0.6s ease forwards; }
+.cbt-card.hit-flash { animation: cbt-hit var(--dur-slow) var(--ease); }
+.cbt-card.crit-flash { animation: cbt-crit var(--dur-flourish) var(--ease); }
+.cbt-card.heal-flash { animation: cbt-heal var(--dur-flourish) var(--ease); }
+.cbt-card.death-flash { animation: cbt-death var(--dur-flourish) var(--ease) forwards; }
 @keyframes cbt-hit {
   0%, 100% { transform: translateX(0); filter: none; }
   25% { transform: translateX(4px); filter: brightness(1.9) saturate(0.6); }
@@ -5246,7 +5249,43 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
 @keyframes cbt-death {
   to { opacity: 0.28; filter: grayscale(1); }
 }
-.combat-screen.screen-shake { animation: screen-shake 0.3s ease; }
+
+/*
+ * These two keyframes did not exist.
+ *
+ * `.cbt-float` has asked for `float-up` and `.combat-screen.screen-shake` for
+ * `screen-shake` since they were written, and neither name was ever defined —
+ * anywhere, in any stylesheet. An animation naming keyframes that do not exist
+ * is not an error in CSS. It resolves to nothing and the element simply sits
+ * there, so the damage number over a card appeared, held still for 1.1s and
+ * vanished, and a killing blow shook nothing.
+ *
+ * Everything around them says they were meant to: ui-combat.js removes the
+ * float after exactly 1100ms and strips `.screen-shake` after exactly 300ms,
+ * which are --dur-rise and --dur-fill to the millisecond, and the
+ * reduced-motion block below already suppresses both. Four facts in agreement
+ * and no keyframes.
+ *
+ * They are written to match their nearest siblings rather than invented:
+ * float-up takes bm-rise's shape, which is the battlefield's version of the
+ * same idea, and screen-shake takes cbt-hit's displacement. float-up carries
+ * `translateX(-50%)` through every stop because .cbt-float is centred with
+ * it, and a keyframe that omitted it would throw the number to the left on
+ * the first frame.
+ */
+@keyframes float-up {
+  0%   { transform: translate(-50%, 0.25rem); opacity: 0; }
+  12%  { transform: translate(-50%, 0); opacity: 1; }
+  70%  { opacity: 1; }
+  100% { transform: translate(-50%, -1.5rem); opacity: 0; }
+}
+@keyframes screen-shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-3px); }
+  45% { transform: translateX(3px); }
+  70% { transform: translateX(-2px); }
+}
+.combat-screen.screen-shake { animation: screen-shake var(--dur-fill) var(--ease); }
 
 /* One frame of a 3-frame side-view pose, played over the card. Same clip
    technique the animated scenery uses — see decorSpriteMarkup in game.js. */
@@ -5291,6 +5330,27 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
   .verdict-critical,
   .verdict-fumble {
     animation: none !important;
+  }
+
+  /*
+   * death-flash is the fourth of those four card flashes and was the one left
+   * out of the list above — tools/motion_probe.html found it, which is the
+   * whole reason that bench exists.
+   *
+   * It cannot simply join them, though, and that is why it was worth finding
+   * rather than just fixing. The other three flash and return; this one ends
+   * on `forwards`, and what it leaves behind is the card greyed out to say
+   * that character is down. `animation: none` would take the information away
+   * with the motion.
+   *
+   * So it takes bm-hold's treatment, which is already the answer to this
+   * question elsewhere in the file: same keyframes, same duration, stepped —
+   * the card arrives at greyed without passing through anything. Reusing the
+   * keyframes rather than restating `opacity: 0.28; filter: grayscale(1)`
+   * here, because two copies of an end state is how they come to disagree.
+   */
+  .cbt-card.death-flash {
+    animation: cbt-death var(--dur-flourish) steps(1) forwards;
   }
 
   #location-root.is-fading { transition: none; opacity: 1; }
@@ -5355,7 +5415,7 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
   background: linear-gradient(160deg, var(--bg-raised), var(--bg-panel-2));
   border: 1px solid var(--border-strong);
   box-shadow: var(--sh-bevel), var(--sh-3);
-  transition: transform 0.25s ease, border-color 0.25s ease;
+  transition: transform var(--dur-enter) var(--ease), border-color var(--dur-enter) var(--ease);
 }
 .flat-die-face {
   font-size: 2.6rem;
@@ -6029,7 +6089,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: var(--sp-32); }
   /* The plate is flush to the frame, so the padding moves inside. */
   padding: 0;
   overflow: hidden;
-  transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+  transition: border-color var(--dur), box-shadow var(--dur), transform var(--dur);
 }
 .module-card:hover {
   border-color: var(--ornament);
@@ -6055,7 +6115,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: var(--sp-32); }
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.35s ease;
+  transition: transform var(--dur-fill) var(--ease);
 }
 .module-card:hover .module-cover { transform: scale(1.035); }
 
@@ -6708,7 +6768,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: var(--sp-32); }
   /* Held back until the row is under the pointer: on a list of sixty people a
      button on every line reads as sixty things to do. */
   opacity: 0;
-  transition: opacity 0.12s, color 0.12s, border-color 0.12s, background 0.12s;
+  transition: opacity var(--dur-fast), color var(--dur-fast), border-color var(--dur-fast), background var(--dur-fast);
 }
 .ce-row-pair:hover .ce-row-walk,
 .ce-row-walk:focus-visible { opacity: 1; }
