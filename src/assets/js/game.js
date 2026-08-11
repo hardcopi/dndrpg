@@ -34,7 +34,7 @@
    * into the URLs they build. The tiles it was named for are gone; the faces
    * and busts it also versions are not.
    */
-  const TILE_CACHE_VER = 'pv11';   // pv11: bandit bust and face redrawn
+  const TILE_CACHE_VER = 'pv12';   // pv12: Sib Marrell redrawn — he was in mail
 
   const DEFAULT_SPRITE_KEY = 'fighter';
 
