@@ -4479,9 +4479,20 @@ body.in-combat .cbt-top {
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
-  /* Or the browser scrolls the page on a two-finger drag instead of letting
-     the board have the gesture. */
-  touch-action: none;
+  /* `pan-y`, not `none`.
+   
+     `none` was here so a two-finger drag would reach the board instead of
+     scrolling the page — except the board never receives a touch drag at all.
+     Panning is gated on `canPan: (e) => (e.button === 0 && spaceHeld) ||
+     e.button === 1`, and a finger has no space bar and no middle button. So
+     `none` was reserving the gesture for a capability that does not exist on
+     a phone, and the whole of what it achieved was that a drag on the board
+     did nothing while also refusing to scroll the page.
+   
+     `pan-y` gives the vertical drag back to the browser and keeps everything
+     the board actually uses: taps are a click listener, and zoom is the
+     button cluster in the corner and the wheel on a desktop. */
+  touch-action: pan-y;
 }
 /* The cursor says which of the two things a drag will do. Default is a
    pointer, because a bare left-click on this board is a move order and never a
@@ -7034,10 +7045,40 @@ body.home-page > main { flex: 1 0 auto; padding-top: var(--sp-32); }
      to grow it would put the party rail an arbitrary distance down the page. */
   .hud-log .log { max-height: 40vh; }
 
-  /* A fight takes the screen back — the board is the game at that moment, and
-     it is the one thing here that genuinely wants a fixed viewport. */
-  body.in-combat.game-page,
-  html:has(body.in-combat.game-page) { height: 100dvh; overflow: hidden; }
-  body.in-combat .game-shell { height: 100dvh; overflow: hidden; }
-  body.in-combat .scene { min-height: 0; }
+  /* A fight USED to take the screen back: 100dvh, overflow hidden, on the
+     argument that the board is the game at that moment and is the one thing
+     here that genuinely wants a fixed viewport.
+   
+     The argument was right and the arithmetic was not. Pinned to one screen,
+     everything on it competes for 740px — and the board lost, twice, badly
+     enough to be reported as unusable. Even after the rail and the rosters
+     were capped it came out 184px tall against the exploration map's 235 on
+     the same phone, and the exploration map is the size that works.
+   
+     So the fight scrolls, like everything else below the fold. The board is
+     given a real height rather than whatever is left over, and what falls
+     under the fold is the log — which is what gives here, as it does in the
+     budget above. */
+  body.in-combat .game-shell {
+    grid-template-rows: auto auto auto;
+    height: auto;
+    min-height: 100dvh;
+    overflow: visible;
+  }
+
+  /* The board, sized rather than starved. 15rem is the exploration map's own
+     floor plus the pixel or two its border costs — at 360px that is a 304-wide
+     box 240 tall, and a 16x12 grid contained in it comes out at 19px a cell
+     against the 15.4 it had. */
+  body.in-combat .cbt-map { min-height: 15rem; }
+
+  /* The action bar stays put while the log scrolls under it. It is the one
+     band you reach for rather than read, and a fight where you scroll to find
+     your own actions is worse than a fight with a short log. */
+  body.in-combat .cbt-bar {
+    position: sticky;
+    bottom: 0;
+    z-index: 1;            /* local: over the log sliding past beneath it */
+    background: var(--bg-inset);
+  }
 }
