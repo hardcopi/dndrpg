@@ -66,6 +66,48 @@ SKIP = {"pc_1534", "pc_173", "pc_434", "npc_kessa"}
 # gen_location_art.py: this model runs without classifier-free guidance, the
 # negative prompt below is inert, and the positive prompt is weighted toward
 # what it reads first.
+# Trades the PERIOD clause dresses wrongly, and it is worth being exact about
+# why rather than treating each as a one-off.
+#
+# PERIOD opens with "Wool, linen, leather, riveted mail and hand-forged iron"
+# to anchor the century. The model reads a list of materials as a WARDROBE,
+# and it is the first thing in the prompt — where, per the note in
+# gen_location_art.py, this model weights hardest. So it dresses anybody whose
+# own description does not dress them. Sib Marrell empties Rivermark's
+# cesspits by dark and came back in riveted mail and steel pauldrons, twice,
+# on two separate generations: he looked exactly like the watch he is
+# described as knowing the underside of.
+#
+# The remedy is the one gen_race_art.py arrived at for dragonborn and half-orc
+# — name the thing the model is SUBSTITUTING rather than describing the right
+# thing harder, and put it where the weight is. "No armour, not a guard" does
+# more work here than any amount of oilskin.
+#
+# Only keys that need it. A character whose description already dresses them
+# does not belong in this table.
+# SHORT, and said twice. The first draft of Sib's entry was two sentences of
+# oilskin and negation; it removed most of the armour and cost the shot — the
+# bust came back as a full standing figure with the head small in frame,
+# because FRAMING sits between PERIOD and the subject and a long clause in
+# front of it is displacement rather than emphasis. That is the finding
+# gen_race_art.py records almost word for word: lengthening a clause to insist
+# harder buys the insistence out of something else.
+#
+# So each entry is one short phrase, placed twice — once after PERIOD where the
+# weight is and the mail was just named, once after the description where
+# there is room. Same trick that made "back to back" survive in the race
+# plates.
+# The seed each of these shipped on, for the reason gen_module_cover.py keeps
+# SHIPPED_SEED: the same seed and prompt reproduce the file on disk, and
+# without it "regenerate that one" is a fresh roll of the dice. --seed is how
+# to ask for it. Sib went out on 3; the default 11 and two others still put him
+# in a mail shirt, and the wardrobe clause alone was not enough to shift it.
+SHIPPED_SEED = {"sib_marrell": 3}
+
+WARDROBE = {
+    "sib_marrell": "No armour: oilskin cape over coarse wool.",
+}
+
 PERIOD = (
     "Medieval fantasy. Pre-industrial. Wool, linen, leather, riveted mail and "
     "hand-forged iron. No modern clothing of any kind — no peaked caps, no "
@@ -318,8 +360,10 @@ def build_prompt(key: str, wearers: list[dict], expression: int = 1) -> str:
         race = " ".join(x for x in [w.get("race"), w.get("class")] if x)
         sex = GENDER.get(key)
         who_is = f"{who}, a {sex}," if sex else f"{who},"
-        bits = [PERIOD, FRAMING, who_is, f"{role}." if role else "",
-                f"{race}." if race else "", desc]
+        wardrobe = WARDROBE.get(key, "")
+        bits = [PERIOD, wardrobe, FRAMING, who_is,
+                f"{role}." if role else "",
+                f"{race}." if race else "", desc, wardrobe]
     else:
         bits = [PERIOD, FRAMING, ARCHETYPE.get(key, key.replace("_", " ")) + "."]
     bits.append(STYLE)
