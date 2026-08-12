@@ -182,6 +182,7 @@ if (!session_character_id()) {
   <script src="<?= asset('assets/js/dice-geometry.js') ?>"></script>
   <script src="<?= asset('assets/js/dice3d.js') ?>"></script>
   <script src="<?= asset('assets/js/ui-check.js') ?>"></script>
+  <script src="<?= asset('assets/js/ui-voice.js') ?>"></script>
   <script src="<?= asset('assets/js/ui-dialog.js') ?>"></script>
   <script src="<?= asset('assets/js/ui-battlemap.js') ?>"></script>
   <script src="<?= asset('assets/js/ui-combat.js') ?>"></script>

@@ -161,6 +161,9 @@
     session.closing = true;
     // Stop a half-typed line before the element it is writing into is gone.
     if (session.skip) session.skip = null;
+    // And a half-read one. The panel is about to be emptied; a voice still
+    // talking about a room the player has walked out of is the worst of it.
+    window.Voice.stop();
     document.removeEventListener('keydown', onNumberKey, true);
     const el = root();
     el.removeEventListener('click', onPanelClick);
@@ -282,6 +285,7 @@
       bust: G().withTileVer(node.speaker?.bust || ''),
       fallback: G().bodySpriteUrl(node.speaker?.image_url || ''),
       text: node.text || '',
+      vo: node.vo || [],
     }];
 
     (node.interjections || []).forEach((i) => {
@@ -295,6 +299,9 @@
         bust: row && row.sprite_key ? G().spriteArtUrl(row.sprite_key, '_bust') : '',
         fallback: '',
         text: stripSpeakerPrefix(i.text || '', row ? row.name : i.companion, i.companion),
+        // The recording was cut from the same authored line and had the same
+        // `Aldric:` taken off its front, by the same rule, in the generator.
+        vo: i.vo || [],
         aside: true,
         band: band && band.cls ? band.cls : '',
       });
@@ -321,6 +328,10 @@
           <img class="dlg-bust" alt="">
           <div class="dlg-name"></div>
           <div class="dlg-role"></div>
+          <label class="dlg-vo" title="Read the scene aloud">
+            <input type="checkbox" data-vo${window.Voice.enabled() ? ' checked' : ''}>
+            <span>Voice</span>
+          </label>
         </div>
         <div class="dlg-script">
           <p class="dlg-line" aria-live="polite"></p>
@@ -331,6 +342,14 @@
                 aria-label="End the conversation">Esc</button>
       </div>`;
     root().querySelector('[data-close]').onclick = () => close();
+
+    // Turning it on mid-scene starts the line being read now rather than at the
+    // next beat: the player has just asked to hear this, and the beat they are
+    // looking at is the one they meant.
+    root().querySelector('[data-vo]').onchange = (e) => {
+      window.Voice.setEnabled(e.target.checked);
+      if (e.target.checked) window.Voice.play(session.beats[session.beat]?.vo);
+    };
   }
 
   /**
@@ -373,6 +392,12 @@
 
     $('#dlg-choices', el).innerHTML = '';
     $('#dlg-advance', el).innerHTML = '';
+
+    // Started with the crawl rather than waited for: the reading is usually the
+    // longer of the two, and holding the replies back until it finished would
+    // make the voiceover something to sit through. Skipping ahead cuts it off,
+    // which is the same bargain the text crawl already offers.
+    window.Voice.play(beat.vo);
 
     session.skip = typeOut(line, beat.text, onBeatTyped);
   }

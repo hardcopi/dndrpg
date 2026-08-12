@@ -1,0 +1,10 @@
+{
+  "narrator": "bf_emma",
+  "voices": {
+    "garrow_finch": "bm_fable",
+    "sera": "af_alloy",
+    "aldric": "am_michael",
+    "kessa": "af_sarah",
+    "ilse": "bf_isabella"
+  }
+}

@@ -394,6 +394,12 @@ class DialogEngine
                 'bust'       => self::bust($speaker, (int) ($node['expression'] ?? 1)),
             ],
             'text'          => (string) $node['text'],
+            // The recorded reading, when there is one. Shipped whether or not
+            // the player has the voiceover switched on: it is a handful of URLs
+            // against a payload that already carries a paragraph of prose, and
+            // making the toggle a round trip would put a silence in front of
+            // every line the first time somebody turned it on.
+            'vo'            => Voiceover::clips($npcKey, (string) $node['text']),
             'interjections' => $this->interjections($node, $ctx, $partyId, $npcKey, $nodeKey),
             'choices'       => $this->choices($node, $ctx, $partyId, $npcKey, $nodeKey),
         ];
@@ -436,6 +442,10 @@ class DialogEngine
                 'companion' => $key,
                 'text'      => (string) $line['text'],
                 'approval'  => $state['approval'],
+                // Filed under the NPC whose conversation the aside belongs to,
+                // not under the companion: an aside is written for this scene
+                // and is recorded with it.
+                'vo'        => Voiceover::clips($npcKey, (string) $line['text']),
             ];
         }
         return $out;

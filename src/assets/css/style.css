@@ -3844,7 +3844,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   .dlg-speaker {
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);
-    grid-template-areas: "bust name" "bust role";
+    grid-template-areas: "bust name" "bust role" "bust voice";
     align-items: center;
     gap: 0 var(--sp-10);
     text-align: left;
@@ -3855,6 +3855,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   .dlg-bust { grid-area: bust; width: 56px; height: 70px; }
   .dlg-name { grid-area: name; margin-top: 0; }
   .dlg-role { grid-area: role; }
+  .dlg-vo { grid-area: voice; margin-top: var(--sp-2); }
 
   /* The line no longer needs to dodge the close button: it is below the
      speaker row now, and that row is carrying the clearance. */
@@ -3979,6 +3980,27 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
    short of it. Without the reserved gutter the first two lines of every long
    speech run underneath the button and lose their last word — and only long
    speeches show it, so it survives any amount of testing on short ones. */
+/* Read-aloud, under the portrait rather than up beside Esc.
+ *
+ * The top-right corner is spoken for: .dlg-close sits there absolutely and
+ * .dlg-line carries 4.25rem of padding to clear it. A second control in that
+ * corner would have to widen that clearance, and padding-right on the line
+ * shortens EVERY line of the paragraph, not just the one beside the button.
+ * Under the bust it costs nothing and it sits with the rest of the furniture
+ * about who is talking, which is what it controls. */
+.dlg-vo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-6);
+  margin-top: var(--sp-10);
+  color: var(--text-dim);
+  font-size: var(--fs-2xs);
+  cursor: pointer;
+  user-select: none;
+}
+.dlg-vo:hover { color: var(--text); }
+.dlg-vo input { accent-color: var(--accent); cursor: pointer; margin: 0; }
+
 .dlg-close { position: absolute; top: 0.5rem; right: 0.6rem; z-index: 2; }   /* local: over the line of dialogue */
 /* Clearance, not rhythm: .dlg-close is absolutely positioned in this
    corner and this is its width plus air. It answers to the button, not to
