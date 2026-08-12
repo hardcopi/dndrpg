@@ -1,10 +1,438 @@
 {
-  "narrator": "bf_emma",
+  "narrator": {
+    "voice": "bf_emma",
+    "accent": "en-GB",
+    "gender": "female",
+    "grade": "B-",
+    "name": "The narrator"
+  },
   "voices": {
-    "garrow_finch": "bm_fable",
-    "sera": "af_alloy",
-    "aldric": "am_michael",
-    "kessa": "af_sarah",
-    "ilse": "bf_isabella"
+    "garrow_finch": {
+      "voice": "bm_fable",
+      "accent": "en-GB",
+      "gender": "male",
+      "grade": "C",
+      "name": "Garrow Finch"
+    },
+    "sera": {
+      "voice": "af_alloy",
+      "accent": "en-US",
+      "gender": "female",
+      "grade": "C",
+      "name": "Sera Vance"
+    },
+    "aldric": {
+      "voice": "am_michael",
+      "accent": "en-US",
+      "gender": "male",
+      "grade": "C+",
+      "name": "Brother Aldric"
+    },
+    "kessa": {
+      "voice": "af_sarah",
+      "accent": "en-US",
+      "gender": "female",
+      "grade": "C+",
+      "name": "Kessa Dunmar"
+    },
+    "ilse": {
+      "voice": "bf_isabella",
+      "accent": "en-GB",
+      "gender": "female",
+      "grade": "C",
+      "name": "Ilse Thornwood"
+    },
+    "aggie_slate": {
+      "voice": "af_bella",
+      "accent": "en-US",
+      "gender": "female",
+      "grade": "A-",
+      "name": "Aggie Slate"
+    },
+    "alder_pyke": {
+      "voice": "bm_lewis",
+      "accent": "en-GB",
+      "gender": "male",
+      "grade": "D+",
+      "name": "Alder Pyke"
+    },
+    "almoner_venn": {
+      "voice": "bm_george",
+      "accent": "en-GB",
+      "gender": "male",
+      "grade": "C",
+      "name": "Brother Venn"
+    },
+    "bael_rourke": {
+      "voice": "bm_daniel",
+      "accent": "en-GB",
+      "gender": "male",
+      "grade": "D",
+      "name": "Bael Rourke"
+    },
+    "bram_ockley": {
+      "voice": "am_liam",
+      "accent": "en-US",
+      "gender": "male",
+      "grade": "D",
+      "name": "Officer Bram Ockley"
+    },
+    "jimmy_able": {
+      "voice": "am_onyx",
+      "accent": "en-US",
+      "gender": "male",
+      "grade": "D",
+      "name": "Jimmy Able"
+    },
+    "brenna_smith": {
+      "voice": "bf_lily",
+      "accent": "en-GB",
+      "gender": "female",
+      "grade": "D",
+      "name": "Brenna Coalwright"
+    },
+    "brother_teodor": {
+      "voice": "am_echo",
+      "accent": "en-US",
+      "gender": "male",
+      "grade": "D",
+      "name": "Brother Teodor"
+    },
+    "captain_elowen": {
+      "voice": "af_sky",
+      "accent": "en-US",
+      "gender": "female",
+      "grade": "C-",
+      "name": "Captain Elowen Reed"
+    },
+    "corrin_dale": {
+      "voice": "am_eric",
+      "accent": "en-US",
+      "gender": "male",
+      "grade": "D",
+      "name": "Corrin Dale"
+    },
+    "cully_tench": {
+      "voice": "am_puck",
+      "accent": "en-US",
+      "gender": "male",
+      "grade": "C+",
+      "name": "Cully Tench"
+    },
+    "dessa_kell": {
+      "voice": "af_nova",
+      "accent": "en-US",
+      "gender": "female",
+      "grade": "C",
+      "name": "Dessa Kell"
+    },
+    "dorn_ackley": {
+      "voice": "am_fenrir",
+      "accent": "en-US",
+      "gender": "male",
+      "grade": "C+",
+      "name": "Dorn Ackley"
+    },
+    "dov_mudlark": {
+      "voice": "af_kore",
+      "accent": "en-US",
+      "gender": "female",
+      "grade": "C+",
+      "name": "Dov"
+    },
+    "fessick": {
+      "voice": "bm_daniel",
+      "accent": "en-GB",
+      "gender": "male",
+      "grade": "D",
+      "name": "Fessick"
+    },
+    "foreman_dessel": {
+      "voice": "am_eric",
+      "accent": "en-US",
+      "gender": "male",
+      "grade": "D",
+      "name": "Foreman Dessel"
+    },
+    "gest_pyle": {
+      "voice": "am_liam",
+      "accent": "en-US",
+      "gender": "male",
+      "grade": "D",
+      "name": "Gest Pyle"
+    },
+    "gillian_petch": {
+      "voice": "af_nicole",
+      "accent": "en-US",
+      "gender": "female",
+      "grade": "B-",
+      "name": "Gillian Petch"
+    },
+    "gubb_wrayne": {
+      "voice": "am_fenrir",
+      "accent": "en-US",
+      "gender": "male",
+      "grade": "C+",
+      "name": "Gubb Wrayne"
+    },
+    "hesk_dray": {
+      "voice": "am_onyx",
+      "accent": "en-US",
+      "gender": "male",
+      "grade": "D",
+      "name": "Hesk Dray"
+    },
+    "hollis_marrow": {
+      "voice": "am_echo",
+      "accent": "en-US",
+      "gender": "male",
+      "grade": "D",
+      "name": "Hollis Marrow"
+    },
+    "inn_sleeper": {
+      "voice": "am_michael",
+      "accent": "en-US",
+      "gender": "male",
+      "grade": "C+",
+      "name": "Corbin Waite"
+    },
+    "joss_frayle": {
+      "voice": "am_puck",
+      "accent": "en-US",
+      "gender": "male",
+      "grade": "C+",
+      "name": "Joss Frayle"
+    },
+    "ludo_corse": {
+      "voice": "bm_lewis",
+      "accent": "en-GB",
+      "gender": "male",
+      "grade": "D+",
+      "name": "Ludo Corse"
+    },
+    "mara_hearthstone": {
+      "voice": "af_jessica",
+      "accent": "en-US",
+      "gender": "female",
+      "grade": "D",
+      "name": "Mara Hearthstone"
+    },
+    "marda_scole": {
+      "voice": "af_aoede",
+      "accent": "en-US",
+      "gender": "female",
+      "grade": "C+",
+      "name": "Marda Scole"
+    },
+    "market_baker": {
+      "voice": "af_heart",
+      "accent": "en-US",
+      "gender": "female",
+      "grade": "A",
+      "name": "Nell Quist"
+    },
+    "mott_wenn": {
+      "voice": "bm_george",
+      "accent": "en-GB",
+      "gender": "male",
+      "grade": "C",
+      "name": "Mott Wenn"
+    },
+    "nakka": {
+      "voice": "af_river",
+      "accent": "en-US",
+      "gender": "female",
+      "grade": "D",
+      "name": "Nakka Skarn"
+    },
+    "nell_carrow": {
+      "voice": "bf_alice",
+      "accent": "en-GB",
+      "gender": "female",
+      "grade": "D",
+      "name": "Nell Carrow"
+    },
+    "nesh_gray": {
+      "voice": "af_jessica",
+      "accent": "en-US",
+      "gender": "female",
+      "grade": "D",
+      "name": "Nesh Gray"
+    },
+    "odger_vance": {
+      "voice": "bm_fable",
+      "accent": "en-GB",
+      "gender": "male",
+      "grade": "C",
+      "name": "Odger Vance"
+    },
+    "orm_lisser": {
+      "voice": "am_liam",
+      "accent": "en-US",
+      "gender": "male",
+      "grade": "D",
+      "name": "Orm Lisser"
+    },
+    "orrin_bly": {
+      "voice": "am_eric",
+      "accent": "en-US",
+      "gender": "male",
+      "grade": "D",
+      "name": "Orrin Bly"
+    },
+    "osgar_tull": {
+      "voice": "am_echo",
+      "accent": "en-US",
+      "gender": "male",
+      "grade": "D",
+      "name": "Osgar Tull"
+    },
+    "osric_apothecary": {
+      "voice": "bm_lewis",
+      "accent": "en-GB",
+      "gender": "male",
+      "grade": "D+",
+      "name": "Osric Fen"
+    },
+    "penned_boys": {
+      "voice": "am_onyx",
+      "accent": "en-US",
+      "gender": "male",
+      "grade": "D",
+      "name": "The Penned Boys"
+    },
+    "pol_reddick": {
+      "voice": "bm_daniel",
+      "accent": "en-GB",
+      "gender": "male",
+      "grade": "D",
+      "name": "Pol Reddick"
+    },
+    "prioress_hale": {
+      "voice": "af_alloy",
+      "accent": "en-US",
+      "gender": "female",
+      "grade": "C",
+      "name": "Ottilie Hale"
+    },
+    "quartermaster_oyle": {
+      "voice": "am_puck",
+      "accent": "en-US",
+      "gender": "male",
+      "grade": "C+",
+      "name": "Quartermaster Oyle"
+    },
+    "sella_carrow": {
+      "voice": "af_kore",
+      "accent": "en-US",
+      "gender": "female",
+      "grade": "C+",
+      "name": "Sella Carrow"
+    },
+    "serjeant_ballow": {
+      "voice": "am_michael",
+      "accent": "en-US",
+      "gender": "male",
+      "grade": "C+",
+      "name": "Serjeant Ballow"
+    },
+    "sib_marrell": {
+      "voice": "bm_fable",
+      "accent": "en-GB",
+      "gender": "male",
+      "grade": "C",
+      "name": "Sib Marrell"
+    },
+    "sister_ovid": {
+      "voice": "af_heart",
+      "accent": "en-US",
+      "gender": "female",
+      "grade": "A",
+      "name": "Ovid"
+    },
+    "sten_harrow": {
+      "voice": "bm_george",
+      "accent": "en-GB",
+      "gender": "male",
+      "grade": "C",
+      "name": "Sten Harrow"
+    },
+    "street_almoner": {
+      "voice": "am_fenrir",
+      "accent": "en-US",
+      "gender": "male",
+      "grade": "C+",
+      "name": "Dagen Wyke"
+    },
+    "street_cutpurse": {
+      "voice": "bm_george",
+      "accent": "en-GB",
+      "gender": "male",
+      "grade": "C",
+      "name": "Rilk"
+    },
+    "street_seer": {
+      "voice": "af_sarah",
+      "accent": "en-US",
+      "gender": "female",
+      "grade": "C+",
+      "name": "Nan Vetch"
+    },
+    "tibald_ashe": {
+      "voice": "am_eric",
+      "accent": "en-US",
+      "gender": "male",
+      "grade": "D",
+      "name": "Tibald Ashe"
+    },
+    "tobin": {
+      "voice": "am_echo",
+      "accent": "en-US",
+      "gender": "male",
+      "grade": "D",
+      "name": "Tobin Brassscale"
+    },
+    "tull_barrow": {
+      "voice": "am_fenrir",
+      "accent": "en-US",
+      "gender": "male",
+      "grade": "C+",
+      "name": "Tull Barrow"
+    },
+    "vessa_dann": {
+      "voice": "bf_lily",
+      "accent": "en-GB",
+      "gender": "female",
+      "grade": "D",
+      "name": "Vessa Dann"
+    },
+    "wat_fenner": {
+      "voice": "bm_daniel",
+      "accent": "en-GB",
+      "gender": "male",
+      "grade": "D",
+      "name": "Wat Fenner"
+    },
+    "wenna_coyle": {
+      "voice": "af_sky",
+      "accent": "en-US",
+      "gender": "female",
+      "grade": "C-",
+      "name": "Wenna Coyle"
+    },
+    "wick_lorrimer": {
+      "voice": "am_michael",
+      "accent": "en-US",
+      "gender": "male",
+      "grade": "C+",
+      "name": "Wick Lorrimer"
+    },
+    "wren_tallow": {
+      "voice": "af_bella",
+      "accent": "en-US",
+      "gender": "female",
+      "grade": "A-",
+      "name": "Wren Tallow"
+    }
   }
 }

@@ -1,0 +1,406 @@
+{
+ "75275beffe152f2faf462824788c931c8d22952c": [
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "b185a83da3a1995b.mp3"
+  },
+  {
+   "speaker": "inn_sleeper",
+   "voice": "am_michael",
+   "src": "0d1f7688d5856bd1.mp3"
+  },
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "00b616eda4c68170.mp3"
+  },
+  {
+   "speaker": "inn_sleeper",
+   "voice": "am_michael",
+   "src": "1dd638a7743ea03a.mp3"
+  }
+ ],
+ "d0170d6b8a554a491317805ddec336a19310af95": [
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "bcca2a227f885325.mp3"
+  }
+ ],
+ "2513f019c5409b31df66d9af0e380c696e98f548": [
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "0facb0e836cdaa7e.mp3"
+  }
+ ],
+ "c74a83dd971f8335ca009fee119d5d7ff07c7b35": [
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "fa49bc01d9b64607.mp3"
+  },
+  {
+   "speaker": "inn_sleeper",
+   "voice": "am_michael",
+   "src": "173e5e7d0e76d10b.mp3"
+  },
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "d23832e998309008.mp3"
+  },
+  {
+   "speaker": "inn_sleeper",
+   "voice": "am_michael",
+   "src": "ad671e2707179675.mp3"
+  }
+ ],
+ "81c0019c4e8519654d5bf475c54181c5e5c568eb": [
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "07c445d2419a1504.mp3"
+  },
+  {
+   "speaker": "inn_sleeper",
+   "voice": "am_michael",
+   "src": "eae89664c851eb5e.mp3"
+  },
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "03647467a344d9fc.mp3"
+  },
+  {
+   "speaker": "inn_sleeper",
+   "voice": "am_michael",
+   "src": "ed18613a2bb72387.mp3"
+  }
+ ],
+ "2a1f11b0e5a835e205e5dde1e35f94260699cf39": [
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "7c52ff9567f3ba66.mp3"
+  }
+ ],
+ "30b0f6cb52b9f6951fac9f4a80954146c1d25f91": [
+  {
+   "speaker": "inn_sleeper",
+   "voice": "am_michael",
+   "src": "abbda511f76c4fe1.mp3"
+  },
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "b6479be9c26cfd72.mp3"
+  },
+  {
+   "speaker": "inn_sleeper",
+   "voice": "am_michael",
+   "src": "354f7b834713b3e3.mp3"
+  },
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "2d62132f306abae3.mp3"
+  }
+ ],
+ "5d30714525e9d4ed6cb9607e1fe5005161e172d0": [
+  {
+   "speaker": "inn_sleeper",
+   "voice": "am_michael",
+   "src": "af6518844480cf9a.mp3"
+  },
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "f07d1ae929e5bfb6.mp3"
+  },
+  {
+   "speaker": "inn_sleeper",
+   "voice": "am_michael",
+   "src": "163df561b583cb0d.mp3"
+  },
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "69f232caa7ee0e7d.mp3"
+  },
+  {
+   "speaker": "inn_sleeper",
+   "voice": "am_michael",
+   "src": "58fe9983f4304333.mp3"
+  },
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "a049415cbe531288.mp3"
+  },
+  {
+   "speaker": "inn_sleeper",
+   "voice": "am_michael",
+   "src": "940e3447f9023145.mp3"
+  },
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "5ebdf379c36175f5.mp3"
+  }
+ ],
+ "7e76d329d928fdb3dc8220d9ad4e7a468f842454": [
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "aed5cee919529874.mp3"
+  }
+ ],
+ "4bbd41f67b085e9a93ae5b1b912c4c68466805d8": [
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "aad32a0c81aae8f5.mp3"
+  }
+ ],
+ "b98d91a7974a12e23bd2304a227d9b8aae1a10bc": [
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "cea99efeadfdd9cd.mp3"
+  },
+  {
+   "speaker": "inn_sleeper",
+   "voice": "am_michael",
+   "src": "553c041ab588e1d0.mp3"
+  },
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "e2f2355586d3f64f.mp3"
+  },
+  {
+   "speaker": "inn_sleeper",
+   "voice": "am_michael",
+   "src": "e0fbd4c6fa66d6ec.mp3"
+  }
+ ],
+ "7d1c3d5d7a228191497a8670117050cfe2df361c": [
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "185672b743416fdc.mp3"
+  },
+  {
+   "speaker": "inn_sleeper",
+   "voice": "am_michael",
+   "src": "afef174cff916776.mp3"
+  },
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "d23832e998309008.mp3"
+  },
+  {
+   "speaker": "inn_sleeper",
+   "voice": "am_michael",
+   "src": "2515adb1f51757a3.mp3"
+  },
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "4d35abb081526c5a.mp3"
+  },
+  {
+   "speaker": "inn_sleeper",
+   "voice": "am_michael",
+   "src": "2105810f61d874d4.mp3"
+  },
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "d23832e998309008.mp3"
+  },
+  {
+   "speaker": "inn_sleeper",
+   "voice": "am_michael",
+   "src": "8e6956640e6d2123.mp3"
+  }
+ ],
+ "4f7bcc1c8ae5ecc1288613754cbb4989ccb72e57": [
+  {
+   "speaker": "inn_sleeper",
+   "voice": "am_michael",
+   "src": "85d62dbb1183b308.mp3"
+  },
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "00b616eda4c68170.mp3"
+  },
+  {
+   "speaker": "inn_sleeper",
+   "voice": "am_michael",
+   "src": "6dbb8f436ada98f6.mp3"
+  },
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "ef9de2e9b0e9c985.mp3"
+  },
+  {
+   "speaker": "inn_sleeper",
+   "voice": "am_michael",
+   "src": "a9e92141e6998f31.mp3"
+  },
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "5b6e8857e98bdaaf.mp3"
+  },
+  {
+   "speaker": "inn_sleeper",
+   "voice": "am_michael",
+   "src": "ddefc80c8b6c149c.mp3"
+  }
+ ],
+ "6192b766dfb71b2201cb80225915df6171bccd6d": [
+  {
+   "speaker": "inn_sleeper",
+   "voice": "am_michael",
+   "src": "c5950a88c92aac04.mp3"
+  },
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "a732991180fb702f.mp3"
+  },
+  {
+   "speaker": "inn_sleeper",
+   "voice": "am_michael",
+   "src": "ca5f99574711dd96.mp3"
+  },
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "059e69b4221318c3.mp3"
+  },
+  {
+   "speaker": "inn_sleeper",
+   "voice": "am_michael",
+   "src": "556c3da3ecd17dd3.mp3"
+  },
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "d23832e998309008.mp3"
+  },
+  {
+   "speaker": "inn_sleeper",
+   "voice": "am_michael",
+   "src": "5052ddaffcb13c07.mp3"
+  }
+ ],
+ "6a58a916ab2823bf2e973bbd9203e028d174f601": [
+  {
+   "speaker": "inn_sleeper",
+   "voice": "am_michael",
+   "src": "6eafa7e9b0a54281.mp3"
+  },
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "651429d9d4fb08d2.mp3"
+  },
+  {
+   "speaker": "inn_sleeper",
+   "voice": "am_michael",
+   "src": "b91b3c33af94f6fc.mp3"
+  },
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "adcabcff2a547102.mp3"
+  },
+  {
+   "speaker": "inn_sleeper",
+   "voice": "am_michael",
+   "src": "97d424809d87c1c9.mp3"
+  },
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "d23832e998309008.mp3"
+  },
+  {
+   "speaker": "inn_sleeper",
+   "voice": "am_michael",
+   "src": "20deaed6060a9f96.mp3"
+  },
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "ca522bbcb1db6ca5.mp3"
+  }
+ ],
+ "0cc686ee50017fb46fea95c3f8d4083ea480f0f8": [
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "b2ed9d3459ee9d0f.mp3"
+  },
+  {
+   "speaker": "ilse",
+   "voice": "bf_isabella",
+   "src": "4b78ba46e5c862e6.mp3"
+  }
+ ],
+ "936d304cd29720b4be5ef3763b5c322062f7cda8": [
+  {
+   "speaker": "inn_sleeper",
+   "voice": "am_michael",
+   "src": "9fafa94492a85fd5.mp3"
+  },
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "a732991180fb702f.mp3"
+  },
+  {
+   "speaker": "inn_sleeper",
+   "voice": "am_michael",
+   "src": "57499cd49a161d6b.mp3"
+  },
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "4baae3aa71c80339.mp3"
+  },
+  {
+   "speaker": "inn_sleeper",
+   "voice": "am_michael",
+   "src": "9687cfe47bc5390a.mp3"
+  },
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "fa2d51eab08e7394.mp3"
+  },
+  {
+   "speaker": "inn_sleeper",
+   "voice": "am_michael",
+   "src": "baca891f74dc3d53.mp3"
+  },
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "70b986c81444f9b8.mp3"
+  },
+  {
+   "speaker": "inn_sleeper",
+   "voice": "am_michael",
+   "src": "30d054d3a94d418d.mp3"
+  }
+ ]
+}

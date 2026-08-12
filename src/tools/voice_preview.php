@@ -179,10 +179,26 @@ foreach ($nodes as $n) {
     <?php endif; ?>
   </p>
 
+  <?php
+  /**
+   * A registry row, as a chip. Written to survive BOTH shapes of voices.json:
+   * the first draft recorded a bare voice id per character and the second an
+   * object with the accent and grade beside it. This page is a bench and gets
+   * pointed at old checkouts, where "Array" in a chip and a type warning in the
+   * log would look like a fault in the cast rather than in the reader.
+   */
+  $chip = static function ($entry): string {
+      if (!is_array($entry)) {
+          return htmlspecialchars((string) $entry);
+      }
+      return htmlspecialchars($entry['voice'] ?? '?')
+          . ' <em>' . htmlspecialchars($entry['accent'] ?? '') . '</em>';
+  };
+  ?>
   <div class="bench-cast">
-    <span>narrator <?= htmlspecialchars((string) ($cast['narrator'] ?? '?')) ?></span>
-    <?php foreach (($cast['voices'] ?? []) as $who => $voice): ?>
-      <span><?= htmlspecialchars($who) ?> <?= htmlspecialchars($voice) ?></span>
+    <span>narrator <?= $chip($cast['narrator'] ?? '?') ?></span>
+    <?php foreach (($cast['voices'] ?? []) as $who => $entry): ?>
+      <span><?= htmlspecialchars($who) ?> <?= $chip($entry) ?></span>
     <?php endforeach; ?>
   </div>
   <p class="bench-note"><?= count($nodes) ?> variant(s), <?= $clips ?> clip(s).</p>

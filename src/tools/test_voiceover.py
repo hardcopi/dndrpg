@@ -185,8 +185,59 @@ def test_casting() -> None:
 
 
 def assign_twice(key: str) -> bool:
-    a, b = {"narrator": vo.NARRATOR, "voices": {}}, {"narrator": vo.NARRATOR, "voices": {}}
+    a, b = empty_cast(), empty_cast()
     return vo.assign_voice(a, key, "he him his") == vo.assign_voice(b, key, "he him his")
+
+
+def empty_cast() -> dict:
+    return {"narrator": vo.narrator_entry(), "voices": {}}
+
+
+def test_registry() -> None:
+    """The cast list: its migration, its spread, and what it refuses to do.
+
+    The migration is the dangerous one. Finch is `bm_fable` in a hundred and
+    eleven generated files, and a reformat that recast him would orphan every
+    one of them — silently, because the lookup is by hash and a miss is just
+    silence. So the test is not "does it produce v2", it is "does every voice
+    survive".
+    """
+    print("\nthe registry")
+
+    v1 = {"narrator": "bf_emma",
+          "voices": {"garrow_finch": "bm_fable", "kessa": "af_sarah",
+                     "sera": "af_alloy", "aldric": "am_michael",
+                     "ilse": "bf_isabella"}}
+    got = vo.migrate_cast(v1)
+
+    check("migrating the first format changes nobody's voice",
+          {k: r["voice"] for k, r in got["voices"].items()}, v1["voices"])
+    check("migrating fills in the accent",
+          got["voices"]["garrow_finch"]["accent"], "en-GB")
+    check("migrating fills in the grade",
+          got["voices"]["ilse"]["grade"], "C")
+    check("the narrator survives the migration",
+          got["narrator"]["voice"], vo.NARRATOR)
+
+    # Already-cast rows are read, never rewritten.
+    frozen = vo.migrate_cast(v1)
+    vo.assign_voice(frozen, "garrow_finch", "she her hers", "Garrow Finch")
+    check("an existing pick is not overwritten, even against the pronouns",
+          frozen["voices"]["garrow_finch"]["voice"], "bm_fable")
+    check("...but it does gain the display name",
+          frozen["voices"]["garrow_finch"].get("name"), "Garrow Finch")
+
+    # Spread. Twelve men cast into an eleven-strong male pool should use every
+    # voice once before doubling up; hashing alone put five on one voice.
+    cast = empty_cast()
+    pool = len(vo.VOICE_POOL["male"])
+    for i in range(pool):
+        vo.assign_voice(cast, f"man_{i}", "he him his")
+    used = {r["voice"] for r in cast["voices"].values()}
+    check(f"{pool} men fill the male pool without repeating", len(used), pool)
+
+    check("nobody can be cast as the narrator",
+          any(r["voice"] == vo.NARRATOR for r in cast["voices"].values()), False)
 
 
 def test_key_contract() -> None:
@@ -217,6 +268,7 @@ def test_key_contract() -> None:
 def main() -> int:
     test_cut()
     test_casting()
+    test_registry()
     test_key_contract()
     print(f"\n{'FAILED' if FAIL else 'passed'} — {FAIL} failure(s)")
     return 1 if FAIL else 0

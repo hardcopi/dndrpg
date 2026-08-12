@@ -34,3 +34,9 @@ src/assets/images/anim/
 # the intrinsic sizes of files no clone will contain is not a list of anything.
 # tools/make_art_manifest.py rebuilds it from the disk if they ever come back.
 src/assets/images/art.json
+
+# One line read aloud by each of the speech model's non-English voices, for
+# deciding by ear whether any of them belong in the cast. Scratch for a human
+# judgement, not an asset: no page references them, deploy.sh excludes them,
+# and `tools/gen_voiceover.py --sample-accents` makes them again in a minute.
+src/assets/audio/vo/_accent_samples/
