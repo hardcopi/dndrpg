@@ -56,7 +56,13 @@ function board(array $conditions = [], int $left = 30): array
         'grid' => ['terrain' => array_fill(0, 12, str_repeat('.', 16))],
         'log' => [],
         'combatants' => [
+            /* `character_id` 0 so that taking damage — which the walk test
+               below does — writes `WHERE id = 0` rather than `WHERE id = NULL`
+               and a warning. The column is auto_increment from 1, so 0 matches
+               nothing and this file's "touches no rows" stays true by
+               construction rather than by the id happening to be absent. */
             ['cid' => 'pc_1', 'type' => 'pc', 'side' => 'party', 'name' => 'Wren',
+             'character_id' => 0,
              'class' => 'Fighter', 'level' => 3, 'x' => 4, 'y' => 5,
              'speed' => 30, 'move_left' => $left, 'hp' => 19, 'max_hp' => 19,
              'alive' => true, 'conditions' => $conditions, 'boons' => [],
@@ -201,6 +207,74 @@ try {
     $shouted = str_contains($e->getMessage(), 'too far away');
 }
 ok('one across the room cannot', $shouted);
+
+/* ---------------------------------------------------------------------------
+ * A walk that gets interrupted, and WHEN the interruption is said to happen.
+ *
+ * Reported from a real fight: "Kessa just attacked and got hit by a rat from a
+ * distance." The rule was right — her path clipped the rat's reach at one cell
+ * and the opportunity attack fired as she left it — but stepMove() logged the
+ * whole move after the whole walk, so the log read
+ *
+ *     Giant Rat 2 lashes out as Kessa Dunmar breaks away.
+ *     Giant Rat 2 CRITS Kessa Dunmar: 24 vs AC 12, 6 piercing damage.
+ *     Kessa Dunmar moves 30 feet.
+ *
+ * and the client, which plays events in order, drew the bite while she was
+ * still standing on her starting cell thirty feet away.
+ *
+ * So this asserts the ORDER, not the arithmetic: the ground covered before the
+ * blow is on the board before the blow. The geometry that decides whether an
+ * attack happens at all is test_combat.php's.
+ * ------------------------------------------------------------------------- */
+echo "\n== a blow lands where the walk had got to ==\n";
+
+$stepMove = new ReflectionMethod(CombatEngine::class, 'stepMove');
+$stepMove->setAccessible(true);
+
+/* The bandit is at 10,5 and threatens 9..11 x 4..6. Wren starts at 4,5, walks
+   east into that reach at 9,5, then steps away to 9,7 — the same shape as the
+   rat and Kessa: in reach for one cell, then out. */
+$walk = board();
+$walk['order'] = ['pc_1', 'mon_1'];
+$walk['events'] = [];
+$path = array_map(
+    static fn (array $c) => BattleGrid::keyOf($c[0], $c[1]),
+    [[4, 5], [5, 5], [6, 5], [7, 5], [8, 5], [9, 5], [9, 6], [9, 7]]
+);
+$after = $stepMove->invoke($engine, $walk, 'pc_1', $path, $walk['grid']['terrain']);
+
+$types = array_column($after['events'], 'type');
+$firstMove = array_search('move', $types, true);
+$oa = array_search('opportunity', $types, true);
+
+ok('the walk provokes at all', $oa !== false);
+ok('and a move is on the board before the swing',
+    $firstMove !== false && $oa !== false && $firstMove < $oa,
+    'events were: ' . implode(', ', $types));
+
+/* The whole point: the segment emitted before the blow must END on a cell the
+   attacker can actually reach. This is the assertion that fails if stepMove
+   goes back to logging one move after the walk — the mover would still be on
+   her starting cell, six cells away, when the bite is drawn. */
+if ($firstMove !== false && $oa !== false && $firstMove < $oa) {
+    $at = $after['events'][$firstMove]['to'];
+    same('and it ends within the attacker\'s reach', 5,
+        BattleGrid::feet((int) $at[0], (int) $at[1], 10, 5));
+}
+
+/* A move nothing interrupts is still ONE line and ONE event. The split is the
+   information; a walk across an empty room must not grow segments. */
+$clear = board();
+$clear['events'] = [];
+$clearPath = array_map(
+    static fn (array $c) => BattleGrid::keyOf($c[0], $c[1]),
+    [[4, 5], [4, 6], [4, 7], [4, 8]]
+);
+$plain = $stepMove->invoke($engine, $clear, 'pc_1', $clearPath, $clear['grid']['terrain']);
+same('an uninterrupted walk is one event', 1,
+    count(array_filter($plain['events'], static fn ($e) => $e['type'] === 'move')));
+same('and one line', 1, count($plain['log']));
 
 echo PHP_EOL . str_repeat('-', 52) . PHP_EOL;
 printf("%d passed, %d failed%s", $pass, $fail, PHP_EOL);

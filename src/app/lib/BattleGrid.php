@@ -546,11 +546,19 @@ final class BattleGrid
      * a pair: cost first, then the number of TURNS, which is what makes a path
      * look like somebody walking rather than a tie being broken.
      *
-     * `turns` is carried on the entry for that comparison and is not a fact
-     * about the board — `pathTo()` ignores it and the client is not shown it.
+     * That pair is now a triple, and `risk` — how many of somebody's threatened
+     * cells the route crosses — sits between them: cost, then RISK, then turns.
+     * Straightness was deciding which of two equally priced routes to take, and
+     * the straighter one ran through a rat's reach when a route of exactly the
+     * same length did not. Reaching a destination is unchanged; only the way
+     * there is. See the tie-break itself for the whole of that story.
+     *
+     * `turns`, `diags` and `risk` are carried on the entry for that comparison
+     * and are not facts about the board — `pathTo()` ignores them and the
+     * client is not shown them.
      *
      * @return array<string, array{cost:int, from:?string, end:bool, turns:int,
-     *                              diags:int, dir:?string}>
+     *                              diags:int, risk:int, dir:?string}>
      */
     public static function reachable(array $terrain, array $combatants, array $actor, int $budgetFt): array
     {
@@ -562,6 +570,7 @@ final class BattleGrid
         // hostile => cannot pass; friendly (or a downed body) => pass, don't stop.
         $blocked = [];
         $occupied = [];
+        $hostiles = [];
         foreach ($combatants as $c) {
             if (empty($c['alive'])) {
                 continue;
@@ -574,13 +583,23 @@ final class BattleGrid
             $occupied[$key] = true;
             if ((string) ($c['side'] ?? '') !== $side && self::upright($c)) {
                 $blocked[$key] = true;
+                $hostiles[] = $c;
             }
         }
 
+        // Whose reach the walk would have to cross. See the tie-break below:
+        // this does not change WHERE you can go, only which of the equally
+        // priced ways of getting there is the one recorded.
+        $threat = self::threatenedCells($terrain, $hostiles);
+
         $start = self::keyOf($sx, $sy);
+        // The origin's own risk is zero whether or not somebody threatens it:
+        // you are already standing there, and a route is not charged for the
+        // cell it starts on. Being IN reach at the start is exactly the case
+        // that provokes on the way out, and no choice of route avoids it.
         $out = [$start => [
             'cost' => 0, 'from' => null, 'end' => true,
-            'turns' => 0, 'diags' => 0, 'dir' => null,
+            'turns' => 0, 'diags' => 0, 'risk' => 0, 'dir' => null,
         ]];
         if ($budgetFt <= 0) {
             return $out;
@@ -603,6 +622,7 @@ final class BattleGrid
             $dirIn = $out[$key]['dir'];
             $turnsHere = $out[$key]['turns'];
             $diagsHere = $out[$key]['diags'];
+            $riskHere = $out[$key]['risk'];
 
             for ($dy = -1; $dy <= 1; $dy++) {
                 for ($dx = -1; $dx <= 1; $dx++) {
@@ -643,18 +663,39 @@ final class BattleGrid
                     // second is a V for no reason. Diagonals are the tie-break
                     // under that: spend them only where they buy ground.
                     $diags = $diagsHere + (($dx !== 0 && $dy !== 0) ? 1 : 0);
+                    // How much of somebody's reach this route has crossed.
+                    //
+                    // Ranked ABOVE straightness and BELOW cost, and both halves
+                    // of that matter. Above straightness, because the tie-break
+                    // as it stood picked the route that LOOKED better: walking
+                    // from (3,6) to (9,6) with a rat at (9,4), two routes cost
+                    // thirty feet and differed by one cell — (8,5), inside the
+                    // rat's reach, or (8,6), outside it. The straighter of the
+                    // two is the one through the rat, so the board spent a
+                    // player's hit points on an opportunity attack to save a
+                    // bend. Nobody chose that and nothing said it had happened.
+                    //
+                    // Below cost, because going the long way round is a real
+                    // decision with a real price — it can cost the rest of a
+                    // turn — and the engine does not get to make it. Shortest
+                    // still always wins; this only decides between routes that
+                    // already cost the same.
+                    $risk = $riskHere + (isset($threat[$nkey]) ? 1 : 0);
 
                     if (isset($out[$nkey])) {
                         if ($out[$nkey]['cost'] < $cost) {
                             continue;
                         }
-                        // Same price: keep whichever route bends less, then
-                        // whichever leans less. Equal on all three means keep
-                        // what is there, so the result does not depend on the
-                        // order the neighbours happen to be enumerated in.
+                        // Same price: keep whichever route crosses less reach,
+                        // then whichever bends less, then whichever leans less.
+                        // Equal on all four means keep what is there, so the
+                        // result does not depend on the order the neighbours
+                        // happen to be enumerated in.
                         if ($out[$nkey]['cost'] === $cost
-                            && ($out[$nkey]['turns'] < $turns
-                                || ($out[$nkey]['turns'] === $turns && $out[$nkey]['diags'] <= $diags))) {
+                            && ($out[$nkey]['risk'] < $risk
+                                || ($out[$nkey]['risk'] === $risk
+                                    && ($out[$nkey]['turns'] < $turns
+                                        || ($out[$nkey]['turns'] === $turns && $out[$nkey]['diags'] <= $diags))))) {
                             continue;
                         }
                     }
@@ -664,6 +705,7 @@ final class BattleGrid
                         'end'   => !isset($occupied[$nkey]),
                         'turns' => $turns,
                         'diags' => $diags,
+                        'risk'  => $risk,
                         'dir'   => $dir,
                     ];
                     $buckets[$cost][] = $nkey;

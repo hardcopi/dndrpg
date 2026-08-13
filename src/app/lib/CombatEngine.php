@@ -3868,8 +3868,7 @@ class CombatEngine
             return $state;
         }
         $mover = $this->getCombatant($state, $cid);
-        $from = [(int) $mover['x'], (int) $mover['y']];
-        $walked = [$from];
+        $walked = [[(int) $mover['x'], (int) $mover['y']]];
         $spent = 0;
 
         for ($i = 1; $i < count($path); $i++) {
@@ -3878,12 +3877,51 @@ class CombatEngine
             if (!$mover || !self::isTargetable($mover)) {
                 break;
             }
+            $cx = (int) $mover['x'];
+            $cy = (int) $mover['y'];
 
-            $state = $this->provoke($state, $cid, (int) $mover['x'], (int) $mover['y'], $nx, $ny, $terrain);
+            $watchers = $this->reactors($state, $cid);
+            $leaving = BattleGrid::threatenersOf($terrain, $watchers, $cx, $cy);
+            $entering = BattleGrid::threatenersOf($terrain, $watchers, $nx, $ny);
+            $swingers = empty($mover['disengaging'])
+                ? $this->opportunists($state, $leaving, $entering)
+                : [];
+
+            // THE WALK SO FAR GOES ON THE BOARD BEFORE THE BLOW THAT STOPS IT.
+            //
+            // An opportunity attack happens partway through a move, and this
+            // used to log the whole move after the whole walk — so the log read
+            // "the rat lashes out … Kessa moves 30 feet", and the client, which
+            // plays events in order, drew the bite while she was still standing
+            // on her starting cell thirty feet away. The rule was right and had
+            // always been right; the picture was a lie about when.
+            //
+            // Flushing here splits one move into the segments the interruption
+            // actually cut it into. A move nothing interrupts still emits
+            // exactly one event and one line, which is every move in most
+            // fights — the split IS the information, so it only appears when
+            // there is something to say.
+            if ($swingers) {
+                $state = $this->emitMove($state, $cid, $walked, $spent);
+                $walked = [[$cx, $cy]];
+                $spent = 0;
+            }
+
+            $state = $this->provoke(
+                $state,
+                $cid,
+                $cx,
+                $cy,
+                $swingers,
+                array_values(array_diff($entering, $leaving)),
+                $terrain
+            );
 
             $mover = $this->getCombatant($state, $cid);
             if (!$mover || !self::isTargetable($mover)) {
-                // Dropped on the way. Whoever it was stops where they stand.
+                // Dropped on the way. Whoever it was stops where they fell —
+                // and the segment they had already walked is on the board, so
+                // they fall where the blow caught them and not at the start.
                 break;
             }
 
@@ -3898,18 +3936,31 @@ class CombatEngine
             $walked[] = [$nx, $ny];
         }
 
+        return $this->emitMove($state, $cid, $walked, $spent);
+    }
+
+    /**
+     * One leg of a walk: the line and the event for it.
+     *
+     * A leg of nothing is not an event. stepMove() flushes whenever a step is
+     * about to be interrupted, and a mover interrupted on their very first step
+     * has gone nowhere yet — logging "moves 0 feet" before the blow would be a
+     * line about something that did not happen.
+     *
+     * @param array<int,array{0:int,1:int}> $walked cells, origin first
+     */
+    private function emitMove(array $state, string $cid, array $walked, int $spent): array
+    {
         if (count($walked) < 2) {
             return $state;
         }
-
-        $end = $walked[count($walked) - 1];
         $mover = $this->getCombatant($state, $cid);
         $state['log'][] = "{$mover['name']} moves {$spent} feet.";
         return $this->emit($state, [
             'type'  => 'move',
             'actor' => $cid,
-            'from'  => $from,
-            'to'    => $end,
+            'from'  => $walked[0],
+            'to'    => $walked[count($walked) - 1],
             'path'  => $walked,
             'cost'  => $spent,
         ]);
@@ -3923,37 +3974,29 @@ class CombatEngine
      * arm's length provokes nothing; walking away provokes. Disengaging
      * suppresses it entirely.
      *
+     * Who swings and who is newly in reach are decided by stepMove() and handed
+     * in, rather than worked out again here. It has to know before the step, so
+     * that the ground already covered is on the board before the blow lands —
+     * see the flush there — and a second computation of the same two sets is a
+     * second thing to keep in agreement with the first.
+     *
      * Order is initiative order rather than array order, so a walk across a
      * room is resolved the same way twice. Each reactor is re-read from state
      * inside the loop because resolveAttack() can drop the mover — and the
      * mover being gone is what stops the rest of the walk, up in stepMove().
+     *
+     * @param string[] $provoked cids that will swing, initiative order
+     * @param string[] $entered  cids whose reach the mover has just entered
      */
     private function provoke(
         array $state,
         string $moverCid,
         int $fromX,
         int $fromY,
-        int $toX,
-        int $toY,
+        array $provoked,
+        array $entered,
         array $terrain
     ): array {
-        $mover = $this->getCombatant($state, $moverCid);
-        if (!$mover || !empty($mover['disengaging'])) {
-            return $state;
-        }
-
-        $watchers = $this->reactors($state, $moverCid);
-        $leaving = BattleGrid::threatenersOf($terrain, $watchers, $fromX, $fromY);
-        $entering = BattleGrid::threatenersOf($terrain, $watchers, $toX, $toY);
-        $provoked = array_values(array_diff($leaving, $entering));
-        if (!$provoked) {
-            return $state;
-        }
-
-        // Initiative order, so the same walk resolves the same way every time.
-        $rank = array_flip((array) ($state['order'] ?? []));
-        usort($provoked, static fn ($a, $b) => ($rank[$a] ?? 99) <=> ($rank[$b] ?? 99));
-
         foreach ($provoked as $reactorCid) {
             $reactor = $this->getCombatant($state, $reactorCid);
             $mover = $this->getCombatant($state, $moverCid);
@@ -3989,7 +4032,50 @@ class CombatEngine
                 'cover' => 0, 'melee' => true, 'long' => false, 'crowded' => false, 'flank' => false,
             ]);
         }
-        return $this->fireReadied($state, $moverCid, array_values(array_diff($entering, $leaving)), $terrain);
+        return $this->fireReadied($state, $moverCid, $entered, $terrain);
+    }
+
+    /**
+     * Who, of the watchers on a step, will actually swing — in initiative order.
+     *
+     * Split out of provoke() so stepMove() can ask the question BEFORE the step
+     * rather than discover the answer afterwards. It has to know: an opportunity
+     * attack interrupts a walk, and the walk it interrupts has to be on the
+     * board before the blow lands or the swing is drawn against the mover's
+     * starting cell — which is how a rat at (9,4) came to bite somebody standing
+     * at (3,6), thirty feet away. The rule was right and the picture was not.
+     *
+     * Every filter here is a fact about the reactor at the moment the step is
+     * taken, so asking early and asking late give the same answer. What is NOT
+     * here is provoke()'s inner re-read of the mover — an earlier reactor can
+     * drop them and stop the rest — because that decides how many of these
+     * swing, not whether the step is interrupted at all.
+     *
+     * @param  string[] $leaving  watchers threatening the cell being left
+     * @param  string[] $entering watchers threatening the cell being entered
+     * @return string[] cids, initiative order
+     */
+    private function opportunists(array $state, array $leaving, array $entering): array
+    {
+        $provoked = array_values(array_filter(
+            array_diff($leaving, $entering),
+            function (string $cid) use ($state): bool {
+                $reactor = $this->getCombatant($state, $cid);
+                return $reactor
+                    && empty($reactor['reaction_used'])
+                    && self::isTargetable($reactor)
+                    && Conditions::canAct($reactor)
+                    // Nothing to swing. An archer with no other action does not
+                    // get to shoot somebody for walking past — that would be a
+                    // free ranged attack, which is not what a reaction is.
+                    && $this->meleeWeaponFor($reactor) !== null;
+            }
+        ));
+
+        // Initiative order, so the same walk resolves the same way every time.
+        $rank = array_flip((array) ($state['order'] ?? []));
+        usort($provoked, static fn ($a, $b) => ($rank[$a] ?? 99) <=> ($rank[$b] ?? 99));
+        return $provoked;
     }
 
     /**

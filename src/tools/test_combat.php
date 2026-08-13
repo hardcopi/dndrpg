@@ -824,6 +824,56 @@ $rooted = at('growth', 'foe', 8, 5, ['speed' => 0]);
 $stuck = BattleGrid::reachable($open, [$rooted], $rooted, 0);
 same('something with no speed reaches only its own cell', ['8,5'], array_keys($stuck));
 
+/* Of two routes that cost the same, the one that does not walk through a
+ * enemy's reach.
+ *
+ * Reported from a real fight: a rogue crossed a room to a cell ten feet from a
+ * giant rat and was bitten on the way, and nothing she or the player did put
+ * her next to it. Both routes cost thirty feet and they differed by ONE cell —
+ * the straighter of the two clipped the rat's reach, and straightness was the
+ * tie-break, so the board spent her hit points to save a bend.
+ *
+ * The shape below is that fight, reduced: a walker due west of a destination
+ * with a guard one row north of the midpoint. Going straight along the row
+ * passes inside the guard's reach; stepping one cell south of it does not, and
+ * costs exactly the same because a diagonal is priced as a step.
+ */
+$walker = at('walker', 'party', 2, 5);
+$sentry = at('sentry', 'foe', 5, 4);
+$route = BattleGrid::reachable($open, [$walker, $sentry], $walker, 30);
+$dest = '8,5';
+
+/* The sentry at 5,4 reaches 4..6 x 3..5, so the straight walk due east along
+   row 5 crosses three of its cells. Dipping to row 6 for the middle of the
+   journey costs exactly the same — a diagonal is priced as a step, so down-one
+   and up-one are free — and touches none of them. Before risk was weighed, the
+   straight line won on turns and the walker ate an opportunity attack. */
+$threatened = BattleGrid::threatenedCells($open, [$sentry]);
+ok('the straight line really would have crossed the sentry\'s reach',
+    isset($threatened['4,5']) && isset($threatened['5,5']) && isset($threatened['6,5']));
+ok('and the way round it really is clear', !isset($threatened['5,6']));
+
+$crossed = array_values(array_filter(
+    array_slice(BattleGrid::pathTo($route, $dest), 1),
+    static fn (string $cell) => isset($threatened[$cell])
+));
+
+ok('the destination is reachable at all', isset($route[$dest]));
+same('and the route to it enters nobody\'s reach', [], $crossed);
+same('while still costing what the straight line costs', 30, $route[$dest]['cost'] ?? -1);
+
+/* And the half of the rule that must NOT change: risk is ranked below cost, so
+ * a safer route is never bought with extra movement. Boxed in by a guard whose
+ * reach covers the only doorway, the walker still goes through it — going the
+ * long way round is a decision with a price, and the engine does not get to
+ * make it on the player's behalf. */
+$corridor = paint(paint(paint(board(), 5, 4, '#'), 5, 6, '#'), 5, 7, '#');
+$doorman = at('doorman', 'foe', 6, 6, ['reach_ft' => 5]);
+$squeeze = at('squeeze', 'party', 4, 5);
+$forced = BattleGrid::reachable($corridor, [$squeeze, $doorman], $squeeze, 30);
+ok('a route that can only be walked through somebody\'s reach is still offered',
+    isset($forced['6,4']) || isset($forced['5,5']));
+
 // ---------------------------------------------------------------------------
 section('Threat, opportunity and flanking');
 
