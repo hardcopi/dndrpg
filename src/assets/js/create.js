@@ -40,6 +40,8 @@
     nameChecked: '',
     /** Which peoples NameGen has names for, from meta/races. */
     nameTables: [],
+    /** Class name => {primary: [short keys], secondary: short key}, from meta/classes. */
+    keyAbilities: {},
     /**
      * The six 4d6 totals the server rolled, or null before any roll.
      *
@@ -242,6 +244,13 @@
     state.step = i;
     state.reached = Math.max(state.reached, i);
     if (STEPS[i].id === 'review') renderReview();
+    // Abilities is drawn on arrival for the same reason review is: it now says
+    // something about the CLASS — which is primary, which is next — and the
+    // class is chosen on the step before it. It used to be built once at load
+    // and never again, which was true enough while the grid was six identical
+    // boxes, and became a Wizard being told to raise Strength the moment they
+    // carried any information.
+    if (STEPS[i].id === 'abilities') renderAbilities();
     renderWizard();
     // Each step is its own screen, so start it at the top rather than wherever
     // the previous one happened to be scrolled to.
@@ -369,6 +378,7 @@
     ]);
     state.races = races.races;
     state.nameTables = races.name_tables || [];
+    state.keyAbilities = classes.key_abilities || {};
     state.classes = classes.classes;
     state.pointBuy = pb;
     state.avatars = avatars.avatars || [];
@@ -1167,9 +1177,14 @@
       const sel = tray.querySelector('.roll-tray-pick');
       const mine = state.rollAssign[i];
 
-      sel.innerHTML = ABILS.map(
-        (a) => `<option value="${a}"${a === mine ? ' selected' : ''}>${ABIL_SHORT[a]}</option>`
-      ).join('');
+      // The random method has no ability grid to mark, so the ranking has to
+      // ride on the option text — an <option> holds no markup, and a select is
+      // narrow, so it is two characters rather than the word.
+      const key = classAbilities();
+      sel.innerHTML = ABILS.map((a) => {
+        const rank = key.primary.includes(a) ? ' · 1st' : (key.secondary === a ? ' · 2nd' : '');
+        return `<option value="${a}"${a === mine ? ' selected' : ''}>${ABIL_SHORT[a]}${rank}</option>`;
+      }).join('');
 
       if (!sel.dataset.wired) {
         sel.dataset.wired = '1';
@@ -1220,9 +1235,56 @@
     return null;
   }
 
+  /** Rules::ABILITIES is short keys; this page is long ones. */
+  const ABIL_LONG = {
+    str: 'strength', dex: 'dexterity', con: 'constitution',
+    int: 'intelligence', wis: 'wisdom', cha: 'charisma',
+  };
+
+  /**
+   * What the chosen class wants, as long ability names.
+   *
+   * The two halves are different KINDS of claim and are kept apart all the way
+   * to the screen: `primary` is the SRD's own field off the class row, and
+   * `secondary` is this project's advice about what to raise next. A class the
+   * table has nothing for marks nothing — the grid is the same grid it was.
+   */
+  function classAbilities() {
+    const chosen = $('#class')?.value;
+    const row = chosen ? (state.keyAbilities || {})[chosen] : null;
+    if (!row) return { primary: [], secondary: null };
+    return {
+      primary: (row.primary || []).map((k) => ABIL_LONG[k]).filter(Boolean),
+      secondary: ABIL_LONG[row.secondary] || null,
+    };
+  }
+
+  /**
+   * The sentence over the grid: what to put where, in words.
+   *
+   * Said as well as marked, because a badge on a box tells somebody WHICH box
+   * and not WHY, and this step is the one place in creation where a player who
+   * does not already know the system has to make six decisions at once. "or"
+   * for a Fighter is the SRD's own word: it is a choice between two builds
+   * rather than a tie.
+   */
+  function abilityAdvice() {
+    const { primary, secondary } = classAbilities();
+    const cls = $('#class')?.value;
+    if (!cls || !primary.length) return '';
+    const name = (a) => ABIL_SHORT[a];
+    const first = primary.map(name).join(' or ');
+    return secondary
+      ? `A ${cls} leans on ${first}, then ${name(secondary)}.`
+      : `A ${cls} leans on ${first}.`;
+  }
+
   function renderAbilities() {
     const box = $('#abilities');
     box.innerHTML = '';
+    const key = classAbilities();
+    const advice = $('#ability-advice');
+    if (advice) advice.textContent = abilityAdvice();
     const isPointBuy = state.method === 'point_buy';
     const isRandom = state.method === 'random';
     const assignable = assignableScores();
@@ -1263,9 +1325,17 @@
 
     ABILS.forEach((a) => {
       const div = document.createElement('div');
-      div.className = 'ability-box';
+      // The mark is on the BOX and not on the number, because what is being
+      // pointed at is the ability — which score is sitting in it is the very
+      // thing the player is still moving around.
+      const rank = key.primary.includes(a) ? 'primary'
+        : (key.secondary === a ? 'secondary' : null);
+      div.className = 'ability-box' + (rank ? ` is-${rank}` : '');
+      const tag = rank
+        ? `<em class="ability-rank">${rank === 'primary' ? 'Primary' : 'Secondary'}</em>`
+        : '';
       if (isPointBuy) {
-        div.innerHTML = `<span>${ABIL_SHORT[a]}</span>
+        div.innerHTML = `<span>${ABIL_SHORT[a]}${tag}</span>
           <input type="number" min="8" max="15" value="${state.abilities[a]}" data-ab="${a}">
           <strong class="mod">${modStr(state.abilities[a])}</strong>`;
         div.querySelector('input').addEventListener('change', (e) => {
@@ -1279,7 +1349,7 @@
       } else {
         // Standard array and rolled dice are the same interaction: arrange a
         // fixed set of six.
-        div.innerHTML = `<span>${ABIL_SHORT[a]}</span>
+        div.innerHTML = `<span>${ABIL_SHORT[a]}${tag}</span>
           <select data-ab="${a}"></select>
           <strong class="mod">${modStr(state.abilities[a])}</strong>`;
         const sel = div.querySelector('select');

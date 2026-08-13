@@ -600,7 +600,16 @@ function handle_meta(string $action): void
         ]);
     }
     if ($action === 'classes') {
-        json_response(['ok' => true, 'classes' => (new CharacterGenerator($db))->listClasses()]);
+        json_response([
+            'ok'      => true,
+            'classes' => (new CharacterGenerator($db))->listClasses(),
+            // Which abilities each class wants, best first, for the creator to
+            // mark up its grid. Beside the catalogue rather than folded into a
+            // row, for the reason `name_tables` is: listClasses() is a SELECT *,
+            // and the secondary is our advice rather than a column anybody
+            // should go looking for in the database.
+            'key_abilities' => Rules::CLASS_ABILITIES,
+        ]);
     }
     if ($action === 'avatars') {
         json_response(['ok' => true, 'avatars' => (new CharacterGenerator($db))->listAvatars()]);

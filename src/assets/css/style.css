@@ -203,6 +203,31 @@ input:focus, select:focus, textarea:focus { outline: 1px solid var(--gold-dim); 
 .ability-box strong { display: block; color: var(--gold); font-size: var(--fs-lg); }
 .ability-box span { font-size: var(--fs-2xs); color: var(--text-dim); text-transform: uppercase; }
 
+/* What the class wants. Gold on the primary, because gold means "you can act
+   on this" everywhere else in the game and this is the box to act on first;
+   the secondary gets the same shape at part strength rather than a second
+   colour, so the two read as one scale and not as two unrelated marks. */
+.ability-box.is-primary { border-color: var(--gold-dim); background: var(--bg-panel-2); }
+.ability-box.is-secondary { border-color: var(--ornament); }
+.ability-box .ability-rank {
+  display: block;
+  font-size: var(--fs-2xs);
+  font-style: normal;
+  letter-spacing: 0.06em;
+  color: var(--gold-dim);
+}
+.ability-box.is-secondary .ability-rank { color: var(--text-dim); }
+
+/* The sentence over the grid. Sits where the method note sits and reads as
+   part of the same running commentary, so it is styled to match rather than
+   competing with it. */
+.wiz-advice {
+  margin: 0 0 var(--sp-8);
+  font-size: var(--fs-sm);
+  color: var(--gold-dim);
+}
+.wiz-advice:empty { display: none; }
+
 .tabs {
   display: flex;
   gap: var(--sp-6);
@@ -2559,13 +2584,23 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   display: grid;
   gap: calc((var(--die6-tumble) - var(--die6-rest)) / 2);
 }
+/* The first column holds the ability picker, and it is 6.5rem rather than 5
+   because the longest option is "CON · 2nd" and not "CON" — the picker carries
+   the class's ranking now. Widening the SELECT instead of its column is the
+   version of this that looks fixed and is not: the select overflows its cell
+   and lies across the first die of every throw. */
 .roll-tray {
   display: grid;
-  grid-template-columns: 5rem 1fr 2.6rem 2.4rem;
+  grid-template-columns: 6.5rem 1fr 2.6rem 2.4rem;
   align-items: center;
   gap: var(--sp-12);
 }
-.roll-tray-pick { margin: 0; padding: var(--sp-4) var(--sp-6); font-size: var(--fs-xs); }
+.roll-tray-pick {
+  margin: 0;
+  width: 100%;
+  padding: var(--sp-4) var(--sp-6);
+  font-size: var(--fs-xs);
+}
 .roll-tray-mod {
   font-family: var(--mono);
   font-size: var(--fs-sm);

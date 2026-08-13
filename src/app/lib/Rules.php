@@ -35,6 +35,50 @@ class Rules
         'cha' => 'charisma',
     ];
 
+    /**
+     * Which abilities a class actually wants, best first — for the creator.
+     *
+     * ADVICE, NOT A RULE, and the distinction is the whole reason this is a
+     * separate table rather than a column. `classes.primary_ability` is the
+     * SRD's own field and nothing here may contradict it; what the SRD does not
+     * have is a SECOND ability, because it never needed one — "primary ability"
+     * exists in those rules to gate multiclassing, not to help somebody arrange
+     * six numbers. So the first half of each row restates a fact and the second
+     * half is an opinion, and they are labelled differently on the screen for
+     * that reason: the abilities step marks the primary as what the class is
+     * built on and the secondary as what to raise next.
+     *
+     * `primary` is a LIST because the SRD's own answer sometimes is: a Fighter's
+     * is "Strength or Dexterity", which is a real choice between two builds and
+     * not an editorial hedge. Where the SRD names two abilities outright — Monk,
+     * Paladin, Ranger — the second is carried here as the secondary rather than
+     * as a second primary, because by the time somebody is assigning scores
+     * "this one first, that one next" is the useful shape of the answer.
+     *
+     * Constitution is the secondary for seven of the twelve, which looks like a
+     * table that gave up and is not: hit points and holding concentration are
+     * what most classes want second, and writing something more varied here
+     * would be worse advice more attractively arranged.
+     *
+     * tools/test_class_abilities.php holds the two halves together — every class
+     * in the database has a row, no `primary` here names an ability the SRD
+     * column does not, and nothing the column names is dropped from both halves.
+     */
+    public const CLASS_ABILITIES = [
+        'Barbarian' => ['primary' => ['str'],        'secondary' => 'con'],
+        'Bard'      => ['primary' => ['cha'],        'secondary' => 'dex'],
+        'Cleric'    => ['primary' => ['wis'],        'secondary' => 'con'],
+        'Druid'     => ['primary' => ['wis'],        'secondary' => 'con'],
+        'Fighter'   => ['primary' => ['str', 'dex'], 'secondary' => 'con'],
+        'Monk'      => ['primary' => ['dex'],        'secondary' => 'wis'],
+        'Paladin'   => ['primary' => ['str'],        'secondary' => 'cha'],
+        'Ranger'    => ['primary' => ['dex'],        'secondary' => 'wis'],
+        'Rogue'     => ['primary' => ['dex'],        'secondary' => 'con'],
+        'Sorcerer'  => ['primary' => ['cha'],        'secondary' => 'con'],
+        'Warlock'   => ['primary' => ['cha'],        'secondary' => 'con'],
+        'Wizard'    => ['primary' => ['int'],        'secondary' => 'con'],
+    ];
+
     /** All eighteen SRD skills and the ability each is checked against. */
     public const SKILLS = [
         'acrobatics'      => 'dex',

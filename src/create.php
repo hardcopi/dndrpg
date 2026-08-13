@@ -190,6 +190,13 @@ require_signed_in_page();
             nobody would notice while it was a number changing in a box and
             everybody would notice with dice on the screen.
           -->
+          <!--
+            What the class wants, said before it is marked. Above the trays as
+            well as the grid, because the random method draws no grid at all
+            and the advice is worth as much when arranging six thrown numbers
+            as when spending points on them.
+          -->
+          <p id="ability-advice" class="wiz-advice"></p>
           <div id="roll-trays" class="roll-trays hidden"></div>
           <div id="abilities" class="ability-grid"></div>
           <p class="help-hint">Racial bonuses are applied on top of these; you will
