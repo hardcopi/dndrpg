@@ -38,6 +38,8 @@
     /** null = unchecked, true/false = the answer from meta/name_free. */
     nameFree: null,
     nameChecked: '',
+    /** Which peoples NameGen has names for, from meta/races. */
+    nameTables: [],
     /**
      * The six 4d6 totals the server rolled, or null before any roll.
      *
@@ -366,6 +368,7 @@
       API.get('meta/feats'),
     ]);
     state.races = races.races;
+    state.nameTables = races.name_tables || [];
     state.classes = classes.classes;
     state.pointBuy = pb;
     state.avatars = avatars.avatars || [];
@@ -921,6 +924,7 @@
       if (parseInt(r[k], 10)) bonuses.push(`${label} +${r[k]}`);
     });
     $('#racial-preview').textContent = `Speed ${r.speed} ft. Bonuses: ${bonuses.join(', ') || 'none'}. ${r.traits || ''}`;
+    showNameRoll(r);
     // textContent, not innerHTML: this is prose out of a database column that
     // an admin can edit, and the creator is the one page it is read on.
     const lore = $('#racial-lore');
@@ -954,6 +958,65 @@
     img.src = `assets/images/races/${encodeURIComponent(key)}.png`;
   }
 
+  /**
+   * The Roll button, offered only where there are names to roll.
+   *
+   * `meta/races` ships the list of peoples NameGen has tables for, beside the
+   * catalogue itself. Asking the server rather than keeping a copy of the list
+   * here is the same rule the rest of the creator follows — the race catalogue
+   * is a database table and the client is driven off it — and it means adding
+   * names for a people is one PHP file and no JavaScript.
+   *
+   * Keyed on the subrace first and the race second, because that is the order
+   * NameGen resolves them in: a Dark Elf has their own list, every other elf
+   * shares the one.
+   */
+  function showNameRoll(race) {
+    const btn = $('#name-roll');
+    const gender = $('#name-gender');
+    if (!btn) return;
+    const tables = state.nameTables || [];
+    const has = !!race && (tables.includes(race.subrace || '') || tables.includes(race.name));
+    btn.hidden = !has;
+    if (gender) gender.hidden = !has;
+  }
+
+  /**
+   * Put a suggestion in the box, and check it like anything typed.
+   *
+   * It overwrites: the button is only ever pressed by somebody who wants a
+   * different name from the one in front of them. The field stays a text
+   * field, so the suggestion is a starting point rather than a choice — edit
+   * it, keep half of it, or press again.
+   */
+  async function rollName() {
+    const race = currentRace();
+    const btn = $('#name-roll');
+    if (!race || !btn) return;
+
+    btn.disabled = true;
+    try {
+      const gender = $('#name-gender')?.value || '';
+      let q = 'meta/roll_name&race=' + encodeURIComponent(race.name);
+      if (race.subrace) q += '&subrace=' + encodeURIComponent(race.subrace);
+      if (gender) q += '&gender=' + encodeURIComponent(gender);
+      if (state.redressId) q += '&except=' + state.redressId;
+      const r = await API.get(q);
+      if (!r.name) return;
+      $('#name').value = r.name;
+      // Down the same path as typing: the note, the debounce and the UNIQUE
+      // index are all still what decide whether this name is allowed.
+      checkNameSoon();
+      renderWizard();
+    } catch (_) {
+      // A suggestion that could not be fetched is not worth a banner; the
+      // field is untouched and the player can type.
+    } finally {
+      btn.disabled = false;
+    }
+  }
+
+  $('#name-roll')?.addEventListener?.('click', rollName);
   $('#race')?.addEventListener?.('change', updateRacialPreview);
   document.addEventListener('change', (e) => {
     if (e.target && e.target.id === 'subrace') updateRacialPreview();

@@ -61,8 +61,34 @@ require_signed_in_page();
         <div class="wiz-split">
           <div class="wiz-split-main">
             <label for="name">Name</label>
-            <input id="name" name="name" maxlength="50" autocomplete="off"
-                   placeholder="e.g. Elara Stormwind">
+            <!--
+              The dice sit beside the field rather than under it, and they are
+              a word rather than a die glyph — the same call the map's Look
+              button makes, and for the reason the ⓘ records: a decorative
+              glyph lands at a different size and weight on every machine.
+
+              Hidden until the race is known, and hidden again for any race
+              with no name table, so the offer is never made and then refused.
+            -->
+            <div class="wiz-name-row">
+              <input id="name" name="name" maxlength="50" autocomplete="off"
+                     placeholder="e.g. Elara Stormwind">
+              <!--
+                Which pool the dice draw from. "Either" is the default and a
+                real answer rather than a shrug — it draws from the whole
+                culture at once — because the game models no gender anywhere
+                else, and a required question here would be the only place it
+                asked. It steers a suggestion; it is not a field on the
+                character, and the box below stays typeable whatever it says.
+              -->
+              <select id="name-gender" aria-label="Which names to draw from" hidden>
+                <option value="">Either</option>
+                <option value="masculine">Masculine</option>
+                <option value="feminine">Feminine</option>
+              </select>
+              <button type="button" id="name-roll" class="btn btn-small" hidden
+                      title="Suggest a name for this people">Roll</button>
+            </div>
             <p id="name-check" class="field-note"></p>
 
             <div class="wiz-pair">

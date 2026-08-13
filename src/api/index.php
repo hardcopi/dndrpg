@@ -588,7 +588,16 @@ function handle_meta(string $action): void
 {
     $db = db();
     if ($action === 'races') {
-        json_response(['ok' => true, 'races' => (new CharacterGenerator($db))->listRaces()]);
+        json_response([
+            'ok'    => true,
+            'races' => (new CharacterGenerator($db))->listRaces(),
+            // Which of them have name tables written, so the creator can offer
+            // the dice on those rows and not on the others. Shipped beside the
+            // catalogue rather than folded into it: listRaces() is a SELECT *,
+            // and a computed column on a row is a column somebody will later
+            // look for in the database.
+            'name_tables' => NameGen::races(),
+        ]);
     }
     if ($action === 'classes') {
         json_response(['ok' => true, 'classes' => (new CharacterGenerator($db))->listClasses()]);
@@ -689,6 +698,43 @@ function handle_meta(string $action): void
     // collision surfaces where the name is typed rather than four steps later
     // when the character is finally submitted. Not a reservation — the UNIQUE
     // index is still what guarantees it, and create/rename still check.
+    /**
+     * A suggested name for a people, already checked against the ones taken.
+     *
+     * The rolling is NameGen's and the checking is not: whether a name is
+     * somebody's is a question about rows, so it is asked here, where the PDO
+     * is, and NameGen stays pure. Twelve tries and then give up and answer
+     * anyway — the client re-checks whatever lands in the field through
+     * `name_free` regardless, so the worst case is the note saying it is taken
+     * and the player pressing again.
+     */
+    if ($action === 'roll_name') {
+        $race = trim((string) ($_GET['race'] ?? ''));
+        $subrace = trim((string) ($_GET['subrace'] ?? ''));
+        $except = isset($_GET['except']) ? (int) $_GET['except'] : null;
+        // Unvalidated on purpose: NameGen treats anything it does not recognise
+        // as "either", which is the right answer to a gender it has no pool for.
+        $gender = trim((string) ($_GET['gender'] ?? ''));
+
+        if (!NameGen::has($race, $subrace !== '' ? $subrace : null)) {
+            json_response(['ok' => true, 'name' => null]);
+        }
+        $gen = new CharacterGenerator($db);
+        $name = null;
+        for ($try = 0; $try < 12; $try++) {
+            $candidate = NameGen::roll(
+                $race,
+                $subrace !== '' ? $subrace : null,
+                $gender !== '' ? $gender : null
+            );
+            $name = $candidate;
+            if ($candidate !== null && $gen->nameTaken($candidate, $except) === null) {
+                break;
+            }
+        }
+        json_response(['ok' => true, 'name' => $name]);
+    }
+
     if ($action === 'name_free') {
         $name = trim((string) ($_GET['name'] ?? ''));
         $except = isset($_GET['except']) ? (int) $_GET['except'] : null;

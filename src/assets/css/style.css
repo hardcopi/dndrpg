@@ -2238,6 +2238,18 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 /* Steps whose content is mostly form fields do not want to be 1100px wide —
    a text input that long is harder to read, not easier. */
 .wiz-narrow { max-width: 560px; }
+/* The name field and its dice. The button takes only the width of its word so
+   the field keeps the full measure it had before — and `align-items: stretch`
+   rather than a fixed height, so the two stay the same size if either's
+   padding is ever changed. */
+.wiz-name-row {
+  display: flex;
+  align-items: stretch;
+  gap: var(--sp-8);
+}
+.wiz-name-row input { flex: 1 1 auto; min-width: 0; }
+.wiz-name-row .btn { flex: 0 0 auto; }
+
 .wiz-pair { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-12); }
 
 /* Fields on the left, the picture on the right.
