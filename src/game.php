@@ -71,7 +71,22 @@ if (!session_character_id()) {
     </aside>
 
     <main class="scene">
+      <!--
+        The bar is where you are AND the menu, on one line.
+
+        It was the menu alone, justified right, with 205px of nothing beside it
+        — and a `.loc-header` underneath repeating the name the chart already
+        writes on the party's own node (ui-map.js draws a `.wm-label` for every
+        node, `is-here` included). So the header cost 83px of a 578px column to
+        say a thing that was already on screen 90px lower down.
+
+        What is left here is the REGION, which the chart does not name anywhere.
+        It is filled by game.js and deliberately never cleared: you are still
+        standing in Rivermark while the fight is on, and a bar that emptied
+        itself on every mode switch would flicker between screens.
+      -->
       <div class="topbar" role="toolbar" aria-label="Menu">
+        <div class="topbar-where" id="topbar-where" aria-hidden="true"></div>
         <div class="topbar-actions hud-icons">
           <button type="button" class="icon-btn" id="btn-journal" title="Journal (J)" aria-label="Journal">
             <svg aria-hidden="true"><use href="#i-journal"></use></svg>

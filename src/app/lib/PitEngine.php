@@ -68,19 +68,101 @@ class PitEngine
      */
     public function offer(int $partyId): array
     {
-        $out = [];
+        $size = max(1, count($this->levels($partyId)));
+        $tiers = [];
         foreach (self::TIERS as $key => $tier) {
             $budget = $this->budget($partyId, $key);
             $group = $this->pick($budget);
-            $out[] = [
-                'tier'   => $key,
-                'label'  => $tier['label'],
-                'blurb'  => $tier['blurb'],
-                'budget' => $budget,
-                'sample' => $this->describe($group),
+
+            // What one win at this tier is worth to one character, by
+            // CombatEngine's own arithmetic: the monsters' raw XP, split by
+            // the party. Not the BUDGET — that is what the tier may SPEND,
+            // inflated by the multiplier for how many foes there are, and a
+            // pack of six pays out a good deal less than it costs to buy.
+            $raw = 0;
+            foreach ($group as $m) {
+                $raw += (int) $m['xp'] * (int) $m['quantity'];
+            }
+
+            $tiers[] = [
+                'tier'    => $key,
+                'label'   => $tier['label'],
+                'blurb'   => $tier['blurb'],
+                'budget'  => $budget,
+                'sample'  => $this->describe($group),
+                'xp_each' => intdiv($raw, $size),
             ];
         }
-        return $out;
+
+        return ['tiers' => $tiers, 'to_level' => $this->toLevel($partyId, $tiers)];
+    }
+
+    /**
+     * How many bouts at each tier until somebody levels.
+     *
+     * Measured against the LOWEST-level character in the party, because that
+     * is the one the next level belongs to — "how long until somebody levels"
+     * is the question a player asks standing in front of this card, and a
+     * count against the leader ignores the straggler who is one fight away.
+     *
+     * A sample, not a promise, for the same reason the monsters are: `offer()`
+     * rolls a fresh group every time the scene is drawn, so the XP a tier pays
+     * moves between one look at the card and the next. It is the honest shape
+     * of the answer — the pit does not sell a fixed fight.
+     *
+     * Null at the ceiling. A party at MAX_LEVEL has no next level, and a card
+     * reading "0 bouts to level 7" would be an invitation to grind for a thing
+     * that is not there.
+     */
+    private function toLevel(int $partyId, array $tiers): ?array
+    {
+        $stmt = $this->db->prepare(
+            /* `experience`, not `experience_points` — the latter is the
+               MONSTERS' column, which pick() a few lines up selects from. */
+            'SELECT c.name, c.level, c.experience AS xp FROM characters c
+             INNER JOIN character_party cp ON cp.character_id = c.id
+             WHERE cp.party_id = ? AND c.is_active = 1
+             ORDER BY c.level ASC, c.experience ASC LIMIT 1'
+        );
+        $stmt->execute([$partyId]);
+        $who = $stmt->fetch();
+        if (!$who) {
+            return null;
+        }
+
+        $progress = Rules::xpProgress((int) $who['xp']);
+        if (($progress['next_level'] ?? null) === null) {
+            return null;
+        }
+
+        $remaining = max(0, (int) $progress['remaining']);
+        $bouts = [];
+        foreach ($tiers as $t) {
+            // A tier worth nothing per head cannot get anybody anywhere, and
+            // dividing by it is how a card comes to say "Infinity bouts".
+            $bouts[$t['tier']] = $t['xp_each'] > 0
+                ? (int) ceil($remaining / $t['xp_each'])
+                : null;
+        }
+
+        return [
+            'level'     => (int) $progress['next_level'],
+            'remaining' => $remaining,
+            'who'       => $who['name'],
+            'bouts'     => $bouts,
+        ];
+    }
+
+    /** The active party's levels, which two things here need. */
+    private function levels(int $partyId): array
+    {
+        $stmt = $this->db->prepare(
+            'SELECT c.level FROM characters c
+             INNER JOIN character_party cp ON cp.character_id = c.id
+             WHERE cp.party_id = ? AND c.is_active = 1'
+        );
+        $stmt->execute([$partyId]);
+        return array_map('intval', $stmt->fetchAll(PDO::FETCH_COLUMN));
     }
 
     /**
@@ -127,16 +209,7 @@ class PitEngine
     /** What this party's tier is worth, in monster XP. */
     private function budget(int $partyId, string $tier): int
     {
-        $stmt = $this->db->prepare(
-            'SELECT c.level FROM characters c
-             INNER JOIN character_party cp ON cp.character_id = c.id
-             WHERE cp.party_id = ? AND c.is_active = 1'
-        );
-        $stmt->execute([$partyId]);
-        return EncounterBudget::forParty(
-            array_map('intval', $stmt->fetchAll(PDO::FETCH_COLUMN)),
-            $tier
-        );
+        return EncounterBudget::forParty($this->levels($partyId), $tier);
     }
 
     /** EncounterBudget's, kept under the old name so `pick()` reads unchanged. */

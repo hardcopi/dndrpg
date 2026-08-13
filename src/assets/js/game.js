@@ -351,6 +351,18 @@
     // the log stays, because it is the one panel a fight makes MORE useful.
     document.body.classList.toggle('in-combat', inCombat);
 
+    // Where you are, in the bar beside the menu.
+    //
+    // Set here rather than in renderLocation() because renderLocation() is the
+    // branch a fight does NOT take, and a page reloaded mid-combat would then
+    // draw an empty bar. It is only ever written, never cleared: the region is
+    // true while the fight is on, and blanking it per mode would flicker.
+    const where = $('#topbar-where');
+    if (where && state.location && state.location.region_name) {
+      const region = state.location.region_name;
+      if (where.textContent !== region) where.textContent = region;
+    }
+
     if (inCombat && window.Combat) {
       window.Combat.render();
     } else {
@@ -395,10 +407,7 @@
     root.innerHTML = `
       <div class="loc-inner">
         <div class="loc-text">
-          <header class="loc-header">
-            <h1 class="loc-name">${esc(loc.name)}</h1>
-            <div class="loc-region">${esc(loc.region_name)}</div>
-          </header>
+          <h1 class="loc-name">${esc(loc.name)}, ${esc(loc.region_name)}</h1>
           ${sceneMap()}
           <div class="loc-foot">
             ${pitPanel(loc)}
@@ -633,17 +642,52 @@
    * is a fair idea of the match rather than a promise about it — which is why
    * it says "or so" and why the bout is built server-side when you commit.
    */
+  /**
+   * The pit's card: three bouts and a readout, two by two.
+   *
+   * The three tiers were a full-width column of two-line buttons, which is
+   * three rows of a scene that is mostly chart. There are exactly three of
+   * them — PitEngine::TIERS — so a 2x2 has one cell spare, and what goes in it
+   * is the question the buttons cannot answer: how many more of these until
+   * somebody levels.
+   *
+   * The counts are the ENGINE's. PitEngine::toLevel divides the remaining XP
+   * by what a win at each tier pays one character, which is CombatEngine's own
+   * split and not a rule restated here — the same reason the combat board does
+   * no geometry of its own.
+   */
   function pitPanel(loc) {
-    if (!loc.pit || !loc.pit.length) return '';
+    const tiers = loc.pit && loc.pit.tiers;
+    if (!tiers || !tiers.length) return '';
+
+    // A tier's short name, for the readout: the labels read "A fair match" and
+    // a column of them would be three sentences where three nouns will do.
+    const shortName = (label) => label.replace(/^(a|an)\s+/i, '');
+
+    const toLevel = loc.pit.to_level;
+    const readout = toLevel
+      ? `<div class="pit-level" title="${esc(toLevel.who)} is ${
+            toLevel.remaining.toLocaleString()} XP short">
+           <span class="pit-level-head">To level ${toLevel.level}</span>
+           <ul class="pit-level-counts">
+             ${tiers.map((t) => {
+               const n = toLevel.bouts && toLevel.bouts[t.tier];
+               return n ? `<li>${esc(shortName(t.label))} <b>&times;${n}</b></li>` : '';
+             }).join('')}
+           </ul>
+         </div>`
+      : '';
+
     return `<section class="loc-pit">
       <h2>Take a bout</h2>
-      <div class="action-list">
-        ${loc.pit.map((t) => `
+      <div class="pit-grid">
+        ${tiers.map((t) => `
           <button type="button" class="btn loc-act pit-bout" data-act="pit" data-id="${esc(t.tier)}"
                   title="${esc(t.blurb)}">
             <span class="pit-label">${esc(t.label)}</span>
             <span class="pit-sample">${esc(t.sample)}, or so</span>
           </button>`).join('')}
+        ${readout}
       </div>
     </section>`;
   }

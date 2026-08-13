@@ -340,10 +340,30 @@ body.game-page {
   min-width: 0;
 }
 
+/* Where you are on the left, the menu on the right, one row.
+   `space-between` rather than `flex-end`: the bar used to be the menu alone
+   with 205px of nothing beside it, and the region moved into that nothing. */
 .scene .topbar {
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-8);
   flex: 0 0 auto;
+}
+
+/* The region, as the eyebrow the deleted .loc-header used to carry.
+   `min-width: 0` so a long region name yields to the icons instead of pushing
+   them off the end — the menu is the thing you have to be able to reach. */
+.topbar-where {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: var(--fs-xs);
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  color: var(--text-dim);
+  padding-left: var(--sp-4);
 }
 
 /* One of these is visible at a time. The scroll lives here rather than on the
@@ -908,15 +928,16 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   }
   .loc-text { height: 100%; }
 
-  /* Heading fixed, prose fills the middle, menus pinned to the bottom. */
+  /* Chart fills the middle, menus pinned to the bottom. The heading used to be
+     the fixed thing at the top of this stack; it is in the topbar now, which is
+     outside .screen and so is fixed by construction rather than by a rule. */
   .loc-text {
     display: flex;
     flex-direction: column;
     min-height: 0;
     gap: var(--sp-14);
   }
-  .loc-header { flex: 0 0 auto; }
-  .loc-foot   { flex: 0 0 auto; }
+  .loc-foot { flex: 0 0 auto; }
 
   /* The chart fills the middle. It was the art and the prose scrolling here,
      with the map behind a keystroke; see renderLocation() for the swap. */
@@ -1040,10 +1061,35 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   max-width: 68ch;
 }
 
-/* --- Heading ---------------------------------------------------------- */
-.loc-header {
-  border-bottom: 1px solid var(--ornament);
-  padding-bottom: var(--sp-8);
+/* --- Heading ----------------------------------------------------------
+ *
+ * There is no drawn heading any more. `.loc-header` was an <h1> with the
+ * place's name and a rule under it, and the chart 90px below drew the same
+ * name on the node the party pin sits on — `ui-map.js` labels every node,
+ * `is-here` included. It cost 83px of a 578px column to repeat something
+ * already on screen. The REGION, which the chart names nowhere, moved up to
+ * `.topbar-where`.
+ *
+ * The <h1> survives as .loc-name, unpainted. A screen has to have a heading —
+ * deleting the only <h1> leaves a document that cannot be navigated by one —
+ * and "you are here" read aloud is exactly the thing a sighted player gets
+ * from the pin on the chart and a blind one does not. So it carries the region
+ * too, which is why .topbar-where is aria-hidden: between them they would say
+ * Rivermark twice.
+ *
+ * Not `display: none` and not `.hidden`: both take it out of the accessibility
+ * tree, which is the whole of what it is for.
+ */
+.loc-name {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
 }
 
 /* Optional establishing painting. Generated separately and dropped in as
@@ -1070,22 +1116,6 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   object-fit: cover;
   object-position: center 40%;
 }
-.loc-name {
-  font-family: var(--font-display);
-  font-size: var(--fs-2xl);
-  line-height: var(--lh-display);
-  margin: 0;
-  color: var(--gold);
-  letter-spacing: var(--ls-display);
-}
-.loc-region {
-  font-size: var(--fs-xs);
-  letter-spacing: var(--ls-caps);
-  text-transform: uppercase;
-  color: var(--text-dim);
-  margin-top: var(--sp-2);
-}
-
 /* --- Prose ------------------------------------------------------------
    The description is the screen. It gets the largest comfortable size and a
    generous line height, because in a text game this paragraph is doing the
@@ -1291,14 +1321,75 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   padding-bottom: var(--sp-10);
   border-bottom: 1px solid var(--ornament);
 }
+/* Two by two. The three tiers used to be a full-width column — three rows of a
+   scene that is mostly chart — and there are exactly three of them, so the
+   spare cell holds the readout. `minmax(0, 1fr)` rather than `1fr`: a long
+   monster sample is a grid item that would otherwise refuse to shrink and push
+   the second column off the card. */
+.pit-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-4);
+  align-items: stretch;
+}
+
+/* One column below the fold, where two 2-line buttons side by side leave no
+   room for either to say what it is sending. */
+@media (max-width: 30rem) {
+  .pit-grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* `display: flex` said out loud, and it is a fix rather than a tidy-up.
+   `.btn` is `inline-block` and only `.btn:has(svg)` promotes it to
+   `inline-flex` — a pit bout has no icon, so it never matched, and the
+   `flex-direction: column` below has been inert since it was written: the
+   tier and its sample ran together as one line of text, "A warm-up3 Giant
+   Rats, or so". Two lines is what the two spans were always for. */
 .pit-bout {
+  display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: var(--sp-2);
+  height: 100%;
+  text-align: left;
 }
 .pit-label { font-weight: var(--fw-semibold); }
 .pit-sample { font-size: var(--fs-xs); color: var(--text-dim); }
 .pit-bout:hover .pit-sample { color: var(--text); }
+
+/* The fourth cell: how many more bouts until somebody levels.
+   A well, not a key — it is the only thing in this grid you cannot press, and
+   drawing it with the buttons' bevel would say otherwise. */
+.pit-level {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  justify-content: center;
+  padding: var(--sp-8) var(--sp-10);
+  background: var(--bg-inset);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--r-md);
+}
+.pit-level-head {
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+.pit-level-counts {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: var(--fs-xs);
+  line-height: var(--lh-snug);
+  color: var(--text-dim);
+}
+/* The count is the number, so the number is the lit part. */
+.pit-level-counts b {
+  color: var(--gold);
+  font-weight: var(--fw-semibold);
+  font-variant-numeric: tabular-nums;
+}
 
 /* Ways the chart could not draw, listed in the scene instead. Sits above the
    actions with a hairline between, so travel and doing-things stay two

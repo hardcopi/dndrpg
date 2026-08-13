@@ -146,8 +146,12 @@ if ($one !== null) {
        plain SVG of the right aspect rather than a real region — WorldMap.svg
        needs a map payload, and what is being measured is the space it is given. */
     $scene = '<div class="loc-inner"><div class="loc-text">'
-        . '<div class="loc-header"><h1 class="loc-name">The Golden Flagon</h1>'
-        . '<p class="loc-region">Rivermark</p></div>'
+        /* The <h1> is unpainted now — the drawn heading moved to .topbar-where
+           and the name it used to carry is on the chart. It stays in the
+           fixture because it is still in the DOM game.js writes, and a probe
+           that measures a box the game does not have is the failure mode this
+           file exists to avoid. It measures 1px by design. */
+        . '<h1 class="loc-name">The Golden Flagon, Rivermark</h1>'
         . '<div class="loc-map"><svg class="worldmap is-bare" viewBox="0 0 100 75" '
         . 'preserveAspectRatio="xMidYMid meet" style="width:100%;height:auto">'
         . '<rect x="0" y="0" width="100" height="75" fill="#1a1d22"></rect>'
@@ -188,6 +192,10 @@ if ($one !== null) {
     $fill = json_encode([
         'party-rail'    => $party,
         'people-rail'   => $people,
+        /* The region, which game.js writes into the topbar beside the menu.
+           Filled here for the same reason the icon sprite is inlined: the bar
+           is a measured box, and an empty one is not the bar the game draws. */
+        'topbar-where'  => 'The Quarry Wilds',
         'location-root' => $scene,
         'quest-tracker' => $quest,
         'game-log'      => $log,
