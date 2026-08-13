@@ -192,6 +192,7 @@ if (!session_character_id()) {
        each asks for it at the moment a map is opened rather than at load. -->
   <script src="<?= asset('assets/js/svg-view.js') ?>"></script>
   <script src="<?= asset('assets/js/ui-map.js') ?>"></script>
+  <script src="<?= asset('assets/js/ui-firstperson.js') ?>"></script>
   <script src="<?= asset('assets/js/game.js') ?>"></script>
   <script src="<?= asset('assets/js/ui-panels.js') ?>"></script>
   <script src="<?= asset('assets/js/dice-geometry.js') ?>"></script>

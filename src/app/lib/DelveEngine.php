@@ -268,7 +268,15 @@ final class DelveEngine
             $plan['corridors'][$i]['to'] = $idFor((int) $c['b']);
         }
 
-        return $this->playersMap($plan, $partyId, $ids);
+        $seen = $this->playersMap($plan, $partyId, $ids);
+
+        // The raster rides alongside the plan rather than replacing it: the
+        // chart is still what a player reads a floor from, and the toggle to
+        // the first-person view has to be able to go back. Censored from the
+        // plan's OWN fog answer, so the two can never show different floors.
+        $seen['tiles'] = self::fogTiles(DungeonGen::tiles($level), $seen);
+
+        return $seen;
     }
 
     /**
@@ -458,6 +466,179 @@ final class DelveEngine
         }
 
         return $plan;
+    }
+
+    /** Rock, in the tile layer. A space, so a row of it reads as nothing. */
+    private const TILE_ROCK = ' ';
+
+    /**
+     * One character per location in the tile layer, in the order first met.
+     *
+     * A floor has at most eleven rooms and fourteen passages, so sixty-two
+     * keys is room to spare; a level that somehow wanted more would ship the
+     * overflow as rock rather than as the wrong place.
+     */
+    private const TILE_KEYS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+    /**
+     * The raster, censored to what this party has earned, on the wire.
+     *
+     * Static and PDO-free beside fog(), for fog()'s reason — it is arithmetic
+     * over a plan and a raster, so a test can sweep it without a party.
+     *
+     * IT READS FOG()'S ANSWER RATHER THAN ASKING THE QUESTION AGAIN. Whether a
+     * shape may be drawn is already decided, on the server, from the room-to-
+     * passage graph; a second rule here would be a second copy of the level's
+     * topology, and the two would disagree the first time either was fixed. So
+     * this only turns "may this shape be drawn" into "is there floor in this
+     * tile", which is the same fact at a finer grain. Three things fall out of
+     * that rather than being written:
+     *
+     *  - An unfound secret door's passage is neither seen nor glimpsed, so its
+     *    tiles are rock AND its doorway is not in the list — the chamber wall
+     *    is blank until somebody searches it, which is the whole of what a
+     *    secret door is.
+     *  - A glimpsed shape ships its floor. On the chart that state is an
+     *    outline; in here there is no outline to draw, and a corridor you can
+     *    see the mouth of is a corridor you can see down. The information is
+     *    the same as the chart's, which is the line that has to hold.
+     *  - A door whose far side is NOT shipped still ships, and still carries
+     *    the location beyond it. That is not a leak: an unfound door is already
+     *    gone, so every doorway left is one the exit graph will honour, and
+     *    without the id on it a party could see an opening and not walk
+     *    through. What they see past it is darkness, because the tiles beyond
+     *    really are not there yet.
+     *
+     * ONE LAYER, NOT TWO. `rows` says both whether a tile is floor and whose it
+     * is, because those are one fact and shipping them separately is two things
+     * that can disagree. Two strings of 29 characters by 23 rows, a key list,
+     * and a handful of faces: under two kilobytes, against the fifteen an array
+     * of tile objects would cost.
+     *
+     * @param  array $tiles from DungeonGen::tiles(), uncensored
+     * @param  array $plan  after fog(), with location ids resolved
+     */
+    public static function fogTiles(array $tiles, array $plan): array
+    {
+        $w = (int) $tiles['w'];
+        $h = (int) $tiles['h'];
+
+        // Every shape's location id, and the subset this party may see.
+        $idOf = [];
+        $show = [];
+        $doorKind = [];
+
+        foreach ($plan['rooms'] as $r) {
+            $key = 'room:' . (int) $r['id'];
+            $id = $r['location_id'] ?? null;
+            if ($id === null) {
+                continue;
+            }
+            $idOf[$key] = (int) $id;
+            if (($r['seen'] ?? true) || ($r['glimpsed'] ?? false)) {
+                $show[$key] = (int) $id;
+            }
+        }
+        foreach ($plan['corridors'] as $c) {
+            $key = 'corridor:' . (int) $c['id'];
+            $doorKind[(int) $c['id']] = $c['door'];
+            $id = $c['location_id'] ?? null;
+            if ($id === null) {
+                continue;
+            }
+            $idOf[$key] = (int) $id;
+            if (($c['seen'] ?? true) || ($c['glimpsed'] ?? false)) {
+                $show[$key] = (int) $id;
+            }
+        }
+
+        $rows = [];
+        $locs = [];
+        $keyFor = [];
+        for ($y = 0; $y < $h; $y++) {
+            $row = '';
+            for ($x = 0; $x < $w; $x++) {
+                $o = $tiles['owner'][$y * $w + $x] ?? null;
+                $id = $o === null ? null : ($show[$o[0] . ':' . $o[1]] ?? null);
+                if ($id === null) {
+                    $row .= self::TILE_ROCK;
+                    continue;
+                }
+                if (!isset($keyFor[$id])) {
+                    $ch = self::TILE_KEYS[count($keyFor)] ?? null;
+                    if ($ch === null) {
+                        $row .= self::TILE_ROCK;
+                        continue;
+                    }
+                    $keyFor[$id] = $ch;
+                    $locs[$ch] = $id;
+                }
+                $row .= $keyFor[$id];
+            }
+            $rows[] = $row;
+        }
+
+        $lit = static fn (int $tile): bool =>
+            ($rows[intdiv($tile, $w)][$tile % $w] ?? self::TILE_ROCK) !== self::TILE_ROCK;
+
+        $doors = [];
+        foreach ($tiles['doors'] as $d) {
+            // The side you would be standing on has to be somewhere you can be.
+            if (!isset($show[$d['from'][0] . ':' . $d['from'][1]])) {
+                continue;
+            }
+            // A stuck door nobody has found is not a door yet. playersMap()
+            // nulls its kind; both sides of the threshold read the same field.
+            foreach ([$d['from'], $d['to']] as $side) {
+                if ($side[0] === 'corridor' && ($doorKind[$side[1]] ?? null) === null) {
+                    continue 2;
+                }
+            }
+            $doors[] = [
+                't' => (int) $d['tile'],
+                'd' => (int) $d['dir'],
+                'k' => (string) $d['kind'],
+                'to' => $idOf[$d['to'][0] . ':' . $d['to'][1]] ?? null,
+            ];
+        }
+
+        // A partition only matters where there is floor on this side of it.
+        $walls = [];
+        foreach ($tiles['walls'] as $wall) {
+            if ($lit((int) $wall['tile'])) {
+                $walls[] = ['t' => (int) $wall['tile'], 'd' => (int) $wall['dir']];
+            }
+        }
+
+        $stairs = [];
+        foreach ($tiles['stairs'] as $s) {
+            if ($lit((int) $s['tile'])) {
+                $stairs[] = ['t' => (int) $s['tile'], 'd' => (string) $s['dir']];
+            }
+        }
+
+        // Where a party arriving in a place is put down, by location id.
+        $spines = [];
+        foreach (['room', 'corridor'] as $kind) {
+            foreach ($tiles['spines'][$kind] ?? [] as $shapeId => $tile) {
+                $id = $show[$kind . ':' . $shapeId] ?? null;
+                if ($id !== null) {
+                    $spines[$id] = (int) $tile;
+                }
+            }
+        }
+
+        return [
+            'w' => $w,
+            'h' => $h,
+            'sub' => (int) $tiles['sub'],
+            'rows' => $rows,
+            'locs' => $locs,
+            'doors' => $doors,
+            'walls' => $walls,
+            'stairs' => $stairs,
+            'spines' => $spines,
+        ];
     }
 
     // =======================================================================

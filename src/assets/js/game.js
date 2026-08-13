@@ -60,6 +60,11 @@
     avatars: null,
     log: [],
     busy: false,             // a request is in flight; menus are inert
+    // The first-person view of a generated floor. `on` is a preference, and
+    // `cursor` is where in the tiles the party is standing — VIEW state, and
+    // reconciled against the server's answer by fpSync() on every render. See
+    // ui-firstperson.js: the location is the truth and this is a camera.
+    fp: { on: false, cursor: null },
   };
 
   // =========================================================================
@@ -394,6 +399,9 @@
       return;
     }
 
+    // Before the scene is built, not after: sceneMap() draws from the cursor.
+    fpSync();
+
     // Heading and actions stay put; THE MIDDLE IS THE MAP.
     //
     // It used to be the establishing art and the prose, with the chart behind
@@ -433,6 +441,7 @@
     if (!state.regionMap || !window.WorldMap) {
       return '<div class="loc-map is-empty"><p class="help-hint">Nowhere charted yet.</p></div>';
     }
+    if (fpOn()) return firstPersonScene();
     return `<div class="loc-map" id="scene-map">
       ${window.WorldMap.svg(state.regionMap,
         { ways: currentWays(), quests: questPins(), party: partyMarks() })}
@@ -444,9 +453,150 @@
         <button type="button" class="icon-btn icon-btn-sm" data-zoom="in"
                 title="Zoom in (+) · drag to pan" aria-label="Zoom in">+</button>
       </div>
+      ${fpToggle('Walk it in first person (V)', 'Look')}
       <button type="button" class="icon-btn map-info" id="scene-info"
               title="What this place looks like (I)" aria-label="Describe this place">i</button>
     </div>`;
+  }
+
+  // =========================================================================
+  // The dungeon, from inside it
+  //
+  // A generated floor can be walked a step at a time instead of read off the
+  // chart. Only a generated floor: the toggle is offered when the payload
+  // carries a raster and not otherwise, so authored regions are untouched by
+  // construction rather than by a check. The chart stays one keypress away and
+  // stays the thing you travel from by clicking — this is a second way to look
+  // at the same floor, not a replacement for reading it.
+  // =========================================================================
+
+  /** Remembered across sessions; the view is a preference, not a mode. */
+  const FP_PREF = 'rpg.firstperson';
+
+  function fpTiles() {
+    const map = state.regionMap;
+    return (map && map.floorplan && map.floorplan.tiles) || null;
+  }
+
+  /** Offered only where there is a raster to draw and a renderer to draw it. */
+  const fpAvailable = () => !!(fpTiles() && window.FirstPerson);
+  const fpOn = () => fpAvailable() && state.fp.on;
+
+  function fpToggle(title, label) {
+    if (!fpAvailable()) return '';
+    return `<button type="button" class="icon-btn map-look" id="scene-look"
+              title="${esc(title)}" aria-label="${esc(title)}">${esc(label)}</button>`;
+  }
+
+  /**
+   * Put the camera where the server says the party is.
+   *
+   * THE ONE PLACE THE CURSOR IS RECONCILED, and it has to be one place because
+   * of how many ways the two can part: arriving somewhere, a journey cut short
+   * by a trap or a wandering monster, going down the stair, waking up in the
+   * haven after a defeat, and a plain reload with no cursor at all. Each of
+   * those ends in a render, so all of them are covered by asking here whether
+   * the tile under the camera still belongs to the location the party is in,
+   * and standing them in the middle of it when it does not.
+   */
+  function fpSync() {
+    const tiles = fpTiles();
+    const here = state.location ? +state.location.id : null;
+    if (!tiles || !window.FirstPerson || here === null) {
+      state.fp.cursor = null;
+      return;
+    }
+    if (window.FirstPerson.agrees(tiles, state.fp.cursor, here)) return;
+    const facing = state.fp.cursor ? state.fp.cursor.facing : 0;
+    state.fp.cursor = window.FirstPerson.place(tiles, here, facing);
+  }
+
+  function firstPersonScene() {
+    const tiles = fpTiles();
+    const cursor = state.fp.cursor;
+    if (!cursor) {
+      return '<div class="loc-map is-empty"><p class="help-hint">Nowhere charted yet.</p></div>';
+    }
+    const way = window.FirstPerson.facings[cursor.facing];
+    return `<div class="loc-map is-fp" id="scene-map">
+      <div class="fp-stage" id="scene-fp">${window.FirstPerson.svg(tiles, cursor,
+        { label: `Looking ${way} from ${state.location ? state.location.name : 'here'}` })}</div>
+      <p class="fp-compass" id="scene-compass" aria-live="polite">Facing ${esc(way)}</p>
+      <div class="fp-walk" role="group" aria-label="Walk">
+        <button type="button" class="icon-btn" data-fp="left"
+                title="Turn left (←)" aria-label="Turn left">↰</button>
+        <button type="button" class="icon-btn fp-fwd" data-fp="forward"
+                title="Step forward (↑)" aria-label="Step forward">↑</button>
+        <button type="button" class="icon-btn" data-fp="about"
+                title="Turn about (↓)" aria-label="Turn about">↻</button>
+        <button type="button" class="icon-btn" data-fp="right"
+                title="Turn right (→)" aria-label="Turn right">↱</button>
+      </div>
+      ${fpToggle('Read the floor plan (V)', 'Map')}
+      <button type="button" class="icon-btn map-info" id="scene-info"
+              title="What this place looks like (I)" aria-label="Describe this place">i</button>
+    </div>`;
+  }
+
+  /** Redraw the picture alone, so turning on the spot costs no request. */
+  function fpRedraw() {
+    const stage = document.getElementById('scene-fp');
+    const tiles = fpTiles();
+    if (!stage || !tiles || !state.fp.cursor) {
+      render();
+      return;
+    }
+    const way = window.FirstPerson.facings[state.fp.cursor.facing];
+    stage.innerHTML = window.FirstPerson.svg(tiles, state.fp.cursor, { label: `Looking ${way}` });
+    const compass = document.getElementById('scene-compass');
+    if (compass) compass.textContent = `Facing ${way}`;
+  }
+
+  function fpTurn(by) {
+    if (!state.fp.cursor) return;
+    state.fp.cursor = window.FirstPerson.turn(state.fp.cursor, by);
+    fpRedraw();
+  }
+
+  /**
+   * One step forward, which is one of three things.
+   *
+   * Inside the place you are already standing it is a redraw and no request at
+   * all. Across a threshold it is the ordinary one-hop `location/travel` the
+   * chart has always issued, so the trap, the wandering monster, the locked
+   * door and the refusal all behave exactly as they do when you click the map.
+   * Into a wall it is nothing, and says so.
+   */
+  async function fpForward() {
+    const tiles = fpTiles();
+    if (!tiles || !state.fp.cursor || state.busy) return;
+    const here = state.location ? +state.location.id : null;
+    const move = window.FirstPerson.step(tiles, state.fp.cursor, here);
+
+    if (move.blocked) {
+      const stage = document.getElementById('scene-fp');
+      if (stage && !reducedMotion()) {
+        stage.classList.remove('is-bump');
+        void stage.offsetWidth;      // restart the animation
+        stage.classList.add('is-bump');
+      }
+      return;
+    }
+    if (!move.travel) {
+      state.fp.cursor = move.cursor;
+      fpRedraw();
+      return;
+    }
+    // Step onto the threshold before asking, so the picture moves when the key
+    // does. fpSync() is what decides where the party really ended up.
+    state.fp.cursor = move.cursor;
+    await travelTo(move.travel);
+  }
+
+  function fpFlip() {
+    state.fp.on = !state.fp.on;
+    try { window.localStorage.setItem(FP_PREF, state.fp.on ? '1' : '0'); } catch (e) { /* private mode */ }
+    render();
   }
 
   /**
@@ -485,6 +635,26 @@
   function mountSceneMap() {
     const box = $('#scene-map');
     if (!box || !window.WorldMap) return;
+
+    const look = $('#scene-look');
+    if (look) look.addEventListener('click', fpFlip);
+
+    // The first-person view has no chart under it, so none of the pan, zoom or
+    // quest-pin wiring below applies to it.
+    if (fpOn()) {
+      const info = $('#scene-info');
+      if (info) info.addEventListener('click', openDescription);
+      box.querySelectorAll('[data-fp]').forEach((b) => {
+        b.addEventListener('click', () => {
+          const verb = b.dataset.fp;
+          if (verb === 'forward') fpForward();
+          else if (verb === 'left') fpTurn(-1);
+          else if (verb === 'right') fpTurn(1);
+          else if (verb === 'about') fpTurn(2);
+        });
+      });
+      return;
+    }
 
     const here = state.location ? +state.location.id : null;
     if (sceneViewAt !== here) {
@@ -1468,7 +1638,23 @@
       // map had to print it beside a name to be usable at all. Travel is
       // clicking a place on the chart.
 
+      // Walking a floor, the arrows are the whole of the controls — and they
+      // are bound only while the first-person view is up, so nothing else on
+      // the page loses them.
+      if (fpOn()) {
+        switch (e.key) {
+          case 'ArrowUp': e.preventDefault(); fpForward(); return;
+          case 'ArrowLeft': e.preventDefault(); fpTurn(-1); return;
+          case 'ArrowRight': e.preventDefault(); fpTurn(1); return;
+          case 'ArrowDown': e.preventDefault(); fpTurn(2); return;
+          default: break;
+        }
+      }
+
       switch (e.key.toLowerCase()) {
+        case 'v':
+          if (fpAvailable()) { e.preventDefault(); fpFlip(); }
+          break;
         case 's': e.preventDefault(); doSearch(); break;
         case 'l': {
           const it = (loc.items || [])[0];
@@ -1529,6 +1715,10 @@
     bindDelegates();
     bindKeys();
     bindTopbar();
+
+    // Whether the last floor was walked or read. Harmless anywhere there is no
+    // raster to draw, because fpOn() asks for one before it asks for this.
+    try { state.fp.on = window.localStorage.getItem(FP_PREF) === '1'; } catch (e) { /* private mode */ }
     if (window.UI && window.UI.init) window.UI.init();
 
     // The combat screen's own setup: the rules tables it draws slot dots and

@@ -777,6 +777,48 @@ $hereKey = $db->query(
 )->fetchColumn();
 ok('wherever they are is on their own map', is_string($hereKey) && $hereKey !== '');
 
+// -- and the raster is fogged by the same answer -----------------------------
+// The first-person view walks a tile layer, and it has to be censored the same
+// way the chart is or the two show different floors. fogTiles() is given fog()'s
+// output rather than asking again, so what is checked here is that the finer
+// grain follows the coarse one exactly: no tile of a place the chart is hiding,
+// and no doorway into one either.
+$tiles = $pm['tiles'];
+ok('the raster rides with the plan', is_array($tiles) && isset($tiles['rows']),
+    'no tiles block on the payload');
+
+$litIds = [];
+foreach (array_merge($pm['rooms'], $pm['corridors']) as $s) {
+    if ($s['seen'] || $s['glimpsed']) {
+        $litIds[(int) $s['location_id']] = true;
+    }
+}
+$onWire = array_values($tiles['locs']);
+$extra = array_values(array_diff($onWire, array_keys($litIds)));
+$missing = array_values(array_diff(array_keys($litIds), $onWire));
+same('every place on the raster is a place the chart draws', [], $extra);
+same('and every place the chart draws has floor on the raster', [], $missing);
+
+// The dark rooms are rock, tile for tile — not dimmed, not outlined, absent.
+$rock = 0;
+foreach ($dark as $r) {
+    if (in_array((int) $r['location_id'], $onWire, true)) {
+        $rock++;
+    }
+}
+same('a room the party has not found is rock', 0, $rock);
+
+// A doorway is only ever offered out of somewhere you are standing, and every
+// one that is offered leads to a real place.
+$strays = 0;
+foreach ($tiles['doors'] as $dr) {
+    $ch = $tiles['rows'][intdiv($dr['t'], $tiles['w'])][$dr['t'] % $tiles['w']] ?? ' ';
+    if ($ch === ' ' || $dr['to'] === null) {
+        $strays++;
+    }
+}
+same('every doorway stands on floor and leads somewhere', 0, $strays);
+
 // The stuck door, found the honest way: stand next to it and look.
 $stuckIdx = $fixture['stuck'];
 $stuckRoomA = (int) $db->query(

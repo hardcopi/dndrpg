@@ -305,6 +305,61 @@
   --pg-glimpse-wall: color-mix(in srgb, var(--pg-ink) 45%, transparent);
 
   /* ==================================================================
+   * THE FIRST-PERSON VIEW — a generated floor, from inside it
+   *
+   * The chart above is parchment: a floor as somebody's drawing of it. This
+   * is the opposite claim — you are underground with a lamp — so it owes the
+   * plan nothing and shares none of its values. It is the one part of the
+   * game drawn in lamplight rather than ink.
+   *
+   * FOUR SURFACES, SIX BANDS EACH, and the bands are the whole lighting
+   * model: ui-firstperson.js picks by distance, so a wall five tiles off is
+   * the same polygon as one at arm's length in a darker paint. There is no
+   * light source, no falloff and no shading maths anywhere — a lamp that
+   * actually fell off would need a second copy of the level's geometry to
+   * know what it was lighting, and this is a flat-shaded view on purpose,
+   * which is what the games it is copying did on hardware that had no choice.
+   *
+   * The side walls are lit a step warmer than the faces square to you, which
+   * is not physics: with every surface at one value a corridor reads as a
+   * flat hexagon, and the step is what makes a corner turn.
+   * ================================================================== */
+  --fp-void: #07050300;          /* past the lamp: nothing, not black rock */
+
+  --fp-wall-0: #7a6a52;
+  --fp-wall-1: #6a5b46;
+  --fp-wall-2: #584c3a;
+  --fp-wall-3: #463c2e;
+  --fp-wall-4: #352e23;
+  --fp-wall-5: #252019;
+
+  --fp-side-0: #8d7b5f;
+  --fp-side-1: #7b6b52;
+  --fp-side-2: #675946;
+  --fp-side-3: #534737;
+  --fp-side-4: #3f362a;
+  --fp-side-5: #2c261d;
+
+  --fp-floor-0: #4a4034;
+  --fp-floor-1: #413830;
+  --fp-floor-2: #37302a;
+  --fp-floor-3: #2d2723;
+  --fp-floor-4: #241f1c;
+  --fp-floor-5: #1a1715;
+
+  --fp-roof-0: #241f19;
+  --fp-roof-1: #201c17;
+  --fp-roof-2: #1c1914;
+  --fp-roof-3: #181511;
+  --fp-roof-4: #14120f;
+  --fp-roof-5: #100e0c;
+
+  --fp-edge: rgba(10, 7, 3, 0.85);   /* the line every polygon is drawn with */
+  --fp-leaf: #6b4a1e;                /* a door with something in it */
+  --fp-leaf-line: #170e04;
+  --fp-bars: #8a8f96;                /* a portcullis, which you see through */
+
+  /* ==================================================================
    * TERRAIN — the battlefield's 16×12 board
    *
    * These four are the only colours that survived the tile map, and they

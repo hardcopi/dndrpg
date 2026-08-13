@@ -693,6 +693,257 @@ for ($i = 0; $i < 200; $i++) {
 ok('a room is drawn in something like its own proportions', $worst < 0.2,
     sprintf('worst was %.0f%% off', $worst * 100));
 
+// =========================================================================
+section('the raster');
+// tiles() is what ui-firstperson.js walks: the same level cut into ten-foot
+// tiles, so a wall can be drawn where there is a wall. Everything below is
+// one question asked several ways — DOES THE RASTER AGREE WITH THE GRAPH? A
+// floor the first-person view can walk and the chart cannot, or the other way
+// about, is two maps of one place disagreeing, and it would show as a party
+// walking at an opening the server refuses to let them through.
+
+/** Which locations a flood fill of the tiles can reach from a starting tile. */
+function flood(array $t, int $from): array
+{
+    $doors = [];
+    foreach ($t['doors'] as $d) {
+        $doors[$d['tile'] * 4 + $d['dir']] = true;
+    }
+    $walls = [];
+    foreach ($t['walls'] as $w) {
+        $walls[$w['tile'] * 4 + $w['dir']] = true;
+    }
+    $steps = [-$t['w'], 1, $t['w'], -1];
+
+    $seen = [$from => true];
+    $queue = [$from];
+    $owners = [];
+    while ($queue) {
+        $at = array_shift($queue);
+        $o = $t['owner'][$at] ?? null;
+        if ($o !== null) {
+            $owners[$o[0] . ':' . $o[1]] = true;
+        }
+        foreach ($steps as $dir => $off) {
+            $to = $at + $off;
+            if (!isset($t['owner'][$to]) || $t['owner'][$to] === null) {
+                continue;                                  // rock
+            }
+            if (isset($walls[$at * 4 + $dir])) {
+                continue;                                  // a thin partition
+            }
+            $sameOwner = $t['owner'][$to] === $o;
+            if (!$sameOwner && !isset($doors[$at * 4 + $dir])) {
+                continue;   // two places with no doorway between them
+            }
+            if (!isset($seen[$to])) {
+                $seen[$to] = true;
+                $queue[] = $to;
+            }
+        }
+    }
+    return $owners;
+}
+
+$level = DungeonGen::generate(4471, 2);
+same('the same seed carves the same tiles',
+    DungeonGen::tiles($level), DungeonGen::tiles(DungeonGen::generate(4471, 2)));
+
+$t = DungeonGen::tiles($level);
+same('the grid is the plan sub-divided, plus a border',
+    [DungeonGen::GRID_W * DungeonGen::SUB + 2, DungeonGen::GRID_H * DungeonGen::SUB + 2],
+    [$t['w'], $t['h']]);
+
+$bad = 0;
+$shared = 0;
+$border = 0;
+$notRect = 0;
+$abut = 0;
+$badDoor = 0;
+$oneSided = 0;
+$wide = 0;
+$partitions = 0;
+$partitionLevels = 0;
+$dropped = 0;
+$cutOff = 0;
+$mismatch = 0;
+$levels = 0;
+$ways = 0;
+
+for ($i = 1; $i <= 400; $i++) {
+    for ($d = 1; $d <= 5; $d++) {
+        $lv = DungeonGen::generate($i * 7919, $d);
+        $t = DungeonGen::tiles($lv);
+        $routes = DungeonGen::routes($lv);
+        $levels++;
+        $shared += $t['shared'];
+
+        // The border is the rock the level is cut from, and the reason nothing
+        // downstream needs a bounds test.
+        for ($x = 0; $x < $t['w']; $x++) {
+            if ($t['owner'][$x] !== null || $t['owner'][($t['h'] - 1) * $t['w'] + $x] !== null) {
+                $border++;
+            }
+        }
+        for ($y = 0; $y < $t['h']; $y++) {
+            if ($t['owner'][$y * $t['w']] !== null || $t['owner'][$y * $t['w'] + $t['w'] - 1] !== null) {
+                $border++;
+            }
+        }
+
+        // A room's tiles are its footprint exactly — the same rectangle plan()
+        // draws, at SUB times the resolution.
+        foreach ($lv['rooms'] as $r) {
+            $want = 0;
+            for ($y = DungeonGen::SUB * $r['gy'] + 1; $y <= DungeonGen::SUB * ($r['gy'] + $r['h']); $y++) {
+                for ($x = DungeonGen::SUB * $r['gx'] + 1; $x <= DungeonGen::SUB * ($r['gx'] + $r['w']); $x++) {
+                    if ($t['owner'][$y * $t['w'] + $x] !== ['room', (int) $r['id']]) {
+                        $notRect++;
+                    }
+                    $want++;
+                }
+            }
+            $got = 0;
+            foreach ($t['owner'] as $o) {
+                if ($o === ['room', (int) $r['id']]) {
+                    $got++;
+                }
+            }
+            if ($got !== $want) {
+                $notRect++;
+            }
+        }
+
+        $doorFaces = [];
+        foreach ($t['doors'] as $dr) {
+            $doorFaces[$dr['tile'] * 4 + $dr['dir']] = $dr;
+        }
+        $steps = [-$t['w'], 1, $t['w'], -1];
+        $hasPartition = false;
+
+        foreach ($t['owner'] as $tile => $o) {
+            if ($o === null) {
+                continue;
+            }
+            foreach ($steps as $dir => $off) {
+                $n = $t['owner'][$tile + $off] ?? null;
+                if ($n === null || $n === $o) {
+                    continue;
+                }
+                // Two different places touching: either a doorway, or a
+                // partition. Never a bare hole.
+                $isDoor = isset($doorFaces[$tile * 4 + $dir]);
+                $isWall = false;
+                foreach ($t['walls'] as $w) {
+                    if ($w['tile'] === $tile && $w['dir'] === $dir) {
+                        $isWall = true;
+                        break;
+                    }
+                }
+                if (!$isDoor && !$isWall) {
+                    $badDoor++;
+                }
+                if ($isWall) {
+                    $hasPartition = true;
+                    $partitions++;
+                    // A partition is only ever between two passages. A chamber
+                    // is never squeezed past.
+                    if ($o[0] !== 'corridor' || $n[0] !== 'corridor') {
+                        $bad++;
+                    }
+                }
+                // A doorway is written from both sides, like the exit rows.
+                if ($isDoor && !isset($doorFaces[($tile + $off) * 4 + (($dir + 2) % 4)])) {
+                    $oneSided++;
+                }
+                // A passage never touches a chamber it does not join.
+                if ($o[0] === 'corridor' && $n[0] === 'room') {
+                    $e = $lv['corridors'][$o[1]];
+                    if ((int) $n[1] !== (int) $e['a'] && (int) $n[1] !== (int) $e['b']) {
+                        $abut++;
+                    }
+                }
+            }
+            // One tile wide: a passage never fills a two-by-two block of its
+            // OWN tiles. Four tiles belonging to two passages that have
+            // squeezed past each other is a different thing and is allowed —
+            // there is a partition down the middle of it.
+            if ($o[0] === 'corridor'
+                && ($t['owner'][$tile + 1] ?? null) === $o
+                && ($t['owner'][$tile + $t['w']] ?? null) === $o
+                && ($t['owner'][$tile + $t['w'] + 1] ?? null) === $o) {
+                $wide++;
+            }
+        }
+        if ($hasPartition) {
+            $partitionLevels++;
+        }
+
+        // THE ONE THAT MATTERS. Walk the tiles from the entrance's own tile and
+        // see which places you can get to; it has to be every place the routed
+        // graph says, and nothing else.
+        $reach = flood($t, $t['spines']['room'][$lv['entrance']]);
+
+        $adj = [];
+        foreach ($lv['corridors'] as $e) {
+            $ways++;
+            if (!isset($routes[$e['id']])) {
+                $dropped++;
+                continue;
+            }
+            $adj[$e['a']][] = [$e['b'], (int) $e['id']];
+            $adj[$e['b']][] = [$e['a'], (int) $e['id']];
+        }
+        $want = ['room:' . $lv['entrance'] => true];
+        $queue = [$lv['entrance']];
+        while ($queue) {
+            $at = array_shift($queue);
+            foreach ($adj[$at] ?? [] as [$to, $cid]) {
+                $want['corridor:' . $cid] = true;
+                if (!isset($want['room:' . $to])) {
+                    $want['room:' . $to] = true;
+                    $queue[] = $to;
+                }
+            }
+        }
+        ksort($want);
+        ksort($reach);
+        if ($want !== $reach) {
+            $mismatch++;
+        }
+        // And every chamber is still reachable once the dropped ways are gone.
+        foreach ($lv['rooms'] as $r) {
+            if (!isset($want['room:' . $r['id']])) {
+                $cutOff++;
+            }
+        }
+    }
+}
+
+ok('the raster reaches exactly what the graph reaches', $mismatch === 0,
+    "{$mismatch} of {$levels} levels disagreed");
+ok('and no chamber is left without a way in', $cutOff === 0, "{$cutOff} were");
+ok('no two passages stand on the same tile', $shared === 0, "{$shared} did");
+ok('a passage never touches a chamber it does not join', $abut === 0, "{$abut} tiles did");
+ok('every room is its own footprint, exactly', $notRect === 0, "{$notRect} tiles were not");
+ok('nothing is carved into the border', $border === 0, "{$border} tiles were");
+ok('two places never touch without a doorway or a wall', $badDoor === 0, "{$badDoor} faces did");
+ok('and a doorway is written from both sides', $oneSided === 0, "{$oneSided} were not");
+ok('every passage is one tile wide', $wide === 0, "{$wide} filled a square");
+// Only the optional loops are ever lost — a spanning-tree edge that could not
+// be routed would have shown up as a chamber cut off, above. Banded rather than
+// forbidden, for the reason the squeeze below is: the router can be beaten by a
+// plan that leaves one lane between two chambers and asks two passages for it.
+ok('almost every way the graph rolls gets floor', $dropped * 200 < $ways,
+    sprintf('%d of %d ways did not (%.2f%%)', $dropped, $ways, 100 * $dropped / max(1, $ways)));
+// Two passages squeezing past each other with a thin wall between them is
+// legitimate and rare; it is banded rather than forbidden so the number cannot
+// drift without somebody deciding it should.
+ok('and passages rarely have to squeeze past each other',
+    $partitionLevels * 100 < $levels * 12,
+    sprintf('%d of %d levels (%.1f%%), %d faces', $partitionLevels, $levels,
+        100 * $partitionLevels / $levels, $partitions));
+
 echo PHP_EOL . str_repeat('-', 52) . PHP_EOL;
 printf("%d passed, %d failed%s", $pass, $fail, PHP_EOL);
 exit($fail > 0 ? 1 : 0);

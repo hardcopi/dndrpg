@@ -1047,9 +1047,105 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 }
 .loc-map:hover .map-zoom,
 .loc-map:hover .map-info,
+.loc-map:hover .map-look,
 .loc-map .map-zoom:focus-within,
+.map-look:focus-visible,
 .map-info:focus-visible { opacity: 1; }
 .map-info:hover { color: var(--gold); }
+
+/* The way between the two views of a floor, in the corner opposite the zoom.
+   A word rather than a glyph: "Look" and "Map" say which way it goes, and
+   there is no icon for "walk this in first person" that anybody would read
+   correctly the first time. */
+.map-look {
+  position: absolute;
+  left: 0.4rem;
+  bottom: 0.4rem;
+  width: auto;
+  padding: 0.1rem 0.5rem;
+  font-size: var(--fs-xs);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+  background: color-mix(in srgb, var(--bg-panel) 88%, transparent);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  opacity: 0.5;
+  transition: opacity var(--dur-fast), color var(--dur-fast);
+}
+.map-look:hover { color: var(--gold); }
+
+/* ---- The first-person view ------------------------------------------
+   The picture is the whole panel and the controls sit on it, exactly as the
+   zoom cluster sits on the chart. It keeps the chart's box so that flipping
+   between them does not move anything else on the page. */
+/* The chart's own proportions — 118 by 87, its viewBox with the padding it
+   draws place names into. Held here as well as in ui-firstperson.js's viewBox
+   so that flipping between the two views does not move the panel, and so the
+   picture fills its box without letterboxing or cropping. */
+.loc-map.is-fp {
+  aspect-ratio: 118 / 87;
+  background: var(--fp-roof-5);
+}
+.fp-stage { display: block; width: 100%; height: 100%; }
+.fp-view { display: block; width: 100%; height: 100%; }
+.fp-void { fill: var(--fp-void); }
+.fp-view polygon { stroke: var(--fp-edge); stroke-width: 0.5; stroke-linejoin: round; }
+.fp-view .fp-wall { stroke-width: 0.7; }
+/* Floor and ceiling are drawn a cell at a time, so an outline on them rules
+   the ground with every quad's own edges — including the ones radiating out
+   of the vanishing point, which read as cracks nothing in the level has. The
+   depth bands alone are enough to say how far away the floor is. */
+.fp-view .fp-floor,
+.fp-view .fp-roof { stroke: none; }
+.fp-leaf { fill: var(--fp-leaf); stroke: var(--fp-leaf-line); stroke-width: 1; }
+.fp-leaf.is-stuck { stroke-dasharray: 4 3; }
+.fp-leaf.is-locked { fill: color-mix(in srgb, var(--fp-leaf) 80%, #000); }
+.fp-leaf.is-portcullis line { stroke: var(--fp-bars); stroke-width: 2.4; }
+.fp-stair polygon { fill: var(--pg-stair); fill-opacity: 0.55; stroke: var(--fp-edge); }
+
+/* Which way you are looking, over a ceiling that is nearly black — so it is
+   given its own ground rather than trusted to a text-shadow, the same way
+   every other mark on this panel is. */
+.fp-compass {
+  position: absolute;
+  top: 0.4rem;
+  left: 0.4rem;
+  margin: 0;
+  padding: 0.1rem 0.45rem;
+  font-size: var(--fs-xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+  background: color-mix(in srgb, var(--bg-panel) 88%, transparent);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  pointer-events: none;
+}
+.fp-walk {
+  position: absolute;
+  right: 0.4rem;
+  bottom: 0.4rem;
+  display: flex;
+  gap: var(--sp-1);
+  padding: var(--sp-2);
+  background: color-mix(in srgb, var(--bg-panel) 88%, transparent);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+}
+.fp-walk .fp-fwd { color: var(--gold); }
+
+/* Walking into a wall. The only feedback there is, because a refused step
+   makes no request and so has nothing to say in the log. */
+.fp-stage.is-bump { animation: fp-bump var(--dur-fast, 140ms) ease-out; }
+@keyframes fp-bump {
+  0%   { transform: translateZ(0) scale(1); }
+  40%  { transform: translateZ(0) scale(0.985); }
+  100% { transform: translateZ(0) scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fp-stage.is-bump { animation: none; }
+}
 
 /* The description, opened from that corner. The measure lives here now, for
    the reason it lived on `.loc-prose`: prose the width of a wide modal is
