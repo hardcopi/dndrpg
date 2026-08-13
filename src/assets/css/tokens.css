@@ -27,6 +27,47 @@
  * of them were hiding.
  */
 
+/*
+ * THE ONE WEBFONT.
+ *
+ * --font-display was "Palatino Linotype", "Book Antiqua", Palatino, Georgia,
+ * serif — and Palatino ships on Windows and macOS and nowhere else, so the
+ * game's voice type was a different face depending on who was reading. Alegreya
+ * is a warm old-style serif under the SIL OFL; assets/fonts/README.md says where
+ * it came from and why the three fonts that came with the Synty pack did not.
+ *
+ * ONE VARIABLE AXIS RATHER THAN FIVE STATIC CUTS, because --font-display is
+ * asked for at 400, --fw-medium, --fw-semibold and --fw-bold, plus italic on
+ * .dlg-aside / .map-info / .wm-out-label. Declaring the range in font-weight is
+ * what lets the browser hit each of those exactly instead of synthesising a
+ * fake bold, and it is the whole reason this is two files and not five.
+ *
+ * font-display: swap — this face is opt-in and only for voice, so a heading
+ * arriving a beat late in the fallback serif costs nothing, and blocking the
+ * first paint of a game screen on it would cost a great deal.
+ *
+ * The format is plain `woff2`, NOT `woff2-variations`. The latter reads like the
+ * more precise answer and is the wrong one: it never made it into the spec's
+ * format list, and a browser that does not recognise a format string skips that
+ * src entirely — so the more specific-looking value is the one that silently
+ * serves no font at all.
+ */
+@font-face {
+  font-family: "Alegreya";
+  src: url("../fonts/alegreya-var-latin.woff2") format("woff2");
+  font-weight: 400 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Alegreya";
+  src: url("../fonts/alegreya-var-latin-italic.woff2") format("woff2");
+  font-weight: 400 900;
+  font-style: italic;
+  font-display: swap;
+}
+
 :root {
   /* ==================================================================
    * SURFACES, LINES, TEXT
@@ -322,7 +363,10 @@
    * a headline that wraps four times.
    * ================================================================== */
 
-  --font-display: "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+  /* The system stack stays on as the tail rather than being replaced: it is what
+     renders during the swap, and what renders if the woff2 404s — which on this
+     vhost is served as the homepage with a 200, so there is no error to catch. */
+  --font-display: "Alegreya", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
   --font-ui: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --mono: "Cascadia Code", "Consolas", ui-monospace, monospace;
 
