@@ -38,6 +38,8 @@ class ContentEditor
      */
     private const LOCATION_TYPES = ['square', 'street', 'gate', 'building', 'room', 'site', 'camp'];
 
+    private const REGION_TYPES = ['town', 'wilderness', 'dungeon'];
+
     private PDO $db;
 
     /** The world's flag read/write sets, gathered once per request. */
@@ -53,20 +55,26 @@ class ContentEditor
     // =======================================================================
 
     /** Everything the editor's list needs, without the dialogue blobs. */
-    public function listNpcs(): array
+    public function listNpcs(?int $moduleId = null): array
     {
-        return $this->db->query(
-            "SELECT n.id, n.npc_key, n.name, n.role, n.sprite_key, n.pose,
-                    n.is_merchant, n.is_quest_giver, n.is_ambient,
-                    n.dialogue_json IS NOT NULL AND n.dialogue_json <> '' AS has_dialogue,
-                    n.location_id, l.location_key, l.name AS location_name,
-                    r.name AS region_name
-               FROM npcs n
-               LEFT JOIN locations l ON l.id = n.location_id
-               LEFT JOIN regions r ON r.id = l.region_id
-              WHERE n.npc_key IS NOT NULL
-              ORDER BY n.name"
-        )->fetchAll();
+        $sql = "SELECT n.id, n.npc_key, n.name, n.role, n.sprite_key, n.pose,
+                       n.is_merchant, n.is_quest_giver, n.is_ambient,
+                       n.dialogue_json IS NOT NULL AND n.dialogue_json <> '' AS has_dialogue,
+                       n.location_id, l.location_key, l.name AS location_name,
+                       r.name AS region_name
+                  FROM npcs n
+                  LEFT JOIN locations l ON l.id = n.location_id
+                  LEFT JOIN regions r ON r.id = l.region_id
+                 WHERE n.npc_key IS NOT NULL";
+        $args = [];
+        if ($moduleId !== null) {
+            $sql .= ' AND r.module_id = ?';
+            $args[] = $moduleId;
+        }
+        $sql .= ' ORDER BY n.name';
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($args);
+        return $stmt->fetchAll();
     }
 
     public function getNpc(int $id): array
@@ -600,16 +608,26 @@ class ContentEditor
     // Quests
     // =======================================================================
 
-    public function listQuests(): array
+    public function listQuests(?int $moduleId = null): array
     {
-        return $this->db->query(
-            'SELECT q.id, q.quest_key, q.title, q.act, q.on_job_board, q.required_level,
-                    q.companion_key, q.is_active,
-                    (SELECT COUNT(*) FROM quest_stages s WHERE s.quest_id = q.id) AS stages
-               FROM quests q
-              WHERE q.quest_key IS NOT NULL
-              ORDER BY q.act, q.title'
-        )->fetchAll();
+        $sql = 'SELECT q.id, q.quest_key, q.title, q.act, q.on_job_board, q.required_level,
+                       q.companion_key, q.is_active, q.giver_npc_id,
+                       (SELECT COUNT(*) FROM quest_stages s WHERE s.quest_id = q.id) AS stages
+                  FROM quests q
+                 WHERE q.quest_key IS NOT NULL';
+        $args = [];
+        if ($moduleId !== null) {
+            $sql .= ' AND q.giver_npc_id IN (
+                        SELECT n.id FROM npcs n
+                        INNER JOIN locations l ON l.id = n.location_id
+                        INNER JOIN regions r ON r.id = l.region_id
+                       WHERE r.module_id = ?)';
+            $args[] = $moduleId;
+        }
+        $sql .= ' ORDER BY q.act, q.title';
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($args);
+        return $stmt->fetchAll();
     }
 
     public function getQuest(int $id): array
@@ -834,6 +852,15 @@ class ContentEditor
         $items->execute([$id]);
         $location['items'] = $items->fetchAll();
 
+        $enc = $this->db->prepare(
+            'SELECT e.id, e.encounter_key, e.name, e.is_ambush, e.difficulty
+               FROM encounters e
+              WHERE e.location_id = ? AND e.is_random = 0
+              ORDER BY e.id'
+        );
+        $enc->execute([$id]);
+        $location['encounters'] = $enc->fetchAll();
+
         return $location;
     }
 
@@ -991,6 +1018,19 @@ class ContentEditor
     }
 
     /**
+     * Move a node on the chart. The plan is the source for a dungeon;
+     * this is only for a town or a wilderness, where map_x / map_y are
+     * authored by hand.
+     */
+    public function savePosition(int $id, float $x, float $y): array
+    {
+        $this->requireLocation($id);
+        $this->db->prepare('UPDATE locations SET map_x = ?, map_y = ? WHERE id = ?')
+            ->execute([$this->percent($x, 'map_x'), $this->percent($y, 'map_y'), $id]);
+        return $this->getLocation($id);
+    }
+
+    /**
      * Create or rewrite one way out of a location.
      *
      * Exits are directed and unique on (from, to), which is the pair that
@@ -1007,6 +1047,7 @@ class ContentEditor
         if ($from === $to) {
             throw new InvalidArgumentException('An exit has to lead somewhere else.');
         }
+        $this->assertSameModule($from, $to);
 
         $label = trim((string) ($data['label'] ?? ''));
         if ($label === '') {
@@ -1139,6 +1180,1774 @@ class ContentEditor
         $this->db->prepare('DELETE FROM locations WHERE id = ?')->execute([$id]);
 
         return ['deleted' => true, 'location_key' => $location['location_key']];
+    }
+
+    // =======================================================================
+    // Studio creates — a blank page, not a revision of one that exists
+    // =======================================================================
+
+    /**
+     * Every module the picker and the studio can name.
+     *
+     * Inactive modules stay on this list: the studio has to be able to open
+     * a draft the public shelf will not show.
+     */
+    public function listModules(): array
+    {
+        return $this->db->query(
+            'SELECT m.id, m.module_key, m.name, m.blurb, m.start_location_key,
+                    m.level_min, m.level_max, m.attribution, m.is_active, m.sort_order,
+                    (SELECT COUNT(*) FROM regions r WHERE r.module_id = m.id) AS regions
+               FROM modules m
+              ORDER BY m.sort_order, m.name'
+        )->fetchAll();
+    }
+
+    public function getModule(int $id): array
+    {
+        $stmt = $this->db->prepare('SELECT * FROM modules WHERE id = ?');
+        $stmt->execute([$id]);
+        $row = $stmt->fetch();
+        if (!$row) {
+            throw new InvalidArgumentException('No such module.');
+        }
+        return $row;
+    }
+
+    /**
+     * The module's first region as the chart payload WorldMap.svg already draws.
+     *
+     * Every node is visited: this is the GM's copy, not a party's fog. The
+     * start room is marked current so the chart has a "here" to sit on.
+     */
+    public function moduleChart(int $moduleId, ?int $hereId = null): array
+    {
+        $module = $this->getModule($moduleId);
+        $stmt = $this->db->prepare(
+            'SELECT * FROM regions WHERE module_id = ? ORDER BY sort_order, id LIMIT 1'
+        );
+        $stmt->execute([$moduleId]);
+        $region = $stmt->fetch();
+        if (!$region) {
+            return ['region_id' => null, 'region_key' => null, 'name' => $module['name'],
+                    'region_type' => 'dungeon', 'nodes' => [], 'edges' => [],
+                    'neighbors' => [], 'floorplan' => null];
+        }
+
+        $locs = $this->db->prepare(
+            'SELECT id, location_key, name, location_type, map_x, map_y
+               FROM locations WHERE region_id = ? ORDER BY sort_order, id'
+        );
+        $locs->execute([(int) $region['id']]);
+        $rows = $locs->fetchAll();
+
+        $startKey = (string) $module['start_location_key'];
+        $startId = null;
+        foreach ($rows as $l) {
+            if ($l['location_key'] === $startKey) {
+                $startId = (int) $l['id'];
+                break;
+            }
+        }
+        if ($hereId === null) {
+            $hereId = $startId;
+        }
+
+        $nodes = [];
+        $shown = [];
+        foreach ($rows as $l) {
+            $id = (int) $l['id'];
+            $shown[$id] = true;
+            $nodes[] = [
+                'id'      => $id,
+                'key'     => $l['location_key'],
+                'name'    => $l['name'],
+                'type'    => $l['location_type'],
+                'x'       => (float) $l['map_x'],
+                'y'       => (float) $l['map_y'],
+                'visited' => true,
+                'current' => $hereId !== null && $id === $hereId,
+            ];
+        }
+
+        $exits = $this->db->prepare(
+            'SELECT e.from_location_id, e.to_location_id
+               FROM location_exits e
+               INNER JOIN locations l1 ON l1.id = e.from_location_id
+               INNER JOIN locations l2 ON l2.id = e.to_location_id
+              WHERE l1.region_id = ? AND l2.region_id = ?'
+        );
+        $exits->execute([(int) $region['id'], (int) $region['id']]);
+        $edges = [];
+        $seen = [];
+        foreach ($exits->fetchAll() as $e) {
+            $a = (int) $e['from_location_id'];
+            $b = (int) $e['to_location_id'];
+            if (!isset($shown[$a], $shown[$b])) {
+                continue;
+            }
+            $pair = min($a, $b) . ':' . max($a, $b);
+            if (isset($seen[$pair])) {
+                continue;
+            }
+            $seen[$pair] = true;
+            $edges[] = ['from' => $a, 'to' => $b];
+        }
+
+        $floorplan = null;
+        if (!empty($region['plan_json'])) {
+            $raw = json_decode((string) $region['plan_json'], true);
+            if (is_array($raw)) {
+                try {
+                    $compiled = PlanAuthored::compile($raw);
+                    $floorplan = $this->bindPlan($compiled['plan'], $compiled['level'], $shown);
+                } catch (InvalidArgumentException $e) {
+                    $floorplan = null;
+                }
+            }
+        }
+
+        return [
+            'region_id'   => (int) $region['id'],
+            'region_key'  => $region['region_key'],
+            'name'        => $region['name'],
+            'region_type' => $region['region_type'],
+            'nodes'       => $nodes,
+            'edges'       => $edges,
+            'neighbors'   => [],
+            'floorplan'   => $floorplan,
+            'plan'        => !empty($region['plan_json'])
+                ? json_decode((string) $region['plan_json'], true) : null,
+        ];
+    }
+
+    /**
+     * Save an authored dungeon plan and compile it into locations and exits.
+     *
+     * The plan is the source. Room rows are created or updated by key; halls
+     * become a pair of exits. A hall the router cannot run is refused rather
+     * than stored as a door that the walker will not see.
+     */
+    public function savePlan(int $regionId, array $plan): array
+    {
+        $region = $this->requireRegion($regionId);
+        if ($region['region_type'] !== 'dungeon') {
+            throw new InvalidArgumentException(
+                'A plan belongs on a dungeon, not a ' . $region['region_type'] . '.'
+            );
+        }
+        $plan = PlanAuthored::normalize($plan);
+        $compiled = PlanAuthored::compile($plan);
+        if ($compiled['dropped'] > 0) {
+            throw new InvalidArgumentException(
+                'A hall could not be routed between two rooms. Leave a cell of '
+                . 'rock between them, or move them so a passage can run.'
+            );
+        }
+
+        $this->db->beginTransaction();
+        try {
+            $this->db->prepare('UPDATE regions SET plan_json = ? WHERE id = ?')
+                ->execute([
+                    json_encode($plan, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
+                    $regionId,
+                ]);
+
+            $oldKeyById = [];
+            if (!empty($region['plan_json'])) {
+                $prev = json_decode((string) $region['plan_json'], true);
+                if (is_array($prev)) {
+                    foreach ($prev['rooms'] ?? [] as $old) {
+                        if (is_array($old) && isset($old['id'], $old['key'])) {
+                            $oldKeyById[(int) $old['id']] = (string) $old['key'];
+                        }
+                    }
+                }
+            }
+
+            $idByPlan = [];
+            foreach ($compiled['level']['rooms'] as $r) {
+                [$mx, $my] = DungeonGen::project(
+                    $r['gx'] + $r['w'] / 2,
+                    $r['gy'] + $r['h'] / 2
+                );
+                $newKey = (string) $r['key'];
+                $oldKey = $oldKeyById[(int) $r['id']] ?? null;
+                if ($oldKey !== null && $oldKey !== $newKey) {
+                    $prevRow = $this->db->prepare(
+                        'SELECT id FROM locations WHERE location_key = ?'
+                    );
+                    $prevRow->execute([$oldKey]);
+                    $prevId = $prevRow->fetchColumn();
+                    if ($prevId !== false) {
+                        $taken = $this->db->prepare(
+                            'SELECT id FROM locations WHERE location_key = ?'
+                        );
+                        $taken->execute([$newKey]);
+                        $takenId = $taken->fetchColumn();
+                        if ($takenId !== false && (int) $takenId !== (int) $prevId) {
+                            throw new InvalidArgumentException(
+                                "There is already a location keyed {$newKey}."
+                            );
+                        }
+                        $this->db->prepare(
+                            'UPDATE locations SET location_key = ? WHERE id = ?'
+                        )->execute([$newKey, (int) $prevId]);
+                    }
+                }
+                $existing = $this->db->prepare('SELECT id FROM locations WHERE location_key = ?');
+                $existing->execute([$newKey]);
+                $locId = $existing->fetchColumn();
+                if ($locId === false) {
+                    $saved = $this->saveLocation([
+                        'location_key'  => $newKey,
+                        'region_id'     => $regionId,
+                        'name'          => $r['name'],
+                        'location_type' => 'room',
+                        'description'   => 'A chamber. Nobody has written what is in it yet.',
+                        'map_x'         => $mx,
+                        'map_y'         => $my,
+                    ]);
+                    $locId = (int) $saved['id'];
+                } else {
+                    $this->db->prepare(
+                        'UPDATE locations SET name = ?, map_x = ?, map_y = ?, region_id = ?
+                          WHERE id = ?'
+                    )->execute([$r['name'], $mx, $my, $regionId, (int) $locId]);
+                }
+                $idByPlan[(int) $r['id']] = (int) $locId;
+            }
+
+            $keepPairs = [];
+            foreach ($compiled['level']['corridors'] as $c) {
+                $from = $idByPlan[(int) $c['a']] ?? null;
+                $to = $idByPlan[(int) $c['b']] ?? null;
+                if ($from === null || $to === null) {
+                    continue;
+                }
+                $hidden = !empty($c['hidden']);
+                $this->saveExit([
+                    'from_location_id' => $from,
+                    'to_location_id'   => $to,
+                    'label'            => 'On to ' . $this->roomName($compiled['level']['rooms'], (int) $c['b']),
+                    'is_hidden'        => $hidden,
+                ]);
+                $this->saveExit([
+                    'from_location_id' => $to,
+                    'to_location_id'   => $from,
+                    'label'            => 'Back to ' . $this->roomName($compiled['level']['rooms'], (int) $c['a']),
+                    'is_hidden'        => $hidden,
+                ]);
+                $keepPairs[min($from, $to) . ':' . max($from, $to)] = true;
+            }
+
+            $this->prunePlanExits($regionId, $idByPlan, $keepPairs);
+
+            $this->db->commit();
+        } catch (Throwable $e) {
+            $this->db->rollBack();
+            throw $e;
+        }
+
+        return [
+            'plan'  => $plan,
+            'chart' => $this->moduleChart((int) $region['module_id']),
+        ];
+    }
+
+    /** @param list<array{id:int,name:string}> $rooms */
+    private function roomName(array $rooms, int $id): string
+    {
+        foreach ($rooms as $r) {
+            if ((int) $r['id'] === $id) {
+                return (string) $r['name'];
+            }
+        }
+        return 'the next room';
+    }
+
+    /**
+     * Drop exits between plan rooms that no longer have a hall, without
+     * touching exits that leave the region.
+     *
+     * @param array<int,int> $idByPlan
+     * @param array<string,true> $keepPairs
+     */
+    private function prunePlanExits(int $regionId, array $idByPlan, array $keepPairs): void
+    {
+        $planLocs = array_flip($idByPlan);
+        $stmt = $this->db->prepare(
+            'SELECT e.id, e.from_location_id, e.to_location_id
+               FROM location_exits e
+               INNER JOIN locations a ON a.id = e.from_location_id
+               INNER JOIN locations b ON b.id = e.to_location_id
+              WHERE a.region_id = ? AND b.region_id = ?'
+        );
+        $stmt->execute([$regionId, $regionId]);
+        foreach ($stmt->fetchAll() as $e) {
+            $a = (int) $e['from_location_id'];
+            $b = (int) $e['to_location_id'];
+            if (!isset($planLocs[$a], $planLocs[$b])) {
+                continue;
+            }
+            $pair = min($a, $b) . ':' . max($a, $b);
+            if (!isset($keepPairs[$pair])) {
+                $this->db->prepare('DELETE FROM location_exits WHERE id = ?')
+                    ->execute([(int) $e['id']]);
+            }
+        }
+    }
+
+    /**
+     * Attach location ids to a compiled plan so the chart can match rooms
+     * and halls against the nodes it already has.
+     *
+     * @param array<int,true> $shown location id => true
+     */
+    private function bindPlan(array $drawn, array $level, array $shown): array
+    {
+        $keyOf = [];
+        foreach ($level['rooms'] as $r) {
+            $keyOf[(int) $r['id']] = (string) $r['key'];
+        }
+        $idOf = [];
+        if ($keyOf) {
+            $keys = array_values($keyOf);
+            $in = implode(',', array_fill(0, count($keys), '?'));
+            $stmt = $this->db->prepare(
+                "SELECT id, location_key FROM locations WHERE location_key IN ({$in})"
+            );
+            $stmt->execute($keys);
+            foreach ($stmt->fetchAll() as $row) {
+                $idOf[(string) $row['location_key']] = (int) $row['id'];
+            }
+        }
+        foreach ($drawn['rooms'] as $i => $r) {
+            $key = $keyOf[(int) $r['id']] ?? '';
+            $lid = $idOf[$key] ?? null;
+            $drawn['rooms'][$i]['location_id'] = $lid;
+            $drawn['rooms'][$i]['seen'] = $lid !== null && isset($shown[$lid]);
+        }
+        foreach ($drawn['corridors'] as $i => $c) {
+            $drawn['corridors'][$i]['seen'] = true;
+        }
+        return $drawn;
+    }
+
+    /**
+     * A new game: the module row, one region, and the room a party wakes in.
+     *
+     * Inactive until somebody turns it on — a draft on the public shelf is a
+     * hole people walk into. The start location's key is stored on the module
+     * as a key, not an id, which is the same rule the loader uses.
+     */
+    public function createModule(array $body): array
+    {
+        $key = $this->requireKey($body['module_key'] ?? '', 'module');
+        $name = trim((string) ($body['name'] ?? ''));
+        if ($name === '') {
+            throw new InvalidArgumentException('A module needs a name.');
+        }
+        if (mb_strlen($name) > 120) {
+            throw new InvalidArgumentException('That name is too long for the column (120).');
+        }
+
+        $clash = $this->db->prepare('SELECT id FROM modules WHERE module_key = ?');
+        $clash->execute([$key]);
+        if ($clash->fetchColumn() !== false) {
+            throw new InvalidArgumentException("There is already a module keyed {$key}.");
+        }
+
+        $startKey = trim((string) ($body['start_location_key'] ?? ''));
+        $startKey = $startKey !== '' ? $this->requireKey($startKey, 'location') : $key . '_door';
+        $here = $this->db->prepare('SELECT id FROM locations WHERE location_key = ?');
+        $here->execute([$startKey]);
+        if ($here->fetchColumn() !== false) {
+            throw new InvalidArgumentException(
+                "The start location {$startKey} already exists; pick another key."
+            );
+        }
+
+        $regionKey = trim((string) ($body['region_key'] ?? ''));
+        $regionKey = $regionKey !== '' ? $this->requireKey($regionKey, 'region') : $key . '_region';
+        $regionClash = $this->db->prepare('SELECT id FROM regions WHERE region_key = ?');
+        $regionClash->execute([$regionKey]);
+        if ($regionClash->fetchColumn() !== false) {
+            throw new InvalidArgumentException("There is already a region keyed {$regionKey}.");
+        }
+
+        $levelMin = (int) ($body['level_min'] ?? 1);
+        $levelMax = (int) ($body['level_max'] ?? 6);
+        if ($levelMin < 1 || $levelMax < $levelMin || $levelMax > Rules::MAX_LEVEL) {
+            throw new InvalidArgumentException(
+                'A level band is from 1 to ' . Rules::MAX_LEVEL . ', min no higher than max.'
+            );
+        }
+
+        $regionType = trim((string) ($body['region_type'] ?? 'dungeon'));
+        if (!in_array($regionType, self::REGION_TYPES, true)) {
+            throw new InvalidArgumentException(
+                'A region type is one of: ' . implode(', ', self::REGION_TYPES) . '.'
+            );
+        }
+
+        $next = (int) $this->db->query('SELECT COALESCE(MAX(sort_order), 0) + 10 FROM modules')
+            ->fetchColumn();
+
+        $this->db->beginTransaction();
+        try {
+            $this->db->prepare(
+                'INSERT INTO modules
+                     (module_key, name, blurb, start_location_key, level_min, level_max,
+                      attribution, is_active, sort_order)
+                 VALUES (?,?,?,?,?,?,?,0,?)'
+            )->execute([
+                $key,
+                $name,
+                $this->nullIfBlank($body['blurb'] ?? null),
+                $startKey,
+                $levelMin,
+                $levelMax,
+                $this->nullIfBlank($body['attribution'] ?? null),
+                $next,
+            ]);
+            $moduleId = (int) $this->db->lastInsertId();
+
+            $regionName = trim((string) ($body['region_name'] ?? ''));
+            if ($regionName === '') {
+                $regionName = $name;
+            }
+            $this->db->prepare(
+                'INSERT INTO regions (region_key, module_id, name, description, region_type, sort_order)
+                 VALUES (?,?,?,?,?,10)'
+            )->execute([
+                $regionKey,
+                $moduleId,
+                $regionName,
+                $this->nullIfBlank($body['region_description'] ?? null),
+                $regionType,
+            ]);
+            $regionId = (int) $this->db->lastInsertId();
+
+            $doorName = trim((string) ($body['start_location_name'] ?? ''));
+            if ($doorName === '') {
+                $doorName = 'The door you came in by';
+            }
+            [$mx, $my] = $regionType === 'dungeon'
+                ? DungeonGen::project(2, 3)
+                : [50.0, 50.0];
+            $this->saveLocation([
+                'location_key' => $startKey,
+                'region_id'    => $regionId,
+                'name'         => $doorName,
+                'location_type'=> $regionType === 'dungeon' ? 'room' : 'site',
+                'description'  => (string) ($body['start_description']
+                    ?? 'The door you came in by. Nobody has written what is beyond it yet.'),
+                'map_x'        => $mx,
+                'map_y'        => $my,
+            ]);
+            if ($regionType === 'dungeon') {
+                $seedPlan = [
+                    'rooms' => [[
+                        'id' => 0, 'key' => $startKey, 'name' => $doorName,
+                        'gx' => 1, 'gy' => 2, 'w' => 2, 'h' => 2,
+                    ]],
+                    'halls' => [],
+                ];
+                $this->db->prepare('UPDATE regions SET plan_json = ? WHERE id = ?')
+                    ->execute([
+                        json_encode($seedPlan, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
+                        $regionId,
+                    ]);
+            }
+
+            $this->db->commit();
+        } catch (Throwable $e) {
+            $this->db->rollBack();
+            throw $e;
+        }
+
+        return [
+            'module'   => $this->getModule($moduleId),
+            'region'   => $this->requireRegion($regionId),
+            'location' => $this->requireLocationByKey($startKey),
+        ];
+    }
+
+    /**
+     * Another map view inside a module.
+     *
+     * A module that is only a dungeon has one; a town with a wilderness
+     * beyond it has two. Creating one does not move the start location.
+     */
+    public function createRegion(array $body): array
+    {
+        $moduleId = (int) ($body['module_id'] ?? 0);
+        $this->getModule($moduleId);
+
+        $key = $this->requireKey($body['region_key'] ?? '', 'region');
+        $clash = $this->db->prepare('SELECT id FROM regions WHERE region_key = ?');
+        $clash->execute([$key]);
+        if ($clash->fetchColumn() !== false) {
+            throw new InvalidArgumentException("There is already a region keyed {$key}.");
+        }
+
+        $name = trim((string) ($body['name'] ?? ''));
+        if ($name === '') {
+            throw new InvalidArgumentException('A region needs a name.');
+        }
+
+        $type = trim((string) ($body['region_type'] ?? 'dungeon'));
+        if (!in_array($type, self::REGION_TYPES, true)) {
+            throw new InvalidArgumentException(
+                'A region type is one of: ' . implode(', ', self::REGION_TYPES) . '.'
+            );
+        }
+
+        $next = $this->db->prepare(
+            'SELECT COALESCE(MAX(sort_order), 0) + 10 FROM regions WHERE module_id = ?'
+        );
+        $next->execute([$moduleId]);
+
+        $this->db->prepare(
+            'INSERT INTO regions (region_key, module_id, name, description, region_type, sort_order)
+             VALUES (?,?,?,?,?,?)'
+        )->execute([
+            $key,
+            $moduleId,
+            $name,
+            $this->nullIfBlank($body['description'] ?? null),
+            $type,
+            (int) $next->fetchColumn(),
+        ]);
+
+        return $this->requireRegion((int) $this->db->lastInsertId());
+    }
+
+    /**
+     * A person who did not exist this morning.
+     *
+     * `sprite_key` may be empty: a draft with no bust is a person the scene
+     * can still name. Assigning a key that has no `_face`/`_bust` on disk is
+     * refused, same as saveNpc, so the next load does not.
+     */
+    public function createNpc(array $body): array
+    {
+        $key = $this->requireKey($body['npc_key'] ?? '', 'npc');
+        $clash = $this->db->prepare('SELECT id FROM npcs WHERE npc_key = ?');
+        $clash->execute([$key]);
+        if ($clash->fetchColumn() !== false) {
+            throw new InvalidArgumentException("There is already a person keyed {$key}.");
+        }
+
+        $name = trim((string) ($body['name'] ?? ''));
+        if ($name === '') {
+            throw new InvalidArgumentException('A person needs a name.');
+        }
+        if (mb_strlen($name) > 100) {
+            throw new InvalidArgumentException('That name is too long for the column (100).');
+        }
+
+        $spriteKey = trim((string) ($body['sprite_key'] ?? ''));
+        if ($spriteKey !== '') {
+            $this->assertSpriteArt($spriteKey, '');
+        }
+
+        $locationId = isset($body['location_id']) && $body['location_id'] !== null
+            && $body['location_id'] !== ''
+            ? (int) $body['location_id'] : null;
+        if ($locationId !== null) {
+            $this->requireLocation($locationId);
+        }
+
+        $this->db->prepare(
+            'INSERT INTO npcs
+                 (npc_key, name, role, description, sprite_key, is_merchant,
+                  is_quest_giver, is_ambient, location_id)
+             VALUES (?,?,?,?,?,?,?,?,?)'
+        )->execute([
+            $key,
+            $name,
+            $this->nullIfBlank($body['role'] ?? null, 80),
+            $this->nullIfBlank($body['description'] ?? null),
+            $spriteKey !== '' ? $spriteKey : null,
+            !empty($body['is_merchant']) ? 1 : 0,
+            !empty($body['is_quest_giver']) ? 1 : 0,
+            !empty($body['is_ambient']) ? 1 : 0,
+            $locationId,
+        ]);
+
+        return $this->getNpc((int) $this->db->lastInsertId());
+    }
+
+    /**
+     * A quest that can be finished the moment it is made.
+     *
+     * The loader refuses a quest with no terminal stage, so a blank one that
+     * saved without an ending would be a row the next import deleted. One
+     * terminal stage is created with it; more stages are addStage().
+     */
+    public function createQuest(array $body): array
+    {
+        $key = $this->requireKey($body['quest_key'] ?? '', 'quest');
+        if (mb_strlen($key) > 60) {
+            throw new InvalidArgumentException('That key is too long for the column (60).');
+        }
+        $clash = $this->db->prepare('SELECT id FROM quests WHERE quest_key = ?');
+        $clash->execute([$key]);
+        if ($clash->fetchColumn() !== false) {
+            throw new InvalidArgumentException("There is already a quest keyed {$key}.");
+        }
+
+        $title = trim((string) ($body['title'] ?? ''));
+        if ($title === '') {
+            throw new InvalidArgumentException('A quest needs a title.');
+        }
+
+        $giverId = isset($body['giver_npc_id']) && $body['giver_npc_id'] !== null
+            && $body['giver_npc_id'] !== ''
+            ? (int) $body['giver_npc_id'] : null;
+        if ($giverId !== null) {
+            $this->getNpc($giverId);
+        }
+
+        $act = (int) ($body['act'] ?? 1);
+        if ($act < 1 || $act > 5) {
+            throw new InvalidArgumentException('An act is between 1 and 5.');
+        }
+        $level = (int) ($body['required_level'] ?? 1);
+        if ($level < 1 || $level > Rules::MAX_LEVEL) {
+            throw new InvalidArgumentException(
+                'A required level is between 1 and ' . Rules::MAX_LEVEL . '.'
+            );
+        }
+
+        $this->db->beginTransaction();
+        try {
+            $this->db->prepare(
+                'INSERT INTO quests
+                     (quest_key, title, description, act, on_job_board, giver_npc_id,
+                      required_level, is_active)
+                 VALUES (?,?,?,?,?,?,?,1)'
+            )->execute([
+                $key,
+                $title,
+                $this->nullIfBlank($body['description'] ?? null),
+                $act,
+                !empty($body['on_job_board']) ? 1 : 0,
+                $giverId,
+                $level,
+            ]);
+            $questId = (int) $this->db->lastInsertId();
+
+            $this->db->prepare(
+                'INSERT INTO quest_stages
+                     (quest_id, stage_key, title, objective, is_terminal, outcome, sort_order)
+                 VALUES (?, \'done\', \'Done\', ?, 1, \'success\', 10)'
+            )->execute([
+                $questId,
+                $this->nullIfBlank($body['objective'] ?? null) ?? 'The work is finished.',
+            ]);
+
+            $this->db->commit();
+        } catch (Throwable $e) {
+            $this->db->rollBack();
+            throw $e;
+        }
+
+        return $this->getQuest($questId);
+    }
+
+    /**
+     * Another stage on an existing quest.
+     *
+     * A new stage is not terminal. Making it one is saveStage's job, which
+     * already knows how to refuse clearing the last ending.
+     */
+    public function addStage(int $questId, array $body): array
+    {
+        $this->getQuest($questId);
+
+        $key = $this->requireKey($body['stage_key'] ?? '', 'stage');
+        if (mb_strlen($key) > 60) {
+            throw new InvalidArgumentException('That key is too long for the column (60).');
+        }
+        $clash = $this->db->prepare(
+            'SELECT id FROM quest_stages WHERE quest_id = ? AND stage_key = ?'
+        );
+        $clash->execute([$questId, $key]);
+        if ($clash->fetchColumn() !== false) {
+            throw new InvalidArgumentException("This quest already has a stage keyed {$key}.");
+        }
+
+        $title = trim((string) ($body['title'] ?? ''));
+        if ($title === '') {
+            throw new InvalidArgumentException('A stage needs a title.');
+        }
+
+        $targetLocation = isset($body['target_location_id'])
+            && $body['target_location_id'] !== null && $body['target_location_id'] !== ''
+            ? (int) $body['target_location_id'] : null;
+        if ($targetLocation !== null) {
+            $this->requireLocation($targetLocation);
+        }
+
+        // New work goes before the ending. start_quest enters the first stage
+        // by sort_order; a "go there" that landed after Done would never be
+        // the work the player was handed.
+        $term = $this->db->prepare(
+            'SELECT MIN(sort_order) FROM quest_stages WHERE quest_id = ? AND is_terminal = 1'
+        );
+        $term->execute([$questId]);
+        $termAt = $term->fetchColumn();
+        if ($termAt !== false && $termAt !== null) {
+            $order = (int) $termAt;
+            $this->db->prepare(
+                'UPDATE quest_stages SET sort_order = sort_order + 10
+                  WHERE quest_id = ? AND sort_order >= ?'
+            )->execute([$questId, $order]);
+        } else {
+            $tail = $this->db->prepare(
+                'SELECT COALESCE(MAX(sort_order), 0) + 10 FROM quest_stages WHERE quest_id = ?'
+            );
+            $tail->execute([$questId]);
+            $order = (int) $tail->fetchColumn();
+        }
+
+        $this->db->prepare(
+            'INSERT INTO quest_stages
+                 (quest_id, stage_key, title, objective, journal_entry, is_terminal,
+                  resolution, outcome, target_location_id, sort_order)
+             VALUES (?,?,?,?,?,0,?,\'success\',?,?)'
+        )->execute([
+            $questId,
+            $key,
+            $title,
+            $this->nullIfBlank($body['objective'] ?? null),
+            $this->nullIfBlank($body['journal_entry'] ?? null),
+            $this->nullIfBlank($body['resolution'] ?? null, 60),
+            $targetLocation,
+            $order,
+        ]);
+
+        return $this->getQuest($questId);
+    }
+
+    /**
+     * Drop a stage that is not the last ending.
+     *
+     * The loader refuses a quest with no terminal stage, so this will not
+     * leave one. The work that remains is still a quest.
+     */
+    public function deleteStage(int $stageId): array
+    {
+        $stmt = $this->db->prepare('SELECT * FROM quest_stages WHERE id = ?');
+        $stmt->execute([$stageId]);
+        $stage = $stmt->fetch();
+        if (!$stage) {
+            throw new InvalidArgumentException('No such stage.');
+        }
+        $questId = (int) $stage['quest_id'];
+        if ((int) $stage['is_terminal'] === 1) {
+            $others = $this->db->prepare(
+                'SELECT COUNT(*) FROM quest_stages WHERE quest_id = ? AND is_terminal = 1 AND id <> ?'
+            );
+            $others->execute([$questId, $stageId]);
+            if ((int) $others->fetchColumn() === 0) {
+                throw new InvalidArgumentException(
+                    'That is the quest\'s only ending. It cannot be removed.'
+                );
+            }
+        }
+        $this->db->prepare('DELETE FROM quest_stages WHERE id = ?')->execute([$stageId]);
+        return $this->getQuest($questId);
+    }
+
+    /**
+     * Sprite keys that have both a face and a bust on disk.
+     *
+     * The same pair assertSpriteArt and the loader ask for. A key with only
+     * one of the two is not offered, because assigning it would save a person
+     * the next load refuses.
+     *
+     * @return list<string>
+     */
+    public function listSprites(): array
+    {
+        $dir = APP_ROOT . '/assets/images/npcs/';
+        $out = [];
+        foreach (glob($dir . '*_bust.png') ?: [] as $path) {
+            $base = basename($path, '.png');
+            if (!str_ends_with($base, '_bust')) {
+                continue;
+            }
+            $key = substr($base, 0, -5);
+            if ($key !== '' && is_file($dir . $key . '_face.png')) {
+                $out[] = $key;
+            }
+        }
+        sort($out);
+        return $out;
+    }
+
+    /**
+     * A fight waiting in a place.
+     *
+     * The monsters are the shared bestiary, named by key. Quantity is who is
+     * standing here; scale_to_party stays on, so the cellar rats stay "some
+     * rats" rather than a fixed head-count.
+     */
+    public function createEncounter(array $body): array
+    {
+        $key = $this->requireKey($body['encounter_key'] ?? '', 'encounter');
+        if (mb_strlen($key) > 60) {
+            throw new InvalidArgumentException('That key is too long for the column (60).');
+        }
+        $clash = $this->db->prepare('SELECT id FROM encounters WHERE encounter_key = ?');
+        $clash->execute([$key]);
+        if ($clash->fetchColumn() !== false) {
+            throw new InvalidArgumentException("There is already a fight keyed {$key}.");
+        }
+
+        $name = trim((string) ($body['name'] ?? ''));
+        if ($name === '') {
+            throw new InvalidArgumentException('A fight needs a name.');
+        }
+
+        $locationId = (int) ($body['location_id'] ?? 0);
+        $this->requireLocation($locationId);
+
+        $roster = $body['monsters'] ?? [];
+        if (!is_array($roster) || $roster === []) {
+            throw new InvalidArgumentException('A fight needs at least one kind of creature.');
+        }
+
+        $resolved = [];
+        foreach ($roster as $row) {
+            if (!is_array($row)) {
+                throw new InvalidArgumentException('Each creature is an object with a key and a quantity.');
+            }
+            $mk = trim((string) ($row['monster_key'] ?? ''));
+            if ($mk === '') {
+                throw new InvalidArgumentException('Every creature needs a monster_key.');
+            }
+            $found = $this->db->prepare('SELECT id FROM monsters WHERE monster_key = ?');
+            $found->execute([$mk]);
+            $mid = $found->fetchColumn();
+            if ($mid === false) {
+                throw new InvalidArgumentException("No creature keyed {$mk} in the bestiary.");
+            }
+            $qty = max(1, (int) ($row['quantity'] ?? 1));
+            $resolved[] = [(int) $mid, $qty];
+        }
+
+        $this->db->beginTransaction();
+        try {
+            $this->db->prepare(
+                'INSERT INTO encounters
+                     (encounter_key, name, description, location_id, is_random, is_ambush,
+                      difficulty, allow_flee, scale_to_party)
+                 VALUES (?,?,?,?,0,?,?,1,1)'
+            )->execute([
+                $key,
+                $name,
+                $this->nullIfBlank($body['description'] ?? null),
+                $locationId,
+                !empty($body['is_ambush']) ? 1 : 0,
+                $this->nullIfBlank($body['difficulty'] ?? null, 20) ?? 'medium',
+            ]);
+            $eid = (int) $this->db->lastInsertId();
+            $ins = $this->db->prepare(
+                'INSERT INTO encounter_monsters (encounter_id, monster_id, quantity) VALUES (?,?,?)'
+            );
+            foreach ($resolved as [$mid, $qty]) {
+                $ins->execute([$eid, $mid, $qty]);
+            }
+            $this->db->commit();
+        } catch (Throwable $e) {
+            $this->db->rollBack();
+            throw $e;
+        }
+
+        return $this->getEncounter($eid);
+    }
+
+    /**
+     * Something lying on the ground in a place.
+     *
+     * The item is from the shared catalogue, named by key. The same item
+     * twice in one room is two things to pick up, so a second drop of the
+     * same key is allowed.
+     */
+    public function addLocationItem(int $locationId, string $itemKey): array
+    {
+        $this->requireLocation($locationId);
+        $key = $this->requireKey($itemKey, 'item');
+        $found = $this->db->prepare('SELECT id FROM items WHERE item_key = ?');
+        $found->execute([$key]);
+        $itemId = $found->fetchColumn();
+        if ($itemId === false) {
+            throw new InvalidArgumentException("No item keyed {$key}.");
+        }
+        $this->db->prepare(
+            'INSERT INTO location_items (location_id, item_id) VALUES (?,?)'
+        )->execute([$locationId, (int) $itemId]);
+        return $this->getLocation($locationId);
+    }
+
+    public function removeLocationItem(int $id): array
+    {
+        $stmt = $this->db->prepare('SELECT location_id FROM location_items WHERE id = ?');
+        $stmt->execute([$id]);
+        $locId = $stmt->fetchColumn();
+        if ($locId === false) {
+            throw new InvalidArgumentException('No such drop.');
+        }
+        $this->db->prepare('DELETE FROM location_items WHERE id = ?')->execute([$id]);
+        return $this->getLocation((int) $locId);
+    }
+
+    /**
+     * Put a draft on the public shelf, or take it off.
+     *
+     * Play still works either way — the studio's Play door does not consult
+     * is_active. The homepage does.
+     */
+    public function setModuleActive(int $id, bool $active): array
+    {
+        $this->getModule($id);
+        $this->db->prepare('UPDATE modules SET is_active = ? WHERE id = ?')
+            ->execute([$active ? 1 : 0, $id]);
+        return $this->getModule($id);
+    }
+
+    /**
+     * Cover art or a region plate, named for the key the renderer already uses.
+     *
+     * No new column: a module cover is assets/images/modules/<key>.jpg and a
+     * town plate is assets/images/maps/<region_key>.png. A dungeon does not
+     * take a plate — the plan is the map.
+     */
+    public function saveArt(string $kind, string $key, string $payload): array
+    {
+        $key = $this->requireKey($key, $kind === 'cover' ? 'module' : 'region');
+        if ($kind === 'cover') {
+            $found = $this->db->prepare('SELECT id FROM modules WHERE module_key = ?');
+            $found->execute([$key]);
+            if ($found->fetchColumn() === false) {
+                throw new InvalidArgumentException("No module keyed {$key}.");
+            }
+            $path = APP_ROOT . '/assets/images/modules/' . $key . '.jpg';
+            $this->writeImage($payload, $path, 'jpeg');
+            return ['kind' => 'cover', 'key' => $key, 'path' => 'assets/images/modules/' . $key . '.jpg'];
+        }
+        if ($kind === 'plate') {
+            $region = $this->db->prepare(
+                'SELECT id, region_type FROM regions WHERE region_key = ?'
+            );
+            $region->execute([$key]);
+            $row = $region->fetch();
+            if (!$row) {
+                throw new InvalidArgumentException("No region keyed {$key}.");
+            }
+            if ($row['region_type'] === 'dungeon') {
+                throw new InvalidArgumentException(
+                    'A dungeon does not take a world plate. The plan is the map.'
+                );
+            }
+            $path = APP_ROOT . '/assets/images/maps/' . $key . '.png';
+            $this->writeImage($payload, $path, 'png');
+            return ['kind' => 'plate', 'key' => $key, 'path' => 'assets/images/maps/' . $key . '.png'];
+        }
+        throw new InvalidArgumentException('Art is a cover or a plate.');
+    }
+
+    private function writeImage(string $payload, string $path, string $format): void
+    {
+        if (preg_match('#^data:image/[\w+.-]+;base64,#', $payload)) {
+            $payload = substr($payload, (int) strpos($payload, ',') + 1);
+        }
+        $bin = base64_decode($payload, true);
+        if ($bin === false || $bin === '') {
+            throw new InvalidArgumentException('That is not an image.');
+        }
+        if (strlen($bin) > 3_000_000) {
+            throw new InvalidArgumentException('That image is too large (3 MB).');
+        }
+        $im = @imagecreatefromstring($bin);
+        if ($im === false) {
+            throw new InvalidArgumentException('That file is not a PNG or JPEG.');
+        }
+        $dir = dirname($path);
+        if (!is_dir($dir) || !is_writable($dir)) {
+            imagedestroy($im);
+            throw new InvalidArgumentException('Cannot write art to ' . $dir . '.');
+        }
+        $ok = $format === 'jpeg' ? imagejpeg($im, $path, 88) : imagepng($im, $path);
+        imagedestroy($im);
+        if (!$ok) {
+            throw new InvalidArgumentException('The image could not be written.');
+        }
+    }
+
+    /**
+     * How this adventure runs, inferred from what is already authored.
+     *
+     * A beat is arrive, talk, take work, fight, or end. No extra table: the
+     * quest stages and the people who hand them out are the spine. Empty is
+     * the honest picture of a blank page.
+     *
+     * @return list<array<string,mixed>>
+     */
+    public function moduleRun(int $moduleId): array
+    {
+        $module = $this->getModule($moduleId);
+        $beats = [];
+
+        $start = $this->db->prepare(
+            'SELECT l.id, l.name, l.location_key FROM locations l
+              WHERE l.location_key = ?'
+        );
+        $start->execute([(string) $module['start_location_key']]);
+        $door = $start->fetch();
+        if ($door) {
+            $beats[] = [
+                'kind'         => 'arrive',
+                'title'        => 'Arrive at ' . $door['name'],
+                'location_id'  => (int) $door['id'],
+                'location_key' => $door['location_key'],
+            ];
+        }
+
+        $quests = $this->db->prepare(
+            'SELECT q.id, q.quest_key, q.title, n.id AS npc_id, n.name AS npc_name,
+                    n.location_id AS npc_location_id
+               FROM quests q
+               INNER JOIN npcs n ON n.id = q.giver_npc_id
+               INNER JOIN locations l ON l.id = n.location_id
+               INNER JOIN regions r ON r.id = l.region_id
+              WHERE r.module_id = ?
+              ORDER BY q.id'
+        );
+        $quests->execute([$moduleId]);
+        $seenFight = [];
+        foreach ($quests->fetchAll() as $q) {
+            $beats[] = [
+                'kind'        => 'talk',
+                'title'       => 'Talk to ' . $q['npc_name'],
+                'npc_id'      => (int) $q['npc_id'],
+                'location_id' => (int) $q['npc_location_id'],
+            ];
+            $beats[] = [
+                'kind'        => 'work',
+                'title'       => $q['title'],
+                'quest_id'    => (int) $q['id'],
+                'quest_key'   => $q['quest_key'],
+                'location_id' => (int) $q['npc_location_id'],
+            ];
+            $stages = $this->db->prepare(
+                'SELECT s.title, s.is_terminal, s.target_location_id, l.name AS target_name,
+                        l.location_key AS target_key
+                   FROM quest_stages s
+                   LEFT JOIN locations l ON l.id = s.target_location_id
+                  WHERE s.quest_id = ? ORDER BY s.sort_order, s.id'
+            );
+            $stages->execute([(int) $q['id']]);
+            foreach ($stages->fetchAll() as $s) {
+                if ((int) $s['is_terminal'] === 1) {
+                    $beats[] = [
+                        'kind'      => 'end',
+                        'title'     => $s['title'] !== '' ? $s['title'] : 'The work ends',
+                        'quest_id'  => (int) $q['id'],
+                    ];
+                    continue;
+                }
+                if ($s['target_location_id']) {
+                    $beats[] = [
+                        'kind'         => 'arrive',
+                        'title'        => 'Go to ' . ($s['target_name'] ?: $s['title']),
+                        'location_id'  => (int) $s['target_location_id'],
+                        'location_key' => $s['target_key'],
+                        'quest_id'     => (int) $q['id'],
+                    ];
+                    $fights = $this->db->prepare(
+                        'SELECT id, name FROM encounters
+                          WHERE location_id = ? AND is_random = 0 ORDER BY id'
+                    );
+                    $fights->execute([(int) $s['target_location_id']]);
+                    foreach ($fights->fetchAll() as $f) {
+                        $seenFight[(int) $f['id']] = true;
+                        $beats[] = [
+                            'kind'        => 'fight',
+                            'title'       => $f['name'],
+                            'encounter_id'=> (int) $f['id'],
+                            'location_id' => (int) $s['target_location_id'],
+                        ];
+                    }
+                }
+            }
+        }
+
+        $orphans = $this->db->prepare(
+            'SELECT e.id, e.name, e.location_id, l.name AS location_name
+               FROM encounters e
+               INNER JOIN locations l ON l.id = e.location_id
+               INNER JOIN regions r ON r.id = l.region_id
+              WHERE r.module_id = ? AND e.is_random = 0
+              ORDER BY e.id'
+        );
+        $orphans->execute([$moduleId]);
+        foreach ($orphans->fetchAll() as $f) {
+            if (isset($seenFight[(int) $f['id']])) {
+                continue;
+            }
+            $beats[] = [
+                'kind'        => 'fight',
+                'title'       => $f['name'] . ' (' . $f['location_name'] . ')',
+                'encounter_id'=> (int) $f['id'],
+                'location_id' => (int) $f['location_id'],
+            ];
+        }
+
+        return $beats;
+    }
+
+    public function getEncounter(int $id): array
+    {
+        $stmt = $this->db->prepare(
+            'SELECT e.*, l.location_key, l.name AS location_name
+               FROM encounters e
+               LEFT JOIN locations l ON l.id = e.location_id
+              WHERE e.id = ?'
+        );
+        $stmt->execute([$id]);
+        $row = $stmt->fetch();
+        if (!$row) {
+            throw new InvalidArgumentException('No such fight.');
+        }
+        $mons = $this->db->prepare(
+            'SELECT em.quantity, m.monster_key, m.name
+               FROM encounter_monsters em
+               INNER JOIN monsters m ON m.id = em.monster_id
+              WHERE em.encounter_id = ?
+              ORDER BY em.id'
+        );
+        $mons->execute([$id]);
+        $row['monsters'] = $mons->fetchAll();
+        return $row;
+    }
+
+    /**
+     * Tear down a draft module and everything that only existed to stand in it.
+     *
+     * Refuses if a party has picked it — those saves are somebody's game.
+     * People, quests and fights that live in its rooms go with it; the
+     * shared bestiary does not.
+     */
+    public function deleteModule(int $id): array
+    {
+        $module = $this->getModule($id);
+
+        $playing = $this->db->prepare(
+            'SELECT COUNT(*) FROM parties WHERE module_id = ?'
+        );
+        $playing->execute([$id]);
+        if ((int) $playing->fetchColumn() > 0) {
+            throw new InvalidArgumentException(
+                'A party is playing this module. It cannot be deleted while a save is in it.'
+            );
+        }
+
+        $locIds = $this->db->prepare(
+            'SELECT l.id FROM locations l
+               INNER JOIN regions r ON r.id = l.region_id
+              WHERE r.module_id = ?'
+        );
+        $locIds->execute([$id]);
+        $ids = array_map('intval', $locIds->fetchAll(PDO::FETCH_COLUMN));
+
+        $npcIds = [];
+        if ($ids) {
+            $in = implode(',', array_fill(0, count($ids), '?'));
+            $npcStmt = $this->db->prepare("SELECT id FROM npcs WHERE location_id IN ({$in})");
+            $npcStmt->execute($ids);
+            $npcIds = array_map('intval', $npcStmt->fetchAll(PDO::FETCH_COLUMN));
+        }
+
+        $this->db->beginTransaction();
+        try {
+            if ($ids) {
+                $in = implode(',', array_fill(0, count($ids), '?'));
+                $this->db->prepare("DELETE FROM encounters WHERE location_id IN ({$in})")
+                    ->execute($ids);
+            }
+            if ($npcIds) {
+                $nin = implode(',', array_fill(0, count($npcIds), '?'));
+                $this->db->prepare("DELETE FROM quests WHERE giver_npc_id IN ({$nin})")
+                    ->execute($npcIds);
+            }
+            $this->db->prepare(
+                'DELETE q FROM quests q
+                   INNER JOIN locations tl ON tl.id = q.target_location_id
+                   INNER JOIN regions tr ON tr.id = tl.region_id
+                  WHERE tr.module_id = ?'
+            )->execute([$id]);
+            if ($npcIds) {
+                $nin = implode(',', array_fill(0, count($npcIds), '?'));
+                $this->db->prepare("DELETE FROM npcs WHERE id IN ({$nin})")->execute($npcIds);
+            }
+            $this->db->prepare('DELETE FROM modules WHERE id = ?')->execute([$id]);
+            $this->db->commit();
+        } catch (Throwable $e) {
+            $this->db->rollBack();
+            throw $e;
+        }
+
+        return ['deleted' => true, 'module_key' => $module['module_key']];
+    }
+
+    /**
+     * One adventure as a document somebody can download and import.
+     *
+     * Shared catalogue (monsters, items, spells) is named by key, not copied.
+     * Art that belongs to the module — the cover and any region plate — travels
+     * as data URLs so the other install does not have to share a disk.
+     *
+     * @return array<string,mixed>
+     */
+    public function packModule(int $id): array
+    {
+        $module = $this->getModule($id);
+        $key = (string) $module['module_key'];
+
+        $regions = $this->db->prepare(
+            'SELECT * FROM regions WHERE module_id = ? ORDER BY sort_order, id'
+        );
+        $regions->execute([$id]);
+        $packedRegions = [];
+        $locIds = [];
+        foreach ($regions->fetchAll() as $r) {
+            $locs = $this->db->prepare(
+                'SELECT * FROM locations WHERE region_id = ? ORDER BY sort_order, id'
+            );
+            $locs->execute([(int) $r['id']]);
+            $locations = [];
+            foreach ($locs->fetchAll() as $l) {
+                $locIds[] = (int) $l['id'];
+                $here = $this->getLocation((int) $l['id']);
+                $exits = [];
+                foreach ($here['exits'] as $e) {
+                    $ex = ['to' => $e['to_location_key'], 'label' => $e['label']];
+                    if ((int) $e['is_hidden'] === 1) {
+                        $ex['hidden'] = true;
+                    }
+                    $conds = json_decode((string) ($e['conditions_json'] ?? ''), true);
+                    if (is_array($conds) && $conds) {
+                        $ex['conditions'] = $conds;
+                    }
+                    $exits[] = $ex;
+                }
+                $loot = array_values(array_unique(array_map(
+                    static fn ($it) => (string) $it['item_key'],
+                    $here['items'] ?? []
+                )));
+                $entry = [
+                    'name'        => $l['name'],
+                    'type'        => $l['location_type'],
+                    'map_pos'     => [(float) $l['map_x'], (float) $l['map_y']],
+                    'description' => $l['description'],
+                ];
+                if (($l['first_visit_text'] ?? '') !== '') {
+                    $entry['first_visit'] = $l['first_visit_text'];
+                }
+                if ($exits) {
+                    $entry['exits'] = $exits;
+                }
+                if ($loot) {
+                    $entry['loot'] = $loot;
+                }
+                $locations[(string) $l['location_key']] = $entry;
+            }
+            $reg = [
+                'region_key'  => $r['region_key'],
+                'module'      => $key,
+                'name'        => $r['name'],
+                'region_type' => $r['region_type'],
+                'locations'   => $locations,
+            ];
+            if (($r['description'] ?? '') !== '') {
+                $reg['description'] = $r['description'];
+            }
+            if (!empty($r['plan_json'])) {
+                $plan = json_decode((string) $r['plan_json'], true);
+                if (is_array($plan) && !empty($plan['rooms'])) {
+                    $reg['plan'] = $plan;
+                }
+            }
+            $packedRegions[] = $reg;
+        }
+
+        $npcs = [];
+        $dialog = [];
+        if ($locIds) {
+            $in = implode(',', array_fill(0, count($locIds), '?'));
+            $stmt = $this->db->prepare(
+                "SELECT * FROM npcs WHERE location_id IN ({$in}) AND npc_key IS NOT NULL"
+            );
+            $stmt->execute($locIds);
+            foreach ($stmt->fetchAll() as $n) {
+                $row = [
+                    'npc_key' => $n['npc_key'],
+                    'name'    => $n['name'],
+                ];
+                foreach (['role', 'description', 'sprite_key'] as $k) {
+                    if (($n[$k] ?? '') !== '') {
+                        $row[$k] = $n[$k];
+                    }
+                }
+                foreach (['is_merchant', 'is_quest_giver', 'is_ambient'] as $k) {
+                    if ((int) ($n[$k] ?? 0) === 1) {
+                        $row[$k] = true;
+                    }
+                }
+                $lk = $this->db->prepare('SELECT location_key FROM locations WHERE id = ?');
+                $lk->execute([(int) $n['location_id']]);
+                $place = $lk->fetchColumn();
+                if ($place) {
+                    $row['place'] = ['location' => $place];
+                }
+                if (($n['dialogue_json'] ?? '') !== '') {
+                    $doc = json_decode((string) $n['dialogue_json'], true);
+                    if (is_array($doc)) {
+                        $row['dialog'] = $n['npc_key'];
+                        $dialog[] = [
+                            'npc_key' => $n['npc_key'],
+                            'start'   => $doc['start'] ?? 'hail',
+                            'nodes'   => $doc['nodes'] ?? new stdClass(),
+                        ];
+                    }
+                }
+                $npcs[] = $row;
+            }
+        }
+
+        $quests = [];
+        foreach ($this->listQuests($id) as $qrow) {
+            $q = $this->getQuest((int) $qrow['id']);
+            $out = [
+                'quest_key' => $q['quest_key'],
+                'title'     => $q['title'],
+                'stages'    => [],
+            ];
+            if (($q['description'] ?? '') !== '') {
+                $out['description'] = $q['description'];
+            }
+            if ($q['giver_key']) {
+                $out['giver'] = $q['giver_key'];
+            }
+            if ((int) $q['on_job_board'] === 1) {
+                $out['on_job_board'] = true;
+            }
+            foreach ($q['stages'] as $s) {
+                $st = ['title' => $s['title']];
+                if (($s['objective'] ?? '') !== '') {
+                    $st['objective'] = $s['objective'];
+                }
+                if ((int) $s['is_terminal'] === 1) {
+                    $st['terminal'] = true;
+                }
+                if ($s['target_location_key']) {
+                    $st['target'] = ['location' => $s['target_location_key']];
+                }
+                $out['stages'][(string) $s['stage_key']] = $st;
+            }
+            $quests[] = $out;
+        }
+
+        $encounters = [];
+        if ($locIds) {
+            $in = implode(',', array_fill(0, count($locIds), '?'));
+            $stmt = $this->db->prepare(
+                "SELECT * FROM encounters WHERE location_id IN ({$in}) AND encounter_key IS NOT NULL"
+            );
+            $stmt->execute($locIds);
+            foreach ($stmt->fetchAll() as $e) {
+                $full = $this->getEncounter((int) $e['id']);
+                $roster = [];
+                foreach ($full['monsters'] as $m) {
+                    $roster[] = [
+                        'monster'  => $m['monster_key'],
+                        'quantity' => (int) $m['quantity'],
+                    ];
+                }
+                $row = [
+                    'encounter_key' => $e['encounter_key'],
+                    'name'          => $e['name'],
+                    'monsters'      => $roster,
+                ];
+                if ((int) $e['is_ambush'] === 1) {
+                    $row['ambush'] = true;
+                }
+                $lk = $this->db->prepare('SELECT location_key FROM locations WHERE id = ?');
+                $lk->execute([(int) $e['location_id']]);
+                $place = $lk->fetchColumn();
+                if ($place) {
+                    $row['place'] = ['location' => $place];
+                }
+                $encounters[] = $row;
+            }
+        }
+
+        $art = [];
+        $cover = APP_ROOT . '/assets/images/modules/' . $key . '.jpg';
+        if (is_file($cover)) {
+            $art['cover'] = 'data:image/jpeg;base64,' . base64_encode((string) file_get_contents($cover));
+        }
+        foreach ($packedRegions as $r) {
+            $plate = APP_ROOT . '/assets/images/maps/' . $r['region_key'] . '.png';
+            if (is_file($plate)) {
+                $art['plates'][$r['region_key']] =
+                    'data:image/png;base64,' . base64_encode((string) file_get_contents($plate));
+            }
+        }
+
+        return [
+            'format'     => 'rivermark.adventure',
+            'version'    => 1,
+            'module'     => [
+                'module_key'         => $key,
+                'name'               => $module['name'],
+                'blurb'              => $module['blurb'],
+                'start_location_key' => $module['start_location_key'],
+                'level_min'          => (int) $module['level_min'],
+                'level_max'          => (int) $module['level_max'],
+                'attribution'        => $module['attribution'],
+                'is_active'          => (int) $module['is_active'] === 1,
+            ],
+            'regions'    => $packedRegions,
+            'npcs'       => $npcs,
+            'dialog'     => $dialog,
+            'quests'     => $quests,
+            'encounters' => $encounters,
+            'art'        => $art,
+        ];
+    }
+
+    /**
+     * Install a downloaded adventure. Refuses if the module key already exists.
+     *
+     * @param  array<string,mixed> $pack
+     * @return array{module: array}
+     */
+    public function importBundle(array $pack): array
+    {
+        if (($pack['format'] ?? '') !== 'rivermark.adventure') {
+            throw new InvalidArgumentException('That is not a Rivermark adventure file.');
+        }
+        if ((int) ($pack['version'] ?? 0) !== 1) {
+            throw new InvalidArgumentException('This studio cannot read that adventure version.');
+        }
+        $mod = $pack['module'] ?? null;
+        if (!is_array($mod)) {
+            throw new InvalidArgumentException('The file has no module.');
+        }
+        $regions = $pack['regions'] ?? [];
+        if (!is_array($regions) || $regions === []) {
+            throw new InvalidArgumentException('The file has no region.');
+        }
+        $first = $regions[0];
+        $type = (string) ($first['region_type'] ?? 'dungeon');
+
+        $made = $this->createModule([
+            'module_key'          => $mod['module_key'] ?? '',
+            'name'                => $mod['name'] ?? '',
+            'blurb'               => $mod['blurb'] ?? '',
+            'start_location_key'  => $mod['start_location_key'] ?? '',
+            'level_min'           => $mod['level_min'] ?? 1,
+            'level_max'           => $mod['level_max'] ?? 6,
+            'attribution'         => $mod['attribution'] ?? '',
+            'region_type'         => $type,
+            'region_key'          => $first['region_key'] ?? '',
+            'region_name'         => $first['name'] ?? '',
+            'start_location_name' => $first['locations'][$mod['start_location_key'] ?? '']['name'] ?? '',
+        ]);
+        $moduleId = (int) $made['module']['id'];
+        $regionId = (int) $made['region']['id'];
+
+        if (!empty($first['plan']['rooms'])) {
+            $this->savePlan($regionId, $first['plan']);
+        }
+
+        foreach ($first['locations'] ?? [] as $lk => $loc) {
+            if (!is_array($loc)) {
+                continue;
+            }
+            $pos = $loc['map_pos'] ?? [50, 50];
+            $this->saveLocation([
+                'location_key'         => $lk,
+                'region_id'            => $regionId,
+                'name'                 => $loc['name'] ?? $lk,
+                'description'          => $loc['description'] ?? 'A place.',
+                'first_visit_text'     => $loc['first_visit'] ?? '',
+                'location_type'        => $loc['type'] ?? 'site',
+                'map_x'                => $pos[0] ?? 50,
+                'map_y'                => $pos[1] ?? 50,
+            ]);
+            foreach ($loc['loot'] ?? [] as $itemKey) {
+                if (is_string($itemKey) && $itemKey !== '') {
+                    try {
+                        $this->addLocationItem(
+                            (int) $this->requireLocationByKey((string) $lk)['id'],
+                            $itemKey
+                        );
+                    } catch (InvalidArgumentException $e) {
+                        // Shared catalogue missing on this install: skip the drop.
+                    }
+                }
+            }
+        }
+
+        foreach ($first['locations'] ?? [] as $lk => $loc) {
+            $from = (int) $this->requireLocationByKey((string) $lk)['id'];
+            foreach ($loc['exits'] ?? [] as $ex) {
+                if (!is_array($ex) || empty($ex['to'])) {
+                    continue;
+                }
+                try {
+                    $to = (int) $this->requireLocationByKey((string) $ex['to'])['id'];
+                } catch (InvalidArgumentException $e) {
+                    continue;
+                }
+                $this->saveExit([
+                    'from_location_id' => $from,
+                    'to_location_id'   => $to,
+                    'label'            => (string) ($ex['label'] ?? 'Onward'),
+                    'is_hidden'        => !empty($ex['hidden']),
+                    'conditions'       => $ex['conditions'] ?? null,
+                ]);
+            }
+        }
+
+        $npcId = [];
+        foreach ($pack['npcs'] ?? [] as $n) {
+            if (!is_array($n)) {
+                continue;
+            }
+            $place = $n['place']['location'] ?? null;
+            $locId = null;
+            if (is_string($place) && $place !== '') {
+                try {
+                    $locId = (int) $this->requireLocationByKey($place)['id'];
+                } catch (InvalidArgumentException $e) {
+                    $locId = null;
+                }
+            }
+            $body = [
+                'npc_key'     => $n['npc_key'] ?? '',
+                'name'        => $n['name'] ?? '',
+                'role'        => $n['role'] ?? '',
+                'description' => $n['description'] ?? '',
+                'sprite_key'  => $n['sprite_key'] ?? '',
+                'location_id' => $locId,
+                'is_merchant' => !empty($n['is_merchant']),
+                'is_quest_giver' => !empty($n['is_quest_giver']),
+                'is_ambient'  => !empty($n['is_ambient']),
+            ];
+            try {
+                $person = $this->createNpc($body);
+            } catch (InvalidArgumentException $e) {
+                $body['sprite_key'] = '';
+                $person = $this->createNpc($body);
+            }
+            $npcId[(string) $n['npc_key']] = (int) $person['id'];
+        }
+
+        foreach ($pack['dialog'] ?? [] as $d) {
+            if (!is_array($d) || empty($d['npc_key'])) {
+                continue;
+            }
+            $id = $npcId[(string) $d['npc_key']] ?? null;
+            if ($id === null) {
+                continue;
+            }
+            $this->saveDialogue($id, [
+                'start' => $d['start'] ?? 'hail',
+                'nodes' => $d['nodes'] ?? ['hail' => ['text' => '', 'choices' => [['label' => 'Leave.', 'end' => true]]]],
+            ]);
+        }
+
+        foreach ($pack['quests'] ?? [] as $q) {
+            if (!is_array($q)) {
+                continue;
+            }
+            $giver = $q['giver'] ?? null;
+            $qid = $this->createQuest([
+                'quest_key'    => $q['quest_key'] ?? '',
+                'title'        => $q['title'] ?? '',
+                'description'  => $q['description'] ?? '',
+                'giver_npc_id' => is_string($giver) ? ($npcId[$giver] ?? null) : null,
+                'on_job_board' => !empty($q['on_job_board']),
+            ]);
+            $created = $this->getQuest((int) $qid['id']);
+            foreach ($q['stages'] ?? [] as $sk => $st) {
+                if (!is_array($st)) {
+                    continue;
+                }
+                if ($sk === 'done') {
+                    $doneId = (int) $created['stages'][array_key_last($created['stages'])]['id'];
+                    $this->saveStage($doneId, [
+                        'title'       => $st['title'] ?? 'Done',
+                        'objective'   => $st['objective'] ?? '',
+                        'is_terminal' => 1,
+                    ]);
+                    continue;
+                }
+                $target = $st['target']['location'] ?? null;
+                $tid = null;
+                if (is_string($target)) {
+                    try {
+                        $tid = (int) $this->requireLocationByKey($target)['id'];
+                    } catch (InvalidArgumentException $e) {
+                        $tid = null;
+                    }
+                }
+                $this->addStage((int) $qid['id'], [
+                    'stage_key'          => $sk,
+                    'title'              => $st['title'] ?? $sk,
+                    'objective'          => $st['objective'] ?? '',
+                    'target_location_id' => $tid,
+                ]);
+            }
+        }
+
+        foreach ($pack['encounters'] ?? [] as $e) {
+            if (!is_array($e)) {
+                continue;
+            }
+            $place = $e['place']['location'] ?? null;
+            if (!is_string($place)) {
+                continue;
+            }
+            try {
+                $lid = (int) $this->requireLocationByKey($place)['id'];
+            } catch (InvalidArgumentException $ex) {
+                continue;
+            }
+            $roster = [];
+            foreach ($e['monsters'] ?? [] as $m) {
+                if (is_array($m) && !empty($m['monster'])) {
+                    $roster[] = [
+                        'monster_key' => $m['monster'],
+                        'quantity'    => $m['quantity'] ?? 1,
+                    ];
+                }
+            }
+            if ($roster === []) {
+                continue;
+            }
+            try {
+                $this->createEncounter([
+                    'encounter_key' => $e['encounter_key'] ?? '',
+                    'name'          => $e['name'] ?? 'A fight',
+                    'location_id'   => $lid,
+                    'is_ambush'     => !empty($e['ambush']),
+                    'monsters'      => $roster,
+                ]);
+            } catch (InvalidArgumentException $ex) {
+                // Missing bestiary entry on this install.
+            }
+        }
+
+        $art = $pack['art'] ?? [];
+        if (is_array($art)) {
+            if (!empty($art['cover']) && is_string($art['cover'])) {
+                try {
+                    $this->saveArt('cover', (string) $mod['module_key'], $art['cover']);
+                } catch (InvalidArgumentException $e) {
+                    // cover is optional
+                }
+            }
+            foreach ($art['plates'] ?? [] as $rk => $data) {
+                if (is_string($data)) {
+                    try {
+                        $this->saveArt('plate', (string) $rk, $data);
+                    } catch (InvalidArgumentException $e) {
+                        // plate optional
+                    }
+                }
+            }
+        }
+
+        if (!empty($mod['is_active'])) {
+            $this->setModuleActive($moduleId, true);
+        }
+
+        return ['module' => $this->getModule($moduleId)];
+    }
+
+    /** A content key: lowercase letters, numbers, underscores. */
+    private function requireKey($value, string $kind): string
+    {
+        $key = trim((string) $value);
+        if (!preg_match(self::KEY_RE, $key)) {
+            throw new InvalidArgumentException(
+                "A {$kind} key is lowercase letters, numbers and underscores."
+            );
+        }
+        return $key;
+    }
+
+    private function requireRegion(int $id): array
+    {
+        $stmt = $this->db->prepare(
+            'SELECT r.*, m.module_key, m.name AS module_name
+               FROM regions r
+               INNER JOIN modules m ON m.id = r.module_id
+              WHERE r.id = ?'
+        );
+        $stmt->execute([$id]);
+        $row = $stmt->fetch();
+        if (!$row) {
+            throw new InvalidArgumentException('No such region.');
+        }
+        return $row;
+    }
+
+    private function requireLocationByKey(string $key): array
+    {
+        $stmt = $this->db->prepare('SELECT id FROM locations WHERE location_key = ?');
+        $stmt->execute([$key]);
+        $id = $stmt->fetchColumn();
+        if ($id === false) {
+            throw new InvalidArgumentException('No such location.');
+        }
+        return $this->requireLocation((int) $id);
+    }
+
+    /**
+     * Two locations in different modules cannot share an exit.
+     *
+     * The loader treats a cross-module exit as an error, not a warning, because
+     * in play it looks like a travel bug. Saving one here would be a row the
+     * next import refuses.
+     */
+    private function assertSameModule(int $fromId, int $toId): void
+    {
+        $stmt = $this->db->prepare(
+            'SELECT r.module_id
+               FROM locations l
+               INNER JOIN regions r ON r.id = l.region_id
+              WHERE l.id = ?'
+        );
+        $stmt->execute([$fromId]);
+        $a = $stmt->fetchColumn();
+        $stmt->execute([$toId]);
+        $b = $stmt->fetchColumn();
+        if ($a === false || $b === false || (int) $a !== (int) $b) {
+            throw new InvalidArgumentException(
+                'An exit cannot leave its module. Two games share no doors.'
+            );
+        }
     }
 
     /** Every route that takes a location id resolves it through here. */

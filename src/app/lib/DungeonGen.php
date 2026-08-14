@@ -991,7 +991,7 @@ final class DungeonGen
     }
 
     /** Room-shaped hole in the plan, with a cell of clearance on every side. */
-    private static function fits(array $rooms, int $gx, int $gy, int $w, int $h): bool
+    public static function fits(array $rooms, int $gx, int $gy, int $w, int $h): bool
     {
         foreach ($rooms as $r) {
             if ($gx <= $r['gx'] + $r['w'] && $r['gx'] <= $gx + $w

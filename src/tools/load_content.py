@@ -133,7 +133,7 @@ FIELDS = {
     # LOC_FIELDS below; this is the region envelope.
     "locations": (
         {"region_key", "module", "name", "region_type", "locations"},
-        {"description", "sort_order"},
+        {"description", "sort_order", "plan"},
     ),
     "items": (
         {"item_key", "name", "item_type"},
@@ -188,8 +188,15 @@ FIELDS = {
 LOC_FIELDS = ({"name", "type", "map_pos", "description"},
               {"first_visit", "ambience", "inn_cost", "allow_camp",
                "random_encounter_pct", "hidden_until_visited", "job_board",
-               "exits"})
+               "exits", "loot"})
 EXIT_FIELDS = ({"to", "label"}, {"conditions", "hidden"})
+# Authored dungeon shape. Rooms sit on DungeonGen's coarse plan; halls name
+# two of them. The loader stores the drawing — it does not compile it. The
+# studio's savePlan is what writes the matching locations and exits.
+PLAN_FIELDS = ({"rooms"}, {"halls"})
+PLAN_ROOM_FIELDS = ({"key", "gx", "gy", "w", "h"}, {"id", "name"})
+PLAN_HALL_FIELDS = ({"a", "b"}, {"id", "door", "hidden"})
+PLAN_DOORS = ("open", "arch", "door", "stuck", "locked", "portcullis")
 
 NODE_FIELDS = ({"text"},
                {"expression", "speaker", "conditions", "once", "pool", "on_enter",
@@ -692,6 +699,123 @@ def want_location(key, index, p, w):
     return key
 
 
+def dungeon_grid():
+    """DungeonGen::GRID_W × GRID_H, read from the class so a resize cannot drift."""
+    src = open(os.path.join(ROOT, "app", "lib", "DungeonGen.php"), encoding="utf-8").read()
+    w = re.search(r"const GRID_W = (\d+);", src)
+    h = re.search(r"const GRID_H = (\d+);", src)
+    if not w or not h:
+        raise RuntimeError("could not read DungeonGen::GRID_W / GRID_H")
+    return int(w.group(1)), int(h.group(1))
+
+
+def plan_fits(rooms, gx, gy, w, h):
+    """The same clearance DungeonGen::fits() requires: one cell of rock."""
+    for r in rooms:
+        if (gx <= r["gx"] + r["w"] and r["gx"] <= gx + w
+                and gy <= r["gy"] + r["h"] and r["gy"] <= gy + h):
+            return False
+    return True
+
+
+def check_plan(plan, loc_keys, p, rel):
+    """An authored dungeon drawing. Mirrors PlanAuthored::normalize()."""
+    if want_dict(plan, p, (rel, "$.plan")) is None:
+        return
+    check_fields(plan, PLAN_FIELDS, p, (rel, "$.plan"))
+    rooms_in = plan.get("rooms")
+    if want_list(rooms_in, p, (rel, "$.plan.rooms")) is None:
+        return
+    if not rooms_in:
+        p.err((rel, "$.plan.rooms"), "a dungeon plan needs at least one room")
+        return
+
+    grid_w, grid_h = dungeon_grid()
+    rooms = []
+    by_id = {}
+    keys = {}
+    for i, r in enumerate(rooms_in):
+        at = (rel, jp("$.plan.rooms", i))
+        if want_dict(r, p, at) is None:
+            continue
+        check_fields(r, PLAN_ROOM_FIELDS, p, at)
+        gx = r.get("gx")
+        gy = r.get("gy")
+        w = r.get("w")
+        h = r.get("h")
+        if want_int(gx, p, (at[0], at[1] + ".gx")) is None:
+            continue
+        if want_int(gy, p, (at[0], at[1] + ".gy")) is None:
+            continue
+        if want_int(w, p, (at[0], at[1] + ".w")) is None:
+            continue
+        if want_int(h, p, (at[0], at[1] + ".h")) is None:
+            continue
+        gx, gy, w, h = int(gx), int(gy), int(w), int(h)
+        if w < 1 or h < 1:
+            p.err(at, "a room is at least one cell on a side")
+            continue
+        if gx < 0 or gy < 0 or gx + w > grid_w or gy + h > grid_h:
+            p.err(at, f"sits off the {grid_w}×{grid_h} plan ({gx},{gy} {w}×{h})")
+            continue
+        if not plan_fits(rooms, gx, gy, w, h):
+            p.err(at, "overlaps another room, or leaves no cell for a hall")
+            continue
+        key = r.get("key")
+        if want_str(key, p, (at[0], at[1] + ".key")) is None:
+            continue
+        if not KEY_RE.match(key):
+            p.err((at[0], at[1] + ".key"),
+                  f"malformed location key {key!r} — keys are lowercase [a-z0-9_]")
+            continue
+        if key in keys:
+            p.err((at[0], at[1] + ".key"), f"two rooms share the key {key}")
+            continue
+        if key not in loc_keys:
+            p.err((at[0], at[1] + ".key"),
+                  f"plan room {key!r} is not a location in this region")
+            continue
+        keys[key] = True
+        rid = int(r["id"]) if "id" in r and isinstance(r["id"], (int, float)) else i
+        if rid in by_id:
+            p.err(at, f"two rooms share the id {rid}")
+            continue
+        row = {"id": rid, "gx": gx, "gy": gy, "w": w, "h": h}
+        rooms.append(row)
+        by_id[rid] = row
+
+    halls = plan.get("halls")
+    if halls is None:
+        return
+    if want_list(halls, p, (rel, "$.plan.halls")) is None:
+        return
+    seen = set()
+    for i, hall in enumerate(halls):
+        at = (rel, jp("$.plan.halls", i))
+        if want_dict(hall, p, at) is None:
+            continue
+        check_fields(hall, PLAN_HALL_FIELDS, p, at)
+        a = hall.get("a")
+        b = hall.get("b")
+        if want_int(a, p, (at[0], at[1] + ".a")) is None:
+            continue
+        if want_int(b, p, (at[0], at[1] + ".b")) is None:
+            continue
+        a, b = int(a), int(b)
+        if a not in by_id or b not in by_id or a == b:
+            p.err(at, "does not join two rooms")
+            continue
+        pair = (min(a, b), max(a, b))
+        if pair in seen:
+            p.err(at, "the same two rooms are already joined")
+            continue
+        seen.add(pair)
+        door = hall.get("door")
+        if door is not None:
+            want_enum(door, PLAN_DOORS, p, (at[0], at[1] + ".door"))
+        want_bool(hall.get("hidden"), p, (at[0], at[1] + ".hidden"))
+
+
 # ---------------------------------------------------------------------------
 # Conditions and effects
 # ---------------------------------------------------------------------------
@@ -1077,6 +1201,14 @@ def validate_locations(index, p):
         want_int(obj.get("sort_order"), p, (rel, "$.sort_order"))
         want_enum(obj.get("region_type"), REGION_TYPES, p, (rel, "$.region_type"))
 
+        plan = obj.get("plan")
+        if plan is not None:
+            if obj.get("region_type") != "dungeon":
+                p.err((rel, "$.plan"), "a plan belongs on a dungeon, not a "
+                      f"{obj.get('region_type') or 'region'} with a painted map")
+            loc_keys = obj.get("locations") if isinstance(obj.get("locations"), dict) else {}
+            check_plan(plan, set(loc_keys), p, rel)
+
         module = obj.get("module")
         if want_str(module, p, (rel, "$.module")) is not None:
             if not index.has("modules", module):
@@ -1157,6 +1289,11 @@ def validate_locations(index, p):
         if amb is not None and want_list(amb, p, (rel, jp(at, "ambience"))) is not None:
             for i, line in enumerate(amb):
                 want_str(line, p, (rel, jp(at, "ambience", i)))
+
+        loot = loc.get("loot")
+        if loot is not None and want_list(loot, p, (rel, jp(at, "loot"))) is not None:
+            for i, item in enumerate(loot):
+                want_key(item, "items", index, p, (rel, jp(at, "loot", i)), label="item")
 
         exits = loc.get("exits")
         if exits is None:
@@ -2447,9 +2584,10 @@ def emit_locations(lines, index):
 
     rows(lines, "regions",
          ("region_key", "module_id", "name", "description", "region_type",
-          "sort_order"),
+          "plan_json", "sort_order"),
          [[sql_str(rk), module_ref(r.get("module")), sql_val(r["name"]),
            sql_val(r.get("description")), sql_val(r.get("region_type", "town")),
+           sql_json(r.get("plan")),
            sql_val(r.get("sort_order", 0))]
           for rk, r in regions.items()],
          upsert_on=("region_key",))
@@ -2854,13 +2992,25 @@ def emit_placements(lines, index):
     lines.append("-- party_items_taken rows go with it.")
     lines.append("DELETE FROM party_items_taken;")
     lines.append("DELETE FROM location_items;")
-    loot = [[loc_ref(o["place"]["location"]), ref("items", key)]
-            for key, o in index.by_kind["items"].items()
-            if isinstance(o.get("place"), dict)]
+    pairs = {}
+    for key, o in index.by_kind["items"].items():
+        if isinstance(o.get("place"), dict) and o["place"].get("location"):
+            pairs[(o["place"]["location"], key)] = True
+    for rk, region in index.by_kind["locations"].items():
+        locs = region.get("locations") or {}
+        if not isinstance(locs, dict):
+            continue
+        for lk, loc in locs.items():
+            if not isinstance(loc, dict):
+                continue
+            for item in loc.get("loot") or []:
+                if isinstance(item, str) and item:
+                    pairs[(lk, item)] = True
+    loot = [[loc_ref(loc), ref("items", item)] for loc, item in pairs]
     if loot:
         rows(lines, "location_items", ("location_id", "item_id"), loot)
     else:
-        lines.append("-- no item declares a `place` block")
+        lines.append("-- no item declares a `place` block and no location lists loot")
     lines.append("")
 
 

@@ -29,6 +29,7 @@ require_signed_in_page();
 <?php if (auth()->isAdmin()): ?>
       <a href="admin.php">Accounts</a>
       <a href="content.php">Content</a>
+      <a href="studio.php">Studio</a>
       <a href="adventure_print.php">Books</a>
 <?php endif; ?>
       <a href="#" id="btn-signout">Sign out</a>

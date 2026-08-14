@@ -325,6 +325,12 @@ $cover = art('assets/images/modules/' . $module['module_key'] . '.jpg');
         <?php if ($map) { ?>
           <div class="chapter-map"><?= map_frame($region, $map, true) ?></div>
           <p class="map-caption">The numbers are the areas below.</p>
+        <?php } elseif (!empty($region['map']['floorplan'])) { ?>
+          <div class="chapter-map">
+            <div class="floor-plan" data-authored="<?= (int) $n ?>"></div>
+          </div>
+          <p class="map-caption">The numbers are the areas below. This is the
+            plan you drew — the same shape the game walks.</p>
         <?php } ?>
         <?php if (trim((string) $region['description']) !== '') { ?>
           <p class="lede"><?= esc($region['description']) ?></p>
@@ -875,7 +881,19 @@ if (!empty($data['delve']['floors'])) {
       </div>
     </div>
   <?php } ?>
+<?php } ?>
 
+<?php
+$authoredPlans = [];
+foreach ($data['regions'] as $i => $region) {
+    if (!empty($region['map']['floorplan'])) {
+        $authoredPlans[] = ['i' => $i, 'map' => $region['map']];
+    }
+}
+$needRenderer = $authoredPlans || !empty($data['delve']['floors']);
+if ($needRenderer) {
+    $delveFloors = $data['delve']['floors'] ?? [];
+    ?>
   <script>
     /* ui-map.js reaches for Game.esc and nothing else of the game — the same
        shim tools/floorplan_preview.php uses. */
@@ -883,17 +901,22 @@ if (!empty($data['delve']['floors'])) {
       '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
     }[c])) };
     window.BOOK_FLOORS = <?= json_encode(
-        array_map(static fn ($f) => ['depth' => $f['depth'], 'map' => $f['map']], $delve['floors']),
+        array_map(static fn ($f) => ['depth' => $f['depth'], 'map' => $f['map']], $delveFloors),
         JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
     ) ?>;
+    window.BOOK_PLANS = <?= json_encode($authoredPlans, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?>;
   </script>
   <script src="<?= esc(asset('assets/js/ui-map.js')) ?>"></script>
   <script>
     /* No `ways` and no party: nothing in a book is somewhere you can walk to
        from where you are standing, because nobody is standing anywhere. */
-    window.BOOK_FLOORS.forEach((f) => {
-      const host = document.querySelector(`.floor-plan[data-floor="${f.depth}"]`);
+    (window.BOOK_FLOORS || []).forEach((f) => {
+      const host = document.querySelector('.floor-plan[data-floor="' + f.depth + '"]');
       if (host) host.innerHTML = window.WorldMap.svg(f.map, { ways: new Map() });
+    });
+    (window.BOOK_PLANS || []).forEach((p) => {
+      const host = document.querySelector('.floor-plan[data-authored="' + p.i + '"]');
+      if (host) host.innerHTML = window.WorldMap.svg(p.map, { ways: new Map() });
     });
   </script>
 <?php } ?>

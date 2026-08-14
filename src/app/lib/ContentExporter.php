@@ -65,11 +65,12 @@ class ContentExporter
     {
         $this->written = [];
         $counts = [
-            'modules' => $this->exportModules(),
-            'regions' => $this->exportRegions(),
-            'npcs'    => $this->exportNpcs(),
-            'dialog'  => $this->exportDialogue(),
-            'quests'  => $this->exportQuests(),
+            'modules'    => $this->exportModules(),
+            'regions'    => $this->exportRegions(),
+            'npcs'       => $this->exportNpcs(),
+            'dialog'     => $this->exportDialogue(),
+            'quests'     => $this->exportQuests(),
+            'encounters' => $this->exportEncounters(),
         ];
         return ['written' => $this->written, 'counts' => $counts];
     }
@@ -188,6 +189,12 @@ class ContentExporter
             if ((int) $r['sort_order'] !== 0) {
                 $out['sort_order'] = (int) $r['sort_order'];
             }
+            if (!empty($r['plan_json'])) {
+                $plan = json_decode((string) $r['plan_json'], true);
+                if (is_array($plan) && !empty($plan['rooms'])) {
+                    $out['plan'] = $plan;
+                }
+            }
 
             $locStmt->execute([(int) $r['id']]);
             $locations = [];
@@ -249,6 +256,17 @@ class ContentExporter
                             $exits
                         )) . "\n" . str_repeat(' ', 12) . ']'
                     );
+                }
+
+                $lootStmt = $this->db->prepare(
+                    'SELECT i.item_key FROM location_items li
+                      INNER JOIN items i ON i.id = li.item_id
+                     WHERE li.location_id = ? ORDER BY i.item_key'
+                );
+                $lootStmt->execute([(int) $l['id']]);
+                $loot = $lootStmt->fetchAll(PDO::FETCH_COLUMN);
+                if ($loot) {
+                    $loc['loot'] = array_values(array_unique($loot));
                 }
 
                 $locations[$l['location_key']] = $loc;
@@ -566,6 +584,93 @@ class ContentExporter
             $out['stages'] = $stages;
 
             $this->write('quests/' . $q['quest_key'] . '.json', $out);
+            $count++;
+        }
+        return $count;
+    }
+
+    /**
+     * Fights the studio (or a later editor) wrote into the database.
+     *
+     * Files that already exist under content/encounters/ stay file-owned —
+     * rewriting them would be a fifty-file formatting diff of fights nobody
+     * edited. A key with no file is a fight that only lives in the database,
+     * and that is what this writes so Export can commit it.
+     */
+    public function exportEncounters(): int
+    {
+        $rows = $this->db->query(
+            'SELECT e.*, l.location_key, r.region_key
+               FROM encounters e
+               LEFT JOIN locations l ON l.id = e.location_id
+               LEFT JOIN regions r ON r.id = e.region_id
+              WHERE e.encounter_key IS NOT NULL
+              ORDER BY e.encounter_key'
+        )->fetchAll();
+        $mons = $this->db->prepare(
+            'SELECT m.monster_key, em.quantity, em.rank_override
+               FROM encounter_monsters em
+               INNER JOIN monsters m ON m.id = em.monster_id
+              WHERE em.encounter_id = ?
+              ORDER BY em.id'
+        );
+
+        $count = 0;
+        foreach ($rows as $e) {
+            $rel = 'encounters/' . $e['encounter_key'] . '.json';
+            if (is_file($this->root . '/' . $rel)) {
+                continue;
+            }
+            $mons->execute([(int) $e['id']]);
+            $roster = [];
+            foreach ($mons->fetchAll() as $m) {
+                $row = ['monster' => $m['monster_key'], 'quantity' => (int) $m['quantity']];
+                if ($m['rank_override']) {
+                    $row['rank'] = $m['rank_override'];
+                }
+                $roster[] = $row;
+            }
+            if ($roster === []) {
+                continue;
+            }
+            $out = [
+                'encounter_key' => $e['encounter_key'],
+                'name'          => $e['name'],
+            ];
+            if (($e['description'] ?? '') !== '') {
+                $out['description'] = $e['description'];
+            }
+            if (($e['difficulty'] ?? '') !== '') {
+                $out['difficulty'] = $e['difficulty'];
+            }
+            $out['monsters'] = $roster;
+            if ((int) $e['is_random'] === 1) {
+                $out['is_random'] = true;
+            }
+            if ((int) $e['is_ambush'] === 1) {
+                $out['ambush'] = true;
+            }
+            if ((int) $e['allow_flee'] === 0) {
+                $out['allow_flee'] = false;
+            }
+            if ((int) $e['allow_parley'] === 1) {
+                $out['allow_parley'] = true;
+            }
+            foreach (['parley_node', 'victory_flag', 'defeat_flag', 'victory_quest_stage'] as $k) {
+                if (($e[$k] ?? '') !== '') {
+                    $out[$k] = $e[$k];
+                }
+            }
+            if ((int) $e['scale_to_party'] === 0) {
+                $out['scale'] = false;
+            }
+            if ($e['location_key']) {
+                $out['place'] = ['location' => $e['location_key']];
+            }
+            if ($e['region_key'] && (int) $e['is_random'] === 1) {
+                $out['region'] = $e['region_key'];
+            }
+            $this->write($rel, $out);
             $count++;
         }
         return $count;

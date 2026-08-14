@@ -282,7 +282,9 @@ function handle_content(string $action): void
     $ed = new ContentEditor(db());
 
     if ($action === 'npcs') {
-        json_response(['ok' => true, 'npcs' => $ed->listNpcs()]);
+        $moduleId = isset($_GET['module_id']) && $_GET['module_id'] !== ''
+            ? (int) $_GET['module_id'] : null;
+        json_response(['ok' => true, 'npcs' => $ed->listNpcs($moduleId)]);
     }
 
     if ($action === 'npc') {
@@ -337,7 +339,9 @@ function handle_content(string $action): void
     }
 
     if ($action === 'quests') {
-        json_response(['ok' => true, 'quests' => $ed->listQuests()]);
+        $moduleId = isset($_GET['module_id']) && $_GET['module_id'] !== ''
+            ? (int) $_GET['module_id'] : null;
+        json_response(['ok' => true, 'quests' => $ed->listQuests($moduleId)]);
     }
 
     if ($action === 'quest') {
@@ -370,6 +374,19 @@ function handle_content(string $action): void
         json_response(['ok' => true, 'location' => $ed->saveLocation($body)]);
     }
 
+    if ($action === 'save_position') {
+        require_method('POST');
+        $body = read_json_body();
+        json_response([
+            'ok'       => true,
+            'location' => $ed->savePosition(
+                (int) ($body['id'] ?? 0),
+                (float) ($body['map_x'] ?? 0),
+                (float) ($body['map_y'] ?? 0)
+            ),
+        ]);
+    }
+
     if ($action === 'save_exit') {
         require_method('POST');
         $body = read_json_body();
@@ -392,6 +409,148 @@ function handle_content(string $action): void
     // well as grouped: the exit and quest-marker selects need one list of
     // everywhere, and building it in the client from the grouped copy is how
     // the two come to be sorted differently on two screens.
+    if ($action === 'modules') {
+        json_response(['ok' => true, 'modules' => $ed->listModules()]);
+    }
+
+    if ($action === 'module') {
+        json_response(['ok' => true, 'module' => $ed->getModule((int) ($_GET['id'] ?? 0))]);
+    }
+
+    if ($action === 'chart') {
+        json_response([
+            'ok'    => true,
+            'chart' => $ed->moduleChart((int) ($_GET['module_id'] ?? 0)),
+        ]);
+    }
+
+    if ($action === 'create_module') {
+        require_method('POST');
+        json_response(['ok' => true, 'created' => $ed->createModule(read_json_body())]);
+    }
+
+    if ($action === 'delete_module') {
+        require_method('POST');
+        $body = read_json_body();
+        json_response(['ok' => true, 'result' => $ed->deleteModule((int) ($body['id'] ?? 0))]);
+    }
+
+    if ($action === 'save_plan') {
+        require_method('POST');
+        $body = read_json_body();
+        json_response([
+            'ok'   => true,
+            'saved'=> $ed->savePlan((int) ($body['region_id'] ?? 0), $body['plan'] ?? []),
+        ]);
+    }
+
+    if ($action === 'create_region') {
+        require_method('POST');
+        json_response(['ok' => true, 'region' => $ed->createRegion(read_json_body())]);
+    }
+
+    if ($action === 'create_npc') {
+        require_method('POST');
+        json_response(['ok' => true, 'npc' => $ed->createNpc(read_json_body())]);
+    }
+
+    if ($action === 'create_quest') {
+        require_method('POST');
+        json_response(['ok' => true, 'quest' => $ed->createQuest(read_json_body())]);
+    }
+
+    if ($action === 'add_stage') {
+        require_method('POST');
+        $body = read_json_body();
+        json_response([
+            'ok'    => true,
+            'quest' => $ed->addStage((int) ($body['quest_id'] ?? 0), $body),
+        ]);
+    }
+
+    if ($action === 'delete_stage') {
+        require_method('POST');
+        $body = read_json_body();
+        json_response([
+            'ok'    => true,
+            'quest' => $ed->deleteStage((int) ($body['id'] ?? 0)),
+        ]);
+    }
+
+    if ($action === 'create_encounter') {
+        require_method('POST');
+        json_response(['ok' => true, 'encounter' => $ed->createEncounter(read_json_body())]);
+    }
+
+    if ($action === 'add_item') {
+        require_method('POST');
+        $body = read_json_body();
+        json_response([
+            'ok'       => true,
+            'location' => $ed->addLocationItem(
+                (int) ($body['location_id'] ?? 0),
+                (string) ($body['item_key'] ?? '')
+            ),
+        ]);
+    }
+
+    if ($action === 'remove_item') {
+        require_method('POST');
+        $body = read_json_body();
+        json_response([
+            'ok'       => true,
+            'location' => $ed->removeLocationItem((int) ($body['id'] ?? 0)),
+        ]);
+    }
+
+    if ($action === 'save_art') {
+        require_method('POST');
+        $body = read_json_body();
+        json_response([
+            'ok'  => true,
+            'art' => $ed->saveArt(
+                (string) ($body['kind'] ?? ''),
+                (string) ($body['key'] ?? ''),
+                (string) ($body['image'] ?? '')
+            ),
+        ]);
+    }
+
+    if ($action === 'set_active') {
+        require_method('POST');
+        $body = read_json_body();
+        json_response([
+            'ok'     => true,
+            'module' => $ed->setModuleActive(
+                (int) ($body['id'] ?? 0),
+                !empty($body['is_active'])
+            ),
+        ]);
+    }
+
+    if ($action === 'run') {
+        json_response([
+            'ok'    => true,
+            'beats' => $ed->moduleRun((int) ($_GET['module_id'] ?? 0)),
+        ]);
+    }
+
+    if ($action === 'bundle') {
+        json_response([
+            'ok'     => true,
+            'bundle' => $ed->packModule((int) ($_GET['module_id'] ?? 0)),
+        ]);
+    }
+
+    if ($action === 'import_bundle') {
+        require_method('POST');
+        $body = read_json_body();
+        json_response([
+            'ok'     => true,
+            'imported' => $ed->importBundle($body['bundle'] ?? []),
+        ]);
+    }
+
     if ($action === 'refs') {
         json_response([
             'ok'        => true,
@@ -405,6 +564,17 @@ function handle_content(string $action): void
             )->fetchAll(),
             'location_types' => ['square', 'street', 'gate', 'building', 'room', 'site', 'camp'],
             'poses'     => ['sleeping', 'kneel'],
+            'monsters'  => db()->query(
+                'SELECT monster_key, name, challenge_rating
+                   FROM monsters ORDER BY name'
+            )->fetchAll(),
+            'items'     => db()->query(
+                'SELECT item_key, name FROM items ORDER BY name'
+            )->fetchAll(),
+            'sprites'    => $ed->listSprites(),
+            'companions' => db()->query(
+                'SELECT companion_key, name FROM companions ORDER BY name'
+            )->fetchAll(),
         ]);
     }
 

@@ -26,6 +26,7 @@ require_admin_page();
       <h1>Content</h1>
     </div>
     <nav class="admin-nav">
+      <a class="btn" href="studio.php">Studio</a>
       <a class="btn" href="game.php">Adventure</a>
       <a class="btn" href="admin.php">Accounts</a>
       <!--

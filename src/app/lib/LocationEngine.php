@@ -699,8 +699,60 @@ class LocationEngine
             // authored region — which is every region with a painted plate.
             // The chart draws one or the other, never both: a plan under a
             // painting would be two maps of the same place disagreeing.
-            'floorplan'   => (new DelveEngine($this->db))->planFor($regionId),
+            'floorplan'   => $this->authoredFloorplan($r)
+                ?? (new DelveEngine($this->db))->planFor($regionId),
         ];
+    }
+
+    /**
+     * An authored dungeon's shape, when the region carries a plan.
+     *
+     * Generated floors still come from DelveEngine::planFor(). A region with
+     * no plan_json returns null so the caller falls through. Every room is
+     * seen: fog on an authored hole is a later question, and the Old City
+     * already ships its whole shape.
+     */
+    private function authoredFloorplan(array $region): ?array
+    {
+        $raw = $region['plan_json'] ?? null;
+        if (!is_string($raw) || $raw === '') {
+            return null;
+        }
+        $plan = json_decode($raw, true);
+        if (!is_array($plan) || empty($plan['rooms'])) {
+            return null;
+        }
+        try {
+            $compiled = PlanAuthored::compile($plan);
+        } catch (InvalidArgumentException $e) {
+            return null;
+        }
+        $keys = [];
+        foreach ($compiled['level']['rooms'] as $r) {
+            $keys[(int) $r['id']] = (string) $r['key'];
+        }
+        $idOf = [];
+        if ($keys) {
+            $list = array_values($keys);
+            $in = implode(',', array_fill(0, count($list), '?'));
+            $stmt = $this->db->prepare(
+                "SELECT id, location_key FROM locations WHERE location_key IN ({$in})"
+            );
+            $stmt->execute($list);
+            foreach ($stmt->fetchAll() as $row) {
+                $idOf[(string) $row['location_key']] = (int) $row['id'];
+            }
+        }
+        $drawn = $compiled['plan'];
+        foreach ($drawn['rooms'] as $i => $r) {
+            $key = $keys[(int) $r['id']] ?? '';
+            $drawn['rooms'][$i]['location_id'] = $idOf[$key] ?? null;
+            $drawn['rooms'][$i]['seen'] = true;
+        }
+        foreach ($drawn['corridors'] as $i => $c) {
+            $drawn['corridors'][$i]['seen'] = true;
+        }
+        return $drawn;
     }
 
     // -----------------------------------------------------------------------

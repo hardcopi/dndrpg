@@ -105,6 +105,7 @@ $tmp = sys_get_temp_dir() . '/rpg-export-test-' . bin2hex(random_bytes(4));
 mkdir($tmp . '/npcs', 0o775, true);
 mkdir($tmp . '/dialog', 0o775, true);
 mkdir($tmp . '/quests', 0o775, true);
+mkdir($tmp . '/encounters', 0o775, true);
 
 try {
     $exporter = new ContentExporter($db, $tmp);
@@ -190,7 +191,21 @@ try {
     foreach (glob($tmp . '/*/*.json') as $f) {
         unlink($f);
     }
-    foreach (['npcs', 'dialog', 'quests', 'locations'] as $d) {
+    $encFields = ['encounter_key', 'name', 'description', 'monsters', 'is_random',
+                  'ambush', 'difficulty', 'allow_flee', 'allow_parley', 'parley_node',
+                  'victory_flag', 'defeat_flag', 'victory_quest_stage', 'place',
+                  'scale', 'region'];
+    $badEnc = [];
+    foreach (glob($tmp . '/encounters/*.json') ?: [] as $f) {
+        foreach (array_keys(json_decode(file_get_contents($f), true) ?: []) as $k) {
+            if (!in_array($k, $encFields, true)) {
+                $badEnc[] = basename($f) . ':' . $k;
+            }
+        }
+    }
+    ok('every encounter field is one the loader knows', $badEnc === [], implode(', ', array_slice($badEnc, 0, 5)));
+
+    foreach (['npcs', 'dialog', 'quests', 'locations', 'encounters'] as $d) {
         @rmdir($tmp . '/' . $d);
     }
     @rmdir($tmp);

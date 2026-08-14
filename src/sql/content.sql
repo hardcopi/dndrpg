@@ -33,23 +33,24 @@ ON DUPLICATE KEY UPDATE
   sort_order = VALUES(sort_order);
 
 -- === Regions & locations ===
-INSERT INTO regions (region_key,module_id,name,description,region_type,sort_order) VALUES
-('arden_priory',(SELECT id FROM modules WHERE module_key = 'rivermark'),'Arden Priory','A small house of the Order of the Sun''s Hour, above the ford on the west bank. Eleven brothers, a hospice, a bell, and more land on paper than they can walk in a day.','town',45),
-('ford_road',(SELECT id FROM modules WHERE module_key = 'rivermark'),'The Ford Road','West of Rivermark: the river crossing, the mill that burned, and the farms that have been on this road longer than the town has.','wilderness',25),
-('goblin_warren',(SELECT id FROM modules WHERE module_key = 'rivermark'),'Goblin Warren','A damp network of quarry tunnels claimed by goblins and worse things.','dungeon',30),
-('greyhythe',(SELECT id FROM modules WHERE module_key = 'rivermark'),'Greyhythe','The river port eleven miles downstream of Rivermark: a common wharf, a private one, and a road out that goes on going.','town',60),
-('hollow_fen',(SELECT id FROM modules WHERE module_key = 'rivermark'),'Hollow Fen','Four thousand acres of standing water west of the ford road, with a village under it and a road across it that somebody keeps open at their own expense.','wilderness',40),
-('old_city',(SELECT id FROM modules WHERE module_key = 'old_city'),'The Old City','The streets the City was built on top of, roofed over and running as its sewers. Two shored-up causeways are lit and patrolled; everything off them is older stonework and dark.','dungeon',10),
-('quarry_wilds',(SELECT id FROM modules WHERE module_key = 'rivermark'),'Quarry Wilds','Open valley country east of Rivermark — the river road, standing woods, and the old quarry cut where the goblins den.','wilderness',20),
-('rivermark',(SELECT id FROM modules WHERE module_key = 'rivermark'),'Rivermark','A modest trade town of cobbled streets, the Golden Flagon inn, and a watchful eastern gate.','town',10),
-('the_deepworks',(SELECT id FROM modules WHERE module_key = 'rivermark'),'The Deepworks','An excavation under the goblin warren, forty feet below the bottom of the old quarry. It is timbered, drained, lit, victualled and worked in shifts, and nobody in Rivermark has ever heard of it.','dungeon',50),
-('undertown',(SELECT id FROM modules WHERE module_key = 'rivermark'),'Undertown','The flood tunnels under Rivermark. Brick drains cut two hundred years ago to take the river when it comes over the quay, dry eleven months of the year, and lived in for all of them.','dungeon',15),
-('undervault_head',(SELECT id FROM modules WHERE module_key = 'undervault'),'The Stair Head','A shelf of bare hillside with a hole in it, and everything that has grown up around the hole: a camp that was meant to be temporary nine years ago, a spoil heap taller than the tents, and a winch nobody trusts. This is the last place with a fire in it.','wilderness',60)
+INSERT INTO regions (region_key,module_id,name,description,region_type,plan_json,sort_order) VALUES
+('arden_priory',(SELECT id FROM modules WHERE module_key = 'rivermark'),'Arden Priory','A small house of the Order of the Sun''s Hour, above the ford on the west bank. Eleven brothers, a hospice, a bell, and more land on paper than they can walk in a day.','town',NULL,45),
+('ford_road',(SELECT id FROM modules WHERE module_key = 'rivermark'),'The Ford Road','West of Rivermark: the river crossing, the mill that burned, and the farms that have been on this road longer than the town has.','wilderness',NULL,25),
+('goblin_warren',(SELECT id FROM modules WHERE module_key = 'rivermark'),'Goblin Warren','A damp network of quarry tunnels claimed by goblins and worse things.','dungeon',NULL,30),
+('greyhythe',(SELECT id FROM modules WHERE module_key = 'rivermark'),'Greyhythe','The river port eleven miles downstream of Rivermark: a common wharf, a private one, and a road out that goes on going.','town',NULL,60),
+('hollow_fen',(SELECT id FROM modules WHERE module_key = 'rivermark'),'Hollow Fen','Four thousand acres of standing water west of the ford road, with a village under it and a road across it that somebody keeps open at their own expense.','wilderness',NULL,40),
+('old_city',(SELECT id FROM modules WHERE module_key = 'old_city'),'The Old City','The streets the City was built on top of, roofed over and running as its sewers. Two shored-up causeways are lit and patrolled; everything off them is older stonework and dark.','dungeon',NULL,10),
+('quarry_wilds',(SELECT id FROM modules WHERE module_key = 'rivermark'),'Quarry Wilds','Open valley country east of Rivermark — the river road, standing woods, and the old quarry cut where the goblins den.','wilderness',NULL,20),
+('rivermark',(SELECT id FROM modules WHERE module_key = 'rivermark'),'Rivermark','A modest trade town of cobbled streets, the Golden Flagon inn, and a watchful eastern gate.','town',NULL,10),
+('the_deepworks',(SELECT id FROM modules WHERE module_key = 'rivermark'),'The Deepworks','An excavation under the goblin warren, forty feet below the bottom of the old quarry. It is timbered, drained, lit, victualled and worked in shifts, and nobody in Rivermark has ever heard of it.','dungeon',NULL,50),
+('undertown',(SELECT id FROM modules WHERE module_key = 'rivermark'),'Undertown','The flood tunnels under Rivermark. Brick drains cut two hundred years ago to take the river when it comes over the quay, dry eleven months of the year, and lived in for all of them.','dungeon',NULL,15),
+('undervault_head',(SELECT id FROM modules WHERE module_key = 'undervault'),'The Stair Head','A shelf of bare hillside with a hole in it, and everything that has grown up around the hole: a camp that was meant to be temporary nine years ago, a spoil heap taller than the tents, and a winch nobody trusts. This is the last place with a fire in it.','wilderness',NULL,60)
 ON DUPLICATE KEY UPDATE
   module_id = VALUES(module_id),
   name = VALUES(name),
   description = VALUES(description),
   region_type = VALUES(region_type),
+  plan_json = VALUES(plan_json),
   sort_order = VALUES(sort_order);
 
 -- sort_order is authored order ×10, per region.

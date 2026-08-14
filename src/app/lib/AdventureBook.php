@@ -483,8 +483,8 @@ final class AdventureBook
 
         return [
             'region_id'   => 0,
-            'region_key'  => 'specimen_' . (int) $level['depth'],
-            'name'        => 'The Undervault, level ' . (int) $level['depth'],
+            'region_key'  => 'specimen_' . (int) ($level['depth'] ?? 0),
+            'name'        => 'The Undervault, level ' . (int) ($level['depth'] ?? 0),
             'region_type' => 'dungeon',
             'nodes'       => $nodes,
             'edges'       => $edges,
@@ -542,8 +542,49 @@ final class AdventureBook
 
         foreach ($regions as $i => $region) {
             $regions[$i]['locations'] = $this->locations((int) $region['id']);
+            $regions[$i]['map'] = $this->authoredMap($regions[$i]);
         }
         return $regions;
+    }
+
+    /**
+     * An authored dungeon's compiled plan, in the shape the book already
+     * hands to WorldMap.svg for a rolled floor.
+     *
+     * The plan is the source; this is a reading of it. A town or a wilderness
+     * has a painted plate and no plan, and returns null so the chapter falls
+     * through to pins on that painting — two maps of one place would disagree.
+     */
+    private function authoredMap(array $region): ?array
+    {
+        $raw = $region['plan_json'] ?? null;
+        if (!is_string($raw) || $raw === '') {
+            return null;
+        }
+        $plan = json_decode($raw, true);
+        if (!is_array($plan) || empty($plan['rooms'])) {
+            return null;
+        }
+        try {
+            $compiled = PlanAuthored::compile($plan);
+        } catch (InvalidArgumentException $e) {
+            return null;
+        }
+
+        $byKey = [];
+        foreach ($region['locations'] ?? [] as $loc) {
+            $byKey[(string) $loc['location_key']] = (int) $loc['number'];
+        }
+        $numbers = [];
+        foreach ($compiled['level']['rooms'] as $room) {
+            $id = (int) $room['id'];
+            $numbers[$id] = $byKey[(string) ($room['key'] ?? '')] ?? ($id + 1);
+        }
+
+        $map = self::planPayload($compiled['level'], $compiled['plan'], $numbers);
+        $map['region_key'] = (string) $region['region_key'];
+        $map['name'] = (string) $region['name'];
+        return $map;
     }
 
     private function locations(int $regionId): array

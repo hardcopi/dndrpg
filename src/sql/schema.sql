@@ -276,6 +276,12 @@ CREATE TABLE regions (
     name VARCHAR(120) NOT NULL,
     description TEXT NULL,
     region_type ENUM('town','wilderness','dungeon') NOT NULL DEFAULT 'town',
+    -- Authored dungeon shape: rooms as rectangles on the same coarse plan
+    -- DungeonGen uses, halls as pairs of room ids. NULL for a town, a
+    -- wilderness, or a generated floor. The plan is the source; locations
+    -- and exits are compiled from it on save so the chart and the walker
+    -- cannot disagree with the drawing.
+    plan_json TEXT NULL,
     sort_order INT NOT NULL DEFAULT 0,
     KEY idx_region_module (module_id),
     FOREIGN KEY (module_id) REFERENCES modules(id) ON DELETE CASCADE
