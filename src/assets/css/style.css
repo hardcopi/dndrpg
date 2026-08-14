@@ -6298,12 +6298,12 @@ body.home-page > main { flex: 1 0 auto; padding-top: var(--sp-32); }
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--sp-16);
-  /* Stretch, not start. `.module-card` pushes its buttons down with
-     `margin-top: auto`, which does nothing unless the card is taller than its
-     content — and with `align-items: start` it never is. The row came out with
-     Play sitting at three different heights depending on how long each blurb
-     and attribution ran, which reads as three different components rather than
-     three of the same thing. */
+  /* Stretch, not start, so the frames end level. This used to be what made
+     the buttons line up — they sat on the card's foot with `margin-top: auto`,
+     which does nothing unless the card is taller than its content. The buttons
+     are under the plate now and align on their own, but a row of cards ending
+     at three different heights still reads as three different components
+     rather than three of the same thing. */
   align-items: stretch;
 }
 
@@ -6463,10 +6463,9 @@ body.home-page > main { flex: 1 0 auto; padding-top: var(--sp-32); }
 
 /* --- A module card ----------------------------------------------------
    The painting is the top two thirds of it with the name lying across the
-   bottom of the picture; then the blurb, the credit, and the doors on the
-   card's own baseline. The name sat in a line of text under the plate and the
-   card read as a picture with a caption stuck below it — a book has its title
-   on the cover. */
+   bottom of the picture; then the doors, then the blurb and the credit. The
+   name sat in a line of text under the plate and the card read as a picture
+   with a caption stuck below it — a book has its title on the cover. */
 .module-card {
   display: flex;
   flex-direction: column;
@@ -6579,7 +6578,10 @@ body.home-page > main { flex: 1 0 auto; padding-top: var(--sp-32); }
   letter-spacing: var(--ls-wide);
 }
 
-.module-body { padding: var(--sp-14) var(--sp-20) 0; }
+/* Last in the card now that the doors have moved up, so it carries the foot.
+   It keeps that padding when it is empty — a module with no blurb and no
+   attribution is a card that ends below its buttons, not against them. */
+.module-body { padding: var(--sp-14) var(--sp-20) var(--sp-20); }
 .module-blurb {
   color: var(--text-dim);
   line-height: var(--lh-normal);
@@ -6592,11 +6594,13 @@ body.home-page > main { flex: 1 0 auto; padding-top: var(--sp-32); }
   margin: var(--sp-12) 0 0;
 }
 
-/* Both buttons sit on the card's baseline together, so a row of cards has one
-   line of buttons across it however long the blurbs ran. */
+/* Directly under the plate, which is where the title is — the doors sit with
+   the name of the thing they open rather than at the far end of a paragraph
+   about it. No `margin-top: auto` any more: the plate's 3:2 is a fixed height,
+   so a row of cards lines its buttons up without being asked, however long the
+   blurbs below them run. */
 .module-actions {
-  margin-top: auto;
-  padding: var(--sp-16) var(--sp-20) var(--sp-20);
+  padding: var(--sp-16) var(--sp-20) 0;
   display: flex;
   flex-wrap: wrap;
   gap: var(--sp-6);

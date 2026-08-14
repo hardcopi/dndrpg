@@ -40,12 +40,6 @@ require_signed_in_page();
     <p class="hero-eyebrow">Open 5e SRD &middot; single player &middot; in the browser</p>
     <h1>Rivermark Chronicles</h1>
     <div class="rule-orn" aria-hidden="true"></div>
-    <p>
-      A single-player RPG in the manner of the old gold-box games: talk your way
-      around a town, walk out of it, and fight what is waiting on a battlefield
-      of five-foot squares. The world — every room, every face, every quest —
-      lives in the database.
-    </p>
     <div class="hero-actions">
       <!--
         This starts a new party, which is to say a new game — quests, flags and
@@ -55,34 +49,28 @@ require_signed_in_page();
         apart. Adding somebody to a party in progress is the party rail's own
         link, in game.
 
-        Removed by the script as soon as the module cells are drawn: "start a
-        new game" without saying which game is exactly the question those cells
-        exist to ask. It survives only on an install with no modules at all.
+        Removed by the script — the whole row with it — as soon as the module
+        cells are drawn: "start a new game" without saying which game is
+        exactly the question those cells exist to ask. It survives only on an
+        install with no modules at all.
+
+        There is no "Continue where you left off" beside it. It went to
+        game.php, which reads no query string and plays whoever the session
+        says is active, so where it landed depended on state the page does not
+        show — the last character selected, possibly in a module you were not
+        looking at. A card's own Play answers the same want and says which
+        game it means.
       -->
       <a class="btn btn-primary btn-lg" href="create.php" id="new-game-btn">Start a New Game</a>
-      <a class="btn btn-lg" href="game.php" id="continue-btn">
-        <svg class="btn-glyph" aria-hidden="true" focusable="false"><use href="#i-play"></use></svg>
-        Continue where you left off
-      </a>
     </div>
   </header>
 
   <!--
-    Two symbols, in the same stroke-only 24-grid style as the set in game.php,
-    so they take `.icon-btn`'s sizing and currentColor without a second rule.
-    Kept here rather than shared because these two are the only ones this page
-    needs and game.php's sprite is not loaded on it.
+    This page carried a sprite of two symbols. `i-play` was the Continue
+    button's glyph and went with it; `i-print` was never referenced here at
+    all — characters.php draws the printer and declares its own copy. Nothing
+    on this page draws an icon now, so there is no sprite to keep.
   -->
-  <svg class="icon-sprite" aria-hidden="true" focusable="false">
-    <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5l11 7-11 7z"/></symbol>
-    <!-- A printer: paper going in at the top, the sheet coming out below. -->
-    <symbol id="i-print" viewBox="0 0 24 24">
-      <path d="M7 9V3h10v6"/>
-      <path d="M5 9h14a2 2 0 012 2v5h-4"/>
-      <path d="M7 16H3v-5a2 2 0 012-2"/>
-      <path d="M7 14h10v7H7z"/>
-    </symbol>
-  </svg>
 
   <main class="container">
     <div id="error-banner" class="error-banner hidden"></div>
@@ -177,8 +165,10 @@ require_signed_in_page();
         return [];   // the character list reports failures; one banner is enough
       }
 
+      // The row goes, not just the button: it is the only thing left in
+      // `.hero-actions`, and an empty flex box still spends its top margin.
       const newGame = document.getElementById('new-game-btn');
-      if (newGame && modules.length) newGame.remove();
+      if (newGame && modules.length) (newGame.closest('.hero-actions') || newGame).remove();
 
       host.innerHTML = '';
       modules.forEach((m) => {
@@ -220,6 +210,12 @@ require_signed_in_page();
         // is anything behind it. With parties here, Play is the thing you came
         // for; with none, Play would open an empty page and Create is the only
         // useful move — so it takes the emphasis and Play is not drawn at all.
+        //
+        // They go directly under the plate, which is to say under the title
+        // lying across it, and above the blurb. The plate is a fixed 3:2, so
+        // everything above them is the same height on every card and the row
+        // lines up on its own — which is what `margin-top: auto` was buying
+        // when they sat on the card's foot.
         const actions = document.createElement('div');
         actions.className = 'module-actions';
 
@@ -237,7 +233,7 @@ require_signed_in_page();
         start.textContent = n ? 'New party' : 'Start a game here';
         actions.appendChild(start);
 
-        card.appendChild(actions);
+        card.insertBefore(actions, card.querySelector('.module-body'));
         host.appendChild(card);
       });
 
