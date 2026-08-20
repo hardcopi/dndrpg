@@ -267,6 +267,14 @@ function sheet_fixture(array $c): array
             'character' => $c + [
                 'subclass' => null, 'background' => 'Folk Hero', 'alignment' => 'Neutral Good',
                 'armor_class' => 15, 'speed' => 30, 'gold' => 42,
+                // Rules::xpProgress's shape. The bar under the pills is what
+                // the Random encounter button beside it is for, so a fixture
+                // without one would hide half of what this pane draws.
+                'xp_progress' => [
+                    'level' => (int) $c['level'], 'xp' => 1273,
+                    'next_level' => (int) $c['level'] + 1,
+                    'earned' => 373, 'needed' => 1800, 'percent' => 20, 'remaining' => 1427,
+                ],
             ],
             'proficiency_bonus' => $prof,
             'abilities' => $abilities,

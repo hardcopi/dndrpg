@@ -177,21 +177,69 @@ class PitEngine
      */
     public function bout(int $partyId, string $tier): int
     {
+        return $this->build(
+            $partyId,
+            $tier,
+            'pit',
+            static fn (string $roster, string $blurb): array
+                => ['The Pit: ' . $roster, 'The gate goes up. ' . $blurb]
+        );
+    }
+
+    /**
+     * The same match, with no pit around it.
+     *
+     * A fight taken wherever the party happens to be standing, so a player can
+     * go and find one without walking to the arena in the Quarry Wilds — which
+     * is the only place in the world that sells one, and only in one module of
+     * four. It is the pit's own arithmetic on purpose: the sizing, the roster
+     * and the payout are what they are at the arena, and what is skipped is
+     * the walk rather than the price. A skirmish that paid better than the pit
+     * would make the pit a worse version of the front page.
+     *
+     * Its own scratch row, keyed apart from the pit's, so a bout arranged at
+     * the arena and a skirmish asked for from the picker cannot deal each
+     * other's monsters. One fight can be live at a time either way — that is
+     * CombatEngine's rule and this does not touch it — but two rows that are
+     * rewritten by different doors should not share a key.
+     */
+    public function skirmish(int $partyId, string $tier = 'fair'): int
+    {
+        return $this->build(
+            $partyId,
+            $tier,
+            'skirmish',
+            static fn (string $roster, string $blurb): array
+                => [$roster, 'Something on the road: ' . lcfirst($blurb)]
+        );
+    }
+
+    /**
+     * Roll a group and write it into this party's scratch encounter.
+     *
+     * `$prose` is handed the roster sentence and the tier's blurb and answers
+     * with a name and a description, which is the only thing that differs
+     * between a bout and a skirmish. Everything that decides what you are
+     * about to fight is shared, deliberately — two copies of a difficulty
+     * curve is how one of them quietly stops matching the other.
+     *
+     * @param callable(string, string): array{0:string, 1:string} $prose
+     */
+    private function build(int $partyId, string $tier, string $kind, callable $prose): int
+    {
         if (!isset(self::TIERS[$tier])) {
             throw new InvalidArgumentException('No such bout.');
         }
         $group = $this->pick($this->budget($partyId, $tier));
         if (!$group) {
-            throw new RuntimeException('The pit has nothing to send out.');
+            throw new RuntimeException('There is nothing to send out.');
         }
 
-        $encounterId = $this->scratchEncounter($partyId);
+        [$name, $description] = $prose($this->describe($group), self::TIERS[$tier]['blurb']);
+
+        $encounterId = $this->scratchEncounter($partyId, $kind);
         $this->db->prepare('UPDATE encounters SET name = ?, description = ? WHERE id = ?')
-            ->execute([
-                'The Pit: ' . $this->describe($group),
-                'The gate goes up. ' . self::TIERS[$tier]['blurb'],
-                $encounterId,
-            ]);
+            ->execute([$name, $description, $encounterId]);
 
         $this->db->prepare('DELETE FROM encounter_monsters WHERE encounter_id = ?')
             ->execute([$encounterId]);
@@ -348,9 +396,12 @@ class PitEngine
     }
 
     /** This party's scratch encounter row, made on first use. */
-    private function scratchEncounter(int $partyId): int
+    private function scratchEncounter(int $partyId, string $kind = 'pit'): int
     {
-        $key = '_pit_party_' . $partyId;
+        // `_pit_party_N` and `_skirmish_party_N`. The leading underscore is the
+        // mark of machinery — DelveEngine's generated rooms wear it too, and
+        // apply_content_safely.py leaves anything wearing it alone.
+        $key = '_' . $kind . '_party_' . $partyId;
         $stmt = $this->db->prepare('SELECT id FROM encounters WHERE encounter_key = ?');
         $stmt->execute([$key]);
         $id = (int) ($stmt->fetchColumn() ?: 0);
@@ -371,6 +422,10 @@ class PitEngine
                  allow_flee, allow_parley, scale_to_party)
              VALUES (?, ?, ?, 0, 0, ?, 1, 0, 0)'
         )->execute([$key, 'The Pit', 'A bout in the fighting pit.', 'pit']);
+        // `is_random` is 0 on purpose and means something narrower than the
+        // name suggests: it marks a row the travel roll may DRAW from, and
+        // this row is not placed anywhere to be drawn from. A skirmish is
+        // asked for by name; it is never stumbled into.
         return (int) $this->db->lastInsertId();
     }
 }

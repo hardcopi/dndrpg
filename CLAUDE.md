@@ -695,6 +695,44 @@ Three things about that page are load-bearing:
   with no party has no module and no game to resume, and is told so instead of
   being given a button that would open somebody else's.
 
+**A fight is the second door on the sheet.** Beside Play is *Random encounter*,
+which deals the party the fighting pit's own match wherever they are standing
+and drops them onto the board — `combat/random`, which is `PitEngine::skirmish()`
+and then the ordinary `startEncounter`. Four things about it are deliberate:
+
+- **It is the pit's arithmetic, not a second copy of it.** `bout()` and
+  `skirmish()` are one private `build()` with different prose; the sizing, the
+  roster and the payout are the arena's. What the front page skips is the walk
+  to the Quarry Wilds — which is one location, in one module of four — and not
+  the price. A skirmish that paid better than the pit would make the pit the
+  worse version of it.
+- **Its scratch encounter is unplaced and keyed apart** (`_skirmish_party_N`
+  beside `_pit_party_N`): no region, no location, `is_random` 0, so the row can
+  never be drawn on a travel roll. It is asked for by name or not at all.
+- **Asking twice hands back the fight you are in.** One session per character is
+  CombatEngine's rule; the alternative to answering here would be an error the
+  front page cannot act on, and the button means "take me to a fight".
+- **A party with nobody standing is refused.** The engine would deal a fight to
+  four unconscious characters and end it on the first monster turn, which reads
+  as a broken button rather than as a party that needs to rest.
+
+The XP bar on the sheet is there because of that button: a page that offers a
+way to earn experience and never shows what it bought is asking to be taken on
+trust. It is `Rules::xpProgress`, carried on the character row — the ladder is
+not restated in the page.
+
+**The level-up is claimed on the victory bar, not after it.** The experience is
+already banked by then: `CombatEngine` grants it inside the action that ends the
+fight and records the level as *owed* rather than applying it, because a round is
+no place to stop and wait on a hit die. `ui-combat.js` claims it as the outcome
+bar is drawn, so the ceremony happens over the battlefield with "+120 XP" still
+behind it, rather than a beat later on a map screen that has nothing to do with
+it. `leaveCombat` still asks on the way out — a fight that ended in a parley or a
+flight never drew an outcome bar, and talking your way out of something can pay
+experience too. The guard is the combat session's id and not a boolean, because
+it has to survive several redraws of one victory bar and must not survive into
+the next fight.
+
 **The shelf is not gone; it is what the same pane shows when you press New.**
 Starting a fresh game is the one time the adventure is a real question, so that
 is when it is asked — and the cards are the same cards, with the same cover
@@ -772,7 +810,10 @@ route's, the numbers are invented, and no modifier on that page should be
 believed. It finds the page's `<body>` by tag rather than by the literal
 string `<body>`: index.php grew a class on it and the "preview" banner silently
 stopped drawing on the one page the bench is mostly used for. `tools/test_characters_page.sh` covers the
-guard, the catalogue, the cover art and the grouping contract over real HTTP.
+guard, the catalogue, the cover art and the grouping contract over real HTTP;
+`tools/test_skirmish.sh` covers the fight door — that it works away from an
+arena, refuses a wiped party, cannot deal two fights at once, and writes a row
+nothing can stumble into.
 
 The front page used to spend its first column on a flat list of every character
 the account had ever made, with `MODULE_SLOTS = 2` capping the module row

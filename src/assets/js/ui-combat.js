@@ -91,6 +91,9 @@
     // A spell with an area, waiting for the cell to put it on:
     // {spell_id, shape, ft, name}. Cleared on cast or on Escape.
     placing: null,
+    // The session whose owed levels have already been offered, so the ceremony
+    // opens once on the victory bar and not on every redraw behind it.
+    claimed: null,
   };
 
   function root() {
@@ -907,6 +910,18 @@
       const b = bar.querySelector('[data-dismiss]');
       b.onclick = () => leaveCombat(s.status);
       b.focus();
+      // Level up before the fight is packed away, not after.
+      //
+      // The experience is already banked: CombatEngine grants it inside the
+      // action that ended the fight, and records the level as OWED rather than
+      // applying it, because a round is no place to stop and wait on a hit die.
+      // So by the time this bar is drawn the level is sitting there to be
+      // claimed, and claiming it here means the ceremony happens over the
+      // battlefield you just won — with the outcome line still reading
+      // "+120 XP" behind it — rather than a beat later on a map screen that has
+      // nothing to do with it. leaveCombat still asks, for the fights that end
+      // some other way and for anything this missed.
+      claimLevels(s.status);
       return;
     }
 
@@ -1557,10 +1572,32 @@
     await G().refreshAll();
     if (status === 'defeat') G().log('You wake at the Golden Flagon…', 'danger', 'combat');
 
-    // A won fight is the commonest way to level, and the level was recorded as
-    // owed rather than applied — a round is no place to stop and wait on a hit
-    // die the player has not thrown. Claim it now the fight is over.
-    if (window.LevelUp) await window.LevelUp.checkPending();
+    // Whatever the outcome bar did not already claim. A won fight offers the
+    // ceremony on the bar itself; a fight that ended in a parley or a flight
+    // never drew one, and experience can still have arrived — Effects::grantXp
+    // pays for talking your way out of things.
+    await claimLevels(status, true);
+  }
+
+  /**
+   * Claim any level the party is owed, once per fight.
+   *
+   * Guarded on the session id rather than a bare boolean: the guard has to
+   * survive several redraws of one victory bar and must NOT survive into the
+   * next fight, and the session id is the one value with exactly that lifetime.
+   *
+   * `force` is for the way out: by then the board is gone, another ceremony
+   * cannot land on top of anything, and a level that somehow went unclaimed on
+   * the bar is better claimed late than left owed until the next fight.
+   */
+  async function claimLevels(status, force) {
+    if (!window.LevelUp) return;
+    const id = G().state.combat?.id ?? null;
+    if (!force) {
+      if (status !== 'victory' || ui.claimed === id) return;
+      ui.claimed = id;
+    }
+    await window.LevelUp.checkPending();
   }
 
   // =========================================================================

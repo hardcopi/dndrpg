@@ -311,14 +311,42 @@ require_signed_in_page();
       // walk into. A character with no party has no module and no game to
       // resume; they get the creator instead of a button that would open one.
       const play = ctx.party_id
-        ? `<button type="button" class="btn btn-primary btn-lg play-btn"
-                   data-party="${esc(ctx.party_id)}">
-             <svg aria-hidden="true"><use href="#i-play"></use></svg>
-             Play ${esc(ctx.module_name || 'this adventure')}
-           </button>
+        ? `<div class="play-doors">
+             <button type="button" class="btn btn-primary btn-lg play-btn"
+                     data-party="${esc(ctx.party_id)}">
+               <svg aria-hidden="true"><use href="#i-play"></use></svg>
+               Play ${esc(ctx.module_name || 'this adventure')}
+             </button>
+             <button type="button" class="btn btn-lg fight-btn"
+                     data-party="${esc(ctx.party_id)}"
+                     title="A fight built to this party's size and level, taken where they stand. Worth exactly what the same monsters are worth anywhere else.">
+               <svg aria-hidden="true"><use href="#i-swords"></use></svg>
+               Random encounter
+             </button>
+           </div>
            ${where ? `<p class="play-where">${esc(where)}</p>` : ''}`
         : `<p class="help-hint">This one never joined a party, so there is no
              game to resume.</p>`;
+
+      /*
+       * How far off the next level is.
+       *
+       * On the sheet because of the button beside it: a random encounter is
+       * offered here as a way of earning experience, and a page that offers
+       * that without ever showing what it bought is asking the player to take
+       * it on trust. `xp_progress` is Rules::xpProgress, computed on the server
+       * and carried on every character — the ladder is never restated here.
+       */
+      const xp = c.xp_progress;
+      const xpBar = xp ? `
+        <div class="bar-row pick-xp">
+          <span class="bar-label">${xp.next_level === null
+            ? 'Experience' : 'To level ' + esc(xp.next_level)}</span>
+          <div class="xp-bar"><span style="width:${esc(xp.percent)}%"></span></div>
+          <span class="bar-value">${xp.next_level === null
+            ? esc(xp.xp) + ' XP · max level'
+            : esc(xp.earned) + ' / ' + esc(xp.needed)}</span>
+        </div>` : '';
 
       const abilities = s.abilities.map((a) => `
         <div class="ability-box sheet-ab">
@@ -391,6 +419,7 @@ require_signed_in_page();
             <div class="sheet-stat-pill"><span>Hit dice</span><strong>${esc(s.hit_dice)}</strong></div>
             <div class="sheet-stat-pill"><span>Gold</span><strong>${esc(c.gold ?? 0)} gp</strong></div>
           </div>
+          ${xpBar}
 
           <div class="sheet-section">
             <h3>Ability scores</h3>
@@ -511,15 +540,31 @@ require_signed_in_page();
      * `leader_character_id`.
      */
     document.getElementById('detail').addEventListener('click', async (e) => {
-      const btn = e.target.closest('.play-btn');
+      const btn = e.target.closest('.play-btn, .fight-btn');
       if (!btn) return;
+      const fight = btn.classList.contains('fight-btn');
       btn.disabled = true;
       try {
         await API.post('session/select', { party_id: Number(btn.dataset.party) });
+        /*
+         * The fight is arranged BEFORE the page changes, not after.
+         *
+         * game.php reads `session/status` on boot and opens in combat when the
+         * session has an active fight, so a skirmish started here is already
+         * on the board by the time the game draws itself — one navigation, and
+         * no moment where the player is standing on a map wondering whether
+         * the button worked. It is also the only order that can report a
+         * refusal: a party with nobody on their feet is told so here, on a
+         * page that can say it, rather than in a game they have just been sent
+         * to.
+         */
+        if (fight) await API.post('combat/random', {});
         location.href = 'game.php';
       } catch (err) {
         btn.disabled = false;
-        showError(err.message || 'Could not open that game.');
+        showError(err.message || (fight
+          ? 'Could not find them a fight.'
+          : 'Could not open that game.'));
       }
     });
 
@@ -563,6 +608,14 @@ require_signed_in_page();
 
   <svg class="icon-sprite" aria-hidden="true" focusable="false">
     <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5l11 7-11 7z"/></symbol>
+    <!-- Crossed blades. Stroked rather than filled, so it reads beside the
+         solid play triangle as the quieter of the two doors. -->
+    <symbol id="i-swords" viewBox="0 0 24 24">
+      <path d="M4 3l10 10M20 3L10 13" stroke="currentColor" stroke-width="2"
+            fill="none" stroke-linecap="round"/>
+      <path d="M3 17l4 4M21 17l-4 4M13 15l-4 4" stroke="currentColor"
+            stroke-width="2" fill="none" stroke-linecap="round"/>
+    </symbol>
   </svg>
 </body>
 </html>

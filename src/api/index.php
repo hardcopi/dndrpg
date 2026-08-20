@@ -1692,6 +1692,66 @@ function handle_combat(string $action): void
         ]);
     }
 
+    // A fight found on the road: the pit's match, taken wherever the party is
+    // standing. Offered beside Play on the front page, so a player who wants a
+    // fight for its own sake can have one without walking to the arena in the
+    // Quarry Wilds — which is one location, in one module of four.
+    //
+    // Same sizing and same payout as a bout at the arena; see PitEngine.
+    if ($action === 'random') {
+        require_method('POST');
+        $id = require_character_id();
+        $partyId = require_party_id();
+        $body = read_json_body();
+
+        // Already fighting: hand back the fight they are in rather than
+        // refusing or, worse, starting a second one. The button means "take me
+        // to a fight", and the one they are already in is a fight — a party
+        // interrupted mid-bout by a reload presses this and lands back on the
+        // sand. CombatEngine allows one active session per character, so the
+        // alternative to answering here is an error the front page cannot act
+        // on.
+        $active = $engine->getActiveSession($id);
+        if ($active) {
+            json_response(['ok' => true, 'combat' => $active, 'resumed' => true]);
+        }
+
+        // Nobody on their feet. The engine would happily deal a fight to four
+        // unconscious characters and end it on the first monster turn, which
+        // reads as the button being broken rather than as the party needing a
+        // rest.
+        $up = $db->prepare(
+            'SELECT COUNT(*) FROM characters c
+             INNER JOIN character_party cp ON cp.character_id = c.id
+             WHERE cp.party_id = ? AND c.is_active = 1 AND c.current_hp > 0'
+        );
+        $up->execute([$partyId]);
+        if ((int) $up->fetchColumn() === 0) {
+            json_error('Nobody in this party is in any state to fight. Rest first.', 400);
+        }
+
+        $tier = trim((string) ($body['tier'] ?? 'fair'));
+        if (!isset(PitEngine::TIERS[$tier])) {
+            $tier = 'fair';
+        }
+
+        $char = (new LocationEngine($db))->getCharacterPosition($id);
+        $encounterId = (new PitEngine($db))->skirmish($partyId, $tier);
+        json_response([
+            'ok'     => true,
+            // A seed of its own, for the reason the pit passes one: the scratch
+            // encounter keeps the same row id for the life of the party, and a
+            // battlefield derived from that id alone would be the same twelve
+            // rocks every single time.
+            'combat' => $engine->startEncounter(
+                $id,
+                $encounterId,
+                (int) $char['current_location_id'],
+                random_int(0, PHP_INT_MAX)
+            ),
+        ]);
+    }
+
     // Finishes an attack the player asked to roll themselves. The die is thrown
     // by CheckService; this resumes the turn it interrupted.
     if ($action === 'resolve_check') {
