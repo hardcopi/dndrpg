@@ -308,6 +308,14 @@ function sheet_fixture(array $c): array
             ],
             'spellcasting' => $spellcasting,
         ],
+        // The three difficulties, as the route ships them from PitEngine::TIERS.
+        // The picker draws a button per row, so a fixture without them draws a
+        // caption and no fights.
+        'tiers' => [
+            ['tier' => 'warmup', 'label' => 'A warm-up',    'blurb' => 'Something to break a sweat on.'],
+            ['tier' => 'fair',   'label' => 'A fair match', 'blurb' => 'An honest fight, evenly made.'],
+            ['tier' => 'hard',   'label' => 'A hard match', 'blurb' => 'The crowd will get its money back.'],
+        ],
         'context' => [
             'party_id' => $c['party_id'],
             'party_name' => $c['party_name'],

@@ -1133,7 +1133,25 @@ function handle_session(string $action): void
             $context += $where->fetch() ?: [];
         }
 
-        json_response(['ok' => true, 'sheet' => $sheet, 'context' => $context]);
+        json_response([
+            'ok'      => true,
+            'sheet'   => $sheet,
+            'context' => $context,
+            // What a fight can be asked for at, easiest first. Shipped from the
+            // constant rather than written into the page, for the reason the
+            // printed book reads the pit's odds out of the engine: a second
+            // copy of a difficulty table is one that can quietly stop matching
+            // the fights it names. The page draws a button per row of this and
+            // sends the `tier` back untouched.
+            'tiers'   => array_map(
+                static fn (string $key): array => [
+                    'tier'  => $key,
+                    'label' => PitEngine::TIERS[$key]['label'],
+                    'blurb' => PitEngine::TIERS[$key]['blurb'],
+                ],
+                array_keys(PitEngine::TIERS)
+            ),
+        ]);
     }
     if ($action === 'modules') {
         // What the picker draws: every module you can start, and how much of

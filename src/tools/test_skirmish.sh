@@ -8,6 +8,7 @@
 # the things that make this door different from that one:
 #
 #   * it works away from an arena, which combat/pit deliberately refuses;
+#   * the difficulty the player pressed is the difficulty that gets built;
 #   * it cannot deal a party two fights at once;
 #   * it refuses a party with nobody on their feet, rather than dealing a fight
 #     that ends on the first monster turn;
@@ -157,6 +158,62 @@ LIVE=$(sql "SELECT COUNT(*) FROM combat_sessions cs
               WHERE u.username = '${USER}' AND cs.is_active = 1")
 check "and there is exactly one live session" \
   "$([ "${LIVE:-0}" = "1" ] && echo 1 || echo 0)" "${LIVE} session(s)"
+
+echo "== the three difficulties are the engine's, and the one pressed is built =="
+# The picker draws a button per row of PitEngine::TIERS as `session/sheet` ships
+# them, so the page cannot offer a tier the engine does not have. What is
+# checked on the way back is that the tier travelled: skirmish() writes the
+# chosen tier's own blurb into the encounter's description, so the row says
+# which of the three was actually rolled.
+MINE=$(jq_ "$(api "session/list")" "
+import json,sys
+print(json.load(sys.stdin)['characters'][0]['id'])")
+TIERS=$(jq_ "$(api "session/sheet&character_id=${MINE}")" "
+import json,sys
+ts = json.load(sys.stdin).get('tiers') or []
+print(1 if [t['tier'] for t in ts] == ['warmup','fair','hard']
+        and all(t.get('label') and t.get('blurb') for t in ts) else 0,
+      ','.join(t['tier'] for t in ts) or '-')")
+check "session/sheet ships the three tiers, easiest first" \
+  "${TIERS%% *}" "got ${TIERS#* }"
+
+for T in warmup fair hard; do
+  # One fight at a time is CombatEngine's rule, so the last one is closed
+  # before the next tier is asked for.
+  sql "UPDATE combat_sessions cs
+         INNER JOIN characters c ON c.id = cs.character_id
+         INNER JOIN users u ON u.id = c.user_id
+       SET cs.is_active = 0 WHERE u.username = '${USER}';"
+  OUT=$(api "combat/random" "{\"tier\":\"${T}\"}")
+  LIVE=$(jq_ "$OUT" "
+import json,sys
+d = json.load(sys.stdin)
+s = (d.get('combat') or {}).get('state') or {}
+print(1 if d.get('ok') and not d.get('resumed') and s.get('status') == 'active' else 0)")
+  BLURB=$(sql "SELECT description FROM encounters WHERE encounter_key = '_skirmish_party_${PID}'")
+  case "$T" in
+    warmup) WANT='break a sweat' ;;
+    fair)   WANT='evenly made' ;;
+    hard)   WANT='money back' ;;
+  esac
+  check "a '${T}' fight starts" "$LIVE" "$(head -c 140 <<<"$OUT")"
+  check "and the row it wrote is the ${T} one" \
+    "$(has "$BLURB" "$WANT")" "description was '${BLURB}'"
+done
+
+# A tier nobody offers is not an error page: the picker sends what the server
+# gave it, so anything else is a request that did not come from the picker, and
+# a fair match is the honest thing to answer with.
+sql "UPDATE combat_sessions cs
+       INNER JOIN characters c ON c.id = cs.character_id
+       INNER JOIN users u ON u.id = c.user_id
+     SET cs.is_active = 0 WHERE u.username = '${USER}';"
+ODD=$(api "combat/random" '{"tier":"impossible"}')
+check "an unknown tier falls back rather than failing" \
+  "$(has "$ODD" '"ok":true')" "$(head -c 140 <<<"$ODD")"
+BADROW=$(sql "SELECT description FROM encounters WHERE encounter_key = '_skirmish_party_${PID}'")
+check "and what it falls back to is the fair match" \
+  "$(has "$BADROW" 'evenly made')" "description was '${BADROW}'"
 
 echo "== nobody on their feet, no fight =="
 sql "UPDATE combat_sessions cs

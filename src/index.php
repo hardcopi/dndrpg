@@ -317,14 +317,20 @@ require_signed_in_page();
                <svg aria-hidden="true"><use href="#i-play"></use></svg>
                Play ${esc(ctx.module_name || 'this adventure')}
              </button>
-             <button type="button" class="btn btn-lg fight-btn"
-                     data-party="${esc(ctx.party_id)}"
-                     title="A fight built to this party's size and level, taken where they stand. Worth exactly what the same monsters are worth anywhere else.">
+           </div>
+           ${where ? `<p class="play-where">${esc(where)}</p>` : ''}
+           <div class="fight-row">
+             <span class="fight-label">
                <svg aria-hidden="true"><use href="#i-swords"></use></svg>
                Random encounter
-             </button>
-           </div>
-           ${where ? `<p class="play-where">${esc(where)}</p>` : ''}`
+             </span>
+             ${(payload.tiers || []).map((t) => `
+               <button type="button" class="btn btn-small fight-btn"
+                       data-party="${esc(ctx.party_id)}" data-tier="${esc(t.tier)}"
+                       title="${esc(t.blurb)} Built to this party's size and level, and worth exactly what the same monsters are worth anywhere else.">
+                 ${esc(t.label)}
+               </button>`).join('')}
+           </div>`
         : `<p class="help-hint">This one never joined a party, so there is no
              game to resume.</p>`;
 
@@ -558,7 +564,29 @@ require_signed_in_page();
          * page that can say it, rather than in a game they have just been sent
          * to.
          */
-        if (fight) await API.post('combat/random', {});
+        if (fight) {
+          const r = await API.post('combat/random', { tier: btn.dataset.tier || 'fair' });
+          /*
+           * Which fight to come back from.
+           *
+           * A skirmish is a sortie from this page and the player is returned
+           * here when it ends, which the game has to be told because the fight
+           * itself is an ordinary one — same engine, same board, same payout —
+           * and nothing about it says where it was arranged.
+           *
+           * The session's OWN id, not a bare "came from the picker" flag: the
+           * flag would still be sitting there an hour later when some authored
+           * fight ended and would bounce the player out of their game. Matched
+           * against the fight that is ending, it can only ever fire once, for
+           * the fight it was written for.
+           *
+           * sessionStorage rather than the server, because this is where a
+           * browser tab is going next — not a fact about the playthrough. It
+           * belongs to the tab, survives a reload of it, and does not follow
+           * the save into a window that never pressed this button.
+           */
+          sessionStorage.setItem('rpg:picker-fight', String(r.combat?.id ?? ''));
+        }
         location.href = 'game.php';
       } catch (err) {
         btn.disabled = false;

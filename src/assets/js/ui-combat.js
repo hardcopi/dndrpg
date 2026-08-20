@@ -94,6 +94,8 @@
     // The session whose owed levels have already been offered, so the ceremony
     // opens once on the victory bar and not on every redraw behind it.
     claimed: null,
+    // That offer, in flight. Awaited on the way out.
+    claiming: null,
   };
 
   function root() {
@@ -921,7 +923,13 @@
       // "+120 XP" behind it — rather than a beat later on a map screen that has
       // nothing to do with it. leaveCombat still asks, for the fights that end
       // some other way and for anything this missed.
-      claimLevels(s.status);
+      //
+      // Kept as a promise rather than fired and forgotten: leaving the fight
+      // waits on it, so a ceremony still open when Continue is somehow pressed
+      // finishes before the board goes — which matters most for a skirmish,
+      // where leaving is a navigation and a half-claimed level would be left
+      // behind on a page that is gone.
+      ui.claiming = claimLevels(s.status);
       return;
     }
 
@@ -1562,7 +1570,50 @@
     }
   }
 
+  /**
+   * Was this fight arranged from the character picker?
+   *
+   * The front page writes the id of the fight it started; a fight that ends
+   * with that id is a sortie from that page and the player goes back to it.
+   * Read and cleared in one go, so it can only ever be spent on the fight it
+   * was written for — a bare "came from the picker" flag left lying about would
+   * bounce somebody out of their game an hour later, when some authored fight
+   * happened to end.
+   */
+  function pickerSortie() {
+    let mark = null;
+    try {
+      mark = sessionStorage.getItem('rpg:picker-fight');
+      // Whatever happens next, this is spent. A player who presses Escape out
+      // of the game rather than Continue should not be sent to the picker by
+      // the fight after this one.
+      sessionStorage.removeItem('rpg:picker-fight');
+    } catch (e) {
+      return false;    // private mode, or storage disabled: stay in the game
+    }
+    return !!mark && mark === String(G().state.combat?.id ?? '');
+  }
+
   async function leaveCombat(status) {
+    // The victory bar's ceremony, if one opened. Awaited before anything is
+    // taken down, and before any navigation.
+    if (ui.claiming) {
+      try { await ui.claiming; } catch (e) { /* a level owed is not worth an error */ }
+      ui.claiming = null;
+    }
+
+    // A fight taken from the front page ends by going back to it, with the
+    // party's hit points and the experience bar showing what the fight cost
+    // and bought. Everything below this — closing the board, refreshing the
+    // world, the walk back to the map — is for a fight that belongs to the
+    // game, and there is no point doing any of it to a page about to be
+    // replaced.
+    if (pickerSortie()) {
+      await claimLevels(status, true);
+      location.href = 'index.php';
+      return;
+    }
+
     close();
     G().state.mode = 'explore';
     G().state.combat = null;

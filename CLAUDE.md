@@ -695,10 +695,11 @@ Three things about that page are load-bearing:
   with no party has no module and no game to resume, and is told so instead of
   being given a button that would open somebody else's.
 
-**A fight is the second door on the sheet.** Beside Play is *Random encounter*,
-which deals the party the fighting pit's own match wherever they are standing
-and drops them onto the board — `combat/random`, which is `PitEngine::skirmish()`
-and then the ordinary `startEncounter`. Four things about it are deliberate:
+**A fight is the second door on the sheet.** Under Play is *Random encounter*,
+three buttons — one per difficulty — which deal the party the fighting pit's own
+match wherever they are standing and drop them onto the board: `combat/random`,
+which is `PitEngine::skirmish()` and then the ordinary `startEncounter`. Six
+things about it are deliberate:
 
 - **It is the pit's arithmetic, not a second copy of it.** `bout()` and
   `skirmish()` are one private `build()` with different prose; the sizing, the
@@ -715,6 +716,23 @@ and then the ordinary `startEncounter`. Four things about it are deliberate:
 - **A party with nobody standing is refused.** The engine would deal a fight to
   four unconscious characters and end it on the first monster turn, which reads
   as a broken button rather than as a party that needs to rest.
+- **The three difficulties are `PitEngine::TIERS`, shipped by `session/sheet`
+  and drawn from what arrives.** The page holds no copy of the table — a second
+  list of difficulties is one that can quietly stop matching the fights it names
+  — so a tier added to the constant appears on the front page with no change
+  here, and a tier the engine does not have cannot be offered. A `tier` the
+  route does not recognise falls back to `fair` rather than failing: the picker
+  only ever sends what the server gave it, so anything else came from somewhere
+  else.
+- **A fight taken from the picker ends by going back to the picker.** The page
+  writes the id of the fight it started into `sessionStorage`, and `leaveCombat`
+  returns there when a fight with THAT id ends. The session's own id rather than
+  a bare "came from the picker" flag, which would still be lying about an hour
+  later and would bounce somebody out of their game when an authored fight
+  happened to end; `sessionStorage` rather than the server, because where a
+  browser tab goes next is not a fact about the playthrough. You land back on
+  your own sheet with the hit points and the experience bar showing what the
+  fight cost and bought.
 
 The XP bar on the sheet is there because of that button: a page that offers a
 way to earn experience and never shows what it bought is asking to be taken on
@@ -729,7 +747,9 @@ bar is drawn, so the ceremony happens over the battlefield with "+120 XP" still
 behind it, rather than a beat later on a map screen that has nothing to do with
 it. `leaveCombat` still asks on the way out — a fight that ended in a parley or a
 flight never drew an outcome bar, and talking your way out of something can pay
-experience too. The guard is the combat session's id and not a boolean, because
+experience too — and it now *waits* on the bar's ceremony (`ui.claiming`) before
+taking anything down, because for a skirmish leaving is a navigation and a
+half-claimed level would be left behind on a page that is gone. The guard is the combat session's id and not a boolean, because
 it has to survive several redraws of one victory bar and must not survive into
 the next fight.
 

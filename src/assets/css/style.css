@@ -6757,14 +6757,36 @@ body.home-page > main { flex: 1 0 auto; padding-top: var(--sp-32); }
 }
 .pick-play .btn { display: inline-flex; align-items: center; gap: var(--sp-8); }
 .pick-play .btn svg { width: 1em; height: 1em; fill: currentColor; }
-/* Crossed blades are drawn, not filled: `fill: currentColor` would flood the
-   strokes into a blob at 1em. */
-.pick-play .fight-btn svg { fill: none; }
-/* Two doors on one line, wrapping rather than shrinking. Resuming the game is
-   the loud one and stays first; a fight for its own sake is the quiet one
-   beside it, in the ordinary button colours — it is a thing you can do here,
-   not the reason the page exists. */
+/* The doors on one line, wrapping rather than shrinking. */
 .play-doors { display: flex; flex-wrap: wrap; gap: var(--sp-10); align-items: center; }
+
+/* The fights, on their own line under Play and at half its weight.
+   Three buttons, one per tier, because a fight has a difficulty and picking it
+   is the whole of the choice — offering one and deciding for the player which
+   it was is the thing the pit's own card has never done. They are small and
+   ungilded on purpose: resuming the game is why the page exists and a row of
+   four gold buttons would say otherwise. */
+.fight-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-8);
+  margin-top: var(--sp-12);
+  padding-top: var(--sp-12);
+  border-top: 1px solid var(--gold-dim);
+}
+.fight-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-6);
+  margin-right: var(--sp-2);
+  font-family: var(--font-ui);
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+.fight-label svg { width: 1em; height: 1em; fill: none; stroke: currentColor; }
 /* Nothing to press: a character with no party has no game to resume, and a
    gold-lit box saying so reads as a button that failed rather than as a
    sentence. Same frame, no light in it. */
