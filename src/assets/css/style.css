@@ -6748,6 +6748,71 @@ body.home-page > main { flex: 1 0 auto; padding-top: var(--sp-32); }
   .shelf-grid { grid-template-columns: minmax(0, 1fr); }
 }
 
+/* The party, across the top of the sheet.
+
+   Tabs rather than a second list: they name the four who march together, they
+   sit directly above the buttons that act on all of them, and the one you are
+   reading is lit. A row that wraps rather than scrolls — a party holds four and
+   the pane is wide enough for four, but a long name should push the fourth onto
+   a second line rather than off the edge. */
+.party-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-8);
+  margin-top: var(--sp-16);
+}
+.party-tab {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-8);
+  flex: 1 1 10rem;
+  min-width: 0;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  padding: var(--sp-6) var(--sp-10) var(--sp-6) var(--sp-6);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--r-md);
+  background: rgba(0, 0, 0, 0.12);
+  transition: border-color var(--dur), background var(--dur);
+}
+.party-tab:hover { border-color: var(--ornament); background: rgba(0, 0, 0, 0.24); }
+.party-tab:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+/* The one on screen. Same gold edge the rail's own selection wears, so "this
+   is the one you are reading" reads identically in both places. */
+.party-tab.is-active {
+  border-color: var(--gold-dim);
+  background: var(--gold-well);
+  box-shadow: inset 3px 0 0 var(--gold);
+}
+.tab-face {
+  width: 2.1rem;
+  height: 2.1rem;
+  flex: 0 0 auto;
+  border-radius: var(--r-md);
+  object-fit: cover;
+  object-position: center top;
+  border: 1px solid var(--ornament);
+  background: var(--bg-raised);
+}
+.tab-body { min-width: 0; }
+.tab-name {
+  display: block;
+  color: var(--gold);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-snug);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.tab-sub {
+  display: block;
+  font-size: var(--fs-2xs);
+  color: var(--text-dim);
+  line-height: var(--lh-snug);
+}
+
 .pick-sheet {
   border: 1px solid var(--border-soft);
   border-radius: var(--r-lg);

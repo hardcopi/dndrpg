@@ -106,6 +106,7 @@ require_signed_in_page();
       modules: [],
       selected: null,      // character id whose sheet is open
       sheets: new Map(),   // id -> the payload, so flicking through the list is free
+      fetching: new Set(), // ids already on their way, so a prefetch is asked once
     };
 
     // =====================================================================
@@ -333,6 +334,53 @@ require_signed_in_page();
            </button>`
         : '<span class="camp-no" title="Camping needs open ground or an inn.">No camp here</span>';
 
+      /*
+       * The party, across the top of their own sheet.
+       *
+       * The rail on the right already lists everybody, but it lists them by
+       * ADVENTURE — every character on the account, in groups — and comparing
+       * two people in the same party means finding them among the rest of
+       * them. These are the four (or one) who march together, above the buttons
+       * that act on all of them, and they are the fastest thing on the page:
+       * every sheet is fetched once and kept, and the others are already on
+       * their way before you press anything (see prefetchParty).
+       *
+       * Drawn from `session/list`, which the page has already read, rather than
+       * asked for again — the party is a filter on a list that is in hand.
+       * Recruited companions are not in it: that route excludes them, and
+       * `session/sheet` refuses them, so a tab for one would be a button that
+       * cannot open.
+       *
+       * Not drawn at all for a party of one, where a row of tabs is a control
+       * with nothing to choose.
+       */
+      const party = ctx.party_id
+        ? state.characters.filter((m) => m.party_id == ctx.party_id)
+            .sort((a, b) => a.id - b.id)
+        : [];
+      const tabs = party.length > 1
+        ? `<div class="party-tabs" role="tablist" aria-label="Party members">
+             ${party.map((m) => {
+               const hurt = m.max_hp > 0 && m.current_hp / m.max_hp <= 0.34 ? ' is-hurt' : '';
+               const on = m.id == c.id;
+               return `<button type="button" class="party-tab${on ? ' is-active' : ''}"
+                       role="tab" aria-selected="${on ? 'true' : 'false'}"
+                       data-pick="${esc(m.id)}">
+                 ${m.sprite_key
+                   ? `<img class="tab-face" alt="" loading="lazy"
+                          src="assets/images/npcs/${encodeURIComponent(m.sprite_key)}_face.png"
+                          onerror="this.remove()">`
+                   : ''}
+                 <span class="tab-body">
+                   <span class="tab-name">${esc(m.name)}</span>
+                   <span class="tab-sub">${esc(m.class)} ${esc(m.level)} ·
+                     <span class="char-hp${hurt}">${esc(m.current_hp)}/${esc(m.max_hp)}</span></span>
+                 </span>
+               </button>`;
+             }).join('')}
+           </div>`
+        : '';
+
       const play = ctx.party_id
         ? `<div class="play-doors">
              <button type="button" class="btn btn-primary btn-lg play-btn"
@@ -437,6 +485,8 @@ require_signed_in_page();
             </div>
           </div>
 
+          ${tabs}
+
           <div class="pick-play${ctx.party_id ? '' : ' is-idle'}">${play}</div>
 
           <div class="sheet-combat-row">
@@ -508,6 +558,51 @@ require_signed_in_page();
      * Nothing on this page changes a character, so a cached sheet cannot go
      * stale while it is being looked at.
      */
+    /**
+     * One character's sheet, fetched once.
+     *
+     * Everything that wants a sheet goes through here, so a payload is asked
+     * for at most once however many ways there are to open it — the rail, a
+     * party tab, or the page landing on somebody. `fetching` is the guard that
+     * makes that true while a request is still in the air: without it, opening
+     * a sheet and having its party prefetched a moment later asks for the same
+     * character twice.
+     */
+    async function sheetFor(id) {
+      if (state.sheets.has(id)) return state.sheets.get(id);
+      if (state.fetching.has(id)) return null;    // already coming; whoever asked first will draw it
+      state.fetching.add(id);
+      try {
+        const payload = await API.get('session/sheet', { character_id: id });
+        state.sheets.set(id, payload);
+        return payload;
+      } finally {
+        state.fetching.delete(id);
+      }
+    }
+
+    /**
+     * The rest of the party, before they are asked for.
+     *
+     * The point of the tabs is that pressing one is instant, and it is only
+     * instant if the sheet is already in hand — the first press would otherwise
+     * pay for a fetch that could have happened while the player was reading the
+     * sheet in front of them. Fired and not awaited: nothing on screen is
+     * waiting for it, and a failure here costs a fetch later rather than
+     * anything visible now.
+     *
+     * Cheap by construction. A party holds at most four, they are asked for
+     * once each per page load, and a sheet cannot go stale while it is being
+     * looked at because nothing on this page changes a character — except camp,
+     * which drops the whole cache itself.
+     */
+    function prefetchParty(partyId) {
+      if (!partyId) return;
+      state.characters
+        .filter((m) => m.party_id == partyId && !state.sheets.has(m.id))
+        .forEach((m) => { sheetFor(Number(m.id)).catch(() => {}); });
+    }
+
     async function showSheet(id, pressed) {
       state.selected = id;
       renderRail();
@@ -521,14 +616,24 @@ require_signed_in_page();
       const stacked = window.matchMedia('(max-width: 62rem)').matches;
       if (pressed && stacked) host.scrollIntoView({ behavior: 'smooth', block: 'start' });
       if (state.sheets.has(id)) {
-        renderSheet(state.sheets.get(id));
+        const payload = state.sheets.get(id);
+        renderSheet(payload);
+        // Even from cache: the party this one belongs to may not have been
+        // seen yet, and the tabs it just drew are only fast if the sheets
+        // behind them are already coming.
+        prefetchParty(payload.context?.party_id);
         return;
       }
       host.innerHTML = '<p class="help-hint">Reading the sheet…</p>';
       try {
-        const payload = await API.get('session/sheet', { character_id: id });
-        state.sheets.set(id, payload);
-        if (state.selected === id) renderSheet(payload);
+        const payload = await sheetFor(id);
+        // Null means somebody else's request is already in the air for this
+        // id; it will land in the cache, and the click that started it is the
+        // one that draws.
+        if (payload && state.selected === id) {
+          renderSheet(payload);
+          prefetchParty(payload.context?.party_id);
+        }
       } catch (e) {
         host.innerHTML = `<p class="help-hint">Could not read that sheet.</p>`;
         showError(e.message);
@@ -623,6 +728,13 @@ require_signed_in_page();
       const camp = e.target.closest('.camp-btn');
       if (camp) {
         await makeCamp(camp);
+        return;
+      }
+      // A party tab: same door as a name in the rail, so the same handler
+      // answers it and the rail's highlight moves with the sheet.
+      const tab = e.target.closest('[data-pick]');
+      if (tab) {
+        showSheet(Number(tab.dataset.pick));
         return;
       }
       const btn = e.target.closest('.play-btn, .fight-btn');

@@ -682,6 +682,17 @@ Three things about that page are load-bearing:
   CSS puts the list in the right-hand column, which is where it belongs; on a
   phone there are no columns, source order wins, and you land on the list
   rather than on somebody the page picked for you.
+- **The party is tabbed across the top of its own sheet, and pressing a tab
+  costs nothing.** The rail lists everybody by ADVENTURE, so comparing two
+  people in the same party means finding them among the rest; the tabs are the
+  four who march together, sitting above the buttons that act on all of them.
+  They are drawn by filtering `session/list`, which the page has already read,
+  and the other members' sheets are **prefetched** as soon as one is opened —
+  `sheetFor()` is the single door to a payload and `state.fetching` stops a
+  prefetch and a click asking for the same character twice. A press is a
+  redraw from cache with no request at all, which was the point. Recruited
+  companions are not in it: `session/list` excludes them and `session/sheet`
+  refuses them, so a tab for one would be a button that cannot open.
 - **The sheet is `session/sheet`, not `character/sheet`.** The difference is the
   gate and not the payload: `character/sheet` asks
   `assert_character_accessible()` — is this somebody in the game you are
