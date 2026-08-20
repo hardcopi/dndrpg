@@ -762,6 +762,30 @@ things about it are deliberate:
   confirmation is two presses of the same button rather than `confirm()` — a
   browser modal stops every script on the page, cannot be styled, and cannot be
   driven by the tests. Looking at anybody else disarms it.
+- **The bag and the store take the pane over, rather than opening on top of
+  it.** This page has no modal machinery — the game's lives behind the whole
+  game shell — and a pane that swaps what it shows is less code and less to
+  explain. Both act on the character whose sheet is open, which is why
+  `inventory/list`, `buy` and `sell` now take a `character_id` and check it the
+  way `equip`, `use` and `give` always did: the session is playing somebody
+  else, or nobody. The Equip button is drawn from `equip_slot`, which
+  `InventoryService::list()` fills from `slotOf()` — the client does not work
+  out what can be worn, or it would offer a button the route refuses.
+- **The general store is a shop with no shopkeeper.** `shop_inventory` is keyed
+  by `npc_key`, so `GeneralStore` writes its own rows under the reserved
+  `_general_store` and everything downstream is the ordinary shop path —
+  `shopFor()`, `buy()`, `sell()`, untouched. What it sells is a RULE
+  (`GeneralStore::sells()`), never a list: ordinary goods, consumables, and
+  enchantment of at most +1, where the plus has to actually be a plus. An
+  uncommon cloak that grants advantage is not "+2" and is not general-store
+  stock either — that is the kind of thing the world is supposed to hand you.
+  It re-stocks on every visit, because the shelf is derived from `items` and a
+  content load is exactly when nobody remembers to re-stock a shop.
+- **`Rules::weaponAttack()` now adds a weapon's own plus**, which it never did:
+  `CombatEngine` read `attack_bonus`/`damage_bonus` when it swung and the sheet
+  did not when it printed, so a +1 longsword was rolled at +6 and written down
+  as +5. That was invisible while no shop sold one. `tools/test_rules.php`
+  covers it.
 - **Camp is the third door, beside the fights.** A party back from a skirmish
   at two hit points had nowhere on this page to sleep it off, and walking into
   the game to press the same button is the walk the fight button exists to

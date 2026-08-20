@@ -1207,10 +1207,27 @@ class Rules
 
         $mod = $ranged ? $dexMod : (($finesse && $dexMod > $strMod) ? $dexMod : $strMod);
 
+        // What the enchantment is worth.
+        //
+        // The same two properties CombatEngine reads when it swings the thing —
+        // a +1 longsword carries {"attack_bonus":1,"damage_bonus":1} — and they
+        // were being read there and nowhere else. The sheet therefore printed
+        // +5 for a weapon the engine rolled at +6, which is precisely the
+        // disagreement CharacterSheet's own header says a printed sheet must
+        // never carry: the player adds the number in front of them and has no
+        // way to know it is not the number the game added.
+        $atkBonus = 0;
+        $dmgBonus = 0;
+        if ($weapon !== null) {
+            $props = self::weaponProperties($weapon);
+            $atkBonus = (int) ($props['attack_bonus'] ?? 0);
+            $dmgBonus = (int) ($props['damage_bonus'] ?? 0);
+        }
+
         return [
             'name'        => $name,
-            'bonus'       => $mod + $norm['prof'],
-            'damage'      => $damageExpr . sprintf('%+d', $mod),
+            'bonus'       => $mod + $norm['prof'] + $atkBonus,
+            'damage'      => $damageExpr . sprintf('%+d', $mod + $dmgBonus),
             'damage_type' => $damageType,
             'reach'       => $ranged ? 'ranged' : 'melee',
         ];

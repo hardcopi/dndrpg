@@ -383,6 +383,17 @@ same('finesse damage follows the same ability', '1d4+3', Rules::weaponAttack($ro
 // Ranger's bow is swung with Strength. See the note on Rules::weaponAttack.
 $bow = ['name' => 'Shortbow', 'damage_dice' => '1d6', 'damage_type' => 'piercing',
     'properties' => '{"ranged":"80/320","two_handed":true}'];
+// A weapon's own enchantment, which the engine has always added when it swings
+// and the sheet did not add when it printed. The two have to agree: a player
+// adding +5 to a die the game resolves at +6 has no way to notice.
+$magicSword = [
+    'name' => 'Longsword +1', 'damage_dice' => '1d8', 'damage_type' => 'slashing',
+    'properties' => '{"versatile":"1d10","attack_bonus":1,"damage_bonus":1}',
+];
+same('a +1 weapon adds its plus to the attack', 6, Rules::weaponAttack($fighterRow, $magicSword)['bonus']);
+same('and to the damage', '1d8+4', Rules::weaponAttack($fighterRow, $magicSword)['damage']);
+same('a plain one is unchanged', 5, Rules::weaponAttack($fighterRow, $longsword)['bonus']);
+
 same('a ranged weapon uses dexterity', 3, Rules::weaponAttack($fighterRow, $bow)['bonus']);
 same('a ranged weapon reaches', 'ranged', Rules::weaponAttack($fighterRow, $bow)['reach']);
 $sling = ['name' => 'Sling', 'damage_dice' => '1d4', 'properties' => '{"ammunition":true}'];

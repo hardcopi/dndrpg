@@ -6861,6 +6861,59 @@ body.home-page > main { flex: 1 0 auto; padding-top: var(--sp-32); }
   color: var(--text-faint);
 }
 
+/* The bag and the store, which take the detail pane over rather than opening
+   on top of it. Their own header, because the sheet's belongs to a character
+   and this one belongs to a task: the way back, what you are looking at, and
+   whose it is. */
+.panel-head {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-12);
+  border-bottom: 1px solid var(--border-soft);
+  padding-bottom: var(--sp-10);
+  margin-bottom: var(--sp-12);
+}
+.panel-head h2 { margin: 0; border-bottom: none; padding-bottom: 0; flex: 1; min-width: 0; }
+.panel-who { color: var(--gold); font-size: var(--fs-sm); white-space: nowrap; }
+
+.bag-list { list-style: none; margin: 0; padding: 0; }
+/* Name, then what it is, then what you can do about it — the last column
+   pushed right so the buttons line up down the list however long the names
+   are. */
+.bag-row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-10);
+  padding: var(--sp-6) 0;
+  border-bottom: 1px solid var(--border-soft);
+}
+.bag-row:last-child { border-bottom: none; }
+.bag-name { flex: 1; min-width: 0; color: var(--text); }
+.bag-acts {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-6);
+  flex: 0 0 auto;
+}
+/* Worn, not merely carried. Gold on the name rather than a badge: the list is
+   long and a column of badges reads as noise. */
+.bag-row.is-worn .bag-name { color: var(--gold); }
+.bag-row.is-worn .bag-name::after {
+  content: " · worn";
+  font-size: var(--fs-2xs);
+  color: var(--text-faint);
+  font-style: italic;
+}
+.coin {
+  font-variant-numeric: tabular-nums;
+  color: var(--gold-dim);
+  font-size: var(--fs-xs);
+  white-space: nowrap;
+}
+.store-purse { margin: 0 0 var(--sp-12); color: var(--text-dim); }
+.store-purse strong { color: var(--gold); }
+.store-purse .stat-note { display: block; white-space: normal; }
+
 .pick-sheet {
   border: 1px solid var(--border-soft);
   border-radius: var(--r-lg);

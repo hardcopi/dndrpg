@@ -26,7 +26,14 @@ class InventoryService
              ORDER BY i.item_type, i.name'
         );
         $stmt->execute([$characterId]);
-        return $stmt->fetchAll();
+        // Where each thing would go if it were put on, or null for something
+        // that cannot be. The rule is slotOf()'s and stays there — a client
+        // that worked it out from `item_type` and `slot` would be a second
+        // copy of it, and would offer an Equip button the route then refuses.
+        return array_map(
+            static fn (array $row): array => $row + ['equip_slot' => self::slotOf($row)],
+            $stmt->fetchAll()
+        );
     }
 
     /** How many of one slot a body offers. Two hands' worth of fingers is 2. */

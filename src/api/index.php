@@ -2023,8 +2023,14 @@ function handle_inventory(string $action): void
     $db = db();
     $inv = new InventoryService($db);
 
+    // The pack, for a character the account owns rather than only for the one
+    // the session is playing. `equip`, `use` and `give` have always taken a
+    // character_id and checked it; reading, buying and selling did not, which
+    // was invisible while the only door to any of them was inside the game and
+    // is not now — the picker equips and buys for whoever is on screen, and
+    // that is not the session's character.
     if ($action === 'list') {
-        $id = require_character_id();
+        $id = inventory_owner($_GET);
         json_response(['ok' => true, 'inventory' => $inv->list($id)]);
     }
 
@@ -2057,6 +2063,30 @@ function handle_inventory(string $action): void
         json_response($inv->give($from, (int) $body['inventory_id'], $to, $qty));
     }
 
+    // The general store: the same counter, with nobody behind it.
+    //
+    // GeneralStore writes its own `shop_inventory` rows under a reserved key,
+    // so everything past this line is the ordinary shop path — `shopFor()`,
+    // `buy()`, `sell()` — and the picker's store is a shop in every way except
+    // that it has no shopkeeper and stands nowhere. Re-stocked on every visit
+    // rather than on a schedule: the shelf is derived from `items`, and the
+    // moment `items` changes is exactly the moment nobody remembers to re-stock
+    // a shop.
+    if ($action === 'store') {
+        $id = inventory_owner($_GET);
+        $store = new GeneralStore($db);
+        $store->stock();
+        $char = (new CharacterGenerator($db))->getCharacter($id);
+        json_response([
+            'ok'        => true,
+            'npc_key'   => GeneralStore::NPC_KEY,
+            'items'     => $inv->shopFor(GeneralStore::NPC_KEY),
+            'sellables' => $inv->sellablesFor($id),
+            'gold'      => (int) ($char['gold'] ?? 0),
+            'character' => ['id' => (int) $char['id'], 'name' => $char['name']],
+        ]);
+    }
+
     if ($action === 'shop') {
         // A shop is a merchant's, not the world's: the key names whose counter
         // you are standing at, and the sell list rides along so the panel can
@@ -2075,15 +2105,15 @@ function handle_inventory(string $action): void
 
     if ($action === 'buy') {
         require_method('POST');
-        $id = require_character_id();
         $body = read_json_body();
+        $id = inventory_owner($body);
         json_response($inv->buy($id, (int) $body['item_id'], (string) ($body['npc_key'] ?? '')));
     }
 
     if ($action === 'sell') {
         require_method('POST');
-        $id = require_character_id();
         $body = read_json_body();
+        $id = inventory_owner($body);
         json_response($inv->sell($id, (int) $body['inventory_id']));
     }
 

@@ -114,6 +114,10 @@ require_signed_in_page();
       // not a setting about the character.
       joining: new Map(),   // party_id -> Set(character id)
       arming: null,         // the character whose Retire has been pressed once
+      // Which face of the detail pane is up: the sheet, the bag, or the store.
+      // Reset to the sheet whenever the character changes, because a bag is
+      // somebody's and looking at somebody else means looking at theirs.
+      view: 'sheet',
     };
 
     // =====================================================================
@@ -562,6 +566,12 @@ require_signed_in_page();
               <a class="btn btn-small" target="_blank" rel="noopener"
                  href="sheet_print.php?character_id=${esc(c.id)}&amp;print=1&amp;from=picker"
                  title="A paper sheet for the table, in the standard 5e layout. Opens in a new tab.">Print</a>
+              <button type="button" class="btn btn-small" data-open="bag"
+                      data-id="${esc(c.id)}"
+                      title="What ${esc(c.name)} is carrying, and what they are wearing">Bag</button>
+              <button type="button" class="btn btn-small" data-open="store"
+                      data-id="${esc(c.id)}"
+                      title="Buy supplies and sell what you do not want. Nothing enchanted beyond +1.">Store</button>
               ${retire}
             </div>
           </div>
@@ -688,6 +698,7 @@ require_signed_in_page();
       // when it is somebody else: the first press re-renders this same sheet to
       // put "Really retire?" on the button, and that must not undo itself.
       if (state.arming !== null && state.arming !== id) state.arming = null;
+      if (state.selected !== id) state.view = 'sheet';
       state.selected = id;
       renderRail();
       const host = document.getElementById('detail');
@@ -774,6 +785,159 @@ require_signed_in_page();
      * a party and the client's copy is the one that never sees
      * `leader_character_id`.
      */
+    // =====================================================================
+    // The bag and the store
+    //
+    // Two panels that take over the detail pane rather than opening on top of
+    // it. This page has no modal machinery of its own — the game's lives in
+    // ui-panels.js, behind the whole game shell — and a pane that swaps what it
+    // is showing is both less code and less to explain: the rail stays where it
+    // is, the character stays selected, and Back puts the sheet up again.
+    //
+    // Both act on the character whose sheet is open, which is why every
+    // inventory route now takes a `character_id`: the session is playing
+    // somebody else, or nobody.
+    // =====================================================================
+
+    /** The pane's own header: who this is about, and the way back. */
+    function panelHead(name, title) {
+      return `<div class="panel-head">
+        <button type="button" class="btn btn-small" data-open="sheet">&larr; Back</button>
+        <h2>${esc(title)}</h2>
+        <span class="panel-who">${esc(name)}</span>
+      </div>`;
+    }
+
+    /**
+     * What they are carrying.
+     *
+     * Equipping is the point of it — the sheet says what is worn and this is
+     * where that is decided. `inventory/equip` is the game's own route and
+     * decides everything: which slot a thing occupies, whether it can be worn
+     * at all, and what comes off when a hand or a finger is already full.
+     *
+     * Potions are drunk here too. That is not scope creep: a party standing on
+     * the front page between fights is exactly who wants to drink one, and
+     * `inventory/use` was already the route for it.
+     */
+    async function renderBag(id) {
+      const host = document.getElementById('detail');
+      const who = state.sheets.get(id)?.sheet?.character?.name || 'This character';
+      host.innerHTML = panelHead(who, 'The bag') + '<p class="help-hint">Reading the pack…</p>';
+      let items;
+      try {
+        items = (await API.get('inventory/list', { character_id: id })).inventory || [];
+      } catch (e) {
+        showError(e.message);
+        return;
+      }
+      if (state.view !== 'bag' || state.selected !== id) return;
+
+      const rows = items.map((it) => {
+        const worn = Number(it.is_equipped) === 1;
+        const potion = it.item_type === 'potion';
+        return `<li class="bag-row${worn ? ' is-worn' : ''}">
+          <span class="bag-name">${esc(it.name)}${it.quantity > 1
+            ? ` <span class="stat-note">×${esc(it.quantity)}</span>` : ''}</span>
+          <span class="stat-note">${esc(it.item_type)}${it.damage_dice
+            ? ' · ' + esc(it.damage_dice) + ' ' + esc(it.damage_type || '') : ''}${it.armor_bonus
+            ? ' · AC ' + esc(it.armor_bonus) : ''}</span>
+          <span class="bag-acts">
+            ${potion
+              ? `<button type="button" class="btn btn-small" data-use="${esc(it.id)}">Drink</button>`
+              : ''}
+            ${it.equip_slot
+              ? `<button type="button" class="btn btn-small" data-equip="${esc(it.id)}"
+                         data-on="${worn ? '0' : '1'}">${worn ? 'Take off' : 'Equip'}</button>`
+              : ''}
+          </span>
+        </li>`;
+      }).join('');
+
+      host.innerHTML = panelHead(who, 'The bag') + (items.length
+        ? `<ul class="bag-list">${rows}</ul>`
+        : '<p class="help-hint">Carrying nothing at all.</p>');
+    }
+
+    /**
+     * The general store.
+     *
+     * One counter, no shopkeeper — see GeneralStore. What is on the shelf is
+     * the server's answer and not a list held here; the page draws what
+     * arrives, which is how "nothing enchanted beyond +1" stays one rule in one
+     * place rather than a filter here that agrees with it until somebody edits
+     * an item.
+     */
+    async function renderStore(id) {
+      const host = document.getElementById('detail');
+      const who = state.sheets.get(id)?.sheet?.character?.name || 'This character';
+      host.innerHTML = panelHead(who, 'The general store') + '<p class="help-hint">Opening up…</p>';
+      let shop;
+      try {
+        shop = await API.get('inventory/store', { character_id: id });
+      } catch (e) {
+        showError(e.message);
+        return;
+      }
+      if (state.view !== 'store' || state.selected !== id) return;
+
+      const buys = (shop.items || []).map((it) => `
+        <li class="bag-row">
+          <span class="bag-name">${esc(it.name)}</span>
+          <span class="stat-note">${esc(it.item_type)}${it.rarity && it.rarity !== 'common'
+            ? ' · ' + esc(it.rarity) : ''}</span>
+          <span class="bag-acts">
+            <span class="coin">${esc(it.price)} gp</span>
+            <button type="button" class="btn btn-small" data-buy="${esc(it.id)}"
+                    ${Number(it.price) > Number(shop.gold) ? 'disabled title="Not enough gold"' : ''}>Buy</button>
+          </span>
+        </li>`).join('');
+
+      const sells = (shop.sellables || []).map((it) => `
+        <li class="bag-row">
+          <span class="bag-name">${esc(it.name)}${it.quantity > 1
+            ? ` <span class="stat-note">×${esc(it.quantity)}</span>` : ''}</span>
+          <span class="stat-note">${esc(it.item_type)}</span>
+          <span class="bag-acts">
+            <span class="coin">${esc(it.sale_price)} gp</span>
+            <button type="button" class="btn btn-small" data-sell="${esc(it.inventory_id)}">Sell</button>
+          </span>
+        </li>`).join('');
+
+      host.innerHTML = panelHead(who, 'The general store') + `
+        <p class="store-purse">Purse: <strong>${esc(shop.gold)} gp</strong>
+          <span class="stat-note">Half price when you sell. Nothing here is enchanted beyond +1.</span></p>
+        <div class="sheet-cols">
+          <div class="sheet-section">
+            <h3>For sale</h3>
+            <ul class="bag-list">${buys || '<li class="help-hint">The shelf is empty.</li>'}</ul>
+          </div>
+          <div class="sheet-section">
+            <h3>They will buy</h3>
+            <ul class="bag-list">${sells || '<li class="help-hint">Nothing of yours is worth selling.</li>'}</ul>
+          </div>
+        </div>`;
+    }
+
+    /**
+     * Anything that changed a character from one of these panels.
+     *
+     * The sheet cached for them is now wrong — gold, what is worn, what the
+     * armour class is — so it goes, and the rail with it. The panel is drawn
+     * again rather than left as it was, because the prices, the purse and the
+     * Equip/Take off labels are all answers that just changed.
+     */
+    async function afterTrade(id, message) {
+      state.sheets.delete(id);
+      try {
+        state.characters = (await API.get('session/list')).characters || [];
+      } catch (e) { /* the rail keeps what it had */ }
+      renderRail();
+      if (state.view === 'bag') await renderBag(id);
+      else if (state.view === 'store') await renderStore(id);
+      if (message) showNotice(message);
+    }
+
     /**
      * Retire somebody, on the second press.
      *
@@ -856,6 +1020,83 @@ require_signed_in_page();
         await makeCamp(camp);
         return;
       }
+      // The bag, the store, and the way back to the sheet.
+      const open = e.target.closest('[data-open]');
+      if (open) {
+        state.view = open.dataset.open;
+        const id = Number(open.dataset.id) || state.selected;
+        if (state.view === 'bag') await renderBag(id);
+        else if (state.view === 'store') await renderStore(id);
+        else await showSheet(id);
+        return;
+      }
+
+      const equip = e.target.closest('[data-equip]');
+      if (equip) {
+        equip.disabled = true;
+        try {
+          const r = await API.post('inventory/equip', {
+            character_id: state.selected,
+            inventory_id: Number(equip.dataset.equip),
+            equip: equip.dataset.on === '1',
+          });
+          await afterTrade(state.selected, r.message);
+        } catch (err) {
+          equip.disabled = false;
+          showError(err.message || 'That could not be worn.');
+        }
+        return;
+      }
+
+      const drink = e.target.closest('[data-use]');
+      if (drink) {
+        drink.disabled = true;
+        try {
+          const r = await API.post('inventory/use', {
+            character_id: state.selected,
+            inventory_id: Number(drink.dataset.use),
+          });
+          await afterTrade(state.selected, r.message);
+        } catch (err) {
+          drink.disabled = false;
+          showError(err.message || 'That could not be drunk.');
+        }
+        return;
+      }
+
+      const buy = e.target.closest('[data-buy]');
+      if (buy) {
+        buy.disabled = true;
+        try {
+          const r = await API.post('inventory/buy', {
+            character_id: state.selected,
+            item_id: Number(buy.dataset.buy),
+            npc_key: '_general_store',
+          });
+          await afterTrade(state.selected, r.message);
+        } catch (err) {
+          buy.disabled = false;
+          showError(err.message || 'That could not be bought.');
+        }
+        return;
+      }
+
+      const sell = e.target.closest('[data-sell]');
+      if (sell) {
+        sell.disabled = true;
+        try {
+          const r = await API.post('inventory/sell', {
+            character_id: state.selected,
+            inventory_id: Number(sell.dataset.sell),
+          });
+          await afterTrade(state.selected, r.message);
+        } catch (err) {
+          sell.disabled = false;
+          showError(err.message || 'That could not be sold.');
+        }
+        return;
+      }
+
       const retire = e.target.closest('[data-retire]');
       if (retire) {
         await retireCharacter(retire);
