@@ -690,9 +690,17 @@ Three things about that page are load-bearing:
   and the other members' sheets are **prefetched** as soon as one is opened —
   `sheetFor()` is the single door to a payload and `state.fetching` stops a
   prefetch and a click asking for the same character twice. A press is a
-  redraw from cache with no request at all, which was the point. Recruited
-  companions are not in it: `session/list` excludes them and `session/sheet`
-  refuses them, so a tab for one would be a button that cannot open.
+  redraw from cache with no request at all, which was the point.
+
+  **Companions are in the row**, which is why the roster is shipped by
+  `session/sheet` rather than filtered out of `session/list`: that list is the
+  characters you may PLAY and has no companions in it by design, so a party of
+  three and Brother Aldric drew three tabs and quietly lost the fourth. Reading
+  one needs `assert_character_readable()` — the ownership half of
+  `assert_character_manageable()` without the companion refusal, which is a
+  rule about RETIRING somebody and was welded to reading only because nothing
+  read. Retiring a companion is still refused, in the gate that is about
+  retiring, and `tools/test_characters_page.sh` asserts both halves.
 - **The sheet is `session/sheet`, not `character/sheet`.** The difference is the
   gate and not the payload: `character/sheet` asks
   `assert_character_accessible()` — is this somebody in the game you are

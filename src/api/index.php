@@ -737,20 +737,41 @@ function assert_character_accessible(int $id): void
  */
 function assert_character_manageable(int $id): void
 {
-    $stmt = db()->prepare('SELECT companion_key FROM characters WHERE id = ?');
-    $stmt->execute([$id]);
-    $row = $stmt->fetch();
-    if (!$row) {
-        json_error('No such character.', 404);
-    }
-    // 404 rather than 403 for somebody else's character: a 403 would confirm the
-    // id exists, which turns retire into a way of counting other people's saves.
-    if (!character_is_owned($id)) {
-        json_error('No such character.', 404);
-    }
-    if (!empty($row['companion_key'])) {
+    if (!empty(assert_character_readable($id)['companion_key'])) {
         json_error('Companions are dismissed at camp, not retired.', 403);
     }
+}
+
+/**
+ * Is this a character the player is allowed to LOOK at?
+ *
+ * The half of assert_character_manageable that is about ownership, without the
+ * half that is about companions — because a companion is somebody you may read
+ * and not somebody you may retire, and those two facts were welded together
+ * while only retiring ever asked. The picker's party tabs put Brother Aldric's
+ * sheet one press away from Sera's, which is a reasonable thing to want and not
+ * a way to do anything to him.
+ *
+ * Returns the row, so a caller that needs the companion flag does not go back
+ * for it — assert_character_manageable is exactly that caller.
+ *
+ * 404 rather than 403 for somebody else's character: a 403 would confirm the id
+ * exists, which turns either route into a way of counting other people's saves.
+ *
+ * @return array<string, mixed>
+ */
+function assert_character_readable(int $id): array
+{
+    $stmt = db()->prepare('SELECT id, companion_key FROM characters WHERE id = ?');
+    $stmt->execute([$id]);
+    $row = $stmt->fetch();
+    // The row's existence is checked before ownership, not after: an admin
+    // passes the ownership test on any id at all, including one that was never
+    // a character.
+    if (!$row || !character_is_owned($id)) {
+        json_error('No such character.', 404);
+    }
+    return $row;
 }
 
 
@@ -1102,7 +1123,7 @@ function handle_session(string $action): void
         if ($id <= 0) {
             json_error('character_id required', 400);
         }
-        assert_character_manageable($id);
+        assert_character_readable($id);
 
         // Which game they are in, who they march with, and where they are
         // standing — the three things the sheet's Play button has to be able to
@@ -1140,10 +1161,38 @@ function handle_session(string $action): void
             $context['can_camp'] = (new LocationEngine(db()))->canCampHere($id);
         }
 
+        // Who marches with them, for the tabs across the top of the sheet.
+        //
+        // From the server rather than filtered out of `session/list`, because
+        // that list is the characters you may PLAY and deliberately has no
+        // companions in it — and a party's fourth member missing from its own
+        // row of tabs is the sort of quiet omission that reads as a bug. This
+        // is the party as the game holds it: slot order, companions among them,
+        // marked as such.
+        //
+        // Cut down to what a tab draws. The full rows are a kilobyte each of
+        // spell slots and feats that nothing up here reads.
+        $party = [];
+        if (!empty($context['party_id'])) {
+            foreach ((new CharacterGenerator(db()))->getPartyCharacters((int) $context['party_id']) as $m) {
+                $party[] = [
+                    'id'         => (int) $m['id'],
+                    'name'       => $m['name'],
+                    'class'      => $m['class'],
+                    'level'      => (int) $m['level'],
+                    'current_hp' => (int) $m['current_hp'],
+                    'max_hp'     => (int) $m['max_hp'],
+                    'sprite_key' => $m['sprite_key'] ?? null,
+                    'companion'  => !empty($m['companion_key']),
+                ];
+            }
+        }
+
         json_response([
             'ok'      => true,
             'sheet'   => $sheet,
             'context' => $context,
+            'party'   => $party,
             // What a fight can be asked for at, easiest first. Shipped from the
             // constant rather than written into the page, for the reason the
             // printed book reads the pit's odds out of the engine: a second

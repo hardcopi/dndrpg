@@ -35,8 +35,17 @@ OK=0; BAD=0
 sql() { docker compose -f "$COMPOSE_DIR/docker-compose.yml" exec -T db \
   mysql -uweb -pdevpassword --default-character-set=utf8mb4 -N -B rpg_5e -e "$1" 2>/dev/null; }
 
+# Recruiting a companion is a thing that happens in a conversation, and playing
+# one from bash is not what is being tested here. This calls the service the
+# conversation would have called.
+php_() { docker compose -f "$COMPOSE_DIR/docker-compose.yml" exec -T php \
+  php -r "require '/var/www/html/app/bootstrap.php'; $1" 2>/dev/null; }
+
 cleanup() {
   sql "
+    DELETE pc FROM party_companions pc
+      INNER JOIN parties p ON p.id = pc.party_id
+      INNER JOIN users u ON u.id = p.user_id WHERE u.username = '${USER}';
     DELETE FROM characters WHERE user_id IN (SELECT id FROM users WHERE username = '${USER}');
     DELETE FROM parties    WHERE user_id IN (SELECT id FROM users WHERE username = '${USER}');
     DELETE FROM users      WHERE username = '${USER}';"
@@ -245,6 +254,40 @@ check "and refused as a 404, which does not confirm the id exists" \
   "$(has "$DENIED" 'No such character')" "$(head -c 120 <<<"$DENIED")"
 sql "DELETE FROM users WHERE username = '${USER2}';"
 rm -f "$JAR2"
+
+echo "== the sheet carries the party, companions included =="
+# The tabs across the top of a sheet are drawn from this, and the reason it is
+# shipped by the server rather than filtered out of `session/list` is exactly
+# the companion: that list is the characters you may PLAY and has none in it,
+# so a party of two and Brother Aldric would have drawn two tabs and quietly
+# lost the third.
+php_ "(new CompanionService(db()))->recruit(${PID}, 'aldric');"
+SHEET=$(api "session/sheet&character_id=${MINE}")
+ROSTER=$(jq_ "$SHEET" "
+import json,sys
+p = json.load(sys.stdin).get('party') or []
+comp = [m for m in p if m.get('companion')]
+want = ('id','name','class','level','current_hp','max_hp','sprite_key','companion')
+print(1 if len(p) == 3 and len(comp) == 1
+        and all(k in m for m in p for k in want) else 0,
+      len(p), len(comp))")
+read -r OK_ROSTER NMEM NCOMP <<<"$ROSTER"
+check "session/sheet ships the marching party with the companion in it" \
+  "$OK_ROSTER" "${NMEM} members, ${NCOMP} companion(s)"
+
+COMPID=$(jq_ "$SHEET" "
+import json,sys
+p = json.load(sys.stdin).get('party') or []
+print(next((m['id'] for m in p if m.get('companion')), 0))")
+COMPSHEET=$(api "session/sheet&character_id=${COMPID}")
+check "and a companion's own sheet can be read, so the tab opens" \
+  "$(has "$COMPSHEET" '"ok":true')" "$(head -c 140 <<<"$COMPSHEET")"
+
+# The widening is for READING and stops there. Retiring still goes through
+# assert_character_manageable, which is the gate the companion rule belongs to.
+NORETIRE=$(api "character/retire" "{\"character_id\":${COMPID}}")
+check "but they still cannot be retired from here" \
+  "$(has "$NORETIRE" 'dismissed at camp')" "$(head -c 140 <<<"$NORETIRE")"
 
 echo "== and the module scopes the page =="
 OTHER=$(jq_ "$LIST" "

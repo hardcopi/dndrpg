@@ -6812,6 +6812,17 @@ body.home-page > main { flex: 1 0 auto; padding-top: var(--sp-32); }
   color: var(--text-dim);
   line-height: var(--lh-snug);
 }
+/* Somebody who travels with you rather than somebody you made. Said in a word
+   on the tab rather than drawn as a different KIND of tab: they are a member of
+   the party and the row is the party, and a companion's sheet opens the same
+   way anyone else's does. What they are not is somebody you can play as, and
+   nothing on this page offers that — Play sends the party and the server picks
+   a lead, skipping them. */
+.party-tab.is-companion .tab-name { color: var(--text); }
+.tab-comp {
+  font-style: italic;
+  color: var(--text-faint);
+}
 
 .pick-sheet {
   border: 1px solid var(--border-soft);

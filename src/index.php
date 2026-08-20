@@ -345,27 +345,29 @@ require_signed_in_page();
        * every sheet is fetched once and kept, and the others are already on
        * their way before you press anything (see prefetchParty).
        *
-       * Drawn from `session/list`, which the page has already read, rather than
-       * asked for again — the party is a filter on a list that is in hand.
-       * Recruited companions are not in it: that route excludes them, and
-       * `session/sheet` refuses them, so a tab for one would be a button that
-       * cannot open.
+       * The roster comes from the server with the sheet. It was filtered out
+       * of `session/list` at first, which was cheaper and wrong: that list is
+       * the characters you may PLAY and has no companions in it by design, so
+       * a party of three and Brother Aldric drew three tabs and quietly lost
+       * the fourth. `session/sheet` ships the party as the game holds it —
+       * slot order, companions among them and marked as such — and reading a
+       * companion's sheet is allowed for the same reason the tab is drawn.
        *
        * Not drawn at all for a party of one, where a row of tabs is a control
        * with nothing to choose.
        */
-      const party = ctx.party_id
-        ? state.characters.filter((m) => m.party_id == ctx.party_id)
-            .sort((a, b) => a.id - b.id)
-        : [];
+      const party = payload.party || [];
       const tabs = party.length > 1
         ? `<div class="party-tabs" role="tablist" aria-label="Party members">
              ${party.map((m) => {
                const hurt = m.max_hp > 0 && m.current_hp / m.max_hp <= 0.34 ? ' is-hurt' : '';
                const on = m.id == c.id;
-               return `<button type="button" class="party-tab${on ? ' is-active' : ''}"
+               return `<button type="button" class="party-tab${on ? ' is-active' : ''}${m.companion ? ' is-companion' : ''}"
                        role="tab" aria-selected="${on ? 'true' : 'false'}"
-                       data-pick="${esc(m.id)}">
+                       data-pick="${esc(m.id)}"
+                       title="${m.companion
+                         ? esc(m.name) + ' travels with you. Read their sheet here; they are recruited and dismissed at camp.'
+                         : 'Read ' + esc(m.name) + '&apos;s sheet'}">
                  ${m.sprite_key
                    ? `<img class="tab-face" alt="" loading="lazy"
                           src="assets/images/npcs/${encodeURIComponent(m.sprite_key)}_face.png"
@@ -374,7 +376,8 @@ require_signed_in_page();
                  <span class="tab-body">
                    <span class="tab-name">${esc(m.name)}</span>
                    <span class="tab-sub">${esc(m.class)} ${esc(m.level)} ·
-                     <span class="char-hp${hurt}">${esc(m.current_hp)}/${esc(m.max_hp)}</span></span>
+                     <span class="char-hp${hurt}">${esc(m.current_hp)}/${esc(m.max_hp)}</span>${
+                       m.companion ? ' · <span class="tab-comp">companion</span>' : ''}</span>
                  </span>
                </button>`;
              }).join('')}
@@ -596,11 +599,10 @@ require_signed_in_page();
      * looked at because nothing on this page changes a character — except camp,
      * which drops the whole cache itself.
      */
-    function prefetchParty(partyId) {
-      if (!partyId) return;
-      state.characters
-        .filter((m) => m.party_id == partyId && !state.sheets.has(m.id))
-        .forEach((m) => { sheetFor(Number(m.id)).catch(() => {}); });
+    function prefetchParty(payload) {
+      (payload?.party || []).forEach((m) => {
+        if (!state.sheets.has(Number(m.id))) sheetFor(Number(m.id)).catch(() => {});
+      });
     }
 
     async function showSheet(id, pressed) {
@@ -621,7 +623,7 @@ require_signed_in_page();
         // Even from cache: the party this one belongs to may not have been
         // seen yet, and the tabs it just drew are only fast if the sheets
         // behind them are already coming.
-        prefetchParty(payload.context?.party_id);
+        prefetchParty(payload);
         return;
       }
       host.innerHTML = '<p class="help-hint">Reading the sheet…</p>';
@@ -632,7 +634,7 @@ require_signed_in_page();
         // one that draws.
         if (payload && state.selected === id) {
           renderSheet(payload);
-          prefetchParty(payload.context?.party_id);
+          prefetchParty(payload);
         }
       } catch (e) {
         host.innerHTML = `<p class="help-hint">Could not read that sheet.</p>`;

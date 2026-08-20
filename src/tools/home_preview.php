@@ -337,6 +337,44 @@ foreach ($characters as $c) {
     $sheets[(string) $c['id']] = sheet_fixture($c);
 }
 
+/* The party each sheet ships for its tabs, as `session/sheet` builds it — the
+   marching party in slot order, companions among them. Assembled here from the
+   fixture's own characters plus one recruited companion, because the tabs are
+   the one part of this pane whose whole point is the member the character list
+   does NOT contain. */
+foreach ($sheets as $id => &$payload) {
+    $partyId = $payload['context']['party_id'] ?? null;
+    if (!$partyId) {
+        $payload['party'] = [];
+        continue;
+    }
+    $party = [];
+    foreach ($characters as $m) {
+        if (($m['party_id'] ?? null) !== $partyId) {
+            continue;
+        }
+        $party[] = [
+            'id' => $m['id'], 'name' => $m['name'], 'class' => $m['class'],
+            'level' => $m['level'], 'current_hp' => $m['current_hp'],
+            'max_hp' => $m['max_hp'], 'sprite_key' => $m['sprite_key'],
+            'companion' => false,
+        ];
+    }
+    if ($party) {
+        $party[] = [
+            'id' => 99, 'name' => 'Kessa', 'class' => 'Rogue', 'level' => 3,
+            'current_hp' => 18, 'max_hp' => 24, 'sprite_key' => 'rogue', 'companion' => true,
+        ];
+    }
+    $payload['party'] = $party;
+}
+unset($payload);
+
+/* And a sheet for him, so pressing his tab in the bench opens something. */
+$sheets['99'] = sheet_fixture(pc(99, '10', "Wren Kingsley's Party", 'Kessa',
+    'Human', 'Rogue', 3, 18, 24, 'rogue'));
+$sheets['99']['party'] = $sheets[array_key_first($sheets)]['party'] ?? [];
+
 /* Who the session was last playing — the picker opens that sheet rather than
    the top of the list. Deliberately NOT the first character here, so the
    bench shows whether the rail marks the right one.
