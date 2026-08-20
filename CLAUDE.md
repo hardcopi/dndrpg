@@ -743,6 +743,25 @@ things about it are deliberate:
   route does not recognise falls back to `fair` rather than failing: the picker
   only ever sends what the server gave it, so anything else came from somewhere
   else.
+- **Every tab carries a tick, and the ticks decide who walks out.** A fight
+  asked for from here sends `members` and the engine deploys those and nobody
+  else — `startEncounter($only)` refuses rather than falling back to the whole
+  party when the list matches nobody, because quietly deploying four people who
+  were not asked for is only noticed on the battlefield. `PitEngine` sizes the
+  bout against **who is coming** rather than who is on the books, so going
+  alone does not silently quadruple the difficulty. The ids are checked against
+  the party (they arrive in a request body), the downed are dropped rather than
+  refused, and a field of nothing but companions is refused outright: a
+  companion cannot be the session's character, and a fight the player is not in
+  is a fight nobody can end. An authored fight passes `null` and everybody
+  goes — a fight that happens TO you does not take requests.
+- **Retire is on the sheet, and it is the only door to `character/retire`.**
+  The route existed with no UI at all, which is why it grew a guard the day the
+  button appeared: not while the party is on a battlefield, or the fight goes on
+  swinging for somebody the character list has stopped showing. The
+  confirmation is two presses of the same button rather than `confirm()` — a
+  browser modal stops every script on the page, cannot be styled, and cannot be
+  driven by the tests. Looking at anybody else disarms it.
 - **Camp is the third door, beside the fights.** A party back from a skirmish
   at two hit points had nowhere on this page to sleep it off, and walking into
   the game to press the same button is the walk the fight button exists to

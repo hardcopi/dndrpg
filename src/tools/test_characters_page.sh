@@ -289,6 +289,29 @@ NORETIRE=$(api "character/retire" "{\"character_id\":${COMPID}}")
 check "but they still cannot be retired from here" \
   "$(has "$NORETIRE" 'dismissed at camp')" "$(head -c 140 <<<"$NORETIRE")"
 
+echo "== retiring somebody, which the picker is the only door to =="
+# The route had no UI at all until the sheet grew a Retire button. What is
+# asserted is the two rules that button now has to live with: not while the
+# party is on a battlefield, and gone from the list afterwards.
+FIGHT=$(api "combat/random" '{"tier":"warmup"}')
+check "a fight is on" "$(has "$FIGHT" '"ok":true')" "$(head -c 120 <<<"$FIGHT")"
+MIDFIGHT=$(api "character/retire" "{\"character_id\":${MINE}}")
+check "retiring mid-fight is refused" \
+  "$(has "$MIDFIGHT" 'fight on')" "$(head -c 140 <<<"$MIDFIGHT")"
+
+sql "UPDATE combat_sessions cs
+       INNER JOIN characters c ON c.id = cs.character_id
+       INNER JOIN users u ON u.id = c.user_id
+     SET cs.is_active = 0 WHERE u.username = '${USER}';"
+GONE=$(api "character/retire" "{\"character_id\":${MINE}}")
+check "and accepted once it is over" "$(has "$GONE" '"ok":true')" "$(head -c 140 <<<"$GONE")"
+
+LEFT=$(jq_ "$(api "session/list")" "
+import json,sys
+print(sum(1 for c in json.load(sys.stdin)['characters'] if c['id'] == ${MINE}))")
+check "and they are off the list the picker draws" \
+  "$([ "${LEFT:-1}" = "0" ] && echo 1 || echo 0)" "${LEFT} row(s) left"
+
 echo "== and the module scopes the page =="
 OTHER=$(jq_ "$LIST" "
 import json,sys

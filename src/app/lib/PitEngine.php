@@ -153,16 +153,30 @@ class PitEngine
         ];
     }
 
-    /** The active party's levels, which two things here need. */
-    private function levels(int $partyId): array
+    /**
+     * The active party's levels, which two things here need.
+     *
+     * `$only` narrows it to the characters actually coming to the fight. The
+     * ids are filtered in PHP rather than bound into an IN() list because the
+     * caller's list has already been checked against this party — the query
+     * would otherwise have to trust it — and a party holds four.
+     *
+     * @param list<int>|null $only
+     */
+    private function levels(int $partyId, ?array $only = null): array
     {
         $stmt = $this->db->prepare(
-            'SELECT c.level FROM characters c
+            'SELECT c.id, c.level FROM characters c
              INNER JOIN character_party cp ON cp.character_id = c.id
              WHERE cp.party_id = ? AND c.is_active = 1'
         );
         $stmt->execute([$partyId]);
-        return array_map('intval', $stmt->fetchAll(PDO::FETCH_COLUMN));
+        $rows = $stmt->fetchAll();
+        if ($only !== null) {
+            $wanted = array_flip(array_map('intval', $only));
+            $rows = array_filter($rows, static fn ($r) => isset($wanted[(int) $r['id']]));
+        }
+        return array_map(static fn ($r) => (int) $r['level'], array_values($rows));
     }
 
     /**
@@ -203,14 +217,15 @@ class PitEngine
      * CombatEngine's rule and this does not touch it — but two rows that are
      * rewritten by different doors should not share a key.
      */
-    public function skirmish(int $partyId, string $tier = 'fair'): int
+    public function skirmish(int $partyId, string $tier = 'fair', ?array $only = null): int
     {
         return $this->build(
             $partyId,
             $tier,
             'skirmish',
             static fn (string $roster, string $blurb): array
-                => [$roster, 'Something on the road: ' . lcfirst($blurb)]
+                => [$roster, 'Something on the road: ' . lcfirst($blurb)],
+            $only
         );
     }
 
@@ -225,12 +240,22 @@ class PitEngine
      *
      * @param callable(string, string): array{0:string, 1:string} $prose
      */
-    private function build(int $partyId, string $tier, string $kind, callable $prose): int
-    {
+    private function build(
+        int $partyId,
+        string $tier,
+        string $kind,
+        callable $prose,
+        ?array $only = null
+    ): int {
         if (!isset(self::TIERS[$tier])) {
             throw new InvalidArgumentException('No such bout.');
         }
-        $group = $this->pick($this->budget($partyId, $tier));
+        // Sized against who is COMING, not against who is on the books. A
+        // player who leaves three at the fire and walks out alone should meet
+        // a fight built for one — the alternative is that choosing to go alone
+        // silently multiplies the difficulty by four, which is a rule nobody
+        // was told about.
+        $group = $this->pick($this->budget($partyId, $tier, $only));
         if (!$group) {
             throw new RuntimeException('There is nothing to send out.');
         }
@@ -255,9 +280,9 @@ class PitEngine
     // -----------------------------------------------------------------------
 
     /** What this party's tier is worth, in monster XP. */
-    private function budget(int $partyId, string $tier): int
+    private function budget(int $partyId, string $tier, ?array $only = null): int
     {
-        return EncounterBudget::forParty($this->levels($partyId), $tier);
+        return EncounterBudget::forParty($this->levels($partyId, $only), $tier);
     }
 
     /** EncounterBudget's, kept under the old name so `pick()` reads unchanged. */

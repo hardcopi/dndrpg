@@ -1415,6 +1415,30 @@ function handle_character(string $action): void
             json_error('character_id required', 400);
         }
         assert_character_manageable($id);
+
+        // Not while their party is on a battlefield.
+        //
+        // The route had no UI at all until the picker grew a Retire button, so
+        // this could not happen before and can now: a fight holds its
+        // combatants in `state_json` and would go on swinging for somebody the
+        // character list has stopped showing, and the session would be pointing
+        // at a retired row. The check is on the PARTY rather than on this
+        // character because the session belongs to whoever leads it — a fight
+        // is the party's, not one member's. Same answer as casting mid-fight,
+        // and the same 409.
+        $theirParty = WorldState::partyIdFor($db, $id);
+        if ($theirParty) {
+            $fighting = $db->prepare(
+                'SELECT COUNT(*) FROM combat_sessions cs
+                   INNER JOIN character_party cp ON cp.character_id = cs.character_id
+                  WHERE cp.party_id = ? AND cs.is_active = 1'
+            );
+            $fighting->execute([$theirParty]);
+            if ((int) $fighting->fetchColumn() > 0) {
+                json_error('There is a fight on. Finish it before retiring anybody.', 409);
+            }
+        }
+
         $result = $gen->retire($id);
         // If they retired whoever the session was playing, the session is now
         // pointing at somebody who is gone. Move it to a survivor rather than
@@ -1809,8 +1833,61 @@ function handle_combat(string $action): void
             $tier = 'fair';
         }
 
+        // Who is coming, if the player said. The picker draws a tick on every
+        // party tab and sends the ones still ticked; anything else — an
+        // authored fight, an ambush on the road — sends nothing and everybody
+        // goes, because a fight that happens TO you does not take requests.
+        //
+        // Checked against this party rather than trusted: the ids arrive in a
+        // request body, and an unchecked list is a way to deploy somebody
+        // else's character onto your battlefield.
+        $only = null;
+        if (isset($body['members']) && is_array($body['members'])) {
+            $mine = $db->prepare(
+                'SELECT c.id, c.companion_key FROM characters c
+                 INNER JOIN character_party cp ON cp.character_id = c.id
+                 WHERE cp.party_id = ? AND c.is_active = 1 AND c.current_hp > 0'
+            );
+            $mine->execute([$partyId]);
+            $standing = [];
+            foreach ($mine->fetchAll() as $row) {
+                $standing[(int) $row['id']] = empty($row['companion_key']);
+            }
+
+            $only = [];
+            foreach ($body['members'] as $member) {
+                $memberId = (int) $member;
+                // Silently dropped rather than refused: somebody who was
+                // knocked out between the page being drawn and the button being
+                // pressed is not an error, they are simply not coming.
+                if (isset($standing[$memberId]) && !in_array($memberId, $only, true)) {
+                    $only[] = $memberId;
+                }
+            }
+            if (!$only) {
+                json_error('Choose somebody to take the fight.', 400);
+            }
+
+            // Somebody has to be the one you are playing as, and a companion
+            // cannot be: `session/select` refuses them, the character list
+            // cannot show them, and finalizeCombat pays the gold to whoever the
+            // session says. So a party of companions alone is refused here
+            // rather than starting a fight nobody is in.
+            $leads = array_values(array_filter($only, static fn ($m) => $standing[$m]));
+            if (!$leads) {
+                json_error('One of your own characters has to take the field.', 400);
+            }
+            // The session follows the choice. Whoever the picker made active is
+            // usually the party's lead, and leaving them behind would otherwise
+            // start a fight the player is watching from outside it.
+            if (!in_array($id, $leads, true)) {
+                $id = $leads[0];
+                set_active_character($id, $partyId);
+            }
+        }
+
         $char = (new LocationEngine($db))->getCharacterPosition($id);
-        $encounterId = (new PitEngine($db))->skirmish($partyId, $tier);
+        $encounterId = (new PitEngine($db))->skirmish($partyId, $tier, $only);
         json_response([
             'ok'     => true,
             // A seed of its own, for the reason the pit passes one: the scratch
@@ -1821,7 +1898,8 @@ function handle_combat(string $action): void
                 $id,
                 $encounterId,
                 (int) $char['current_location_id'],
-                random_int(0, PHP_INT_MAX)
+                random_int(0, PHP_INT_MAX),
+                $only
             ),
         ]);
     }

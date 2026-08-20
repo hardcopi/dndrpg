@@ -45,6 +45,20 @@ OK=0; BAD=0
 sql() { docker compose -f "$COMPOSE_DIR/docker-compose.yml" exec -T db \
   mysql -uweb -pdevpassword --default-character-set=utf8mb4 -N -B rpg_5e -e "$1" 2>/dev/null; }
 
+# Recruiting a companion happens in a conversation; this calls what the
+# conversation would have called.
+php_() { docker compose -f "$COMPOSE_DIR/docker-compose.yml" exec -T php \
+  php -r "require '/var/www/html/app/bootstrap.php'; $1" 2>/dev/null; }
+
+# One fight at a time is CombatEngine's rule, so each of the checks below opens
+# with the last one closed.
+close_fights() {
+  sql "UPDATE combat_sessions cs
+         INNER JOIN characters c ON c.id = cs.character_id
+         INNER JOIN users u ON u.id = c.user_id
+       SET cs.is_active = 0 WHERE u.username = '${USER}';"
+}
+
 cleanup() {
   sql "
     DELETE cs FROM combat_sessions cs
@@ -52,6 +66,9 @@ cleanup() {
       INNER JOIN users u ON u.id = c.user_id WHERE u.username = '${USER}';
     DELETE e FROM encounters e
       INNER JOIN parties p ON e.encounter_key = CONCAT('_skirmish_party_', p.id)
+      INNER JOIN users u ON u.id = p.user_id WHERE u.username = '${USER}';
+    DELETE pc FROM party_companions pc
+      INNER JOIN parties p ON p.id = pc.party_id
       INNER JOIN users u ON u.id = p.user_id WHERE u.username = '${USER}';
     DELETE FROM characters WHERE user_id IN (SELECT id FROM users WHERE username = '${USER}');
     DELETE FROM parties    WHERE user_id IN (SELECT id FROM users WHERE username = '${USER}');
@@ -218,6 +235,55 @@ check "an unknown tier falls back rather than failing" \
 BADROW=$(sql "SELECT description FROM encounters WHERE encounter_key = '_skirmish_party_${PID}'")
 check "and what it falls back to is the fair match" \
   "$(has "$BADROW" 'evenly made')" "description was '${BADROW}'"
+
+echo "== and you choose who walks out to it =="
+# The picker ticks every party member by default and sends the ones still
+# ticked. What matters on the way back is that the field holds exactly those
+# people — a fight that quietly deployed somebody left at the fire would only
+# be noticed by whoever died in it.
+MEMBERS=$(jq_ "$(api "session/list")" "
+import json,sys
+cs = [c for c in json.load(sys.stdin)['characters'] if c['party_id']]
+print(' '.join(str(c['id']) for c in cs))")
+ONE=${MEMBERS%% *}
+
+close_fights
+SOLO=$(api "combat/random" "{\"tier\":\"warmup\",\"members\":[${ONE}]}")
+FIELD=$(jq_ "$SOLO" "
+import json,sys
+s = ((json.load(sys.stdin).get('combat') or {}).get('state') or {})
+ours = [c for c in s.get('combatants', []) if c.get('side') == 'party']
+print(1 if len(ours) == 1 and ours[0].get('character_id') == ${ONE} else 0,
+      ','.join(str(c.get('character_id')) for c in ours))")
+check "one name sent, one character on the field" \
+  "${FIELD%% *}" "deployed ${FIELD#* }"
+
+close_fights
+NONE=$(api "combat/random" '{"members":[]}')
+check "an empty choice is refused rather than quietly meaning everybody" \
+  "$(has "$NONE" 'Choose somebody')" "$(head -c 140 <<<"$NONE")"
+
+close_fights
+# An id from outside this party is dropped on the way in, which leaves nothing
+# chosen — so the refusal is the same one an empty list gets, and no character
+# of anybody else's has been anywhere near the battlefield.
+STRANGER=$(api "combat/random" '{"members":[999999]}')
+check "somebody else's character cannot be deployed onto your board" \
+  "$(has "$STRANGER" 'Choose somebody')" "$(head -c 140 <<<"$STRANGER")"
+
+close_fights
+# A companion cannot be the one you are playing as — session/select refuses
+# them and the gold is paid to whoever the session says — so a field of nothing
+# but companions is refused rather than started with nobody in it.
+php_ "(new CompanionService(db()))->recruit(${PID}, 'aldric');"
+COMPID=$(sql "SELECT c.id FROM characters c
+                INNER JOIN character_party cp ON cp.character_id = c.id
+               WHERE cp.party_id = ${PID} AND c.companion_key IS NOT NULL LIMIT 1")
+ALONE=$(api "combat/random" "{\"members\":[${COMPID}]}")
+check "a companion cannot take the field on their own" \
+  "$(has "$ALONE" 'own characters')" "$(head -c 140 <<<"$ALONE")"
+
+close_fights
 
 echo "== and they can sleep it off =="
 # The picker draws Make camp from `can_camp`, which is LocationEngine's own

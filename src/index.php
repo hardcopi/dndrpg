@@ -107,6 +107,13 @@ require_signed_in_page();
       selected: null,      // character id whose sheet is open
       sheets: new Map(),   // id -> the payload, so flicking through the list is free
       fetching: new Set(), // ids already on their way, so a prefetch is asked once
+      // Who marches out when a fight is asked for, per party. A Set of
+      // character ids, seeded from whoever is on their feet the first time a
+      // party's sheet is drawn and then left to the player. Per page load:
+      // "who am I taking THIS time" is a decision about the next ten minutes,
+      // not a setting about the character.
+      joining: new Map(),   // party_id -> Set(character id)
+      arming: null,         // the character whose Retire has been pressed once
     };
 
     // =====================================================================
@@ -278,6 +285,30 @@ require_signed_in_page();
       });
     }
 
+    /**
+     * Who walks out with you, for one party.
+     *
+     * Seeded the first time a party is drawn with everybody on their feet,
+     * which is what a player who never touches a tick would expect, and then
+     * owned by the player. Held per party rather than globally because two
+     * parties are two decisions, and flicking between them must not carry one
+     * party's choice into the other's tabs.
+     *
+     * The downed are never in it. Anybody knocked out since the set was made is
+     * dropped on the way past, so a tick cannot outlive the character it
+     * belonged to falling over.
+     */
+    function joiners(partyId, party) {
+      if (!partyId) return new Set();
+      let set = state.joining.get(partyId);
+      if (!set) {
+        set = new Set(party.filter((m) => m.current_hp > 0).map((m) => Number(m.id)));
+        state.joining.set(partyId, set);
+      }
+      party.forEach((m) => { if (m.current_hp <= 0) set.delete(Number(m.id)); });
+      return set;
+    }
+
     /** A row of the saves or skills column. */
     function statRow(label, m, prof, note) {
       return `<li class="stat-line${prof ? ' is-prof' : ''}">
@@ -311,6 +342,29 @@ require_signed_in_page();
       // a person, and "Play" alone would not tell you what you were about to
       // walk into. A character with no party has no module and no game to
       // resume; they get the creator instead of a button that would open one.
+      /*
+       * Retiring somebody, in two presses.
+       *
+       * A confirmation, because it is the one control on this page that takes
+       * a character away — and an in-page one rather than `confirm()`, which
+       * is a browser modal that stops every script on the page and cannot be
+       * styled, read by the tests, or dismissed by anything but a human.
+       * Pressing once arms it and pressing again does it; anything else on the
+       * sheet redraws and disarms it, which is the behaviour you want from a
+       * confirmation you have wandered away from.
+       *
+       * Not offered for a companion. `character/retire` refuses them — they
+       * are dismissed at camp, which is a scene and not a button — so the
+       * offer would be a promise the server breaks.
+       */
+      const retire = c.companion_key
+        ? ''
+        : `<button type="button" class="btn btn-small retire-btn${
+             state.arming === Number(c.id) ? ' is-armed' : ''}"
+                   data-retire="${esc(c.id)}"
+                   title="Retire ${esc(c.name)}. They leave the list; the party and everything they were carrying stay.">${
+             state.arming === Number(c.id) ? 'Really retire?' : 'Retire'}</button>`;
+
       /*
        * Camp is the other half of a fight, and this is where the fight now
        * ends: a party back from a skirmish at two hit points has nowhere on
@@ -357,29 +411,52 @@ require_signed_in_page();
        * with nothing to choose.
        */
       const party = payload.party || [];
+      const coming = joiners(ctx.party_id, party);
+      /*
+       * Each tab is a tick and a door, and they are two controls rather than
+       * one: a checkbox nested inside a button is not valid HTML and, more to
+       * the point, "bring them" and "show me them" are different questions
+       * about the same person. The tick decides who walks out when a fight is
+       * asked for; the rest of the tab opens their sheet.
+       *
+       * Somebody at nought hit points cannot be ticked. The engine drops them
+       * from the field anyway, so a tick that could be set and then ignored
+       * would be a promise the fight does not keep.
+       */
       const tabs = party.length > 1
         ? `<div class="party-tabs" role="tablist" aria-label="Party members">
              ${party.map((m) => {
                const hurt = m.max_hp > 0 && m.current_hp / m.max_hp <= 0.34 ? ' is-hurt' : '';
                const on = m.id == c.id;
-               return `<button type="button" class="party-tab${on ? ' is-active' : ''}${m.companion ? ' is-companion' : ''}"
-                       role="tab" aria-selected="${on ? 'true' : 'false'}"
-                       data-pick="${esc(m.id)}"
-                       title="${m.companion
-                         ? esc(m.name) + ' travels with you. Read their sheet here; they are recruited and dismissed at camp.'
-                         : 'Read ' + esc(m.name) + '&apos;s sheet'}">
-                 ${m.sprite_key
-                   ? `<img class="tab-face" alt="" loading="lazy"
-                          src="assets/images/npcs/${encodeURIComponent(m.sprite_key)}_face.png"
-                          onerror="this.remove()">`
-                   : ''}
-                 <span class="tab-body">
-                   <span class="tab-name">${esc(m.name)}</span>
-                   <span class="tab-sub">${esc(m.class)} ${esc(m.level)} ·
-                     <span class="char-hp${hurt}">${esc(m.current_hp)}/${esc(m.max_hp)}</span>${
-                       m.companion ? ' · <span class="tab-comp">companion</span>' : ''}</span>
-                 </span>
-               </button>`;
+               const down = m.current_hp <= 0;
+               return `<div class="party-tab${on ? ' is-active' : ''}${m.companion ? ' is-companion' : ''}${down ? ' is-down' : ''}">
+                 <input type="checkbox" class="tab-join" data-join="${esc(m.id)}"
+                        ${coming.has(Number(m.id)) ? 'checked' : ''} ${down ? 'disabled' : ''}
+                        aria-label="${down
+                          ? esc(m.name) + ' is down and cannot fight'
+                          : 'Take ' + esc(m.name) + ' into the fight'}"
+                        title="${down
+                          ? esc(m.name) + ' is down and cannot fight.'
+                          : 'Take ' + esc(m.name) + ' into a random encounter'}">
+                 <button type="button" class="tab-open" role="tab"
+                         aria-selected="${on ? 'true' : 'false'}"
+                         data-pick="${esc(m.id)}"
+                         title="${m.companion
+                           ? esc(m.name) + ' travels with you. Read their sheet here; they are recruited and dismissed at camp.'
+                           : 'Read ' + esc(m.name) + '&apos;s sheet'}">
+                   ${m.sprite_key
+                     ? `<img class="tab-face" alt="" loading="lazy"
+                            src="assets/images/npcs/${encodeURIComponent(m.sprite_key)}_face.png"
+                            onerror="this.remove()">`
+                     : ''}
+                   <span class="tab-body">
+                     <span class="tab-name">${esc(m.name)}</span>
+                     <span class="tab-sub">${esc(m.class)} ${esc(m.level)} ·
+                       <span class="char-hp${hurt}">${esc(m.current_hp)}/${esc(m.max_hp)}</span>${
+                         m.companion ? ' · <span class="tab-comp">companion</span>' : ''}</span>
+                   </span>
+                 </button>
+               </div>`;
              }).join('')}
            </div>`
         : '';
@@ -485,6 +562,7 @@ require_signed_in_page();
               <a class="btn btn-small" target="_blank" rel="noopener"
                  href="sheet_print.php?character_id=${esc(c.id)}&amp;print=1"
                  title="A paper sheet for the table, in the standard 5e layout. Opens in a new tab.">Print</a>
+              ${retire}
             </div>
           </div>
 
@@ -606,6 +684,10 @@ require_signed_in_page();
     }
 
     async function showSheet(id, pressed) {
+      // Looking at somebody else disarms a Retire you walked away from. Only
+      // when it is somebody else: the first press re-renders this same sheet to
+      // put "Really retire?" on the button, and that must not undo itself.
+      if (state.arming !== null && state.arming !== id) state.arming = null;
       state.selected = id;
       renderRail();
       const host = document.getElementById('detail');
@@ -693,6 +775,48 @@ require_signed_in_page();
      * `leader_character_id`.
      */
     /**
+     * Retire somebody, on the second press.
+     *
+     * The route is the game's own: it refuses the last character anywhere, it
+     * refuses companions, and it moves the session off whoever it just retired
+     * so the next request does not load a character that is gone. All this does
+     * is ask, and then read the world again — the rail has one fewer name in it
+     * and the sheet on screen is of somebody who is no longer there, so it
+     * lands on whoever is left.
+     */
+    async function retireCharacter(btn) {
+      const id = Number(btn.dataset.retire);
+      if (state.arming !== id) {
+        // First press: arm it, and say so on the button itself.
+        state.arming = id;
+        await showSheet(id);
+        return;
+      }
+      state.arming = null;
+      btn.disabled = true;
+      try {
+        const r = await API.post('character/retire', { character_id: id });
+        state.sheets.delete(id);
+        state.characters = (await API.get('session/list')).characters || [];
+        // The party's marching order has changed, so any sheet that draws tabs
+        // for it is now drawing a member who has gone.
+        state.sheets.clear();
+        state.joining.clear();
+        renderRail();
+        const next = state.characters[0];
+        if (next) {
+          await showSheet(Number(next.id));
+        } else {
+          renderShelf('Start your first adventure');
+        }
+        showNotice(r.message || 'Retired.');
+      } catch (err) {
+        btn.disabled = false;
+        showError(err.message || 'They could not be retired.');
+      }
+    }
+
+    /**
      * A night's sleep, from here.
      *
      * `location/camp` is the game's own route and the rules stay in it: it
@@ -732,6 +856,24 @@ require_signed_in_page();
         await makeCamp(camp);
         return;
       }
+      const retire = e.target.closest('[data-retire]');
+      if (retire) {
+        await retireCharacter(retire);
+        return;
+      }
+      // A tick on a tab: who comes to the next fight. Read off the box rather
+      // than toggled here, so the checkbox remains the thing that holds the
+      // state and a keyboard press needs no second code path.
+      const join = e.target.closest('[data-join]');
+      if (join) {
+        const party = state.sheets.get(state.selected)?.context?.party_id;
+        const set = party ? state.joining.get(party) : null;
+        if (set) {
+          if (join.checked) set.add(Number(join.dataset.join));
+          else set.delete(Number(join.dataset.join));
+        }
+        return;   // no redraw: a tick is not a change of view
+      }
       // A party tab: same door as a name in the rail, so the same handler
       // answers it and the rail's highlight moves with the sheet.
       const tab = e.target.closest('[data-pick]');
@@ -758,7 +900,14 @@ require_signed_in_page();
          * to.
          */
         if (fight) {
-          const r = await API.post('combat/random', { tier: btn.dataset.tier || 'fair' });
+          const r = await API.post('combat/random', {
+            tier: btn.dataset.tier || 'fair',
+            // Who was ticked. Sent for a party of one as well, where there are
+            // no tabs and the set is simply that one person — the route takes
+            // the same shape either way rather than the page having two ways
+            // of asking for a fight.
+            members: [...(state.joining.get(Number(btn.dataset.party)) || [])],
+          });
           /*
            * Which fight to come back from.
            *

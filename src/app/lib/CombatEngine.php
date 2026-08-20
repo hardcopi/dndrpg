@@ -1319,11 +1319,17 @@ class CombatEngine
         return preg_match('/^[aeiou]/i', $name) ? 'an' : 'a';
     }
 
+    /**
+     * @param list<int>|null $only  The character ids to deploy, when the player
+     *   has chosen who comes. Null is everybody, which is what an authored
+     *   fight means: you are ambushed with whoever you are travelling with.
+     */
     public function startEncounter(
         int $characterId,
         int $encounterId,
         int $locationId,
-        ?int $mapSeed = null
+        ?int $mapSeed = null,
+        ?array $only = null
     ): array {
         $existing = $this->getActiveSession($characterId);
         if ($existing) {
@@ -1348,6 +1354,25 @@ class CombatEngine
         $party = $this->getPartyCharacters($characterId);
         if (!$party) {
             throw new RuntimeException('No party characters for combat.');
+        }
+
+        // Who was asked for, when somebody was asked for. A fight taken
+        // deliberately — from the front page — lets the player leave people
+        // behind; a fight that happens TO them does not, and passes null.
+        //
+        // Refuses rather than falling back to the whole party when the choice
+        // matches nobody. Quietly deploying four people who were not asked for
+        // is a worse answer than an error, and it is the answer that would only
+        // be noticed on the battlefield.
+        if ($only !== null) {
+            $wanted = array_flip(array_map('intval', $only));
+            $party = array_values(array_filter(
+                $party,
+                static fn ($p) => isset($wanted[(int) $p['id']])
+            ));
+            if (!$party) {
+                throw new InvalidArgumentException('Nobody was chosen for this fight.');
+            }
         }
 
         // Fit the roster to who turned up. See scaleToParty().
