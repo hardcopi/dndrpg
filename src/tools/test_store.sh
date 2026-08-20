@@ -168,6 +168,43 @@ OFF=$(api "inventory/equip" "{\"character_id\":${MATE},\"inventory_id\":${INVID}
 SOLD=$(api "inventory/sell" "{\"character_id\":${MATE},\"inventory_id\":${INVID}}")
 check "and it can be sold once it is off" "$(has "$SOLD" '"ok":true')" "$(head -c 140 <<<"$SOLD")"
 
+echo "== handing things across the party =="
+# The bag's Give: one target for the panel, a button on every row. The route is
+# the game's own and does the work — it refuses anybody outside the party, takes
+# the thing off if it was being worn, and merges the stack into one the receiver
+# already has. What is checked here is that the picker can drive it for a member
+# the session is not playing, in both directions.
+LEAD=$(jq_ "$A" "
+import json,sys
+print(json.load(sys.stdin)['character']['id'])")
+GIFT=$(api "inventory/buy" "{\"character_id\":${MATE},\"item_id\":${ITEM_ID},\"npc_key\":\"_general_store\"}")
+GIFTID=$(jq_ "$(api "inventory/list&character_id=${MATE}")" "
+import json,sys
+rows = [r for r in json.load(sys.stdin)['inventory'] if r['item_id'] == ${ITEM_ID}]
+print(rows[0]['id'] if rows else 0)")
+HANDED=$(api "inventory/give" \
+  "{\"character_id\":${MATE},\"inventory_id\":${GIFTID},\"to_character_id\":${LEAD}}")
+check "one party member can hand a thing to another" \
+  "$(has "$HANDED" '"ok":true')" "$(head -c 140 <<<"$HANDED")"
+LANDED=$(sql "SELECT COUNT(*) FROM character_inventory
+               WHERE character_id = ${LEAD} AND item_id = ${ITEM_ID}")
+check "and it is in the other one's pack afterwards" \
+  "$([ "${LANDED:-0}" -ge 1 ] 2>/dev/null && echo 1 || echo 0)" "${LANDED} row(s)"
+
+# Somebody in another party entirely. `give()` asks sameParty(), so this is the
+# service's rule rather than the route's, and it is the one that stops a party
+# being used as a way to move things onto a character who is not in it.
+LONER=$(jq_ "$(api "character/create" \
+  "{\"name\":\"Loner${SUFFIX}\",\"race\":\"Human\",\"class\":\"Cleric\",\"module\":\"rivermark\"}")" "
+import json,sys
+print(json.load(sys.stdin)['character']['id'])")
+BACK=$(sql "SELECT id FROM character_inventory
+             WHERE character_id = ${LEAD} AND item_id = ${ITEM_ID} LIMIT 1")
+STRAY=$(api "inventory/give" \
+  "{\"character_id\":${LEAD},\"inventory_id\":${BACK},\"to_character_id\":${LONER}}")
+check "but not to somebody in another party, even your own" \
+  "$(has "$STRAY" 'travelling with you')" "$(head -c 140 <<<"$STRAY")"
+
 echo "== and none of it reaches somebody else's character =="
 curl -s -c "$JAR2" -H 'Content-Type: application/json' -X POST \
   -d "{\"username\":\"${USER2}\",\"password\":\"${PASS}\"}" "$BASE/api/?r=auth/register" >/dev/null

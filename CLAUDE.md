@@ -762,6 +762,23 @@ things about it are deliberate:
   confirmation is two presses of the same button rather than `confirm()` — a
   browser modal stops every script on the page, cannot be styled, and cannot be
   driven by the tests. Looking at anybody else disarms it.
+- **The party strip is drawn above the bag as well as above the sheet**, and
+  pressing a name there KEEPS you where you are — a sheet takes you to their
+  sheet, a bag to their bag. That is `data-keep` on the tab, and it is the
+  difference between the strip and the rail down the right, where a name means
+  "show me somebody else" and lands on a sheet. Two questions that would
+  otherwise need two controls that look the same.
+- **Handing things over asks once, not once per row.** The bag has a single
+  "Hand things to" for the panel and a Give on every line: a party holds four,
+  the answer is the same for the six things you are about to move, and a picker
+  per row is a control repeated twenty times to ask one question.
+  `inventory/give` does the work and is the game's own route — it refuses
+  anybody outside the party, takes a thing off before it travels, and merges
+  the stack into one the receiver already has.
+- **Equipping and giving compose their own sentence**, because those two routes
+  answer with the pack and the character rather than with prose. The page says
+  what it asked for; a server that worded it would be worded for one screen and
+  quoted by another that words it differently.
 - **The bag and the store take the pane over, rather than opening on top of
   it.** This page has no modal machinery — the game's lives behind the whole
   game shell — and a pane that swaps what it shows is less code and less to

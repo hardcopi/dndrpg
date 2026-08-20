@@ -6910,6 +6910,27 @@ body.home-page > main { flex: 1 0 auto; padding-top: var(--sp-32); }
   font-size: var(--fs-xs);
   white-space: nowrap;
 }
+/* Who the Give buttons are pointing at. Asked once for the panel rather than
+   on every row: a party holds four and the answer is the same for the six
+   things you are about to move. */
+.hand-to {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-8);
+  white-space: nowrap;   /* "Hand things to" is one phrase, not three lines */
+  margin: var(--sp-12) 0;
+  color: var(--text-dim);
+  font-size: var(--fs-sm);
+}
+.hand-to select {
+  background: var(--bg-inset);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: var(--sp-4) var(--sp-8);
+  font: inherit;
+}
+
 .store-purse { margin: 0 0 var(--sp-12); color: var(--text-dim); }
 .store-purse strong { color: var(--gold); }
 .store-purse .stat-note { display: block; white-space: normal; }

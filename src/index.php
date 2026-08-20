@@ -313,6 +313,63 @@ require_signed_in_page();
       return set;
     }
 
+    /**
+     * The party strip.
+     *
+     * Drawn above the sheet and above the bag, because both are about one
+     * person and both are things you want for the next person along without
+     * going back to a list first. Pressing one keeps you where you are — read a
+     * sheet, press a name, read that sheet; open a bag, press a name, open that
+     * bag — which is `data-keep` on the button and is the difference between
+     * these and the rail down the right, where pressing a name means "show me
+     * somebody else" and lands on their sheet.
+     *
+     * `ticks` is the fight roster, and only the sheet wants it: a tick is about
+     * who walks out to a fight and would be a question with no meaning over a
+     * list of somebody's rope and rations.
+     */
+    function partyTabs(party, currentId, partyId, ticks) {
+      if (!party || party.length < 2) return '';
+      const coming = ticks ? joiners(partyId, party) : null;
+      return `<div class="party-tabs" role="tablist" aria-label="Party members">
+        ${party.map((m) => {
+          const hurt = m.max_hp > 0 && m.current_hp / m.max_hp <= 0.34 ? ' is-hurt' : '';
+          const on = m.id == currentId;
+          const down = m.current_hp <= 0;
+          return `<div class="party-tab${on ? ' is-active' : ''}${m.companion ? ' is-companion' : ''}${down ? ' is-down' : ''}">
+            ${coming
+              ? `<input type="checkbox" class="tab-join" data-join="${esc(m.id)}"
+                        ${coming.has(Number(m.id)) ? 'checked' : ''} ${down ? 'disabled' : ''}
+                        aria-label="${down
+                          ? esc(m.name) + ' is down and cannot fight'
+                          : 'Take ' + esc(m.name) + ' into the fight'}"
+                        title="${down
+                          ? esc(m.name) + ' is down and cannot fight.'
+                          : 'Take ' + esc(m.name) + ' into a random encounter'}">`
+              : ''}
+            <button type="button" class="tab-open" role="tab"
+                    aria-selected="${on ? 'true' : 'false'}"
+                    data-pick="${esc(m.id)}" data-keep="1"
+                    title="${m.companion
+                      ? esc(m.name) + ' travels with you.'
+                      : esc(m.name)}">
+              ${m.sprite_key
+                ? `<img class="tab-face" alt="" loading="lazy"
+                       src="assets/images/npcs/${encodeURIComponent(m.sprite_key)}_face.png"
+                       onerror="this.remove()">`
+                : ''}
+              <span class="tab-body">
+                <span class="tab-name">${esc(m.name)}</span>
+                <span class="tab-sub">${esc(m.class)} ${esc(m.level)} ·
+                  <span class="char-hp${hurt}">${esc(m.current_hp)}/${esc(m.max_hp)}</span>${
+                    m.companion ? ' · <span class="tab-comp">companion</span>' : ''}</span>
+              </span>
+            </button>
+          </div>`;
+        }).join('')}
+      </div>`;
+    }
+
     /** A row of the saves or skills column. */
     function statRow(label, m, prof, note) {
       return `<li class="stat-line${prof ? ' is-prof' : ''}">
@@ -393,7 +450,7 @@ require_signed_in_page();
         : '<span class="camp-no" title="Camping needs open ground or an inn.">No camp here</span>';
 
       /*
-       * The party, across the top of their own sheet.
+       * The party, across the top of their own sheet. See partyTabs().
        *
        * The rail on the right already lists everybody, but it lists them by
        * ADVENTURE — every character on the account, in groups — and comparing
@@ -415,7 +472,6 @@ require_signed_in_page();
        * with nothing to choose.
        */
       const party = payload.party || [];
-      const coming = joiners(ctx.party_id, party);
       /*
        * Each tab is a tick and a door, and they are two controls rather than
        * one: a checkbox nested inside a button is not valid HTML and, more to
@@ -427,43 +483,7 @@ require_signed_in_page();
        * from the field anyway, so a tick that could be set and then ignored
        * would be a promise the fight does not keep.
        */
-      const tabs = party.length > 1
-        ? `<div class="party-tabs" role="tablist" aria-label="Party members">
-             ${party.map((m) => {
-               const hurt = m.max_hp > 0 && m.current_hp / m.max_hp <= 0.34 ? ' is-hurt' : '';
-               const on = m.id == c.id;
-               const down = m.current_hp <= 0;
-               return `<div class="party-tab${on ? ' is-active' : ''}${m.companion ? ' is-companion' : ''}${down ? ' is-down' : ''}">
-                 <input type="checkbox" class="tab-join" data-join="${esc(m.id)}"
-                        ${coming.has(Number(m.id)) ? 'checked' : ''} ${down ? 'disabled' : ''}
-                        aria-label="${down
-                          ? esc(m.name) + ' is down and cannot fight'
-                          : 'Take ' + esc(m.name) + ' into the fight'}"
-                        title="${down
-                          ? esc(m.name) + ' is down and cannot fight.'
-                          : 'Take ' + esc(m.name) + ' into a random encounter'}">
-                 <button type="button" class="tab-open" role="tab"
-                         aria-selected="${on ? 'true' : 'false'}"
-                         data-pick="${esc(m.id)}"
-                         title="${m.companion
-                           ? esc(m.name) + ' travels with you. Read their sheet here; they are recruited and dismissed at camp.'
-                           : 'Read ' + esc(m.name) + '&apos;s sheet'}">
-                   ${m.sprite_key
-                     ? `<img class="tab-face" alt="" loading="lazy"
-                            src="assets/images/npcs/${encodeURIComponent(m.sprite_key)}_face.png"
-                            onerror="this.remove()">`
-                     : ''}
-                   <span class="tab-body">
-                     <span class="tab-name">${esc(m.name)}</span>
-                     <span class="tab-sub">${esc(m.class)} ${esc(m.level)} ·
-                       <span class="char-hp${hurt}">${esc(m.current_hp)}/${esc(m.max_hp)}</span>${
-                         m.companion ? ' · <span class="tab-comp">companion</span>' : ''}</span>
-                   </span>
-                 </button>
-               </div>`;
-             }).join('')}
-           </div>`
-        : '';
+      const tabs = partyTabs(party, c.id, ctx.party_id, true);
 
       const play = ctx.party_id
         ? `<div class="play-doors">
@@ -693,12 +713,37 @@ require_signed_in_page();
       });
     }
 
+    /**
+     * Show a character, in whatever the pane is currently showing.
+     *
+     * The party strip keeps you where you are (`keep`) and the rail down the
+     * right does not: pressing a name in the strip means "the same thing, for
+     * them" — their bag, if you are in a bag — and pressing one in the rail
+     * means "show me somebody else", which lands on a sheet. Two different
+     * questions that would otherwise need two different-looking controls.
+     */
+    async function openCharacter(id, opts) {
+      const keep = !!(opts && opts.keep);
+      if (state.arming !== null && state.arming !== id) state.arming = null;
+      if (!keep) state.view = 'sheet';
+      state.selected = id;
+      if (state.view === 'bag') {
+        renderRail();
+        return renderBag(id);
+      }
+      if (state.view === 'store') {
+        renderRail();
+        return renderStore(id);
+      }
+      return showSheet(id, opts && opts.pressed);
+    }
+
     async function showSheet(id, pressed) {
       // Looking at somebody else disarms a Retire you walked away from. Only
       // when it is somebody else: the first press re-renders this same sheet to
       // put "Really retire?" on the button, and that must not undo itself.
       if (state.arming !== null && state.arming !== id) state.arming = null;
-      if (state.selected !== id) state.view = 'sheet';
+      state.view = 'sheet';
       state.selected = id;
       renderRail();
       const host = document.getElementById('detail');
@@ -763,7 +808,7 @@ require_signed_in_page();
 
     document.getElementById('char-list').addEventListener('click', (e) => {
       const btn = e.target.closest('[data-pick]');
-      if (btn) showSheet(Number(btn.dataset.pick), true);
+      if (btn) openCharacter(Number(btn.dataset.pick), { pressed: true });
     });
 
     document.getElementById('btn-new').addEventListener('click', () => {
@@ -822,16 +867,48 @@ require_signed_in_page();
      */
     async function renderBag(id) {
       const host = document.getElementById('detail');
-      const who = state.sheets.get(id)?.sheet?.character?.name || 'This character';
-      host.innerHTML = panelHead(who, 'The bag') + '<p class="help-hint">Reading the pack…</p>';
+      host.innerHTML = '<p class="help-hint">Reading the pack…</p>';
+
+      // The sheet's payload as well as the pack, for the two things a bag needs
+      // that a list of items does not carry: whose it is, and who else is in
+      // the party. Cached almost always — the prefetch has been round for every
+      // member — so this is one request in practice rather than two.
+      let payload;
       let items;
       try {
-        items = (await API.get('inventory/list', { character_id: id })).inventory || [];
+        [payload, items] = await Promise.all([
+          sheetFor(id),
+          API.get('inventory/list', { character_id: id }).then((r) => r.inventory || []),
+        ]);
       } catch (e) {
         showError(e.message);
         return;
       }
       if (state.view !== 'bag' || state.selected !== id) return;
+
+      const who = payload?.sheet?.character?.name || 'This character';
+      const party = payload?.party || [];
+      const others = party.filter((m) => Number(m.id) !== Number(id));
+
+      /*
+       * Handing things over.
+       *
+       * One target for the whole panel rather than a picker on every row: a
+       * party holds four, the answer is the same for the six things you are
+       * about to move, and a select per row is a control repeated twenty times
+       * to ask a question once. "Hand to X", then press Give down the list.
+       *
+       * `inventory/give` does the rest and is the game's own route: it refuses
+       * anybody outside the party, takes the thing off first if it was being
+       * worn, and merges the stack into one the receiver already has.
+       */
+      const handTo = others.length
+        ? `<label class="hand-to">Hand things to
+             <select id="give-to">
+               ${others.map((m) => `<option value="${esc(m.id)}">${esc(m.name)}</option>`).join('')}
+             </select>
+           </label>`
+        : '';
 
       const rows = items.map((it) => {
         const worn = Number(it.is_equipped) === 1;
@@ -850,13 +927,20 @@ require_signed_in_page();
               ? `<button type="button" class="btn btn-small" data-equip="${esc(it.id)}"
                          data-on="${worn ? '0' : '1'}">${worn ? 'Take off' : 'Equip'}</button>`
               : ''}
+            ${others.length
+              ? `<button type="button" class="btn btn-small" data-give="${esc(it.id)}"
+                         title="Hand it to whoever is named above">Give</button>`
+              : ''}
           </span>
         </li>`;
       }).join('');
 
-      host.innerHTML = panelHead(who, 'The bag') + (items.length
-        ? `<ul class="bag-list">${rows}</ul>`
-        : '<p class="help-hint">Carrying nothing at all.</p>');
+      host.innerHTML = panelHead(who, 'The bag')
+        + partyTabs(party, id, payload?.context?.party_id, false)
+        + handTo
+        + (items.length
+          ? `<ul class="bag-list">${rows}</ul>`
+          : '<p class="help-hint">Carrying nothing at all.</p>');
     }
 
     /**
@@ -1027,7 +1111,7 @@ require_signed_in_page();
         const id = Number(open.dataset.id) || state.selected;
         if (state.view === 'bag') await renderBag(id);
         else if (state.view === 'store') await renderStore(id);
-        else await showSheet(id);
+        else await showSheet(id);   // Back: the sheet, and the view with it
         return;
       }
 
@@ -1035,12 +1119,20 @@ require_signed_in_page();
       if (equip) {
         equip.disabled = true;
         try {
-          const r = await API.post('inventory/equip', {
+          const on = equip.dataset.on === '1';
+          // The row's own name, before the panel is redrawn out from under it.
+          const what = equip.closest('.bag-row')?.querySelector('.bag-name')?.textContent?.trim();
+          await API.post('inventory/equip', {
             character_id: state.selected,
             inventory_id: Number(equip.dataset.equip),
-            equip: equip.dataset.on === '1',
+            equip: on,
           });
-          await afterTrade(state.selected, r.message);
+          // `equip` answers with the pack and the character rather than a
+          // sentence, so the sentence is written here out of what was asked
+          // for. The alternative is a server that words this for one screen
+          // and is quoted by another that words it differently.
+          await afterTrade(state.selected,
+            what ? `${what} ${on ? 'equipped' : 'taken off'}.` : null);
         } catch (err) {
           equip.disabled = false;
           showError(err.message || 'That could not be worn.');
@@ -1060,6 +1152,28 @@ require_signed_in_page();
         } catch (err) {
           drink.disabled = false;
           showError(err.message || 'That could not be drunk.');
+        }
+        return;
+      }
+
+      const gift = e.target.closest('[data-give]');
+      if (gift) {
+        const to = document.getElementById('give-to');
+        if (!to || !to.value) return;
+        gift.disabled = true;
+        try {
+          const r = await API.post('inventory/give', {
+            character_id: state.selected,
+            inventory_id: Number(gift.dataset.give),
+            to_character_id: Number(to.value),
+          });
+          // Same as equipping: the route answers with what moved and to whom,
+          // and the sentence is this page's to write.
+          await afterTrade(state.selected, `${esc(r.item)}${r.moved > 1 ? ' ×' + r.moved : ''}`
+            + ` handed to ${esc(r.recipient?.name || 'them')}.`);
+        } catch (err) {
+          gift.disabled = false;
+          showError(err.message || 'That could not be handed over.');
         }
         return;
       }
@@ -1119,7 +1233,7 @@ require_signed_in_page();
       // answers it and the rail's highlight moves with the sheet.
       const tab = e.target.closest('[data-pick]');
       if (tab) {
-        showSheet(Number(tab.dataset.pick));
+        openCharacter(Number(tab.dataset.pick), { keep: tab.dataset.keep === '1' });
         return;
       }
       const btn = e.target.closest('.play-btn, .fight-btn');
