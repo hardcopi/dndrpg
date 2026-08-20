@@ -560,7 +560,7 @@ require_signed_in_page();
             </div>
             <div class="sheet-header-actions">
               <a class="btn btn-small" target="_blank" rel="noopener"
-                 href="sheet_print.php?character_id=${esc(c.id)}&amp;print=1"
+                 href="sheet_print.php?character_id=${esc(c.id)}&amp;print=1&amp;from=picker"
                  title="A paper sheet for the table, in the standard 5e layout. Opens in a new tab.">Print</a>
               ${retire}
             </div>

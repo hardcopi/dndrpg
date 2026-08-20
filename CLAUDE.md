@@ -795,9 +795,28 @@ bar is drawn, so the ceremony happens over the battlefield with "+120 XP" still
 behind it, rather than a beat later on a map screen that has nothing to do with
 it. `leaveCombat` still asks on the way out — a fight that ended in a parley or a
 flight never drew an outcome bar, and talking your way out of something can pay
-experience too — and it now *waits* on the bar's ceremony (`ui.claiming`) before
-taking anything down, because for a skirmish leaving is a navigation and a
-half-claimed level would be left behind on a page that is gone. The guard is the combat session's id and not a boolean, because
+experience too.
+
+**It is claimed with `checkPending({refresh: false})`, and that argument is the
+whole of a bug worth remembering.** A ceremony normally ends by refreshing the
+world, because the sheet, the rail and the hit point bars are all stale by then.
+Claimed over a live battlefield, that refresh took the outcome bar and its
+Continue button with it — so a player who levelled at the end of a skirmish was
+left standing on the map, the fight over and the level taken, with the trip back
+to the picker hanging off a button that no longer existed. The ceremony now
+leaves the screen alone when the caller says it will see to it, and leaving is
+the combat screen's own job, done once.
+
+**Whether a fight was a sortie is settled while the fight is still on screen**,
+in `noteFight()`, and not read out of `state.combat` at the moment of leaving —
+by then anything may have refreshed it away. That was the second half of the
+same bug: the comparison was against nothing, so the answer was always no.
+
+**And `sheet_print.php` is told which door it was opened by** (`?from=picker`).
+It is reached from the game's own sheet panel and from the picker, and "Back to
+the game" is the wrong offer to somebody who pressed Print on the front page and
+has not started one — they were being put into a game they had not asked for.
+Both doors are always drawn; the one you came in by is first. The guard is the combat session's id and not a boolean, because
 it has to survive several redraws of one victory bar and must not survive into
 the next fight.
 

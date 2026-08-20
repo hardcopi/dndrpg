@@ -152,10 +152,34 @@ $xp = $c['xp_progress'] ?? null;
   because a hidden element still takes up space and half an inch of nothing at
   the top of page one is what pushes the bottom of the sheet onto page two.
 -->
+<?php
+/*
+ * Where "back" goes.
+ *
+ * This page is opened from two places and they are not the same place. The
+ * game's own sheet panel opens it mid-play, and back means the game; the
+ * character picker opens it from a screen you are not playing from at all, and
+ * back means the picker — a player who pressed Print on the front page and
+ * then pressed "Back to the game" was put into a game they had not started,
+ * which is a strange answer to a button they thought was a way out.
+ *
+ * The caller says which, because this page cannot know: the Referer is not
+ * sent on every navigation and is not worth trusting when the answer is one
+ * query parameter. Both doors are always drawn — the other one is often
+ * exactly where somebody wants to go next — but the one you came in by is
+ * first and reads as the way back.
+ */
+$fromPicker = ($_GET['from'] ?? '') === 'picker';
+?>
 <div class="sheet-toolbar no-print">
   <button type="button" class="primary" id="btn-print">Print / Save as PDF</button>
-  <a class="tb" href="game.php">Back to the game</a>
-  <a class="tb" href="index.php">Characters</a>
+  <?php if ($fromPicker): ?>
+    <a class="tb" href="index.php">Back to your characters</a>
+    <a class="tb" href="game.php">The game</a>
+  <?php else: ?>
+    <a class="tb" href="game.php">Back to the game</a>
+    <a class="tb" href="index.php">Characters</a>
+  <?php endif; ?>
   <span class="spacer"></span>
   <span class="who"><strong><?= esc($c['name']) ?></strong> · level <?= esc($c['level']) ?> <?= esc($c['class']) ?></span>
 </div>

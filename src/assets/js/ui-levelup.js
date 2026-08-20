@@ -64,22 +64,39 @@
    * Called after everything that can grant experience — a fight ending, a
    * conversation closing, a quest turned in. Cheap when there is nothing owed,
    * which is almost always.
+   *
+   * Answers with how many ceremonies it ran, for a caller that needs to know
+   * whether anything happened at all.
+   *
+   * `opts.refresh === false` leaves the world alone on the way out. The
+   * ceremony normally ends by refreshing everything, because the sheet, the
+   * rail and the hit point bars are all stale by then — but a caller that is
+   * ABOUT to refresh or leave anyway does not want its own screen pulled out
+   * from under it first. That is not hypothetical: the end-of-combat bar claims
+   * levels while the battlefield is still up, and the refresh took the bar and
+   * its Continue button with it, which stranded the player on the map at the
+   * end of a skirmish instead of returning them to the picker.
+   *
+   * @param {{refresh?: boolean}} [opts]
+   * @param {number} [ran] ceremonies already run in this chain; internal.
+   * @returns {Promise<number>}
    */
-  async function checkPending() {
-    if (open) return;
+  async function checkPending(opts, ran) {
+    const done = ran || 0;
+    if (open) return done;
     let pending;
     try {
       pending = (await API.get('levelup/pending')).pending || [];
     } catch (e) {
-      return; // A level owed is not worth interrupting play with an error.
+      return done; // A level owed is not worth interrupting play with an error.
     }
-    if (!pending.length) return;
-    await runCeremony(pending[0].id);
+    if (!pending.length) return done;
+    await runCeremony(pending[0].id, opts);
     // A big award can owe two levels. Come back for the next one.
-    await checkPending();
+    return checkPending(opts, done + 1);
   }
 
-  async function runCeremony(pendingId) {
+  async function runCeremony(pendingId, opts) {
     if (open) return;
     open = true;
     try {
@@ -89,7 +106,7 @@
         label: 'Level up',
         slot: 'levelup',
       });
-      await steps(el, ceremony);
+      await steps(el, ceremony, opts);
     } catch (e) {
       console.error('level-up ceremony failed', e);
     } finally {
@@ -104,7 +121,7 @@
    * it returns rather than tracking state here, so a half-finished ceremony
    * reopened after a reload resumes exactly where it stopped.
    */
-  async function steps(el, ceremony) {
+  async function steps(el, ceremony, opts) {
     let c = ceremony;
     if (!c.hp.done) {
       c = (await rollStep(el, c)).ceremony;
@@ -115,7 +132,7 @@
     if (c.spells.offered && !c.spells.done) {
       c = (await spellStep(el, c)).ceremony;
     }
-    await finish(el, c);
+    await finish(el, c, opts);
   }
 
   // =========================================================================
@@ -501,7 +518,7 @@
   // Close
   // =========================================================================
 
-  async function finish(el, c) {
+  async function finish(el, c, opts) {
     const gained = c.hp.gained;
     body(el).innerHTML = `
       <section class="levelup-step levelup-done">
@@ -524,8 +541,10 @@
     });
     UI().closeTopModal();
 
-    // The sheet, the party rail and the hit point bars are all now stale.
-    if (G().refreshAll) await G().refreshAll();
+    // The sheet, the party rail and the hit point bars are all now stale —
+    // unless the caller said it was about to see to that itself. See the note
+    // on checkPending: refreshing here is what took the end-of-combat bar away.
+    if ((!opts || opts.refresh !== false) && G().refreshAll) await G().refreshAll();
   }
 
   window.LevelUp = { checkPending, runCeremony };

@@ -94,8 +94,11 @@
     // The session whose owed levels have already been offered, so the ceremony
     // opens once on the victory bar and not on every redraw behind it.
     claimed: null,
-    // That offer, in flight. Awaited on the way out.
-    claiming: null,
+    // The fight currently on screen, and two things decided once about it: was
+    // it asked for from the picker, and are we already on the way out of it.
+    fightId: null,
+    sortie: false,
+    leaving: false,
   };
 
   function root() {
@@ -377,6 +380,9 @@
     const el = root();
     if (!s || !el) return;
     el.classList.remove('hidden');
+
+    // Settle what we need to know about this fight while it is still here.
+    noteFight();
 
     const actor = currentActor();
     const combatants = s.combatants || [];
@@ -1570,48 +1576,31 @@
     }
   }
 
-  /**
-   * Was this fight arranged from the character picker?
-   *
-   * The front page writes the id of the fight it started; a fight that ends
-   * with that id is a sortie from that page and the player goes back to it.
-   * Read and cleared in one go, so it can only ever be spent on the fight it
-   * was written for — a bare "came from the picker" flag left lying about would
-   * bounce somebody out of their game an hour later, when some authored fight
-   * happened to end.
-   */
-  function pickerSortie() {
-    let mark = null;
-    try {
-      mark = sessionStorage.getItem('rpg:picker-fight');
-      // Whatever happens next, this is spent. A player who presses Escape out
-      // of the game rather than Continue should not be sent to the picker by
-      // the fight after this one.
-      sessionStorage.removeItem('rpg:picker-fight');
-    } catch (e) {
-      return false;    // private mode, or storage disabled: stay in the game
-    }
-    return !!mark && mark === String(G().state.combat?.id ?? '');
-  }
-
   async function leaveCombat(status) {
-    // The victory bar's ceremony, if one opened. Awaited before anything is
-    // taken down, and before any navigation.
-    if (ui.claiming) {
-      try { await ui.claiming; } catch (e) { /* a level owed is not worth an error */ }
-      ui.claiming = null;
-    }
+    // Once. The button can be pressed twice, and a fight that ends in a flight
+    // reaches here from a different direction.
+    //
+    // Deliberately NOT waiting on an open ceremony: it is a modal over this
+    // screen, so Continue cannot be pressed while one is up, and a ceremony
+    // that never finishes — a step abandoned, a request that never came back —
+    // would otherwise take the Continue button down with it.
+    if (ui.leaving) return;
+    ui.leaving = true;
 
     // A fight taken from the front page ends by going back to it, with the
     // party's hit points and the experience bar showing what the fight cost
-    // and bought. Everything below this — closing the board, refreshing the
-    // world, the walk back to the map — is for a fight that belongs to the
-    // game, and there is no point doing any of it to a page about to be
-    // replaced.
-    if (pickerSortie()) {
+    // and bought. Answered by noteFight() while the fight was still on screen,
+    // not read out of `state.combat` here — by here it can be gone.
+    //
+    // Everything below — closing the board, refreshing the world, the walk back
+    // to the map — is for a fight that belongs to the game, and there is no
+    // point doing any of it to a page about to be replaced.
+    const sortie = ui.sortie;
+    ui.sortie = false;
+    if (sortie) {
       await claimLevels(status, true);
       location.href = 'index.php';
-      return;
+      return;    // `leaving` stays set: this page is on its way out
     }
 
     close();
@@ -1628,6 +1617,38 @@
     // never drew one, and experience can still have arrived — Effects::grantXp
     // pays for talking your way out of things.
     await claimLevels(status, true);
+    ui.leaving = false;
+  }
+
+  /**
+   * What we know about this fight before anything happens to it.
+   *
+   * Called on every render and does its work once per session id. The question
+   * it settles — was this fight asked for from the character picker — has to be
+   * answered while the fight is still on screen, because the answer was being
+   * read at the moment of LEAVING and by then it could already be wrong: the
+   * level-up ceremony refreshes the world when it closes, `state.combat` goes
+   * with it, and the comparison was then against nothing. That is the whole of
+   * the bug where levelling up at the end of a skirmish put the player back on
+   * the map instead of back on the picker.
+   *
+   * The mark is spent as soon as it matches. A mark for some other fight is
+   * left alone rather than cleared — it belongs to a tab that is still in one.
+   */
+  function noteFight() {
+    const id = G().state.combat?.id ?? null;
+    if (!id || ui.fightId === id) return;
+    ui.fightId = id;
+    ui.leaving = false;
+    ui.claimed = null;
+    let mark = null;
+    try {
+      mark = sessionStorage.getItem('rpg:picker-fight');
+      if (mark === String(id)) sessionStorage.removeItem('rpg:picker-fight');
+    } catch (e) {
+      mark = null;    // storage off: nothing here is a sortie
+    }
+    ui.sortie = mark === String(id);
   }
 
   /**
@@ -1642,13 +1663,15 @@
    * the bar is better claimed late than left owed until the next fight.
    */
   async function claimLevels(status, force) {
-    if (!window.LevelUp) return;
+    if (!window.LevelUp) return 0;
     const id = G().state.combat?.id ?? null;
     if (!force) {
-      if (status !== 'victory' || ui.claimed === id) return;
+      if (status !== 'victory' || ui.claimed === id) return 0;
       ui.claimed = id;
     }
-    await window.LevelUp.checkPending();
+    // `refresh: false`: leaving is this screen's job, and the ceremony's own
+    // refresh would take the outcome bar away before anybody could press it.
+    return (await window.LevelUp.checkPending({ refresh: false })) || 0;
   }
 
   // =========================================================================
