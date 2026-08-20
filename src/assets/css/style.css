@@ -3519,6 +3519,15 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   border-radius: var(--r-md);
   margin-bottom: var(--sp-12);
 }
+/* The same strip, for something that went right — a night's sleep, and whatever
+   the fire had to say about it. One element and one modifier rather than two
+   banners, so a message can never appear under an error that is still showing
+   above it. */
+.error-banner.is-good {
+  background: var(--gold-well);
+  border-color: var(--gold-dim);
+  color: var(--gold);
+}
 
 .help-hint {
   font-size: var(--fs-xs);
@@ -6787,6 +6796,15 @@ body.home-page > main { flex: 1 0 auto; padding-top: var(--sp-32); }
   color: var(--text-dim);
 }
 .fight-label svg { width: 1em; height: 1em; fill: none; stroke: currentColor; }
+/* Camp is pushed to the far end of the same line. It is the other thing you do
+   between adventures — the two of them are a pair, and a fight you cannot sleep
+   off is a fight you can only have once. */
+.camp-btn, .camp-no { margin-left: auto; }
+.camp-no {
+  font-size: var(--fs-2xs);
+  color: var(--text-faint);
+  font-style: italic;
+}
 /* Nothing to press: a character with no party has no game to resume, and a
    gold-lit box saying so reads as a button that failed rather than as a
    sentence. Same frame, no light in it. */

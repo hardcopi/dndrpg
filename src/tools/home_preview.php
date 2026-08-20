@@ -324,6 +324,10 @@ function sheet_fixture(array $c): array
             'party_size' => 3,
             'location_name' => 'The Golden Flagon',
             'region_name' => 'Rivermark',
+            // The Flagon is an inn, so they may sleep here. `?case=loose` is
+            // the other half of this: a character with no party has no
+            // location either, and no camp offered.
+            'can_camp' => true,
         ],
     ];
 }

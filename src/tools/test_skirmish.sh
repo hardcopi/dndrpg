@@ -1,5 +1,6 @@
 #!/bin/bash
-# Can a party take a fight from the front page, and only a sane one?
+# Can a party take a fight from the front page, sleep it off, and only when
+# either makes sense?
 #
 # `combat/random` is the picker's second door: the fighting pit's own match,
 # taken wherever the party is standing rather than at the arena in the Quarry
@@ -14,7 +15,10 @@
 #     that ends on the first monster turn;
 #   * its scratch encounter is unplaced — no region, no location — so the row it
 #     writes can never be stumbled into on a travel roll;
-#   * and it leaves the pit's own scratch row alone.
+#   * it leaves the pit's own scratch row alone;
+#   * and the party can camp afterwards where camping is allowed, and is told
+#     so plainly where it is not — a fight you cannot sleep off is a fight you
+#     can only have once.
 #
 # What it does NOT cover is the level-up: the experience is granted by
 # CombatEngine inside the action that ends the fight (settle -> finalizeCombat
@@ -214,6 +218,54 @@ check "an unknown tier falls back rather than failing" \
 BADROW=$(sql "SELECT description FROM encounters WHERE encounter_key = '_skirmish_party_${PID}'")
 check "and what it falls back to is the fair match" \
   "$(has "$BADROW" 'evenly made')" "description was '${BADROW}'"
+
+echo "== and they can sleep it off =="
+# The picker draws Make camp from `can_camp`, which is LocationEngine's own
+# answer, and presses `location/camp`, which asks the same method again. What
+# matters is that those two never disagree: a button offered where the route
+# refuses is the fault this pair of checks exists to catch.
+sql "UPDATE combat_sessions cs
+       INNER JOIN characters c ON c.id = cs.character_id
+       INNER JOIN users u ON u.id = c.user_id
+     SET cs.is_active = 0 WHERE u.username = '${USER}';
+     UPDATE characters c INNER JOIN users u ON u.id = c.user_id
+     SET c.current_hp = 1 WHERE u.username = '${USER}';"
+
+CAN=$(jq_ "$(api "session/sheet&character_id=${MINE}")" "
+import json,sys
+print(1 if (json.load(sys.stdin).get('context') or {}).get('can_camp') else 0)")
+check "the sheet says they may camp at the inn they opened in" "$CAN"
+
+# The picker makes the party active first, exactly as Play does, because the
+# route answers for the session.
+api "session/select" "{\"party_id\":${PID}}" >/dev/null
+CAMP=$(api "location/camp" '{}')
+check "location/camp accepts it" "$(has "$CAMP" '"ok":true')" "$(head -c 140 <<<"$CAMP")"
+
+HURT=$(sql "SELECT COUNT(*) FROM characters c
+              INNER JOIN users u ON u.id = c.user_id
+             WHERE u.username = '${USER}' AND c.current_hp < c.max_hp")
+check "and everybody is whole again, not just whoever was active" \
+  "$([ "${HURT:-1}" = "0" ] && echo 1 || echo 0)" "${HURT} still hurt"
+
+# Somewhere with no open ground and no innkeeper. The Priory Gate is authored
+# that way; moved by hand because walking there is not what is being tested.
+sql "UPDATE characters c INNER JOIN users u ON u.id = c.user_id
+     SET c.current_location_id = (SELECT id FROM locations WHERE location_key = 'priory_gate')
+     WHERE u.username = '${USER}';"
+CANT=$(jq_ "$(api "session/sheet&character_id=${MINE}")" "
+import json,sys
+print(0 if (json.load(sys.stdin).get('context') or {}).get('can_camp') else 1)")
+check "the sheet withdraws the offer at a place they cannot sleep" "$CANT"
+NOPE=$(api "location/camp" '{}')
+check "and the route refuses there too, so the two agree" \
+  "$(has "$NOPE" '"ok":false')" "$(head -c 140 <<<"$NOPE")"
+
+# Back to the inn: the wiped-party check below is about hit points, not about
+# standing somewhere nobody may sleep.
+sql "UPDATE characters c INNER JOIN users u ON u.id = c.user_id
+     SET c.current_location_id = (SELECT id FROM locations WHERE location_key = 'flagon_common_room')
+     WHERE u.username = '${USER}';"
 
 echo "== nobody on their feet, no fight =="
 sql "UPDATE combat_sessions cs

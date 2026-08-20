@@ -310,6 +310,29 @@ require_signed_in_page();
       // a person, and "Play" alone would not tell you what you were about to
       // walk into. A character with no party has no module and no game to
       // resume; they get the creator instead of a button that would open one.
+      /*
+       * Camp is the other half of a fight, and this is where the fight now
+       * ends: a party back from a skirmish at two hit points has nowhere on
+       * this page to sleep it off, and walking into the game to press the same
+       * button is the walk the fight button exists to skip.
+       *
+       * Offered only where they may actually sleep. `can_camp` is the engine's
+       * own answer to the question location/camp asks when this is pressed, so
+       * the button and the route cannot disagree; where they may not sleep the
+       * reason is said, rather than the button quietly going missing.
+       *
+       * Built here rather than inline below, because this comment is full of
+       * the sort of prose that wants backticks in it and a backtick inside a
+       * template literal ends the template literal.
+       */
+      const camp = ctx.can_camp
+        ? `<button type="button" class="btn btn-small camp-btn"
+                   data-party="${esc(ctx.party_id)}"
+                   title="A long rest: wounds close, spells return, hit dice come back. Free where the party is standing.">
+             Make camp
+           </button>`
+        : '<span class="camp-no" title="Camping needs open ground or an inn.">No camp here</span>';
+
       const play = ctx.party_id
         ? `<div class="play-doors">
              <button type="button" class="btn btn-primary btn-lg play-btn"
@@ -330,6 +353,7 @@ require_signed_in_page();
                        title="${esc(t.blurb)} Built to this party's size and level, and worth exactly what the same monsters are worth anywhere else.">
                  ${esc(t.label)}
                </button>`).join('')}
+             ${camp}
            </div>`
         : `<p class="help-hint">This one never joined a party, so there is no
              game to resume.</p>`;
@@ -514,6 +538,22 @@ require_signed_in_page();
     function showError(message) {
       const banner = document.getElementById('error-banner');
       banner.textContent = message || 'Something went wrong.';
+      banner.classList.remove('is-good');
+      banner.classList.remove('hidden');
+    }
+
+    /**
+     * What just happened, when what just happened went well.
+     *
+     * The same strip as the errors, in the other colour. Camp is the one thing
+     * on this page that changes the world and shows nothing for it otherwise —
+     * hit points move in the rail, which is easy to miss, and a companion who
+     * has had enough leaves at the fire and must not do so silently.
+     */
+    function showNotice(message) {
+      const banner = document.getElementById('error-banner');
+      banner.textContent = message;
+      banner.classList.add('is-good');
       banner.classList.remove('hidden');
     }
 
@@ -545,7 +585,46 @@ require_signed_in_page();
      * a party and the client's copy is the one that never sees
      * `leader_character_id`.
      */
+    /**
+     * A night's sleep, from here.
+     *
+     * `location/camp` is the game's own route and the rules stay in it: it
+     * refuses where camping is not allowed, it heals everyone at the fire
+     * including the companions who are waiting there, it gives the hit dice
+     * back, and it is where a companion whose approval has bottomed out walks
+     * away. All this page does is make the party active first — the route
+     * answers for the session, exactly as it does in the game — and then read
+     * the world again, because a long rest changes every character in the
+     * party and the sheet on screen is one of them.
+     */
+    async function makeCamp(btn) {
+      btn.disabled = true;
+      try {
+        await API.post('session/select', { party_id: Number(btn.dataset.party) });
+        const r = await API.post('location/camp', {});
+        // Every cached sheet, not this one: a long rest heals the whole party,
+        // so any of them that is looked at next would be drawn from a copy
+        // taken before the fire.
+        state.sheets.clear();
+        try {
+          state.characters = (await API.get('session/list')).characters || [];
+        } catch (e) { /* the rail keeps what it had; the sheet still reloads */ }
+        renderRail();
+        await showSheet(state.selected);
+        showNotice([r.message, ...(r.messages || [])].filter(Boolean).join(' '));
+      } catch (err) {
+        showError(err.message || 'They could not make camp here.');
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
     document.getElementById('detail').addEventListener('click', async (e) => {
+      const camp = e.target.closest('.camp-btn');
+      if (camp) {
+        await makeCamp(camp);
+        return;
+      }
       const btn = e.target.closest('.play-btn, .fight-btn');
       if (!btn) return;
       const fight = btn.classList.contains('fight-btn');

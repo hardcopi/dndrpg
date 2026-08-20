@@ -724,6 +724,16 @@ things about it are deliberate:
   route does not recognise falls back to `fair` rather than failing: the picker
   only ever sends what the server gave it, so anything else came from somewhere
   else.
+- **Camp is the third door, beside the fights.** A party back from a skirmish
+  at two hit points had nowhere on this page to sleep it off, and walking into
+  the game to press the same button is the walk the fight button exists to
+  skip. It presses `location/camp` — the game's own route, with the rules left
+  in it: it heals everyone at the fire including the companions waiting there,
+  gives the hit dice back, and is where a companion whose approval has bottomed
+  out walks away. The button is drawn from `can_camp`, which is
+  `LocationEngine::canCampHere()` — the same method the route asks when it is
+  pressed, so the button cannot offer a rest the route then refuses. Where they
+  may not sleep it says "No camp here" rather than going quietly missing.
 - **A fight taken from the picker ends by going back to the picker.** The page
   writes the id of the fight it started into `sessionStorage`, and `leaveCombat`
   returns there when a fight with THAT id ends. The session's own id rather than

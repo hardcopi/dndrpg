@@ -1131,6 +1131,13 @@ function handle_session(string $action): void
             );
             $where->execute([$locId]);
             $context += $where->fetch() ?: [];
+            // Whether the party may sleep where it is standing, asked of the
+            // engine rather than worked out from the location row here. It is
+            // the same question `location/camp` will ask when the button is
+            // pressed, through the same method, so the button cannot offer a
+            // rest the route then refuses — and "allow_camp, or an inn" stays
+            // one rule in one place.
+            $context['can_camp'] = (new LocationEngine(db()))->canCampHere($id);
         }
 
         json_response([
