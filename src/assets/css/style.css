@@ -6606,6 +6606,260 @@ body.home-page > main { flex: 1 0 auto; padding-top: var(--sp-32); }
   gap: var(--sp-6);
 }
 
+
+/* ------------------------------------------------------------------ *
+   index.php — the picker: your characters, and whoever is open
+
+   Two panes. The sheet is the page and the list is the index down its edge,
+   so the sheet takes the room and the rail takes a fixed column — a list of
+   names does not get more readable for being wider, and a sheet does.
+
+   The rail is SECOND in the grid and FIRST in the source, which is the whole
+   trick of this layout: on a phone there are no columns, source order wins,
+   and you land on the list rather than on somebody the page picked for you.
+ * ------------------------------------------------------------------ */
+/* The header, held short. `.hero-slim` is already the passing-through hero that
+   characters.php wears, and this page wants less again: the title is here to
+   say which game you are in, and every pixel it spends is a pixel the list is
+   pushed down by. The lozenge rule stays — it is the one thing that says the
+   page has a top — on a shorter leash, and with nothing under it now that the
+   eyebrow is gone. */
+.picker-page .hero-slim { padding: var(--sp-16) var(--sp-16) var(--sp-12); }
+.picker-page .hero-slim h1 { font-size: var(--fs-2xl); margin: 0; }
+.picker-page .rule-orn { margin: var(--sp-10) auto 0; }
+
+.picker {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 20rem;
+  gap: var(--sp-20);
+  align-items: start;
+}
+.picker-rail { grid-column: 2; grid-row: 1; }
+.picker-detail { grid-column: 1; grid-row: 1; min-width: 0; }
+
+/* One column, list first. The rail's own scroller goes with the columns: a
+   pane that scrolls inside a page that scrolls is a trap on a touch screen,
+   and there is no second pane beside it to keep level with. */
+@media (max-width: 62rem) {
+  .picker { grid-template-columns: minmax(0, 1fr); }
+  .picker-rail, .picker-detail { grid-column: 1; grid-row: auto; }
+  .rail-list { max-height: none; overflow: visible; }
+}
+
+.picker-rail {
+  border: 1px solid var(--border-soft);
+  border-radius: var(--r-lg);
+  background: var(--bg-panel);
+  padding: var(--sp-12);
+  /* Follows you down a long sheet. `top` clears the site bar, which is not
+     fixed — this only ever engages once the sheet is taller than the rail,
+     which is most characters. */
+  position: sticky;
+  top: var(--sp-12);
+}
+.rail-head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-10);
+  border-bottom: 1px solid var(--border-soft);
+  padding-bottom: var(--sp-8);
+  margin-bottom: var(--sp-10);
+}
+.rail-head h2 {
+  margin: 0;
+  flex: 1;
+  min-width: 0;
+  border-bottom: none;
+  padding-bottom: 0;
+  font-size: var(--fs-md);
+}
+.rail-head .btn { align-self: center; }
+
+/* The list scrolls inside the rail rather than running the page down past the
+   sheet: twenty characters is a plausible account and the sheet beside them
+   must stay reachable. Only in two columns — see the media query above. */
+.rail-list {
+  max-height: calc(100vh - 10rem);
+  overflow-y: auto;
+  /* Room for the scrollbar when there is one, so the cards do not shift
+     sideways as the list grows past the fold. */
+  padding-right: var(--sp-4);
+}
+
+.rail-group + .rail-group { margin-top: var(--sp-14); }
+/* Which adventure this run of names is in. Quiet: it is a divider, and the
+   loud thing in this column is a character's name. */
+.rail-group-head {
+  font-family: var(--font-ui);
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin: 0 0 var(--sp-8);
+  border-bottom: none;
+}
+
+/* A character, as a button. `.char-card` gives it the frame characters.php
+   uses; this makes it pressable — a button carries none of the font, colour
+   or alignment of the text around it, and inherits a centred label. */
+.rail-pick {
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  transition: border-color var(--dur), background var(--dur);
+}
+.rail-pick .name, .rail-pick .sub { display: block; }
+.rail-pick:hover { border-color: var(--ornament); background: rgba(0, 0, 0, 0.24); }
+.rail-pick:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+/* The one whose sheet is open. A left edge in gold rather than a filled card:
+   the sheet beside it is already the loud answer to "who is this", and two
+   golden things saying the same would compete. */
+.rail-pick.is-active {
+  border-color: var(--gold-dim);
+  background: var(--gold-well);
+  box-shadow: inset 3px 0 0 var(--gold);
+}
+.rail-party {
+  color: var(--text-faint);
+  font-style: italic;
+}
+
+/* The detail pane's other face: the module cards, when you are starting a new
+   game rather than resuming one. Narrower than the old full-width shelf, so
+   two across rather than three. */
+.shelf-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-16);
+  align-items: stretch;
+}
+@media (max-width: 46rem) {
+  .shelf-grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+.pick-sheet {
+  border: 1px solid var(--border-soft);
+  border-radius: var(--r-lg);
+  background: var(--bg-panel);
+  padding: var(--sp-20);
+}
+/* The Play button, and under it where pressing it takes you. Boxed and gold-lit
+   because it is the one thing on a page of numbers that DOES something — the
+   rest of the sheet is a reason to press it. */
+.pick-play {
+  margin: var(--sp-16) 0;
+  padding: var(--sp-14) var(--sp-16);
+  border: 1px solid var(--gold-dim);
+  border-radius: var(--r-md);
+  background: var(--gold-well);
+}
+.pick-play .btn { display: inline-flex; align-items: center; gap: var(--sp-8); }
+.pick-play .btn svg { width: 1em; height: 1em; fill: currentColor; }
+/* Nothing to press: a character with no party has no game to resume, and a
+   gold-lit box saying so reads as a button that failed rather than as a
+   sentence. Same frame, no light in it. */
+.pick-play.is-idle { border-color: var(--border-soft); background: transparent; }
+.pick-play.is-idle .help-hint { margin: 0; }
+.play-where {
+  margin: var(--sp-8) 0 0;
+  color: var(--text-dim);
+  font-size: var(--fs-xs);
+}
+
+/* Two columns of boxes where there is room for two — saves beside skills,
+   features beside proficiencies. The pane is already the narrower half of a
+   split, so this folds early. */
+.sheet-cols {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-20);
+  align-items: start;
+}
+@media (max-width: 52rem) {
+  .sheet-cols { grid-template-columns: minmax(0, 1fr); }
+}
+
+.sheet-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  color: var(--text-dim);
+  font-size: var(--fs-sm);
+}
+.sheet-list > li { margin-bottom: var(--sp-6); line-height: var(--lh-snug); }
+.sheet-list strong { color: var(--text); }
+.sheet-list .inv-desc { margin: var(--sp-2) 0 0; }
+/* Eighteen skills is a tall column on its own; it is the one list here worth
+   splitting, and `break-inside` keeps a row off the fold. */
+.skill-list { columns: 2; column-gap: var(--sp-16); }
+.skill-list > li { break-inside: avoid; }
+@media (max-width: 70rem) { .skill-list { columns: 1; } }
+/* The spell list is the other one that runs long — a prepared caster at level
+   six knows more lines than the whole features box holds — and it has the full
+   width of the pane rather than half of it, so it splits later. */
+.spell-list { columns: 2; column-gap: var(--sp-20); }
+.spell-list > li { break-inside: avoid; }
+@media (max-width: 46rem) { .spell-list { columns: 1; } }
+
+/* A save or a skill: the bubble, the name, what it is rolled off, the number.
+   The modifier is pushed right and tabular so the column reads down. */
+.stat-line {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-6);
+}
+.stat-line .stat-name { flex: 1; min-width: 0; }
+.stat-line.is-prof .stat-name { color: var(--text); }
+.stat-mod {
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+  font-weight: var(--fw-semibold);
+}
+.stat-note {
+  font-size: var(--fs-2xs);
+  color: var(--text-faint);
+  white-space: nowrap;
+}
+/* Filled means proficient — the same mark the paper sheet uses, so a player
+   holding both is reading one convention. Expertise is not a third state: a
+   doubled skill is a proficient one, and the note beside it says ×2. */
+.stat-dot {
+  flex: 0 0 auto;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: var(--r-circle);
+  border: 1px solid var(--ornament);
+  background: transparent;
+}
+.stat-line.is-prof .stat-dot { background: var(--gold); border-color: var(--gold); }
+
+.sheet-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-sm);
+  color: var(--text-dim);
+}
+.sheet-table th {
+  text-align: left;
+  font-family: var(--font-ui);
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  color: var(--text-faint);
+  font-weight: var(--fw-semibold);
+  padding-bottom: var(--sp-4);
+  border-bottom: 1px solid var(--border-soft);
+}
+.sheet-table td {
+  padding: var(--sp-6) var(--sp-8) var(--sp-6) 0;
+  border-bottom: 1px solid var(--border-soft);
+  vertical-align: baseline;
+}
+.sheet-table tr:last-child td { border-bottom: none; }
+.sheet-table tr.is-equipped td { color: var(--text); }
+
 /* ------------------------------------------------------------------ *
    characters.php — one module's parties
 

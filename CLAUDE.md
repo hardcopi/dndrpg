@@ -662,11 +662,44 @@ Schema changes belong in `src/sql/`, so they travel with the code.
 
 ## Getting into a game
 
-The front page is a shelf of modules and nothing else. Each card carries the
-cover plate, the level band, how many of your parties are in it, and two doors:
-**Play**, to `characters.php?module=<key>`, and **New party**, to `create.php`.
-A module you have nothing in draws only the second, because Play would open an
-empty page.
+The front page is **your characters on the right and whoever you pick on the
+left**. Clicking a name opens that character's sheet in the other pane, and the
+sheet carries the Play button with the name of the adventure they are on
+written on it.
+
+It was a shelf of modules — three cover plates, and Play went to
+`characters.php?module=<key>` — and the pivot is worth stating as a rule rather
+than as a redesign: **"which adventure?" has exactly one right answer for a
+character who already exists**, which is the one their party is in. Asking it
+first cost two pages before anybody was playing, and it asked the player to
+choose between games when what they wanted to say was who they were. The
+adventure is now an ANSWER printed on the button rather than a question asked
+before it.
+
+Three things about that page are load-bearing:
+
+- **The rail is second in the grid and first in the source.** On a wide screen
+  CSS puts the list in the right-hand column, which is where it belongs; on a
+  phone there are no columns, source order wins, and you land on the list
+  rather than on somebody the page picked for you.
+- **The sheet is `session/sheet`, not `character/sheet`.** The difference is the
+  gate and not the payload: `character/sheet` asks
+  `assert_character_accessible()` — is this somebody in the game you are
+  currently playing — which is false for every character on this page but one.
+  The picker spans games, so it asks the wider question through
+  `assert_character_manageable()`, the same widening `sheet_print.php` made and
+  for the same reason. The numbers are `CharacterSheet`'s, which are `Rules`':
+  no arithmetic happens in the page's script.
+- **A module belongs to the party, so it arrives in a `context` block** beside
+  the sheet, along with the party name and where they are standing. A character
+  with no party has no module and no game to resume, and is told so instead of
+  being given a button that would open somebody else's.
+
+**The shelf is not gone; it is what the same pane shows when you press New.**
+Starting a fresh game is the one time the adventure is a real question, so that
+is when it is asked — and the cards are the same cards, with the same cover
+plate, badge and doors, two across in the detail pane instead of three across
+the page.
 
 A card is drawn as a book: the painting is the top of it with the name and the
 level band lying across the bottom of the picture, the party count is a badge in
@@ -685,9 +718,18 @@ Three things about that shape are load-bearing.
   "About", "Accounts" and "Content" were four identical grey rectangles in a row
   under the title, which is four equal offers where only one of them is why
   anybody opened the page.
-- **Gold still means "you can act on this".** The hero's rule and the how-to's
-  numbered discs are drawn in `--ornament` — unlit brass — for the same reason
-  the HUD's filigree is: an ornament in gold spends the signal on decoration.
+- **Gold still means "you can act on this".** The hero's rule is drawn in
+  `--ornament` — unlit brass — for the same reason the HUD's filigree is: an
+  ornament in gold spends the signal on decoration. Which is also why the Play
+  box on a sheet loses its gold when there is nothing to press: a lit box
+  saying "there is no game to resume" reads as a button that failed.
+
+**There is no "Continue where you left off", and the picker is not one.** That
+button went to `game.php`, which reads no query string and plays whoever the
+session says is active — so you pressed it and found out where you landed. The
+page does open the sheet of whoever the session was last playing, but that is a
+SHOW: it names the character, the party and the adventure, and leaves the
+pressing to you.
 
 `characters.php` is one module's worth of your characters, **grouped by the
 party they march in**, with anyone party-less collected at the bottom. It
@@ -717,12 +759,17 @@ Three things about it that look like details and are not:
   party_name` now.
 
 `tools/home_preview.php` draws both pages against fixtures, with no account and
-no session, so the awkward cases — an install with no modules (`?case=empty`), a
-module with no cover on disk (`?case=bare`), a party of six
+no session, so the awkward cases — an account with nobody in it (`?case=empty`),
+a module with no cover on disk (`?case=bare`), a character with no party to play
+(`?case=loose`), the shelf as New draws it (`?case=shelf`), a party of six
 (`?page=characters&case=big`) — can be looked at without arranging a database to
-produce them. It serves the pages' own markup and their own inline scripts and
-fakes only the two API routes, so a layout fault visible there is a layout fault
-in the game. It finds the page's `<body>` by tag rather than by the literal
+produce them. `?pick=<id>` opens a particular sheet, which is the only way to
+see one the bench does not open by itself: a screenshot cannot click. It serves
+the pages' own markup and their own inline scripts and fakes only the four API
+routes they call, so a layout fault visible there is a layout fault in the game.
+The sheet fixture is the one place it departs from that — the SHAPE is the
+route's, the numbers are invented, and no modifier on that page should be
+believed. It finds the page's `<body>` by tag rather than by the literal
 string `<body>`: index.php grew a class on it and the "preview" banner silently
 stopped drawing on the one page the bench is mostly used for. `tools/test_characters_page.sh` covers the
 guard, the catalogue, the cover art and the grouping contract over real HTTP.
@@ -730,7 +777,9 @@ guard, the catalogue, the cover art and the grouping contract over real HTTP.
 The front page used to spend its first column on a flat list of every character
 the account had ever made, with `MODULE_SLOTS = 2` capping the module row
 beside it — which silently sliced the third module off the page when it
-arrived. The cap is gone; every module is drawn.
+arrived. The cap went first; the list came back as the picker, grouped by
+adventure rather than flat, which is what made it survivable at thirty
+characters.
 
 ## Accounts
 

@@ -1,11 +1,15 @@
 #!/bin/bash
 # Does the front page / characters.php split hold up over real HTTP?
 #
-# The page groups by party in JavaScript, which bash cannot run. What it can
+# Both pages group by party in JavaScript, which bash cannot run. What it can
 # check is the contract that grouping stands on — that `session/list` actually
 # returns a party id, a party NAME and a module key per character — and the
-# things around it that are server-side: the guard, the module catalogue, and
-# the cover art the cards draw.
+# things around it that are server-side: the guard, the module catalogue, the
+# cover art the cards draw, and `session/sheet`, which is what the picker on
+# the front page draws beside the list.
+#
+# The layout itself is judged in tools/home_preview.php, which draws both pages
+# against fixtures with no account and no database behind them.
 #
 # The party name is the point. It was not in the query at all until this page
 # needed it; the list came back with `party_id` and nothing to call it, so
@@ -59,6 +63,10 @@ jq_() { python3 -c "$2" <<<"$1" 2>/dev/null || echo '?'; }
 echo "== the page is behind the guard =="
 CODE=$(curl -s -o /dev/null -w '%{http_code}' "$BASE/characters.php")
 check "a signed-out visitor is redirected away" \
+  "$([ "$CODE" = "302" ] || [ "$CODE" = "303" ] && echo 1 || echo 0)" "HTTP $CODE"
+
+CODE=$(curl -s -o /dev/null -w '%{http_code}' "$BASE/index.php")
+check "and so is the picker on the front page" \
   "$([ "$CODE" = "302" ] || [ "$CODE" = "303" ] && echo 1 || echo 0)" "HTTP $CODE"
 
 curl -s -c "$JAR" -H 'Content-Type: application/json' -X POST \
@@ -159,6 +167,84 @@ print(json.load(sys.stdin).get('character',{}).get('id') or 0)")
   check "and playing the party again resumes whoever you left it as" \
     "$([ "$AGAIN" = "$OTHER_ID" ] && echo 1 || echo 0)" "wanted $OTHER_ID, got $AGAIN"
 fi
+
+echo "== the picker reads a sheet, and only your own =="
+# The front page opens a character sheet beside the list, and it is deliberately
+# NOT character/sheet: that route asks whether the character is in the game the
+# session is playing, which is false for every character on this page except
+# one. This is the wider question — is it yours — and the widening is the whole
+# reason the route exists, so it is what gets tested.
+MINE=$(jq_ "$LIST" "
+import json,sys
+print(json.load(sys.stdin)['characters'][0]['id'])")
+SHEET=$(api "session/sheet&character_id=${MINE}")
+KEYS=$(jq_ "$SHEET" "
+import json,sys
+d = json.load(sys.stdin)
+s = d.get('sheet', {})
+want = ('character','abilities','saves','skills','attacks','features',
+        'proficiencies','spellcasting','proficiency_bonus','initiative',
+        'passive_perception','hit_dice','inventory','carried_weight')
+print(1 if all(k in s for k in want) else 0)")
+check "session/sheet returns every box the page draws" "$KEYS" "$(head -c 160 <<<"$SHEET")"
+
+# And the fields INSIDE those boxes, which is where a rename hides: the page
+# prints `a.abbr` and `v.proficient` straight into the markup, so a column that
+# quietly became something else does not fail — it draws the word "undefined"
+# in a bubble on the front page.
+ROWS=$(jq_ "$SHEET" "
+import json,sys
+s = json.load(sys.stdin)['sheet']
+want = {
+  'abilities':     ('abbr', 'score', 'mod'),
+  'saves':         ('label', 'mod', 'proficient'),
+  'skills':        ('label', 'ability', 'mod', 'proficient', 'expertise'),
+  'attacks':       ('name', 'bonus', 'damage', 'damage_type', 'equipped', 'notes'),
+  'features':      ('source', 'name', 'detail'),
+  'proficiencies': ('label', 'value'),
+}
+missing = [f'{box}.{k}' for box, keys in want.items()
+           for row in s.get(box) or [] for k in keys if k not in row]
+print(1 if not missing else 0, ' '.join(sorted(set(missing))) or '-')")
+check "and every row in them carries the fields the page prints" \
+  "${ROWS%% *}" "missing ${ROWS#* }"
+
+# The character row itself. `armor_class` and `gold` are pills on the sheet and
+# `sprite_key` is the portrait; none of them are things CharacterSheet computes,
+# so they come along on the row or not at all.
+CHAR=$(jq_ "$SHEET" "
+import json,sys
+c = json.load(sys.stdin)['sheet']['character']
+want = ('name','race','subrace','class','subclass','level','background','alignment',
+        'current_hp','max_hp','armor_class','speed','gold','sprite_key')
+print(1 if all(k in c for k in want) else 0,
+      ' '.join(k for k in want if k not in c) or '-')")
+check "and the character row carries the header and the pills" \
+  "${CHAR%% *}" "missing ${CHAR#* }"
+
+# The Play button is labelled with the adventure, which is the one thing on the
+# sheet that is not on the sheet: a module belongs to the party, so it has to
+# arrive in the context block or the button has nothing to say.
+CTX=$(jq_ "$SHEET" "
+import json,sys
+c = json.load(sys.stdin).get('context', {})
+print(1 if c.get('module_name') and c.get('party_id') and c.get('party_name') else 0, c.get('module_name'))")
+check "and names the adventure the character is on" "${CTX%% *}" "context ${CTX#* }"
+
+# A second account, to prove the route is not simply Ownership-shaped in its
+# comments. 404 rather than 403 on purpose: a 403 confirms the id exists.
+JAR2=$(mktemp)
+USER2="chars_b_${SUFFIX}"
+curl -s -c "$JAR2" -H 'Content-Type: application/json' -X POST \
+  -d "{\"username\":\"${USER2}\",\"password\":\"${PASS}\"}" \
+  "$BASE/api/?r=auth/register" >/dev/null
+DENIED=$(curl -s -b "$JAR2" "$BASE/api/?r=session/sheet&character_id=${MINE}")
+check "somebody else's sheet is refused" "$(has "$DENIED" '"ok":false')" \
+  "$(head -c 120 <<<"$DENIED")"
+check "and refused as a 404, which does not confirm the id exists" \
+  "$(has "$DENIED" 'No such character')" "$(head -c 120 <<<"$DENIED")"
+sql "DELETE FROM users WHERE username = '${USER2}';"
+rm -f "$JAR2"
 
 echo "== and the module scopes the page =="
 OTHER=$(jq_ "$LIST" "

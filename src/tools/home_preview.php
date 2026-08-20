@@ -14,11 +14,15 @@
  * the real stylesheet, with `API` replaced by a fixture. Nothing is
  * transcribed: the render code here IS the render code that ships, so a
  * layout bug visible here is a layout bug in the game. What is faked is the
- * two API routes and nothing else.
+ * four API routes these two pages call and nothing else.
  *
- *   /tools/home_preview.php                      the module shelf
- *   /tools/home_preview.php?case=bare            a module with no cover on disk
- *   /tools/home_preview.php?case=empty           an install with no modules
+ *   /tools/home_preview.php                      the picker: list, and a sheet
+ *   /tools/home_preview.php?case=big             a longer list, for the rail
+ *   /tools/home_preview.php?case=bare            the shelf, with an unpainted cover
+ *   /tools/home_preview.php?case=empty           an account with nobody in it
+ *   /tools/home_preview.php?case=loose           a character with no party to play
+ *   /tools/home_preview.php?case=shelf           the shelf, as "New" draws it
+ *   /tools/home_preview.php?pick=3               open a particular sheet
  *   /tools/home_preview.php?page=characters      one module's parties
  *   /tools/home_preview.php?page=characters&case=empty
  *   /tools/home_preview.php?page=characters&case=big
@@ -122,21 +126,31 @@ $bare = [
 ];
 
 /* Index only: characters.php looks its own module up in this same list, and
-   `case=empty` there means "an account with no characters in it", not "an
-   install with no modules". */
+   `case=empty` there means "an account with no characters in it" on both
+   pages — on the picker that is also what puts the shelf on screen, because
+   the shelf is what the detail pane shows when there is nobody to show.
+
+   Which is also why `bare` empties the list: the unpainted cover is a thing
+   you can only look at while the shelf is up. */
 if ($page === 'index') {
     $modules = ['bare' => $bare, 'empty' => []][$case] ?? $modules;
 }
 
 function pc(int $id, string $party, ?string $pname, string $name, string $race,
-            string $cls, int $lvl, int $hp, int $max, string $sprite): array
+            string $cls, int $lvl, int $hp, int $max, string $sprite,
+            string $mkey = 'rivermark', string $mname = 'Rivermark Chronicles'): array
 {
     return [
         'id' => $id, 'name' => $name, 'race' => $race, 'subrace' => null,
         'class' => $cls, 'level' => $lvl, 'current_hp' => $hp, 'max_hp' => $max,
         'party_id' => $party === '' ? null : (int) $party,
-        'party_name' => $pname, 'module_key' => 'rivermark',
-        'module_name' => 'Rivermark Chronicles', 'sprite_key' => $sprite,
+        // A character with no party has no module either — a module is a
+        // property of the party — so the pair travels together and both are
+        // empty for the loose one below.
+        'party_name' => $pname,
+        'module_key' => $party === '' ? null : $mkey,
+        'module_name' => $party === '' ? null : $mname,
+        'sprite_key' => $sprite,
     ];
 }
 
@@ -148,6 +162,11 @@ $normal = [
     pc(3, '10', "Wren Kingsley's Party", 'Brother Aldric', 'Human', 'Cleric', 4, 30, 30, 'cleric'),
     // A second party in the same module, so the grouping has to actually group.
     pc(4, '11', "Dontonion's Party", 'Dontonion', 'Dwarf', 'Barbarian', 2, 21, 24, 'barbarian'),
+    // And a party in a DIFFERENT module. characters.php filters this one out —
+    // it is one module's page — and the picker groups by it, so the same
+    // fixture exercises both the scope and the grouping.
+    pc(6, '13', 'The Long Way Down', 'Yorri Deepfast', 'Dwarf', 'Warlock', 1, 9, 9,
+       'warlock', 'undervault', 'The Undervault'),
     // And somebody who belongs to no party at all.
     pc(5, '', null, 'Halfway-made Wizard', 'Gnome', 'Wizard', 1, 6, 6, 'wizard'),
 ];
@@ -163,12 +182,161 @@ foreach ($names as $i => $n) {
         $n, 'Human', $cls[$i], 6 - ($i % 3), ($i === 1 ? 2 : 40 - $i), 45, strtolower($cls[$i]));
 }
 
-$sets = ['normal' => $normal, 'big' => $big, 'empty' => []];
+/* `loose` is one character and no party — the case where there is no game to
+   resume, so the sheet has to say so instead of drawing a Play button that
+   would open somebody else's. It is the last member of $normal, on its own. */
+$sets = ['normal' => $normal, 'big' => $big, 'empty' => [], 'bare' => [],
+         'shelf' => [], 'loose' => [$normal[count($normal) - 1]]];
 $characters = $sets[$case] ?? $normal;
+if ($page === 'characters' && $case === 'bare') {
+    $characters = $normal;      // `bare` is a shelf case; it means nothing here
+}
+
+/**
+ * A whole sheet for one fixture character, in the shape `session/sheet` returns.
+ *
+ * The numbers are INVENTED and none of them are Rules'. That is the one place
+ * this bench departs from "the render code here IS the render code that ships",
+ * and it is deliberate: the alternative is a database with a levelled wizard in
+ * it, which is the thing the bench exists to avoid needing. What is being
+ * judged here is a layout — eighteen skills in two columns, a long spell list,
+ * a party name that wraps — and a layout does not care whether the Athletics
+ * bonus is right. Do not read a modifier off this page and believe it.
+ *
+ * The SHAPE is real, though, and has to stay real: every key here is one the
+ * page reads, so a field renamed in CharacterSheet and not here shows up as a
+ * hole in the drawing rather than as a silent pass.
+ */
+function sheet_fixture(array $c): array
+{
+    $abil = ['STR' => 15, 'DEX' => 14, 'CON' => 13, 'INT' => 12, 'WIS' => 10, 'CHA' => 8];
+    $m = static fn (int $score): int => intdiv($score - 10, 2);
+    $prof = 2 + intdiv(max(1, (int) $c['level']) - 1, 4);
+
+    $abilities = [];
+    foreach ($abil as $abbr => $score) {
+        $abilities[] = ['abbr' => $abbr, 'label' => $abbr, 'score' => $score, 'mod' => $m($score)];
+    }
+    $saves = [];
+    foreach (['Strength' => 'STR', 'Dexterity' => 'DEX', 'Constitution' => 'CON',
+              'Intelligence' => 'INT', 'Wisdom' => 'WIS', 'Charisma' => 'CHA'] as $label => $abbr) {
+        $saves[] = ['label' => $label, 'mod' => $m($abil[$abbr]) + ($abbr === 'STR' ? $prof : 0),
+                    'proficient' => $abbr === 'STR'];
+    }
+
+    // The eighteen, in the alphabetical order the sheet prints them. Written
+    // out rather than taken from Rules::SKILLS, because the bench does not load
+    // the app — see the note above about what is and is not real here.
+    $skills = [
+        ['Acrobatics', 'DEX'], ['Animal Handling', 'WIS'], ['Arcana', 'INT'],
+        ['Athletics', 'STR'], ['Deception', 'CHA'], ['History', 'INT'],
+        ['Insight', 'WIS'], ['Intimidation', 'CHA'], ['Investigation', 'INT'],
+        ['Medicine', 'WIS'], ['Nature', 'INT'], ['Perception', 'WIS'],
+        ['Performance', 'CHA'], ['Persuasion', 'CHA'], ['Religion', 'INT'],
+        ['Sleight of Hand', 'DEX'], ['Stealth', 'DEX'], ['Survival', 'WIS'],
+    ];
+    $skillRows = [];
+    foreach ($skills as $i => [$label, $abbr]) {
+        $isProf = in_array($label, ['Athletics', 'Perception', 'Stealth'], true);
+        $exp = $label === 'Stealth';
+        $skillRows[] = [
+            'label' => $label, 'ability' => $abbr,
+            'mod' => $m($abil[$abbr]) + ($isProf ? $prof : 0) + ($exp ? $prof : 0),
+            'proficient' => $isProf, 'expertise' => $exp,
+        ];
+    }
+
+    // A caster gets the spellcasting box; everybody else gets nothing where it
+    // would be. Both are worth looking at — the box is the tallest thing on the
+    // sheet and a fixture that never draws it hides how the pane copes.
+    $caster = in_array($c['class'], ['Wizard', 'Cleric', 'Sorcerer', 'Warlock', 'Druid'], true);
+    $spellcasting = $caster ? [
+        'ability' => 'Intelligence', 'ability_mod' => 3, 'save_dc' => 13, 'attack_bonus' => 5,
+        'slots' => [['level' => 1, 'have' => 3, 'used' => 1, 'left' => 2]],
+        'known' => [
+            ['name' => 'Fire Bolt', 'level' => 0, 'school' => 'Evocation'],
+            ['name' => 'Mage Hand', 'level' => 0, 'school' => 'Conjuration'],
+            ['name' => 'Burning Hands', 'level' => 1, 'school' => 'Evocation'],
+            ['name' => 'Magic Missile', 'level' => 1, 'school' => 'Evocation'],
+            ['name' => 'Shield', 'level' => 1, 'school' => 'Abjuration'],
+        ],
+    ] : null;
+
+    return [
+        'sheet' => [
+            'character' => $c + [
+                'subclass' => null, 'background' => 'Folk Hero', 'alignment' => 'Neutral Good',
+                'armor_class' => 15, 'speed' => 30, 'gold' => 42,
+            ],
+            'proficiency_bonus' => $prof,
+            'abilities' => $abilities,
+            'saves' => $saves,
+            'skills' => $skillRows,
+            'passive_perception' => 10 + $m($abil['WIS']) + $prof,
+            'initiative' => $m($abil['DEX']),
+            'hit_dice' => $c['level'] . 'd10',
+            'attacks' => [
+                ['name' => 'Longsword', 'bonus' => $m($abil['STR']) + $prof, 'damage' => '1d8+2',
+                 'damage_type' => 'slashing', 'reach' => 'melee', 'equipped' => true,
+                 'notes' => 'versatile 1d10'],
+                ['name' => 'Shortbow', 'bonus' => $m($abil['DEX']) + $prof, 'damage' => '1d6+2',
+                 'damage_type' => 'piercing', 'reach' => 'ranged', 'equipped' => false,
+                 'notes' => 'range 80/320'],
+                ['name' => 'Unarmed Strike', 'bonus' => $m($abil['STR']) + $prof, 'damage' => '1',
+                 'damage_type' => 'bludgeoning', 'reach' => 'melee', 'equipped' => false,
+                 'notes' => ''],
+            ],
+            'inventory' => array_fill(0, 11, ['id' => 0]),
+            'carried_weight' => 48.5,
+            'features' => [
+                ['source' => $c['race'], 'name' => 'Keen Senses', 'detail' => 'Applied by the game.'],
+                ['source' => $c['class'], 'name' => 'Second Wind', 'detail' => ''],
+                ['source' => 'Level 4', 'name' => 'Alert',
+                 'detail' => 'You cannot be surprised while conscious, and you gain +5 to initiative.'],
+            ],
+            'proficiencies' => [
+                ['label' => 'Armor', 'value' => 'Light, Medium, Shields'],
+                ['label' => 'Weapons', 'value' => 'Simple, Martial'],
+            ],
+            'spellcasting' => $spellcasting,
+        ],
+        'context' => [
+            'party_id' => $c['party_id'],
+            'party_name' => $c['party_name'],
+            'module_key' => $c['module_key'],
+            'module_name' => $c['module_name'],
+            'party_size' => 3,
+            'location_name' => 'The Golden Flagon',
+            'region_name' => 'Rivermark',
+        ],
+    ];
+}
+
+$sheets = [];
+foreach ($characters as $c) {
+    $sheets[(string) $c['id']] = sheet_fixture($c);
+}
+
+/* Who the session was last playing — the picker opens that sheet rather than
+   the top of the list. Deliberately NOT the first character here, so the
+   bench shows whether the rail marks the right one.
+
+   `?pick=` overrides it, which is the only way to see a sheet the bench does
+   not open by itself: a screenshot cannot click, and the caster's spell box is
+   the tallest thing this pane ever draws. Checked against the fixture rather
+   than passed through — an id that is not in it would fail as a broken sheet
+   and read as a bug in the page. */
+$status = $characters ? (string) ($characters[min(1, count($characters) - 1)]['id']) : null;
+$pick = (string) ($_GET['pick'] ?? '');
+if ($pick !== '' && isset($sheets[$pick])) {
+    $status = $pick;
+}
 
 $fixture = json_encode([
     'modules' => $modules,
     'characters' => $characters,
+    'sheets' => $sheets,
+    'status' => $status,
 ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 
 // The stub goes in where the real client would be loaded, so it is defined
@@ -179,9 +347,25 @@ $stub = <<<HTML
   /* Only the two routes these pages ask for. Anything else is a mistake worth
      seeing rather than quietly satisfying. */
   const API = {
-    async get(route) {
+    /* Params are appended to the route here exactly as api.js appends them,
+       rather than read as an argument — `API.get('x', {id: 1})` and
+       `API.get('x&id=1')` are the same call to the real client and both are
+       made in the pages, so a stub that understood only one of them would
+       answer half the page's questions with an exception. */
+    async get(route, params) {
+      if (params) route += '&' + new URLSearchParams(params).toString();
       if (route === 'session/modules') return { ok: true, modules: FIXTURE.modules };
       if (route === 'session/list')    return { ok: true, characters: FIXTURE.characters };
+      if (route === 'session/status')  return { ok: true, character_id: FIXTURE.status };
+      /* Params arrive appended to the route, because that is how api.js sends
+         them — `session/sheet&character_id=5`. Parsed rather than matched, so
+         the bench does not care in what order they are put on. */
+      if (route.split('&')[0] === 'session/sheet') {
+        const id = new URLSearchParams(route.slice(route.indexOf('&') + 1)).get('character_id');
+        const sheet = FIXTURE.sheets[id];
+        if (!sheet) throw new Error('preview: no sheet fixture for character ' + id);
+        return { ok: true, ...sheet };
+      }
       throw new Error('preview: no fixture for ' + route);
     },
     async post(route) { throw new Error('preview: ' + route + ' is not wired up here'); },

@@ -1083,6 +1083,58 @@ function handle_session(string $action): void
         }
         json_response(['ok' => true, 'characters' => $stmt->fetchAll()]);
     }
+    if ($action === 'sheet') {
+        // The whole sheet for one of YOUR characters, whichever game they are
+        // in. The picker on the front page draws it beside the list.
+        //
+        // Deliberately not `character/sheet`, and the difference is the gate
+        // rather than the payload. That route asks assert_character_accessible
+        // — "is this somebody in the game you are playing" — which is the right
+        // question inside a game and the wrong one here: the whole point of the
+        // picker is to read a character from a game you are NOT currently in.
+        // This is the same widening sheet_print.php made for the same reason,
+        // so it asks the same question, through assert_character_manageable.
+        //
+        // The numbers are CharacterSheet's, which are Rules'. Nothing on this
+        // page does arithmetic — a second rules engine in the front-page script
+        // would be wrong in exactly the places nobody checks.
+        $id = (int) ($_GET['character_id'] ?? 0);
+        if ($id <= 0) {
+            json_error('character_id required', 400);
+        }
+        assert_character_manageable($id);
+
+        // Which game they are in, who they march with, and where they are
+        // standing — the three things the sheet's Play button has to be able to
+        // say and the sheet itself does not carry. A character with no party
+        // has no module either (a module is a property of the party), so every
+        // one of these is legitimately null.
+        $stmt = db()->prepare(
+            'SELECT p.id AS party_id, p.name AS party_name,
+                    m.module_key, m.name AS module_name,
+                    (SELECT COUNT(*) FROM character_party x WHERE x.party_id = p.id) AS party_size
+               FROM character_party cp
+               LEFT JOIN parties p ON p.id = cp.party_id
+               LEFT JOIN modules m ON m.id = p.module_id
+              WHERE cp.character_id = ? LIMIT 1'
+        );
+        $stmt->execute([$id]);
+        $context = $stmt->fetch() ?: [];
+
+        $sheet = (new CharacterSheet(db()))->build($id);
+        $locId = (int) ($sheet['character']['current_location_id'] ?? 0);
+        if ($locId > 0) {
+            $where = db()->prepare(
+                'SELECT l.name AS location_name, r.name AS region_name
+                   FROM locations l LEFT JOIN regions r ON r.id = l.region_id
+                  WHERE l.id = ? LIMIT 1'
+            );
+            $where->execute([$locId]);
+            $context += $where->fetch() ?: [];
+        }
+
+        json_response(['ok' => true, 'sheet' => $sheet, 'context' => $context]);
+    }
     if ($action === 'modules') {
         // What the picker draws: every module you can start, and how much of
         // one you already have going. Answered in one route rather than joined
