@@ -37,18 +37,24 @@ SRC = "/home/richard/code/rpg-unity/Assets/Synty/PolygonGeneric/Textures"
 OUT = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
                    "assets", "images", "fp")
 
-# surface key -> (source file, output size)
+# texture name -> (source file, output size)
 #
-# `wall` is the face across the view and gets the brick, because that is the
-# surface a player is looking straight at. `side` is the wall running away from
-# them and takes the rougher rock, so the two read as different planes even
-# where the depth band gives them the same value. `floor` is dirt.
+# TWO, NOT THREE, AND THAT IS THE POINT. The first cut gave the walls running
+# away from the viewer their own texture — Generic_Rock — so the two planes
+# would read apart. They read apart all right: the rock is 5% saturated and the
+# brick is 43%, so a corridor's side walls came out grey while the wall ahead
+# was brown, and the same masonry appeared to change material depending on
+# which way you were facing.
+#
+# That was a category error. Orientation should change the LIGHT, not the
+# stone, and it already does — `--fp-side-*` is a lighter set than `--fp-wall-*`
+# and exists for exactly this. So both wall planes share one brick and the
+# tokens do the separating.
 #
 # There is no `roof`: it is nearly black at every band, and a texture nobody can
 # see is a request nobody should pay for.
 SWATCHES = {
     "wall":  ("Generic_Brick.png", 256),
-    "side":  ("Generic_Rock.png",  256),
     "floor": ("Generic_Dirt.png",  256),
 }
 

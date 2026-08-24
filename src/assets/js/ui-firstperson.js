@@ -242,6 +242,19 @@
   const GRAIN = { wall: 1, side: 1, floor: 1 };
 
   /**
+   * Which swatch a surface is made of.
+   *
+   * `side` is the same brick as `wall`, because it IS the same wall — the only
+   * difference is which way it faces. Giving it its own texture is what made
+   * a corridor's left and right walls come out grey while the one ahead was
+   * brown: Generic_Rock is 5% saturated and Generic_Brick is 43%, so the
+   * masonry appeared to change material with the compass. The plane separation
+   * is `--fp-side-*` being a lighter set than `--fp-wall-*`, which is lighting
+   * and is the right tool for it.
+   */
+  const TEXTURE = { wall: 'wall', side: 'wall', floor: 'floor' };
+
+  /**
    * How much of the band's token colour is laid OVER the texture, per depth.
    *
    * This is the distance shading, and it runs the opposite way to the old
@@ -303,7 +316,7 @@
             // is what shows through, which is the flat cave again.
             '<rect width="' + px(size) + '" height="' + px(size) + '" ' +
               'fill="var(--fp-' + surface + '-' + band + ', var(--fp-' + surface + '))"/>' +
-            '<image href="' + base + surface + '.png" x="0" y="0" ' +
+            '<image href="' + base + TEXTURE[surface] + '.png" x="0" y="0" ' +
               'width="' + px(size) + '" height="' + px(size) + '" ' +
               'preserveAspectRatio="none"/>' +
             '<rect width="' + px(size) + '" height="' + px(size) + '" ' +
