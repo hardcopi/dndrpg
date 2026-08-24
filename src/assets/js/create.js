@@ -103,11 +103,16 @@
    * `hidden` flag on the 3D creator's own race table — the rows stay in the
    * `races` table, every character who already is one keeps their sheet, their
    * traits and their look, and nothing about the API changes. The only thing
-   * that goes is the option to become one, which is this list.
+   * that goes is the option to become one.
    *
-   * Emptying this array puts them back.
+   * THE LIST IS NOT HERE ANY MORE. It is `RACES_WITHHELD` in bootstrap.php,
+   * handed over by create.php, because the public races page has to answer the
+   * same question and a page that offered a race this picker refuses would be
+   * an advertisement for something nobody can have. The fallback is an empty
+   * array — everything on offer — which is the safe way to be wrong: a missing
+   * global shows a race that exists rather than hiding one that does not.
    */
-  const RACES_WITHHELD = ['Dragonborn', 'Tiefling'];
+  const RACES_WITHHELD = Array.isArray(window.RACES_WITHHELD) ? window.RACES_WITHHELD : [];
 
   /**
    * The wizard, in order.

@@ -62,6 +62,25 @@ define('ADVENTURES_ENABLED', false);
 /** The world a character stands in when there is no adventure. */
 define('FREE_PLAY_MODULE', '_freeplay');
 
+/**
+ * Races that exist but are not on offer.
+ *
+ * Put away rather than deleted: the rows stay in the `races` table, every
+ * character who already is one keeps their sheet, their traits and their look,
+ * and nothing about the API changes. The only thing that goes is the option to
+ * become one. Emptying this array puts them back.
+ *
+ * IT LIVES HERE BECAUSE TWO THINGS HAVE TO AGREE ABOUT IT. It began as a
+ * `const RACES_WITHHELD` inside create.js, which was the only place that needed
+ * it while the creator was the only place a race was offered. Then the public
+ * races page started listing the catalogue and listed all ten — advertising two
+ * races to a visitor that the creator would not let them choose, which is the
+ * exact failure that page is built to be incapable of. A second copy in PHP
+ * would have fixed the symptom and guaranteed the next one, so the list moved
+ * here and create.php hands it to create.js as `window.RACES_WITHHELD`.
+ */
+define('RACES_WITHHELD', ['Dragonborn', 'Tiefling']);
+
 spl_autoload_register(static function (string $class): void {
     $paths = [
         APP_PATH . '/lib/' . $class . '.php',

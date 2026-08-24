@@ -24,6 +24,18 @@ require_once __DIR__ . '/app/inc/public_page.php';
 $rows = public_races();
 $count = public_race_count();
 
+// How many of the peoples on offer come off the SRD and how many are ours.
+// Counted rather than written down: the sentence below said "nine of these" for
+// as long as ten races were listed, and went on saying it when two were
+// withheld and eight were left.
+$ours = [];
+$srd = [];
+foreach ($rows as $r) {
+    $bucket = ((string) $r['source'] === '5e SRD') ? 'srd' : 'ours';
+    ${$bucket}[(string) $r['name']] = true;
+}
+$nSrd = count($srd);
+
 public_head(
     'All ' . $count . ' races',
     'Every playable people in Rivermark Chronicles, with ability bonuses, speed, '
@@ -36,10 +48,12 @@ public_head(
     <p class="lp-eyebrow"><?= $count ?> peoples · <?= count($rows) ?> rows to choose from</p>
     <h1>Who you are</h1>
     <p class="lp-lead">
-      Nine of these come off the open 5e rules. One does not: the <strong>Sarsen</strong>
-      are ours, cut for this valley out of things that were already in it — the haul-road,
-      the boundary stones, the Old City's masonry — because the SRD has no big people in
-      it and we would rather write one than borrow one.
+      <?= $nSrd ?> of these come off the open 5e rules.
+      <?= count($ours) === 1 ? 'One does not' : count($ours) . ' do not' ?>: the
+      <strong><?= e(implode(', ', array_keys($ours))) ?></strong>
+      <?= count($ours) === 1 ? 'is' : 'are' ?> ours, cut for this valley out of things that
+      were already in it — the haul-road, the boundary stones, the Old City's masonry —
+      because the SRD has no big people in it and we would rather write one than borrow one.
     </p>
     <div class="lp-legend">
       <span><i class="lp-swatch"></i> the engine enforces it</span>

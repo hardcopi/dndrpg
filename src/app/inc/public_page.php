@@ -230,8 +230,18 @@ function race_bonuses(array $row): array
 function race_plate(string $race): ?string
 {
     $slug = strtolower(preg_replace('/[^a-z0-9]+/i', '_', $race));
-    $rel = 'assets/images/races/' . $slug . '.png';
-    return is_file(APP_ROOT . '/' . $rel) ? $rel : null;
+    // The 3D creator's own render first, the painted plate second. Two files
+    // rather than one overwritten, because the painting is also what
+    // create.js's showRaceArt() puts in the creator's aside: replacing it
+    // would redraw a screen nobody asked about. Delete the `_model` files and
+    // this page goes back to the paintings with no other change.
+    foreach ([$slug . '_model.png', $slug . '.png'] as $name) {
+        $rel = 'assets/images/races/' . $name;
+        if (is_file(APP_ROOT . '/' . $rel)) {
+            return $rel;
+        }
+    }
+    return null;
 }
 
 /** Every class, in the creator's own order. */
@@ -244,20 +254,39 @@ function public_classes(): array
     )->fetchAll();
 }
 
-/** Every race row — one per race AND SUBRACE, which is what the creator offers. */
+/**
+ * Every race row a visitor could actually become — one per race AND SUBRACE,
+ * which is what the creator offers.
+ *
+ * `RACES_WITHHELD` is subtracted here, and that is the whole reason this page
+ * cannot simply `SELECT * FROM races`. The rows stay in the table for the
+ * characters who already are one; what the table does not know is that the
+ * creator will not offer them. Listing a race a visitor cannot choose is
+ * advertising something nobody can have, which is the one failure these pages
+ * exist to be incapable of.
+ */
 function public_races(): array
 {
-    return db()->query(
+    $rows = db()->query(
         'SELECT name, subrace, speed, traits, description, source,
                 str_bonus, dex_bonus, con_bonus, int_bonus, wis_bonus, cha_bonus
            FROM races ORDER BY name, subrace'
     )->fetchAll();
+
+    return array_values(array_filter(
+        $rows,
+        static fn ($r) => !in_array((string) $r['name'], RACES_WITHHELD, true)
+    ));
 }
 
-/** How many distinct races there are, as opposed to how many rows. */
+/** How many distinct races are on offer, as opposed to how many rows there are. */
 function public_race_count(): int
 {
-    return (int) db()->query('SELECT COUNT(DISTINCT name) FROM races')->fetchColumn();
+    $names = [];
+    foreach (public_races() as $r) {
+        $names[(string) $r['name']] = true;
+    }
+    return count($names);
 }
 
 /** Shorthand, because these pages are mostly text. */

@@ -318,11 +318,19 @@ figure.lp-figure figcaption {
 /* A race with no painting on disk is normal, not broken — the same rule the
    creator's aside follows. `.is-bare` drops the frame rather than showing a
    dark rectangle where a picture failed. */
+/* CONTAIN, not COVER, and that is about what the plate now IS.
+   The painted plates are wide two-figure compositions and were cropped to a
+   square with the interesting third near the top — `cover` at 22%. The
+   creator's renders are a single figure on transparency in a square already,
+   so cropping them takes the top off somebody's head to show more breastplate.
+   `contain` shows the whole bust; the card's own ground fills the corners the
+   transparency leaves, which is the reason the render is written with its alpha
+   kept rather than flattened onto a colour. */
 .lp-plate {
   width: 100%;
   aspect-ratio: 1 / 1;
-  object-fit: cover;
-  object-position: 50% 22%;
+  object-fit: contain;
+  object-position: 50% 50%;
   border-radius: var(--r-md);
   border: 1px solid var(--border);
   background: var(--bg-inset);

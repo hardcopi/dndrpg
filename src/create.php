@@ -279,7 +279,12 @@ require_signed_in_page();
         ['assets/images/npcs/busts.json', 'assets/images/paperdoll/index.json']
     ));
   ?>
-  <script>window.ART_VER = <?= json_encode((string) $artVer) ?>;</script>
+  <script>
+    window.ART_VER = <?= json_encode((string) $artVer) ?>;
+    // The races that exist and are not on offer. Defined in bootstrap.php
+    // because the public races page has to agree with this picker about it.
+    window.RACES_WITHHELD = <?= json_encode(array_values(RACES_WITHHELD)) ?>;
+  </script>
   <script src="assets/js/api.js?v=<?= filemtime(__DIR__ . '/assets/js/api.js') ?>"></script>
   <script src="assets/js/dice-geometry.js?v=<?= filemtime(__DIR__ . '/assets/js/dice-geometry.js') ?>"></script>
   <script src="assets/js/dice3d.js?v=<?= filemtime(__DIR__ . '/assets/js/dice3d.js') ?>"></script>
