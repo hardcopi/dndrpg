@@ -77,6 +77,7 @@ $admin = auth()->isAdmin();
   <span><b>The Bestiary</b> · <?= esc(count($monsters)) ?> creatures</span>
   <button type="button" onclick="window.print()">Print / Save as PDF</button>
   <a href="index.php">Home</a>
+  <a href="handbook.php">Handbook</a>
   <a href="about.php">About &amp; licence</a>
   <?php if ($admin) { ?>
     <a href="adventure_print.php">Adventure books</a>

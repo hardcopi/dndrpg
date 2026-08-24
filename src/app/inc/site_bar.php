@@ -21,6 +21,7 @@ $doors = [];
 if ($signedIn) {
     // "Shelf" is the adventures. With them hidden the same door is just home.
     $doors[] = ['index.php', ADVENTURES_ENABLED ? 'Shelf' : 'Home'];
+    $doors[] = ['handbook.php', 'Handbook'];
     $doors[] = ['bestiary.php', 'Bestiary'];
     $doors[] = ['about.php', 'About &amp; legal'];
     if (auth()->isAdmin()) {
@@ -37,6 +38,7 @@ if ($signedIn) {
     $doors[] = ['tour.php', 'The game'];
     $doors[] = ['classes.php', 'Classes'];
     $doors[] = ['races.php', 'Races'];
+    $doors[] = ['handbook.php', 'Handbook'];
     $doors[] = ['bestiary.php', 'Bestiary'];
     $doors[] = ['about.php', 'About &amp; legal'];
     $doors[] = ['login.php', 'Sign in'];

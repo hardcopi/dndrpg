@@ -237,7 +237,9 @@ public_head(
               ceremony happens over the battlefield with the fight still behind it.</li>
           <li><strong>Retiring somebody</strong> is on their own sheet, takes two presses,
               and is refused while they are standing on a battlefield.</li>
-          <li><strong>A sheet that prints</strong>, laid out for a binder.</li>
+          <li><strong>A sheet that prints</strong>, laid out for a binder — and a
+          <a href="handbook.php">player's handbook</a> that prints with it, every
+          number in it read from the rules the game enforces.</li>
         </ul>
       </div>
       <figure class="lp-figure">
