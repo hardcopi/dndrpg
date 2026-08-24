@@ -3,14 +3,11 @@
  * The peoples, one card per row — which means per race AND subrace, because
  * that is what the creator offers and what the ability bonuses hang off.
  *
- * Two things this page has to get right, both of them rules the rest of the
- * codebase already states:
- *
- * THE PLATE IS PER RACE, NOT PER ROW. A Wood Elf and a High Elf are both elves
- * and there is one painting of elves, found by filename rather than by a
- * column. `race_plate()` checks the disk for it, because this vhost answers a
- * missing file with the homepage HTML and a 200 — an `onerror` would never fire
- * and the card would end up showing a web page inside a picture frame.
+ * NO PICTURES. The cards carried a plate per race — the painted pair, then a
+ * bust rendered by the 3D creator — and both are gone: the page is the
+ * catalogue, and the catalogue is the numbers, the traits and the paragraph
+ * about who these people are in this valley. The paintings are still on disk
+ * and still what the creator's own aside shows; nothing here asks for them.
  *
  * THE DESCRIPTION IS OURS. `races.description` is written for this valley — who
  * lends money, who witnesses contracts, who the priory disapproves of — rather
@@ -68,16 +65,10 @@ public_head(
       <?php foreach ($rows as $r) {
           $name = (string) $r['name'];
           $subrace = trim((string) ($r['subrace'] ?? ''));
-          $plate = race_plate($name);
           $traits = race_traits($name, $subrace, (string) $r['traits']);
           $bonuses = race_bonuses($r);
       ?>
-        <article class="lp-card<?= $plate === null ? ' is-bare' : '' ?>">
-          <?php if ($plate !== null) { ?>
-            <img class="lp-plate" src="<?= asset($plate) ?>" loading="lazy"
-                 alt="A man and a woman of the <?= e($name) ?> people, back to back.">
-          <?php } ?>
-
+        <article class="lp-card">
           <h3><?= e($subrace !== '' ? $subrace : $name) ?></h3>
           <p class="lp-card-sub">
             <?= $subrace !== '' ? e($name) . ' · ' : '' ?><?= (int) $r['speed'] ?> ft speed

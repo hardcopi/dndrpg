@@ -217,33 +217,6 @@ function race_bonuses(array $row): array
     return $out;
 }
 
-/**
- * The race plate, or null.
- *
- * Per RACE and not per row — a Wood Elf and a High Elf are both elves and there
- * is one painting of elves — and found by filename rather than by a column, the
- * rule `showRaceArt()` applies client-side. Checked against the disk here
- * because the vhost answers a missing file with the homepage HTML and a 200,
- * so an `onerror` would never fire and the card would show a page inside a
- * picture frame.
- */
-function race_plate(string $race): ?string
-{
-    $slug = strtolower(preg_replace('/[^a-z0-9]+/i', '_', $race));
-    // The 3D creator's own render first, the painted plate second. Two files
-    // rather than one overwritten, because the painting is also what
-    // create.js's showRaceArt() puts in the creator's aside: replacing it
-    // would redraw a screen nobody asked about. Delete the `_model` files and
-    // this page goes back to the paintings with no other change.
-    foreach ([$slug . '_model.png', $slug . '.png'] as $name) {
-        $rel = 'assets/images/races/' . $name;
-        if (is_file(APP_ROOT . '/' . $rel)) {
-            return $rel;
-        }
-    }
-    return null;
-}
-
 /** Every class, in the creator's own order. */
 function public_classes(): array
 {
