@@ -8,11 +8,18 @@
  * books draw from. A goblin is a goblin, and this is where that is written
  * down.
  *
- * ADMIN ONLY. Not because a goblin's AC is secret — a player will see it the
- * first time one swings — but because the catalogue also holds the named
- * things at the bottom of a module (The Growth, the Drowned Clerk, the Pit
- * Champion), and handing those to the person playing is spoiling the game.
- * `require_admin_page()` is the same gate `/content.php` uses.
+ * OPEN TO EVERYONE, including a visitor with no account — the same gate
+ * classes.php and races.php stand behind, which is none. Nothing here is about
+ * anybody: Bestiary::all() is `SELECT * FROM monsters`, so there is no session
+ * to need and no ownership to check.
+ *
+ * It was admin-only, and the reason was never that a goblin's AC is secret — a
+ * player sees that the first time one swings. It was that the catalogue also
+ * holds the named things at the bottom of a module: The Growth, the Drowned
+ * Clerk, the Pit Champion. That cost is real and it is now paid deliberately
+ * rather than avoided. If it is ever worth taking back, the fix is to filter
+ * those rows for a non-admin rather than to shut the whole book again — the
+ * hundred ordinary creatures were never the problem.
  *
  * The layout lives in assets/css/adventure-print.css; this file is structure
  * and data, and Bestiary is where the gathering happens. Nothing here
@@ -22,8 +29,7 @@
  *   /bestiary.php?print=1      …and open the print dialogue
  */
 
-require_once __DIR__ . '/app/page_guard.php';
-$user = require_admin_page();
+require_once __DIR__ . '/app/bootstrap.php';
 
 function esc($value): string
 {
@@ -59,11 +65,23 @@ foreach ($bySource as $src => $rows) {
 </head>
 <body>
 
+<?php
+// The bar's own doors, which stopped being one set when the book stopped being
+// admin-only. `adventure_print.php` and `content.php` both stand behind
+// require_admin_page(), so offering them to everybody is offering a signed-out
+// visitor a login form and a signed-in player a refusal. Everyone gets a way
+// back to the front; an admin also keeps the two they had.
+$admin = auth()->isAdmin();
+?>
 <div class="book-bar">
   <span><b>The Bestiary</b> · <?= esc(count($monsters)) ?> creatures</span>
   <button type="button" onclick="window.print()">Print / Save as PDF</button>
-  <a href="adventure_print.php">Adventure books</a>
-  <a href="content.php">Back to content</a>
+  <a href="index.php">Home</a>
+  <a href="about.php">About &amp; licence</a>
+  <?php if ($admin) { ?>
+    <a href="adventure_print.php">Adventure books</a>
+    <a href="content.php">Back to content</a>
+  <?php } ?>
 </div>
 
 <!-- ------------------------------------------------------------------ Cover -->

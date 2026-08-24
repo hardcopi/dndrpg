@@ -21,13 +21,13 @@ $doors = [];
 if ($signedIn) {
     // "Shelf" is the adventures. With them hidden the same door is just home.
     $doors[] = ['index.php', ADVENTURES_ENABLED ? 'Shelf' : 'Home'];
+    $doors[] = ['bestiary.php', 'Bestiary'];
     $doors[] = ['about.php', 'About &amp; legal'];
     if (auth()->isAdmin()) {
         $doors[] = ['admin.php', 'Accounts'];
         $doors[] = ['content.php', 'Content'];
         $doors[] = ['studio.php', 'Studio'];
         $doors[] = ['adventure_print.php', 'Books'];
-        $doors[] = ['bestiary.php', 'Bestiary'];
     }
 } else {
     // The public face. index.php serves the pitch rather than the picker when
@@ -37,6 +37,7 @@ if ($signedIn) {
     $doors[] = ['tour.php', 'The game'];
     $doors[] = ['classes.php', 'Classes'];
     $doors[] = ['races.php', 'Races'];
+    $doors[] = ['bestiary.php', 'Bestiary'];
     $doors[] = ['about.php', 'About &amp; legal'];
     $doors[] = ['login.php', 'Sign in'];
 }
