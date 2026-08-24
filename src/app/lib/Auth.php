@@ -31,10 +31,38 @@ class Auth
     /** Session key. Namespaced so it cannot collide with character_id/party_id. */
     private const SESSION_KEY = 'auth_user_id';
 
+    /** How long a Bearer token is accepted after it is issued. */
+    public const TOKEN_TTL_SECONDS = 60 * 60 * 24 * 30;
+
+    /** Live tokens kept per account; issuing another revokes the oldest. */
+    public const TOKEN_MAX_LIVE = 8;
+
+    /**
+     * Keys the cookie session and a token share.
+     *
+     * These are the play-state the API already parks in $_SESSION. A token
+     * client has no cookie, so they are written into api_tokens.state_json
+     * at the end of the request and poured back into $_SESSION at the start
+     * of the next. Adding a key here is how a new piece of session state
+     * becomes visible to Unity; adding one only in $_SESSION is how it
+     * silently vanishes for that client.
+     */
+    private const TOKEN_STATE_KEYS = [
+        'character_id',
+        'party_id',
+        'rolled_abilities',
+        'pending_checks',
+    ];
+
     private PDO $db;
 
     /** Memoised for the request: currentUser() is asked on nearly every route. */
     private static ?array $cached = null;
+
+    /** Row id of the Bearer token that authenticated this request, if any. */
+    private ?int $tokenId = null;
+
+    private bool $persistRegistered = false;
 
     public function __construct(PDO $db)
     {
@@ -51,6 +79,15 @@ class Auth
         if (self::$cached !== null) {
             return self::$cached ?: null;
         }
+        $this->tokenId = null;
+
+        $bearer = self::bearerToken();
+        if ($bearer !== null) {
+            $user = $this->userFromToken($bearer);
+            self::$cached = $user ?? [];
+            return $user;
+        }
+
         $id = $_SESSION[self::SESSION_KEY] ?? null;
         if (!$id) {
             self::$cached = [];
@@ -75,6 +112,15 @@ class Auth
 
         self::$cached = $user;
         return $user;
+    }
+
+    /** True when this request authenticated with a Bearer token. */
+    public function usingToken(): bool
+    {
+        if (self::$cached === null) {
+            $this->currentUser();
+        }
+        return $this->tokenId !== null;
     }
 
     public function userId(): ?int
@@ -155,10 +201,33 @@ class Auth
 
     public function logout(): void
     {
+        // A Bearer client has no cookie session to clear. If this request
+        // presented a token we have not yet resolved (logout is public and
+        // does not go through requireUser), look it up here so Sign Out
+        // revokes the secret rather than unsetting nothing.
+        if ($this->tokenId === null) {
+            $raw = self::bearerToken();
+            if ($raw !== null) {
+                $stmt = $this->db->prepare(
+                    'SELECT id FROM api_tokens WHERE token_hash = ? AND revoked_at IS NULL'
+                );
+                $stmt->execute([hash('sha256', $raw)]);
+                $found = $stmt->fetchColumn();
+                if ($found) {
+                    $this->tokenId = (int) $found;
+                }
+            }
+        }
+        if ($this->tokenId !== null) {
+            $this->revokeTokenId($this->tokenId);
+            $this->tokenId = null;
+        }
         unset(
             $_SESSION[self::SESSION_KEY],
             $_SESSION['character_id'],
-            $_SESSION['party_id']
+            $_SESSION['party_id'],
+            $_SESSION['rolled_abilities'],
+            $_SESSION['pending_checks']
         );
         self::$cached = null;
         self::regenerateSession();
@@ -257,6 +326,9 @@ class Auth
         }
         $this->db->prepare('UPDATE users SET password_hash = ? WHERE id = ?')
             ->execute([password_hash($password, PASSWORD_DEFAULT), $userId]);
+        // A password change is a reason to distrust every outstanding token:
+        // the old secret may have been why they were issued.
+        $this->revokeAllTokens($userId);
     }
 
     // =======================================================================
@@ -328,6 +400,187 @@ class Auth
             throw new AuthForbiddenException('That is for administrators.');
         }
         return $u;
+    }
+
+    // =======================================================================
+    // Bearer tokens
+    // =======================================================================
+
+    /**
+     * Issue a token for this account. The secret is returned once.
+     *
+     * @return array{token: string, expires_at: string}
+     */
+    public function issueToken(int $userId, string $label = 'api'): array
+    {
+        $label = preg_replace('/[^A-Za-z0-9_.-]/', '', $label) ?? '';
+        $label = substr($label, 0, 60);
+        if ($label === '') {
+            $label = 'api';
+        }
+
+        $this->pruneTokens($userId);
+
+        $raw = 'rpg_' . bin2hex(random_bytes(32));
+        $expires = (new DateTimeImmutable('+' . self::TOKEN_TTL_SECONDS . ' seconds'));
+        $this->db->prepare(
+            'INSERT INTO api_tokens (user_id, token_hash, label, expires_at)
+             VALUES (?, ?, ?, ?)'
+        )->execute([
+            $userId,
+            hash('sha256', $raw),
+            $label,
+            $expires->format('Y-m-d H:i:s'),
+        ]);
+
+        return [
+            'token'      => $raw,
+            'expires_at' => $expires->format('c'),
+        ];
+    }
+
+    /** Revoke every live token for this account. */
+    public function revokeAllTokens(int $userId): void
+    {
+        $this->db->prepare(
+            'UPDATE api_tokens SET revoked_at = NOW()
+              WHERE user_id = ? AND revoked_at IS NULL'
+        )->execute([$userId]);
+        if ($this->tokenId !== null) {
+            $this->tokenId = null;
+        }
+    }
+
+    /**
+     * Write the play-state bag back onto the token that authenticated this
+     * request. A no-op for cookie sessions, and for a token already revoked
+     * this request (logout).
+     */
+    public function persistTokenState(): void
+    {
+        if ($this->tokenId === null) {
+            return;
+        }
+        $state = [];
+        foreach (self::TOKEN_STATE_KEYS as $key) {
+            if (array_key_exists($key, $_SESSION)) {
+                $state[$key] = $_SESSION[$key];
+            }
+        }
+        $this->db->prepare(
+            'UPDATE api_tokens SET state_json = ?, last_used_at = NOW() WHERE id = ? AND revoked_at IS NULL'
+        )->execute([
+            json_encode($state, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
+            $this->tokenId,
+        ]);
+    }
+
+    private static function bearerToken(): ?string
+    {
+        $header = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
+        if ($header === '' && function_exists('getallheaders')) {
+            $headers = getallheaders();
+            if (is_array($headers)) {
+                foreach ($headers as $name => $value) {
+                    if (strcasecmp((string) $name, 'Authorization') === 0) {
+                        $header = (string) $value;
+                        break;
+                    }
+                }
+            }
+        }
+        if (!preg_match('/^Bearer\s+(\S+)$/i', $header, $m)) {
+            return null;
+        }
+        return $m[1];
+    }
+
+    private function userFromToken(string $raw): ?array
+    {
+        $stmt = $this->db->prepare(
+            'SELECT t.id AS token_id, t.state_json,
+                    u.id, u.username, u.email, u.role, u.is_active, u.last_login_at
+               FROM api_tokens t
+               INNER JOIN users u ON u.id = t.user_id
+              WHERE t.token_hash = ?
+                AND t.revoked_at IS NULL
+                AND t.expires_at > NOW()'
+        );
+        $stmt->execute([hash('sha256', $raw)]);
+        $row = $stmt->fetch();
+        if (!$row || (int) $row['is_active'] !== 1) {
+            return null;
+        }
+
+        $this->tokenId = (int) $row['token_id'];
+        $this->hydrateTokenState($row['state_json'] ?? null);
+        $this->registerPersist();
+
+        unset($row['token_id'], $row['state_json']);
+        return $row;
+    }
+
+    private function hydrateTokenState(mixed $json): void
+    {
+        $decoded = [];
+        if (is_string($json) && $json !== '') {
+            $parsed = json_decode($json, true);
+            if (is_array($parsed)) {
+                $decoded = $parsed;
+            }
+        } elseif (is_array($json)) {
+            $decoded = $json;
+        }
+        foreach (self::TOKEN_STATE_KEYS as $key) {
+            if (array_key_exists($key, $decoded)) {
+                $_SESSION[$key] = $decoded[$key];
+            } else {
+                unset($_SESSION[$key]);
+            }
+        }
+    }
+
+    private function registerPersist(): void
+    {
+        if ($this->persistRegistered) {
+            return;
+        }
+        $this->persistRegistered = true;
+        register_shutdown_function(function () {
+            $this->persistTokenState();
+        });
+    }
+
+    private function revokeTokenId(int $tokenId): void
+    {
+        $this->db->prepare(
+            'UPDATE api_tokens SET revoked_at = NOW() WHERE id = ? AND revoked_at IS NULL'
+        )->execute([$tokenId]);
+    }
+
+    private function pruneTokens(int $userId): void
+    {
+        $this->db->prepare(
+            'UPDATE api_tokens SET revoked_at = NOW()
+              WHERE user_id = ? AND revoked_at IS NULL AND expires_at < NOW()'
+        )->execute([$userId]);
+
+        $stmt = $this->db->prepare(
+            'SELECT id FROM api_tokens
+              WHERE user_id = ? AND revoked_at IS NULL AND expires_at > NOW()
+              ORDER BY created_at ASC, id ASC'
+        );
+        $stmt->execute([$userId]);
+        $ids = array_map('intval', $stmt->fetchAll(PDO::FETCH_COLUMN));
+        $over = count($ids) - self::TOKEN_MAX_LIVE + 1;
+        if ($over <= 0) {
+            return;
+        }
+        $drop = array_slice($ids, 0, $over);
+        $placeholders = implode(',', array_fill(0, count($drop), '?'));
+        $this->db->prepare(
+            "UPDATE api_tokens SET revoked_at = NOW() WHERE id IN ({$placeholders})"
+        )->execute($drop);
     }
 
     /** Forget the memoised user. For tests that switch identity mid-process. */

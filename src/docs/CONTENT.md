@@ -98,6 +98,8 @@ one cannot see the other's work.
 |---|---|---|---|---|
 | `rivermark` | 9 | 73 | 1–6 | Original setting. |
 | `old_city` | 1 | 22 | 1–4 | One companion (Jimmy Able). Adapted from Simon J. Bull's *Secrets of the Old City* (2014). See `attribution` on the module row — it is rendered on the picker, and the licence is to be confirmed before public release. |
+| `undervault` | 1 authored | 4 authored | 1–6 | Levels are generated at play; see `DungeonGen` / `DelveEngine`. |
+| `waerhaven` | 8 | 49 | 1–6 | *Eleven Weeks* — a city of the Ythan League, built from the gazetteers in `World/`. Three companions (Yrsa, Doren, Nessa). Original setting. `tools/test_waerhaven.sh` drives it over real HTTP. |
 
 ## Keys, not ids
 

@@ -22,6 +22,21 @@
 declare(strict_types=1);
 require_once '/var/www/html/app/bootstrap.php';
 
+/*
+ * The local generator, always, whatever this install has running.
+ *
+ * This file is about the delve ENGINE — what gets written into the world, what
+ * the fog shows, what a forced door remembers — and it asserts against specific
+ * rooms and doors on specific floors. Those floors have to be the same every
+ * run, which means DungeonGen: it is a deterministic function of a seed sitting
+ * in this repository. The map service is neither, by design; it is allowed to
+ * be absent and it is allowed to be a newer version of itself.
+ *
+ * Coverage for service floors is test_mapgen.php, which asserts the things that
+ * are true of ANY floor rather than of one.
+ */
+putenv('RPG_MAPGEN_URL=');
+
 $db = db();
 $delves = new DelveEngine($db);
 
@@ -106,7 +121,7 @@ ok('the party may descend at the Mouth', $delves->canDescendHere($leader));
 $db->prepare('UPDATE characters SET current_location_id = ? WHERE id = ?')->execute([$campId, $leader]);
 ok('but not from the camp', !$delves->canDescendHere($leader));
 threw('and asking anyway is refused',
-    fn() => $delves->descend($leader, $partyId), 'at the Mouth');
+    fn() => $delves->descend($leader, $partyId), 'no stair here');
 $db->prepare('UPDATE characters SET current_location_id = ? WHERE id = ?')->execute([$mouthId, $leader]);
 
 echo "\n== the first floor ==\n";
@@ -372,7 +387,13 @@ $db->prepare('UPDATE characters c INNER JOIN character_party cp ON cp.character_
               SET c.current_location_id = ? WHERE cp.party_id = ?')->execute([$campId, $partyId]);
 $atCamp = $loc2->getState($leader, $partyId)['location']['delve'];
 ok('the camp does not', empty($atCamp['can_descend']));
-ok('but it is still inside the module, so the block exists', $atCamp !== null);
+// And says nothing at all there, which is a CHANGE. The block used to exist
+// anywhere inside the module that owned the delve, because the module was the
+// boundary — one game had a stair in it and the rest did not. A stair is now a
+// property of a location (locations.has_delve) and can be in any module, so
+// "you are in the delve's module" is no longer a fact about anything. What is
+// left is the honest rule: say something where there is something to say.
+ok('and says nothing there at all', $atCamp === null);
 
 // Somewhere else entirely: the block must be absent, not merely false.
 $elsewhere = (int) $db->query("SELECT id FROM locations WHERE location_key='flagon_common_room'")->fetchColumn();

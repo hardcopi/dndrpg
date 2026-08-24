@@ -204,6 +204,105 @@ try {
         'the environment is not overriding it in this test run',
         !$auth->registrationLockedByEnv() || getenv('RPG_REGISTRATION') !== false
     );
+
+    // -----------------------------------------------------------------------
+    section('Bearer tokens');
+
+    $tokenUser = $auth->register("token_{$suffix}", 'a token password here');
+    $issued = $auth->issueToken((int) $tokenUser['id'], 'unity');
+    ok('a token is issued as a secret', str_starts_with($issued['token'], 'rpg_') && strlen($issued['token']) > 20);
+    $stored = $db->prepare('SELECT token_hash FROM api_tokens WHERE user_id = ?');
+    $stored->execute([(int) $tokenUser['id']]);
+    $hash = (string) $stored->fetchColumn();
+    ok('the secret is not stored', $hash !== '' && !str_contains($hash, $issued['token']));
+    ok('and the hash matches', $hash === hash('sha256', $issued['token']));
+
+    $_SESSION = [];
+    Auth::forgetCache();
+    $_SERVER['HTTP_AUTHORIZATION'] = 'Bearer ' . $issued['token'];
+    $viaToken = new Auth($db);
+    same('a Bearer token signs you in', "token_{$suffix}", $viaToken->currentUser()['username'] ?? null);
+    ok('usingToken agrees', $viaToken->usingToken());
+    same('and userId is the account', (int) $tokenUser['id'], $viaToken->userId());
+
+    $_SESSION['character_id'] = 4242;
+    $_SESSION['party_id'] = 77;
+    $viaToken->persistTokenState();
+    $_SESSION = [];
+    Auth::forgetCache();
+    $viaToken2 = new Auth($db);
+    $viaToken2->currentUser();
+    same('token state restores the active character', 4242, $_SESSION['character_id'] ?? null);
+    same('and the party', 77, $_SESSION['party_id'] ?? null);
+
+    Auth::forgetCache();
+    $_SERVER['HTTP_AUTHORIZATION'] = 'Bearer rpg_' . str_repeat('ab', 32);
+    $bogus = new Auth($db);
+    ok('a garbage token is not signed in', !$bogus->isSignedIn());
+
+    unset($_SERVER['HTTP_AUTHORIZATION']);
+    Auth::forgetCache();
+    $_SESSION = [];
+    $auth->login("token_{$suffix}", 'a token password here');
+    ok('a cookie session still signs in without a token', $auth->isSignedIn());
+    ok('and is not usingToken', !$auth->usingToken());
+
+    $viaToken->logout();
+    Auth::forgetCache();
+    $_SERVER['HTTP_AUTHORIZATION'] = 'Bearer ' . $issued['token'];
+    $afterLogout = new Auth($db);
+    ok('logout revokes the token', !$afterLogout->isSignedIn());
+
+    $unresolved = $auth->issueToken((int) $tokenUser['id'], 'unity');
+    Auth::forgetCache();
+    $_SERVER['HTTP_AUTHORIZATION'] = 'Bearer ' . $unresolved['token'];
+    $neverAsked = new Auth($db);
+    $neverAsked->logout();
+    Auth::forgetCache();
+    $afterUnresolved = new Auth($db);
+    ok('logout revokes even if currentUser was never asked', !$afterUnresolved->isSignedIn());
+    unset($_SERVER['HTTP_AUTHORIZATION']);
+    Auth::forgetCache();
+
+    $second = $auth->issueToken((int) $tokenUser['id'], 'unity');
+    $auth->setPassword((int) $tokenUser['id'], 'a changed password here');
+    Auth::forgetCache();
+    $_SERVER['HTTP_AUTHORIZATION'] = 'Bearer ' . $second['token'];
+    $afterPw = new Auth($db);
+    ok('changing the password revokes tokens', !$afterPw->isSignedIn());
+    unset($_SERVER['HTTP_AUTHORIZATION']);
+    Auth::forgetCache();
+
+    $live = $auth->issueToken((int) $tokenUser['id'], 'unity');
+    $db->prepare('UPDATE users SET is_active = 0 WHERE id = ?')->execute([(int) $tokenUser['id']]);
+    Auth::forgetCache();
+    $_SERVER['HTTP_AUTHORIZATION'] = 'Bearer ' . $live['token'];
+    $afterOff = new Auth($db);
+    ok('a deactivated account cannot use its token', !$afterOff->isSignedIn());
+    unset($_SERVER['HTTP_AUTHORIZATION']);
+    Auth::forgetCache();
+    $db->prepare('UPDATE users SET is_active = 1 WHERE id = ?')->execute([(int) $tokenUser['id']]);
+
+    $expired = $auth->issueToken((int) $tokenUser['id'], 'unity');
+    $db->prepare(
+        'UPDATE api_tokens SET expires_at = DATE_SUB(NOW(), INTERVAL 1 DAY) WHERE token_hash = ?'
+    )->execute([hash('sha256', $expired['token'])]);
+    Auth::forgetCache();
+    $_SERVER['HTTP_AUTHORIZATION'] = 'Bearer ' . $expired['token'];
+    $afterExp = new Auth($db);
+    ok('an expired token is refused', !$afterExp->isSignedIn());
+    unset($_SERVER['HTTP_AUTHORIZATION']);
+    Auth::forgetCache();
+
+    for ($i = 0; $i < Auth::TOKEN_MAX_LIVE + 1; $i++) {
+        $auth->issueToken((int) $tokenUser['id'], 'cap');
+    }
+    $liveCount = $db->prepare(
+        'SELECT COUNT(*) FROM api_tokens
+          WHERE user_id = ? AND revoked_at IS NULL AND expires_at > NOW()'
+    );
+    $liveCount->execute([(int) $tokenUser['id']]);
+    same('issuing past the cap revokes the oldest', Auth::TOKEN_MAX_LIVE, (int) $liveCount->fetchColumn());
 } finally {
     $db->rollBack();
     $_SESSION = [];

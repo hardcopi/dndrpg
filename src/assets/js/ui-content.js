@@ -28,7 +28,20 @@
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
   }[c]));
 
-  const state = { tab: 'npcs', npcs: [], quests: [], regions: [], refs: null, selected: null };
+  const state = { tab: 'npcs', npcs: [], quests: [], regions: [], items: [], refs: null, selected: null };
+
+  const ITEM_TYPES = ['weapon', 'armor', 'potion', 'scroll', 'misc', 'treasure'];
+  const ITEM_SLOTS = ['ring', 'amulet', 'cloak', 'boots'];
+  const ITEM_ICONS = ['sword', 'weapon', 'dagger', 'axe', 'mace', 'bow', 'staff',
+    'armor', 'helmet', 'cloak', 'boots', 'belt', 'ring', 'amulet',
+    'potion', 'scroll', 'book', 'wand', 'lantern', 'tools', 'herb',
+    'gem', 'coin', 'treasure', 'misc'];
+  const WEAPON_FLAGS = ['simple', 'martial', 'finesse', 'light', 'thrown',
+    'two_handed', 'heavy', 'loading', 'silvered'];
+  const KNOWN_PROPS = WEAPON_FLAGS.concat([
+    'versatile', 'ranged', 'reach', 'attack_bonus', 'damage_bonus',
+    'ac_bonus', 'save_bonus', 'heals', 'resistance',
+  ]);
 
   const err = (e) => { $('#ce-error').textContent = e ? (e.message || String(e)) : ''; };
 
@@ -80,15 +93,17 @@
   async function load() {
     err(null);
     try {
-      const [npcs, quests, regions, refs] = await Promise.all([
+      const [npcs, quests, regions, items, refs] = await Promise.all([
         API.get('content/npcs'),
         API.get('content/quests'),
         API.get('content/regions'),
+        API.get('content/items'),
         API.get('content/refs'),
       ]);
       state.npcs = npcs.npcs;
       state.quests = quests.quests;
       state.regions = regions.regions;
+      state.items = items.items;
       state.refs = refs;
       renderList();
     } catch (e) { err(e); }
@@ -137,6 +152,28 @@
             ${Number(q.on_job_board) ? ' · job board' : ''}
           </span>
         </button>`).join('');
+    } else if (state.tab === 'items') {
+      let lastType = null;
+      const rows = state.items.map((it) => {
+        const heading = it.item_type !== lastType
+          ? `<p class="ce-sub">${esc(it.item_type)}</p>` : '';
+        lastType = it.item_type;
+        return `
+        ${heading}
+        <button type="button" class="ce-row${state.selected === it.id ? ' is-on' : ''}" data-item="${it.id}">
+          <span class="ce-row-name">${esc(it.name)}</span>
+          <span class="ce-row-sub">
+            ${esc(it.item_key)}
+            ${it.rarity && it.rarity !== 'common' ? ` · ${esc(it.rarity)}` : ''}
+            ${it.slot ? ` · ${esc(it.slot)}` : ''}
+          </span>
+        </button>`;
+      }).join('');
+      el.innerHTML = `
+        <div class="ce-actions">
+          <button type="button" class="btn btn-small" data-new-item="1">New item</button>
+        </div>
+        ${rows || '<p class="help-hint">No items yet.</p>'}`;
     } else {
       // Locations are listed under their region rather than in one flat run:
       // the key is global but the sense of a place is regional, and "which
@@ -193,6 +230,10 @@
     if (nl) { state.selected = null; renderList(); openLocation(null, Number(nl.dataset.newLoc)); }
     const t = e.target.closest('[data-talk]');
     if (t) { state.selected = Number(t.dataset.talk); renderList(); openTree(state.selected); }
+    const it = e.target.closest('[data-item]');
+    if (it) { state.selected = Number(it.dataset.item); renderList(); openItem(state.selected); }
+    const ni = e.target.closest('[data-new-item]');
+    if (ni) { state.selected = null; renderList(); openItem(null); }
   });
 
   // =========================================================================
@@ -223,6 +264,15 @@
           </select>
         </label>
       </div>
+      <div class="ce-npc-art">
+        <img class="ce-bust${npc.sprite_key ? '' : ' is-empty'}" id="f-bust"
+             src="${npc.sprite_key ? 'assets/images/npcs/' + encodeURIComponent(npc.sprite_key) + '_bust.png' : ''}"
+             alt="" ${npc.sprite_key ? '' : 'hidden'}>
+        <label>Portrait
+          <input type="file" id="f-art" accept="image/png,image/jpeg">
+        </label>
+      </div>
+      <p class="ce-hint">A painted bust, filed under their key. The face is cut from the top automatically — two generations of the same miner are two different men.</p>
 
       <div class="ce-checks">
         <label class="ce-check"><input type="checkbox" id="f-merchant" ${Number(npc.is_merchant) ? 'checked' : ''}> Merchant</label>
@@ -247,6 +297,34 @@
         <button type="button" class="btn" id="btn-clear-dlg">Remove</button>
         <button type="button" class="btn btn-primary" id="btn-save-dlg">Save conversation</button>
       </div>`;
+
+    $('#f-art').addEventListener('change', async (ev) => {
+      const file = ev.target.files && ev.target.files[0];
+      if (!file) return;
+      err(null);
+      const key = (npc.npc_key || '').trim();
+      if (!key) {
+        return err(new Error('They need a key — the portrait is filed under it.'));
+      }
+      const reader = new FileReader();
+      reader.onload = async () => {
+        try {
+          const art = (await API.post('content/save_art', {
+            kind: 'npc',
+            key,
+            npc_id: id,
+            image: reader.result,
+          })).art;
+          $('#f-sprite').value = art.key;
+          const img = $('#f-bust');
+          img.src = art.bust + '?v=' + Date.now();
+          img.hidden = false;
+          img.classList.remove('is-empty');
+          await refreshNpcs(id);
+        } catch (e) { err(e); }
+      };
+      reader.readAsDataURL(file);
+    });
 
     $('#btn-save-npc').addEventListener('click', async () => {
       err(null);
@@ -430,6 +508,217 @@
         openQuest(id);
       } catch (e) { err(e); }
     }));
+  }
+
+  // =========================================================================
+  // Items
+  // =========================================================================
+
+  /**
+   * One item in the shared catalogue.
+   *
+   * The columns are the form. Known combat properties (a +1, versatile, a
+   * heal) are fields; everything else — quest flags, bane, a scroll's
+   * `use_effect` — stays a JSON object so a form cannot drop them.
+   */
+  async function openItem(id) {
+    err(null);
+    let item;
+    if (id) {
+      try { item = (await API.get('content/item', { id })).item; } catch (e) { return err(e); }
+    } else {
+      item = {
+        id: null, item_key: '', name: '', item_type: 'weapon', rarity: 'uncommon',
+        description: '', weight: 0, value_gp: 0, damage_dice: '', damage_type: '',
+        armor_bonus: '', armor_type: '', slot: '', icon: '', properties: {},
+      };
+    }
+    const props = item.properties && typeof item.properties === 'object' ? item.properties : {};
+    const extra = {};
+    Object.keys(props).forEach((k) => {
+      if (!KNOWN_PROPS.includes(k)) extra[k] = props[k];
+    });
+    const extraText = Object.keys(extra).length ? JSON.stringify(extra, null, 2) : '';
+    const res = Array.isArray(props.resistance) ? props.resistance.join(', ') : (props.resistance || '');
+
+    $('#ce-detail').innerHTML = `
+      <h2 class="ce-title">
+        ${esc(item.name || 'A new item')} <code>${esc(item.item_key)}</code>
+      </h2>
+      <p class="ce-hint">The shared catalogue. Studio drops pick from this list.
+        A +1 sword is the weapon plus attack and damage bonuses.</p>
+
+      <div class="ce-grid">
+        <label>Name<input type="text" id="i-name" value="${esc(item.name)}"></label>
+        <label>Key<input type="text" id="i-key" value="${esc(item.item_key)}"
+          autocapitalize="none" spellcheck="false"></label>
+      </div>
+      <div class="ce-grid">
+        <label>Type
+          <select id="i-type">
+            ${ITEM_TYPES.map((t) => `
+              <option value="${t}"${item.item_type === t ? ' selected' : ''}>${t}</option>`).join('')}
+          </select>
+        </label>
+        <label>Rarity
+          <select id="i-rarity">
+            ${['common', 'uncommon', 'rare', 'very rare', 'legendary'].map((r) => `
+              <option value="${r}"${(item.rarity || 'common') === r ? ' selected' : ''}>${r}</option>`).join('')}
+          </select>
+        </label>
+      </div>
+      <label>Description<textarea id="i-desc" rows="4">${esc(item.description || '')}</textarea></label>
+      <div class="ce-grid ce-grid-3">
+        <label>Weight<input type="number" id="i-weight" value="${item.weight ?? 0}" min="0" step="0.1"></label>
+        <label>Value (gp)<input type="number" id="i-value" value="${item.value_gp ?? 0}" min="0"></label>
+        <label>Icon
+          <select id="i-icon">
+            <option value="">(from type)</option>
+            ${ITEM_ICONS.map((ic) => `
+              <option value="${ic}"${item.icon === ic ? ' selected' : ''}>${ic}</option>`).join('')}
+          </select>
+        </label>
+      </div>
+
+      <div id="i-weapon-fields">
+        <h3 class="ce-sub">Weapon</h3>
+        <div class="ce-grid">
+          <label>Damage<input type="text" id="i-dice" value="${esc(item.damage_dice || '')}" placeholder="1d8"></label>
+          <label>Type<input type="text" id="i-dtype" value="${esc(item.damage_type || '')}" placeholder="slashing"></label>
+        </div>
+        <div class="ce-grid">
+          <label>Versatile<input type="text" id="i-vers" value="${esc(props.versatile || '')}" placeholder="1d10"></label>
+          <label>Range<input type="text" id="i-range" value="${esc(typeof props.ranged === 'string' ? props.ranged : '')}" placeholder="80/320"></label>
+        </div>
+        <div class="ce-checks">
+          ${WEAPON_FLAGS.map((f) => `
+            <label class="ce-check"><input type="checkbox" data-flag="${f}" ${props[f] ? 'checked' : ''}> ${f.replace('_', ' ')}</label>`).join('')}
+        </div>
+      </div>
+
+      <div id="i-armor-fields">
+        <h3 class="ce-sub">Armour</h3>
+        <div class="ce-grid">
+          <label>Armour bonus<input type="number" id="i-abonus" value="${item.armor_bonus ?? ''}" step="1"></label>
+          <label>Armour type<input type="text" id="i-atype" value="${esc(item.armor_type || '')}" placeholder="shield, light, medium"></label>
+        </div>
+      </div>
+
+      <div id="i-slot-fields">
+        <h3 class="ce-sub">Worn</h3>
+        <label>Slot
+          <select id="i-slot">
+            <option value="">—</option>
+            ${ITEM_SLOTS.map((s) => `
+              <option value="${s}"${item.slot === s ? ' selected' : ''}>${s}</option>`).join('')}
+          </select>
+        </label>
+      </div>
+
+      <h3 class="ce-sub">Enchantment</h3>
+      <div class="ce-grid ce-grid-3">
+        <label>Attack bonus<input type="number" id="i-atk" value="${props.attack_bonus ?? ''}" step="1"></label>
+        <label>Damage bonus<input type="number" id="i-dmg" value="${props.damage_bonus ?? ''}" step="1"></label>
+        <label>AC bonus<input type="number" id="i-ac" value="${props.ac_bonus ?? ''}" step="1"></label>
+      </div>
+      <div class="ce-grid">
+        <label>Save bonus<input type="number" id="i-save" value="${props.save_bonus ?? ''}" step="1"></label>
+        <label>Heals<input type="text" id="i-heals" value="${esc(props.heals || '')}" placeholder="2d4+2"></label>
+      </div>
+      <label>Resistance<input type="text" id="i-res" value="${esc(res)}" placeholder="poison, fire"></label>
+      <p class="ce-hint">A +1 weapon is attack 1 and damage 1. Resistance is a comma-separated list.</p>
+
+      <label>Other properties<textarea id="i-extra" rows="4" spellcheck="false">${esc(extraText)}</textarea></label>
+      <p class="ce-hint">JSON object for anything the fields above do not cover — a bane, a scroll's use_effect, quest_item.</p>
+
+      <div class="ce-actions">
+        ${item.id ? '<button type="button" class="btn" id="btn-del-item">Delete</button>' : ''}
+        <button type="button" class="btn btn-primary" id="btn-save-item">Save</button>
+      </div>`;
+
+    const showFor = () => {
+      const t = $('#i-type').value;
+      $('#i-weapon-fields').hidden = t !== 'weapon';
+      $('#i-armor-fields').hidden = t !== 'armor';
+      $('#i-slot-fields').hidden = t !== 'misc';
+    };
+    $('#i-type').addEventListener('change', showFor);
+    showFor();
+
+    $('#btn-save-item').addEventListener('click', async () => {
+      err(null);
+      let extraObj = {};
+      const raw = $('#i-extra').value.trim();
+      if (raw) {
+        try { extraObj = JSON.parse(raw); } catch (e) {
+          return err(new Error('Other properties is not valid JSON.'));
+        }
+        if (!extraObj || typeof extraObj !== 'object' || Array.isArray(extraObj)) {
+          return err(new Error('Other properties must be a JSON object.'));
+        }
+      }
+      const merged = Object.assign({}, extraObj);
+      document.querySelectorAll('#ce-detail [data-flag]').forEach((box) => {
+        if (box.checked) merged[box.getAttribute('data-flag')] = true;
+      });
+      const vers = $('#i-vers').value.trim();
+      if (vers) merged.versatile = vers;
+      const range = $('#i-range').value.trim();
+      if (range) merged.ranged = range;
+      const num = (sel) => {
+        const v = $(sel).value.trim();
+        return v === '' ? null : Number(v);
+      };
+      const atk = num('#i-atk'); if (atk !== null) merged.attack_bonus = atk;
+      const dmg = num('#i-dmg'); if (dmg !== null) merged.damage_bonus = dmg;
+      const ac = num('#i-ac'); if (ac !== null) merged.ac_bonus = ac;
+      const sav = num('#i-save'); if (sav !== null) merged.save_bonus = sav;
+      const heals = $('#i-heals').value.trim();
+      if (heals) merged.heals = heals;
+      const resist = $('#i-res').value.split(',').map((s) => s.trim()).filter(Boolean);
+      if (resist.length) merged.resistance = resist;
+
+      try {
+        const ab = $('#i-abonus').value.trim();
+        const saved = (await API.post('content/save_item', {
+          id: item.id,
+          item_key: $('#i-key').value.trim(),
+          name: $('#i-name').value,
+          item_type: $('#i-type').value,
+          rarity: $('#i-rarity').value,
+          description: $('#i-desc').value,
+          weight: $('#i-weight').value,
+          value_gp: $('#i-value').value,
+          icon: $('#i-icon').value,
+          damage_dice: $('#i-dice').value.trim(),
+          damage_type: $('#i-dtype').value.trim(),
+          armor_bonus: ab === '' ? null : Number(ab),
+          armor_type: $('#i-atype').value.trim(),
+          slot: $('#i-slot').value,
+          properties: merged,
+        })).item;
+        state.items = (await API.get('content/items')).items;
+        if (state.refs) {
+          state.refs.items = (await API.get('content/refs')).items;
+        }
+        state.selected = saved.id;
+        renderList();
+        openItem(saved.id);
+      } catch (e) { err(e); }
+    });
+
+    const del = $('#btn-del-item');
+    if (del) del.addEventListener('click', async () => {
+      if (!confirm(`Remove ${item.name} from the catalogue?`)) return;
+      err(null);
+      try {
+        await API.post('content/delete_item', { id: item.id });
+        state.items = (await API.get('content/items')).items;
+        state.selected = null;
+        renderList();
+        $('#ce-detail').innerHTML = '<p class="help-hint">Choose something on the left.</p>';
+      } catch (e) { err(e); }
+    });
   }
 
   // =========================================================================

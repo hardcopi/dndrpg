@@ -25,11 +25,12 @@ require_signed_in_page();
   <link rel="stylesheet" href="<?= asset('assets/css/style.css') ?>">
 </head>
 <body>
+  <?php require APP_PATH . '/inc/site_bar.php'; ?>
   <header class="hero hero-slim">
     <h1 id="module-name">Your parties</h1>
     <p id="module-blurb" class="hero-sub"></p>
     <div class="hero-actions">
-      <a class="btn" href="index.php">All modules</a>
+      <a class="btn" href="index.php"><?= ADVENTURES_ENABLED ? 'All modules' : 'Home' ?></a>
       <a class="btn btn-primary" id="btn-new" href="create.php">Start a new party here</a>
     </div>
   </header>
@@ -122,6 +123,10 @@ require_signed_in_page();
         </div>
         <div class="char-actions">
           ${play}
+          <a class="icon-btn icon-btn-sm char-act" title="Change ${esc(c.name)}'s look"
+             aria-label="Change ${esc(c.name)}'s look"
+             href="look.php?character_id=${encodeURIComponent(c.id)}">
+            <svg aria-hidden="true"><use href="#i-face"></use></svg></a>
           <a class="icon-btn icon-btn-sm char-act" title="Print ${esc(c.name)}'s sheet"
              aria-label="Print ${esc(c.name)}'s sheet"
              href="sheet_print.php?character_id=${encodeURIComponent(c.id)}">
@@ -243,6 +248,8 @@ require_signed_in_page();
 
   <svg class="icon-sprite" aria-hidden="true" focusable="false">
     <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5l11 7-11 7z"/></symbol>
+    <!-- A head in profile: the look, not the sheet. -->
+    <symbol id="i-face" viewBox="0 0 24 24"><path d="M12 3a5 5 0 0 1 5 5v1.5l1.4 2.6a.7.7 0 0 1-.6 1H16v2.4a2 2 0 0 1-2 2h-1.5V21H10v-3.6a6.6 6.6 0 0 1-3-5.5V8a5 5 0 0 1 5-5zm-1.6 5.6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/></symbol>
     <symbol id="i-print" viewBox="0 0 24 24">
       <path d="M7 9V3h10v6"/><path d="M5 9h14a2 2 0 012 2v6h-4"/>
       <path d="M7 14h10v7H7z"/>

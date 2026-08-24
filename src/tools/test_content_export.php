@@ -98,6 +98,9 @@ $questFields = ['quest_key', 'title', 'stages', 'act', 'description', 'giver',
                 'companion', 'on_job_board', 'required_level', 'rewards', 'is_active'];
 $stageFields = ['title', 'objective', 'journal', 'target', 'terminal', 'resolution',
                 'outcome', 'effects'];
+$itemFields  = ['item_key', 'name', 'item_type', 'description', 'rarity', 'weight',
+                'value_gp', 'damage_dice', 'damage_type', 'armor_bonus', 'armor_type',
+                'slot', 'properties', 'image_url', 'icon', 'place'];
 
 // Export into a scratch directory rather than over content/, so a test run
 // never touches the authored files.
@@ -113,6 +116,7 @@ try {
 
     ok('some NPCs were exported', $counts['npcs'] > 0, (string) $counts['npcs']);
     ok('some quests were exported', $counts['quests'] > 0, (string) $counts['quests']);
+    ok('some items were exported', ($counts['items'] ?? 0) > 0, (string) ($counts['items'] ?? 0));
 
     $badNpc = [];
     foreach (glob($tmp . '/npcs/*.json') as $f) {
@@ -161,6 +165,21 @@ try {
         }
     }
     ok('every exported quest keeps an ending', $noEnd === [], implode(', ', $noEnd));
+
+    $badItem = [];
+    foreach (glob($tmp . '/items/*.json') as $f) {
+        foreach (array_keys(json_decode(file_get_contents($f), true) ?: []) as $k) {
+            if (!in_array($k, $itemFields, true)) {
+                $badItem[] = basename($f) . ':' . $k;
+            }
+        }
+    }
+    ok('every item field is one the loader knows', $badItem === [], implode(', ', array_slice($badItem, 0, 5)));
+
+    $plus = json_decode((string) file_get_contents($tmp . '/items/longsword_fine.json'), true) ?: [];
+    ok('the +1 sword keeps its bonuses',
+        (int) ($plus['properties']['attack_bonus'] ?? 0) === 1
+        && (int) ($plus['properties']['damage_bonus'] ?? 0) === 1);
 
     // Ids must never reach a file: they are assigned by the import, so a file
     // carrying one silently repoints the moment content is reordered.

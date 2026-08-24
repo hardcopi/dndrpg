@@ -1,0 +1,21 @@
+{
+    "encounter_key": "underquay_wandering_crawlers",
+    "name": "Between the Plinths",
+    "description": "Something pale comes over the brickwork sideways and stops when your light finds it, which is the wrong response and tells you it has been found before.",
+    "difficulty": "medium",
+    "monsters": [
+        {
+            "monster": "pale_crawler",
+            "quantity": 2,
+            "rank": "front"
+        },
+        {
+            "monster": "giant_centipede",
+            "quantity": 2,
+            "rank": "front"
+        }
+    ],
+    "allow_flee": true,
+    "is_random": true,
+    "region": "the_underquay"
+}

@@ -1,0 +1,12 @@
+{
+    "npc_key": "hesta_orrow",
+    "name": "Hesta Orrow",
+    "role": "Innkeeper",
+    "description": "Keeps the Waerman's Rest, which means she keeps the carters, which means she hears everything that comes up the Hallowgate road before the Factor does. Rewrites the grain price on her own beam twice a day and has stopped pretending she is doing it for the customers.",
+    "sprite_key": "innkeeper",
+    "is_quest_giver": true,
+    "dialog": "hesta_orrow",
+    "place": {
+        "location": "waermans_rest"
+    }
+}

@@ -1,0 +1,107 @@
+{
+    "npc_key": "hallow_carter",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "flag": "granary_fate",
+                        "equals": "reported"
+                    }
+                ],
+                "text": "\"Barges stopped,\" the carter says, to his ox, because there is nobody else in the market who will discuss it with him. \"Fifty-five miles I come, and the barges stopped. I am carrying pine into a city that wants bread and I will be carrying pine out of it again.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "granary_fate",
+                        "equals": "broken"
+                    }
+                ],
+                "text": "\"Seals off,\" he says. \"Off the doors. In front of everybody.\" He shakes his head slowly and with obvious pleasure. \"Fifty-five miles I have been coming up this road for nineteen years and I have never once had anything to tell them at the other end. I have got something now.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "granary_fate",
+                        "equals": "filled"
+                    }
+                ],
+                "text": "\"Full,\" says the carter, of the granary, having looked in at the door as everybody does. \"They say it was full all along and the Factor is a fool who cannot count. I have met the Factor and he can count. That is the only thing about him anybody has ever been sure of.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "pool": "idle",
+                "conditions": [
+                    {
+                        "flag": "cellar_cleared"
+                    }
+                ],
+                "text": "\"Price on Hesta's beam went up again this morning,\" the carter says. \"She rubs it out and puts it up and rubs it out. I have started reading it the way a sailor reads the sky.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "pool": "idle",
+                "conditions": [
+                    {
+                        "flag": "cellar_cleared"
+                    }
+                ],
+                "text": "\"Six eggs,\" he says, nodding at a board across the way. \"Six. At that money. A year ago you would have been laughed off the square and now there is a queue.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "pool": "idle",
+                "conditions": [
+                    {
+                        "flag": "cellar_cleared"
+                    }
+                ],
+                "text": "The carter is having an argument with a Watch pair about whether his load has been weighed, and losing it, and enjoying it. \"Weighed by what?\" he is saying. \"Weighed by what, though.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "A carter stands at his ox's head with the reins looped over his arm, in no hurry at all, watching the grain queue at the far end of the market not move.\n\n\"Fifty-five mile from Venddock,\" he says, to nobody, to you. \"Every load in this city comes up that road on somebody's beast. You want to remember that when they start telling you who runs the place.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

@@ -1,0 +1,67 @@
+{
+    "quest_key": "the_nineteen",
+    "title": "The Nineteen",
+    "act": 2,
+    "companion": "yrsa",
+    "description": "Yrsa was on Aske Vorn's road. She was fourteen. She has spent four years being told by kind people that she is safe now, and she has never once said what she did on the eleventh night.",
+    "giver": "aske_vorn",
+    "on_job_board": false,
+    "required_level": 3,
+    "rewards": {
+        "xp": 300
+    },
+    "stages": {
+        "she_says_it": {
+            "title": "The eleventh night",
+            "objective": "Let Yrsa get to the end of a sentence.",
+            "journal": "She starts this story about once a month and stops it in the same place, and everybody in the Bough lets her stop, kindly, which is why she has been stopping there for four years.",
+            "target": {
+                "location": "the_green_bough"
+            }
+        },
+        "the_road_south": {
+            "title": "What she carried",
+            "objective": "Go with her as far as she is willing to go.",
+            "journal": "Nineteen did not arrive. Aske Vorn's mark against all nineteen is the same mark. Yrsa knows what the mark means because she was the one holding the lamp.",
+            "target": {
+                "location": "chapel_of_the_grey_road"
+            }
+        },
+        "told": {
+            "title": "Told",
+            "terminal": true,
+            "resolution": "told",
+            "outcome": "success",
+            "journal": "She said it in the chapel, out loud, by name, and nobody died of hearing it. She was furious afterwards for about an hour and then she was not. What she wanted was not comfort and was never comfort — it was somebody who would let the sentence finish.",
+            "effects": [
+                {
+                    "set_flag": "yrsa_fate",
+                    "value": "told"
+                },
+                {
+                    "approval": {
+                        "yrsa": 15
+                    }
+                }
+            ]
+        },
+        "unsaid": {
+            "title": "Unsaid",
+            "terminal": true,
+            "resolution": "unsaid",
+            "outcome": "success",
+            "journal": "I told her she did not have to say it, and meant it, and she took that, and she has been easier since and further away since, both. She says the same three sentences about the eleventh night now and she says them like a thing she has agreed to say.",
+            "effects": [
+                {
+                    "set_flag": "yrsa_fate",
+                    "value": "unsaid"
+                },
+                {
+                    "approval": {
+                        "yrsa": 8
+                    }
+                }
+            ]
+        }
+    }
+}

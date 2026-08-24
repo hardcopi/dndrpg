@@ -1,0 +1,108 @@
+{
+    "quest_key": "eleven_weeks",
+    "title": "Eleven Weeks",
+    "act": 2,
+    "description": "The League Granary holds eleven weeks of grain. Factor Bevis Culm has told Lathmere it holds twenty. Winter is coming, the Wardenswatch has nineteen hundred extra mouths, and the barges stop the moment the lie is found.",
+    "giver": "bevis_culm",
+    "on_job_board": false,
+    "required_level": 4,
+    "rewards": {
+        "xp": 900,
+        "gold": 300
+    },
+    "stages": {
+        "the_third_bay": {
+            "title": "Walk the bays",
+            "objective": "Go past the second bay and count what is actually in the granary.",
+            "journal": "It looks full from the doorway by design. The near bays are the ones that are stacked, and the Factor walks visitors as far as the second one and no further, and he has been doing that for eleven months.",
+            "target": {
+                "location": "league_granary"
+            }
+        },
+        "the_arithmetic": {
+            "title": "Where nine weeks went",
+            "objective": "Account for the shortfall.",
+            "journal": "Nine weeks of grain did not evaporate. Four ounces on every quarter for six years is most of it, and what is under the quay is a good deal of the rest, and the mouths outside the wall are the part nobody is allowed to write down.",
+            "target": {
+                "location": "the_factors_house"
+            }
+        },
+        "the_three_answers": {
+            "title": "Three ways this ends",
+            "objective": "Decide what Waerhaven is told, and by whom.",
+            "journal": "Culm cannot unsay it and cannot survive it and knows both. Gedda can stop the fleet. Ellsa can stop the price. Lathmere can stop the barges. Everybody in this city is holding one end of the same rope and waiting to see who lets go first.",
+            "target": {
+                "location": "the_wet_hall"
+            }
+        },
+        "filled": {
+            "title": "The number made true",
+            "terminal": true,
+            "resolution": "filled",
+            "outcome": "success",
+            "journal": "Twenty weeks in the bays, and every quarter of it clawed back out of this city rather than sent for: the Underquay store, the four ounces, and what the Houses were sitting on. The return Culm sent to Lathmere is now, for the first time in eleven months, an accurate document. Nothing is fixed. Nobody starves. Waerhaven goes on being exactly what it is, which was the price.",
+            "effects": [
+                {
+                    "set_flag": "granary_fate",
+                    "value": "filled"
+                },
+                {
+                    "set_flag": "city_standing",
+                    "value": "held"
+                },
+                {
+                    "set_flag": "culm_owes_you"
+                },
+                {
+                    "xp": 300
+                }
+            ]
+        },
+        "reported": {
+            "title": "Reported",
+            "terminal": true,
+            "resolution": "reported",
+            "outcome": "success",
+            "journal": "The true figure went south to Lathmere over Vennik's seal, with six years of the weight's arithmetic attached to it, and the barges have stopped while the audit runs. The League will pay back what it took, eventually, in full, in writing. The Wardenswatch has to be gone before the auditor's clerk walks out of that gate, and the first frost is nine days off.",
+            "effects": [
+                {
+                    "set_flag": "granary_fate",
+                    "value": "reported"
+                },
+                {
+                    "set_flag": "city_standing",
+                    "value": "audited"
+                },
+                {
+                    "set_flag": "culm_broken"
+                },
+                {
+                    "xp": 300
+                }
+            ]
+        },
+        "broken": {
+            "title": "Broken open",
+            "terminal": true,
+            "resolution": "broken",
+            "outcome": "success",
+            "journal": "The Fish Hall set the ration and the Moot enforced it and the seals came off the granary doors in front of two thousand people, and Waerhaven fed itself for the first time in ninety years. The Factor's writ now runs as far as his own front step. Lathmere will answer this in the spring and everyone standing on that quay knew it and did it anyway.",
+            "effects": [
+                {
+                    "set_flag": "granary_fate",
+                    "value": "broken"
+                },
+                {
+                    "set_flag": "city_standing",
+                    "value": "free"
+                },
+                {
+                    "set_flag": "culm_broken"
+                },
+                {
+                    "xp": 300
+                }
+            ]
+        }
+    }
+}

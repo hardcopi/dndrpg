@@ -13,20 +13,20 @@ require_signed_in_page();
   <link rel="stylesheet" href="assets/css/dice.css?v=<?= filemtime(__DIR__ . '/assets/css/dice.css') ?>">
 </head>
 <!--
-  The creator is a wizard, and it is deliberately the one page in the game that
-  does not scroll on a desktop. Every step is a panel of its own inside a fixed
-  frame: `body.wizard-page` cannot scroll, `.wiz-body` is the only flexible
-  region, and each step is sized to fit inside it.
+  The creator is a wizard: every step is a panel of its own, and the page
+  scrolls as one thing. It used to be pinned to the viewport and refuse to —
+  see the note in style.css about why the 3D creator ended that.
 
   It used to be one long form — name, race, class, background, alignment, six
   ability scores, a twelve-portrait grid and nine layer pickers stacked down a
   page you had to scroll three times to see the bottom of. Everything was
   visible, which sounds like a virtue, and none of it was legible.
 
-  Six steps, `.wiz-step` sections switched by `data-step`, is a rewrite of the
+  Five steps, `.wiz-step` sections switched by `data-step`, is a rewrite of the
   furniture and not of the logic: the same fields post the same payload.
 -->
 <body class="wizard-page">
+  <?php require APP_PATH . '/inc/site_bar.php'; ?>
   <form id="create-form" class="wizard" novalidate>
     <header class="wiz-head">
       <div class="wiz-titles">
@@ -46,74 +46,82 @@ require_signed_in_page();
     <div id="form-error" class="error-banner hidden" role="alert"></div>
 
     <div class="wiz-body">
-      <!-- 1. Who they are -->
+      <!-- 1. Who they are, and what they look like.
+
+           These were two steps until they were one. Identity was a name, two
+           selects and a paragraph of lore with a painting beside it; Appearance
+           was three tabs of ways to choose a face. Both were thin, both were
+           about the same question, and the answer to the first changed what the
+           second could show — so a player set a race, walked forward, and
+           walked back to change it the moment they saw what it looked like.
+
+           Now it is one line of who they are, one line of what that grants
+           them, and the creator underneath showing the answer as they type it.
+           The lore paragraph and the race plate are gone: a painting of a
+           people is a poor substitute for the person you are actually making,
+           and it is standing where they should be.
+      -->
       <section class="wiz-step" data-step="identity" hidden>
         <!--
-          Two columns: what you fill in on the left, who you would be on the
-          right. The plate is 4:3 and was reading as a banner across a 560px
-          column — the picture is a third of the step's height there and pushes
-          the description and the trait line below the fold.
-
-          The aside collapses to nothing when there is no plate (see
-          `.wiz-split:has()`), so a race nobody has painted gets the single
-          column this step had before rather than a column of empty air.
+          One line, four fields. The Roll button rides inside the name field's
+          own cell so it cannot push the selects out of line, and the gender
+          select stays put whether or not the chosen race has names to roll —
+          a control that vanishes takes the three beside it for a walk.
         -->
-        <div class="wiz-split">
-          <div class="wiz-split-main">
+        <div class="wiz-idline">
+          <div class="wiz-idfield wiz-idfield-name">
             <label for="name">Name</label>
-            <!--
-              The dice sit beside the field rather than under it, and they are
-              a word rather than a die glyph — the same call the map's Look
-              button makes, and for the reason the ⓘ records: a decorative
-              glyph lands at a different size and weight on every machine.
-
-              Hidden until the race is known, and hidden again for any race
-              with no name table, so the offer is never made and then refused.
-            -->
             <div class="wiz-name-row">
               <input id="name" name="name" maxlength="50" autocomplete="off"
                      placeholder="e.g. Elara Stormwind">
               <!--
-                Which pool the dice draw from. "Either" is the default and a
-                real answer rather than a shrug — it draws from the whole
-                culture at once — because the game models no gender anywhere
-                else, and a required question here would be the only place it
-                asked. It steers a suggestion; it is not a field on the
-                character, and the box below stays typeable whatever it says.
+                Hidden until the race is known to have a name table, so the
+                offer is never made and then refused.
               -->
-              <select id="name-gender" aria-label="Which names to draw from" hidden>
-                <option value="">Either</option>
-                <option value="masculine">Masculine</option>
-                <option value="feminine">Feminine</option>
-              </select>
               <button type="button" id="name-roll" class="btn btn-small" hidden
                       title="Suggest a name for this people">Roll</button>
             </div>
-            <p id="name-check" class="field-note"></p>
-
-            <div class="wiz-pair">
-              <div>
-                <label for="race">Race</label>
-                <select id="race"></select>
-              </div>
-              <div>
-                <label for="subrace">Subrace</label>
-                <select id="subrace"></select>
-              </div>
-            </div>
-            <!-- Only the races we wrote carry a description; an SRD race
-                 leaves it empty and the paragraph collapses. -->
-            <p id="racial-lore" class="wiz-lore"></p>
-            <p id="racial-preview" class="help-hint"></p>
           </div>
 
-          <!-- The art is by filename rather than by a column — the same
-               convention the module covers use — so `onerror` is what decides
-               there isn't one. -->
-          <div class="wiz-split-aside">
-            <img id="racial-art" class="wiz-race-art" alt="" hidden>
+          <div class="wiz-idfield">
+            <!--
+              Which pool the dice draw from. "Either" is a real answer rather
+              than a shrug — it draws from the whole culture at once — because
+              the game models no gender anywhere else, and this steers a
+              suggestion rather than setting a field on the character. The 3D
+              creator has its own Frame slider for the body it builds.
+            -->
+            <label for="name-gender">Gender</label>
+            <select id="name-gender" aria-label="Which names to draw from">
+              <option value="">Either</option>
+              <option value="masculine">Masculine</option>
+              <option value="feminine">Feminine</option>
+            </select>
+          </div>
+
+          <div class="wiz-idfield">
+            <label for="race">Race</label>
+            <select id="race"></select>
+          </div>
+
+          <div class="wiz-idfield">
+            <label for="subrace">Subrace</label>
+            <select id="subrace"></select>
           </div>
         </div>
+
+        <p id="name-check" class="field-note"></p>
+
+        <!-- What the race grants: speed, ability bonuses, traits. -->
+        <p id="racial-preview" class="wiz-benefits"></p>
+
+        <!--
+          The creator itself. An embed owns its box and fills it, so the box
+          needs a height — and here it is whatever the two lines above did not
+          take, because this page does not scroll and the character is the part
+          worth giving the room to.
+        -->
+        <div id="look-model-well"></div>
       </section>
 
       <!-- 2. What they do -->
@@ -205,51 +213,22 @@ require_signed_in_page();
       </section>
 
       <!--
-        4. Appearance. Two ways to look like somebody: a portrait picks one of
+        4. Appearance. Three ways to look like somebody: a portrait picks one of
         the whole actors cut from the packs — striking, costumed, and shared with
         an NPC — while building one stacks the modular T&C layers instead, which
-        is plainer but nobody else's.
+        is plainer but nobody else's. The third is the 3D creator, which is a
+        different kind of picture altogether: a figure rather than a portrait.
 
         The built preview stacks the layers in the browser so a click is instant.
         The composite that ends up in the game is baked server-side on submit,
         because the renderer wants one sprite sheet, not eight.
+
+        The 3D creator is loaded only when its tab is first opened. It is a
+        WebGL player and a set of mesh bundles, and most people making a
+        character never touch it — paying for it on every visit to this page
+        would be a slow step four for everybody to serve the few.
       -->
-      <section class="wiz-step" data-step="look" hidden>
-        <div class="tabs" role="tablist" aria-label="How to choose a look">
-          <button type="button" class="tab active" data-look="preset" role="tab" aria-selected="true">Pick a portrait</button>
-          <button type="button" class="tab" data-look="built" role="tab" aria-selected="false">Build one</button>
-        </div>
-
-        <div id="look-preset" class="look-pane">
-          <div class="avatar-grid" id="avatar-grid" role="radiogroup" aria-label="Portraits"></div>
-        </div>
-
-        <div id="look-built" class="look-pane hidden">
-          <div class="pd-layout">
-            <!--
-              Two views of the same layer stack. The bust is what a player
-              actually looks at — it is the face in every conversation — and
-              judging a haircut from a 40px-tall walking figure was guesswork.
-              Both are composited from the identical ordered layer list, so they
-              cannot disagree, which is the same guarantee Paperdoll::bake gives
-              server-side.
-            -->
-            <div class="pd-stage">
-              <div class="pd-bust" id="pd-bust" aria-label="Your character's portrait"></div>
-              <div class="pd-preview" id="pd-preview" aria-label="Your character"></div>
-              <div class="pd-stage-actions">
-                <button type="button" class="btn btn-small" id="pd-facing" title="Turn them around">Turn</button>
-                <button type="button" class="btn btn-small" id="pd-random">Randomise</button>
-              </div>
-              <p class="help-hint" id="pd-note"></p>
-            </div>
-            <!-- Two columns of pickers, so nine categories fit without scrolling. -->
-            <div class="pd-pickers" id="pd-pickers"></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- 5. One knack from the life before adventuring. Optional on purpose:
+      <!-- 4. One knack from the life before adventuring. Optional on purpose:
            "take nothing" is a real card, so the step never blocks a new player
            who has no idea what a feat is. -->
       <section class="wiz-step" data-step="gift" hidden>
@@ -260,7 +239,7 @@ require_signed_in_page();
         <div class="avatar-grid gift-grid" id="gift-grid" role="radiogroup" aria-label="Origin feats"></div>
       </section>
 
-      <!-- 6. The finished character, before committing to it -->
+      <!-- 5. The finished character, before committing to it -->
       <section class="wiz-step" data-step="review" hidden>
         <div class="review-layout">
           <div class="review-portrait">

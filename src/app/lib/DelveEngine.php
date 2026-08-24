@@ -37,10 +37,17 @@ declare(strict_types=1);
 
 final class DelveEngine
 {
-    /** The module the whole feature lives in. */
+    /**
+     * The authored module that ships a delve of its own.
+     *
+     * Kept because the printed book knows it — AdventureBook prints the
+     * Undervault's floors — but no longer what decides where a delve may
+     * happen. That is `locations.has_delve` now, and the module a delve writes
+     * into is read from the mouth it began at.
+     */
     public const MODULE_KEY = 'undervault';
 
-    /** Where a delve starts and returns to — authored, and never generated. */
+    /** The Undervault's own mouth. One of several now; see has_delve. */
     public const MOUTH_KEY = 'uv_mouth';
 
     /**
@@ -51,6 +58,16 @@ final class DelveEngine
      * closest thing this module has to winning.
      */
     public const MAX_DEPTH = 5;
+
+    /**
+     * What the map service is asked to draw.
+     *
+     * Keeps only, for now. The service also makes caves, and caves come back as
+     * one to four chambers with no doors between them — which is a fine cave
+     * and a poor dungeon, because every room here becomes a place you walk to
+     * and a floor with two of them is not a delve. See the note in the plan.
+     */
+    private const KIND_FOR_DEPTH = MapService::KIND_KEEP;
 
     /** How many foes a generated room may hold, matching the pit's ceiling. */
     private const MAX_FOES = 6;
@@ -117,19 +134,75 @@ final class DelveEngine
     /**
      * Whether this party may start one from where they are standing.
      *
-     * The Mouth and nowhere else. A delve begun from the camp would put the
-     * party underground without walking to the stair, which is the class of
-     * thing the module boundary rules exist to stop.
+     * A location with a stair in it, and nowhere else. A delve begun from the
+     * camp would put the party underground without walking to the stair, which
+     * is the class of thing the module boundary rules exist to stop — the rule
+     * has not changed, only the number of places that satisfy it.
      */
     public function canDescendHere(int $characterId): bool
     {
+        return $this->mouthFor($characterId) !== null;
+    }
+
+    /**
+     * The stair the party is standing on, or null if they are not on one.
+     *
+     * Returns the location id rather than a yes: a delve records where it began
+     * so it knows where to put the party when they climb out, and which module
+     * its floors belong to. With one authored mouth those were constants; with
+     * a mouth wherever content puts one, they are facts about this delve.
+     */
+    private function mouthFor(int $characterId): ?int
+    {
         $stmt = $this->db->prepare(
-            'SELECT l.location_key FROM characters c
+            'SELECT l.id FROM characters c
                INNER JOIN locations l ON l.id = c.current_location_id
-              WHERE c.id = ?'
+              WHERE c.id = ? AND l.has_delve = 1'
         );
         $stmt->execute([$characterId]);
-        return $stmt->fetchColumn() === self::MOUTH_KEY;
+        $id = $stmt->fetchColumn();
+        return $id === false ? null : (int) $id;
+    }
+
+    /**
+     * Where a delve in progress began.
+     *
+     * A row written before delves recorded their mouth has none, and every such
+     * delve is in the Undervault because that is the only place one could
+     * happen — so that is what it falls back to. Without this the party climbs
+     * out of a floor that is then deleted underneath them and ends up standing
+     * nowhere at all.
+     */
+    private function mouthOf(array $delve): ?int
+    {
+        $id = $delve['mouth_location_id'] ?? null;
+        if ($id !== null) {
+            return (int) $id;
+        }
+        return $this->locationIdByKey(self::MOUTH_KEY);
+    }
+
+    /**
+     * The module a delve's floors are written into: the one its mouth stands in.
+     *
+     * Read from the world rather than named, which is what lets a stair exist in
+     * more than one game. assertContained() still checks every generated exit
+     * against this id, so the boundary is enforced exactly as before — it is the
+     * source of the id that changed, not the rule.
+     */
+    private function moduleForMouth(int $mouthId): int
+    {
+        $stmt = $this->db->prepare(
+            'SELECT r.module_id FROM locations l
+               INNER JOIN regions r ON r.id = l.region_id
+              WHERE l.id = ?'
+        );
+        $stmt->execute([$mouthId]);
+        $id = (int) $stmt->fetchColumn();
+        if ($id <= 0) {
+            throw new RuntimeException('That stair does not stand in any module.');
+        }
+        return $id;
     }
 
     /**
@@ -150,44 +223,65 @@ final class DelveEngine
             return null;
         }
         $stmt = $this->db->prepare(
-            'SELECT l.location_key, r.module_id, m.module_key
+            'SELECT l.location_key, l.has_delve
                FROM characters c
                INNER JOIN locations l ON l.id = c.current_location_id
-               INNER JOIN regions r ON r.id = l.region_id
-               INNER JOIN modules m ON m.id = r.module_id
               WHERE c.id = ?'
         );
         $stmt->execute([$characterId]);
         $here = $stmt->fetch(PDO::FETCH_ASSOC);
-        if (!$here || $here['module_key'] !== self::MODULE_KEY) {
+        if (!$here) {
             return null;
         }
 
         $delve = $this->current($partyId);
         if ($delve === null) {
+            // Nothing to say anywhere but on a stair. Most of the world is not
+            // a stair, and a party in a tavern should not be told about a hole
+            // they cannot reach.
+            if (empty($here['has_delve'])) {
+                return null;
+            }
             return [
                 'depth'       => 0,
                 'max_depth'   => self::MAX_DEPTH,
-                'can_descend' => $here['location_key'] === self::MOUTH_KEY,
+                'can_descend' => true,
                 'can_deeper'  => false,
                 'can_leave'   => false,
             ];
         }
 
-        // Deeper only from the room the stair is actually in. Recomputed from
-        // the seed rather than stored, because DungeonGen is deterministic and
-        // a second copy of "which room was the stair" is a second thing that
-        // can disagree with the first.
+        // Deeper only from the room the stair is actually in. Read from the
+        // floor this delve is on rather than recomputed — see levelFor(). It
+        // used to be recomputed, on the argument that DungeonGen is
+        // deterministic and a stored copy is a second thing that can disagree;
+        // that argument holds for DungeonGen and not for a floor drawn by a
+        // service that is allowed to be absent.
         $depth = (int) $delve['depth'];
-        $level = DungeonGen::generate((int) $delve['seed'], $depth);
+        $level = $this->levelFor($delve);
         $stairKey = self::roomKey($partyId, $depth, (int) $level['stair']);
+        $entranceKey = self::roomKey($partyId, $depth, (int) $level['entrance']);
 
+        // Out from the entrance room only, the same rule that already governs
+        // going deeper — and the same rule the level itself already keeps.
+        //
+        // This was `true`, everywhere. The reasoning was that climbing out
+        // walks nowhere: it ends the delve and the floor stops existing, so
+        // there is no journey to model and no obvious place to stand while
+        // doing it. But a way out that needs no journey is a way out that
+        // costs nothing, and a floor you can leave from its deepest corner is
+        // a floor you can never be cut off in — which is most of what the
+        // loops in it are for.
+        //
+        // The exit was always there, besides. writeExits() cuts one from the
+        // entrance room back to the Mouth and from nowhere else; this button
+        // was a second way out that bypassed it. Now the two agree.
         return [
             'depth'       => $depth,
             'max_depth'   => self::MAX_DEPTH,
             'can_descend' => false,
             'can_deeper'  => $here['location_key'] === $stairKey && $depth < self::MAX_DEPTH,
-            'can_leave'   => true,
+            'can_leave'   => $here['location_key'] === $entranceKey,
         ];
     }
 
@@ -233,7 +327,7 @@ final class DelveEngine
             return null;
         }
 
-        $level = DungeonGen::generate((int) $delve['seed'], $depth);
+        $level = $this->levelFor($delve);
         $plan = DungeonGen::plan($level);
 
         // Room ids mean nothing to the client; location ids are what its nodes
@@ -664,14 +758,20 @@ final class DelveEngine
         $delve = $this->current($partyId);
 
         if ($delve === null) {
-            if (!$this->canDescendHere($characterId)) {
-                throw new InvalidArgumentException('The stair is at the Mouth, not here.');
+            $mouthId = $this->mouthFor($characterId);
+            if ($mouthId === null) {
+                throw new InvalidArgumentException('There is no stair here.');
             }
             $seed = random_int(1, 0x7FFFFFFF);
             $depth = 1;
+            // The mouth is recorded now, at the only moment anybody knows it:
+            // the party is standing on it. Everything afterwards — which module
+            // the floors belong to, where climbing out puts them — is read back
+            // from this row rather than from a constant.
             $this->db->prepare(
-                'INSERT INTO dungeon_delves (party_id, seed, depth) VALUES (?, ?, ?)'
-            )->execute([$partyId, $seed, $depth]);
+                'INSERT INTO dungeon_delves (party_id, seed, depth, mouth_location_id) VALUES (?, ?, ?, ?)'
+            )->execute([$partyId, $seed, $depth, $mouthId]);
+            $delve = ['mouth_location_id' => $mouthId];
         } else {
             $seed = (int) $delve['seed'];
             $depth = (int) $delve['depth'] + 1;
@@ -680,7 +780,8 @@ final class DelveEngine
             }
         }
 
-        $level = DungeonGen::generate($seed, $depth);
+        $mouthId = $this->mouthOf($delve);
+        $level = $this->draw($seed, $depth);
         if (!DungeonGen::isWalkable($level)) {
             // Cannot happen — the layout is joined by a spanning tree before
             // anything else — but a generated thing that reaches the database
@@ -688,12 +789,21 @@ final class DelveEngine
             throw new RuntimeException('Generated a level that cannot be walked. Seed ' . $seed);
         }
 
-        $old = $delve === null ? null : (int) ($delve['region_id'] ?? 0);
-        $regionId = $this->write($partyId, $level);
+        $old = (int) ($delve['region_id'] ?? 0) ?: null;
+        $regionId = $this->write($partyId, $level, $mouthId);
 
+        // The floor is kept, not just its seed. See the migration and levelFor():
+        // a floor the map service drew cannot be recomputed on demand, because
+        // the service is allowed to be missing.
         $this->db->prepare(
-            'UPDATE dungeon_delves SET seed = ?, depth = ?, region_id = ? WHERE party_id = ?'
-        )->execute([$seed, $depth, $regionId, $partyId]);
+            'UPDATE dungeon_delves SET seed = ?, depth = ?, region_id = ?, level_json = ? WHERE party_id = ?'
+        )->execute([
+            $seed,
+            $depth,
+            $regionId,
+            json_encode($level, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
+            $partyId,
+        ]);
 
         $entranceId = $this->locationIdOf($partyId, $depth, $level['entrance']);
         $this->moveParty($partyId, $entranceId);
@@ -720,6 +830,85 @@ final class DelveEngine
                 ? 'You go down the stair. The cold closes over you.'
                 : "You take the stair down. Level {$depth}.",
         ];
+    }
+
+    /**
+     * The floor this delve is standing on.
+     *
+     * The stored one if there is one, and there is one for every floor written
+     * since the map service arrived. Falls back to regenerating from the seed,
+     * which is right for the delves that predate the column and for every floor
+     * DungeonGen drew — those ARE their seed, and always will be.
+     *
+     * Everything that draws or asks about a floor comes through here, so the
+     * chart, the stair and the room the party is standing in cannot disagree
+     * about which dungeon they are in.
+     */
+    private function levelFor(array $delve): array
+    {
+        $stored = $delve['level_json'] ?? null;
+        if (is_string($stored) && $stored !== '') {
+            $level = json_decode($stored, true);
+            if (is_array($level) && !empty($level['rooms'])) {
+                return $level;
+            }
+            error_log('DelveEngine: stored level for party ' . ($delve['party_id'] ?? '?')
+                . ' is unreadable; rebuilding from the seed.');
+        }
+        return DungeonGen::generate((int) $delve['seed'], (int) $delve['depth']);
+    }
+
+    /**
+     * A floor: the map service's if it can draw one, this game's otherwise.
+     *
+     * The fallback is not an error path, it is the other half of the design.
+     * A delve must be enterable on an install with no map service at all, on
+     * one where the container is restarting, and on one where the service
+     * answered with something that could not be made into a level — and in all
+     * three the answer is the generator that drew every floor before it.
+     */
+    private function draw(int $seed, int $depth): array
+    {
+        if (MapService::available()) {
+            $dungeon = MapService::floor($seed, $depth, self::KIND_FOR_DEPTH, [
+                // Sized to the delve rather than to the service's defaults: a
+                // floor is a night's work, not a fortress.
+                //
+                // The field is bigger than the floor needs to be, and that is
+                // the point. It was 48x36 with the service's default pad of 1,
+                // which packed the rooms in until the gaps between them were
+                // one or two tiles — about 1.7 chart units once projected,
+                // against a passage drawn 2.4 wide. A passage shorter than it
+                // is wide is not a passage, it is a doorway, and the whole
+                // level read as rooms sharing walls.
+                //
+                // Spreading the same rooms over 72x54 and holding them five
+                // tiles apart puts the shortest passage at 5.5 to 6.6 units —
+                // two and a half times its width — with the middle of the
+                // range around 12 to 17. Measured over six seeds; it also
+                // reaches the room count it asks for, which at 48x36 it
+                // managed on one seed in four.
+                //
+                // Rooms shrink to about 10 units across, still four times the
+                // width of a passage, so nothing has to be squinted at. The
+                // grid travels with the level in `grid_w`/`grid_h` and
+                // DungeonGen::gridOf reads it, so the chart, the fog raster
+                // and the router all follow without being told.
+                'cols' => 72,
+                'rows' => 54,
+                'roomPad' => 5,
+                'roomCount' => DungeonGen::PROFILES[DungeonGen::profileForDepth($depth)]['rooms'][1],
+            ]);
+            if ($dungeon !== null) {
+                $level = GeneratedLevel::fromDungeon($dungeon, $seed, $depth);
+                if ($level !== null) {
+                    return $level;
+                }
+                error_log("DelveEngine: the service's floor for seed {$seed} depth {$depth} "
+                    . 'could not be made into a level; using DungeonGen.');
+            }
+        }
+        return DungeonGen::generate($seed, $depth);
     }
 
     /**
@@ -752,7 +941,11 @@ final class DelveEngine
             return;
         }
         if ($moveParty) {
-            $mouth = $this->locationIdByKey(self::MOUTH_KEY);
+            // Back to the stair they came down, not to a named one. A party
+            // that walked into a hole in the Proving Yard must not surface in
+            // the Undervault, which is what a constant here would have done the
+            // moment a second mouth existed.
+            $mouth = $this->mouthOf($delve);
             if ($mouth) {
                 $this->moveParty($partyId, $mouth);
             }
@@ -766,9 +959,20 @@ final class DelveEngine
         }
         // Every floor's forced-door and found-trap flags, not just the current
         // depth's: a delve that ended on level 4 walked through three others.
+        // Its quests go the same way and for the same reason.
         for ($d = 1; $d <= self::MAX_DEPTH; $d++) {
             $this->clearFloorFlags($partyId, $d);
+            $this->dropQuest(self::questKey($partyId, $d));
         }
+        // Barricades, which clearFloorFlags cannot reach: they are keyed on the
+        // two LOCATION IDS a doorway joins (see DoorEngine::barricadeFlag), not
+        // on the _dg_party_depth_ pattern the other floor flags share. Ids are
+        // never reused, so a stale one could not attach itself to a new door —
+        // but it would sit in the table for ever, and a party that delves fifty
+        // times would carry fifty floors of dead furniture around with it.
+        $this->db->prepare(
+            "DELETE FROM world_flags WHERE party_id = ? AND flag_key LIKE 'dg\\_barr\\_%'"
+        )->execute([$partyId]);
         $this->db->prepare('DELETE FROM dungeon_delves WHERE party_id = ?')->execute([$partyId]);
     }
 
@@ -784,11 +988,11 @@ final class DelveEngine
      * other. The keys are deliberately readable — `_dg_12_3_room7` — because
      * the first thing anybody does with a broken delve is look in the database.
      */
-    private function write(int $partyId, array $level): int
+    private function write(int $partyId, array $level, ?int $mouthId): int
     {
         $depth = (int) $level['depth'];
         $regionKey = self::regionKey($partyId, $depth);
-        $moduleId = $this->moduleId();
+        $moduleId = $mouthId === null ? $this->moduleId() : $this->moduleForMouth($mouthId);
 
         // Anything left from a previous visit to this depth. dropRegion() should
         // already have taken it, but a region removed by any other route — a
@@ -801,6 +1005,9 @@ final class DelveEngine
         $this->db->prepare('DELETE FROM regions WHERE region_key = ?')->execute([$regionKey]);
         $this->db->prepare('DELETE FROM encounters WHERE encounter_key LIKE ?')
             ->execute(['_dg_' . $partyId . '_' . $depth . '_e%']);
+        // And the floor's quest, for the same reason: its stages point at rooms
+        // that are about to be deleted and rewritten.
+        $this->dropQuest(self::questKey($partyId, $depth));
         $this->clearFloorFlags($partyId, $depth);
         $this->db->prepare(
             'INSERT INTO regions (region_key, module_id, name, description, region_type, sort_order)
@@ -808,7 +1015,7 @@ final class DelveEngine
         )->execute([
             $regionKey,
             $moduleId,
-            'The Undervault, level ' . $depth,
+            $this->floorName($mouthId, $depth),
             // The level's one atmosphere, stated where the floor announces
             // itself — the same pick that flavours the entrance and a third
             // of the passages, so the region says what they will then show.
@@ -888,11 +1095,137 @@ final class DelveEngine
             ]);
         }
 
-        $this->writeExits($partyId, $level, $regionId);
+        $this->writeExits($partyId, $level, $regionId, $mouthId);
         $this->stock($partyId, $level, $regionId);
+        $this->writeQuest($partyId, $level);
         $this->assertContained($regionId, $moduleId);
 
         return $regionId;
+    }
+
+    /**
+     * The floor's own errand, in the journal.
+     *
+     * The map service invents a quest with every floor it draws — a name, a
+     * hook, a few steps pinned to particular rooms, and a twist. Written here
+     * as ordinary `quests` and `quest_stages` rows, so the journal, the tracker
+     * and the map markers all work on it with no special case, exactly the way
+     * the floor itself is ordinary `locations`.
+     *
+     * NOTHING IS INVENTED AS A REWARD. Zero XP and zero gold, deliberately, and
+     * for the reason the rest of this engine gives: the pay for a floor is the
+     * monsters standing on it, counted by CombatEngine. A quest that paid on top
+     * would make the delve the only content worth playing.
+     *
+     * Keyed `_dg_q_<party>_<depth>` and deleted with the floor — see
+     * dropQuest(). A quest whose rooms have been deleted is a journal entry
+     * pointing at nowhere.
+     */
+    private function writeQuest(int $partyId, array $level): void
+    {
+        $depth = (int) $level['depth'];
+        $quest = $level['quest'] ?? null;
+        if (!is_array($quest) || empty($quest['steps'])) {
+            return;
+        }
+
+        // Only the steps that are on THIS floor. The generator writes quests for
+        // a building with storeys and can point a step at the one below; a delve
+        // draws each floor separately, so a step that names another one has no
+        // room here to stand in.
+        $steps = [];
+        foreach ($quest['steps'] as $step) {
+            $room = (int) ($step['room'] ?? -1);
+            $text = trim((string) ($step['text'] ?? ''));
+            $where = $this->locationIdByKey(self::roomKey($partyId, $depth, $room));
+            if ($room < 0 || $text === '' || $where === null) {
+                continue;
+            }
+            $steps[] = ['text' => $text, 'location' => $where];
+        }
+        if ($steps === []) {
+            return;
+        }
+
+        $key = self::questKey($partyId, $depth);
+        $this->dropQuest($key);
+
+        $this->db->prepare(
+            'INSERT INTO quests
+                (quest_key, title, description, act, on_job_board,
+                 required_level, reward_xp, reward_gold, target_location_id, is_active)
+             VALUES (?, ?, ?, 1, 0, 1, 0, 0, ?, 1)'
+        )->execute([
+            $key,
+            mb_substr(trim((string) ($quest['name'] ?? 'Unfinished business')), 0, 150),
+            trim((string) ($quest['hook'] ?? '')),
+            $steps[count($steps) - 1]['location'],
+        ]);
+        $questId = (int) $this->db->lastInsertId();
+
+        $insert = $this->db->prepare(
+            'INSERT INTO quest_stages
+                (quest_id, stage_key, title, objective, journal_entry,
+                 target_location_id, is_terminal, outcome, sort_order)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'
+        );
+
+        foreach ($steps as $i => $step) {
+            $last = $i === count($steps) - 1;
+            $insert->execute([
+                $questId,
+                's' . ($i + 1),
+                mb_substr($step['text'], 0, 150),
+                $step['text'],
+                // The twist is kept back for the last step, which is the only
+                // place it can land as a turn rather than as a spoiler in the
+                // journal from the moment the party walks in.
+                $last && !empty($quest['twist'])
+                    ? $step['text'] . ' — ' . trim((string) $quest['twist'])
+                    : $step['text'],
+                $step['location'],
+                $last ? 1 : 0,
+                'success',
+                ($i + 1) * 10,
+            ]);
+        }
+
+        // Begun at once, rather than waiting to be found. There is nobody down
+        // here to hand out work: the party goes down the stair already knowing
+        // what the place is for, which is what the hook says. Advancing to the
+        // first stage is what starts it — see QuestService::advance.
+        (new QuestService($this->db))->advance($partyId, $key, 's1');
+    }
+
+    /** A generated quest's key. Readable, and prefixed like everything else generated. */
+    public static function questKey(int $partyId, int $depth): string
+    {
+        return "_dg_q_{$partyId}_{$depth}";
+    }
+
+    /**
+     * Take a generated quest out again, stages, progress and all.
+     *
+     * `quest_stages.target_location_id` is ON DELETE SET NULL, which is right
+     * for the authored world — deleting a room should not destroy a hand-written
+     * quest — and wrong here, where the quest exists only to point at rooms that
+     * are about to stop existing. The same argument dropRegion() makes about
+     * encounters, and the same answer.
+     */
+    private function dropQuest(string $key): void
+    {
+        $stmt = $this->db->prepare('SELECT id FROM quests WHERE quest_key = ?');
+        $stmt->execute([$key]);
+        $id = $stmt->fetchColumn();
+        if ($id === false) {
+            return;
+        }
+        $id = (int) $id;
+        foreach (['party_quest_stages', 'party_quests'] as $table) {
+            $this->db->prepare("DELETE FROM {$table} WHERE quest_id = ?")->execute([$id]);
+        }
+        $this->db->prepare('DELETE FROM quest_stages WHERE quest_id = ?')->execute([$id]);
+        $this->db->prepare('DELETE FROM quests WHERE id = ?')->execute([$id]);
     }
 
     /**
@@ -915,7 +1248,7 @@ final class DelveEngine
      * room; having to force it again to leave the corridor would be the same
      * door twice.
      */
-    private function writeExits(int $partyId, array $level, int $regionId): void
+    private function writeExits(int $partyId, array $level, int $regionId, ?int $mouthId): void
     {
         $depth = (int) $level['depth'];
         $id = fn (int $room) => $this->locationIdOf($partyId, $depth, $room);
@@ -969,11 +1302,10 @@ final class DelveEngine
         // the one exit in a generated level that leaves the generated region,
         // and the reason assertContained() checks the module rather than the
         // region.
-        $mouth = $this->locationIdByKey(self::MOUTH_KEY);
-        if ($mouth) {
+        if ($mouthId) {
             $insert->execute([
                 $id((int) $level['entrance']),
-                $mouth,
+                $mouthId,
                 $depth === 1 ? 'Back up the stair, into the daylight' : 'Back up the stair, and keep going up',
                 0,
                 -10,
@@ -1539,6 +1871,27 @@ final class DelveEngine
             'portcullis' => 'Under the portcullis',
             default      => 'Along the passage',
         };
+    }
+
+    /**
+     * What a generated floor is called.
+     *
+     * Named after the stair it hangs from — "Below the Proving Yard, level 2" —
+     * because a delve is now a thing any place can have and "The Undervault"
+     * was only ever true of one of them. The mouth's own name is the one word
+     * the player already associates with the hole they walked into.
+     */
+    private function floorName(?int $mouthId, int $depth): string
+    {
+        $where = null;
+        if ($mouthId !== null) {
+            $stmt = $this->db->prepare('SELECT name FROM locations WHERE id = ?');
+            $stmt->execute([$mouthId]);
+            $where = $stmt->fetchColumn() ?: null;
+        }
+        return $where === null
+            ? 'The deep, level ' . $depth
+            : 'Below ' . $where . ', level ' . $depth;
     }
 
     private function moduleId(): int

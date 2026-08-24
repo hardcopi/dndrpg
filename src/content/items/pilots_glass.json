@@ -1,0 +1,13 @@
+{
+  "item_key": "pilots_glass",
+  "name": "Vennik's Long Glass",
+  "description": "Four draws of lacquered brass and Lathmere lenses, made for reading a shoal at two miles and a face at four hundred paces. Vennik grinds his own glass and will tell you at length why the third element is the one that matters.",
+  "item_type": "misc",
+  "rarity": "uncommon",
+  "weight": 2,
+  "value_gp": 180,
+  "properties": {
+    "perception_advantage_distant": true
+  },
+  "icon": "tools"
+}

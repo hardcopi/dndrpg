@@ -1,0 +1,12 @@
+{
+    "npc_key": "tam_ryke",
+    "name": "Tam Ryke",
+    "role": "Sailmaker's forewoman",
+    "description": "Runs twenty women, a hundred metres of cutting floor and the best information network in Waerhaven, out of a loft with its windows on the quay. What she knows is not for sale at any price. She will trade it, once, for help with something the Watch will not touch.",
+    "sprite_key": "skulker",
+    "is_quest_giver": true,
+    "dialog": "tam_ryke",
+    "place": {
+        "location": "the_sailmakers_loft"
+    }
+}

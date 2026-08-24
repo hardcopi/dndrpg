@@ -1,0 +1,420 @@
+{
+    "npc_key": "oren_skeld",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "flag": "city_standing",
+                        "equals": "free"
+                    }
+                ],
+                "text": "The duty board has forty names on it and every one of them has been walked this week, which has not happened in Skeld's tenure.\n\n\"Fish Hall sets the ration,\" he says. \"Moot enforces it. And the Watch stands at the granary door and does what it is told by a body that has no charter to tell it anything.\"\n\nHe rubs his face.\n\n\"My men have never been happier. They have never once known who they worked for and now they do, and it turns out that was the whole of it.\"",
+                "choices": [
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "city_standing",
+                        "equals": "audited"
+                    }
+                ],
+                "text": "Skeld is standing at the window with his back to the room, watching the gate.\n\n\"Clerk from Lathmere gets here Thursday,\" he says. \"With a warrant and a list. And on that list, somewhere near the bottom, is a suburb that does not exist.\"\n\nHe does not turn round.\n\n\"I have been letting them through that gate for six years and billing the League for the torches. I am not going to be the man who walks out and counts them.\"",
+                "choices": [
+                    {
+                        "label": "\"Then do not be.\"",
+                        "next": "the_gate_open"
+                    },
+                    {
+                        "label": "Leave him.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "forty_one_fate",
+                        "equals": "named"
+                    }
+                ],
+                "text": "\"They read a list out in a shed outside my wall,\" Skeld says, \"in front of forty people, and eleven of my men were standing at the back of it off duty, and not one of them told me they were going.\"\n\nHe turns a cup round on the table.\n\n\"I found out from the turnkey at the Tar Gaol. The Tar Gaol, which I do not keep, on a warrant I have never seen. That is the Watch I have got.\"",
+                "choices": [
+                    {
+                        "label": "\"You could take the gaol off the Houses.\"",
+                        "next": "the_gaol"
+                    },
+                    {
+                        "label": "\"Why does the Watch not keep it?\"",
+                        "next": "the_gaol"
+                    },
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "skeld_squared"
+                    }
+                ],
+                "text": "Skeld looks up, and there is a wariness in it that was not there before, and also something a good deal more like respect.\n\n\"You,\" he says. \"Right. What is it this time, and before you answer — I have not got forty men. I have got twelve, and four of them are worth the bread.\"",
+                "choices": [
+                    {
+                        "label": "\"The Tar Gaol.\"",
+                        "next": "the_gaol"
+                    },
+                    {
+                        "label": "\"The gate at night.\"",
+                        "next": "the_night_gate"
+                    },
+                    {
+                        "label": "\"The chain winch was tampered with in spring.\"",
+                        "next": "the_winch"
+                    },
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "skeld_bought"
+                    }
+                ],
+                "text": "\"Ah,\" says Skeld, and moves a ledger to cover something on the table that was not worth covering. \"You.\"\n\nHe is perfectly pleasant about it, which is exactly the problem.",
+                "choices": [
+                    {
+                        "label": "\"The gate at night.\"",
+                        "next": "the_night_gate"
+                    },
+                    {
+                        "label": "\"I want the Tar Gaol opened.\"",
+                        "next": "the_gaol"
+                    },
+                    {
+                        "label": "Leave him.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "met_skeld"
+                    }
+                ],
+                "text": "\"Back,\" says Watch-Captain Skeld, from the table by the door where he does his drinking and his duty in the same chair. \"Say it quickly, I have got a man being counted out his drill money and he will steal from me if I stop watching.\"",
+                "choices": [
+                    {
+                        "label": "\"The gate at night.\"",
+                        "next": "the_night_gate"
+                    },
+                    {
+                        "label": "\"Who pays you?\"",
+                        "next": "three_parties"
+                    },
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "The only stone building in the ward, and inside it forty men on a roll and about four in the room, one of whom is being counted out his drill money in coppers, slowly, by the Captain himself.\n\n\"Oren Skeld,\" he says, without stopping counting. \"Boom Watch, city watch, gate watch, and whatever else nobody else will do. If you have been robbed, I am sorry, and if you have been robbed in Tarrow I am not the man.\"\n\nHe pushes the coppers across.\n\n\"Go on. Whatever it is.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_skeld"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "\"What happens at that gate at night?\"",
+                        "next": "the_night_gate"
+                    },
+                    {
+                        "label": "\"Who pays you?\"",
+                        "next": "three_parties"
+                    },
+                    {
+                        "label": "\"Why is the Tar Gaol not yours?\"",
+                        "next": "the_gaol"
+                    },
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "three_parties": {
+            "text": "Skeld puts the last copper down and looks at you with something that is very nearly relief.\n\n\"Three,\" he says. \"League pays the roll. Moot pays the drill money, because the Moot wants that chain drilled and the League will not pay for it. And the Tarrow Houses pay me a retainer to not go into Tarrow, which I would like to point out I would not go into anyway, because I have got twelve sober men and Tarrow has four hundred.\"\n\nHe spreads his hands.\n\n\"Everybody knows all of that. It is not a secret, it is an arrangement. The reason I tell strangers is that they always find out in the third week and decide they have discovered something, and then they are unbearable.\"",
+            "choices": [
+                {
+                    "label": "\"And what do you do that none of the three pay for?\"",
+                    "next": "the_night_gate"
+                },
+                {
+                    "label": "\"That is not an arrangement. That is being bought.\"",
+                    "next": "the_reckoning"
+                },
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "the_reckoning": {
+            "text": "\"Yes,\" says Skeld. \"It is.\"\n\nHe does not get angry, which you were braced for.\n\n\"I take money from three parties and I let people through that gate at night for nothing, and I have decided that balances the account. It does not. I know the arithmetic. I did it about four years ago and I have not done it since, on purpose, and I sleep, and I would like you to know that I am aware of exactly how that sounds.\"\n\nHe picks his cup up.\n\n\"Every man in Waerhaven has one thing he does not look at directly. Mine is my own ledger. I would not trade it for the Factor's.\"",
+            "choices": [
+                {
+                    "label": "\"Then let us do the arithmetic together.\"",
+                    "check": {
+                        "skill": "persuasion",
+                        "dc": 16,
+                        "on_success": "he_squares_it",
+                        "on_failure": "he_takes_it"
+                    }
+                },
+                {
+                    "label": "\"I could make that arithmetic public.\"",
+                    "check": {
+                        "skill": "intimidation",
+                        "dc": 16,
+                        "on_success": "he_squares_it",
+                        "on_failure": "he_takes_it"
+                    }
+                },
+                {
+                    "label": "\"I am a soldier. You have not got twelve men, you have got four and eight uniforms.\"",
+                    "tag": "SOLDIER",
+                    "conditions": [
+                        {
+                            "origin": "soldier"
+                        }
+                    ],
+                    "check": {
+                        "skill": "persuasion",
+                        "dc": 13,
+                        "on_success": "he_squares_it",
+                        "on_failure": "he_takes_it"
+                    }
+                },
+                {
+                    "label": "Leave it.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "he_squares_it": {
+            "text": "Skeld hears you out. Then he gets up, goes to the duty board, and takes down the sheet that has had a name scratched out and no name written over it since spring.\n\n\"Night gate,\" he says. \"Nobody has walked it since Ryland went. I have been drawing the wage for it and putting it in the drill fund, which is the least corrupt piece of corruption in the Ythan League and it is still corruption.\"\n\nHe writes his own name on it.\n\n\"There. Now I have got one thing I cannot be paid to not do. It is not much and it is more than I had at breakfast.\"\n\nHe sits back down.\n\n\"And you may come to me with things. Once each. Do not make a habit of it and do not bring me Tarrow.\"",
+            "on_enter": [
+                {
+                    "set_flag": "skeld_squared"
+                },
+                {
+                    "xp": 120
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"The Tar Gaol.\"",
+                    "next": "the_gaol"
+                },
+                {
+                    "label": "\"Understood.\"",
+                    "end": true
+                }
+            ]
+        },
+        "he_takes_it": {
+            "text": "Skeld listens to the whole thing with his head slightly on one side, and at the end of it he laughs — not unkindly, and not for very long.\n\n\"You are the fourth,\" he says. \"In eleven years. Four people have stood where you are standing and explained my own accounts to me.\"\n\nHe pushes the cup away.\n\n\"Two of them I ended up drinking with. One of them is in the Tar Gaol. One of them went home.\"\n\nHe looks at you with the whole of his attention for the first time.\n\n\"I have got twelve sober men and a gate and a chain and nineteen hundred people outside a wall who are not allowed to be there. Tell me which of the three parties I stop taking from, and what happens at that gate the night after I do, and I will do it before supper.\"\n\nYou do not have an answer, and he was not asking rhetorically, and he waits long enough to be sure of that.",
+            "on_enter": [
+                {
+                    "set_flag": "skeld_bought"
+                }
+            ],
+            "choices": [
+                {
+                    "label": "Say it again, louder, in front of his men.",
+                    "next": "he_calls_it_off"
+                },
+                {
+                    "label": "Say nothing.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "the_night_gate": [
+            {
+                "conditions": [
+                    {
+                        "flag": "met_vorn"
+                    }
+                ],
+                "text": "\"You have been out to the Grey Hall,\" Skeld says. \"Then you have met Vorn, and Vorn will have told you nothing, which is what she tells everybody.\"\n\nHe leans back.\n\n\"She and I have an arrangement that consists entirely of neither of us ever saying a word to the other. Six years. She brings them down the road at night and my gate is not attended, and there is no message, no signal, no payment and no acknowledgement of any kind. If either of us ever said it out loud it would become a thing that had been agreed, and then it could be stopped.\"",
+                "choices": [
+                    {
+                        "label": "\"That is the most careful thing I have heard in this city.\"",
+                        "next": "the_careful_thing"
+                    },
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ]
+            },
+            {
+                "text": "\"At night,\" Skeld says, \"the Hallowgate is shut, and the postern beside it is manned, and the man on it writes down everybody who comes through.\"\n\nHe drinks.\n\n\"That is what the standing order says. What happens is that the man on the postern is a Waerhaven lad of nineteen who is paid four coppers a night, and at about the third hour he goes and stands round the corner out of the wind for a while, and I have never once asked him why.\"\n\n\"I bill the League for the torches. Full night's burn, every night, six years. It is the only line in my accounts that has never been queried and it is the only one that is a complete fabrication.\"",
+                "choices": [
+                    {
+                        "label": "\"You are letting them in.\"",
+                        "next": "the_careful_thing"
+                    },
+                    {
+                        "label": "\"Who brings them down the road?\"",
+                        "next": "who_brings_them"
+                    },
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ]
+            }
+        ],
+        "who_brings_them": {
+            "text": "\"I do not know,\" Skeld says, \"and that is a real answer and not a careful one.\"\n\n\"They arrive in parties of eight and twelve, on foot, at about the third hour, off the Venddock road — which is wrong, because they are coming from the north and there is no road north. So somebody is walking them eighty-five miles through the Wyrdpines to a point on the ox-road where they can turn onto it and look like carters' families.\"\n\nHe shakes his head slowly.\n\n\"Somebody has been doing that for six years, in winter as well, and has never once lost a party on the last stage. I would like to meet whoever it is and I would very much like not to have to arrest them.\"",
+            "choices": [
+                {
+                    "label": "\"Warden Aske Vorn.\"",
+                    "next": "the_careful_thing"
+                },
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "the_careful_thing": {
+            "text": "\"It is,\" Skeld agrees. \"And it is not mine. I am not a careful man. I am a man who found a piece of carefulness lying about six years ago and has been standing very still next to it ever since.\"\n\nHe looks at the door.\n\n\"There is one thing in my life I am proud of and it is a gate I do not guard. You may make of that whatever you like. Everybody does.\"",
+            "on_enter": [
+                {
+                    "set_flag": "met_vorn"
+                }
+            ],
+            "choices": [
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "the_gaol": [
+            {
+                "conditions": [
+                    {
+                        "flag": "gaol_opened"
+                    }
+                ],
+                "text": "\"Open,\" says Skeld. \"On nobody's authority, which is exactly the authority it was shut on, so I have decided the books balance.\"\n\nHe almost smiles.\n\n\"I have put two men on it. Not to hold anybody. To stop the Houses putting anybody back.\"",
+                "choices": [
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "skeld_squared"
+                    }
+                ],
+                "text": "Skeld looks at the ceiling for a while.\n\n\"Right,\" he says. \"The Tar Gaol is kept by the Houses on a warrant nobody has ever produced, and about half the people in it are in it for existing, and I have known that for six years.\"\n\n\"I cannot take it. Twelve men against four hundred picking oakum, in Tarrow, downwind, with one road out.\"\n\nHe leans forward.\n\n\"But I can be somewhere else. Very publicly, with all twelve, at the far end of the ward, on a Thursday afternoon, on a written order that I will have written myself and filed.\"\n\n\"If a gaol that I do not keep is opened while the Watch is drilling on the other side of the city, that is a thing that happened. It is not a thing I did.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "skeld_will_look_away"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "\"Thursday.\"",
+                        "effects": [
+                            {
+                                "xp": 80
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ]
+            },
+            {
+                "text": "\"Because I am not paid to,\" Skeld says. \"And before you say anything: I am aware. Everybody who comes in here about the Tar Gaol is aware, and they all say it in the same tone.\"\n\n\"It is behind the oakum sheds. It is kept by the Houses. There is a warrant, allegedly, and nobody has ever produced it, and I have asked twice in writing and been sent a very polite nothing both times.\"\n\nHe turns his cup round.\n\n\"Half the people in it are Drennmark and they are in it for existing outside a charter. I know. I have known for six years. What I have got is twelve sober men and Tarrow has four hundred and one road out of it.\"",
+                "choices": [
+                    {
+                        "label": "\"That is not an answer.\"",
+                        "next": "the_reckoning"
+                    },
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ]
+            }
+        ],
+        "the_winch": {
+            "text": "\"In the spring,\" Skeld says, and for the first time he is entirely serious. \"Somebody took the pawl out of the chain winch and put it back wrong.\"\n\n\"It was found on the Tuesday drill. Four minutes became eleven. Eleven minutes is a harbour with an open mouth.\"\n\nHe taps the table.\n\n\"It was mended by the boom crew inside the hour and no report was written, because a report would have gone to the Wet Hall and the Wet Hall would have wanted a name. And there is not a name. There are eleven men on that winch and every one of them has been on it since before I was Captain.\"\n\n\"Whoever did it did not want the chain to fail. They wanted to know how long it takes to make it fail. That is a different thing entirely and it is the thing I think about.\"",
+            "choices": [
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "the_gate_open": {
+            "text": "Skeld turns round from the window.\n\n\"Say that again,\" he says.\n\nAnd you do, and he listens, and at the end of it he goes and takes the duty roll off the wall and looks at the forty names on it as though counting something else entirely.\n\n\"Thursday,\" he says. \"The clerk comes Thursday. If the Wardenswatch is a field on Thursday, there is nothing on his list to count and he goes home and writes that Waerhaven is in good order.\"\n\n\"They would have to be somewhere by Wednesday night. Nineteen hundred people. In the open, in October, and it is on me if they die out there, and it is on me if they are counted.\"\n\nHe hangs the roll back up.\n\n\"I have been avoiding one piece of arithmetic for four years and this city has just handed me a worse one. Go on. Get out. I have got to think.\"",
+            "choices": [
+                {
+                    "label": "Go.",
+                    "end": true
+                }
+            ]
+        },
+        "he_calls_it_off": {
+            "text": "\"Hold,\" says Skeld, from the doorway, and twelve men stop, which tells you more about the Boom Watch than anything he has ever said about it.\n\n\"I sent them,\" he says. \"Sober ones, which you may take as a compliment, and I will thank you not to hurt them.\"\n\nHe comes into the room.\n\n\"Now. Say the thing you were going to say when they came in, and say it to me, and if it is any good at all I will let you walk out of my keep.\"",
+            "choices": [
+                {
+                    "label": "\"Your arithmetic does not balance and you know it.\"",
+                    "check": {
+                        "skill": "persuasion",
+                        "dc": 16,
+                        "on_success": "he_squares_it",
+                        "on_failure": "he_takes_it"
+                    }
+                },
+                {
+                    "label": "Say nothing, and fight.",
+                    "effects": [
+                        {
+                            "start_combat": "boom_press_gang"
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}

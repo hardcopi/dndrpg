@@ -1,0 +1,67 @@
+{
+    "quest_key": "what_the_houses_owe",
+    "title": "What the Houses Owe",
+    "act": 2,
+    "companion": "nessa_reth",
+    "description": "Nessa Reth has been keeping a private tally of what the Oakum House has paid four hundred people in bread against what their work sold for, and the number is finished, and she has nowhere to put it.",
+    "giver": "mother_reth",
+    "on_job_board": false,
+    "required_level": 4,
+    "rewards": {
+        "xp": 350
+    },
+    "stages": {
+        "the_bench": {
+            "title": "The bench",
+            "objective": "Let Nessa show you the tally.",
+            "journal": "Six years, four hundred hands, paid in a tin token redeemable at one cart. She has the tokens issued and the oakum sold and the difference, and she has had the difference for a year and has not shown it to a living soul.",
+            "target": {
+                "location": "the_oakum_house"
+            }
+        },
+        "the_reckoning": {
+            "title": "In front of her grandmother",
+            "objective": "Decide where the number gets said.",
+            "journal": "Mother Reth genuinely believes she is the only person in Waerhaven who feeds the poor. The tally does not say she is wrong. It says what she has charged them for it.",
+            "target": {
+                "location": "the_pitch_yards"
+            }
+        },
+        "split": {
+            "title": "Split",
+            "terminal": true,
+            "resolution": "split",
+            "outcome": "success",
+            "journal": "She read it out in the pitch yard in front of both her uncles and left the same evening with what she could carry. The Houses will not change. Four hundred people now know a number they did not know, and Nessa says that is not nothing and does not sound convinced.",
+            "effects": [
+                {
+                    "set_flag": "nessa_fate",
+                    "value": "split"
+                },
+                {
+                    "approval": {
+                        "nessa_reth": 15
+                    }
+                }
+            ]
+        },
+        "stayed": {
+            "title": "Stayed",
+            "terminal": true,
+            "resolution": "stayed",
+            "outcome": "success",
+            "journal": "She gave the tally to her grandmother privately and the bread ration went up a third the following week and no reason was given for it. Nobody knows. Nessa knows. She says that is how it is actually done and she may be right, and she has not been sleeping.",
+            "effects": [
+                {
+                    "set_flag": "nessa_fate",
+                    "value": "stayed"
+                },
+                {
+                    "approval": {
+                        "nessa_reth": 10
+                    }
+                }
+            ]
+        }
+    }
+}

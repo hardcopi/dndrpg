@@ -1,0 +1,76 @@
+{
+    "npc_key": "tar_gaol_prisoner",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "flag": "gaol_opened"
+                    }
+                ],
+                "text": "The doors are open and most of them have gone and this one has not.\n\n\"Where,\" he says, reasonably. \"That is the whole of it. Everybody keeps saying go. Go where. I was picking oakum outside the wall for a token before I was picking it in here for nothing, and the shed is the same shed.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "pool": "idle",
+                "conditions": [
+                    {
+                        "flag": "met_reth"
+                    }
+                ],
+                "text": "\"Held for what?\" the prisoner says through the grille. \"Ask them. Go on, ask them, they cannot say it either. There is no word for it. I am here because there is no word for what I am.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "pool": "idle",
+                "conditions": [
+                    {
+                        "flag": "met_reth"
+                    }
+                ],
+                "text": "He is picking oakum. It is four in the afternoon, nobody has told him to, and there is nothing in it for him.\n\n\"Hands want something,\" he says, when he sees you notice.",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "pool": "idle",
+                "conditions": [
+                    {
+                        "flag": "met_reth"
+                    }
+                ],
+                "text": "\"That slate,\" he says, nodding at the turnkey's board. \"That is the whole record of every one of us. Wiped and written, wiped and written. You could walk out of here and out of the world and it would take a wet rag.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "A face at the grille of the second room, patient in a way that has taken practice.\n\n\"You are not the Houses,\" he says. \"You are not the Watch either, they do not come in here. So you are lost, or you are looking for somebody. I hope you are looking for somebody.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

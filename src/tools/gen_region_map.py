@@ -94,6 +94,83 @@ BY_TYPE = {
                "rubble and broken walls",
 }
 
+# Art direction per REGION, where the type's hint is wrong about that region.
+#
+# `region_type` has three values and is doing two jobs: it picks the map glyphs
+# and it stands in for what the place looks like from above. That is fine until
+# a region is the exception its type does not have a word for — Waerhaven's
+# eight wards are all typed `town` because a party shops and sleeps in them,
+# and the town hint asks for streets, blocks and a town wall, and one of them
+# is a shipyard, one is a pitch works, one is a shanty outside the wall and one
+# is a flooded cellar. The model believes the hint over the description, four
+# seeds out of four, and draws the same grey town eight times.
+#
+# An entry here REPLACES the type hint rather than adding to it, because the
+# failure mode being fixed is the type hint winning, and appending a correction
+# to a wrong clause is how you get both.
+BY_KEY = {
+    # Waerhaven is eight views of one promontory and the type hint alone gives
+    # eight identical grey towns. Each ward names what it actually is on the
+    # ground; `World/waerhaven-map.svg` is the reference and the wards on it
+    # are already coloured and keyed.
+    "hallowgate_ward": (
+        "a walled town gate with one arch, ox-carts queued at it, "
+        "timber yards stacked four metres high in open ground behind, "
+        "a stone granary on staddle stones, a market of trestles, "
+        "trodden dust, no water in sight"
+    ),
+    "highstrand": (
+        "the crown of a low ridge above a harbour, six or seven stone houses "
+        "with glazed windows and slate, one swept paved square between them, "
+        "a long low black timber guildhall, open grey water forty miles wide "
+        "beyond the roofs, no crowd, no market"
+    ),
+    "the_boom": (
+        "a working harbour of five stone piers, warehouses in a double rank "
+        "along the quay, a heavy iron chain slung across the mouth of the bay "
+        "between two low towers, a tall treadwheel crane on the outer quay, "
+        "cold grey water, gulls"
+    ),
+    "the_slipways": (
+        "a shipyard on a shore, four wooden hull frames on slipways running "
+        "down into the water, a long low roofed building three hundred metres "
+        "long beside them, a rectangular black timber pond, stacked pine, "
+        "sawdust, no finished ships"
+    ),
+    "old_waer": (
+        "a very old fishing village of narrow lanes on a headland, houses "
+        "built against and over one another, nets on frames, a small stone "
+        "lighthouse tower at the point, deep water close inshore, "
+        "no carts, no wide streets"
+    ),
+    "tarrow": (
+        "an industrial quarter downwind of a town, pitch cauldrons on stone "
+        "stands under black smoke, brick kilns, long low sheds, a great forge "
+        "with four chimneys, everything stained black, steep steps cut down a "
+        "slope into it"
+    ),
+    "the_wardenswatch": (
+        "a shanty suburb outside a town wall, turf-roofed lean-tos in two rows "
+        "along a cart track, stove pipes, a drainage ditch dug straight and "
+        "graded, a converted timber barn, forest edge close behind, "
+        "cold northern light"
+    ),
+    "the_underquay": (
+        "flooded stone cellars under a quay, brick vaulting half in black "
+        "water, a tide-mark on the walls at chest height, an iron grating in "
+        "an arch with the sea beyond it, one shaft of daylight, "
+        "no people, no fire"
+    ),
+}
+
+# Location types a region map can actually draw. `prompt_for` names a few real
+# places to stop every region coming back as the same region, and it took them
+# in file order — which for Highstrand is the Moot Yard, the Moot, the Factor's
+# House, the Wet Hall, the Charthouse and Vennik's, and four of those six are
+# interiors. The model draws six buildings, correctly and uselessly. A plan
+# seen from above can only show what has a roof of its own or no roof at all.
+OUTDOOR_TYPES = ("site", "square", "street", "gate", "camp")
+
 
 def load_regions() -> list[dict]:
     out = []
@@ -123,13 +200,20 @@ def prompt_for(region: dict) -> str:
     location prompts do past fifty words.
     """
     body = " ".join((region.get("description") or "").split())
-    places = [loc.get("name", "") for loc in list(region["locations"].values())[:6]]
+
+    # Outdoor places first, then anything else to make the six up. A room is
+    # not a thing a plan drawn from above can show, and naming four of them
+    # gets four buildings drawn where there is one.
+    locs = list(region["locations"].values())
+    outdoor = [l for l in locs if l.get("type") in OUTDOOR_TYPES]
+    places = [l.get("name", "") for l in (outdoor or locs)][:6]
+
     bits = [region["name"] + "."]
     if body:
         bits.append(body)
     if places:
         bits.append("Featuring: " + ", ".join(p for p in places if p) + ".")
-    hint = BY_TYPE.get(region["region_type"])
+    hint = BY_KEY.get(region["region_key"]) or BY_TYPE.get(region["region_type"])
     if hint:
         bits.append(hint + ".")
     bits.append(STYLE)

@@ -1,0 +1,11 @@
+{
+    "npc_key": "oakum_picker",
+    "name": "An oakum picker",
+    "role": "Oakum picker",
+    "sprite_key": "sweeper",
+    "is_ambient": true,
+    "dialog": "oakum_picker",
+    "place": {
+        "location": "the_oakum_house"
+    }
+}

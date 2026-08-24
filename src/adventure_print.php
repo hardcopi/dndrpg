@@ -54,29 +54,7 @@ function art(string $path): ?string
     return is_file(__DIR__ . '/' . $path) ? asset($path) : null;
 }
 
-/** A modifier as a stat block writes it: +3, -1, +0. */
-function mod_of(int $score): string
-{
-    return sprintf('%+d', (int) floor(($score - 10) / 2));
-}
 
-/** 1/8 rather than 0.125 — a challenge rating is written as a fraction. */
-function cr_text($cr): string
-{
-    $v = (float) $cr;
-    if ($v <= 0) {
-        return '0';
-    }
-    // A loose tolerance on purpose: the column is DECIMAL and a bandit is
-    // stored as 0.13, not 0.125. Tight matching printed "Challenge 0.13",
-    // which is a number no stat block has ever carried.
-    foreach ([8 => '1/8', 4 => '1/4', 2 => '1/2'] as $d => $label) {
-        if (abs($v - 1 / $d) < 0.02) {
-            return $label;
-        }
-    }
-    return rtrim(rtrim(number_format($v, 2, '.', ''), '0'), '.');
-}
 
 /**
  * A region's plate with its area numbers on it, or without them.
@@ -149,21 +127,29 @@ if ($moduleKey === '') {
       <link rel="stylesheet" href="<?= asset('assets/css/style.css') ?>">
     </head>
     <body class="admin-page">
+      <?php require APP_PATH . '/inc/site_bar.php'; ?>
       <header class="admin-head">
         <div>
           <p class="auth-eyebrow">Rivermark Chronicles</p>
           <h1>Export an adventure</h1>
         </div>
-        <nav class="admin-nav">
-          <a class="btn" href="content.php">Content</a>
-          <a class="btn" href="game.php">Adventure</a>
-        </nav>
       </header>
       <main class="container">
         <p class="help-hint">The GM's copy: every area numbered, the cast, the
           quests with their outcomes, and a stat block for everything the module
-          sends. Print it from the browser to get a PDF.</p>
+          sends. Print it from the browser to get a PDF. The monster manual —
+          every creature, not only the ones one adventure uses — is
+          <a href="bestiary.php">the Bestiary</a>.</p>
         <div class="home-grid">
+          <section class="panel">
+            <h2>The Bestiary</h2>
+            <p class="help-hint">the whole catalogue</p>
+            <p>Every creature the modules draw from, written as a stat block.
+              A goblin is a goblin: this is not scoped to one adventure.</p>
+            <p>
+              <a class="btn btn-primary" href="bestiary.php">Open the manual</a>
+            </p>
+          </section>
           <?php foreach ($modules as $m) { ?>
             <section class="panel">
               <h2><?= esc($m['name']) ?></h2>
@@ -500,55 +486,9 @@ $cover = art('assets/images/modules/' . $module['module_key'] . '.jpg');
 <div class="book-page">
   <div class="cols">
     <h1 class="chapter-head">Appendix C · Bestiary</h1>
-    <?php foreach ($data['monsters'] as $m) { ?>
-      <?php $art = art('assets/images/monsters/' . $m['art_key'] . '_bust.png'); ?>
-      <div class="stat<?= $art ? ' has-art' : '' ?>">
-        <?php if ($art) { ?><img class="stat-art" src="<?= esc($art) ?>" alt=""><?php } ?>
-        <h3><?= esc($m['name']) ?></h3>
-        <p class="stat-kind"><?= esc(trim($m['size'] . ' ' . $m['type'])) ?><?=
-          $m['alignment'] ? ', ' . esc($m['alignment']) : '' ?></p>
-        <hr class="stat-rule">
-        <p class="stat-line"><b>Armour Class</b> <?= esc($m['armor_class']) ?></p>
-        <p class="stat-line"><b>Hit Points</b> <?= esc($m['hit_points']) ?><?=
-          $m['hit_dice'] ? ' (' . esc($m['hit_dice']) . ')' : '' ?></p>
-        <?php /* The column already reads "30 ft., climb 30 ft." — a unit
-                 appended here printed it twice. */ ?>
-        <p class="stat-line"><b>Speed</b> <?= esc($m['speed']) ?></p>
-        <hr class="stat-rule">
-        <div class="stat-abilities">
-          <?php foreach ([
-              'STR' => 'strength', 'DEX' => 'dexterity', 'CON' => 'constitution',
-              'INT' => 'intelligence', 'WIS' => 'wisdom', 'CHA' => 'charisma',
-          ] as $label => $col) { ?>
-            <div><span><?= $label ?></span><?= esc($m[$col]) ?> (<?= mod_of((int) $m[$col]) ?>)</div>
-          <?php } ?>
-        </div>
-        <hr class="stat-rule">
-        <?php if ($m['resistances']) { ?>
-          <p class="stat-line"><b>Resistances</b> <?= esc(implode(', ', $m['resistances'])) ?></p>
-        <?php } ?>
-        <?php if ($m['immunities']) { ?>
-          <p class="stat-line"><b>Immunities</b> <?= esc(implode(', ', $m['immunities'])) ?></p>
-        <?php } ?>
-        <p class="stat-line"><b>Challenge</b> <?= esc(cr_text($m['challenge_rating'])) ?>
-          (<?= esc($m['experience_points']) ?> XP)</p>
-        <?php if ($m['traits_list']) { ?>
-          <hr class="stat-rule">
-          <?php foreach ($m['traits_list'] as $t) { ?>
-            <p class="stat-trait"><?= $t['name'] ? '<b>' . esc($t['name']) . '.</b> ' : '' ?><?=
-              esc($t['text']) ?></p>
-          <?php } ?>
-        <?php } ?>
-        <?php if ($m['actions_list']) { ?>
-          <hr class="stat-rule">
-          <h4>Actions</h4>
-          <?php foreach ($m['actions_list'] as $a) { ?>
-            <p class="stat-trait"><?= $a['name'] ? '<b>' . esc($a['name']) . '.</b> ' : '' ?><?=
-              esc($a['text']) ?></p>
-          <?php } ?>
-        <?php } ?>
-      </div>
-    <?php } ?>
+    <?php foreach ($data['monsters'] as $m) {
+        require __DIR__ . '/app/inc/stat_block.php';
+    } ?>
 
     <?php
     /*

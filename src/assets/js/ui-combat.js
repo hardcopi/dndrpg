@@ -1,17 +1,18 @@
 /**
- * The combat board: four columns, with the battlefield in the middle two.
+ * The combat board: initiative, the battlefield, and the actions for the turn.
  *
- * Your party's cards on the left, the enemy's on the right, and between them
- * the tactical map that ui-battlemap.js draws. The cards carry the detail — hit
- * points, conditions, boons, whose turn it is — and the map carries the one
- * thing cards cannot show, which is where everybody is standing.
+ * One list on the left in `state.order` — everybody, with hit points, so the
+ * thing a turn-based fight is unplayable without is the thing you read first.
+ * The tactical map that ui-battlemap.js draws takes the middle. The acting
+ * character's verbs sit on the right as named keys, because a column that
+ * wide can say "Disengage" instead of asking the player to remember which
+ * icon that was.
  *
- * THE CARDS ARE UNCHANGED FROM THE RANK BOARD, on purpose. `.cbt-card` keeps
- * its width, its three visual channels and its `data-cid`, so playClip(),
- * flash(), float() and stepHp() all still find what they are looking for and
- * every animation the old board had survives untouched. Rewriting the cards to
- * live on the map would have meant rewriting all of that as well, for tokens
- * too small to read a condition pip on.
+ * THE CARDS ARE STILL `.cbt-card[data-cid]`. They moved from two side rosters
+ * into that one list, but playClip(), flash(), float() and stepHp() all still
+ * find what they are looking for, and every animation the old board had
+ * survives untouched. The map carries the one thing a card cannot show, which
+ * is where everybody is standing.
  *
  * WHAT LEFT THIS FILE. Three rules used to be mirrored here in JavaScript —
  * legalTargets, the rank capacity, which rank was the other one — each with a
@@ -23,7 +24,7 @@
  *
  * Two things this file has always done that are worth keeping in mind:
  *
- *   - Turn order comes from `state.order`, drawn as the ribbon along the top.
+ *   - Turn order comes from `state.order`, drawn as the list on the left.
  *   - Animations are driven by `state.events`, never by reading the English
  *     log. Rewording a log line cannot break an effect.
  */
@@ -216,9 +217,12 @@
   }
 
   function faceUrl(c) {
+    if (c.token) {
+      return `/assets/images/${c.token}?v=${G().TILE_CACHE_VER}`;
+    }
     const key = artKey(c);
     const dir = c.type === 'pc' ? 'npcs' : 'monsters';
-    return `assets/images/${dir}/${key}_face.png?v=${G().TILE_CACHE_VER}`;
+    return `/assets/images/${dir}/${key}_face.png?v=${G().TILE_CACHE_VER}`;
   }
 
   /**
@@ -229,9 +233,10 @@
    * than a broken image.
    */
   function battlerUrl(c) {
+    if (c.token) return `/assets/images/${c.token}?v=${G().TILE_CACHE_VER}`;
     const key = artKey(c);
-    if (c.type === 'pc') return `assets/images/npcs/${key}_bust.png?v=${G().TILE_CACHE_VER}`;
-    return `assets/images/battlers/${key}.png?v=${G().TILE_CACHE_VER}`;
+    if (c.type === 'pc') return `/assets/images/npcs/${key}_bust.png?v=${G().TILE_CACHE_VER}`;
+    return `/assets/images/battlers/${key}.png?v=${G().TILE_CACHE_VER}`;
   }
 
   function bustFallbackUrl(c) {
@@ -401,7 +406,7 @@
 
     el.innerHTML = `
       <div class="cbt-field">
-        ${rosterHtml('party', 'Your side', combatants, actor, legal)}
+        ${initHtml(combatants, actor, legal)}
         <div class="cbt-map" id="cbt-map">
           ${window.BattleMap ? window.BattleMap.html(s, { selected: ui.selected, faceUrl }) : ''}
           <div class="map-zoom bm-zoom" role="group" aria-label="Zoom">
@@ -416,12 +421,13 @@
           ${ui.placing ? `<div class="cbt-placing">Placing <strong>${esc(ui.placing.name)}</strong>
             — click the ground. <button type="button" class="btn btn-small" data-cancel-place>Cancel</button></div>` : ''}
         </div>
-        ${rosterHtml('foe', 'The enemy', combatants, actor, legal)}
-      </div>
-
-      <div class="cbt-bar" id="cbt-bar"></div>`;
+        <aside class="cbt-panel" aria-label="Actions">
+          <div class="cbt-bar" id="cbt-bar"></div>
+        </aside>
+      </div>`;
 
     bindCards();
+    bindEffects();
     bindMap(s, actor);
     renderInspector();
     renderBar(s, actor);
@@ -437,13 +443,14 @@
   }
 
   /**
-   * The fight's top line: turn order, and whose turn it is.
+   * The fight's top line: the encounter, the round, whose turn it is.
    *
    * Drawn into `#cbt-top`, which lives in the shell (`game.php`) and NOT in
    * `#combat-root` — so it spans the board's column and the log's rather than
-   * being confined to the first. The ribbon is as long as the fight has
-   * combatants, and in one column it scrolled while 300px of rail sat beside it
-   * holding nothing; across the whole width, an eleven-body fight fits.
+   * being confined to the first. Initiative used to live here as a ribbon of
+   * faces; it is a named list on the left of the board now, where there is
+   * room for a hit-point bar, and this row is only the facts you play the
+   * round off.
    *
    * Same arrangement as the inspector: outside the board, looked up in the
    * document, and emptied by close() because wiping the board no longer wipes
@@ -453,55 +460,18 @@
     const box = document.getElementById('cbt-top');
     if (!box) return;
     box.innerHTML = `
-      <div class="cbt-ribbon" role="list" aria-label="Initiative order">
-        ${(s.order || []).map((cid, i) => ribbonEntry(cid, i === s.turn_index)).join('')}
+      <div class="cbt-brand">
+        <svg class="cbt-brand-icon" aria-hidden="true"><use href="#i-attack"></use></svg>
+        Combat
       </div>
-
       <div class="cbt-head">
         <strong>${esc(s.encounter_name || 'Combat')}</strong>
-        <span class="cbt-round">Round ${esc(s.round)}</span>
-        ${actor ? `<span class="cbt-turn">${esc(actor.name)}'s turn</span>` : ''}
-        ${movementNote(actor)}
+      </div>
+      <div class="cbt-meta">
+        <span class="cbt-pill">Round <strong>${esc(s.round)}</strong></span>
+        ${actor ? `<span class="cbt-pill cbt-turn">Turn · <strong>${esc(actor.name)}</strong></span>` : ''}
         ${economyHtml(actor)}
       </div>`;
-  }
-
-  /**
-   * One slot in the initiative ribbon: a token and the roll that put it there.
-   *
-   * NO NAME UNDER IT. It carried one, truncated from its end so that six
-   * bandits arriving as "Thief Captain 1".."Thief Captain 6" could still be
-   * told apart — but the line cost this row a third of its height, and the row
-   * is charged to the board, which is bound by height and gives back a third as
-   * much again in width. The initiative number already tells them apart, being
-   * unique in the order by construction, and `aria-label` and the `title` both
-   * still say who it is.
-   *
-   * The roll stays drawn rather than moving into the tooltip with the name: it
-   * is the number the ribbon exists to communicate, and a tooltip you have to
-   * hunt for is not communicating it.
-   */
-  function ribbonEntry(cid, isNow) {
-    const c = combatant(cid);
-    if (!c) return '';
-    const down = !isTargetable(c);
-    const who = `${c.name} · initiative ${c.initiative}`;
-    return `<div class="ribbon-slot ${c.side === 'party' ? 'is-party' : 'is-foe'}
-        ${isNow ? 'is-now' : ''} ${down ? 'is-out' : ''}" role="listitem"
-        aria-label="${esc(who)}" title="${esc(who)}">
-      <span class="ribbon-art">
-        <img src="${esc(faceUrl(c))}" alt="">
-        ${c.initiative != null ? `<span class="ribbon-init">${esc(c.initiative)}</span>` : ''}
-      </span>
-    </div>`;
-  }
-
-  /** How much walking the actor has left, in the header where it is read. */
-  function movementNote(actor) {
-    if (!actor || actor.type !== 'pc' || actor.move_left == null) return '';
-    const left = Number(actor.move_left) || 0;
-    return `<span class="cbt-move ${left ? '' : 'spent'}"
-      title="Click a highlighted cell to walk there">${left} ft of movement</span>`;
   }
 
   /**
@@ -512,12 +482,11 @@
    * which cost the screen 24px — and the board is bound by height rather than
    * width, so that came off the drawing and took a third as much again off its
    * width with it. The header is one line of text with a screen's worth of
-   * empty beside it; this is the same trade `.cbt-top` already made by putting
-   * the ribbon and the header on one row.
+   * empty beside it; this is the same trade `.cbt-top` already made by keeping
+   * the round and the economy on one row.
    *
-   * There is no movement pip here any more either. `movementNote()` above says
-   * "20 ft of movement" three words to the left, and the bar was printing the
-   * same number a second time.
+   * There is no movement pip here. The right-hand panel draws a meter of the
+   * feet left, and a second copy in this row would be the same number twice.
    *
    * `character` is the cached sheet, which is what the slot dots need and which
    * arrives a beat after the turn does; render() runs again when it lands.
@@ -537,31 +506,110 @@
   }
 
   /**
-   * One side's roster, in initiative order.
+   * Everybody in the fight, in the order they will act.
    *
-   * Ordered by `state.order` rather than by rank, which is what the ranks were
-   * standing in for: the board no longer has a front and a back to sort into,
-   * and initiative is the ordering a player is already reading along the top.
+   * Ordered by `state.order` rather than split by side. Two columns of cards
+   * flanking the board spent the height the drawing is short of, and hid the
+   * one fact a turn-based fight is for — who is next — in a ribbon of faces
+   * too small to hold a hit-point bar. One list holds both, and the dead stay
+   * on it until the next action clears them: a body that vanishes the instant
+   * it drops leaves the death animation with nothing to play over, and seeing
+   * what you have killed is most of how a fight reads.
    *
-   * The dead are still drawn, greyed and unclickable, until the next action
-   * clears them. Two reasons: a body that vanishes the instant it drops leaves
-   * the death animation with nothing to play over, and seeing what you have
-   * killed is most of how a fight reads.
+   * Anyone missing from `order` is still drawn, at the end, rather than
+   * silently dropped. That is a corrupt state rather than a feature, but a
+   * missing card is how a combatant becomes untargetable by accident.
    */
-  function rosterHtml(side, title, combatants, actor, legal) {
+  function initHtml(combatants, actor, legal) {
     const order = st()?.order || [];
-    const rank = (c) => {
-      const i = order.indexOf(c.cid);
-      return i < 0 ? 99 : i;
-    };
-    const members = combatants
-      .filter((c) => c.side === side)
-      .sort((a, b) => rank(a) - rank(b));
-    return `<section class="cbt-roster side-${side}" aria-label="${esc(title)}">
-      <h3>${esc(title)}</h3>
-      ${members.map((c) => cardHtml(c, actor, legal)).join('')
-        || '<div class="rank-empty">—</div>'}
-    </section>`;
+    const byCid = new Map(combatants.map((c) => [c.cid, c]));
+    const members = order.map((cid) => byCid.get(cid)).filter(Boolean);
+    const seen = new Set(members.map((c) => c.cid));
+    for (const c of combatants) {
+      if (!seen.has(c.cid)) members.push(c);
+    }
+    return `<aside class="cbt-init" aria-label="Initiative order">
+      <h3>Initiative</h3>
+      <div class="cbt-init-list" role="list">
+        ${members.map((c, i) => cardHtml(c, actor, legal, i + 1)).join('')
+          || '<div class="rank-empty">—</div>'}
+      </div>
+      ${effectsBoardHtml(combatants)}
+    </aside>`;
+  }
+
+  /**
+   * Everything currently riding on anybody, as one window.
+   *
+   * The cards carry a pip each, but a pip is two letters and a fight with
+   * three buffs on three bodies is three places to look. This is the mockup's
+   * Conditions / Effects panel: the sentence form of those facts, on screen
+   * without pointing at anybody. Clicking a row selects them, so the
+   * inspector and the list stay on the same person.
+   *
+   * Always drawn, even empty. A window that vanishes when it has nothing to
+   * say reads as a layout fault; the same box holding one line of grey text
+   * reads as a panel waiting for the fight to put something in it.
+   */
+  function effectsBoardHtml(combatants) {
+    const rows = [];
+    for (const c of combatants) {
+      if (!c.alive && !hasCondition(c, 'unconscious')) continue;
+      for (const x of (c.conditions || [])) {
+        const key = typeof x === 'string' ? x : x.key;
+        const rounds = typeof x === 'object' && x.rounds ? Number(x.rounds) : 0;
+        const info = condInfo(key);
+        rows.push({
+          cid: c.cid, who: c.name, label: info.label, rounds,
+          kind: 'cond', note: info.description || '',
+        });
+      }
+      for (const b of (c.boons || [])) {
+        const rounds = Number(b.rounds) || 0;
+        const fx = boonEffects(b);
+        rows.push({
+          cid: c.cid, who: c.name,
+          label: b.label || b.key || 'Blessing',
+          rounds, kind: 'boon',
+          note: fx.length ? fx.join(' · ') : '',
+          untilConc: !rounds,
+        });
+      }
+      if (c.concentrating) {
+        rows.push({
+          cid: c.cid, who: c.name,
+          label: `Concentrating (${c.concentrating.name})`,
+          rounds: 0, kind: 'conc',
+          note: 'Taking damage forces a Constitution save or the spell ends.',
+        });
+      }
+    }
+
+    const when = (r) => r.rounds
+      ? `${r.rounds} round${r.rounds === 1 ? '' : 's'}`
+      : ((r.kind === 'conc' || r.untilConc) ? 'while concentrating' : '');
+
+    const body = rows.length
+      ? rows.map((r) => {
+          const dur = when(r);
+          const on = ui.selected === r.cid ? ' is-on' : '';
+          return `<button type="button" class="cbt-fx-row is-${esc(r.kind)}${on}"
+            data-cid="${esc(r.cid)}"
+            aria-label="${esc(r.who)} · ${esc(r.label)}${dur ? ' · ' + dur : ''}">
+            <i class="cbt-fx-dot" aria-hidden="true"></i>
+            <span class="cbt-fx-body">
+              <span class="cbt-fx-who">${esc(r.who)}</span>
+              <span class="cbt-fx-line">${esc(r.label)}${dur ? ` · ${esc(dur)}` : ''}</span>
+              ${r.note ? `<span class="cbt-fx-note">${esc(r.note)}</span>` : ''}
+            </span>
+          </button>`;
+        }).join('')
+      : '<p class="cbt-fx-empty">Nothing on anyone.</p>';
+
+    return `<div class="cbt-board-fx" aria-label="Conditions and effects">
+      <h3>Conditions / Effects</h3>
+      <div class="cbt-board-fx-list">${body}</div>
+    </div>`;
   }
 
   /**
@@ -576,7 +624,7 @@
    * `.cbt-hp`, `data-cid` — is still one `querySelector` away from the card, so
    * playClip(), flash(), float() and stepHp() do not care that it moved.
    */
-  function cardHtml(c, actor, legal) {
+  function cardHtml(c, actor, legal, initPos) {
     const pct = c.max_hp ? Math.max(0, Math.min(100, Math.round((c.hp / c.max_hp) * 100))) : 0;
     const band = pct > 50 ? 'ok' : pct > 25 ? 'mid' : 'low';
     const isActor = actor && c.cid === actor.cid;
@@ -585,6 +633,8 @@
     const reachable = legal.has(c.cid);
     const foe = actor && c.side !== actor.side;
     const shot = map(uiFor(actor)?.targets)[c.cid];
+    const klass = c.class ? ` <span class="cbt-klass">(${esc(c.class)})</span>` : '';
+    const place = initPos ? `<span class="cbt-init-num">${esc(initPos)}</span>` : '';
 
     // Why an enemy cannot be hit is worth saying — "out of reach" and "no line
     // to them" want different answers from the player, and so does "you can
@@ -599,11 +649,12 @@
         ${isActor ? 'is-actor' : ''} ${ui.selected === c.cid ? 'is-selected' : ''}
         ${dead ? 'is-dead' : ''} ${downed ? 'is-downed' : ''}
         ${foe && reachable ? 'in-reach' : ''} ${foe && !reachable && !dead ? 'behind-line' : ''}"
-        data-cid="${esc(c.cid)}" ${dead ? 'disabled' : ''}
+        data-cid="${esc(c.cid)}" ${dead ? 'disabled' : ''} role="listitem"
         title="${esc(c.name)} — HP ${esc(c.hp)}/${esc(c.max_hp)}, AC ${esc(c.ac)}${esc(note)}">
-      <img class="cbt-face" src="${esc(faceUrl(c))}" alt="">
+      ${place}
+      <img class="cbt-face ${c.token ? 'is-token' : ''}" src="${esc(faceUrl(c))}" alt="">
       <span class="cbt-body">
-        <span class="cbt-name">${esc(c.name)}</span>
+        <span class="cbt-name">${esc(c.name)}${klass}</span>
         <span class="hp-bar"><span class="${band}" style="width:${pct}%"></span></span>
         <span class="cbt-nums"><span class="cbt-hp">${esc(c.hp)}/${esc(c.max_hp)}</span> · AC ${esc(c.ac)}</span>
         ${slotPips(c)}
@@ -788,6 +839,24 @@
     });
   }
 
+  /** The Conditions / Effects window talks about the same bodies the cards do. */
+  function bindEffects() {
+    $$('.cbt-fx-row', root()).forEach((el) => {
+      el.addEventListener('click', () => {
+        ui.selected = el.dataset.cid;
+        render();
+      });
+      el.addEventListener('mouseenter', () => {
+        ui.hovered = el.dataset.cid;
+        renderInspector();
+      });
+      el.addEventListener('mouseleave', () => {
+        ui.hovered = null;
+        renderInspector();
+      });
+    });
+  }
+
   /**
    * Wire the map up.
    *
@@ -930,12 +999,14 @@
       // nothing to do with it. leaveCombat still asks, for the fights that end
       // some other way and for anything this missed.
       //
-      // Kept as a promise rather than fired and forgotten: leaving the fight
-      // waits on it, so a ceremony still open when Continue is somehow pressed
-      // finishes before the board goes — which matters most for a skirmish,
-      // where leaving is a navigation and a half-claimed level would be left
-      // behind on a page that is gone.
-      ui.claiming = claimLevels(s.status);
+      // The ceremony is asked NOT to refresh the world on its way out, which is
+      // the whole of the bug this comment exists for: it normally does, and
+      // that refresh took this outcome bar and its Continue button with it. The
+      // player levelled up at the end of a skirmish and was left standing on
+      // the map with nothing to press — the fight over, the level taken, and
+      // the trip back to the picker hanging off a button that no longer
+      // existed. Leaving is this screen's job and it does it below, once.
+      claimLevels(s.status);
       return;
     }
 
@@ -1198,17 +1269,53 @@
         why: 'Pass to the next in the order' },
     ];
 
-    // One row, and only the keys on it. What the turn has left is in the
-    // header — see economyHtml().
+    // Named keys in a column, grouped by which part of the turn they spend.
+    // What the turn has left is in the header — see economyHtml() — and End
+    // turn is a gold key of its own at the foot of the panel, not a slot in
+    // the same run as Attack.
+    const endBtn = buttons.find((b) => b.key === 'end_turn');
+    const leave = buttons.filter((b) => b.key === 'flee' || b.key === 'parley');
+    // `bonus: true` on a slot is the accent border — Action Surge wears it
+    // and is not a bonus action. The group is the verbs that actually spend
+    // the bonus action: the class feature, the off-hand swing, a held smite.
+    const isBonusAct = (b) => b.key === 'bonus' || b.key === 'offhand' || b.key === 'smite';
+    const bonus = buttons.filter(isBonusAct);
+    const main = buttons.filter((b) =>
+      !b.sep && b.key !== 'end_turn' && b.key !== 'flee' && b.key !== 'parley' && !isBonusAct(b));
+
+    const moveLeft = actor.move_left == null ? null : (Number(actor.move_left) || 0);
+    const moveMax = Number(actor.speed) || 30;
+    const movePct = moveLeft == null || !moveMax
+      ? 0
+      : Math.max(0, Math.min(100, Math.round((moveLeft / moveMax) * 100)));
+
     bar.innerHTML = `
-      <div class="cbt-actions">
+      <div class="cbt-actions is-stack">
         <label class="cbt-manual" title="Throw your own attack dice, with a prompt to spend Bless or Bardic Inspiration">
           <input type="checkbox" data-manual ${ui.manualRolls ? 'checked' : ''}>
           <span>My dice</span>
         </label>
-        ${buttons.map(slotHtml).join('')}
+        <div class="cbt-act-group">
+          <h4 class="cbt-act-label">Action</h4>
+          ${main.map(slotHtml).join('')}
+        </div>
+        ${bonus.length ? `<div class="cbt-act-group">
+          <h4 class="cbt-act-label">Bonus action</h4>
+          ${bonus.map(slotHtml).join('')}
+        </div>` : ''}
+        ${leave.length ? `<div class="cbt-act-group">
+          <h4 class="cbt-act-label">Leave the fight</h4>
+          ${leave.map(slotHtml).join('')}
+        </div>` : ''}
         <div class="act-tip" id="act-tip" role="tooltip" aria-hidden="true"></div>
-      </div>`;
+      </div>
+      ${moveLeft != null ? `<div class="cbt-move-box ${moveLeft ? '' : 'is-spent'}">
+        <div class="cbt-move-label">Movement · ${esc(moveLeft)} / ${esc(moveMax)} ft</div>
+        <div class="cbt-move-bar" title="Click a highlighted cell to walk there">
+          <span style="width:${movePct}%"></span>
+        </div>
+      </div>` : ''}
+      ${endBtn ? slotHtml({ ...endBtn, end: true }) : ''}`;
 
     const manual = $('[data-manual]', bar);
     if (manual) manual.onchange = () => { ui.manualRolls = manual.checked; };
@@ -1244,20 +1351,32 @@
   /**
    * One slot on the bar.
    *
-   * The name is not drawn — that is the whole point of an icon bar — so it
-   * travels in `data-label` for the tooltip and in `aria-label` for anything
-   * reading the page aloud. Those two must not drift apart, so they are written
-   * from the same string.
+   * The name is drawn now — the bar is a column, not a row of 34px keys, and
+   * a column that wide can say Disengage instead of asking the player to
+   * remember which icon that was. `data-label` and `aria-label` still carry
+   * the same string the visible name does, so the tooltip and anything
+   * reading the page aloud cannot drift from what is on the key.
    */
   function slotHtml(b) {
     if (b.sep) return '<span class="act-sep" aria-hidden="true"></span>';
-    const cls = ['act-slot', b.bonus ? 'is-bonus' : '', b.ok ? '' : 'is-closed'].filter(Boolean).join(' ');
+    const cls = [
+      b.end ? 'cbt-end-turn' : 'act-slot',
+      b.bonus ? 'is-bonus' : '',
+      b.ok ? '' : 'is-closed',
+    ].filter(Boolean).join(' ');
     return `<button type="button" class="${cls}" data-act="${esc(b.key)}"
       ${b.extra ? `data-extra="${esc(JSON.stringify(b.extra))}"` : ''}
       ${b.ok ? '' : 'disabled'}
       data-label="${esc(b.label)}" data-why="${esc(b.why)}" aria-label="${esc(b.label)}">
-      <svg class="act-icon" aria-hidden="true"><use href="#${esc(b.icon || 'i-attack')}"></use></svg>
-      ${b.count != null ? `<span class="act-count" aria-hidden="true">${esc(b.count)}</span>` : ''}
+      ${b.end ? '' : `<span class="act-num" aria-hidden="true">
+        <svg class="act-icon"><use href="#${esc(b.icon || 'i-attack')}"></use></svg>
+        ${b.count != null ? `<span class="act-count">${esc(b.count)}</span>` : ''}
+      </span>
+      <span class="act-text">
+        <span class="act-name">${esc(b.label)}</span>
+        <span class="act-desc">${esc(b.why)}</span>
+      </span>`}
+      ${b.end ? esc(b.label) : ''}
     </button>`;
   }
 

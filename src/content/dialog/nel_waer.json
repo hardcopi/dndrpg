@@ -1,0 +1,389 @@
+{
+    "npc_key": "nel_waer",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "flag": "light_fate",
+                        "equals": "stopped"
+                    }
+                ],
+                "text": "Nel Waer is up the ladder trimming a wick that does not need trimming, which is what he does now instead of standing at the rail looking south.\n\n\"It burns,\" he says. \"Every night. I told her myself, in the Hall, standing up, in front of the six houses.\" He comes down two rungs. \"She did not say anything. Eighty-one years old and she just looked at me until I had finished and then she went back to what she was doing. My mother says that is what it looks like when she is pleased.\"",
+                "choices": [
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "light_fate",
+                        "equals": "joined"
+                    }
+                ],
+                "text": "Nel is very glad to see you and does not entirely manage to look it.\n\n\"Fourth of the month,\" he says. \"That is the next one. I will want the oil ordered before, not after — after is how it gets noticed.\" He hesitates. \"You will keep it to the four, will you? He never said four. That was me. Four was mine.\"",
+                "choices": [
+                    {
+                        "label": "\"Four.\"",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "light_dark_seen"
+                    }
+                ],
+                "text": "He has stopped pretending to be busy, which is a considerable improvement.\n\n\"Nobody has ever asked me,\" Nel says. \"Four years I have been up this tower and the only thing anybody has ever asked me is whether the oil is holding out.\"",
+                "choices": [
+                    {
+                        "label": "\"Who pays you?\"",
+                        "next": "the_money"
+                    },
+                    {
+                        "label": "\"What comes ashore?\"",
+                        "next": "the_deep_side"
+                    },
+                    {
+                        "label": "\"It stops. Tonight.\"",
+                        "next": "it_stops"
+                    },
+                    {
+                        "label": "Later.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "met_nel"
+                    }
+                ],
+                "text": "\"You are back,\" Nel Waer says, and looks past you down the point to see whether anybody came up with you.",
+                "choices": [
+                    {
+                        "label": "\"Four nights this spring.\"",
+                        "next": "four_nights"
+                    },
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "The wind on the point comes at you hard enough to lean into, and the lantern behind the glass does not so much as waver, which is the whole art of it.\n\nThe keeper is twenty-six and has his grandmother's face and none of her stillness.\n\n\"Nel Waer,\" he says. \"Fifth of the name up this tower. It burns eleven miles and it has burned every night for a hundred and forty years.\"\n\nHe says the last part like a line he has rehearsed, because he has.",
+                "on_enter": [
+                    {
+                        "set_flag": "met_nel"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "\"Except four.\"",
+                        "next": "four_nights"
+                    },
+                    {
+                        "label": "\"That is a great deal of oil for spring.\"",
+                        "next": "the_oil"
+                    },
+                    {
+                        "label": "Go back down.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_oil": {
+            "text": "He looks at the store, and then at you, and then very carefully not at either.\n\n\"We draw for the year at Candlemas,\" he says. \"It comes in one lot. If it looks a great deal now it is because we have not had the winter out of it yet.\"\n\nIt is a reasonable answer, delivered slightly too quickly, by a man who has had it ready.",
+            "choices": [
+                {
+                    "label": "\"Except four,\" you say. \"Four nights it did not burn.\"",
+                    "next": "four_nights"
+                },
+                {
+                    "label": "Let it go.",
+                    "end": true
+                }
+            ]
+        },
+        "four_nights": [
+            {
+                "conditions": [
+                    {
+                        "flag": "light_dark_seen"
+                    }
+                ],
+                "text": "\"Four,\" Nel says. \"You know. I have said it. I am not going to be better at saying it the second time.\"",
+                "choices": [
+                    {
+                        "label": "\"Who pays you?\"",
+                        "next": "the_money"
+                    },
+                    {
+                        "label": "\"It stops.\"",
+                        "next": "it_stops"
+                    },
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ]
+            },
+            {
+                "text": "The rehearsed part runs out. You can see it run out.\n\n\"There is a fret comes off the Mere in the spring,\" Nel says. \"It puts the glass out. It has always put the glass out. My father —\"\n\nHe stops, because he has heard himself.",
+                "choices": [
+                    {
+                        "label": "\"Look at me and say the fret put it out.\"",
+                        "check": {
+                            "skill": "insight",
+                            "dc": 13,
+                            "on_success": "he_admits_it",
+                            "on_failure": "he_holds"
+                        }
+                    },
+                    {
+                        "label": "\"I have stood a night watch. A fret does not put out a lantern in a glass house.\"",
+                        "tag": "SAILOR",
+                        "conditions": [
+                            {
+                                "origin": "sailor"
+                            }
+                        ],
+                        "check": {
+                            "skill": "insight",
+                            "dc": 10,
+                            "on_success": "he_admits_it",
+                            "on_failure": "he_holds"
+                        }
+                    },
+                    {
+                        "label": "\"Your grandmother sent me.\"",
+                        "next": "the_grandmother"
+                    },
+                    {
+                        "label": "Leave it there.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_grandmother": {
+            "text": "Nel goes grey under the weather-burn, which on a Waer takes some doing.\n\n\"She would not,\" he says. \"She would not send anybody. She would come up herself and she would stand there and she would not say anything at all, and I would tell her inside of a minute, and she knows that, so she has not come.\"\n\nHe sits down on the oil store, which is not a thing to sit on.\n\n\"She sent you so that I could tell somebody else first. That is what that is.\"",
+            "choices": [
+                {
+                    "label": "\"Then tell me.\"",
+                    "next": "he_admits_it"
+                },
+                {
+                    "label": "Say nothing.",
+                    "next": "he_admits_it"
+                }
+            ]
+        },
+        "he_holds": {
+            "text": "\"The fret,\" Nel says again, and this time he gets it out level, and holds your eye all the way through it, and it costs him something you can watch being spent.\n\n\"Four nights,\" he says. \"Spring fret. It happens.\"\n\nAnd that is the end of it. Whatever door was open for a moment has been put to. He will not be got at from this direction again, and both of you know it, and he is not enjoying having won.",
+            "choices": [
+                {
+                    "label": "\"Your grandmother sent me.\"",
+                    "next": "the_grandmother"
+                },
+                {
+                    "label": "Go back down.",
+                    "end": true
+                }
+            ]
+        },
+        "he_admits_it": {
+            "text": "\"Four nights,\" Nel says. \"Yes. I let it go out. I did not let it — I put it out. There is a difference and I want it on the record because I have been lying about the difference to myself for four months.\"\n\nHe looks at the lantern.\n\n\"A man came up here in Lent. Pleasant. Knew my name and my father's. He did not offer me money for the first three visits. He asked whether it was hard, keeping a light for a city that has never once come up this point to look at it.\"\n\n\"And it is. That is the thing. It is hard, and nobody has ever asked.\"",
+            "on_enter": [
+                {
+                    "set_flag": "light_dark_seen"
+                },
+                {
+                    "quest_stage": {
+                        "quest": "the_light_goes_out",
+                        "stage": "four_nights"
+                    }
+                },
+                {
+                    "xp": 100
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"Who was he?\"",
+                    "next": "the_money"
+                },
+                {
+                    "label": "\"What came ashore?\"",
+                    "next": "the_deep_side"
+                },
+                {
+                    "label": "\"It stops. Tonight.\"",
+                    "next": "it_stops"
+                }
+            ]
+        },
+        "the_money": {
+            "text": "\"He never gave me a name and I never asked for one, which I would like to say was cleverness.\"\n\nNel turns the coin over in his fingers — one coin, not a purse, which is somehow worse.\n\n\"Six marks a night. That is what it came to. Six marks, four times.\" He laughs, badly. \"My year's fee is nine.\"\n\n\"He was not from the Boom. I know every face off the Boom. He was not Hjaldmark and he was not Drennmark and he was not Tarrow. He talked like Highstrand and he was too careful about his boots for it.\"",
+            "choices": [
+                {
+                    "label": "\"What came ashore?\"",
+                    "next": "the_deep_side"
+                },
+                {
+                    "label": "\"It stops.\"",
+                    "next": "it_stops"
+                },
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "the_deep_side": {
+            "text": "\"Nothing,\" Nel says. \"That is what I keep — nothing came ashore. I watched the first one, from the stair, because I am not a fool whatever else I am.\"\n\n\"A boat stood in on the deep side where there is forty fathoms right up against the rock. Men went down the rock to it. Nothing came up.\"\n\nHe meets your eye.\n\n\"Four nights, and every one of them the same. Nobody is landing cargo on this point. They are putting something out.\"",
+            "on_enter": [
+                {
+                    "quest_stage": {
+                        "quest": "the_light_goes_out",
+                        "stage": "four_nights"
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"How many men?\"",
+                    "next": "the_count"
+                },
+                {
+                    "label": "\"It stops.\"",
+                    "next": "it_stops"
+                },
+                {
+                    "label": "\"Then let the fifth one come, and we will be here.\"",
+                    "next": "the_fifth_night"
+                }
+            ]
+        },
+        "the_count": {
+            "text": "\"Four, going down. Four coming back up.\" Nel says it the way somebody says a thing they have counted many times since. \"They carry nothing either way. They go down empty and they come up empty and they take a little over an hour.\"\n\n\"There is one place under this point where a boat can lie with forty fathoms under her keel and be out of sight of every window in Waerhaven, and my light is the only thing in the world that would show her.\"",
+            "choices": [
+                {
+                    "label": "\"Then let the fifth one come.\"",
+                    "next": "the_fifth_night"
+                },
+                {
+                    "label": "\"It stops.\"",
+                    "next": "it_stops"
+                }
+            ]
+        },
+        "the_fifth_night": {
+            "text": "Nel Waer looks at you for a long moment with the wind pulling at both of you.\n\n\"Fourth of the month,\" he says. \"That is when he wants it dark next. I have not sent word that I will.\"\n\nHe puts his hand flat on the glass of the lantern house.\n\n\"If I put it out and you are up here, that is not me stopping. That is me doing it again with company.\"",
+            "choices": [
+                {
+                    "label": "\"Put it out. We will be here.\"",
+                    "effects": [
+                        {
+                            "start_combat": "the_light_men"
+                        }
+                    ]
+                },
+                {
+                    "label": "\"No. It stays lit.\"",
+                    "next": "it_stops"
+                }
+            ]
+        },
+        "it_stops": [
+            {
+                "conditions": [
+                    {
+                        "flag": "light_men_beaten"
+                    }
+                ],
+                "text": "There is a boat standing off the point with nobody left aboard her who wants to come in, and four men on the rock who will be explaining themselves to somebody in the morning.\n\n\"It stops,\" Nel says. He is shaking, and is not embarrassed about it. \"I will tell her. Myself. In the Hall.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_light_goes_out",
+                            "stage": "stopped"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "\"Good.\"",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "\"It stops,\" Nel repeats.\n\nHe says it once more to himself, and then goes and does the thing you do not expect: he opens the oil store, takes out the year's draw, and carries it down to the stair head where anybody coming up the point can count it.\n\n\"There,\" he says. \"Now everybody who comes up here knows what I have got. He cannot buy a dark night off a man whose oil is in the open.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "the_light_goes_out",
+                            "stage": "stopped"
+                        }
+                    },
+                    {
+                        "xp": 80
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "\"Tell your grandmother.\"",
+                        "next": "he_will_tell_her"
+                    },
+                    {
+                        "label": "\"Do not tell anyone. Take the fifth night and let me have it.\"",
+                        "next": "he_is_bought"
+                    }
+                ]
+            }
+        ],
+        "he_will_tell_her": {
+            "text": "\"In the Hall,\" Nel says. \"Standing up. In front of the six houses.\"\n\nHe looks ill.\n\n\"It is the worst thing I have ever agreed to do and it is the only version of this where I go on being a Waer.\"",
+            "on_enter": [
+                {
+                    "quest_stage": {
+                        "quest": "the_light_goes_out",
+                        "stage": "stopped"
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "Go down with him.",
+                    "end": true
+                }
+            ]
+        },
+        "he_is_bought": {
+            "text": "Nel Waer looks at you and works out, slowly and in real time, that he has changed hands.\n\n\"Right,\" he says. \"Right. So the light goes out when you say.\"\n\n\"That is — \" He stops. \"That is better, actually. That is better than not knowing who. I would rather it was somebody I can see.\"\n\nHe means it, and it is the saddest sentence anybody has said to you on this point.",
+            "on_enter": [
+                {
+                    "quest_stage": {
+                        "quest": "the_light_goes_out",
+                        "stage": "joined"
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "Go back down.",
+                    "end": true
+                }
+            ]
+        }
+    }
+}

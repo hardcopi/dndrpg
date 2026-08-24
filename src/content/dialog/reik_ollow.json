@@ -1,0 +1,191 @@
+{
+    "npc_key": "reik_ollow",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "flag": "forge_pattern_seen"
+                    }
+                ],
+                "text": "Reik Ollow is on the chain work at the near hearths, which is where he has been for twenty-two years and where he intends to stay.\n\n\"You still got it?\" he says, over the hammer. \"Good. Do not bring it back. I have not got a hole in this floor deep enough to put it in.\"",
+                "choices": [
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "charter_fate",
+                        "equals": "burned"
+                    }
+                ],
+                "text": "\"That book went in the fifth,\" says Reik Ollow. \"My hearth. In front of the Master Shipwright, who stood there and watched it and did not say one word the whole time.\"\n\nHe closes a link.\n\n\"Twenty-two years I have been the man who keeps the fifth hearth lit for whatever gets put in front of him. I would like it on the record that this is the first thing anybody has ever asked me to put in it that I understood.\"",
+                "choices": [
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "met_reik"
+                    }
+                ],
+                "text": "\"Back,\" says Reik Ollow, and the trip hammer comes down, and the floor answers, and everybody's speech falls into the gaps between.",
+                "choices": [
+                    {
+                        "label": "\"The screen at the far end.\"",
+                        "next": "the_screen"
+                    },
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "Four hearths going, a trip hammer worked off the same race as the pitch kilns, and a floor you can feel through your boots. A link is closed, cooled and gauged, and the man doing the gauging does not look at the gauge.\n\n\"Reik Ollow,\" he says, in the gap between hammer blows. \"Chain. Twenty-two years. If it is chain I will tell you anything you like about it and I will keep you here an hour.\"\n\nHe glances, once, at the canvas screen at the far end of the shop, and then very deliberately does not glance at it again.",
+                "on_enter": [
+                    {
+                        "set_flag": "met_reik"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "\"What is behind the screen?\"",
+                        "next": "the_screen"
+                    },
+                    {
+                        "label": "\"Tell me about the chain, then.\"",
+                        "next": "the_chain"
+                    },
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_chain": {
+            "text": "He does keep you an hour, or would, and it is the best hour anybody in Tarrow has offered you.\n\n\"Two hundred and ninety metres,\" says Reik Ollow. \"Forged here, link by link, and repaired here, link by link, and there is not one link in it my hearth has not had at some point in twenty-two years.\"\n\nHe holds up the gauge he has been using, which is worn and stamped and dated.\n\n\"Every link goes through that. Every one. And the gauge is stamped, and dated, and struck by the League's own smith in Lathmere, because a chain is the only thing in this city that has to be right in a way you can prove in a court afterwards.\"\n\nHe puts it down.\n\n\"That is the trade. A gauge with a stamp on it is a promise somebody can hold you to.\"",
+            "choices": [
+                {
+                    "label": "\"And behind the screen?\"",
+                    "next": "the_screen"
+                },
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "the_screen": [
+            {
+                "conditions": [
+                    {
+                        "flag": "forge_pattern_seen"
+                    }
+                ],
+                "text": "\"You have had it,\" says Reik Ollow. \"There is nothing more behind that screen than there was on Tuesday and I have stopped looking at it.\"",
+                "choices": [
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ]
+            },
+            {
+                "text": "Reik Ollow works two more links before he answers, which is his way of deciding.\n\n\"Fifth hearth,\" he says. \"Lit since the spring. Private commission, paid quarterly, and I am not told by who and I do not ask, because a forge this size takes private work about four times a year and it is always somebody's gate hinges.\"\n\nHe wipes his hands.\n\n\"It is not gate hinges.\"\n\n\"There is a gauge on that bench that is two notches and no stamp. No maker. No date. Twenty-two years I have worked to a stamped gauge and I have never in my life seen a piece of iron on a forge floor with nothing on it at all.\"",
+                "choices": [
+                    {
+                        "label": "Look behind the screen.",
+                        "check": {
+                            "skill": "investigation",
+                            "dc": 13,
+                            "on_success": "the_gauge",
+                            "on_failure": "the_hearth_cold"
+                        }
+                    },
+                    {
+                        "label": "\"Give me the gauge and I will find out whose it is.\"",
+                        "check": {
+                            "skill": "persuasion",
+                            "dc": 13,
+                            "on_success": "the_gauge",
+                            "on_failure": "the_hearth_cold"
+                        }
+                    },
+                    {
+                        "label": "\"I know iron. Two notches and no stamp.\"",
+                        "tag": "ARTISAN",
+                        "conditions": [
+                            {
+                                "origin": "artisan"
+                            }
+                        ],
+                        "check": {
+                            "skill": "investigation",
+                            "dc": 10,
+                            "on_success": "the_gauge",
+                            "on_failure": "the_hearth_cold"
+                        }
+                    },
+                    {
+                        "label": "Leave it.",
+                        "next": "greeting"
+                    }
+                ]
+            }
+        ],
+        "the_hearth_cold": {
+            "text": "By the time you get down the shop the fifth hearth is banked and the bench under the screen is clear and swept, and Reik Ollow is at the near hearths closing a link and not looking round.\n\n\"They come in of an evening,\" he says, over the hammer. \"After the shift. That is not a secret, it is a rota. Everybody in this shop knows and nobody has ever been told, which is how a thing gets done in Tarrow.\"\n\nHe does not offer to help further and does not apologise for it. He has a trade and it is chain.",
+            "choices": [
+                {
+                    "label": "Go.",
+                    "end": true
+                }
+            ]
+        },
+        "the_gauge": {
+            "text": "Behind the screen there is a fifth hearth, banked but warm, a bench, a set of top and bottom tools that are not chain tools, and a gauge.\n\nA hand's length of iron. Two notches. No League stamp, no maker's mark, no date, which are three things a gauge is never without.\n\nReik Ollow has followed you down the shop and is standing with his arms folded looking at his own floor.\n\n\"Take it,\" he says. \"I want it out of here. I have been working alongside that for four months and every time I bank the near hearths I look down this end and I think about what it is for.\"\n\nHe finally looks up.\n\n\"I gauge chain. Chain holds a harbour shut. Whatever that is the gauge of, it is not for holding anything shut, because I have handled every link of the boom for twenty-two years and it is a different shape of promise altogether.\"",
+            "on_enter": [
+                {
+                    "set_flag": "forge_pattern_seen"
+                },
+                {
+                    "give_item": "boom_forge_gauge",
+                    "quantity": 1
+                },
+                {
+                    "xp": 150
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"I will find out what it is for.\"",
+                    "next": "who_pays"
+                },
+                {
+                    "label": "Take it and go.",
+                    "end": true
+                }
+            ]
+        },
+        "who_pays": {
+            "text": "\"Quarterly,\" says Reik Ollow. \"In coin, at the counting shed, on the same day as the pitch, and it goes through the Houses' book as fettling.\"\n\nHe shakes his head slowly.\n\n\"Which means Mother Reth's people write it down. Which means it is not being hidden from Tarrow. It is being hidden from Highstrand, and it is being hidden from Highstrand by people who have to walk down the Tar Steps every quarter to pay for it.\"\n\nHe goes back to the near hearths.\n\n\"There is a dwarf at the top of the market who has sold this city every fastening in it for forty years. Take it to him. He will tell you what it is in about ten seconds and then he will be very quiet, and the quiet is the part you want.\"",
+            "choices": [
+                {
+                    "label": "Go up to Halvard's.",
+                    "end": true
+                }
+            ]
+        }
+    }
+}

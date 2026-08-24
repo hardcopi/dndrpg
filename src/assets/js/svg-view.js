@@ -109,18 +109,26 @@
     let panning = null;
     svgEl.addEventListener('pointerdown', (e) => {
       if (!canPan(e)) return;
-      e.preventDefault();
       panned = false;
       panning = {
         x: e.clientX, y: e.clientY, ox: e.clientX, oy: e.clientY,
         moved: false, pointerId: e.pointerId,
       };
-      // Capture so the drag survives the cursor leaving the drawing. Guarded
-      // for the same reason the release below is: a pointer id the browser has
-      // already forgotten throws, and a throw here would leave a half-started
-      // pan with no way to end it.
-      try { svgEl.setPointerCapture(e.pointerId); } catch (_) { /* not ours */ }
-      svgEl.classList.add('is-panning');
+      // Nothing is captured and nothing is prevented yet. Both wait for the
+      // slop below, and the waiting is the whole point:
+      //
+      // A captured pointer retargets its compatibility mouse events, `click`
+      // included, at the element holding the capture. Capturing here — on the
+      // press, before anyone knows whether this is a drag — meant every click
+      // on the drawing arrived at the <svg> instead of at the cell under the
+      // cursor, so `closest('[data-bm-cell]')` found nothing and the board
+      // stopped taking move orders. It went unnoticed while only Space and the
+      // middle button could pan, because neither of those is how you click a
+      // square.
+      //
+      // preventDefault waits for the same moment for a smaller reason: on the
+      // press it also eats the focus, and a board you cannot focus is a board
+      // you cannot then drive from the keyboard.
     });
     svgEl.addEventListener('pointermove', (e) => {
       if (!panning || e.pointerId !== panning.pointerId) return;
@@ -130,7 +138,16 @@
         if (Math.hypot(e.clientX - panning.ox, e.clientY - panning.oy) < slop) return;
         panning.moved = true;
         panned = true;
+        // Now it is a drag, so take the pointer: capture is what lets it carry
+        // on when the cursor leaves the drawing. Guarded for the same reason
+        // the release is — a pointer id the browser has already forgotten
+        // throws, and a throw here would leave a half-started pan with no way
+        // to end it.
+        try { svgEl.setPointerCapture(e.pointerId); } catch (_) { /* not ours */ }
+        svgEl.classList.add('is-panning');
       }
+      // Stops the drag turning into a text selection or a native image drag.
+      e.preventDefault();
       const r = svgEl.getBoundingClientRect();
       const vb = svgEl.viewBox.baseVal;
       view.cx -= (dx / r.width) * vb.width;
@@ -148,6 +165,29 @@
     };
     svgEl.addEventListener('pointerup', endPan);
     svgEl.addEventListener('pointercancel', endPan);
+
+    /**
+     * Eat the click a drag leaves behind.
+     *
+     * A pan ends with a `click` fired wherever the pointer came to rest, and
+     * whatever is under there did not ask to be clicked. This used to be
+     * prevented by accident — the capture on the press retargeted that click
+     * at the <svg>, where the callers' handlers looked for a cell or a place
+     * name, found neither, and did nothing. Capturing on the press is what
+     * broke clicking, so with that gone the guard has to be deliberate.
+     *
+     * Capture phase, and registered before the callers add theirs, so it runs
+     * ahead of both a handler on this element and a delegated one further up.
+     * `consumePan()` stays part of the interface for callers that would rather
+     * ask than be protected; it simply has nothing left to report by the time
+     * they get here.
+     */
+    svgEl.addEventListener('click', (e) => {
+      if (!panned) return;
+      panned = false;
+      e.stopPropagation();
+      e.preventDefault();
+    }, true);
     // Chrome opens its autoscroll widget on middle-click unless this is eaten.
     svgEl.addEventListener('auxclick', (e) => { if (e.button === 1) e.preventDefault(); });
 

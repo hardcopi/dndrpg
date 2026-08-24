@@ -1,0 +1,825 @@
+{
+    "npc_key": "aske_vorn",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "flag": "forty_one_fate",
+                        "equals": "named"
+                    }
+                ],
+                "expression": 2,
+                "text": "The map on the wall of the Grey Hall has been taken down. In its place there is a sheet of the Ropehouse's own paper with nineteen names on it in Aske Vorn's hand, by village, in the order they were lost, and it is nailed up where anybody who comes in off the road can read it.\n\n\"Four years,\" she says. \"I carried that in a coat.\"\n\nShe does not look at it.\n\n\"Nobody has thanked me. That is right. It was not a gift, it was a debt, and you do not thank a man for paying one.\"",
+                "choices": [
+                    {
+                        "label": "\"How is the Watch taking it?\"",
+                        "next": "the_watch_after"
+                    },
+                    {
+                        "label": "Leave her to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "forty_one_fate",
+                        "equals": "buried"
+                    }
+                ],
+                "expression": 6,
+                "text": "The stove in the Grey Hall has been out for two days and Aske Vorn has not had it relit.\n\n\"It is done,\" she says. \"The two are south with money and the list is ash and nobody out there will ever be told.\"\n\nShe looks at the map on the wall.\n\n\"You did what I asked. I want that said plainly, because I am about to be very poor company and it is not aimed at you.\"",
+                "choices": [
+                    {
+                        "label": "\"Was it the right thing?\"",
+                        "next": "was_it_right"
+                    },
+                    {
+                        "label": "Leave her.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "tenth_hull_laid_down"
+                    }
+                ],
+                "expression": 2,
+                "text": "The map is back on the wall of the Grey Hall and somebody has pinned a second sheet beside it: a set of ship's lines, copied in a careful hand, with four inlets on the Drennmark coast marked along one edge.\n\n\"Sixth slip,\" says Aske Vorn. \"Eighteen months. In the open, in their book, with a mast on a beam.\"\n\nShe looks at it.\n\n\"Four years I have been asking this city to look north and it has refused me in writing twice. And it turns out the answer was never a Wet Hall or a Factor or a charter. It was a shipwrights' guild with no standing whatsoever, which decided to build something.\"",
+                "choices": [
+                    {
+                        "label": "Leave her to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "city_standing",
+                        "equals": "audited"
+                    }
+                ],
+                "expression": 7,
+                "text": "The Grey Hall is full of people standing up, and Aske Vorn is at the map with a stick of charcoal drawing a line south-west along the ox-road and marking distances on it.\n\n\"Nine days,\" she says. \"Nineteen hundred people, October, one road, and no destination at the end of it, and I have got four Wardens.\"\n\nShe marks another distance.\n\n\"I have done this before. That is the only advantage I have got and it is the worst qualification in the world.\"",
+                "choices": [
+                    {
+                        "label": "\"Where will you take them?\"",
+                        "next": "where_now"
+                    },
+                    {
+                        "label": "Leave her to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "vorn_in_the_moot"
+                    }
+                ],
+                "expression": 2,
+                "text": "Aske Vorn has her coat on and the map off the wall, rolled, under her arm, and there is a stillness about her that you have not seen.\n\n\"Thursday,\" she says. \"In the Shipwrights' Moot. Eleven families, with their arms folded, and nobody will interrupt me.\"\n\nShe looks at the rolled map.\n\n\"Four years I have been carrying this from building to building being asked what it is. Nobody has ever let me get as far as how fast.\"\n\nShe pulls her coat straight.\n\n\"If I do this badly it will be the last time anybody in that hall listens to Drennmark. I have never in my life been frightened of a room.\"",
+                "choices": [
+                    {
+                        "label": "\"Say the last part first. How fast, and where next.\"",
+                        "next": "the_advice"
+                    },
+                    {
+                        "label": "\"You will not do it badly.\"",
+                        "next": "the_advice"
+                    },
+                    {
+                        "label": "Leave her to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "vorn_task"
+                    },
+                    {
+                        "not": {
+                            "flag": "vorn_trusts_you"
+                        }
+                    }
+                ],
+                "expression": 3,
+                "text": "\"Well,\" says Aske Vorn, and puts the pen down. \"You went out and asked. Three people have told me so, which means you asked more than three.\"\n\nShe looks at you for a while.\n\n\"Nobody has ever done that. In four years. Eleven people have wanted the story off this table and not one of them has walked two hundred yards down that road and asked somebody which village.\"\n\nShe pushes the bench out.\n\n\"Sit down. Ask me the thing you came in wanting and I will answer it properly this time.\"",
+                "choices": [
+                    {
+                        "label": "\"What is coming out of the Wyrdpines?\"",
+                        "next": "how_fast"
+                    },
+                    {
+                        "label": "\"How do they get past the gate?\"",
+                        "next": "the_road"
+                    },
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "two_dead_names"
+                    }
+                ],
+                "expression": 5,
+                "text": "Aske Vorn is standing at the map and has been for some time, and there is a place on it where her thumb has worn the paper.\n\n\"Two,\" she says. \"You are certain. Say it again and be certain.\"",
+                "choices": [
+                    {
+                        "label": "\"Two. One in the lazar house, one in the Tar Gaol.\"",
+                        "next": "the_two"
+                    },
+                    {
+                        "label": "\"Not yet.\"",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "list_seen"
+                    }
+                ],
+                "expression": 3,
+                "text": "\"You have had the list,\" says Aske Vorn. \"You are the only person who has, and I have not decided whether that was a mistake, and I am not going to decide it in front of you.\"",
+                "choices": [
+                    {
+                        "label": "\"The nineteen.\"",
+                        "next": "the_nineteen_q"
+                    },
+                    {
+                        "label": "\"Two of the names are in Waerhaven.\"",
+                        "conditions": [
+                            {
+                                "flag": "two_dead_names"
+                            }
+                        ],
+                        "next": "the_two"
+                    },
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "vorn_trusts_you"
+                    }
+                ],
+                "expression": 2,
+                "text": "\"Sit,\" says Aske Vorn, and food is put in front of you before you have said anything, which is what the Grey Hall does to everyone and which you have now watched it do to four people off the road.",
+                "choices": [
+                    {
+                        "label": "\"The list.\"",
+                        "next": "the_list"
+                    },
+                    {
+                        "label": "\"What is actually coming south?\"",
+                        "next": "the_wyrdpines"
+                    },
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "met_vorn"
+                    }
+                ],
+                "text": "Warden Vorn glances at the door behind you to see whether it shut, which she does every time, and has done for four years.\n\n\"Back,\" she says.",
+                "choices": [
+                    {
+                        "label": "\"What is coming out of the Wyrdpines?\"",
+                        "next": "the_wyrdpines"
+                    },
+                    {
+                        "label": "\"You keep a list.\"",
+                        "next": "the_list"
+                    },
+                    {
+                        "label": "\"How do they get past the gate?\"",
+                        "next": "the_road"
+                    },
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "A converted timber barn, a table at the north end, and a map on the wall with the Wyrdpines drawn on it in more detail than the Charthouse has ever managed. There are pins in it, and a line of pins that stops, and nothing at all beyond the line.\n\nA woman comes in off the road while you are looking at it, is given food before she is asked anything, and eats it before she says anything.\n\n\"That is how we do it,\" says the Warden at the table. \"Eat first. It is not manners, it is that nobody tells the truth hungry.\"\n\nShe looks up.\n\n\"Aske Vorn. Grey Warden. You are not hungry and you are not Drennmark, so you want something, and I would rather you said what.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_vorn"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "\"What is coming out of the Wyrdpines?\"",
+                        "next": "the_wyrdpines"
+                    },
+                    {
+                        "label": "\"What is the line of pins?\"",
+                        "next": "the_pins"
+                    },
+                    {
+                        "label": "\"Sixty came south. Forty-one arrived.\"",
+                        "next": "the_list"
+                    },
+                    {
+                        "label": "Leave her to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_pins": {
+            "expression": 3,
+            "text": "\"Villages,\" says Aske Vorn. \"Every one that has sent somebody south. Eleven when I started. Forty-three now.\"\n\nShe comes and stands beside you at it.\n\n\"And the line is where I stop having anybody to put a pin in for.\"\n\nShe touches the paper above it, where there is nothing.\n\n\"That is not empty country. There are nine villages up there and a Warden station and the Old Ash road. It is empty on that map because nothing has come out of it in two years, and a Warden's map only knows what has come out.\"",
+            "choices": [
+                {
+                    "label": "\"What is up there?\"",
+                    "next": "the_wyrdpines"
+                },
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "the_wyrdpines": [
+            {
+                "conditions": [
+                    {
+                        "flag": "vorn_trusts_you"
+                    }
+                ],
+                "expression": 5,
+                "text": "\"You want the honest one,\" says Aske Vorn, \"so here it is, and it will disappoint you.\"\n\n\"I do not know. Four years, sixty people brought out, forty-three villages, and I cannot tell you what it is.\"\n\nShe puts both hands flat on the table.\n\n\"Here is what I can tell you. It moves south about eleven miles a year and it has done for six. It does not attack. Nobody has ever been chased. What happens is that a village stops sending word, and when you go up to it the houses are shut from the inside and the stock is in the byres and there is nobody in any of them.\"\n\n\"No blood. No burning. No bodies. Doors shut from the inside.\"\n\nShe straightens.\n\n\"I have taken that to a Coronal's ambassador, to the Charthouse, to the Wet Hall and to a Factor. Every one of them has asked me what it is. That is the wrong question and it is the only one anybody asks. The right one is how fast, and where next, and nobody has ever asked me either.\"",
+                "choices": [
+                    {
+                        "label": "\"How fast, and where next?\"",
+                        "next": "how_fast"
+                    },
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ]
+            },
+            {
+                "text": "\"People,\" says Aske Vorn. \"That is what is coming out of the Wyrdpines. Nineteen hundred of them, into a suburb your charter says is not there.\"\n\nShe goes back to the table.\n\n\"You want the other answer and I have not got a reason to give it to you.\"",
+                "choices": [
+                    {
+                        "label": "\"Then give me a reason to earn it.\"",
+                        "next": "what_she_wants"
+                    },
+                    {
+                        "label": "\"You have asked the Charthouse for the northern soundings. Twice. In writing.\"",
+                        "conditions": [
+                            {
+                                "flag": "charts_gone"
+                            }
+                        ],
+                        "next": "she_reconsiders"
+                    },
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ]
+            }
+        ],
+        "how_fast": {
+            "expression": 6,
+            "text": "Aske Vorn takes the charcoal and marks the map without being asked twice, which is the first time you have seen her do anything quickly.\n\n\"Eleven miles a year. Six years. Sixty-six miles.\"\n\nShe draws the line down.\n\n\"Torvald's Wardens hold the pine-marches, and there is no line of them left north of the Ash road, because the men who were on it are the men in the Wardenswatch. The next thing between it and open country is the fell.\"\n\nThe charcoal stops.\n\n\"After the fell there is eighty-five miles of forest with no track worth the name, and then there is this promontory. Waerhaven has no road north because there has never been anything north to have a road to.\"\n\nShe puts the charcoal down.\n\n\"That is what I came south to say. I have been here four years and I have never once been let say it in a building with a roof that the League owns.\"",
+            "on_enter": [
+                {
+                    "set_flag": "vorn_told_you"
+                },
+                {
+                    "xp": 150
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"I will get you into the Wet Hall.\"",
+                    "next": "the_wet_hall_offer"
+                },
+                {
+                    "label": "\"Then why ask the Charthouse for soundings?\"",
+                    "next": "the_soundings"
+                },
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "the_soundings": {
+            "expression": 3,
+            "text": "\"Because if it comes to the fell,\" says Aske Vorn, \"there is no road out. There has never been a road out. There is water.\"\n\nShe looks at the map.\n\n\"There are four inlets on the Drennmark coast that a deep hull can lie in, and a pilot out of this city ran them three times forty years ago, and his soundings are in a press on that ridge that I have asked for twice in writing and been refused twice in writing.\"\n\n\"I am not planning a voyage. I have not got a boat and I have not got four Wardens who can sail one. I asked in writing so that when it matters there will be a document in the Charthouse saying that somebody asked, and was refused, and on what date.\"\n\nShe almost smiles.\n\n\"That is the whole of what a Warden does in a city. Make records that will be useful to somebody after everyone has stopped listening.\"",
+            "choices": [
+                {
+                    "label": "\"Somebody has taken those charts.\"",
+                    "conditions": [
+                        {
+                            "flag": "charts_gone"
+                        }
+                    ],
+                    "next": "she_reconsiders"
+                },
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "she_reconsiders": {
+            "expression": 4,
+            "text": "Aske Vorn goes very still, in the specific way of somebody who has just had a piece of good news and is checking it for a trap.\n\n\"Taken,\" she says. \"Not refused. Taken.\"\n\n\"Then there is somebody in this city who wanted the same three drawers I wanted and did not bother asking, and got them in the spring, and has not been caught because the Chart-Master cannot describe the theft without describing the shore.\"\n\nShe sits down.\n\n\"Four years I have been the only person in Waerhaven who thinks about the north. I have been quite comfortable being the only one. Find out who else is and I will owe you a thing I do not owe anybody.\"",
+            "on_enter": [
+                {
+                    "set_flag": "vorn_wants_the_thief"
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"It was a shipwright. He put them back after nine days and copied four inlets.\"",
+                    "conditions": [
+                        {
+                            "flag": "doren_took_charts"
+                        },
+                        {
+                            "flag": "vorn_wants_the_thief"
+                        }
+                    ],
+                    "next": "the_thief_named"
+                },
+                {
+                    "label": "\"I am looking.\"",
+                    "end": true
+                },
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "what_she_wants": {
+            "expression": 3,
+            "text": "\"A reason,\" says Aske Vorn. \"All right.\"\n\n\"I have been in this city four years and in that time eleven people have come to this table wanting the story of the road. Two of them were priests, four were merchants who wanted to know whether to buy land, three were writing something, and two were from the Wet Hall and wanted to know how many.\"\n\nShe looks at you.\n\n\"Every one of them wanted it to be about what came out of the trees. Not one of them asked about the people. There are nineteen hundred of them outside your wall picking oakum for a tin token and every single one has a village, and nobody in Waerhaven has ever asked one of them which.\"\n\n\"So. Go and ask. Not me. Out there. Then come back.\"",
+            "choices": [
+                {
+                    "label": "\"I will.\"",
+                    "effects": [
+                        {
+                            "set_flag": "vorn_task"
+                        }
+                    ],
+                    "end": true
+                },
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "the_road": {
+            "expression": 2,
+            "text": "\"They walk,\" says Aske Vorn. \"Eighty-five miles of forest with no track, to a point on the Venddock road where they can turn onto it and look like carters' families, and then in at the Hallowgate at about the third hour.\"\n\n\"In parties of eight and twelve. Never more. Twelve is what one person can hold together in the dark.\"\n\nShe does not say who.\n\n\"There is a Watch-Captain in this city who has never once asked me a question, and I have never once told him a thing, and in six years neither of us has so much as nodded at the other in a street. That is the arrangement. It has no words in it. The day it gets words it can be stopped.\"",
+            "choices": [
+                {
+                    "label": "\"You bring them yourself.\"",
+                    "next": "she_admits_the_road"
+                },
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "she_admits_the_road": {
+            "expression": 5,
+            "text": "Aske Vorn does not deny it and does not confirm it, and after a moment she does something better.\n\n\"Nineteen times,\" she says. \"Since the spring of the second year. Nineteen parties.\"\n\n\"And I have lost people on eleven of those nineteen, and every one of them is written down with the village and the date, and that is what I carry in a coat and what nobody in this hall has ever seen.\"\n\nShe looks at you for a long moment.\n\n\"You are the first person who has asked me how they get in rather than how many of them there are. I notice that. I have been noticing which question people ask for four years and you are the first.\"",
+            "on_enter": [
+                {
+                    "set_flag": "vorn_trusts_you"
+                },
+                {
+                    "xp": 120
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"Show me the list.\"",
+                    "next": "the_list"
+                },
+                {
+                    "label": "Say nothing.",
+                    "end": true
+                }
+            ]
+        },
+        "the_list": [
+            {
+                "conditions": [
+                    {
+                        "flag": "list_seen"
+                    }
+                ],
+                "expression": 4,
+                "text": "\"You have seen it,\" says Aske Vorn. \"It has not got better.\"",
+                "choices": [
+                    {
+                        "label": "\"The nineteen.\"",
+                        "next": "the_nineteen_q"
+                    },
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "vorn_trusts_you"
+                    }
+                ],
+                "expression": 6,
+                "text": "Aske Vorn takes it out of her coat.\n\nShe does not unfold it at once. She holds it, and looks at the room, and then goes and shuts the door of the Grey Hall, which is a door that has not been shut in the daytime in four years and which everyone in the building notices.\n\n\"Sixty names,\" she says. \"Village, and the day they left it. Forty-one ticked.\"\n\nShe puts it on the table and does not turn it round.\n\n\"You may read it. Nobody has read it. My own Wardens have not read it and two of them are on it.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "list_seen"
+                    },
+                    {
+                        "start_quest": "the_forty_one"
+                    },
+                    {
+                        "quest_stage": {
+                            "quest": "the_forty_one",
+                            "stage": "the_list"
+                        }
+                    },
+                    {
+                        "give_item": "vorns_list",
+                        "quantity": 1
+                    },
+                    {
+                        "xp": 150
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Read it.",
+                        "next": "reading_the_list"
+                    },
+                    {
+                        "label": "\"Not without your leave.\"",
+                        "next": "reading_the_list"
+                    }
+                ]
+            },
+            {
+                "text": "\"I keep a list,\" says Aske Vorn. \"Everybody knows I keep a list. It is the one thing about me that gets said in this city.\"\n\nShe puts a hand flat on the table.\n\n\"Nobody has seen it and nobody is going to, and I will tell you exactly why, because the reason people assume is wrong.\"\n\n\"It is not that it is secret. It is that it is accurate. Sixty names with the village and the day. If that goes into a League building it is not a memorial, it is a census of nineteen hundred illegal people with the places they came from written next to them, and there is a clerk in Lathmere who would find that extremely useful.\"",
+                "choices": [
+                    {
+                        "label": "\"How do they get past the gate?\"",
+                        "next": "the_road"
+                    },
+                    {
+                        "label": "\"Then keep it. But the nineteen deserve to be said out loud.\"",
+                        "next": "the_nineteen_q"
+                    },
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ]
+            }
+        ],
+        "reading_the_list": {
+            "expression": 7,
+            "text": "Sixty names. The village beside each one, and the day. Forty-one with a tick.\n\nThe other nineteen do not have crosses against them. They have a mark — the same small mark, nineteen times, in the same hand, made with the same pressure, which means it was made on nineteen separate occasions by somebody who had decided in advance what mark they were going to use.\n\nIt is not a cross and it is not a word. It is a short horizontal stroke with a dot under it.\n\n\"Warden's mark,\" says Aske Vorn, watching you find it. \"It means *left the road*. It is in the manual. There is a manual.\"\n\nShe takes the list back.\n\n\"It does not mean died. There is a mark for died and it is a cross and I have used it four times in my life and none of them are on that sheet.\"",
+            "choices": [
+                {
+                    "label": "\"Left the road, going where?\"",
+                    "next": "the_nineteen_q"
+                },
+                {
+                    "label": "\"Two of these names are in Waerhaven.\"",
+                    "conditions": [
+                        {
+                            "flag": "two_dead_names"
+                        }
+                    ],
+                    "next": "the_two"
+                }
+            ]
+        },
+        "the_nineteen_q": {
+            "expression": 8,
+            "text": "Aske Vorn folds the list back into her coat, and answers, which you were not expecting.\n\n\"They stopped,\" she says.\n\n\"That is the whole of it. Somewhere between the eighth night and the twelfth, on every one of the eleven bad parties, somebody stopped walking. Not fell. Not taken. Stopped, and stood, and faced back the way we had come, and would not answer to their name.\"\n\nShe is entirely level.\n\n\"You cannot carry a grown person eighty-five miles. You cannot stay with them; there are eleven others walking. So you say the name three times, and you write the mark, and you go on, and every one of the ones still walking hears you do it.\"\n\n\"Nineteen times. And the reason I will not discuss it is not grief. It is that the correct thing to do was to go on, and I did the correct thing nineteen times, and I would like one person in this world to tell me that was wrong.\"",
+            "on_enter": [
+                {
+                    "set_flag": "nineteen_told"
+                },
+                {
+                    "quest_stage": {
+                        "quest": "the_forty_one",
+                        "stage": "the_two_names"
+                    }
+                },
+                {
+                    "xp": 180
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"It was not wrong. It was the only thing. And it was still a thing you did.\"",
+                    "next": "she_takes_it"
+                },
+                {
+                    "label": "\"I cannot tell you that.\"",
+                    "next": "she_takes_it"
+                }
+            ]
+        },
+        "she_takes_it": {
+            "expression": 2,
+            "text": "Aske Vorn nods once, and goes and opens the door of the Grey Hall again, and the day comes back into it.\n\n\"There are two of them here,\" she says, with her back to you. \"In this city. On your rolls.\"\n\n\"I have known for a year. One in the long room at the lazar house and one in the Tar Gaol, and both of them answer to a name on that sheet, and I marked both of those names myself on the road with my own hand.\"\n\nShe turns round.\n\n\"I have not gone to look. Four years I have walked into rooms nobody else would walk into, and I have not walked two hundred yards to the lazar house.\"",
+            "on_enter": [
+                {
+                    "set_flag": "two_dead_names"
+                },
+                {
+                    "quest_stage": {
+                        "quest": "the_forty_one",
+                        "stage": "the_two_names"
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"Then I will go.\"",
+                    "end": true
+                },
+                {
+                    "label": "\"We will go together.\"",
+                    "next": "the_two"
+                }
+            ]
+        },
+        "the_two": {
+            "expression": 6,
+            "text": "\"Both,\" says Aske Vorn.\n\nShe puts her hands flat on the table and leaves them there.\n\n\"Then there are two possibilities and I have had a year of lying awake with them.\"\n\n\"One is that I was wrong on the road. That they came out on their own, after, behind us, and walked eighty-five miles alone in the dark, and got here, and found a city that had a bed for one of them in a lazar house and a cell for the other.\"\n\n\"The other is that I was right.\"\n\nShe looks up.\n\n\"I want it to be the first one. I want that so badly that I have not been able to trust myself to go and look, which is the whole reason you are standing in this hall.\"",
+            "choices": [
+                {
+                    "label": "\"Then we say the nineteen out loud, whichever it is.\"",
+                    "next": "the_naming_offer"
+                },
+                {
+                    "label": "\"Then we find out quietly, and nobody else is told.\"",
+                    "next": "the_burying_offer"
+                }
+            ]
+        },
+        "the_naming_offer": {
+            "expression": 8,
+            "text": "Aske Vorn is quiet for a long time.\n\n\"In the chapel,\" she says. \"By village. In the order they were lost. And I say what happened to each one, and I say the mark, and I say what the mark means.\"\n\n\"Forty people out there have been waiting four years to be told, and every one of them has been being kind to me about it, which is the worst thing anybody has ever done to me.\"\n\nShe stands up.\n\n\"Come to the chapel. Bring whoever you have got. And if either of those two comes to it, do not stop them.\"",
+            "on_enter": [
+                {
+                    "quest_stage": {
+                        "quest": "the_forty_one",
+                        "stage": "the_gaol"
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"First the one in the gaol.\"",
+                    "next": "the_gaol_run"
+                },
+                {
+                    "label": "\"I will be there.\"",
+                    "next": "the_naming"
+                }
+            ]
+        },
+        "the_burying_offer": {
+            "expression": 5,
+            "text": "Aske Vorn nods slowly, and you can see her take it, and you can see what it costs her to be relieved.\n\n\"South,\" she says. \"On a cart, with money, before anyone out there hears a name said. There are forty people in the Wardenswatch who would be destroyed by this and I have got no right to do that to them for the sake of my own arithmetic.\"\n\nShe takes the list out and looks at it.\n\n\"And this goes in the stove. All sixty. Because a list with two live names ticked as lost is not a record any more, it is evidence about me.\"",
+            "on_enter": [
+                {
+                    "quest_stage": {
+                        "quest": "the_forty_one",
+                        "stage": "the_gaol"
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"First the one in the gaol.\"",
+                    "next": "the_gaol_run"
+                },
+                {
+                    "label": "\"Then let us move quickly.\"",
+                    "next": "the_burial"
+                }
+            ]
+        },
+        "was_it_right": {
+            "expression": 7,
+            "text": "\"No,\" says Aske Vorn. \"And it was the only thing, and both of those are true, and I have spent four years in a country where people think that is a contradiction.\"\n\nShe looks at the cold stove.\n\n\"Forty people out there will go on being kind to me. I shall go on letting them. And in about nine years somebody will find a Warden's manual and look up a short stroke with a dot under it, and by then I shall be dead and it will be a curiosity.\"\n\nShe pulls her coat straight.\n\n\"Do not do that to yourself over it. You did what I asked and I asked because I could not. That is what I hired, and it is the only thing I have ever hired anybody for.\"",
+            "choices": [
+                {
+                    "label": "Leave her.",
+                    "end": true
+                }
+            ]
+        },
+        "the_watch_after": {
+            "expression": 2,
+            "text": "\"Eleven of Skeld's men were at the back of that chapel,\" says Aske Vorn, \"off duty, in their own coats, and not one of them told him they were going.\"\n\nShe considers it.\n\n\"Six years he and I have had an arrangement with no words in it. On Thursday it got words, in a shed outside his wall, in front of forty people, and it did not break.\"\n\nShe looks almost surprised.\n\n\"I have been wrong about one thing for six years. That is not a bad rate.\"",
+            "choices": [
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "where_now": {
+            "expression": 6,
+            "text": "\"There is nowhere,\" says Aske Vorn. \"That is the answer and everybody keeps asking me the question as though I have been holding it back.\"\n\nShe marks the road.\n\n\"Venddock will not take them. Lathmere will not take them. Ordrane is four hundred miles and a border, and Drennmark is what they came out of.\"\n\nShe sets the charcoal down.\n\n\"So: into the timber country, and up into the cut where the ox-road comes down off the ridge, and they are not visible from the road there, and there is water. Nine days. And in eleven days a clerk goes home to Lathmere having counted nothing.\"\n\n\"And then they come back. Every one of them. Because the work is here, and the bread is here, and nothing on that map has moved.\"\n\nShe almost laughs.\n\n\"That is what an audit is. It is nineteen hundred people standing in a wood for a fortnight so that a sheet of paper can be true on the day it is read.\"",
+            "choices": [
+                {
+                    "label": "Leave her to it.",
+                    "end": true
+                }
+            ]
+        },
+        "the_wet_hall_offer": {
+            "expression": 3,
+            "text": "\"You cannot,\" says Aske Vorn. \"Nobody can. The Wet Hall does not receive Drennmark, because receiving Drennmark would mean the charter has somebody to receive, and the charter says there is nobody outside that wall.\"\n\nShe considers it anyway, which is the first time she has considered anything you have offered.\n\n\"But the Moot is not the Wet Hall. The Moot has no charter and no standing and decides everything in this city, and I have never once been inside it.\"\n\nShe folds the map's corner back.\n\n\"If you can get me into that hall, with the map, in front of eleven families, I will say the whole of it in about four minutes and they will not be able to unhear it. That is not a favour. That is the only thing I have wanted in four years.\"",
+            "on_enter": [
+                {
+                    "set_flag": "vorn_wants_the_moot"
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"I will get you in.\"",
+                    "end": true
+                },
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "the_gaol_run": [
+            {
+                "conditions": [
+                    {
+                        "any": [
+                            {
+                                "flag": "skeld_will_look_away"
+                            },
+                            {
+                                "flag": "reth_deal"
+                            }
+                        ]
+                    }
+                ],
+                "expression": 2,
+                "text": "It takes an afternoon and nobody is hurt.\n\nThe Watch is drilling at the far end of the ward on a written order that Oren Skeld wrote himself and filed. Mother Reth's gate stands open on a debt squared. And the turnkey, who has no warrant and knows it, reads the slate out loud and then wipes it with a wet rag while you are standing there, because that is what the record of every person in that building has always been.\n\nThe man on the second room answers to a name off Aske Vorn's sheet.\n\nHe answers to it in the wrong accent, and when Vorn says it he looks up too fast, and she sees him do it.",
+                "on_enter": [
+                    {
+                        "set_flag": "gaol_opened"
+                    },
+                    {
+                        "quest_stage": {
+                            "quest": "the_forty_one",
+                            "stage": "the_gaol"
+                        }
+                    },
+                    {
+                        "xp": 150
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Read the nineteen out in the chapel.",
+                        "next": "the_naming"
+                    },
+                    {
+                        "label": "Put them both on a cart, south, tonight.",
+                        "next": "the_burial"
+                    }
+                ]
+            },
+            {
+                "expression": 5,
+                "text": "There is no arrangement and no drill and no squared debt, so there is a locked door in Tarrow with four men behind it who have thought a great deal harder than most about what happens to them if the arrangement ever ends.\n\n\"I have been in this city four years,\" says Aske Vorn, taking her coat off and folding it, which is somehow the most alarming thing she has done, \"and I have been extremely careful for every one of them.\"",
+                "choices": [
+                    {
+                        "label": "Take the gaol.",
+                        "effects": [
+                            {
+                                "start_combat": "gaol_turnkeys"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "\"Not like this. Square it first.\"",
+                        "next": "greeting"
+                    }
+                ]
+            }
+        ],
+        "the_naming": {
+            "expression": 8,
+            "text": "It is done in the Chapel of the Grey Road on a Thursday, with the doors open, and about forty people, and eleven of Watch-Captain Skeld's men standing at the back in their own coats.\n\nAske Vorn reads the nineteen by village, in the order they were lost, and after each one she says what happened and what the mark means and that she wrote it herself.\n\nAnd then, at the end, she says the other thing: that two of the nineteen are alive, and in this city, and that she does not know whether that means she was wrong on the road or something else that she has not got a word for.\n\nNobody interrupts her. Two people try and are stopped, without a word, by a hand.\n\nAfterwards she stands outside for a long time and lets people come up to her.",
+            "on_enter": [
+                {
+                    "quest_stage": {
+                        "quest": "the_forty_one",
+                        "stage": "named"
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "Stay with her.",
+                    "end": true
+                }
+            ]
+        },
+        "the_burial": {
+            "expression": 6,
+            "text": "It is done by the second hour and nobody in the Wardenswatch is ever told.\n\nThe two go south on a carter's wagon with money and a name that is not on any sheet, and Aske Vorn stands at the Hallowgate and watches them out of sight, and then walks back to the Grey Hall and puts sixty names in the stove.\n\n\"There,\" she says, when it has caught. \"Forty people out there go on being able to be kind to me.\"\n\nShe watches it burn all the way down and then rakes it flat.\n\n\"That is the last accurate record of anything I have ever kept. I want you to know I know what I have just done.\"",
+            "on_enter": [
+                {
+                    "quest_stage": {
+                        "quest": "the_forty_one",
+                        "stage": "buried"
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "Say nothing.",
+                    "end": true
+                }
+            ]
+        },
+        "the_advice": {
+            "expression": 6,
+            "text": "Aske Vorn nods once, and unrolls the map on the table, and marks it — eleven miles a year, six years, the fell, eighty-five miles of forest, and a promontory with no road north — in about four minutes, in silence, the way she will do it on Thursday.\n\nThen she rolls it up again.\n\n\"Right,\" she says. \"Four minutes. That is all it has ever been. Four minutes and a stick of charcoal, and I have been in this city four years.\"",
+            "choices": [
+                {
+                    "label": "Go with her on Thursday.",
+                    "end": true
+                }
+            ]
+        },
+        "the_thief_named": {
+            "expression": 2,
+            "text": "Aske Vorn takes that in silence, and then does something you have not seen her do, which is sit down without deciding to.\n\n\"A shipwright,\" she says. \"Four inlets. And he gave the charts back.\"\n\nShe puts her hands flat on the table.\n\n\"I have spent four years asking this city for a shore in writing and being refused in writing, and the whole time there has been a man of twenty-four in a yard two streets away who wanted the same four inlets and simply took them and learnt them and put them back.\"\n\nShe looks up.\n\n\"I would like to meet him. Not to have him arrested — I have no standing to arrest anybody and I would not if I had. I would like to sit at a table with the only other person in the Ythan League who has looked north on purpose.\"",
+            "on_enter": [
+                {
+                    "set_flag": "vorn_met_the_thief"
+                },
+                {
+                    "xp": 100
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"I will bring him.\"",
+                    "end": true
+                }
+            ]
+        }
+    }
+}

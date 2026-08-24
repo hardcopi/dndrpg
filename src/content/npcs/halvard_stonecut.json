@@ -1,0 +1,46 @@
+{
+    "npc_key": "halvard_stonecut",
+    "name": "Halvard Stonecut",
+    "role": "Ironmonger",
+    "description": "A dwarf of Karrun-Deep, forty years out of the holds, who has sold this city every fastening in it. His letters home stopped being answered eight months ago. He has written eleven more since and sent them anyway, and he does not mention it, and the bundle on the hook behind the counter gets longer.",
+    "sprite_key": "smith",
+    "is_merchant": true,
+    "is_quest_giver": true,
+    "dialog": "halvard_stonecut",
+    "shop": [
+        {
+            "item": "shortsword",
+            "stock": 2
+        },
+        {
+            "item": "spear",
+            "stock": 3
+        },
+        {
+            "item": "mace",
+            "stock": 2
+        },
+        {
+            "item": "halberd",
+            "stock": 1
+        },
+        {
+            "item": "chain_shirt",
+            "stock": 1,
+            "markup_pct": 110
+        },
+        {
+            "item": "shield_warded",
+            "stock": 1,
+            "markup_pct": 130
+        },
+        {
+            "item": "silvered_shortsword",
+            "stock": 1,
+            "markup_pct": 150
+        }
+    ],
+    "place": {
+        "location": "halvards_ironmongery"
+    }
+}

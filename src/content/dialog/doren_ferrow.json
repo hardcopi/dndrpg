@@ -1,0 +1,995 @@
+{
+    "npc_key": "doren_ferrow",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "flag": "doren_fate",
+                        "equals": "owned"
+                    }
+                ],
+                "text": "Doren has a drawing board of his own now — actually his own, with his name burnt into the back of it by somebody in the Sawyers' Hall who will not admit to it — and he is using it to draw something entirely different, which is the most Doren thing that has ever happened.\n\n\"She asked me about the garboard,\" he says, for the ninth time this week. \"That is all she asked. One question. About the garboard.\"",
+                "choices": [
+                    {
+                        "label": "\"You have told me.\"",
+                        "end": true
+                    },
+                    {
+                        "label": "Sit at the fire a while.",
+                        "conditions": [
+                            {
+                                "companion": "doren_ferrow",
+                                "status": "active"
+                            }
+                        ],
+                        "next": "camp"
+                    },
+                    {
+                        "label": "\"Tell me again.\"",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "doren_fate",
+                        "equals": "painted_out"
+                    }
+                ],
+                "expression": 3,
+                "text": "Doren is working on the fourth slip on somebody else's hull and doing it very well and very fast.\n\n\"It is fine,\" he says, before you have asked. \"It was the right thing and I did it myself and I kept the paper.\"\n\nHe does not look up at the beam. He used to look up at the beam every time he came through that door, and now he does not, and he has not noticed that he has stopped.",
+                "choices": [
+                    {
+                        "label": "Sit at the fire a while.",
+                        "conditions": [
+                            {
+                                "companion": "doren_ferrow",
+                                "status": "active"
+                            }
+                        ],
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Say nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "pool": "idle",
+                "conditions": [
+                    {
+                        "companion": "doren_ferrow",
+                        "status": "active"
+                    }
+                ],
+                "text": "Doren has found something structural to be unhappy about.\n\n\"That doorframe,\" he says, pointing at a doorframe. \"Green timber, cross-grain, and somebody has nailed it. Nailed it. I could put my shoulder through that and I have got to walk past it every day.\"",
+                "choices": [
+                    {
+                        "label": "Sit at the fire a while.",
+                        "conditions": [
+                            {
+                                "companion": "doren_ferrow",
+                                "status": "active"
+                            }
+                        ],
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Later.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "pool": "idle",
+                "conditions": [
+                    {
+                        "companion": "doren_ferrow",
+                        "status": "active"
+                    }
+                ],
+                "text": "\"Do you know what the ropewalk is for?\" says Doren, who has been quiet for an hour and has clearly been building up to this. \"Three hundred and eighty metres, under one roof, so that a cable can be laid in one length.\"\n\nHe looks genuinely moved.\n\n\"Somebody four hundred years ago decided that a rope should not have a join in it. And then built a building that long. For rope.\"",
+                "choices": [
+                    {
+                        "label": "Sit at the fire a while.",
+                        "conditions": [
+                            {
+                                "companion": "doren_ferrow",
+                                "status": "active"
+                            }
+                        ],
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Later.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "pool": "idle",
+                "conditions": [
+                    {
+                        "companion": "doren_ferrow",
+                        "status": "active"
+                    }
+                ],
+                "text": "Doren is asleep sitting up with a roll of paper inside his coat and one hand on it, which is how he sleeps every night.",
+                "choices": [
+                    {
+                        "label": "Sit at the fire a while.",
+                        "conditions": [
+                            {
+                                "companion": "doren_ferrow",
+                                "status": "active"
+                            }
+                        ],
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Leave him.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "met_doren"
+                    },
+                    {
+                        "flag": "tenth_mast_seen"
+                    }
+                ],
+                "expression": 4,
+                "text": "Doren Ferrow is under the beam, which is where he stands when he thinks nobody is watching, and he moves away from it when he sees you and does it about a second too late.\n\n\"You counted the pond,\" he says. \"The whole yard knows. Nine short.\"\n\nHe swallows.\n\n\"And you have been in the dry dock.\"",
+                "choices": [
+                    {
+                        "label": "\"Come with me.\"",
+                        "next": "the_recruit"
+                    },
+                    {
+                        "label": "\"I have.\"",
+                        "next": "the_admission"
+                    },
+                    {
+                        "label": "\"You painted the tenth mast.\"",
+                        "next": "the_admission"
+                    },
+                    {
+                        "label": "Sit at the fire a while.",
+                        "conditions": [
+                            {
+                                "companion": "doren_ferrow",
+                                "status": "active"
+                            }
+                        ],
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Later.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "met_doren"
+                    }
+                ],
+                "text": "\"Back,\" says Doren, from the apprentices' end of the table, where he still sits after six years out of his apprenticeship, which nobody has ever explained to him.",
+                "choices": [
+                    {
+                        "label": "\"Tell me about the beam.\"",
+                        "next": "the_beam_talk"
+                    },
+                    {
+                        "label": "\"Why do you sit at this end?\"",
+                        "next": "this_end"
+                    },
+                    {
+                        "label": "Sit at the fire a while.",
+                        "conditions": [
+                            {
+                                "companion": "doren_ferrow",
+                                "status": "active"
+                            }
+                        ],
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "The masters' end of the long table is quiet. The apprentices' end is loud. And at the apprentices' end, six years too old for it, is a man with paint under one fingernail that has clearly resisted several attempts at removal.\n\n\"Doren Ferrow,\" he says, and then, immediately, because he cannot help it: \"That beam is elm. Everyone says oak. It is elm, and it is elm because elm does not split when you drive a peg through it wet, and there are nine pegs in it, one under each mast.\"\n\nHe stops.\n\n\"Sorry. You did not ask.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_doren"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "\"Nine pegs. And ten masts.\"",
+                        "next": "the_beam_talk"
+                    },
+                    {
+                        "label": "\"You have got paint under your nail.\"",
+                        "next": "the_paint"
+                    },
+                    {
+                        "label": "Sit at the fire a while.",
+                        "conditions": [
+                            {
+                                "companion": "doren_ferrow",
+                                "status": "active"
+                            }
+                        ],
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_paint": {
+            "expression": 5,
+            "text": "Doren looks at his hand as though it has betrayed him, which it has.\n\n\"Pitch black,\" he says. \"It is what the beam is done in. It is what everything in this city is done in.\"\n\nHe puts the hand under the table.\n\n\"Half of Tarrow has got it. Half the yard has got it. You cannot get it out from under a nail, you have to grow it out, and it takes about four months, and I have been growing this one out since March.\"\n\nHe hears himself say March.",
+            "choices": [
+                {
+                    "label": "\"Since March.\"",
+                    "next": "the_beam_talk"
+                },
+                {
+                    "label": "Let it go.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "the_beam_talk": [
+            {
+                "conditions": [
+                    {
+                        "flag": "tenth_mast_seen"
+                    }
+                ],
+                "text": "\"You have been told,\" says Doren. \"By her, or by the yard, or by the pond.\"\n\nHe looks at the table.\n\n\"Ask me properly and I will not be able to help it. I have wanted somebody to ask me properly for six months.\"",
+                "choices": [
+                    {
+                        "label": "\"Did you paint it?\"",
+                        "next": "the_admission"
+                    },
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ]
+            },
+            {
+                "text": "\"Nine classes,\" says Doren. \"Nine masts. One peg under each, driven wet, four hundred years, and the master who designs a class puts hers up herself in front of the house. Once. That is the whole ceremony and there has not been one in eighty-one years.\"\n\nHe does not look up at the beam, which is conspicuous.\n\n\"There are ten on it.\"\n\n\"There is no tenth peg. Whoever put it up did not drive a peg, because driving a peg into that beam is a thing you would have to do in front of people.\"",
+                "choices": [
+                    {
+                        "label": "\"Who put it up?\"",
+                        "next": "who_put_it_up"
+                    },
+                    {
+                        "label": "\"Why has nobody painted it out?\"",
+                        "next": "why_not_out"
+                    },
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ],
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "nine_masts",
+                            "stage": "the_beam_in_the_masts"
+                        }
+                    }
+                ]
+            }
+        ],
+        "why_not_out": {
+            "text": "\"Because it is right,\" says Doren, and then hears himself, and goes a colour.\n\n\"Because it might be right,\" he says. \"Because there might be a tenth class and everybody in this yard has thought so for about two years and nobody has said it, and if you paint it out you have said no, and nobody is willing to be the person who said no.\"\n\nHe turns a cup round.\n\n\"The Master has asked twice. Politely the first time. Nobody moved.\"\n\n\"That is the first time in four hundred years that this house has refused her anything and it was done by everybody standing still.\"",
+            "choices": [
+                {
+                    "label": "\"Who put it up?\"",
+                    "next": "who_put_it_up"
+                },
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "who_put_it_up": {
+            "expression": 6,
+            "text": "Doren looks at the masters' end of the table for a long moment.\n\n\"Somebody with nothing to lose by it,\" he says, \"which in this hall means somebody with no family in it, which is a list of about four people, and every one of us has been very careful not to look at the other three since March.\"\n\nHe stands up.\n\n\"I have got to be on the fourth slip. It is the garboard and they always do it wrong and I am the only one who says so, and that is a sentence I ought to stop saying out loud.\"",
+            "choices": [
+                {
+                    "label": "Let him go.",
+                    "end": true
+                },
+                {
+                    "label": "\"Doren.\"",
+                    "next": "the_admission"
+                }
+            ]
+        },
+        "the_admission": {
+            "expression": 7,
+            "text": "Doren Ferrow sits back down very slowly.\n\n\"Yes,\" he says.\n\n\"In March. At about the second hour, with a brush I took out of the Sailmaker's Loft and put back, and I was so frightened I was sick in the mast pond afterwards, which I have not told anybody and would rather not have said now.\"\n\nHe puts both hands flat on the table.\n\n\"I have been drawing it for two years. It is not a whim. It is sheer, half-breadth and body plan, it is right, and it is a hull nobody in this Moot has a class for.\"\n\n\"And I have got no family in this hall, and I have been passed over six years running, and I am never going to be given a board of my own, and I am the best hand under this roof and everybody in this room knows it and not one of them will say it where a master can hear.\"\n\nHe looks up.\n\n\"So I put it on the beam. Which is either the bravest thing anybody in this house has done in eighty-one years or the most cowardly, because I did it at two in the morning with nobody watching.\"",
+            "on_enter": [
+                {
+                    "set_flag": "tenth_mast_seen"
+                },
+                {
+                    "start_quest": "the_beam"
+                },
+                {
+                    "quest_stage": {
+                        "quest": "the_beam",
+                        "stage": "the_drawing"
+                    }
+                },
+                {
+                    "xp": 150
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"Show me the drawing.\"",
+                    "next": "the_drawing"
+                },
+                {
+                    "label": "\"Both. It is both.\"",
+                    "next": "the_drawing"
+                }
+            ]
+        },
+        "the_drawing": {
+            "expression": 2,
+            "text": "He takes you to the ropewalk, because it is the only place in Waerhaven where you can see two hundred metres in both directions and know that nobody is behind you, and he unrolls it on the floor and weights the corners with four caulking irons.\n\nShort. Deep. Double-framed forward. Sheathed to the wale in a way that has no purpose whatsoever in a freshwater sea.\n\n\"It is for ice,\" says Doren, and he stops being nervous the moment he starts explaining, which is the whole of him. \"You cannot take a fleet hull past the Horn in a hard winter, she has not got the shoulders, she will be nipped and opened in a night. This one is built to be lifted rather than crushed. When the ice comes on her she rises.\"\n\nHe traces it.\n\n\"There is nowhere on the Ythan Mere that a hull like this is any use at all.\"",
+            "on_enter": [
+                {
+                    "quest_stage": {
+                        "quest": "the_beam",
+                        "stage": "the_tenth"
+                    }
+                },
+                {
+                    "approval": {
+                        "doren_ferrow": 8
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"Then why draw it?\"",
+                    "next": "why_draw_it"
+                },
+                {
+                    "label": "\"You have read the northern charts.\"",
+                    "next": "the_charts"
+                }
+            ]
+        },
+        "the_charts": {
+            "expression": 5,
+            "text": "Doren does not answer for a while.\n\n\"Three drawers off the north wall,\" he says. \"In the spring. I put them back. All three, in the right drawers, in the right order, after nine days, and I copied nothing except the soundings for four inlets and I burnt the copies after I had learnt them.\"\n\nHe rolls the drawing up.\n\n\"I know what that is. I have known what it was the whole time.\"\n\n\"But I asked at the counter first. Twice. In writing, the second time, because a man in the Sounding Line told me a written refusal has to be signed. And it was signed, and it said that the northern shore is not licensed to any pilot and is not the Charthouse's to release.\"\n\nHe looks at you.\n\n\"There is a shore up there and this city has decided not to be able to reach it, and it did that by putting three drawers on a cold wall and signing a refusal. So I took them. And I would take them again, and I put them back, and I have not slept properly since March.\"",
+            "on_enter": [
+                {
+                    "set_flag": "doren_took_charts"
+                },
+                {
+                    "approval": {
+                        "doren_ferrow": 5
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"Why? What is up there for you?\"",
+                    "next": "why_draw_it"
+                },
+                {
+                    "label": "Say nothing.",
+                    "next": "why_draw_it"
+                }
+            ]
+        },
+        "why_draw_it": {
+            "expression": 6,
+            "text": "\"Because of the Wardenswatch,\" says Doren.\n\nIt is not the answer you expected and he can see that.\n\n\"Nineteen hundred people came south out of a forest with no road in it, on foot, and this city put them outside its wall and gave them a bench and a tin token, and every single person in Waerhaven talks about it as a problem of bread.\"\n\nHe holds the roll against his chest.\n\n\"It is not a problem of bread. Something has happened up there. Something is still happening up there, and it is coming south eleven miles a year, and there are nine villages behind the line on Warden Vorn's map that nobody has heard from in two years.\"\n\n\"And this city — this city, which builds the best hulls on the continent, in a yard, out of timber it drags forty miles on oxen — this city has decided that the correct response is to have no road north.\"\n\nHe is shaking slightly.\n\n\"Somebody is going to have to go and look. Not this year. But somebody is going to have to, and when they do, they will need a hull that can be nipped and rise, and nobody was drawing one.\"\n\n\"So I drew one. At night. Because I am twenty-four and nobody has ever asked me a question in that hall.\"",
+            "on_enter": [
+                {
+                    "approval": {
+                        "doren_ferrow": 10
+                    }
+                },
+                {
+                    "xp": 150
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"Come with me and see it.\"",
+                    "next": "the_recruit"
+                },
+                {
+                    "label": "\"Then stand up under the beam and say it.\"",
+                    "next": "stand_up"
+                },
+                {
+                    "label": "\"Paint it out. Keep the drawing. Wait.\"",
+                    "next": "paint_it_out"
+                },
+                {
+                    "label": "\"Not yet. Think about it.\"",
+                    "end": true
+                }
+            ]
+        },
+        "stand_up": {
+            "expression": 8,
+            "text": "He does it on the Thursday, under the beam, in front of the whole house, and he is terrible at it for the first thirty seconds and then he is not, because somebody asks him a technical question and he forgets to be frightened.\n\nHe says he painted it. He says why. He puts the drawing on the masters' table.\n\nGedda Halloway looks at it for a very long time — long enough that the apprentices' end of the table stops breathing — and then asks him one question, about the garboard.\n\nHe gives her the wrong answer, and gives it fast, and does not apologise for it.\n\n\"That is how she says yes,\" says the man next to you, who is about seventy and has been at that table since before Doren was born. \"Look at her. That is how she says yes.\"",
+            "on_enter": [
+                {
+                    "quest_stage": {
+                        "quest": "the_beam",
+                        "stage": "owned"
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "Watch.",
+                    "end": true
+                }
+            ]
+        },
+        "paint_it_out": {
+            "expression": 3,
+            "text": "He does it himself, at night, with the same brush, and it takes about four minutes.\n\n\"You are right,\" he says afterwards, and he is not sulking, which is somehow worse. \"There are eight hulls ordered and eleven weeks of bread and the Sawyers' Hall is threatening to strike, and a man of twenty-four putting a tenth class on that beam is a man taking a room's attention off all three.\"\n\nHe cleans the brush properly, because he cleans everything properly.\n\n\"I have kept the paper. I will keep the paper. It will still be right in five years.\"\n\nHe puts the brush away.\n\n\"I am not going to look up at that beam again, though. I have decided that. It was making me stupid.\"",
+            "on_enter": [
+                {
+                    "quest_stage": {
+                        "quest": "the_beam",
+                        "stage": "painted_out"
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "Say nothing.",
+                    "end": true
+                }
+            ]
+        },
+        "this_end": {
+            "text": "\"Because nobody has moved me,\" says Doren, cheerfully enough. \"That is genuinely all it is. There is no rule. There is no vote. You sit at the apprentices' end until a master says come up, and no master has said it.\"\n\nHe shrugs.\n\n\"There are eleven families in this hall and I am not in any of them. My father was a carter. I came in on a charity indenture at eleven and I have been the best hand with a scarf joint under this roof since I was nineteen and everybody says so, at this end of the table.\"\n\n\"It does not make me angry. I would like that understood. It makes me extremely careful, which is worse.\"",
+            "choices": [
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "the_recruit": {
+            "expression": 4,
+            "text": "\"Take me with you,\" says Doren, and then, immediately, in case you say no first: \"I am not asking to be got out of anything. I like the yard. I love the yard. I will be back on the fourth slip before the frost and I will be sitting at the same end of the table.\"\n\nHe holds the roll against his chest.\n\n\"But you go into rooms. That is what I have noticed about you. You have been in the Factor's House and the Charthouse and Tarrow and under the quay, and nobody has stopped you, and I have been in one building since I was eleven.\"\n\n\"I have drawn a hull for a shore I have never seen, off charts I stole, on the strength of a map on a wall in a barn outside the wall.\"\n\nHe looks up.\n\n\"I would like to see one thing with my own eyes before I ask a Moot to build it.\"",
+            "choices": [
+                {
+                    "label": "\"Come on, then.\"",
+                    "effects": [
+                        {
+                            "recruit": "doren_ferrow"
+                        },
+                        {
+                            "xp": 100
+                        }
+                    ],
+                    "next": "he_comes"
+                },
+                {
+                    "label": "\"You will slow us down.\"",
+                    "next": "he_argues"
+                },
+                {
+                    "label": "\"Not yet.\"",
+                    "end": true
+                }
+            ]
+        },
+        "he_argues": {
+            "text": "\"I will not,\" says Doren, with complete confidence, which is the first time you have seen it on him.\n\n\"I can carry more than you, I can swim, I can get a fire out of wet pine, I can tell you which of a building's beams will hold a rope, and I have got a caulker's beetle that weighs eleven pounds and I have swung one all day since I was fourteen.\"\n\nHe stops.\n\n\"And I will slow you down in conversation. That I will grant you. I have been told about that.\"",
+            "choices": [
+                {
+                    "label": "\"Come on, then.\"",
+                    "effects": [
+                        {
+                            "recruit": "doren_ferrow"
+                        },
+                        {
+                            "xp": 100
+                        }
+                    ],
+                    "next": "he_comes"
+                },
+                {
+                    "label": "\"Not yet.\"",
+                    "end": true
+                }
+            ]
+        },
+        "he_comes": {
+            "expression": 2,
+            "text": "He is ready in about six minutes, which suggests a certain amount of prior thought, and he says goodbye to the beam rather than to anybody in the room.\n\n\"Right,\" he says, at the door. \"Where first, and what is it built of?\"",
+            "choices": [
+                {
+                    "label": "Go.",
+                    "end": true
+                }
+            ]
+        },
+        "camp": [
+            {
+                "conditions": [
+                    {
+                        "companion": "doren_ferrow",
+                        "status": "active"
+                    }
+                ],
+                "text": "Doren has rebuilt the camp. Not moved it — rebuilt it: the fire is in a scrape with a reflector of green boughs behind it and the packs are up off the ground on a frame he made out of nothing while everybody else was arguing about where to stop.\n\n\"It is not clever,\" he says, before you can say anything. \"It is just that nobody ever thinks about the ground.\"",
+                "choices": [
+                    {
+                        "label": "How did you get into that yard?",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "flag": "camp_doren_indenture"
+                                }
+                            }
+                        ],
+                        "next": "camp_doren_indenture"
+                    },
+                    {
+                        "label": "Teach me something about a hull.",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "flag": "camp_doren_hull"
+                                }
+                            }
+                        ],
+                        "next": "camp_doren_hull"
+                    },
+                    {
+                        "label": "Six years at the apprentices' end.",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "flag": "camp_doren_passed_over"
+                                }
+                            }
+                        ],
+                        "next": "camp_doren_passed_over"
+                    },
+                    {
+                        "label": "What did you do the night you painted it?",
+                        "conditions": [
+                            {
+                                "flag": "tenth_mast_seen"
+                            },
+                            {
+                                "not": {
+                                    "flag": "camp_doren_that_night"
+                                }
+                            }
+                        ],
+                        "next": "camp_doren_that_night"
+                    },
+                    {
+                        "label": "What do you think is actually up there?",
+                        "conditions": [
+                            {
+                                "companion": "doren_ferrow",
+                                "approval_at_least": 15
+                            },
+                            {
+                                "not": {
+                                    "flag": "camp_doren_north"
+                                }
+                            }
+                        ],
+                        "next": "camp_doren_north"
+                    },
+                    {
+                        "label": "Gedda Halloway has read your lines.",
+                        "conditions": [
+                            {
+                                "flag": "tenth_hull_known"
+                            },
+                            {
+                                "not": {
+                                    "flag": "camp_doren_read"
+                                }
+                            }
+                        ],
+                        "next": "camp_doren_read"
+                    },
+                    {
+                        "label": "Warden Vorn would like to meet you.",
+                        "conditions": [
+                            {
+                                "flag": "vorn_met_the_thief"
+                            },
+                            {
+                                "not": {
+                                    "flag": "camp_doren_vorn"
+                                }
+                            }
+                        ],
+                        "next": "camp_doren_vorn"
+                    },
+                    {
+                        "label": "Your father was a carter.",
+                        "conditions": [
+                            {
+                                "companion": "doren_ferrow",
+                                "approval_at_least": 30
+                            },
+                            {
+                                "not": {
+                                    "flag": "camp_doren_father"
+                                }
+                            }
+                        ],
+                        "next": "camp_doren_father"
+                    },
+                    {
+                        "label": "How is it, since the beam?",
+                        "conditions": [
+                            {
+                                "flag": "doren_fate"
+                            },
+                            {
+                                "not": {
+                                    "flag": "camp_doren_fate"
+                                }
+                            }
+                        ],
+                        "next": "camp_doren_fate"
+                    },
+                    {
+                        "label": "\"You have been not saying something for a fortnight.\"",
+                        "conditions": [
+                            {
+                                "companion": "doren_ferrow",
+                                "approval_at_least": 30
+                            },
+                            {
+                                "not": {
+                                    "companion": "doren_ferrow",
+                                    "romance_stage": 1
+                                }
+                            },
+                            {
+                                "not": {
+                                    "companion": "doren_ferrow",
+                                    "romance_locked": true
+                                }
+                            }
+                        ],
+                        "next": "romance_one"
+                    },
+                    {
+                        "label": "Stay up a while.",
+                        "conditions": [
+                            {
+                                "companion": "doren_ferrow",
+                                "romance_stage": 1
+                            }
+                        ],
+                        "next": "romance_two"
+                    },
+                    {
+                        "label": "Goodnight.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "There is nobody at this fire who wants to talk about joinery.",
+                "choices": [
+                    {
+                        "label": "Back.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "camp_doren_indenture": {
+            "text": "\"Charity indenture,\" says Doren. \"At eleven. The Moot takes four a year off the ward and they are always carters' sons, because a carter's son can lift and does not talk back.\"\n\nHe pokes the fire.\n\n\"It is a good thing. I want to say that first, because everybody expects me to be bitter about it and I am not. I would have been on a cart. Instead I have got a trade and a hand that eleven families would like to have in their family.\"\n\n\"The part that is not a good thing is that four hundred years ago somebody wrote it down as charity, and it has been charity ever since, and there is not a man in that hall who has forgotten which of us came in that way. Not one of them is unkind about it. They just all know.\"",
+            "on_enter": [
+                {
+                    "set_flag": "camp_doren_indenture"
+                },
+                {
+                    "approval": {
+                        "doren_ferrow": 6
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "Back to the fire.",
+                    "next": "camp"
+                }
+            ],
+            "expression": 3
+        },
+        "camp_doren_hull": {
+            "text": "\"Right,\" says Doren, and is entirely happy for the next twenty minutes.\n\n\"Everybody thinks a hull is held together by its planking. It is not. A hull is a basket. The frames are the basket and the planking is what stops the water. If you build a hull thinking the planks are doing the work, you get a very pretty boat that opens like a hand the first time she takes a sea on the quarter.\"\n\nHe draws it in the ash with a stick.\n\n\"And the garboard — the plank next the keel — is where every hull ever built goes wrong, because it is the hardest twist and the worst place to work and it is always done at the end of the day by whoever is left.\"\n\nHe sits back, pleased.\n\n\"There is a frame in the middle of the Moot floor that has been standing four hundred years and every master who has been elected under it has said the garboard is wrong. Every one. And not one of them has ever fixed it, because the whole point of it is to be wrong.\"",
+            "on_enter": [
+                {
+                    "set_flag": "camp_doren_hull"
+                },
+                {
+                    "approval": {
+                        "doren_ferrow": 5
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "Back to the fire.",
+                    "next": "camp"
+                }
+            ],
+            "expression": 2
+        },
+        "camp_doren_passed_over": {
+            "text": "\"Six years,\" says Doren. \"Which is nothing. Old Ferris was at that end for eleven and he had a family in the hall.\"\n\nHe is quiet for a bit.\n\n\"I stopped counting at four. That is the honest thing. I told myself I stopped caring and what actually happened is that I stopped counting, which is different, and I found out it was different in March at about two in the morning with a brush in my hand.\"\n\nHe puts a stick on the fire.\n\n\"You do not paint a mast on a four-hundred-year-old beam because you have stopped caring.\"",
+            "on_enter": [
+                {
+                    "set_flag": "camp_doren_passed_over"
+                },
+                {
+                    "approval": {
+                        "doren_ferrow": 6
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "Back to the fire.",
+                    "next": "camp"
+                }
+            ],
+            "expression": 5
+        },
+        "camp_doren_that_night": {
+            "text": "\"I was in there for two hours before I did it,\" says Doren. \"Sitting under it with a brush in my pocket.\"\n\nHe looks at the fire.\n\n\"And the thing I kept thinking was not about the hull and it was not about the Moot. It was that I would have to walk in there the next day and look at it and say nothing, and go on saying nothing, possibly for the rest of my life.\"\n\n\"And then I did it, and it took about four minutes, and it was not a grand feeling at all. It was exactly like finishing a job. And then I was sick in the mast pond, and then I walked home, and then I went in the next morning and looked at it with everybody else and said what a strange thing that was.\"\n\nHe pulls his coat straight.\n\n\"I have got a very good memory and I would like to lose that morning specifically.\"",
+            "on_enter": [
+                {
+                    "set_flag": "camp_doren_that_night"
+                },
+                {
+                    "approval": {
+                        "doren_ferrow": 7
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "Back to the fire.",
+                    "next": "camp"
+                }
+            ],
+            "expression": 6
+        },
+        "camp_doren_north": {
+            "text": "\"I do not know,\" says Doren, \"and I want to be careful here, because the moment you say I do not know, people fill it in for you.\"\n\nHe holds up fingers.\n\n\"What I have got is: villages stop sending word. Doors shut from the inside. No burning, no bodies. Eleven miles a year for six years. Hjaldmark crews in the Drowned Jarl paying money for stories about old shrines on the north shore. Three holds of Karrun-Deep gone quiet under the Kalder Wall. And a Mere that eleven old women in Old Waer say has stopped making a noise it made for four hundred years.\"\n\nHe lowers them.\n\n\"That is five facts about five different places and I have no business at all putting them in a row.\"\n\nHe looks at the fire.\n\n\"But everybody who has heard me put them in a row has told me I have no business putting them in a row, and not one of them has told me the row is wrong.\"",
+            "on_enter": [
+                {
+                    "set_flag": "camp_doren_north"
+                },
+                {
+                    "approval": {
+                        "doren_ferrow": 6
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "Back to the fire.",
+                    "next": "camp"
+                }
+            ],
+            "expression": 5
+        },
+        "camp_doren_father": {
+            "text": "\"Fifty-five miles from Venddock, four days each way, eleven years,\" says Doren. \"And then a broken axle on the ridge in February and he was under it.\"\n\nHe says it without drama, which is how he says everything.\n\n\"I was nine. The Moot took me at eleven, which is the ward's way of dealing with a carter's son, and I have got no complaint about that either.\"\n\nHe turns a stick over in the fire.\n\n\"Here is the thing I have never said. He hated the road. Absolutely hated it. Four days out, four days back, eleven years, and the same fifty-five miles, and he used to say that the worst part was that at the end of it you were somewhere you had already been.\"\n\nHe looks up.\n\n\"And I have drawn a hull for a shore nobody has been to. I did not notice I was doing that until I was about twenty-two.\"",
+            "on_enter": [
+                {
+                    "set_flag": "camp_doren_father"
+                },
+                {
+                    "approval": {
+                        "doren_ferrow": 7
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "Back to the fire.",
+                    "next": "camp"
+                }
+            ],
+            "expression": 6
+        },
+        "camp_doren_fate": [
+            {
+                "conditions": [
+                    {
+                        "flag": "doren_fate",
+                        "equals": "owned"
+                    }
+                ],
+                "expression": 2,
+                "text": "\"I have got a board,\" says Doren, for about the fifth time. \"My own board. With my name burnt in the back, which somebody did without telling me, and I have not worked out who and I have stopped trying because I would rather it stayed like that.\"\n\nHe grins at the fire.\n\n\"And I am still at the apprentices' end of the table. Nobody has moved me. And it has stopped meaning anything, which I did not expect, because the beam has got ten masts on it and one of them is mine and everybody in that room has to look at it.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "camp_doren_fate"
+                    },
+                    {
+                        "approval": {
+                            "doren_ferrow": 6
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Back to the fire.",
+                        "next": "camp"
+                    }
+                ]
+            },
+            {
+                "expression": 3,
+                "text": "\"Fine,\" says Doren, and then, because he is incapable of leaving a wrong answer standing: \"No. Not fine. Fine in the sense that it was right.\"\n\nHe pokes the fire.\n\n\"There were eight hulls ordered and eleven weeks of bread and a strike coming, and a man of twenty-four making a room look at him was not what that month needed. I still think that.\"\n\nHe puts the stick down.\n\n\"And I have got a roll of paper in my coat that is right, and it will be right in five years, and I have started to notice that I say that sentence about once a week.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "camp_doren_fate"
+                    },
+                    {
+                        "approval": {
+                            "doren_ferrow": 6
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Back to the fire.",
+                        "next": "camp"
+                    }
+                ]
+            }
+        ],
+        "romance_one": {
+            "expression": 6,
+            "text": "Doren looks up from the fire and then very carefully back down at it.\n\n\"Yes,\" he says. \"I have. I have been not saying it for rather longer than a fortnight and I have been extremely pleased with how well I was doing.\"\n\nHe turns a stick over.\n\n\"Here is what it is, and I am going to say it badly. I have been in one building since I was eleven, and everybody in it has known me since I was eleven, and there is not a person in that hall who does not already have an opinion about me that they formed when I was a boy carrying somebody's adze.\"\n\n\"You did not. You met a man who was twenty-four and knew things.\"\n\nHe risks a look up.\n\n\"That is not a reason to be fond of somebody. I am aware. It is only that I have never once been met that way and it turns out it does something to you.\"",
+            "on_enter": [
+                {
+                    "romance": {
+                        "companion": "doren_ferrow",
+                        "stage": 1
+                    }
+                },
+                {
+                    "approval": {
+                        "doren_ferrow": 5
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"You said that perfectly well.\"",
+                    "next": "romance_one_answer"
+                },
+                {
+                    "label": "\"I met a man who was right about the garboard.\"",
+                    "next": "romance_one_answer"
+                },
+                {
+                    "label": "\"Get some sleep.\"",
+                    "next": "camp"
+                }
+            ]
+        },
+        "romance_one_answer": {
+            "expression": 2,
+            "text": "Doren makes a small noise, entirely involuntary, and busies himself with the fire, which does not need it.\n\n\"Right,\" he says. \"Good. Well.\"\n\nHe puts a stick on. Then he takes it off again, because it was the wrong stick, because he cannot help himself.\n\n\"I am going to be very bad at this,\" he says. \"I want that established. I have been at a table with sixty men since I was eleven and I have got no practice at all and I am going to build something instead of saying things, and when I do, that will be what I meant.\"",
+            "choices": [
+                {
+                    "label": "\"Understood.\"",
+                    "end": true
+                }
+            ]
+        },
+        "romance_two": {
+            "expression": 2,
+            "text": "He has made something. He has made you a thing out of nothing, in the dark, while everybody else was asleep: a bow-drill, properly turned, the spindle true, the socket lined with a bit of horn off a broken flask.\n\n\"You said your hands were cold,\" he says. \"Two weeks ago. On the Tarrow road.\"\n\nHe hands it over.\n\n\"It is not a present. It is a tool. It will get a fire out of wet pine in about ninety seconds and I have tested it eleven times.\"\n\nHe sits down beside you, on the same side of the fire, which he has not done.\n\n\"That is the whole of it. I told you I would build something.\"",
+            "on_enter": [
+                {
+                    "romance": {
+                        "companion": "doren_ferrow",
+                        "stage": 2
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"It is the best thing anybody has given me.\"",
+                    "end": true
+                },
+                {
+                    "label": "Sit with him.",
+                    "end": true
+                }
+            ]
+        },
+        "camp_doren_read": {
+            "expression": 8,
+            "text": "\"She asked about the garboard,\" says Doren, for about the fourth time this week, and he is going to say it a great many more times and everybody who knows him has accepted this.\n\nHe pokes the fire.\n\n\"Do you know what that means? She did not ask what it was for. She did not ask where the charts came from. She looked at a set of lines drawn at night by a man who has never had a board, and she went straight to the one plank on the whole hull where the drawing was wrong.\"\n\nHe grins at the fire.\n\n\"And it *was* wrong. I had it wrong. Two years and I had it wrong and she saw it in about a minute and a half.\"\n\nHe stops grinning, briefly.\n\n\"That is what nineteen years in that hall is. Everybody in this city talks about her folding her arms. Nobody ever says that she is the best shipwright on this continent and that the arms are only the second most frightening thing about her.\"",
+            "on_enter": [
+                {
+                    "set_flag": "camp_doren_read"
+                },
+                {
+                    "approval": {
+                        "doren_ferrow": 6
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "Back to the fire.",
+                    "next": "camp"
+                }
+            ]
+        },
+        "camp_doren_vorn": {
+            "expression": 5,
+            "text": "Doren goes very still.\n\n\"She knows,\" he says. \"About the charts.\"\n\nAnd then, before you can answer, he works the rest of it out himself, out loud, in the way he works everything out.\n\n\"She asked for them. In writing. Twice. That is in the Charthouse book and I read the second refusal — I read the *refusal*, I did not know whose it was, it is signed by Brack and it does not say who was refused.\"\n\nHe puts his hands over his face.\n\n\"I stole four inlets off a wall because a signed refusal told me this city had decided not to reach a shore. And the person who had been refused was a Grey Warden of Drennmark who has been trying to get somebody to look north for four years, two streets from my yard, and I have never once walked out of that gate to the Wardenswatch.\"\n\nHe lowers his hands.\n\n\"I have been drawing a hull for those people for two years and I have never met one.\"",
+            "on_enter": [
+                {
+                    "set_flag": "camp_doren_vorn"
+                },
+                {
+                    "approval": {
+                        "doren_ferrow": 7
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"Then walk out of the gate.\"",
+                    "next": "camp"
+                }
+            ]
+        }
+    }
+}

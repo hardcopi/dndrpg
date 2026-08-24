@@ -1,0 +1,11 @@
+{
+    "npc_key": "slip_sawyer",
+    "name": "A pit-sawyer",
+    "role": "Sawyer",
+    "sprite_key": "miner",
+    "is_ambient": true,
+    "dialog": "slip_sawyer",
+    "place": {
+        "location": "the_great_slip"
+    }
+}

@@ -151,6 +151,15 @@ class LocationEngine
 
         $firstVisit = $partyId ? $this->markVisited($partyId, $locationId) : false;
 
+        // Standing somewhere a generated quest wanted the party to stand is how
+        // that quest gets on. Asked on every look rather than only on a first
+        // visit: a party that found the third room before the second comes back
+        // for the second later, and that arrival is not a first visit.
+        // QuestService::arriveAt does nothing at all for authored quests.
+        if ($partyId) {
+            (new QuestService($this->db))->arriveAt($partyId, $locationId);
+        }
+
         return [
             'character' => $this->getCharacterPosition($characterId),
             'location'  => $this->locationPayload($location, $characterId, $partyId, $firstVisit),
@@ -233,7 +242,17 @@ class LocationEngine
             // no other module carries a key about a hole it has not got.
             'delve'        => (new DelveEngine($this->db))->status($characterId, $partyId),
             'inn_cost'     => $location['inn_cost'] !== null ? (int) $location['inn_cost'] : null,
-            'allow_camp'   => (bool) $location['allow_camp'],
+            // Sleeping and stopping for an hour are different permissions now,
+            // and both are answered here rather than worked out by the client
+            // from allow_camp — a room can be sleepable because its doors are
+            // braced, which is a fact about world state and not about the row.
+            'allow_camp'   => $this->canCampHere($characterId),
+            'allow_short_rest' => $this->canShortRestHere($characterId),
+            // How the room stands: doors, and how many are braced. The client
+            // shows it so a party can see how close they are to being able to
+            // sleep here.
+            'barricade'    => (new DoorEngine($this->db))
+                ->barricadeReport($partyId, (int) $location['id']),
             'job_board'    => (bool) ($location['has_job_board'] ?? 0),
         ];
     }
@@ -326,8 +345,18 @@ class LocationEngine
     private function npcsAt(int $locationId, int $characterId, ?int $partyId): array
     {
         $stmt = $this->db->prepare(
+            // `pose` rides along for the client's 3D room: a bargeman asleep
+            // over a table stands differently from one drinking at it, and the
+            // column already says which.
+            // `map_x`/`map_y` are where this person stands on the region chart,
+            // when somebody has said. Null means "with everyone else at the
+            // place marker", which is right for almost everyone: a chart shows
+            // a region, and only a location drawn large enough to have rooms in
+            // it has anywhere for a shopkeeper to be standing that is not just
+            // "here".
             'SELECT n.id, n.npc_key, n.name, n.role, n.description, n.image_url,
-                    n.sprite_key, n.is_ambient, n.is_merchant, n.is_quest_giver
+                    n.sprite_key, n.pose, n.is_ambient, n.is_merchant, n.is_quest_giver,
+                    n.map_x, n.map_y
                FROM npcs n
               WHERE n.location_id = ?
               ORDER BY n.is_ambient, n.id'
@@ -582,6 +611,10 @@ class LocationEngine
             if ($locked && DelveEngine::forceFlagOf($e['conditions_json']) !== null) {
                 $attempt = str_contains((string) $e['label'], 'portcullis') ? 'lift' : 'force';
             }
+            // A door with a lock in it can be picked instead of broken, by a
+            // party carrying tools. A portcullis cannot: there is no lock, it
+            // is a grate in a slot and the only argument is Strength.
+            $canPick = $attempt === 'force' && $this->partyHasThievesTools($partyId);
             $out[] = [
                 'id'             => $id,
                 'to_location_id' => $toId,
@@ -591,6 +624,7 @@ class LocationEngine
                 'label'          => $e['label'],
                 'locked'         => $locked,
                 'attempt'        => $attempt,
+                'can_pick'       => $canPick,
             ];
         }
         return $out;
@@ -988,6 +1022,19 @@ class LocationEngine
         $visited = $this->visitedIds($partyId);
         $found = $this->foundExitIds($partyId);
         $ctx = $partyId ? (new WorldState($this->db))->context($partyId, $characterId) : [];
+        // Every barricade this party has standing, read once. The walk graph
+        // touches every edge on the floor and asking per edge would be a query
+        // per door.
+        $barred = [];
+        if ($partyId) {
+            $rowsB = $this->db->prepare(
+                "SELECT flag_key FROM world_flags WHERE party_id = ? AND flag_key LIKE 'dg\\_barr\\_%'"
+            );
+            $rowsB->execute([$partyId]);
+            foreach ($rowsB->fetchAll(PDO::FETCH_COLUMN) as $k) {
+                $barred[(string) $k] = true;
+            }
+        }
 
         $out = [];
         foreach ($rows as $e) {
@@ -1002,6 +1049,15 @@ class LocationEngine
                 if ($conds !== null && !Requirements::pass($conds, $ctx)) {
                     continue;
                 }
+            }
+            // A door the party braced shut is not a way through until they
+            // take it down again. Gated with the locks rather than separately,
+            // because to the walk graph it is the same fact: this edge is not
+            // available. The doorway is barred from BOTH sides — a barricade
+            // does not know which side built it — so this drops the pair.
+            if (!($lift & self::GATES_LOCKED) && $partyId
+                && isset($barred[DoorEngine::barricadeFlag((int) $e['from_location_id'], $destId)])) {
+                continue;
             }
             $out[(int) $e['from_location_id']][] = $e;
         }
@@ -1073,14 +1129,39 @@ class LocationEngine
      * way; a lock is Athletics (technique counts for something) where a
      * portcullis is bare lifting (it does not).
      */
-    public function forceDoor(int $characterId, int $exitId): array
+    /**
+     * How hard a hidden way is to notice.
+     *
+     * Derived rather than stored: `location_exits` has no column for it, and
+     * adding one would want every authored secret door in the game revisited
+     * to fill it in. So a secret door on a generated floor is read off the
+     * depth it was cut at — deeper floors hide their doors better — and
+     * anything authored gets a flat, middling number.
+     *
+     * If a stored DC is ever wanted, this is the one place that decides, and
+     * the column can be read here without any caller changing.
+     */
+    private static function hiddenExitDc(array $exit): int
+    {
+        $flag = DelveEngine::forceFlagOf($exit['conditions_json'] ?? null);
+        if ($flag !== null && preg_match('/^dg_open__dg_\d+_(\d+)_c\d+$/', $flag, $m)) {
+            return 12 + (int) $m[1];
+        }
+        // An authored secret door. Findable by anyone who thinks to look and
+        // is not actively bad at looking.
+        return 13;
+    }
+
+    /**
+     * A way out of the room the character is standing in, by id.
+     *
+     * Shared by the two ways through a locked door. Scoped to the CURRENT
+     * location on purpose: an exit id lifted from somewhere else opens nothing,
+     * and that check belongs here rather than in each caller.
+     */
+    private function exitHereById(int $characterId, int $exitId): array
     {
         $char = $this->getFullCharacter($characterId);
-        $partyId = $this->partyIdForCharacter($characterId);
-        if (!$partyId) {
-            throw new InvalidArgumentException('Forcing a door is party work.');
-        }
-
         $stmt = $this->db->prepare(
             'SELECT id, label, conditions_json FROM location_exits
               WHERE id = ? AND from_location_id = ?'
@@ -1090,6 +1171,17 @@ class LocationEngine
         if (!$exit) {
             throw new InvalidArgumentException('No such way out of here.');
         }
+        return $exit;
+    }
+
+    public function forceDoor(int $characterId, int $exitId): array
+    {
+        $partyId = $this->partyIdForCharacter($characterId);
+        if (!$partyId) {
+            throw new InvalidArgumentException('Forcing a door is party work.');
+        }
+
+        $exit = $this->exitHereById($characterId, $exitId);
         $flag = DelveEngine::forceFlagOf($exit['conditions_json'] ?? null);
         if ($flag === null || !preg_match('/^dg_open__dg_\d+_(\d+)_c\d+$/', $flag, $m)) {
             throw new InvalidArgumentException('That door will not answer to force.');
@@ -1110,6 +1202,120 @@ class LocationEngine
             'ok'    => true,
             'verb'  => $lift ? 'lift' : 'force',
             'check' => (new CheckService($this->db))->request($partyId, $spec, $characterId),
+        ];
+    }
+
+    /**
+     * Does anybody in the party carry a set of picks?
+     *
+     * Party-wide rather than per-character: the check is made by whoever the
+     * check ceremony picks as leader, and a party does not hand the rogue's
+     * tools back and forth at the door. Rogues start with them (see
+     * CharacterGenerator) and until now nothing in the game ever read the
+     * item — it was inventory decoration.
+     */
+    private function partyHasThievesTools(?int $partyId): bool
+    {
+        if (!$partyId) {
+            return false;
+        }
+        $stmt = $this->db->prepare(
+            'SELECT 1
+               FROM character_inventory ci
+               JOIN items i ON i.id = ci.item_id
+               JOIN character_party cp ON cp.character_id = ci.character_id
+               JOIN characters c ON c.id = ci.character_id
+              WHERE cp.party_id = ? AND i.item_key = ?
+                AND ci.quantity > 0 AND c.is_active = 1
+              LIMIT 1'
+        );
+        $stmt->execute([$partyId, 'thieves_tools']);
+        return (bool) $stmt->fetchColumn();
+    }
+
+    /**
+     * Pick a lock: the quiet way through a door that would otherwise be broken.
+     *
+     * The same two-phase ceremony as forcing, and the same flag at the end of
+     * it — a door opened either way is open for good, from either side. What
+     * differs is the trade. Picking is harder (a lock is a lock, and the DC
+     * does not care how big you are) and asks Dexterity by way of Sleight of
+     * Hand, but a failure is SILENT: no bar dropped, no boot, nothing for the
+     * floor to hear. Forcing is easier and draws on the wandering pool when it
+     * goes wrong.
+     *
+     * That is the whole of the choice, and it is why the tools are worth
+     * carrying: not a better lockpick, a quieter one.
+     */
+    public function pickLock(int $characterId, int $exitId): array
+    {
+        $partyId = $this->partyIdForCharacter($characterId);
+        if (!$partyId) {
+            throw new InvalidArgumentException('Picking a lock is party work.');
+        }
+        $exit = $this->exitHereById($characterId, $exitId);
+
+        $flag = DelveEngine::forceFlagOf($exit['conditions_json'] ?? null);
+        if ($flag === null || !preg_match('/^dg_open__dg_\d+_(\d+)_c\d+$/', $flag, $m)) {
+            throw new InvalidArgumentException('That door has no lock to pick.');
+        }
+        if (str_contains((string) $exit['label'], 'portcullis')) {
+            throw new InvalidArgumentException('A portcullis has no lock. It has a slot, and a great deal of weight.');
+        }
+        $world = new WorldState($this->db);
+        if ($world->isSet($partyId, $flag)) {
+            throw new InvalidArgumentException('It is already open.');
+        }
+        if (!$this->partyHasThievesTools($partyId)) {
+            throw new InvalidArgumentException('Nobody here is carrying tools for it.');
+        }
+
+        $depth = (int) $m[1];
+
+        return [
+            'ok'    => true,
+            'verb'  => 'pick',
+            'check' => (new CheckService($this->db))->request($partyId, [
+                // Two harder than forcing the same door. A lock is indifferent
+                // to how the party is built; the reward for tools is silence,
+                // not an easier number.
+                'skill'   => 'sleight_of_hand',
+                'dc'      => 12 + $depth,
+                'context' => ['door' => $flag, 'exit_id' => (int) $exit['id']],
+            ], $characterId),
+        ];
+    }
+
+    /**
+     * Phase two of picking: the die lands, quietly either way.
+     *
+     * Deliberately does not mirror forceDoorResolve's noise. A failed pick
+     * costs the attempt and nothing else — which sounds generous until you
+     * notice the DC, and that a party without tools has no access to it at all.
+     */
+    public function pickLockResolve(int $characterId, string $checkId, array $boosts): array
+    {
+        $partyId = $this->partyIdForCharacter($characterId);
+        $result = (new CheckService($this->db))->resolve($checkId, $boosts);
+
+        $flag = (string) ($result['context']['door'] ?? '');
+        if (!str_starts_with($flag, 'dg_open_') || (int) ($result['party_id'] ?? 0) !== (int) $partyId) {
+            throw new InvalidArgumentException('That check opens no door of yours.');
+        }
+
+        $opened = in_array($result['outcome'], ['success', 'critical'], true);
+        if ($opened) {
+            (new WorldState($this->db))->set($partyId, $flag);
+        }
+
+        return [
+            'ok'       => true,
+            'opened'   => $opened,
+            'result'   => $result,
+            'events'   => [],
+            'messages' => [$opened
+                ? 'The last pin gives without a sound. The way is open — and will stay open.'
+                : 'The picks slip, and the lock holds. Nobody heard it but you.'],
         ];
     }
 
@@ -1254,6 +1460,34 @@ class LocationEngine
         }
         $victim = $victims[random_int(0, count($victims) - 1)];
 
+        $world->set($partyId, $flag, 'sprung');
+
+        return [
+            'event'    => $this->fireTrapOn($partyId, $trap, $victim),
+            'messages' => [],
+        ];
+    }
+
+    /**
+     * A trap going off on somebody, wherever it was set off from.
+     *
+     * Walking into one is not the only way to spring it — a disarm that goes
+     * badly wrong sets it off on the hands doing the work (DoorEngine), and
+     * that has to be the same trap doing the same damage, not a second
+     * implementation that drifts. So the save, the halving, the floor at one
+     * hit point and the shape of the event all live here, and the callers
+     * decide only WHO and WHEN.
+     *
+     * The floor at 1 HP is deliberate and predates this: a trap in a corridor
+     * maims, it does not kill outright, because dying to a floor tile you had
+     * no way to see is not a death anybody learns anything from.
+     *
+     * @param array $trap  the spec: save, dc, damage, name, text
+     * @param array $victim a character row — needs id, name, current_hp
+     * @return array the `trap` event the client animates
+     */
+    public function fireTrapOn(int $partyId, array $trap, array $victim): array
+    {
         $save = Rules::savingThrow($victim, (string) $trap['save']);
         $die = random_int(1, 20);
         $total = $die + (int) $save['total'];
@@ -1267,24 +1501,19 @@ class LocationEngine
         $this->db->prepare('UPDATE characters SET current_hp = ? WHERE id = ?')
             ->execute([$newHp, (int) $victim['id']]);
 
-        $world->set($partyId, $flag, 'sprung');
-
         return [
-            'event' => [
-                'type'   => 'trap',
-                'name'   => (string) $trap['name'],
-                'text'   => (string) $trap['text'],
-                'victim' => (string) $victim['name'],
-                'save'   => [
-                    'ability' => (string) $trap['save'],
-                    'dc'      => $dc,
-                    'die'     => $die,
-                    'total'   => $total,
-                    'success' => $saved,
-                ],
-                'damage' => $dealt,
+            'type'   => 'trap',
+            'name'   => (string) $trap['name'],
+            'text'   => (string) $trap['text'],
+            'victim' => (string) $victim['name'],
+            'save'   => [
+                'ability' => (string) $trap['save'],
+                'dc'      => $dc,
+                'die'     => $die,
+                'total'   => $total,
+                'success' => $saved,
             ],
-            'messages' => [],
+            'damage' => $dealt,
         ];
     }
 
@@ -1358,18 +1587,42 @@ class LocationEngine
 
         $messages = [];
 
-        // Reveal hidden exits from here.
+        // The die for this search. ONE roll, spent against everything there is
+        // to find here.
+        //
+        // Searching used to be free: every hidden way and every unmet trap
+        // gave itself up the moment the button was pressed, so the action had
+        // no failure state and nothing to weigh. It rolls now — Investigation,
+        // actively, because the party has stopped to look. (The passive check
+        // on the way in is the other half of the pair, and stays passive: you
+        // do not get to roll well for walking past something.)
+        //
+        // Rolled once rather than per-thing so a room cannot be farmed by
+        // pressing the button until the dice cooperate: a search that fails
+        // here fails for all of it, and the party has to come back — which is
+        // what makes a second look cost something.
+        $look = Rules::skillCheck($char, 'investigation');
+        $roll = random_int(1, 20);
+        $total = $roll + (int) $look['total'];
+        $messages[] = "You search the place. Investigation — {$roll} + " . (int) $look['total'] . " = {$total}.";
+
+        // Reveal hidden exits the roll is good enough for.
         $hidden = $this->db->prepare(
-            'SELECT e.id, e.label FROM location_exits e
+            'SELECT e.id, e.label, e.conditions_json FROM location_exits e
               WHERE e.from_location_id = ? AND e.is_hidden = 1'
         );
         $hidden->execute([$locationId]);
         $foundNew = [];
+        $missed = 0;
         if ($partyId) {
             $mark = $this->db->prepare(
                 'INSERT IGNORE INTO party_exits_found (party_id, exit_id) VALUES (?, ?)'
             );
             foreach ($hidden->fetchAll() as $e) {
+                if ($total < self::hiddenExitDc($e)) {
+                    $missed++;
+                    continue;
+                }
                 $mark->execute([$partyId, (int) $e['id']]);
                 if ($mark->rowCount() > 0) {
                     $foundNew[] = $e['label'];
@@ -1378,6 +1631,14 @@ class LocationEngine
         }
         foreach ($foundNew as $label) {
             $messages[] = "You find a way you had not noticed: {$label}.";
+        }
+        if ($missed > 0) {
+            // Said out loud, because "nothing here" and "something here you
+            // did not find" are different facts and a player is entitled to
+            // know which one they are looking at.
+            $messages[] = $missed === 1
+                ? 'Something about this room does not add up, and you cannot say what.'
+                : 'More than one thing about this room does not add up.';
         }
 
         // A trap underfoot that nobody has met yet. Rare to reach — the
@@ -1393,8 +1654,16 @@ class LocationEngine
                 $world = new WorldState($this->db);
                 $flag = DelveEngine::trapFlag((string) $row['location_key']);
                 if (!$world->isSet($partyId, $flag)) {
-                    $world->set($partyId, $flag, 'found');
-                    $messages[] = $trap['found_text'] ?? "You find it before it finds you: {$trap['name']}.";
+                    // Against the trap's own DC — the same number the passive
+                    // look on the way in was measured against, so stopping to
+                    // search is strictly better than walking through, without
+                    // being a guarantee.
+                    if ($total >= (int) $trap['dc']) {
+                        $world->set($partyId, $flag, 'found');
+                        $messages[] = $trap['found_text'] ?? "You find it before it finds you: {$trap['name']}.";
+                    } else {
+                        $messages[] = 'The floor and the frame look honest enough. You are fairly sure.';
+                    }
                 }
             }
         }
@@ -1404,8 +1673,10 @@ class LocationEngine
             $messages[] = "There is something here worth taking: {$it['name']}.";
         }
 
-        if (!$messages) {
-            $messages[] = 'You search the area and find nothing you had not already seen.';
+        // The roll line is always there now, so "nothing" is the case where
+        // it is the ONLY thing there.
+        if (count($messages) === 1) {
+            $messages[] = 'Nothing here you had not already seen.';
         }
 
         return [
@@ -1502,8 +1773,8 @@ class LocationEngine
         if (!$partyId) {
             throw new InvalidArgumentException('Nobody here to rest.');
         }
-        if (!$this->canCampHere($characterId)) {
-            throw new InvalidArgumentException('There is nowhere safe to stop here.');
+        if (!$this->canShortRestHere($characterId)) {
+            throw new InvalidArgumentException('There is nowhere here to get your back to a wall.');
         }
 
         $world = new WorldState($this->db);
@@ -1715,12 +1986,50 @@ class LocationEngine
         return $this->longRest($characterId, (int) $loc['inn_cost'], 'inn');
     }
 
-    /** Whether the party may camp where it stands. */
+    /**
+     * Whether the party may sleep where it stands.
+     *
+     * Three ways to earn it. A place authored as safe, a bed paid for, or a
+     * room whose every door the party has braced shut — see DoorEngine. The
+     * third is the only one a delve offers that is not simply given: the floor
+     * marks empty rooms camp-safe and nothing else, on the argument that a
+     * long rest in the room you just cleared would make the whole descent
+     * free. Barricading is what stops it being free.
+     */
     public function canCampHere(int $characterId): bool
     {
         $char = $this->getFullCharacter($characterId);
         $loc = $this->getLocation((int) $char['current_location_id']);
-        return (bool) $loc['allow_camp'] || $loc['inn_cost'] !== null;
+        if ((bool) $loc['allow_camp'] || $loc['inn_cost'] !== null) {
+            return true;
+        }
+        $partyId = $this->partyIdForCharacter($characterId);
+        return (new DoorEngine($this->db))
+            ->barricadeReport($partyId, (int) $char['current_location_id'])['sealed'];
+    }
+
+    /**
+     * Whether the party may stop for an hour where it stands.
+     *
+     * Looser than sleeping, deliberately. Anywhere you could camp, plus any
+     * ROOM on a delve floor — you can get your back to a wall and pass the
+     * waterskin round in a chamber you have just fought through without that
+     * being the same claim as bedding down in it. Passages are still no: this
+     * is about having a room, not about having a minute.
+     *
+     * The hit dice are what keep it honest, and they always did — one die per
+     * character per rest, capped at their level and only given back by a long
+     * one. A party that short rests its way down a floor arrives at the bottom
+     * with nothing left to spend.
+     */
+    public function canShortRestHere(int $characterId): bool
+    {
+        if ($this->canCampHere($characterId)) {
+            return true;
+        }
+        $char = $this->getFullCharacter($characterId);
+        $loc = $this->getLocation((int) $char['current_location_id']);
+        return (bool) preg_match('/^_dg_\d+_\d+_r\d+$/', (string) ($loc['location_key'] ?? ''));
     }
 
     public function healPartial(int $characterId): array

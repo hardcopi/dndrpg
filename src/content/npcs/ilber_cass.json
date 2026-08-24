@@ -1,0 +1,45 @@
+{
+    "npc_key": "ilber_cass",
+    "name": "Ilber Cass",
+    "role": "Chandler and moneylender",
+    "description": "Sells a captain everything he needs to leave the quay, on credit, and sells the credit onward to somebody less pleasant before the month is out. He tells you that first, every time, and believes it makes him honest. He has been buying grain by the Counting Boom's weight for six years and has begun to suspect what that has cost him.",
+    "sprite_key": "merchant",
+    "is_merchant": true,
+    "is_quest_giver": true,
+    "dialog": "ilber_cass",
+    "shop": [
+        {
+            "item": "potion_healing",
+            "stock": 3,
+            "markup_pct": 115
+        },
+        {
+            "item": "oilskin_hood",
+            "stock": 2
+        },
+        {
+            "item": "leather_armor",
+            "stock": 2
+        },
+        {
+            "item": "shortsword",
+            "stock": 2
+        },
+        {
+            "item": "light_crossbow",
+            "stock": 1,
+            "markup_pct": 110
+        },
+        {
+            "item": "deepworks_lamp",
+            "stock": 2
+        },
+        {
+            "item": "fen_waders",
+            "stock": 2
+        }
+    ],
+    "place": {
+        "location": "ilbers_chandlery"
+    }
+}

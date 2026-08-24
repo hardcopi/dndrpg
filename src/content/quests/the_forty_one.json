@@ -1,0 +1,69 @@
+{
+    "quest_key": "the_forty_one",
+    "title": "The Forty-One",
+    "act": 2,
+    "description": "Aske Vorn came south with sixty people and arrived with forty-one. Two of the names she wrote off on the road are walking about in Waerhaven, and she watched both of them die.",
+    "giver": "aske_vorn",
+    "on_job_board": false,
+    "required_level": 3,
+    "rewards": {
+        "xp": 450,
+        "gold": 60,
+        "item": "grey_road_cloak"
+    },
+    "stages": {
+        "the_list": {
+            "title": "The list",
+            "objective": "Get Aske Vorn to show you what she has been carrying.",
+            "journal": "Sixty names, forty-one ticked, and nineteen with the same mark against them nineteen times. She has never shown it to anybody in four years.",
+            "target": {
+                "location": "the_grey_hall"
+            }
+        },
+        "the_two_names": {
+            "title": "Two who should not be here",
+            "objective": "Find the two names that are in Waerhaven.",
+            "journal": "Two of the nineteen are on the city's own rolls: one in the Tar Gaol, held for existing, and one in the long room at the lazar house who came south later than everyone and further.",
+            "target": {
+                "location": "the_lazar_house"
+            }
+        },
+        "the_gaol": {
+            "title": "The one in the gaol",
+            "objective": "Get to the second name before the Houses move him.",
+            "journal": "Held by the Tarrow Houses on an authority nobody has ever produced, in a room he can see the oakum shed from. He answers to the name. He answers to it in the wrong accent.",
+            "target": {
+                "location": "the_tar_gaol"
+            }
+        },
+        "named": {
+            "title": "Named out loud",
+            "terminal": true,
+            "resolution": "named",
+            "outcome": "success",
+            "journal": "We read the nineteen out at the Chapel of the Grey Road, by village, in the order they were lost, and Aske Vorn stood up and said what happened to each of them in front of forty people who had been waiting four years to be told. Two of them are here and they are not what she wrote down, and she said that out loud too, which is the part I did not expect.",
+            "effects": [
+                {
+                    "set_flag": "forty_one_fate",
+                    "value": "named"
+                },
+                {
+                    "xp": 180
+                }
+            ]
+        },
+        "buried": {
+            "title": "Left unsaid",
+            "terminal": true,
+            "resolution": "buried",
+            "outcome": "success",
+            "journal": "The list went in the stove at the Grey Hall and the two names went out of Waerhaven the same night, on a cart, south, with money. Nobody in the Wardenswatch will ever be told, which is what Vorn asked for, and she thanked me, and she has not looked at me properly since.",
+            "effects": [
+                {
+                    "set_flag": "forty_one_fate",
+                    "value": "buried"
+                }
+            ]
+        }
+    }
+}

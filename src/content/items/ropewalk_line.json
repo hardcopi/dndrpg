@@ -1,0 +1,13 @@
+{
+  "item_key": "ropewalk_line",
+  "name": "Ropewalk Line",
+  "description": "Fifty feet of three-strand hemp laid in the Ropehouse, which is to say laid properly: even, dry, and softer in the hand than rope has any business being. Waerhaven's one genuinely famous export, and the only thing the Moot has never once been accused of shorting anybody on.",
+  "item_type": "misc",
+  "rarity": "common",
+  "weight": 8,
+  "value_gp": 12,
+  "properties": {
+    "climb_advantage": true
+  },
+  "icon": "misc"
+}

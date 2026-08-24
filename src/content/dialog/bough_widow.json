@@ -1,0 +1,92 @@
+{
+    "npc_key": "bough_widow",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "flag": "forty_one_fate",
+                        "equals": "named"
+                    }
+                ],
+                "text": "\"She said them,\" the woman says. \"All nineteen. By the village.\" She holds her cup in both hands and does not drink out of it. \"Mine was eleventh. I have been four years not knowing whether to keep a place at the table and now I know, and I would like to tell you that knowing is better. It is. It is just not what I would call better.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "forty_one_fate",
+                        "equals": "buried"
+                    }
+                ],
+                "text": "\"The Warden burned something in the stove,\" the woman says, \"and would not say what, and would not look at anyone for a week.\" She turns her cup round. \"We are none of us stupid out here. We came eighty-five miles. You do not do that and then fail to notice a thing like that.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "pool": "idle",
+                "conditions": [
+                    {
+                        "flag": "met_vorn"
+                    }
+                ],
+                "text": "\"Ask anybody in this room why they left,\" the woman says, \"and watch what the room does. Go on. It is not rude. We would rather you did it than went on wondering.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "pool": "idle",
+                "conditions": [
+                    {
+                        "flag": "met_vorn"
+                    }
+                ],
+                "text": "\"The beer is bad,\" she says, with enormous dignity. \"It is bad because it is made properly, out of the wrong grain, by somebody who will not be told. You would not understand and I am not going to explain it.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "pool": "idle",
+                "conditions": [
+                    {
+                        "flag": "met_vorn"
+                    }
+                ],
+                "text": "Everybody at the long table is facing the door, in a room with only one door, and not one of them appears to have noticed that this is what they are doing.",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "A woman at the end of the bench makes room for you without being asked, which is the first time anybody in Waerhaven has done that.\n\n\"You are not Watch,\" she says. It is not a question. \"Sit down, then. It is bad beer and it is ours.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

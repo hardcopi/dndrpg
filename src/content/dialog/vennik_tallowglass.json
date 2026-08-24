@@ -1,0 +1,385 @@
+{
+    "npc_key": "vennik_tallowglass",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "flag": "granary_fate",
+                        "equals": "reported"
+                    }
+                ],
+                "text": "The sealed packet for Lathmere has gone off the counter. Vennik Tallowglass is polishing a lens with enormous concentration and has been for some time.\n\n\"It went under my seal,\" he says. \"Nine years I have sent them everything and left out nothing that mattered, and the one report I have ever been proud of is the one that ends my posting.\"\n\nHe holds the lens up.\n\n\"They will recall me. Not for the report — for the eleven months before it, when I sent them cheerful nothings about a granary I had not asked to see. They will be quite right to.\"",
+                "choices": [
+                    {
+                        "label": "\"You could have sent it eleven months ago.\"",
+                        "next": "the_omissions"
+                    },
+                    {
+                        "label": "\"Show me what you sell.\"",
+                        "effects": [
+                            {
+                                "open_shop": "vennik_tallowglass"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "granary_fate",
+                        "equals": "broken"
+                    }
+                ],
+                "text": "Vennik is standing at the window with his hands behind his back, watching Highstrand not do anything about what happened on the quay.\n\n\"I have written it four times,\" he says. \"Four drafts. Every one of them is accurate and every one of them ends with Lathmere sending soldiers up a road that is fifty-five miles long in the winter.\"\n\nHe turns round.\n\n\"So I am now a League officer sitting on a fact. Which is a thing I have been telling myself for two years that I would never be, in the specific sense that I have been it for two years.\"",
+                "choices": [
+                    {
+                        "label": "\"Then do not send it.\"",
+                        "next": "the_omissions"
+                    },
+                    {
+                        "label": "\"Show me what you sell.\"",
+                        "effects": [
+                            {
+                                "open_shop": "vennik_tallowglass"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Leave him.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "granary_fate",
+                        "equals": "filled"
+                    }
+                ],
+                "text": "\"Twenty weeks,\" says Vennik, \"in the bays, countable, by a man with a rule.\"\n\nHe adjusts something on the little beam under its dome.\n\n\"And my quarterly return to Lathmere for the first time in eleven months says a true thing without my having to arrange the sentence. You have no idea what a relief that is. I have been writing accurate reports about the wrong subjects since spring.\"",
+                "choices": [
+                    {
+                        "label": "\"Show me what you sell.\"",
+                        "effects": [
+                            {
+                                "open_shop": "vennik_tallowglass"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "box_opened"
+                    }
+                ],
+                "text": "Vennik has the glass dome off the little beam and is standing beside it with his hands folded, waiting, which he has clearly been doing for some time.\n\n\"You have got it,\" he says. \"Do not tell me, I can see the way you are carrying that bag. Put it on. Please put it on, I have been thinking about nothing else since you left.\"",
+                "choices": [
+                    {
+                        "label": "Put the League's weight on the beam.",
+                        "next": "the_weighing"
+                    },
+                    {
+                        "label": "\"Not yet.\"",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "met_vennik"
+                    }
+                ],
+                "text": "\"Back,\" says Vennik, over a lens. \"You will want the third element. Everybody wants the third element and nobody knows they do.\"",
+                "choices": [
+                    {
+                        "label": "\"Show me what you sell.\"",
+                        "effects": [
+                            {
+                                "open_shop": "vennik_tallowglass"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "\"Tell me about the packet on your counter.\"",
+                        "next": "the_packet"
+                    },
+                    {
+                        "label": "\"You report to Lathmere.\"",
+                        "next": "the_reporting"
+                    },
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "Glasses, compasses, dividers, and on the counter under a glass dome a beam-scale small enough to weigh a letter.\n\nThe gnome behind it breathes on a lens, holds it up, and finds a fault in it you cannot see.\n\n\"Vennik Tallowglass, of Lathmere,\" he says. \"Nine years on this rock. I sell instruments to men who navigate by smell and I will sell you one too, and you will use it twice and then put it in a drawer, and I have made my peace with that.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_vennik"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "\"Show me what you sell.\"",
+                        "effects": [
+                            {
+                                "open_shop": "vennik_tallowglass"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "\"That beam under the dome.\"",
+                        "next": "the_dome"
+                    },
+                    {
+                        "label": "\"You are League, then.\"",
+                        "next": "the_reporting"
+                    },
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_dome": {
+            "text": "\"That,\" says Vennik, with real pleasure, \"is the most accurate beam north of Lathmere and probably north of Thrailgate, and there is nothing clever about it whatsoever.\"\n\n\"It is a beam. The knife edges are agate. It lives under a dome because a beam that will read a letter will also read the draught from a door, and the draught from a door is what everybody else's beam is actually measuring.\"\n\nHe taps the glass.\n\n\"Put a thing on that and there is no argument to be had. That is not a boast. It is the opposite of a boast. It is the whole reason nobody in this city has ever asked me to weigh anything.\"",
+            "choices": [
+                {
+                    "label": "\"Nobody?\"",
+                    "next": "nobody_asks"
+                },
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "nobody_asks": {
+            "text": "\"Nine years,\" Vennik says. \"Not the Moot, not the Watch, not the Counting Boom, not the Factor. I have the only instrument on this promontory that settles a question and I have never once been asked to settle one.\"\n\nHe puts the lens down.\n\n\"I used to think that was because they did not know. I have stopped thinking that.\"",
+            "choices": [
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "the_reporting": [
+            {
+                "conditions": [
+                    {
+                        "flag": "granary_lie_known"
+                    }
+                ],
+                "text": "\"You know what is in that granary,\" says Vennik. He says it flatly, as a fact he has checked.\n\n\"So do I. I have known since the spring. I have sent Lathmere eleven perfectly accurate reports about pitch prices, mast counts, the Sawyers' Hall vote and the price of a bed at the Sounding Line, and not one word about the only building in this city that matters.\"\n\nHe sets down the lens.\n\n\"That is not an omission. Nine years of my professional life have been about the difference between an omission and a lie, and I lost the argument with myself about that particular distinction in about April.\"",
+                "choices": [
+                    {
+                        "label": "\"Why?\"",
+                        "next": "the_omissions"
+                    },
+                    {
+                        "label": "\"You could ruin Culm tomorrow.\"",
+                        "next": "about_culm"
+                    },
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ]
+            },
+            {
+                "text": "\"I am,\" Vennik agrees, without the smallest hesitation. \"Everybody in this city knows it and about half of them think it is a secret.\"\n\n\"I sell instruments and I write to Lathmere. Prices, hulls, tempers, who is speaking to whom. It is not spying so much as bookkeeping with opinions in it. Halvia Corr has one in every chartered city and we all know each other's names.\"\n\nHe smiles slightly.\n\n\"The useful thing about being an open secret is that people stop performing for you after about the second year. You cannot imagine what they say in front of me now.\"",
+                "choices": [
+                    {
+                        "label": "\"And what have you not been telling them?\"",
+                        "next": "the_packet"
+                    },
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ]
+            }
+        ],
+        "the_packet": {
+            "text": "Vennik looks at the sealed packet on the counter, which has been there long enough to have dust on it.\n\n\"That is the spring return,\" he says. \"It has been sealed since the first of the month and the courier goes Thursdays.\"\n\nHe turns it round so the seal faces up.\n\n\"It has caught four Thursdays.\"",
+            "choices": [
+                {
+                    "label": "\"Why?\"",
+                    "next": "the_omissions"
+                },
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "the_omissions": {
+            "text": "\"Because I have grown fond of the place,\" Vennik says, \"and that is a hanging matter dressed up as a sentiment.\"\n\nHe comes round the counter, which he does not do.\n\n\"I came here to count things for a woman in Lathmere who has never seen this promontory and never will. And for nine years I have watched a city that has no river, no road north, and no business existing, build the best ships on this Mere out of timber it drags in on oxen, and feed nineteen hundred people it is forbidden to feed, and do all of it by means of an arrangement that would not survive being written down.\"\n\n\"Every accurate sentence I send about it kills a piece of it. Every single one. And they are all accurate. That is what nobody warns you about.\"",
+            "choices": [
+                {
+                    "label": "\"Then stop sending them.\"",
+                    "next": "cannot_stop"
+                },
+                {
+                    "label": "\"You will be recalled.\"",
+                    "next": "cannot_stop"
+                },
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "cannot_stop": {
+            "text": "\"I cannot stop,\" Vennik says, \"because a silence from Waerhaven is itself a report, and a considerably more interesting one.\"\n\nHe goes back behind the counter and picks the lens up again, and his hands are steady, which is somehow the worst part.\n\n\"So I write. I write true things about small matters, punctually, in a good hand, and I leave a hole in the middle of the page in the shape of a granary, and one day somebody in Lathmere with more patience than the last one will put four of my returns side by side and see the hole.\"\n\n\"And then it will not be Culm they come for. It will be both of us, and Culm will not even have known I was in it.\"",
+            "choices": [
+                {
+                    "label": "\"Then be the one who sends it.\"",
+                    "next": "about_culm"
+                },
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "about_culm": [
+            {
+                "conditions": [
+                    {
+                        "flag": "culm_broken"
+                    }
+                ],
+                "text": "\"He is finished,\" Vennik says. \"He was finished the day he wrote the first one and he has been walking about being finished ever since, which is a thing I have watched a man do for eleven months and would not recommend.\"",
+                "choices": [
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ]
+            },
+            {
+                "text": "\"Bevis Culm,\" says Vennik, \"is the only genuinely honest man in Highstrand and he has told the largest lie in the Ythan League, and both of those are true and I have stopped trying to make them agree.\"\n\n\"He inherited a shortfall. He covered it, once, for a quarter, because the barges would have stopped and it was February. And then it was a lie he had told, and a lie you have told is a thing you have to keep telling, and he is not a man with any talent for the second part.\"\n\nHe looks at the sealed packet.\n\n\"If I send what I know, they will recall him in disgrace and appoint somebody who will not care, and the barges will stop while the audit runs, and the audit will take a season, and the season is winter.\"\n\n\"I have done that arithmetic eleven times and it comes out the same way every time, and I do not like being a man whose conscience keeps producing convenient answers.\"",
+                "choices": [
+                    {
+                        "label": "\"Then check the arithmetic with somebody else.\"",
+                        "next": "the_offer"
+                    },
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ]
+            }
+        ],
+        "the_offer": {
+            "text": "Vennik looks at you for rather a long time for a gnome who is normally halfway through a sentence before you have finished yours.\n\n\"Yes,\" he says. \"All right. Yes.\"\n\n\"Here is what I have that nobody else in this city has. A beam that ends arguments. A seal that Lathmere opens without question. And nine years of returns that will show, to anybody who reads them in order, exactly when everything started going wrong.\"\n\nHe puts his hand on the glass dome.\n\n\"All three are yours if you bring me something worth putting under them. And I would rather it were you than me, and I am aware of precisely what kind of man that makes me.\"",
+            "on_enter": [
+                {
+                    "set_flag": "vennik_offer"
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"I will bring you something.\"",
+                    "end": true
+                }
+            ]
+        },
+        "the_weighing": {
+            "text": "He does it properly, which takes four minutes and is unbearable.\n\nThe dome off. The beam released, checked empty, arrested, released again. His own reference set on, read, taken off. Then the League's standard weight, fourteen pounds of bronze with the Mere and the League's arms and a date on it, lowered onto the pan with both hands.\n\nThe pointer swings, and settles, and does not come back.\n\nVennik reads it. Then he reads it again. Then he turns the League's weight over and looks at the underside, where the stamp is, and where the file marks are, and he goes a colour you have not seen on him.\n\n\"Four ounces,\" he says. \"Four ounces and a hair, and the hair is because somebody stopped filing when they got frightened.\"",
+            "on_enter": [
+                {
+                    "set_flag": "weight_fate",
+                    "value": "proved"
+                },
+                {
+                    "quest_stage": {
+                        "quest": "the_short_weight",
+                        "stage": "proved"
+                    }
+                },
+                {
+                    "give_item": "league_standard_weight",
+                    "quantity": 1
+                },
+                {
+                    "xp": 200
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"What does that mean, in grain?\"",
+                    "next": "in_grain"
+                },
+                {
+                    "label": "\"Who could have done it?\"",
+                    "next": "who_filed_it"
+                }
+            ]
+        },
+        "in_grain": {
+            "text": "Vennik does not need paper for it, which is the frightening part.\n\n\"Four ounces in the hundredweight,\" he says. \"On grain alone, at what this city receives in a year, over six years.\"\n\nHe stops.\n\n\"Nine weeks,\" he says. \"Nine weeks of bread for twenty-six thousand people. It is not in anybody's cellar. It never came off the barges at all. Lathmere shipped what Lathmere was paid for and Waerhaven signed for more than it received, every quarter, for six years, in a document I have countersigned eleven times.\"\n\nHe sits down on his own stool.\n\n\"The granary is not short because somebody stole from it. The granary is short because this city has been buying air.\"",
+            "on_enter": [
+                {
+                    "set_flag": "granary_lie_known"
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"Who filed it?\"",
+                    "next": "who_filed_it"
+                },
+                {
+                    "label": "\"Then take it to Lathmere.\"",
+                    "next": "the_report_offer"
+                }
+            ]
+        },
+        "who_filed_it": {
+            "text": "\"Somebody with a key, six years ago,\" says Vennik. \"And the Factor before Culm was recalled to Lathmere six years ago with a commendation and a house in the Silver Quarter, and I am now going to stop talking, because the next sentence is one I can be hanged for and I have not decided yet whether I am going to say it.\"\n\nHe puts the dome back over the beam.\n\n\"It was not stolen for Waerhaven. That is the part I want you to hold on to. Every ounce of it went south.\"",
+            "choices": [
+                {
+                    "label": "\"Then send it south.\"",
+                    "next": "the_report_offer"
+                },
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "the_report_offer": {
+            "text": "\"I can,\" Vennik says. \"Under my seal, with the beam reading attached and nine years of returns behind it, and Halvia Corr will open it herself because they all open mine themselves.\"\n\n\"And the moment she does, the barges stop while an audit runs.\"\n\nHe looks up at you.\n\n\"So it is not mine to send. It never was. I have got the seal and you have got the weight, and I am going to sit in this shop and grind lenses until you tell me what this city is going to do, and I have never in nine years been so relieved to be the second most useful person in a room.\"",
+            "on_enter": [
+                {
+                    "set_flag": "vennik_offer"
+                }
+            ],
+            "choices": [
+                {
+                    "label": "Take the weight and go.",
+                    "end": true
+                }
+            ]
+        }
+    }
+}

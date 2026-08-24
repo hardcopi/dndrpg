@@ -307,7 +307,14 @@ class Paperdoll
     }
 
     /** A transparent truecolour canvas that will composite rather than flatten. */
-    private static function prepare($im): void
+    /**
+     * A canvas that keeps its transparency.
+     *
+     * Public because ModelPortrait bakes into the same namespace and a portrait
+     * cropped by one rule and a portrait cropped by another sit side by side in
+     * the party rail, where the difference is exactly what you notice.
+     */
+    public static function prepare($im): void
     {
         imagesavealpha($im, true);
         imagealphablending($im, false);
@@ -322,7 +329,7 @@ class Paperdoll
      * threshold mode is unreliable on alpha, so the bounding box is walked here
      * where the rule is visible.
      */
-    private static function trim($im)
+    public static function trim($im)
     {
         $w = imagesx($im);
         $h = imagesy($im);
@@ -359,7 +366,7 @@ class Paperdoll
     }
 
     /** Scale so the long edge is at most $cap, preserving aspect. */
-    private static function fit($im, int $cap)
+    public static function fit($im, int $cap)
     {
         $w = imagesx($im);
         $h = imagesy($im);

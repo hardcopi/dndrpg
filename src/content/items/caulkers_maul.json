@@ -1,0 +1,17 @@
+{
+  "item_key": "caulkers_maul",
+  "name": "Caulker's Maul",
+  "description": "A shipwright's beetle rehafted for a fight: two-handed, elm-headed, iron-banded at both ends, and heavy in a way that stops mattering after the first swing and starts mattering a great deal after the tenth.",
+  "item_type": "weapon",
+  "rarity": "common",
+  "weight": 10,
+  "value_gp": 10,
+  "damage_dice": "2d6",
+  "damage_type": "bludgeoning",
+  "properties": {
+    "two_handed": true,
+    "heavy": true,
+    "martial": true
+  },
+  "icon": "mace"
+}

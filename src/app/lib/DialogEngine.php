@@ -53,6 +53,28 @@ class DialogEngine
     {
         $npc = $this->npc($npcKey);
         $tree = $npc['dialogue'];
+
+        // Somebody with no dialogue at all is not a broken conversation, it is
+        // a person who does not have one — the children in the market square,
+        // for instance, are scenery you can walk up to. That is a fact about
+        // the NPC, so it is answered rather than thrown: an empty tree returns
+        // no node, and the client says so in the log.
+        //
+        // The throw below still stands for the different case, where a tree
+        // exists but no variant of the requested node matches. That one really
+        // is content edited past the loader and worth shouting about.
+        if (!$tree) {
+            // Shaped as a node because the route hands whatever this returns
+            // straight back under `node`; `silent` is the flag the client tests.
+            return [
+                'silent'   => true,
+                'npc_key'  => $npcKey,
+                'name'     => (string) ($npc['name'] ?? ''),
+                'text'     => '',
+                'choices'  => [],
+            ];
+        }
+
         $nodeKey ??= (string) ($tree['start'] ?? 'start');
 
         $ctx = $this->world->context($partyId, session_character_id());

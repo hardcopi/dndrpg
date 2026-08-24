@@ -1,0 +1,12 @@
+{
+    "npc_key": "gedda_halloway",
+    "name": "Master Shipwright Gedda Halloway",
+    "role": "Master of the Shipwrights' Moot",
+    "description": "Sixties, deaf in one ear from a lifetime of caulking hammers, and reads people faster than she reads plans, which is saying something. She can stop the Ythan League's fleet by folding her arms and everybody knows it and nobody has said it out loud. She has quietly concluded that the League cannot be relied on, and is deciding what to do about it.",
+    "sprite_key": "captain",
+    "is_quest_giver": true,
+    "dialog": "gedda_halloway",
+    "place": {
+        "location": "shipwrights_moot"
+    }
+}

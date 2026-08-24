@@ -1,0 +1,13 @@
+{
+  "name": "rivermark-mapgen",
+  "private": true,
+  "type": "module",
+  "description": "Vendored dungeon generator behind one HTTP route. See src/server.mjs.",
+  "scripts": {
+    "build": "esbuild src/server.mjs --bundle --platform=node --format=esm --target=node22 --outfile=server.js",
+    "start": "node server.js"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0"
+  }
+}

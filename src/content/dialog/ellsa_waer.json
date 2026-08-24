@@ -1,0 +1,375 @@
+{
+    "npc_key": "ellsa_waer",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "flag": "granary_fate",
+                        "equals": "broken"
+                    }
+                ],
+                "expression": 3,
+                "text": "The Fish Hall is fuller than it has been in ninety years and Ellsa Waer is sitting in the middle of it on the same stool she has sat on since before the charter, with the ration written up on the post by the door in a child's handwriting.\n\n\"Do not congratulate me,\" she says. \"We set a price, and the city took it, and the city took it because it was frightened. That is not the Hall being recognised. That is the Hall being the last thing standing.\"\n\nShe folds her hands.\n\n\"In the spring Lathmere will answer, and every one of these people will still be here, and I am eighty-one.\"",
+                "choices": [
+                    {
+                        "label": "\"Then who comes after you?\"",
+                        "next": "after_her"
+                    },
+                    {
+                        "label": "Leave her to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "mere_fate",
+                        "equals": "answered"
+                    }
+                ],
+                "expression": 2,
+                "text": "Ellsa Waer is on the shingle rather than in the Hall, which nobody can remember her being.\n\n\"Six years of things coming back,\" she says, \"and one afternoon of putting them back with the names said out loud, and I slept.\" She looks out at the water. \"I have not slept a night through since the Wyrdpines went bad. I did not tell anybody that, and I am telling you, and I would be obliged if you did not repeat it.\"",
+                "choices": [
+                    {
+                        "label": "\"Has it gone quiet the right way now?\"",
+                        "next": "the_quiet"
+                    },
+                    {
+                        "label": "Leave her.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "light_fate",
+                        "equals": "stopped"
+                    }
+                ],
+                "expression": 2,
+                "text": "\"He stood up in this Hall,\" says Ellsa Waer, \"in front of the six houses, and said it, and did not once look at me while he said it, which was right.\"\n\nShe is entirely composed and her hands are not.\n\n\"Fifth of his name up that tower. I sent you because I could not go, and I could not go because he would have told me in under a minute and then it would have been mine and not his. Do you understand what I am telling you? I could have had it out of him on the Tuesday. It had to cost him something or it would not have held.\"",
+                "choices": [
+                    {
+                        "label": "\"That was a hard thing to arrange.\"",
+                        "next": "the_hard_thing"
+                    },
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "light_fate",
+                        "equals": "joined"
+                    }
+                ],
+                "expression": 3,
+                "text": "The Fish Hall does not stop when you come in, exactly. It goes on. It goes on in a way that leaves a space around you that was not there last week.\n\n\"My grandson has a new arrangement,\" Ellsa Waer says. \"He is easier in himself. He is easier in himself because he has stopped having to decide anything, which is a thing that happens to people, and I have watched it happen to a good many of them, and I have never once seen it undone.\"\n\nShe turns back to the Hall.\n\n\"You will get your fish at the Hall price. You will not get anything else here.\"",
+                "choices": [
+                    {
+                        "label": "Go.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "light_dark_seen"
+                    }
+                ],
+                "expression": 2,
+                "text": "Ellsa Waer looks up when you come in, and the Hall's noise drops about a quarter, which is how you know the whole district is watching this conversation.\n\n\"You have been up the point,\" she says. \"Sit down. Nobody here will listen and every one of them will hear.\"",
+                "choices": [
+                    {
+                        "label": "\"Four nights. He put it out himself.\"",
+                        "next": "she_is_told"
+                    },
+                    {
+                        "label": "\"Not yet.\"",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "met_ellsa"
+                    }
+                ],
+                "text": "\"Back,\" says Ellsa Waer. Somebody puts a stool where you are going to sit before you have got there, which is not deference, it is choreography.",
+                "choices": [
+                    {
+                        "label": "\"The light.\"",
+                        "next": "the_light"
+                    },
+                    {
+                        "label": "\"You said the Mere has gone quiet in the wrong way.\"",
+                        "next": "the_quiet"
+                    },
+                    {
+                        "label": "\"The Hall voted to refuse the League's price.\"",
+                        "next": "the_price_vote"
+                    },
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "A vote is being taken by shouting and is somehow being counted correctly. In the middle of it, on a stool that is older than the charter, sits a very small woman of eighty-one, who says four words.\n\nThe Hall goes quiet.\n\n\"Ellsa Waer,\" she says. \"I hold no office. Anything you are told in this district about me holding one is people being pleased with themselves.\"\n\nShe looks you over without hurry.\n\n\"You are up from the gate. Say your business and say it in front of everybody, because that is how it is done here and because you will be repeated either way.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_ellsa"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "\"The light was dark four nights this spring.\"",
+                        "next": "the_light"
+                    },
+                    {
+                        "label": "\"They say the Mere has gone quiet in the wrong way.\"",
+                        "next": "the_quiet"
+                    },
+                    {
+                        "label": "\"Old Waer refused the League's grain price.\"",
+                        "next": "the_price_vote"
+                    },
+                    {
+                        "label": "Nothing yet.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_light": [
+            {
+                "conditions": [
+                    {
+                        "quest": "the_light_goes_out",
+                        "status": "active"
+                    }
+                ],
+                "expression": 2,
+                "text": "\"Up the point,\" says Ellsa Waer. \"It is a long walk and the wind is against you both ways, which is a thing about that point that nobody believes until they have done it.\"",
+                "choices": [
+                    {
+                        "label": "Back to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "The Hall does not go quiet. It changes pitch, which is worse.\n\n\"Four nights,\" says Ellsa Waer. \"The seventh of March, the eleventh, the second of April and the ninth. I have them written and I did not have to be told them, because I have looked at that light out of my own window every night for seventy years and on four nights it was not there.\"\n\nShe folds her hands.\n\n\"And on each of those four mornings a boat had been in on the deep side. Nothing went through the Boom. Nothing was landed on any quay. Somebody came in under my window and went out again and this city's own harbour never knew.\"",
+                "choices": [
+                    {
+                        "label": "\"The keeper is your grandson.\"",
+                        "next": "the_grandson"
+                    },
+                    {
+                        "label": "\"Why not go up and ask him?\"",
+                        "next": "the_grandson"
+                    },
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ]
+            }
+        ],
+        "the_grandson": {
+            "text": "\"Fifth of his name,\" says Ellsa Waer. \"And yes. That is exactly why I have not been up.\"\n\nThe Hall is very carefully not listening.\n\n\"If I go up that point I will have it out of him in under a minute. He is a good boy and he cannot hold anything against me and he never could. And then it is mine. Then it is a grandmother knowing a thing about her grandson, and that is a thing that gets managed and covered and never once spoken of again, and in ten years he will still be up that tower and he will still be the sort of man who can be bought for six marks.\"\n\nShe looks at you.\n\n\"It has to cost him something. It has to be said to somebody who is not obliged to forgive him. That is what I want and I will pay for it, and I am aware that what I am hiring is somebody to be harder on my grandson than I am able to be.\"",
+            "choices": [
+                {
+                    "label": "\"I will go up.\"",
+                    "effects": [
+                        {
+                            "start_quest": "the_light_goes_out"
+                        },
+                        {
+                            "quest_stage": {
+                                "quest": "the_light_goes_out",
+                                "stage": "up_the_point"
+                            }
+                        }
+                    ],
+                    "next": "the_hire"
+                },
+                {
+                    "label": "\"That is a cold way to love somebody.\"",
+                    "next": "the_hard_thing"
+                },
+                {
+                    "label": "Not my business.",
+                    "end": true
+                }
+            ]
+        },
+        "the_hire": {
+            "text": "\"Good,\" says Ellsa Waer. \"Take the shore road and go up in daylight; he will hear you coming for a quarter of a mile and that is fine, I would rather he had the time.\"\n\nShe puts a hand on your wrist, briefly, which the whole Hall sees.\n\n\"And when he lies to you — he will, twice — do not be clever about it. Just wait. He has never in his life been able to hold a thing he has said past the second time somebody looks at him.\"",
+            "choices": [
+                {
+                    "label": "Go.",
+                    "end": true
+                }
+            ]
+        },
+        "the_hard_thing": {
+            "text": "\"It is,\" says Ellsa Waer. \"I have been told so before.\"\n\nShe does not defend it, which takes the ground out from under you.\n\n\"I have buried a husband, two sons and a daughter, and there are six houses in this district that were here before the League and will be here after it, and every one of them is held together by somebody old enough not to flinch. That is the office I do not hold. It is not kindness. Kindness is what you do afterwards, and there has to be an afterwards for it to be done in.\"",
+            "choices": [
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "she_is_told": {
+            "expression": 3,
+            "text": "Ellsa Waer listens to the whole of it with her hands in her lap and her eyes on the middle distance, and does not once ask a question.\n\nWhen you have finished she is quiet for long enough that the Hall's noise comes back up around you.\n\n\"Six marks,\" she says. \"Four times. His year's fee is nine.\"\n\nShe closes her eyes for a moment.\n\n\"And a man who knew his father's name and asked him whether it was hard.\" She opens them. \"That is not a bribe. A bribe I could have forgiven. Somebody went up that point and found out what my grandson was short of, and it was not money.\"",
+            "choices": [
+                {
+                    "label": "\"He is going to tell you himself.\"",
+                    "next": "he_will_tell"
+                },
+                {
+                    "label": "\"What do you want done?\"",
+                    "next": "he_will_tell"
+                }
+            ]
+        },
+        "he_will_tell": {
+            "expression": 2,
+            "text": "\"Then I shall be here,\" says Ellsa Waer, \"and I shall not help him.\"\n\nShe means it as a promise rather than a threat, and it takes you a moment to hear which it is.\n\n\"Go and sit at the back when he does it. He will want somebody in the room who already knows, and it cannot be me.\"",
+            "choices": [
+                {
+                    "label": "\"I will be there.\"",
+                    "end": true
+                }
+            ]
+        },
+        "the_quiet": [
+            {
+                "conditions": [
+                    {
+                        "flag": "offerings_seen"
+                    }
+                ],
+                "expression": 3,
+                "text": "\"You have been in Nairn's room,\" says Ellsa Waer, and it is not a guess.\n\n\"Then you have seen them and you know what I mean, and I shall not have to say the sentence that gets me told I am a poetic old woman.\"\n\nShe leans forward.\n\n\"Six years. It started the year the Wyrdpines went bad and the first of them came down that road, and I want you to notice that I am the only person on this shore who has ever put those two facts in the same sentence, and that everybody who has heard me do it has changed the subject.\"",
+                "choices": [
+                    {
+                        "label": "\"Say the sentence.\"",
+                        "next": "the_sentence"
+                    },
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ]
+            },
+            {
+                "text": "\"Ah,\" says Ellsa Waer. \"Now you are going to tell me I am being poetic, and I am going to tell you that I was mending nets on that shingle at nine years old and I have listened to that water for seventy-two years, and then you are going to be embarrassed, so let us skip all three.\"\n\nShe holds up a hand.\n\n\"The Mere has a sound. Not the waves. Under them. Every fisher-child on this point learns it before they learn to swim, because it tells you where the deep water starts.\"\n\n\"Six years ago it stopped. Not got louder. Not got angry. Stopped, the way a room stops when somebody in it has decided to listen.\"",
+                "choices": [
+                    {
+                        "label": "\"And the offerings started coming back.\"",
+                        "next": "the_offerings"
+                    },
+                    {
+                        "label": "\"Who else can hear it?\"",
+                        "next": "who_hears"
+                    },
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ]
+            }
+        ],
+        "who_hears": {
+            "text": "\"Eleven of us,\" says Ellsa Waer. \"All old. All Waerfolk. And every one of us worked out, separately, that we were the only one, and said nothing for about a year and a half.\"\n\nShe almost smiles.\n\n\"That is Old Waer for you. Four hundred years of six families in four lanes and the great skill of the place is not saying things.\"",
+            "choices": [
+                {
+                    "label": "\"And the offerings?\"",
+                    "next": "the_offerings"
+                },
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "the_offerings": {
+            "text": "\"Go and see Nairn,\" says Ellsa Waer. \"She has a room at the back of that temple and a key on a cord and she checks the lock after she has locked it, which is a thing people do when a lock is the only part of a problem they can manage.\"\n\n\"She has been collecting them for six years. She will tell you it is because putting them back feels like an insult. That is true and it is not the reason. The reason is that she has not counted them, and she has not counted them because she has worked out that the number is wrong.\"\n\nShe sits back.\n\n\"Ask her that. Not what they are. How many.\"",
+            "choices": [
+                {
+                    "label": "\"I will ask her.\"",
+                    "effects": [
+                        {
+                            "xp": 60
+                        }
+                    ],
+                    "end": true
+                },
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "the_sentence": {
+            "expression": 3,
+            "text": "Ellsa Waer says it flatly, in a voice pitched for the stool and not for the Hall, and nobody within ten feet of you pretends not to hear it.\n\n\"Something in the north stopped being where it was, six years ago, and everything since has been things coming south. People out of the Wyrdpines. Hjaldmark boats asking after old shrines. Charts going missing off a wall. And forty fathoms of water off my own doorstep that has stopped making a noise it has made since before this district had a name.\"\n\nShe folds her hands.\n\n\"I am eighty-one and I have no office and no charter and no proof of any of it. What I have got is a sound I cannot hear any more. And I have found that if you say that to a man from Highstrand he writes down that the Fish Hall is superstitious, and if you say it to a priest he prays, and if you say it to the Factor he asks whether it affects the grain.\"",
+            "choices": [
+                {
+                    "label": "\"It affects the grain.\"",
+                    "next": "the_grain_joke"
+                },
+                {
+                    "label": "Say nothing.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "the_grain_joke": {
+            "text": "Ellsa Waer laughs — one short, entirely genuine bark of it — and half the Fish Hall turns round in astonishment.\n\n\"It does,\" she says. \"It does, and that is the only reason anybody up that hill will ever do anything about any of it, and I have known that for six years and I have decided not to be too proud to use it.\"\n\nShe pats the stool beside her.\n\n\"You will do. Come back when you have been to Nairn.\"",
+            "choices": [
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "the_price_vote": {
+            "text": "\"We did,\" says Ellsa Waer. \"Last month. By shouting, in this room, with no authority whatsoever, and the League's posted price has been what this Hall says it is ever since.\"\n\nShe seems mildly amused by it.\n\n\"Nobody has come down to stop us. That is the interesting part, and it is the part nobody in Old Waer will discuss, because discussing it would mean admitting we all noticed.\"\n\n\"A chartered city refuses a League price in its own market and Lathmere does not send so much as a letter. Either they have not been told — which means the Factor has not told them, which is its own question — or they have been told and they cannot afford the argument.\"\n\nShe looks at you.\n\n\"I do not know which. I would very much like to.\"",
+            "choices": [
+                {
+                    "label": "\"I may be able to find out.\"",
+                    "next": "greeting"
+                },
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "after_her": {
+            "expression": 2,
+            "text": "\"Nobody,\" says Ellsa Waer. \"That is the honest answer and it is the one thing about this district that frightens me.\"\n\n\"There is no office. That is the whole point of it — the Fish Hall works because it is not a thing, and a thing can be taken. I hold nothing, so nothing can be taken off me. And when I die, what my great-grandmother built out of four hundred years of not saying things goes into the ground with me, and there will be a vote about who sits on the stool, and that will be the end of it.\"\n\nShe looks round the Hall.\n\n\"Unless something happens first that makes it a thing worth being. That is what I have been waiting for. I am eighty-one and I have got a fair idea that I have just watched it happen and I would rather not say so out loud in case I am wrong.\"",
+            "choices": [
+                {
+                    "label": "Leave her to it.",
+                    "end": true
+                }
+            ]
+        }
+    }
+}

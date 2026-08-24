@@ -129,6 +129,39 @@ python3 tools/apply_content_safely.py --apply
 
 ---
 
+## Voices, and the mouths that speak them
+
+A dialogue node is prose with speech quoted inside it, so it is read by more
+than one voice: a narrator for the prose, the character for what is in the
+quotes. Where those cuts fall is a small grammar, and it is worked out **once**,
+offline, by the generator — never re-derived at request time. `Voiceover.php`
+only looks the answer up, keyed on a sha1 of the exact authored text.
+
+Two passes, in order. The second reads what the first wrote:
+
+```bash
+cd src
+python3 tools/gen_voiceover.py --all    # cut the nodes, speak them (needs Kokoro on :3000)
+python3 tools/gen_visemes.py --all      # read the clips back, work out the mouth (needs ffmpeg, numpy)
+```
+
+`gen_visemes.py` derives a mouth track per clip — how far the jaw is open and
+whether the lips are spread or rounded, a byte each at 30fps — and writes it to
+`assets/audio/vo/<npc>/visemes.json`, keyed by clip filename. `Voiceover::clips()`
+hands it to the client on the clip it belongs to, and the Unity portrait paints
+it against the playhead. Nothing analyses audio at run time.
+
+Both passes are incremental: a clip already done is skipped unless `--force`, so
+adding one line costs one clip rather than the corpus. Both are also optional
+everywhere — a clip with no track plays with a still face, exactly as a line
+with no recording plays silently.
+
+The client only moves a face for that character's own clips. The `speaker` on
+each clip is what makes that possible, and it is why the narrator reading half
+of every conversation does not set the whole town talking.
+
+---
+
 ## Tests and benches
 
 There is no framework. Tests are scripts that exit non-zero.
@@ -137,6 +170,7 @@ There is no framework. Tests are scripts that exit non-zero.
 docker compose exec -T php php /var/www/html/tools/test_combat.php    # 279 rules checks, no database
 docker compose exec -T php php /var/www/html/tools/test_dungeon.php   # generated levels, swept
 docker compose exec -T php php /var/www/html/tools/test_delve.php     # delving, over a real database
+docker compose exec -T php php /var/www/html/tools/test_visemes.php   # every recorded clip has a mouth
 bash src/tools/test_ownership.sh                                      # two accounts, over real HTTP
 python3 src/tools/lint_php.py && python3 src/tools/lint_js.py
 ```

@@ -1,0 +1,156 @@
+{
+    "region_key": "tarrow",
+    "module": "waerhaven",
+    "name": "Tarrow",
+    "region_type": "town",
+    "description": "Downwind by law since the fire of the ninth year: the pitch yards, the boom forge, and the oakum sheds where the poor pick old rope apart until their fingers split. Waerhaven cannot float a hull without Tarrow and cannot stand to look at it, and has arranged its streets so that it does not have to.",
+    "sort_order": 60,
+    "locations": {
+        "the_tar_steps": {
+            "name": "The Tar Steps",
+            "type": "street",
+            "map_pos": [
+                43.3,
+                9.8
+            ],
+            "description": "Sixty steps cut down the east flank of the ridge, black underfoot for their whole length, because everything that goes up them is carried and everything carried up them drips. Highstrand is at the top and does not come down. At the bottom the smoke starts, and it is a smell rather than a sight: it gets into cloth on the first day and stays in it after three washings.",
+            "first_visit": "The wind is at your back going down and the smoke comes up to meet you halfway, and by the eighth step you have stopped noticing the view and started breathing through your mouth.",
+            "ambience": [
+                "A pitch-carrier comes up the steps with a yoke and two buckets and does not give way, because he cannot.",
+                "The black on the steps is tacky in the sun and takes the sole of your boot with a small sound.",
+                "Somebody has whitewashed the wall at the top of the steps. It is grey."
+            ],
+            "exits": [
+                {
+                    "to": "moot_yard",
+                    "label": "Up the steps to Highstrand"
+                },
+                {
+                    "to": "hallowmarket",
+                    "label": "South-west, down Tarrow Road to the market"
+                },
+                {
+                    "to": "the_pitch_yards",
+                    "label": "Into the pitch yards"
+                },
+                {
+                    "to": "the_boom_forge",
+                    "label": "Along to the Boom Forge"
+                },
+                {
+                    "to": "the_oakum_house",
+                    "label": "Down to the Oakum House"
+                },
+                {
+                    "to": "the_pitch_and_pot",
+                    "label": "In at the Pitch & Pot"
+                },
+                {
+                    "to": "the_tar_gaol",
+                    "label": "Round to the Tar Gaol"
+                }
+            ]
+        },
+        "the_pitch_yards": {
+            "name": "The Pitch Yards",
+            "type": "site",
+            "map_pos": [
+                56.3,
+                27.0
+            ],
+            "description": "Cauldrons on stone stands, kilns going day and night, and the sourest smell on the northern shore, all of it inside a fence with one gate that the Tarrow Houses keep as a closed shop. Nobody works here who is not spoken for by one of the three families. Since the fleet order the price of pitch has tripled and the yards have not increased their output by a barrel, which is not an accident, and Mother Reth will explain it to you at length if you ask her properly.",
+            "ambience": [
+                "A cauldron is skimmed and the skim goes into a second cauldron and nothing is thrown away.",
+                "The stacked barrels along the north fence are full, and have been full for a month.",
+                "A gang boss counts his people in at the gate by name and does not write any of it down."
+            ],
+            "exits": [
+                {
+                    "to": "the_tar_steps",
+                    "label": "Out to the steps"
+                }
+            ]
+        },
+        "the_boom_forge": {
+            "name": "The Boom Forge",
+            "type": "building",
+            "map_pos": [
+                43.7,
+                42.7
+            ],
+            "description": "Where the harbour chain was forged and is still repaired, link by link, in the largest forge in the League: four hearths, a trip hammer worked off the same race as the pitch kilns, and a floor you can feel through your boots. The chain work goes on at the near hearths. At the far end there is a canvas screen, and behind the screen a fifth hearth is lit that is not on the League's account, and what is being made behind it is not chain.",
+            "ambience": [
+                "The trip hammer comes down and the floor answers, and everybody's speech falls into the gaps between.",
+                "The screen at the far end shifts in the draught, and settles, and is straightened by somebody without being asked.",
+                "A link is closed, cooled and gauged, and the gauge is a piece of iron with no mark on it at all."
+            ],
+            "exits": [
+                {
+                    "to": "the_tar_steps",
+                    "label": "Out to the steps"
+                }
+            ]
+        },
+        "the_oakum_house": {
+            "name": "The Oakum House",
+            "type": "building",
+            "map_pos": [
+                49.0,
+                34.9
+            ],
+            "description": "One long shed where old rope is picked apart into fibre by four hundred people who have nothing else, paid in bread, at a bench a hundred and ten metres long. Half of them are children and about a third are Drennmark and none of that is written anywhere. It is the cheapest labour in the Ythan League and it is what stops the poor of this city starving, and both of those things are true at once and Mother Reth says the second one out loud.",
+            "ambience": [
+                "Four hundred pairs of hands work and the noise is not loud, and that is the thing about it.",
+                "A child's fingers split and are wrapped in a rag by the woman next to her without either of them stopping.",
+                "The bread cart comes in at noon and the whole bench comes up off it at once."
+            ],
+            "exits": [
+                {
+                    "to": "the_tar_steps",
+                    "label": "Up to the steps"
+                }
+            ]
+        },
+        "the_pitch_and_pot": {
+            "name": "The Pitch & Pot",
+            "type": "building",
+            "map_pos": [
+                49.1,
+                39.3
+            ],
+            "inn_cost": 3,
+            "description": "Tarrow's own, and it lets you know it: outsiders are served slowly, watched closely, and charged the same as everyone else, which is somehow the most pointed part of it. It is where you go in Waerhaven to hire somebody to do a thing quietly, and the arrangement is that you name the thing at the bar in front of witnesses and are answered in the yard by somebody who was not in the room.",
+            "ambience": [
+                "You are served, eventually, and it is exactly the right measure.",
+                "Somebody goes out to the yard, and somebody else goes out after them, and only one comes back.",
+                "The room is talking about the pitch price and stops when it works out you can hear."
+            ],
+            "exits": [
+                {
+                    "to": "the_tar_steps",
+                    "label": "Out to the steps"
+                }
+            ]
+        },
+        "the_tar_gaol": {
+            "name": "The Tar Gaol",
+            "type": "building",
+            "map_pos": [
+                37.7,
+                64.7
+            ],
+            "description": "Debtors, smugglers, and anybody the Tarrow Houses would like held for a while, in four barred rooms behind the oakum sheds, with sentences commonly served picking oakum in the shed they can see out of the window. The Watch does not keep it. The Houses do, on an authority nobody has ever produced. Half the people in it are Drennmark, held for the crime of existing outside a charter that says they do not.",
+            "ambience": [
+                "A name is called through the grille and answered from three different rooms.",
+                "The turnkey's book is a slate, and the slate has been wiped and written on so many times it is grey.",
+                "Somebody inside is picking oakum, unpaid, out of habit, at four in the afternoon."
+            ],
+            "exits": [
+                {
+                    "to": "the_tar_steps",
+                    "label": "Out to the steps"
+                }
+            ]
+        }
+    }
+}

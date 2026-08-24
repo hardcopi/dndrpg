@@ -4,10 +4,12 @@
  *
  * A hundred-odd locations exist and none of them have an authored battlefield,
  * so the map is generated: a seed and a palette in, sixteen by twelve cells of
- * terrain and two deployment zones out. The palette comes from the location's
- * own type and the type of the region holding it, which is how a brawl in the
- * Drowned Flagon gets tables and a fight in the Old City gets stalagmites
- * without anybody drawing either.
+ * terrain, two deployment zones, and the furniture that *is* that terrain.
+ * Crates and tables are half cover because they sit on `o`; columns and trees
+ * are tall cover because they sit on `n`. The engine never reads a sprite.
+ * The palette comes from the location's own type and the type of the region
+ * holding it, which is how a brawl in the Drowned Flagon gets tables and a
+ * fight in the Old City gets stalagmites without anybody drawing either.
  *
  * The seed is derived from the encounter, so a given fight always looks the
  * same — walk back into the goblin ambush and the boulder is where you left it.
@@ -104,6 +106,175 @@ final class BattleMapGen
     ];
 
     /**
+     * Floor and wall plates, per palette.
+     *
+     * These are the leftover Synty tiles from the old world map. They tile at
+     * one cell, and they are art rather than terrain: the engine never reads
+     * them. A missing file is a blank cell, not a broken fight.
+     */
+    private const FLOORS = [
+        'arena'    => 'tiles/floor_stone.png',
+        'interior' => 'tiles/floor_wood.png',
+        'street'   => 'tiles/road.png',
+        'cavern'   => 'tiles/floor_dungeon.png',
+        'tunnel'   => 'tiles/floor_dungeon.png',
+        'camp'     => 'tiles/grass.png',
+        'forest'   => 'tiles/grass.png',
+    ];
+
+    private const WALLS = [
+        'arena'    => 'tiles/wall_stone.png',
+        'interior' => 'tiles/wall_inn.png',
+        'street'   => 'tiles/wall_stone.png',
+        'cavern'   => 'tiles/wall_dungeon.png',
+        'tunnel'   => 'tiles/wall_dungeon.png',
+        'camp'     => 'tiles/wall_stone.png',
+        'forest'   => 'tiles/wall_stone.png',
+    ];
+
+    /**
+     * Cover furniture. `o` is half cover, `n` is tall cover, `,` is just
+     * ground that costs more to cross. The character is the rule; the sprite
+     * is a picture of that character. Mixing those — a tree on rough ground,
+     * a grass tuft on a pillar — would be a picture of cover the engine does
+     * not grant.
+     *
+     * `stand` sprites are 3/4-view and grow north of their footprint so a
+     * column is a column, not a squashed capital sitting in the square.
+     */
+    private const PROPS = [
+        'interior' => [
+            'o' => [
+                ['src' => 'decor/barrel.png', 'w' => 1, 'h' => 1],
+                ['src' => 'decor/crate.png', 'w' => 1, 'h' => 1],
+                ['src' => 'decor/keg.png', 'w' => 1, 'h' => 1],
+                ['src' => 'decor/chest.png', 'w' => 1, 'h' => 1],
+                ['src' => 'decor/chair.png', 'w' => 1, 'h' => 1],
+                ['src' => 'decor/table_plain.png', 'w' => 2, 'h' => 1],
+                ['src' => 'decor/table_tavern.png', 'w' => 2, 'h' => 1],
+                ['src' => 'decor/crate_pile.png', 'w' => 2, 'h' => 1],
+                ['src' => 'decor/barrel_rack.png', 'w' => 2, 'h' => 1],
+                ['src' => 'decor/pew.png', 'w' => 2, 'h' => 1],
+                ['src' => 'decor/table_long.png', 'w' => 3, 'h' => 1],
+                ['src' => 'decor/pew_long.png', 'w' => 3, 'h' => 1],
+                ['src' => 'decor/crate_stack.png', 'w' => 2, 'h' => 2],
+                ['src' => 'decor/dining_set.png', 'w' => 2, 'h' => 2],
+                ['src' => 'decor/table_round.png', 'w' => 2, 'h' => 2],
+            ],
+            'n' => [
+                ['src' => 'decor/column.png', 'w' => 1, 'h' => 1, 'stand' => true],
+                ['src' => 'decor/bookshelf_tall.png', 'w' => 1, 'h' => 1, 'stand' => true],
+                ['src' => 'decor/cabinet_tall.png', 'w' => 1, 'h' => 1, 'stand' => true],
+                ['src' => 'decor/wardrobe.png', 'w' => 1, 'h' => 1, 'stand' => true],
+                ['src' => 'decor/bookshelf_wide.png', 'w' => 2, 'h' => 1, 'stand' => true],
+                ['src' => 'decor/altar.png', 'w' => 2, 'h' => 1],
+            ],
+            ',' => [
+                ['src' => 'decor/sacks.png', 'w' => 1, 'h' => 1],
+                ['src' => 'decor/bones.png', 'w' => 1, 'h' => 1],
+            ],
+        ],
+        'street' => [
+            'o' => [
+                ['src' => 'decor/crate.png', 'w' => 1, 'h' => 1],
+                ['src' => 'decor/barrel.png', 'w' => 1, 'h' => 1],
+                ['src' => 'decor/cartwheel.png', 'w' => 1, 'h' => 1],
+                ['src' => 'decor/woodpile.png', 'w' => 1, 'h' => 1],
+                ['src' => 'decor/sacks.png', 'w' => 1, 'h' => 1],
+                ['src' => 'decor/crate_pile.png', 'w' => 2, 'h' => 1],
+                ['src' => 'decor/barrel_pile.png', 'w' => 2, 'h' => 1],
+                ['src' => 'decor/market_stall.png', 'w' => 2, 'h' => 1, 'stand' => true],
+                ['src' => 'decor/crate_stack.png', 'w' => 2, 'h' => 2],
+            ],
+            'n' => [
+                ['src' => 'decor/lamppost.png', 'w' => 1, 'h' => 1, 'stand' => true],
+                ['src' => 'decor/signpost.png', 'w' => 1, 'h' => 1, 'stand' => true],
+                ['src' => 'decor/well.png', 'w' => 1, 'h' => 1, 'stand' => true],
+                ['src' => 'decor/fountain.png', 'w' => 1, 'h' => 1, 'stand' => true],
+            ],
+            ',' => [
+                ['src' => 'decor/rocks.png', 'w' => 1, 'h' => 1],
+                ['src' => 'decor/sacks.png', 'w' => 1, 'h' => 1],
+            ],
+        ],
+        'cavern' => [
+            'n' => [
+                ['src' => 'decor/boulder.png', 'w' => 1, 'h' => 1],
+                ['src' => 'decor/column.png', 'w' => 1, 'h' => 1, 'stand' => true],
+                ['src' => 'decor/statue.png', 'w' => 1, 'h' => 1, 'stand' => true],
+                ['src' => 'decor/rocks.png', 'w' => 1, 'h' => 1],
+            ],
+            ',' => [
+                ['src' => 'decor/rocks.png', 'w' => 1, 'h' => 1],
+                ['src' => 'decor/bones.png', 'w' => 1, 'h' => 1],
+            ],
+        ],
+        'tunnel' => [
+            'n' => [
+                ['src' => 'decor/boulder.png', 'w' => 1, 'h' => 1],
+                ['src' => 'decor/column.png', 'w' => 1, 'h' => 1, 'stand' => true],
+                ['src' => 'decor/rocks.png', 'w' => 1, 'h' => 1],
+            ],
+            ',' => [
+                ['src' => 'decor/rocks.png', 'w' => 1, 'h' => 1],
+                ['src' => 'decor/bones.png', 'w' => 1, 'h' => 1],
+            ],
+        ],
+        'camp' => [
+            'o' => [
+                ['src' => 'decor/crate.png', 'w' => 1, 'h' => 1],
+                ['src' => 'decor/barrel.png', 'w' => 1, 'h' => 1],
+                ['src' => 'decor/woodpile.png', 'w' => 1, 'h' => 1],
+                ['src' => 'decor/chest.png', 'w' => 1, 'h' => 1],
+                ['src' => 'decor/crate_pile.png', 'w' => 2, 'h' => 1],
+                ['src' => 'decor/barrel_pile.png', 'w' => 2, 'h' => 1],
+                ['src' => 'decor/crate_stack.png', 'w' => 2, 'h' => 2],
+            ],
+            'n' => [
+                ['src' => 'decor/well.png', 'w' => 1, 'h' => 1, 'stand' => true],
+                ['src' => 'decor/stump.png', 'w' => 1, 'h' => 1],
+            ],
+            ',' => [
+                ['src' => 'decor/grass_tuft.png', 'w' => 1, 'h' => 1],
+                ['src' => 'decor/sacks.png', 'w' => 1, 'h' => 1],
+            ],
+        ],
+        'forest' => [
+            'n' => [
+                ['src' => 'decor/tree_oak.png', 'w' => 1, 'h' => 1, 'stand' => true],
+                ['src' => 'decor/tree_pine.png', 'w' => 1, 'h' => 1, 'stand' => true],
+                ['src' => 'decor/tree_birch.png', 'w' => 1, 'h' => 1, 'stand' => true],
+                ['src' => 'decor/boulder.png', 'w' => 1, 'h' => 1],
+            ],
+            'o' => [
+                ['src' => 'decor/stump.png', 'w' => 1, 'h' => 1],
+                ['src' => 'decor/bush.png', 'w' => 1, 'h' => 1],
+                ['src' => 'decor/woodpile.png', 'w' => 1, 'h' => 1],
+            ],
+            ',' => [
+                ['src' => 'decor/grass_tuft.png', 'w' => 1, 'h' => 1],
+                ['src' => 'decor/rocks.png', 'w' => 1, 'h' => 1],
+                ['src' => 'decor/shrub.png', 'w' => 1, 'h' => 1],
+            ],
+            '~' => [
+                ['src' => 'decor/plant_reeds.png', 'w' => 1, 'h' => 1],
+            ],
+        ],
+        'arena' => [
+            'o' => [
+                ['src' => 'decor/barrel.png', 'w' => 1, 'h' => 1],
+                ['src' => 'decor/crate.png', 'w' => 1, 'h' => 1],
+                ['src' => 'decor/column.png', 'w' => 1, 'h' => 1, 'stand' => true],
+                ['src' => 'decor/table_long.png', 'w' => 1, 'h' => 3],
+            ],
+            ',' => [
+                ['src' => 'decor/rocks.png', 'w' => 1, 'h' => 1],
+                ['src' => 'decor/bones.png', 'w' => 1, 'h' => 1],
+            ],
+        ],
+    ];
+
+    /**
      * Which palette a location fights on.
      *
      * The value sets are small and closed: `location_type` is one of room,
@@ -133,7 +304,7 @@ final class BattleMapGen
     /**
      * Build a battlefield.
      *
-     * @return array{w:int,h:int,cell_ft:int,seed:int,palette:string,terrain:string[],zones:array}
+     * @return array{w:int,h:int,cell_ft:int,seed:int,palette:string,terrain:string[],floor:?string,wall:?string,props:array,zones:array}
      */
     public static function generate(int $seed, string $palette): array
     {
@@ -173,6 +344,11 @@ final class BattleMapGen
             $terrain = self::rows($grid);
         }
 
+        // Dressing runs AFTER the terrain is final, on the leftover stream, so
+        // adding a barrel cannot move a wall. Existing fights stored without
+        // props keep their ground; new ones get furniture of the same seed.
+        $props = self::dress($terrain, $rng, $palette);
+
         return [
             'w'       => BattleGrid::W,
             'h'       => BattleGrid::H,
@@ -180,6 +356,9 @@ final class BattleMapGen
             'seed'    => $seed,
             'palette' => $palette,
             'terrain' => $terrain,
+            'floor'   => self::FLOORS[$palette] ?? 'tiles/floor_stone.png',
+            'wall'    => self::WALLS[$palette] ?? 'tiles/wall_stone.png',
+            'props'   => $props,
             'zones'   => ['party' => self::ZONE_PARTY, 'foe' => self::ZONE_FOE],
         ];
     }
@@ -318,6 +497,21 @@ final class BattleMapGen
         }
     }
 
+    /**
+     * Is this cell on a GENERATED board?
+     *
+     * BattleGrid::inBounds() asks the terrain, because a fight in a dungeon
+     * room is fought on that room and the board is whatever shape the room is.
+     * Nothing here has terrain yet: blank() builds rows of single characters
+     * and rows() joins them only once the stamping is done, so passing that
+     * half-made grid to inBounds() hands strlen() an array. A generated board
+     * is always W by H — the one place a pair of constants IS the answer.
+     */
+    private static function onBoard(int $x, int $y): bool
+    {
+        return $x >= 0 && $y >= 0 && $x < BattleGrid::W && $y < BattleGrid::H;
+    }
+
     /** Open ground, on the board, and clear of both deployment zones. */
     private static function clearFor(array $grid, int $x, int $y, int $w, int $h): bool
     {
@@ -325,7 +519,7 @@ final class BattleMapGen
             for ($i = 0; $i < $w; $i++) {
                 $px = $x + $i;
                 $py = $y + $j;
-                if (!BattleGrid::inBounds($px, $py) || $grid[$py][$px] !== '.') {
+                if (!self::onBoard($px, $py) || $grid[$py][$px] !== '.') {
                     return false;
                 }
                 if (self::inZone($px, $py, self::ZONE_PARTY) || self::inZone($px, $py, self::ZONE_FOE)) {
@@ -381,7 +575,7 @@ final class BattleMapGen
                 $nx = $cx + $dx;
                 $ny = $cy + $dy;
                 $key = BattleGrid::keyOf($nx, $ny);
-                if (isset($seen[$key]) || !BattleGrid::inBounds($nx, $ny)) {
+                if (isset($seen[$key]) || !self::onBoard($nx, $ny)) {
                     continue;
                 }
                 if (!BattleGrid::passable($terrain, $nx, $ny)) {
@@ -420,7 +614,7 @@ final class BattleMapGen
         for ($i = 0; $i <= $steps; $i++) {
             $x = (int) round($ax + ($bx - $ax) * $i / max(1, $steps));
             $y = (int) round($ay + ($by - $ay) * $i / max(1, $steps));
-            if (BattleGrid::inBounds($x, $y) && (BattleGrid::TERRAIN[$grid[$y][$x]]['cost'] ?? null) === null) {
+            if (self::onBoard($x, $y) && (BattleGrid::TERRAIN[$grid[$y][$x]]['cost'] ?? null) === null) {
                 $grid[$y][$x] = '.';
             }
         }
@@ -447,6 +641,118 @@ final class BattleMapGen
             }
         }
         return $best ?? ['x' => $cx, 'y' => $cy];
+    }
+
+    // -----------------------------------------------------------------------
+    // Dressing — pictures of the terrain, not a second cover rule
+    // -----------------------------------------------------------------------
+
+    /**
+     * Walk the finished grid and put a sprite on every cover cell.
+     *
+     * Greedy rectangles, largest fitting sprite. Adjacent crates become a
+     * pile when the catalog has one; a leftover cell gets a barrel. `#`
+     * walls are a repeating plate in the renderer, not furniture, and `.`
+     * is the floor.
+     *
+     * @return array<int, array{x:int,y:int,w:int,h:int,src:string,stand:bool}>
+     */
+    private static function dress(array $terrain, int &$rng, string $palette): array
+    {
+        $catalog = self::PROPS[$palette] ?? self::PROPS['street'];
+        $visited = [];
+        $props = [];
+        for ($y = 0; $y < BattleGrid::H; $y++) {
+            for ($x = 0; $x < BattleGrid::W; $x++) {
+                $ch = $terrain[$y][$x] ?? '.';
+                if ($ch === '.' || $ch === '#' || $ch === 'v' || !isset($catalog[$ch])) {
+                    continue;
+                }
+                if (isset($visited[$x . ',' . $y])) {
+                    continue;
+                }
+                [$gw, $gh] = self::growRect($terrain, $x, $y, $ch, $visited);
+                $picked = self::pickProp($catalog[$ch], $gw, $gh, $rng);
+                $pw = $picked ? (int) $picked['w'] : 1;
+                $ph = $picked ? (int) $picked['h'] : 1;
+                for ($j = 0; $j < $ph; $j++) {
+                    for ($i = 0; $i < $pw; $i++) {
+                        $visited[($x + $i) . ',' . ($y + $j)] = true;
+                    }
+                }
+                if ($picked) {
+                    $props[] = [
+                        'x'     => $x,
+                        'y'     => $y,
+                        'w'     => $pw,
+                        'h'     => $ph,
+                        'src'   => $picked['src'],
+                        'stand' => !empty($picked['stand']),
+                    ];
+                }
+            }
+        }
+        return $props;
+    }
+
+    /**
+     * Largest rectangle of `$ch` growing east and south from (x0,y0).
+     *
+     * @param array<string, bool> $visited
+     * @return array{0:int,1:int}
+     */
+    private static function growRect(array $terrain, int $x0, int $y0, string $ch, array $visited): array
+    {
+        $w = 1;
+        while ($x0 + $w < BattleGrid::W
+            && ($terrain[$y0][$x0 + $w] ?? '') === $ch
+            && !isset($visited[($x0 + $w) . ',' . $y0])) {
+            $w++;
+        }
+        $h = 1;
+        while ($y0 + $h < BattleGrid::H) {
+            $ok = true;
+            for ($i = 0; $i < $w; $i++) {
+                if (($terrain[$y0 + $h][$x0 + $i] ?? '') !== $ch
+                    || isset($visited[($x0 + $i) . ',' . ($y0 + $h)])) {
+                    $ok = false;
+                    break;
+                }
+            }
+            if (!$ok) {
+                break;
+            }
+            $h++;
+        }
+        return [$w, $h];
+    }
+
+    /**
+     * @param array<int, array{src:string,w:int,h:int,stand?:bool}> $list
+     * @return array{src:string,w:int,h:int,stand?:bool}|null
+     */
+    private static function pickProp(array $list, int $w, int $h, int &$rng): ?array
+    {
+        $fit = [];
+        $best = 0;
+        foreach ($list as $p) {
+            $pw = (int) $p['w'];
+            $ph = (int) $p['h'];
+            if ($pw > $w || $ph > $h) {
+                continue;
+            }
+            $area = $pw * $ph;
+            if ($area > $best) {
+                $best = $area;
+                $fit = [$p];
+            } elseif ($area === $best) {
+                $fit[] = $p;
+            }
+        }
+        if (!$fit) {
+            return null;
+        }
+        return $fit[self::rint($rng, 0, count($fit) - 1)];
     }
 
     // -----------------------------------------------------------------------

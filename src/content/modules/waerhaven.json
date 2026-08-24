@@ -1,0 +1,10 @@
+{
+    "module_key": "waerhaven",
+    "name": "Eleven Weeks",
+    "blurb": "Waerhaven builds the fleet the Ythan League has instead of an army, on a promontory with no river, behind one landward gate and a chain it can drop across the harbour in four minutes. It also has nineteen hundred people from Drennmark living outside the wall, in a suburb the League's charter says does not exist, doing the work that keeps the slipways moving. Everyone involved has a reason not to notice. The whole arrangement stands on the League Granary, the Factor has told Lathmere it holds twenty weeks of grain, and it holds eleven.",
+    "start_location_key": "waermans_rest",
+    "level_min": 1,
+    "level_max": 6,
+    "attribution": "Original setting. Waerhaven, the Ythan League and the continent of Sundermere are ours, from the gazetteers in World/. Rules content from the System Reference Document 5.1 and 5.2, CC-BY 4.0.",
+    "sort_order": 40
+}

@@ -1,0 +1,197 @@
+{
+    "region_key": "the_boom",
+    "module": "waerhaven",
+    "name": "The Boom",
+    "region_type": "town",
+    "description": "The harbour and its quays: five stone piers, a double rank of League warehouses, and a hand-forged chain that eleven men can winch taut across the harbour mouth in four minutes. It has been raised in anger twice in ninety years and for drill every week of those ninety, because the Boom Watch is paid by the drill. This is the reason Waerhaven exists and the reason nobody has ever taken it.",
+    "sort_order": 30,
+    "locations": {
+        "boomhead": {
+            "name": "Boomhead",
+            "type": "square",
+            "map_pos": [
+                51.5,
+                49.0
+            ],
+            "description": "The open ground at the head of the piers where the Strand, the Quay and the Gate Way all arrive at once, and where every cargo in Waerhaven is set down at least briefly. Cold off the water even in a warm month. Tar, wet rope, sawdust, and gulls that have learned exactly how far a man will chase them.",
+            "first_visit": "The harbour opens out all at once at the bottom of the steps: five piers, the chain slung dark across the mouth of the bay, and forty miles of grey water past it with nothing on it at all.",
+            "ambience": [
+                "The chain is drilled. Eleven men, a bell, four minutes, and every head on the quay turns to watch and nobody stops working.",
+                "A gull takes something off a crate in front of six witnesses and is not pursued.",
+                "A cargo comes ashore and goes straight into a warehouse without ever reaching the Counting Boom.",
+                "Somebody counts barrels aloud, loses the count, and starts again from a number that is not one."
+            ],
+            "exits": [
+                {
+                    "to": "the_counting_boom",
+                    "label": "Over to the Counting Boom"
+                },
+                {
+                    "to": "the_chain_winch",
+                    "label": "Along to the Chain Winch"
+                },
+                {
+                    "to": "ilbers_chandlery",
+                    "label": "In at Ilber's"
+                },
+                {
+                    "to": "the_drowned_jarl",
+                    "label": "In at the Drowned Jarl"
+                },
+                {
+                    "to": "the_great_crane",
+                    "label": "Down the quay to the Great Crane"
+                },
+                {
+                    "to": "moot_yard",
+                    "label": "East, up the steps to Highstrand"
+                },
+                {
+                    "to": "hallowmarket",
+                    "label": "South-east, up the Gate Way to the market"
+                },
+                {
+                    "to": "the_great_slip",
+                    "label": "South, along the Strand to the slipways"
+                },
+                {
+                    "to": "old_waer_square",
+                    "label": "North, along the shore to Old Waer"
+                }
+            ]
+        },
+        "the_counting_boom": {
+            "name": "The Counting Boom",
+            "type": "building",
+            "map_pos": [
+                50.5,
+                28.0
+            ],
+            "description": "Where cargo is weighed, taxed and argued over, in a shed open at both ends so a cart can be driven onto the plate. The great beam-scale is calibrated against a League standard weight kept in a sealed iron box on the wall, and the box has three locks, and the three keys are held by three people who do not trust each other. That was thought clever when it was arranged.",
+            "ambience": [
+                "The beam swings, settles, and a figure is called out that two men on the floor both write down differently.",
+                "The sealed box on the wall has three keyholes and a wax seal across the lid, and the wax is not as old as the box.",
+                "A shipper argues about four ounces and is laughed at, in a friendly way, by everybody."
+            ],
+            "exits": [
+                {
+                    "to": "boomhead",
+                    "label": "Out to Boomhead"
+                }
+            ]
+        },
+        "the_chain_winch": {
+            "name": "The Chain Winch",
+            "type": "building",
+            "map_pos": [
+                67.3,
+                23.8
+            ],
+            "description": "The capstan house at the south anchor of the boom: one drum, eleven bars, a ratchet the size of a man's chest, and a bell on the roof. The chain runs out of the seaward wall and down into the water and comes up again on the North Horn, two hundred and ninety metres across. The crew are drilled weekly and paid for the drill, and are the only body in Waerhaven that has never once been late.",
+            "ambience": [
+                "A bar is left out of its socket. Somebody puts it back without being told.",
+                "The ratchet is greased. The pawl is new. Nothing else in the room is new.",
+                "The bell is rung for the hour and half the quay checks the sun against it."
+            ],
+            "exits": [
+                {
+                    "to": "boomhead",
+                    "label": "Back to Boomhead"
+                }
+            ]
+        },
+        "ilbers_chandlery": {
+            "name": "Ilber's Chandlery",
+            "type": "building",
+            "map_pos": [
+                61.9,
+                27.0
+            ],
+            "description": "Rope, canvas, pitch, lamp oil, salt beef, chandler's candles, and everything else a hull needs to leave a quay. Ilber Cass will sell you all of it on credit and will sell that credit on to somebody less pleasant before the month is out, and he will tell you so first, because being told first is what he thinks honesty is.",
+            "ambience": [
+                "A captain signs for stores and does not read what he signs.",
+                "Ilber weighs out beef against a brass weight and watches the beam settle with an expression you cannot read.",
+                "The credit book is open on the counter, face up, on purpose."
+            ],
+            "exits": [
+                {
+                    "to": "boomhead",
+                    "label": "Out to the quay"
+                }
+            ]
+        },
+        "the_drowned_jarl": {
+            "name": "The Drowned Jarl",
+            "type": "building",
+            "map_pos": [
+                54.0,
+                21.0
+            ],
+            "inn_cost": 3,
+            "allow_camp": true,
+            "description": "A Hjaldmark-built longhouse that was hauled here as ballast in somebody's grandfather's time and turned into a dockside inn without anyone straightening it. Sawdust floor, a fire in a stone trench down the middle, ferocious ale, and no questions asked of anybody about anything. Hjaldmark crews drink at the north end. They have been asking about old shrines on the north shore, and paying for the answers.",
+            "ambience": [
+                "The Hjaldmark table goes quiet when a Waerfolk name is said, and starts up again a beat late.",
+                "Somebody is asleep under the bench and has been all day.",
+                "A crewman draws a coastline on the table in spilt ale and is quietly stopped by the man beside him."
+            ],
+            "exits": [
+                {
+                    "to": "boomhead",
+                    "label": "Out to the quay"
+                }
+            ]
+        },
+        "the_great_crane": {
+            "name": "The Great Crane",
+            "type": "site",
+            "map_pos": [
+                37.5,
+                47.0
+            ],
+            "description": "A treadwheel crane on the outer quay, worked by four men walking inside the drum, tall enough to step a mainmast and slow enough that anything it lifts is in the air a long time in front of a great many people. Twice a year it lifts something the Boom Watch is paid not to look at, in daylight, because a thing done at night is a thing worth watching.",
+            "ambience": [
+                "The drum turns. The men inside it walk and talk about nothing at all, loudly.",
+                "A load goes up, hangs, and comes down onto a lighter that has no name painted on it.",
+                "Doss leans out of the drum's hatch, looks at you for exactly as long as it takes to price you, and goes back in."
+            ],
+            "exits": [
+                {
+                    "to": "boomhead",
+                    "label": "Back along the quay"
+                },
+                {
+                    "to": "the_quiet_charter",
+                    "label": "Round the back of the warehouses, to the door with no sign",
+                    "hidden": true
+                },
+                {
+                    "to": "underquay_stair",
+                    "label": "Down the old quay steps, under the stone",
+                    "hidden": true
+                }
+            ]
+        },
+        "the_quiet_charter": {
+            "name": "The Quiet Charter",
+            "type": "building",
+            "map_pos": [
+                77.9,
+                22.8
+            ],
+            "hidden_until_visited": true,
+            "description": "A door in a warehouse wall with no sign, no guild mark and no name on any roll in the city, opening on a counting room with two chairs, a table, a ledger and no window. It is not a guild. It is an arrangement: people in, timber out, everybody paid a little, and no one line of it written anywhere a court could read. Three people are suspected of running it. One of them is right, and it is not the one who wants to be.",
+            "ambience": [
+                "The ledger on the table is in a hand that changes every third page.",
+                "There is a second door, and it is bolted from the other side.",
+                "Nobody offers you a chair, and there are two of them."
+            ],
+            "exits": [
+                {
+                    "to": "the_great_crane",
+                    "label": "Out to the quay"
+                }
+            ]
+        }
+    }
+}

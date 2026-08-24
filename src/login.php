@@ -41,6 +41,7 @@ $mode = ($_GET['mode'] ?? '') === 'register' && $registrationOpen ? 'register' :
   <link rel="stylesheet" href="<?= asset('assets/css/style.css') ?>">
 </head>
 <body class="auth-page">
+  <?php require APP_PATH . '/inc/site_bar.php'; ?>
   <main class="auth-card">
     <header class="auth-head">
       <p class="auth-eyebrow">Rivermark Chronicles</p>

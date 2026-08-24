@@ -1,0 +1,12 @@
+{
+    "npc_key": "sister_nairn",
+    "name": "Sister Nairn",
+    "role": "Keeper of the Deep Mere",
+    "description": "Was mate on a grain hoy for nineteen years before she was anything else, and it shows in how she stands. For six years the offerings thrown off the temple rail have been washing back ashore, and she has been quietly collecting them and locking them in the back room, because throwing them in again feels like an insult to something.",
+    "sprite_key": "cleric",
+    "is_quest_giver": true,
+    "dialog": "sister_nairn",
+    "place": {
+        "location": "temple_of_the_deep_mere"
+    }
+}

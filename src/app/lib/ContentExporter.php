@@ -30,10 +30,9 @@
  * than a picture made of tiles. There is nothing left for a second exporter to
  * own.
  *
- * Encounters, items, monsters, spells and companions are still file-authored
- * only. Nothing in the editors writes them, so exporting them could only
- * reformat files nobody changed; when something starts editing them, they get
- * an export method here beside the others.
+ * Encounters, monsters, spells and companions are still file-authored only,
+ * except encounters the studio created (no file yet). Items are edited in
+ * the copy desk now, so they get an export method beside the others.
  */
 
 declare(strict_types=1);
@@ -71,6 +70,7 @@ class ContentExporter
             'dialog'     => $this->exportDialogue(),
             'quests'     => $this->exportQuests(),
             'encounters' => $this->exportEncounters(),
+            'items'      => $this->exportItems(),
         ];
         return ['written' => $this->written, 'counts' => $counts];
     }
@@ -674,6 +674,96 @@ class ContentExporter
             $count++;
         }
         return $count;
+    }
+
+    /**
+     * The shared item catalogue.
+     *
+     * Unlike encounters, every row is written (when it would change): the
+     * copy desk edits these, and skipping an existing file would mean a
+     * renamed Longsword +1 stayed +0 on disk. A `place` block is not a
+     * column — it is how some files used to drop themselves — so an
+     * existing file keeps the one it already has rather than losing it.
+     */
+    public function exportItems(): int
+    {
+        $rows = $this->db->query(
+            'SELECT * FROM items WHERE item_key IS NOT NULL ORDER BY item_key'
+        )->fetchAll();
+        $count = 0;
+        foreach ($rows as $it) {
+            $rel = 'items/' . $it['item_key'] . '.json';
+            $out = [
+                'item_key'  => $it['item_key'],
+                'name'      => $it['name'],
+                'item_type' => $it['item_type'],
+            ];
+            if (($it['description'] ?? '') !== '') {
+                $out['description'] = $it['description'];
+            }
+            $out['rarity'] = ($it['rarity'] ?? '') !== '' ? $it['rarity'] : 'common';
+            $w = (float) ($it['weight'] ?? 0);
+            $out['weight'] = $w == (int) $w ? (int) $w : $w;
+            $out['value_gp'] = (int) ($it['value_gp'] ?? 0);
+            if (($it['damage_dice'] ?? '') !== '') {
+                $out['damage_dice'] = $it['damage_dice'];
+            }
+            if (($it['damage_type'] ?? '') !== '') {
+                $out['damage_type'] = $it['damage_type'];
+            }
+            if ($it['armor_bonus'] !== null && $it['armor_bonus'] !== '') {
+                $out['armor_bonus'] = (int) $it['armor_bonus'];
+            }
+            if (($it['armor_type'] ?? '') !== '') {
+                $out['armor_type'] = $it['armor_type'];
+            }
+            if (($it['slot'] ?? '') !== '') {
+                $out['slot'] = $it['slot'];
+            }
+            $props = json_decode((string) ($it['properties'] ?? ''), true);
+            if (is_array($props) && $props !== []) {
+                $out['properties'] = $props;
+            }
+            if (($it['icon'] ?? '') !== '') {
+                $out['icon'] = $it['icon'];
+            }
+
+            $path = $this->root . '/' . $rel;
+            if (is_file($path)) {
+                $prev = json_decode((string) file_get_contents($path), true);
+                if (is_array($prev) && isset($prev['place'])) {
+                    $out['place'] = $prev['place'];
+                }
+                if (is_array($prev) && self::itemSame($prev, $out)) {
+                    continue;
+                }
+            }
+            $this->write($rel, $out);
+            $count++;
+        }
+        return $count;
+    }
+
+    /**
+     * @param array<string, mixed> $a
+     * @param array<string, mixed> $b
+     */
+    private static function itemSame(array $a, array $b): bool
+    {
+        unset($a['image_url'], $b['image_url']);
+        return self::canon($a) === self::canon($b);
+    }
+
+    /** @param mixed $v */
+    private static function canon($v): string
+    {
+        if (is_array($v)) {
+            if (!array_is_list($v)) {
+                ksort($v);
+            }
+            $v = array_map(self::canon(...), $v);
+        }
+        return json_encode($v, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?: '';
     }
 
     // =======================================================================

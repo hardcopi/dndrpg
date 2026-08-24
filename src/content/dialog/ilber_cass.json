@@ -1,0 +1,389 @@
+{
+    "npc_key": "ilber_cass",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "flag": "weight_fate",
+                        "equals": "proved"
+                    }
+                ],
+                "text": "The credit book is shut, which it never is, and Ilber Cass is sitting behind it doing arithmetic on a scrap with a stub of chalk.\n\n\"Six years,\" he says, without preamble. \"I have been buying salt beef and grain and lamp oil against that weight for six years and paying for four ounces a quarter that never came off a keel.\"\n\nHe puts the chalk down.\n\n\"I am not going to get it back. I knew that when I hired you. I wanted the number. I have spent my whole life selling people debts and I have never once been able to name my own.\"",
+                "choices": [
+                    {
+                        "label": "\"What will you do with it?\"",
+                        "next": "what_he_does"
+                    },
+                    {
+                        "label": "\"Show me what you sell.\"",
+                        "effects": [
+                            {
+                                "open_shop": "ilber_cass"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "weight_fate",
+                        "equals": "sold"
+                    }
+                ],
+                "text": "Ilber looks up, and works out in about a second and a half exactly what happened, and does not say any of it.\n\n\"Well,\" he says. \"Well. That is the trade, is it not.\"\n\nHe opens the credit book.\n\n\"I will still sell you rope. I sell rope to everybody. It is the one thing about me that has never once been complicated.\"",
+                "choices": [
+                    {
+                        "label": "\"Show me what you sell.\"",
+                        "effects": [
+                            {
+                                "open_shop": "ilber_cass"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Leave him.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "weight_fate",
+                        "equals": "lie"
+                    }
+                ],
+                "text": "\"You went and you came back and you have not said anything,\" says Ilber, \"which is an answer, and I am going to take it as the one it is and not make either of us say it.\"\n\nHe turns the book round.\n\n\"Rope?\"",
+                "choices": [
+                    {
+                        "label": "\"Show me what you sell.\"",
+                        "effects": [
+                            {
+                                "open_shop": "ilber_cass"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Leave him.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "box_opened"
+                    },
+                    {
+                        "not": {
+                            "flag": "weight_fate"
+                        }
+                    }
+                ],
+                "text": "Ilber Cass looks at the bag, and at how you are carrying it, and does the arithmetic in about a second and a half.\n\n\"You have got it out,\" he says. \"Out of the box. Fourteen pounds of bronze with the League's arms on it, in a chandlery, on a Tuesday.\"\n\nHe closes the credit book, which he does not do.\n\n\"Now. I hired you to put it on an honest beam and I am going to say the rest of this out loud rather than let you find it out on your own, because I have made a career of saying the unpleasant part first.\"\n\n\"There is a man in the Sounding Line. Come up in the spring, stayed since, asks careful questions about the Counting Boom and pays for the answers in Ardennian silver.\"\n\nHe spreads his hands.\n\n\"He would pay a very great deal for that to go back in its box. I am not recommending it. I am telling you it exists, because you would find him inside a week and I would rather you heard the number from me.\"",
+                "choices": [
+                    {
+                        "label": "\"It goes on Vennik's beam.\"",
+                        "end": true
+                    },
+                    {
+                        "label": "\"How much would he pay?\"",
+                        "next": "the_other_offer"
+                    },
+                    {
+                        "label": "\"I am putting it back and saying nothing.\"",
+                        "next": "put_it_back"
+                    },
+                    {
+                        "label": "Later.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_short_weight",
+                        "status": "active"
+                    },
+                    {
+                        "flag": "met_sedge"
+                    }
+                ],
+                "text": "\"You have been to Sedge,\" Ilber says. \"Of course you have. Everybody goes to Sedge. He shows them the ninety years and the tour and they come back and tell me the old man is very thorough.\"\n\nHe leans forward.\n\n\"He is not thorough. He is frightened. There is a difference and it took me four years to see it.\"",
+                "choices": [
+                    {
+                        "label": "\"You could have told me that.\"",
+                        "next": "why_not_told"
+                    },
+                    {
+                        "label": "\"What do you actually want out of this?\"",
+                        "next": "what_he_wants"
+                    },
+                    {
+                        "label": "Back to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "met_ilber"
+                    }
+                ],
+                "text": "\"Back,\" says Ilber Cass, and turns the credit book to face you, which is his version of a handshake.",
+                "choices": [
+                    {
+                        "label": "\"Show me what you sell.\"",
+                        "effects": [
+                            {
+                                "open_shop": "ilber_cass"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "\"Tell me about the standard weight again.\"",
+                        "next": "the_four_ounces"
+                    },
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "Rope, canvas, pitch, lamp oil and salt beef, floor to roof, and a smell that is all five at once. The chandler weighs out beef against a brass weight and watches the beam settle with an expression that has nothing to do with beef.\n\n\"Ilber Cass. I will sell you anything a hull needs and I will sell it to you on credit, and I will sell that credit on to somebody a good deal less pleasant than me before the month is out.\"\n\nHe sets the beef down.\n\n\"I tell everybody that first. People think it makes me honest. It does not. It makes me quick.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_ilber"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "\"Show me what you sell.\"",
+                        "effects": [
+                            {
+                                "open_shop": "ilber_cass"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "\"You do not like that beam.\"",
+                        "next": "the_four_ounces"
+                    },
+                    {
+                        "label": "\"Do you have work?\"",
+                        "next": "the_four_ounces"
+                    },
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_four_ounces": [
+            {
+                "conditions": [
+                    {
+                        "quest": "the_short_weight",
+                        "status": "active"
+                    }
+                ],
+                "text": "\"Four ounces,\" Ilber says. \"On a beam calibrated to a weight in a box on a wall. Go and get it out of the box and put it on something honest and I will pay you whatever the difference in my temper is worth.\"",
+                "choices": [
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ]
+            },
+            {
+                "text": "Ilber Cass takes the brass weight off his own beam and puts it in front of you.\n\n\"Mine,\" he says. \"Bought in Lathmere, stamped, and I have had it checked twice by a man who does not know why I asked.\"\n\n\"Everything that comes into this city over the Counting Boom is weighed against the League's standard, which lives in a sealed box on the wall of that shed. Every cargo. Every quarter of grain. Every barrel of oil I have bought in nineteen years.\"\n\nHe taps his own weight.\n\n\"And for about six years now, when I take delivery of a hundred quarters weighed on their beam and put a sample of it on mine, I am four ounces in the hundredweight light. Every time. Which is nothing.\"\n\nHe sits back.\n\n\"It is nothing about nine hundred times a year.\"",
+                "choices": [
+                    {
+                        "label": "\"Why not simply say so?\"",
+                        "next": "why_not_said"
+                    },
+                    {
+                        "label": "\"What is it worth to you to prove it?\"",
+                        "next": "what_he_wants"
+                    },
+                    {
+                        "label": "\"Four ounces could be your beam, not theirs.\"",
+                        "next": "his_beam"
+                    }
+                ]
+            }
+        ],
+        "his_beam": {
+            "text": "\"It could,\" Ilber agrees, immediately. \"That is the first thing I thought and I thought it for eighteen months. So I had mine checked. Then I bought a second one and had that checked. Then I weighed the two against each other in front of a witness who charges by the hour.\"\n\nHe spreads his hands.\n\n\"I have spent more on being sure than the four ounces has ever cost me. That is what I am, if you want to know. I would rather pay to be certain than be owed and comfortable.\"",
+            "choices": [
+                {
+                    "label": "\"Then why not say so out loud?\"",
+                    "next": "why_not_said"
+                },
+                {
+                    "label": "\"What is it worth to prove it?\"",
+                    "next": "what_he_wants"
+                }
+            ]
+        },
+        "why_not_said": {
+            "text": "\"Because I am a moneylender,\" says Ilber, without any self-pity at all. \"I lend to captains and I sell the paper on. There are eleven men on this quay who would enjoy watching me drown.\"\n\n\"If Ilber Cass stands up in the Counting Boom and says the League's weight is light, what happens is not an inquiry. What happens is that everybody I have ever sold a debt to says, at once, that Cass is trying to get out of something.\"\n\n\"It has to be said by somebody with nothing at stake. That is not a description of a citizen of Waerhaven. That is a description of a stranger.\"",
+            "choices": [
+                {
+                    "label": "\"What is it worth?\"",
+                    "next": "what_he_wants"
+                },
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "what_he_wants": {
+            "text": "\"Ninety gold when it is proved,\" Ilber says, \"and I will not haggle and I will not ask how.\"\n\nHe closes the book.\n\n\"And I want you to understand that I am not going to get a copper of it back. Six years of four ounces is gone. It is in somebody's floor. There is no court on the Mere that will unpick a weighing that everybody signed at the time.\"\n\n\"What I want is the number. I have spent thirty years being the man who knows exactly what everybody owes, and for six years there has been one figure in my own book that I could not name, and it is in my head at four in the morning.\"",
+            "choices": [
+                {
+                    "label": "\"I will get it out of the box.\"",
+                    "effects": [
+                        {
+                            "start_quest": "the_short_weight"
+                        }
+                    ],
+                    "next": "the_hire"
+                },
+                {
+                    "label": "\"Not for ninety.\"",
+                    "next": "he_goes_higher"
+                },
+                {
+                    "label": "Not my business.",
+                    "end": true
+                }
+            ]
+        },
+        "he_goes_higher": {
+            "text": "\"A hundred and forty,\" says Ilber, at once, which tells you the ninety was never the figure.\n\n\"And before you go up again — that is not me being beaten down. That is me telling you what it is worth, which is a thing I have never said out loud to anybody and have been carrying about for six years.\"",
+            "choices": [
+                {
+                    "label": "\"Done.\"",
+                    "effects": [
+                        {
+                            "start_quest": "the_short_weight"
+                        }
+                    ],
+                    "next": "the_hire"
+                },
+                {
+                    "label": "Not my business.",
+                    "end": true
+                }
+            ]
+        },
+        "the_hire": {
+            "text": "\"Three locks,\" Ilber says. \"Factor, Master Shipwright, Weighmaster. Culm has never opened his drawer, Gedda Halloway will want to know why before she moves a finger, and Corran Sedge has been weighmaster for thirty-one years and is the only one of the three who has ever had a reason to look.\"\n\n\"Start with Sedge. And do not start with the weight.\"\n\nHe picks the credit book back up.\n\n\"Ask him about his ledgers. He will show you all of them. Watch which one he shows you twice.\"",
+            "on_enter": [
+                {
+                    "quest_stage": {
+                        "quest": "the_short_weight",
+                        "stage": "ask_the_weighmaster"
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "Go.",
+                    "end": true
+                }
+            ]
+        },
+        "why_not_told": {
+            "text": "\"Because you would have gone in there looking for a frightened man,\" Ilber says, \"and Corran Sedge has spent four years being looked at by people who want something, and he is extremely good at it now.\"\n\n\"You had to go in wanting his ledgers. He can tell. Everybody can tell. It is the only advantage an old man in a shed with no door has got.\"",
+            "choices": [
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                },
+                {
+                    "label": "Back to it.",
+                    "end": true
+                }
+            ]
+        },
+        "what_he_does": {
+            "text": "Ilber turns the scrap of chalk arithmetic round so you can see it, which is the single most intimate thing he has done.\n\n\"Nothing,\" he says. \"There is nothing to do with it. I have got a number and no court.\"\n\nHe looks at it.\n\n\"But I will tell you what I am not going to do, and it will cost me. Every man on this quay who owes me is being bought at that weight too, and about nine of them are being ruined by it and do not know why, and I have been selling their paper on all year at a discount because I thought they were bad risks.\"\n\n\"They were not bad risks. They were being weighed.\"\n\nHe puts the chalk down.\n\n\"I am going to buy that paper back. All of it. At what I sold it for. It will take me two years and I will not be thanked, and that is the closest thing to a good deed I have ever had a use for.\"",
+            "choices": [
+                {
+                    "label": "\"That is not nothing.\"",
+                    "effects": [
+                        {
+                            "xp": 60
+                        }
+                    ],
+                    "end": true
+                },
+                {
+                    "label": "Leave him to it.",
+                    "end": true
+                }
+            ]
+        },
+        "the_other_offer": {
+            "text": "\"Two hundred and fifty,\" says Ilber, \"and he will not haggle, and he will pay in Ardennian silver out of a purse he keeps in the room rather than on him, which tells you he expected to be asked this year.\"\n\nHe looks at the ceiling.\n\n\"And the seal goes back on that box, and it is a very good copy of a seal, and everything in this city goes on being weighed against a thing that is four ounces light for another six years.\"\n\nHe brings his eyes back down.\n\n\"I have been buying by that weight for six years and I am the man telling you the price. I would like that noted somewhere, because I have thought about it a good deal and I still do not know what it makes me.\"",
+            "choices": [
+                {
+                    "label": "Sell it back.",
+                    "next": "sold_it_back"
+                },
+                {
+                    "label": "\"No. It goes on the beam.\"",
+                    "end": true
+                }
+            ]
+        },
+        "sold_it_back": {
+            "text": "It takes an evening and the man in the Sounding Line does not give a name and does not ask for one, and counts out two hundred and fifty in Ardennian silver on a table with a cloth on it so that the coin does not sound.\n\nThe box goes back on the wall of the Counting Boom with a new seal across the lid, and the seal is a very good copy, and Corran Sedge notices it inside a fortnight and says nothing to anybody, ever.\n\nEverything in this city goes on being weighed against it.",
+            "on_enter": [
+                {
+                    "quest_stage": {
+                        "quest": "the_short_weight",
+                        "stage": "sold_the_proof"
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "Take the silver.",
+                    "end": true
+                }
+            ]
+        },
+        "put_it_back": {
+            "text": "You put it back and you say nothing, and it takes about four minutes and nobody sees you do it, which is the whole trouble with it.\n\nIlber Cass does not ask. He turns the credit book round to face you the way he does with everybody, and goes on selling rope, and about a fortnight later he stops mentioning the four ounces at all.\n\nCorran Sedge goes on doing the same twelve sums every quarter, and one of them goes on not closing.",
+            "on_enter": [
+                {
+                    "quest_stage": {
+                        "quest": "the_short_weight",
+                        "stage": "let_it_lie"
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "Say nothing.",
+                    "end": true
+                }
+            ]
+        }
+    }
+}

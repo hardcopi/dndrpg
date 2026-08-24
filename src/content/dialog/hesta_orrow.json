@@ -1,0 +1,476 @@
+{
+    "npc_key": "hesta_orrow",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "flag": "granary_fate",
+                        "equals": "broken"
+                    }
+                ],
+                "text": "The chalked price is gone off the beam. In its place, in the same hand, somebody has written the ration, and under it the words BY THE HALL.\n\n\"I am not putting a price back up,\" Hesta says. \"Not till they make me. You have no idea what it does to a room, having a number over the fire that goes up while people are looking at it.\"",
+                "choices": [
+                    {
+                        "label": "How are the carters taking it?",
+                        "next": "the_carters"
+                    },
+                    {
+                        "label": "Leave her to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "granary_fate",
+                        "equals": "reported"
+                    }
+                ],
+                "text": "There is no price on the beam because there is nothing to price. Hesta Orrow is standing under it with a cloth in her hand and no intention of using it.\n\n\"Barges stopped,\" she says. \"I have got nine carters upstairs who came fifty-five miles for a load that is not going to exist, and I am giving them beds because what else am I going to do, and I am doing it on credit I have not got.\"",
+                "choices": [
+                    {
+                        "label": "How are the carters taking it?",
+                        "next": "the_carters"
+                    },
+                    {
+                        "label": "Leave her to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "granary_fate",
+                        "equals": "filled"
+                    }
+                ],
+                "text": "The price on the beam has been rubbed out and written lower, and Hesta has drawn a box round it, which she has never done.\n\n\"Down,\" she says. \"Down, and stayed down four days. I do not know what happened and I have decided not to find out, which is a thing I have never once managed before.\"",
+                "choices": [
+                    {
+                        "label": "How are the carters taking it?",
+                        "next": "the_carters"
+                    },
+                    {
+                        "label": "Leave her to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "cellar_cleared"
+                    },
+                    {
+                        "flag": "underquay_known"
+                    }
+                ],
+                "text": "Hesta has had a baulk of pine wedged across the cellar drain and has not told anybody why, and has been asked four times.\n\n\"I have got a hole in my floor that goes somewhere,\" she says, quietly, with the cloth going round and round one spot on the bar. \"Thirty years I have been drawing beer over a hole that goes somewhere. Do not tell me who uses it. I have thought about it and I do not want to know and I want you to know that I know that is cowardice.\"",
+                "choices": [
+                    {
+                        "label": "\"You should tell the Watch.\"",
+                        "next": "not_the_watch"
+                    },
+                    {
+                        "label": "\"Then I will not tell you.\"",
+                        "next": "she_is_grateful"
+                    },
+                    {
+                        "label": "What is going on in the market?",
+                        "next": "the_price"
+                    },
+                    {
+                        "label": "Leave her to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_carters_cellar",
+                        "status": "active"
+                    },
+                    {
+                        "flag": "underquay_cleared"
+                    }
+                ],
+                "text": "Hesta looks at the state of you, and at the water still coming off your boots onto her floor, and puts the cloth down.\n\n\"You went through it,\" she says. \"Through the drain. Not down the trap — through.\"\n\nShe does not ask what is on the other side. She waits, which for Hesta Orrow is an enormous concession.",
+                "choices": [
+                    {
+                        "label": "\"It comes out under the outer quay. There is a cut stair down there.\"",
+                        "next": "the_way_found"
+                    },
+                    {
+                        "label": "\"It comes out in the rock. It is nothing.\"",
+                        "next": "the_grate_untold"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "cellar_cleared"
+                    }
+                ],
+                "text": "\"Cellar's mine again,\" Hesta says, and puts a cup in front of you that you did not order and are not being charged for. \"Which is the only thing in this ward that has got more mine rather than less this year.\"",
+                "choices": [
+                    {
+                        "label": "What is going on in the market?",
+                        "next": "the_price"
+                    },
+                    {
+                        "label": "Tell me about the carters.",
+                        "next": "the_carters"
+                    },
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "cellar_rats_beaten"
+                    }
+                ],
+                "text": "\"I heard it through the floor,\" Hesta says. \"The whole room heard it through the floor and went very quiet and then very loud. Are they done?\"",
+                "choices": [
+                    {
+                        "label": "\"They are done.\"",
+                        "next": "the_report"
+                    },
+                    {
+                        "label": "\"Not quite. There is something else down there.\"",
+                        "next": "the_report"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_carters_cellar",
+                        "status": "active"
+                    }
+                ],
+                "text": "\"Still down there?\" says Hesta, without looking up from the tap. \"Trap is where it was. Take a light. The candle by the door is the house's and I will want the stub back, and I am not joking, wax is up as well.\"",
+                "choices": [
+                    {
+                        "label": "What is going on in the market?",
+                        "next": "the_price"
+                    },
+                    {
+                        "label": "Back to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "met_hesta"
+                    }
+                ],
+                "text": "Hesta Orrow is rubbing the grain price off the beam over the hearth for the second time today and writing it up again higher, in front of a room that is watching her do it.\n\n\"Do not,\" she says, to the room in general. \"I did not put it up. I am only the one with the chalk.\"",
+                "choices": [
+                    {
+                        "label": "About that cellar of yours.",
+                        "next": "the_cellar"
+                    },
+                    {
+                        "label": "What is going on in the market?",
+                        "next": "the_price"
+                    },
+                    {
+                        "label": "Tell me about the carters.",
+                        "next": "the_carters"
+                    },
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "The woman behind the bar is chalking a number on the beam over the hearth, and half the room is watching her do it, and none of them look pleased.\n\n\"Hesta Orrow,\" she says. \"Beds, beer, broth, and stabling round the back. If you want the price of grain it is over the fire and if you want to argue about it, argue with Lathmere, they are the ones who set it.\"\n\nShe puts the chalk down.\n\n\"And if you are the sort that takes work — I have got a cellar I have stopped going into alone.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_hesta"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "\"What is in the cellar?\"",
+                        "next": "the_cellar"
+                    },
+                    {
+                        "label": "\"Why is the price moving twice a day?\"",
+                        "next": "the_price"
+                    },
+                    {
+                        "label": "A bed, please.",
+                        "effects": [
+                            {
+                                "rest": "inn"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Nothing for now.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_cellar": [
+            {
+                "conditions": [
+                    {
+                        "quest": "the_carters_cellar",
+                        "status": "active"
+                    }
+                ],
+                "text": "\"It is still down there and I am still not going,\" Hesta says. \"Trap by the stair. Mind the third step, it is not there.\"",
+                "choices": [
+                    {
+                        "label": "Right.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "\"A barrel a week,\" Hesta says. \"That is what it is costing me. Not drunk — gone through. And it is not the carters, because carters steal beer, they do not chew the stave.\"\n\nShe wipes the same patch of bar twice.\n\n\"There is a drain in the corner down there. Goes out under the ward somewhere; every cellar this side of the Gate Way has one, it is how the place drains, we are all built on rock and rain. And the grate over mine was mortared in by my husband's father and it is not mortared in now.\"\n\n\"I will pay. I would rather pay than go down.\"",
+                "choices": [
+                    {
+                        "label": "\"I will do it.\"",
+                        "effects": [
+                            {
+                                "start_quest": "the_carters_cellar"
+                            }
+                        ],
+                        "next": "the_hire"
+                    },
+                    {
+                        "label": "\"Who unmortared it?\"",
+                        "next": "who_moved_it"
+                    },
+                    {
+                        "label": "Not today.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "who_moved_it": {
+            "text": "\"Now that,\" Hesta says, \"is the question I have been being careful not to ask myself for a fortnight.\"\n\nShe leans on the bar.\n\n\"This ward is full of people who have arrived in it in the last six years and it is not their fault and I will fight the man who says it is. But somebody moved a stone I could not lift, in my cellar, and set it back down square, and did not take the beer.\"",
+            "choices": [
+                {
+                    "label": "\"I will go and look.\"",
+                    "effects": [
+                        {
+                            "start_quest": "the_carters_cellar"
+                        }
+                    ],
+                    "next": "the_hire"
+                },
+                {
+                    "label": "Leave it for now.",
+                    "end": true
+                }
+            ]
+        },
+        "the_hire": {
+            "text": "\"Trap is by the foot of the stair,\" Hesta says, already reaching for a candle. \"Third step is not a step, it is a memory of one. Light is the house's, I want the stub back.\"\n\nShe stops with the candle half out.\n\n\"And look at the grate. Not at the rats. At the grate.\"",
+            "choices": [
+                {
+                    "label": "Down we go.",
+                    "end": true
+                }
+            ]
+        },
+        "the_report": {
+            "text": "Hesta listens all the way to the end, which not many people in this city do, and then goes and gets the money out of a jar rather than the till, which tells you where the inn actually keeps its money.\n\n\"There,\" she says. \"And do not tell me about the grate. You have got a face on you about the grate.\"",
+            "choices": [
+                {
+                    "label": "\"The grate has been moved. Recently, and by somebody strong, and put back square.\"",
+                    "next": "the_grate_told"
+                },
+                {
+                    "label": "\"It was rats. That is all it was.\"",
+                    "next": "the_grate_untold"
+                }
+            ]
+        },
+        "the_grate_told": {
+            "text": "\"Right,\" says Hesta. She sits down on the bench behind the bar, which she does not do in front of customers.\n\n\"Thirty-one years,\" she says. \"And there is a road under my floor.\"\n\nShe looks at the trap.\n\n\"Wedge it. I will pay for the pine. And do not — \" she stops. \"No. Do what you like. But I am not the Watch and I am not going to be, and if you go down there and find who it is, do not bring them up through my common room.\"",
+            "on_enter": [
+                {
+                    "quest_stage": {
+                        "quest": "the_carters_cellar",
+                        "stage": "the_drain"
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"I will go down and see where it goes.\"",
+                    "end": true
+                },
+                {
+                    "label": "\"Wedge it and forget it.\"",
+                    "effects": [
+                        {
+                            "quest_stage": {
+                                "quest": "the_carters_cellar",
+                                "stage": "cleared"
+                            }
+                        }
+                    ],
+                    "end": true
+                }
+            ]
+        },
+        "the_grate_untold": {
+            "text": "\"Rats,\" Hesta repeats, and looks at you for slightly too long, and then decides — visibly, like a woman putting down a bag — to be told rats.\n\n\"Rats it is,\" she says. \"Thank you. I mean that. I have got nine carters upstairs and a price on that beam that goes up while people watch it, and rats is exactly as much as I have got room for this week.\"",
+            "on_enter": [
+                {
+                    "quest_stage": {
+                        "quest": "the_carters_cellar",
+                        "stage": "cleared"
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "Leave it there.",
+                    "end": true
+                }
+            ]
+        },
+        "the_price": [
+            {
+                "conditions": [
+                    {
+                        "flag": "granary_lie_known"
+                    }
+                ],
+                "text": "\"You know,\" Hesta says, and it is not a question, and she does not stop wiping. \"You have got the face of somebody who has been in the granary past the second bay.\"\n\nShe puts the cloth down.\n\n\"Half this ward has worked it out and none of us can say it, because the day it is said out loud is the day the barges stop, and the barges stopping is the actual thing. Not the lie. Nobody eats the lie.\"",
+                "choices": [
+                    {
+                        "label": "\"That is a very steady head you have got on you.\"",
+                        "next": "she_is_steady"
+                    },
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ]
+            },
+            {
+                "text": "\"Twice a day,\" Hesta says. \"Sometimes three. And do not ask me who sets it, because that is where it gets interesting.\"\n\nShe counts it off on the bar with the chalk.\n\n\"League price is posted at the Weigh House. Fish Hall price is shouted in Old Waer before noon and is lower, and they have no right to set one at all, and everybody in the market takes theirs. And then there is what the Hallowmarket stalls actually charge, which is neither, and which has gone up nine times since Candlemas.\"\n\n\"There is a great deal of grain arriving in this city and it is getting dearer. You tell me what that means and I will give you the room free.\"",
+                "choices": [
+                    {
+                        "label": "\"It means less of it is arriving than the paper says.\"",
+                        "next": "she_is_steady"
+                    },
+                    {
+                        "label": "\"It means somebody is holding stock back.\"",
+                        "next": "she_is_steady"
+                    },
+                    {
+                        "label": "\"I do not know.\"",
+                        "next": "she_is_steady"
+                    },
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ]
+            }
+        ],
+        "she_is_steady": {
+            "text": "\"Everybody has a theory,\" Hesta says, \"and every theory has a man in it, and I have noticed that the man is always somebody the person telling me already disliked.\"\n\nShe picks the cloth back up.\n\n\"So here is mine, and there is nobody in it. There is a number written down in Lathmere and there is a number on the floor of that granary and they have not been the same number for a while, and every single person in this ward is arranging their life around the first one.\"",
+            "choices": [
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "not_the_watch": {
+            "text": "Hesta laughs, once, without any humour in it at all.\n\n\"The Watch,\" she says. \"The Watch drink in my back room on Thursdays and they do not pay, and I do not charge them, and that is the arrangement and it has been the arrangement since before Skeld. You want me to walk up to the Keep and tell forty men who are paid by three different people that there is a hole under my floor?\"\n\nShe shakes her head.\n\n\"They would come and look. That is the trouble. They would come and look and one of them would go and tell whoever it needed telling to, and it would still be my floor.\"",
+            "choices": [
+                {
+                    "label": "\"Fair enough.\"",
+                    "next": "she_is_grateful"
+                }
+            ]
+        },
+        "she_is_grateful": {
+            "text": "\"Good,\" Hesta says.\n\nShe puts a cup down and this time fills it.\n\n\"You are the first person to come through that door in a year who has been told a thing and not immediately explained to me what I ought to do about it. Sit down. The broth is barley and there is not much barley in it and I am not apologising.\"",
+            "choices": [
+                {
+                    "label": "Sit down.",
+                    "effects": [
+                        {
+                            "heal": 4
+                        }
+                    ],
+                    "end": true
+                },
+                {
+                    "label": "Another time.",
+                    "end": true
+                }
+            ]
+        },
+        "the_carters": [
+            {
+                "conditions": [
+                    {
+                        "flag": "city_standing",
+                        "equals": "audited"
+                    }
+                ],
+                "text": "\"Nine of them upstairs,\" Hesta says, \"and not one has left. They are waiting for the barges to start again because the alternative is going home empty and telling Venddock that Waerhaven has stopped buying.\"\n\nShe glances at the stair.\n\n\"They will wait about six more days. Then this ward finds out what fifty-five miles of road looks like with nothing on it.\"",
+                "choices": [
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ]
+            },
+            {
+                "text": "\"Carters know everything and understand none of it,\" Hesta says, comfortably, \"which makes them the best company in this city.\"\n\n\"They come up from Venddock and Lathmere and the timber country and they are the only people in Waerhaven who see the place from outside. Ask one of them what the League thinks of us. Go on. You will get an earful and about a third of it will be true, and it is a third nobody up on that ridge has got at all.\"",
+                "choices": [
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ]
+            }
+        ],
+        "the_way_found": {
+            "text": "\"A stair,\" says Hesta.\n\nShe sits down on the bench behind the bar.\n\n\"Cut. Under the quay. And a drain out of my cellar that runs twenty feet and drops into it, with a grate on it that my husband's father mortared in.\"\n\nShe looks at the trap.\n\n\"Thirty-one years I have been drawing beer over a road.\"\n\nAfter a while she gets up and goes and gets a baulk of pine off the yard herself, and wedges the drain, and pays you out of the jar rather than the till.\n\n\"There,\" she says. \"That is mine wedged. What is under it is somebody else's and I am going to go on serving broth.\"",
+            "on_enter": [
+                {
+                    "quest_stage": {
+                        "quest": "the_carters_cellar",
+                        "stage": "the_way_in_found"
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"Fair enough.\"",
+                    "end": true
+                }
+            ]
+        }
+    }
+}

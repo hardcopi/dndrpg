@@ -1,0 +1,309 @@
+{
+    "npc_key": "doss_the_crane",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "flag": "charter_fate",
+                        "equals": "burned"
+                    }
+                ],
+                "text": "The drum is not turning. Doss sits in the hatch with his legs hanging out of it and looks at the tide gate under the outer quay, which is down, and at the water going in and out of it clean.\n\n\"Nineteen years,\" he says. \"And a fortnight ago I could have told you the name of every man who ever came up that stair.\" He spits into the harbour. \"Now there is nothing under the stone but water, and I have got four men in a wheel and nothing to lift.\"",
+                "choices": [
+                    {
+                        "label": "Leave him.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "charter_fate",
+                        "equals": "seized"
+                    }
+                ],
+                "text": "\"Factor's men counted it out in daylight,\" Doss says, from inside the drum, without stopping walking. \"Eighty quarters, up my crane, onto League carts, with a clerk writing every sack.\" The drum keeps turning. \"Do you know what that is? That is the first honest lift this crane has made in six years, and I have never been so ashamed of a load in my life.\"",
+                "choices": [
+                    {
+                        "label": "\"Ashamed?\"",
+                        "next": "the_shame"
+                    },
+                    {
+                        "label": "Leave him.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "charter_fate",
+                        "equals": "bought_in"
+                    }
+                ],
+                "text": "Doss leans out of the hatch and looks at you for exactly as long as it takes to price you, which is what he did the first time, and then does something he did not do the first time, which is nod.\n\n\"Fourth of the month,\" he says. \"Half tide. Bring your own light.\"",
+                "choices": [
+                    {
+                        "label": "\"Fourth.\"",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "deep_store_seen"
+                    }
+                ],
+                "text": "Doss comes out of the drum for this, which the other three inside it notice and comment on at length.\n\n\"You have been down,\" he says. \"You have got the smell on you. Nobody gets that smell out of a coat in under a week and there is exactly one place on this promontory you get it.\"",
+                "choices": [
+                    {
+                        "label": "\"Whose grain is it?\"",
+                        "next": "whose_grain"
+                    },
+                    {
+                        "label": "\"How long have you been lifting for them?\"",
+                        "next": "nineteen_years"
+                    },
+                    {
+                        "label": "Say nothing and go.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "charter_known"
+                    }
+                ],
+                "text": "\"You again,\" says Doss, from the hatch. \"You have been asking about the Charter. Six people have told me so, which is five more than usually bother.\"",
+                "choices": [
+                    {
+                        "label": "\"How do I get under the quay?\"",
+                        "next": "the_way_under"
+                    },
+                    {
+                        "label": "\"What goes out?\"",
+                        "next": "what_goes_out"
+                    },
+                    {
+                        "label": "Later.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "met_doss"
+                    }
+                ],
+                "text": "The drum turns. Doss is inside it, walking, and does not stop, and talks to you through the hatch on the swing.\n\n\"Still here,\" he says. \"Still walking. It is the only job on this quay where you can see everything and are never once accused of watching.\"",
+                "choices": [
+                    {
+                        "label": "\"What comes off this crane?\"",
+                        "next": "the_arrangement"
+                    },
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "The treadwheel is the size of a small house and there are four men inside it walking, and it turns, and a load goes up very slowly in front of a great many people.\n\nA head appears in the hatch at the side of the drum: broad, grey, entirely unhurried.\n\n\"Doss,\" he says. \"Crane. If it wants lifting, it wants me, and if it does not want lifting, it wants me a good deal more.\"\n\nHe looks at you for exactly as long as it takes to put a price on you, and goes back in.",
+                "on_enter": [
+                    {
+                        "set_flag": "met_doss"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "\"What does that mean?\"",
+                        "next": "the_arrangement"
+                    },
+                    {
+                        "label": "\"Twice a year you lift something nobody looks at.\"",
+                        "next": "twice_a_year"
+                    },
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_arrangement": {
+            "text": "\"It means,\" says Doss, on the next swing past the hatch, \"that a crane is the most public machine in the world. Everything it does, it does slowly, in the air, in front of the whole quay.\"\n\n\"So there is no such thing as a secret lift. There is only a lift that nobody has a reason to describe afterwards.\"\n\nThe drum turns.\n\n\"I have spent nineteen years making sure that nobody on this quay has ever had a reason.\"",
+            "choices": [
+                {
+                    "label": "\"And when somebody does?\"",
+                    "next": "twice_a_year"
+                },
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "twice_a_year": {
+            "text": "The drum stops. It does not slow; it stops, which takes three of the four of them and a shouted word, and the whole quay looks round and then looks away again.\n\nDoss comes to the hatch.\n\n\"Now that,\" he says, \"is a thing somebody has told you. Which is fine. I would like to know who, and I am not going to ask, because asking is how a man ends up owed an answer.\"\n\nHe leans on the frame.\n\n\"Twice a year. Daylight. Everybody watching. That is not smuggling, that is a delivery. What you want to be asking is not what comes up. It is what goes down and never comes up at all.\"",
+            "on_enter": [
+                {
+                    "set_flag": "charter_known"
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"What goes down?\"",
+                    "next": "what_goes_out"
+                },
+                {
+                    "label": "\"And how do I get down there?\"",
+                    "next": "the_way_under"
+                },
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "what_goes_out": [
+            {
+                "conditions": [
+                    {
+                        "flag": "deep_store_seen"
+                    }
+                ],
+                "text": "\"You know what goes out,\" Doss says. \"You have stood in the room it goes out of.\"",
+                "choices": [
+                    {
+                        "label": "\"Whose grain is it?\"",
+                        "next": "whose_grain"
+                    },
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ]
+            },
+            {
+                "text": "\"People in,\" says Doss. \"That is the half everybody knows. Six years of it. Men and women off a coasting boat at the north horn at half tide, and up the old stair, and out through a cellar, and by morning they are picking oakum in Tarrow with a tin token in their hand.\"\n\n\"And that is a cost. You do not move nineteen hundred people for love. Somebody buys the boat, somebody squares the gate, somebody pays for the bread.\"\n\nHe looks out over the harbour.\n\n\"So something goes out. And it is not timber, whatever the book says, because I lift the timber and I know what the timber weighs.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "charter_known"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "\"Then what is it?\"",
+                        "next": "he_will_not_name_it"
+                    },
+                    {
+                        "label": "\"How do I get down there?\"",
+                        "next": "the_way_under"
+                    }
+                ]
+            }
+        ],
+        "he_will_not_name_it": {
+            "text": "\"No,\" says Doss, pleasantly. \"No, that one costs.\"\n\nHe holds up a hand before you can speak.\n\n\"Not money. I have got money; four men in a wheel is better paid than you would think and I have got nothing to spend it on. What it costs is this: you go down and look yourself, and then you come back up and tell me what you are going to do about it.\"\n\n\"I will not be the man who named it. I have been nineteen years not being the man who named anything. But I am sixty-one and the tide gate has been cut wider twice since spring, and somebody has got greedy, and greedy is how nineteen years ends.\"",
+            "choices": [
+                {
+                    "label": "\"Tell me the way down.\"",
+                    "next": "the_way_under"
+                },
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "the_way_under": {
+            "text": "\"Old quay steps,\" Doss says. \"Behind the warehouses, under the stone, where the new work meets the old. Twenty-two of them and the twenty-second is under water except at the ebb.\"\n\n\"Go on the ebb. Come out on the ebb. If you are in the low cellars at the flood you will find out very fast why nobody keeps anything down there that cannot swim.\"\n\nHe considers.\n\n\"And there is a line hung on rings at the turn of the stair. Do not take it. It is not there for you and the man it is there for counts it.\"",
+            "on_enter": [
+                {
+                    "set_flag": "underquay_known"
+                },
+                {
+                    "quest_stage": {
+                        "quest": "what_goes_out",
+                        "stage": "find_the_way_under"
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"On the ebb.\"",
+                    "end": true
+                }
+            ]
+        },
+        "whose_grain": {
+            "text": "Doss is quiet for long enough that the three men still in the drum start asking him things.\n\n\"League grain,\" he says at last. \"League sacking, Lathmere's stencil, off the barges, before it ever reaches the granary. Taken off the top of every consignment for six years and put somewhere the Factor's seals are not.\"\n\n\"And here is the part you will not want. It is not stolen. Look at the room. Dunnaged off the floor, aired, swept, turned. Nobody keeps stolen grain like that. You keep stolen grain until you can sell it.\"\n\nHe looks at you.\n\n\"That is a granary. Somebody has been building this city a second granary for six years, out of the first one, and not telling it.\"",
+            "on_enter": [
+                {
+                    "set_flag": "deep_store_seen"
+                },
+                {
+                    "quest_stage": {
+                        "quest": "what_goes_out",
+                        "stage": "the_deep_store"
+                    }
+                },
+                {
+                    "xp": 150
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"Who keeps the book?\"",
+                    "next": "the_book"
+                },
+                {
+                    "label": "\"Then it is not a theft. It is a hoard against the winter.\"",
+                    "next": "the_book"
+                }
+            ]
+        },
+        "the_book": {
+            "text": "\"The door with no sign,\" Doss says. \"Round the back of the warehouses off my quay. There is a book on the table in there in nine hands and it balances, and I have never once seen the person who rules the columns.\"\n\n\"Three names get said. Ilber Cass, who would love it to be him and it is not. A gnome up on the ridge, which is nonsense, because he reports to Lathmere and this is the one thing Lathmere must never hear. And a third that nobody will say out loud in a room with a door.\"\n\nHe swings back into the drum.\n\n\"You have got a door to go through and I have got a load coming up. Go on.\"",
+            "on_enter": [
+                {
+                    "quest_stage": {
+                        "quest": "what_goes_out",
+                        "stage": "whose_grain"
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "Go.",
+                    "end": true
+                }
+            ]
+        },
+        "nineteen_years": {
+            "text": "\"Six of them for the Charter,\" Doss says. \"Thirteen before it, for the ordinary business of a harbour, which is also mostly a matter of not describing things.\"\n\n\"I will tell you the thing about this job that nobody believes. I have never once been paid to lift a wrong load. Not once. I am paid — properly, by the Moot, by the League — to lift right ones. What I am given, on the side, twice a year, is money for having lifted a load and then gone home and had my supper.\"\n\nHe holds his hands apart.\n\n\"Nobody has ever asked me to do a thing. They have only ever paid me for the shape of the man I already was.\"",
+            "choices": [
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "the_shame": {
+            "text": "\"Because it was eighty quarters of bread,\" Doss says, still walking, \"and it was going into a building with the Factor's seals on the door, and there are nineteen hundred people outside the wall who are not on any list that building answers to.\"\n\nThe drum turns.\n\n\"I lifted it. It was a good clean lift and every sack was written down. And that is the first time in nineteen years I have lifted something in front of the whole quay and wished nobody was looking.\"",
+            "choices": [
+                {
+                    "label": "Leave him to it.",
+                    "end": true
+                }
+            ]
+        }
+    }
+}

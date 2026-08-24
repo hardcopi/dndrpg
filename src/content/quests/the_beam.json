@@ -1,0 +1,71 @@
+{
+    "quest_key": "the_beam",
+    "title": "The Beam",
+    "act": 2,
+    "companion": "doren_ferrow",
+    "description": "There are ten masts painted on a beam that has held nine for four hundred years, and Doren Ferrow has paint under one fingernail that he has not managed to get out since spring.",
+    "giver": "gedda_halloway",
+    "on_job_board": false,
+    "required_level": 3,
+    "rewards": {
+        "xp": 300
+    },
+    "stages": {
+        "the_drawing": {
+            "title": "The drawing",
+            "objective": "Get Doren to show you what he has been drawing for two years.",
+            "journal": "He carries it rolled inside his coat and has done since before I met him, and he unrolls it at the ropewalk, which is the only place in this city where nobody can come up behind you.",
+            "target": {
+                "location": "the_ropehouse"
+            }
+        },
+        "the_tenth": {
+            "title": "Under the beam",
+            "objective": "Decide what happens to the tenth mast.",
+            "journal": "It is a hull for ice. Double-framed forward, sheathed to the wale, short and deep, and drawn by somebody who has read three stolen charts of a shore the Charthouse has stopped admitting is there. He has not asked anyone for permission for any part of it.",
+            "target": {
+                "location": "the_nine_masts"
+            }
+        },
+        "owned": {
+            "title": "Owned",
+            "terminal": true,
+            "resolution": "owned",
+            "outcome": "success",
+            "journal": "He stood up under the beam in front of the whole house and said he painted it, and said why, and put the drawing on the table. Gedda Halloway looked at it for a very long time and then asked him one question about the garboard, which is how a master shipwright says yes.",
+            "effects": [
+                {
+                    "set_flag": "doren_fate",
+                    "value": "owned"
+                },
+                {
+                    "approval": {
+                        "doren_ferrow": 15
+                    }
+                },
+                {
+                    "give_item": "the_tenth_hull",
+                    "quantity": 1
+                }
+            ]
+        },
+        "painted_out": {
+            "title": "Painted out",
+            "terminal": true,
+            "resolution": "painted_out",
+            "outcome": "success",
+            "journal": "He painted it out himself, at night, with the same brush, and kept the drawing. He says it was the right thing and he is right, and he has not looked up at that beam once since, and he used to look at it every time he came through the door.",
+            "effects": [
+                {
+                    "set_flag": "doren_fate",
+                    "value": "painted_out"
+                },
+                {
+                    "approval": {
+                        "doren_ferrow": 8
+                    }
+                }
+            ]
+        }
+    }
+}

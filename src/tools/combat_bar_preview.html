@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <!--
-  The combat action bar, every slot and every state, with no fight running.
+  The combat action column, every slot and every state, with no fight running.
 
   The bar is only reachable three clicks into a live encounter on somebody's
   own turn, and half of what is worth looking at — a closed slot, a spent
-  bonus action, a tooltip that has to say why — needs the fight to be in a
-  particular state to appear at all. That is a slow way to judge an icon.
+  bonus action, a line that has to say why — needs the fight to be in a
+  particular state to appear at all. That is a slow way to judge a key.
 
   This draws the real markup against the real stylesheet and the real sprite,
   pulled from the running site, so anything wrong here is wrong in the game.
@@ -24,23 +24,29 @@
     body { padding: 1.5rem; background: var(--bg-inset); }
     h2 { color: var(--gold); font-size: 0.9rem; margin: 1.4rem 0 0.5rem; }
     .note { color: var(--text-dim); font-size: 0.78rem; margin: 0 0 1rem; max-width: 62ch; }
-    .bench { max-width: 900px; }
+    .bench { max-width: 22rem; }
+    .cbt-bar {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: var(--r-md);
+    }
   </style>
 </head>
 <body class="game-page">
   <div class="bench">
     <h2>Every slot, available</h2>
-    <p class="note">Party-side slots first, then the bonus action in accent, then
-      the three past the divider that end or leave the fight.</p>
-    <div class="cbt-bar"><div class="cbt-actions" id="bar-all"></div></div>
+    <p class="note">The same named keys the fight draws in the right-hand column:
+      the action, then the bonus action in accent, then the three that end or
+      leave the fight.</p>
+    <div class="cbt-bar"><div class="cbt-actions is-stack" id="bar-all"></div></div>
 
     <h2>The turn already spent</h2>
     <p class="note">Closed, not hidden — the position a player learned has to keep
-      meaning the same thing. Hover one: the reason is in the danger colour.</p>
-    <div class="cbt-bar"><div class="cbt-actions" id="bar-spent"></div></div>
+      meaning the same thing. The reason sits on the key in the danger colour.</p>
+    <div class="cbt-bar"><div class="cbt-actions is-stack" id="bar-spent"></div></div>
 
     <h2>A barbarian, two rages left</h2>
-    <div class="cbt-bar"><div class="cbt-actions" id="bar-barb"></div></div>
+    <div class="cbt-bar"><div class="cbt-actions is-stack" id="bar-barb"></div></div>
 
     <h2>Armed, waiting for the second click</h2>
     <p class="note">Dodge, Dash, Disengage and the bonus actions spend the turn the
@@ -49,7 +55,7 @@
       slot — that is why it adds a ring rather than only warming the border the
       way hover does. Every bar on this page is live: click one and it arms,
       click again and it clears, or wait three seconds and it forgets.</p>
-    <div class="cbt-bar"><div class="cbt-actions" id="bar-armed"></div></div>
+    <div class="cbt-bar"><div class="cbt-actions is-stack" id="bar-armed"></div></div>
   </div>
 
   <script>
@@ -83,8 +89,14 @@
     return `<button type="button" class="${cls}" data-act="${esc(b.key)}"
       ${b.ok ? '' : 'disabled'}
       data-label="${esc(b.label)}" data-why="${esc(b.why)}" aria-label="${esc(b.label)}">
-      <svg class="act-icon" aria-hidden="true"><use href="#${esc(b.icon)}"></use></svg>
-      ${b.count != null ? `<span class="act-count" aria-hidden="true">${esc(b.count)}</span>` : ''}
+      <span class="act-num" aria-hidden="true">
+        <svg class="act-icon"><use href="#${esc(b.icon)}"></use></svg>
+        ${b.count != null ? `<span class="act-count">${esc(b.count)}</span>` : ''}
+      </span>
+      <span class="act-text">
+        <span class="act-name">${esc(b.label)}</span>
+        <span class="act-desc">${esc(b.why)}</span>
+      </span>
     </button>`;
   }
 

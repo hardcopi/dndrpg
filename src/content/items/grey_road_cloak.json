@@ -1,0 +1,15 @@
+{
+  "item_key": "grey_road_cloak",
+  "name": "Grey Road Oilcloth",
+  "description": "Warden-cut, waxed to the colour of wet pine, with the shoulders doubled where a pack rides and a pocket inside the breast exactly the size of a folded list. It has come eighty-five miles through the Wyrdpines with somebody inside it and it has not let the weather in yet.",
+  "item_type": "armor",
+  "rarity": "uncommon",
+  "weight": 3,
+  "value_gp": 140,
+  "armor_bonus": 0,
+  "armor_type": "cloak",
+  "properties": {
+    "stealth_advantage_outdoors": true
+  },
+  "icon": "cloak"
+}

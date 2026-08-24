@@ -65,7 +65,7 @@ STYLE = (
 # seed, so this is the whole provenance: the same seed against the same prompt
 # reproduces the file byte for byte (checked, not assumed). Edit a prompt and
 # its seed no longer reaches the same picture — pick again, and record it here.
-SHIPPED_SEED = {"undervault": 201}
+SHIPPED_SEED = {"undervault": 201, "waerhaven": 302}
 
 # A cover per module, written here rather than derived from the blurb. A blurb
 # is prose about what playing it is like; a cover needs a place and a moment,
@@ -88,6 +88,51 @@ COVERS = {
         "orange campfire on the bare hillside around the rim, a grey spoil "
         "heap of broken rock behind the tents, evening sky at the top of the "
         "picture"
+    ),
+    # The module is the whole of Morris's book and the card is read before any
+    # of it, so the cover is the promise rather than the first act: somebody
+    # small, leaving, on a road that does not stop.
+    #
+    # Deliberately NOT the Well. "a well" draws a village wishing-well with a
+    # bucket on a rope, which is the least mysterious object in the language —
+    # and the Well is four acts away and no player will have earned the sight
+    # of it. What is on the card is the moment Act 1 actually ends on.
+    #
+    # The leading clause is the road and the wood, in that order, because the
+    # composition IS the road: a rider anywhere in the first clause makes a
+    # portrait of a horseman and the landscape goes to background. "no castle"
+    # is in the positive prompt on purpose — a small stone hall in a green
+    # valley is a castle in the weights unless told otherwise, and the negative
+    # prompt is inert on this model.
+    # Three things had to be beaten out of the first draft, and all three are
+    # the same fault: a clause that arrives late loses.
+    #
+    # 1. "a vast dark forest" sat in the middle of the sentence and simply did
+    #    not appear — four seeds of open rolling valley with distant hills. It
+    #    leads now, and the wood is a WALL of trees rather than a region of the
+    #    map, because "forest filling the far half" is a proportion and this
+    #    model draws objects.
+    # 2. "a tall weathered stone waymark post" came back as a round stone tower
+    #    on three seeds of four. Tall + stone + standing alone is a tower. It
+    #    is waist-high and leaning now, and "no tower" is stated positively.
+    # 3. The rider was "small in the landscape" and the card is 900px wide in a
+    #    row of three. The shipped covers all have a figure you can read at
+    #    card size and one object doing the composition; a wide empty landscape
+    #    is a fine picture and reads as a failed thumbnail beside them.
+    # The city's own subject is a chain across a harbour mouth, and it is the
+    # one object in Waerhaven that reads at card size: heavy, dark, horizontal,
+    # and obviously a decision somebody made. A wide harbour view came back as
+    # four seeds of generic port. A figure on the quay gives it the scale the
+    # shipped covers all have.
+    "waerhaven": (
+        "a huge heavy black iron chain slung taut across the mouth of a "
+        "harbour just above the water in the foreground, links as thick as a "
+        "man's thigh, running from a squat stone tower on the left out of "
+        "frame to the right, one figure in a dark coat standing on the stone "
+        "quay beside it seen from behind and small against it, "
+        "behind them a shipyard of tall bare wooden hull frames on slipways "
+        "and a ridge of steep grey roofs, cold flat northern light, "
+        "grey water, low cloud, no sun, no sails, no ships afloat"
     ),
 }
 

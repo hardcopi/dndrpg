@@ -1,0 +1,14 @@
+{
+  "item_key": "charter_ledger",
+  "name": "The Quiet Charter's Book",
+  "description": "A ledger in nine hands, ruled in three columns — in, out, and paid — with no names in any of them, only marks. It balances. Whoever keeps it is better at this than anybody in the Wet Hall, and has been doing it for six years, and has never once written a word that could be read aloud in a court.",
+  "item_type": "misc",
+  "rarity": "rare",
+  "weight": 1.5,
+  "value_gp": 0,
+  "properties": {
+    "quest_item": true,
+    "readable": true
+  },
+  "icon": "book"
+}

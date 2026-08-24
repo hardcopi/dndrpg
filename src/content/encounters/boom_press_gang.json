@@ -1,0 +1,17 @@
+{
+    "encounter_key": "boom_press_gang",
+    "name": "The Watch, Sober",
+    "description": "Twelve of forty are sober before noon and Skeld has had the sense to send those twelve. They are not angry and they are not corrupt about this particular thing, which makes them considerably worse to be in a room with.",
+    "difficulty": "medium",
+    "monsters": [
+        {
+            "monster": "city_guard",
+            "quantity": 4,
+            "rank": "front"
+        }
+    ],
+    "allow_flee": true,
+    "allow_parley": true,
+    "parley_node": "oren_skeld:he_calls_it_off",
+    "victory_flag": "watch_beaten"
+}

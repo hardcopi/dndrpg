@@ -1,0 +1,87 @@
+{
+    "quest_key": "what_goes_out",
+    "title": "What Goes Out",
+    "act": 2,
+    "description": "People come into Waerhaven through an arrangement with no name, and something has to go out to pay for them. Tam Ryke's loft has watched it going out for two years and cannot say so on a quay.",
+    "giver": "tam_ryke",
+    "on_job_board": false,
+    "required_level": 3,
+    "rewards": {
+        "xp": 450,
+        "gold": 120
+    },
+    "stages": {
+        "find_the_way_under": {
+            "title": "Under the quay",
+            "objective": "Get into the Underquay.",
+            "journal": "Twenty women have watched the Great Crane lift the same kind of load twice a year for two years, and every time, the lighter it comes off is riding lower going out than it did coming in. Tam wants somebody to go and look at what is under the stone.",
+            "target": {
+                "location": "underquay_stair"
+            }
+        },
+        "the_deep_store": {
+            "title": "The dry room",
+            "objective": "Find what the Underquay is actually for.",
+            "journal": "There is a room down there above the tide-mark with new boards on new joists, and it is a granary, and it is a better granary than the League's.",
+            "target": {
+                "location": "the_deep_store"
+            }
+        },
+        "whose_grain": {
+            "title": "Whose grain",
+            "objective": "Find out who keeps the book.",
+            "journal": "Eighty quarters of League grain in League sacking, dunnaged, swept, kept properly. Not hoarded — held. Somebody in this city has been taking grain off the top for six years and storing it where the Factor's seals are not, and doing it well, and I do not yet know whether that is a theft or a granary.",
+            "target": {
+                "location": "the_quiet_charter"
+            }
+        },
+        "seized": {
+            "title": "Taken back",
+            "terminal": true,
+            "resolution": "seized",
+            "outcome": "success",
+            "journal": "The Underquay store is the Factor's now, on paper, in daylight, and the arrangement that fed the Wardenswatch for six years is finished. Eighty quarters into the granary. Nineteen hundred people off the only supply that was ever actually theirs.",
+            "effects": [
+                {
+                    "set_flag": "charter_fate",
+                    "value": "seized"
+                },
+                {
+                    "xp": 150
+                }
+            ]
+        },
+        "bought_in": {
+            "title": "Bought in",
+            "terminal": true,
+            "resolution": "bought_in",
+            "outcome": "success",
+            "journal": "I did not close it. I got a share of it, and a key, and a share of the blame if it is ever opened. The Charter keeps running. It feeds the people the charter says are not there, out of grain that the charter says is not missing, and now I am in the arrangement rather than looking at it.",
+            "effects": [
+                {
+                    "set_flag": "charter_fate",
+                    "value": "bought_in"
+                },
+                {
+                    "give_gold": 180
+                }
+            ]
+        },
+        "burned": {
+            "title": "Burned out",
+            "terminal": true,
+            "resolution": "burned",
+            "outcome": "success",
+            "journal": "The tide gate is down, the store is spoiled, and the Charter's book went into the fifth hearth at the Boom Forge in front of a witness. Nobody will run grain under this quay again. Nobody will run anything under it again, including the people.",
+            "effects": [
+                {
+                    "set_flag": "charter_fate",
+                    "value": "burned"
+                },
+                {
+                    "xp": 150
+                }
+            ]
+        }
+    }
+}

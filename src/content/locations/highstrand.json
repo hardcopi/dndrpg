@@ -1,0 +1,185 @@
+{
+    "region_key": "highstrand",
+    "module": "waerhaven",
+    "name": "Highstrand",
+    "region_type": "town",
+    "description": "The crown of the ridge: stone houses, glazed windows, and the three buildings that argue over who runs Waerhaven. From the Moot Yard you can see every slip, every pier, and forty miles of open Mere, which is the reason the argument has never had to be settled — everybody up here can watch everybody else's work from a window.",
+    "sort_order": 20,
+    "locations": {
+        "moot_yard": {
+            "name": "The Moot Yard",
+            "type": "square",
+            "map_pos": [
+                45.5,
+                44.8
+            ],
+            "description": "A swept square of set stone at the top of the Gate Way, with the Moot on one side, the Factor's House on the other, and the Wet Hall below them both on its piles over the tidal cut. The ridge falls away north to Old Waer and west to the harbour, and from the parapet you can count the hulls on the slips. Everyone who comes up here is seen coming up here.",
+            "first_visit": "The wind changes at the top of the Gate Way and comes off the Mere instead of out of the timber yards, and for the first time since the gate you can smell water rather than work.",
+            "ambience": [
+                "Somebody watches you from an upper window and does not stop when you look up.",
+                "Two factors' clerks pass each other without speaking, which takes some doing in a square this size.",
+                "The tide is out under the Wet Hall, and the piles stand in black mud, and the smell arrives.",
+                "A boy runs down the Gate Way with a folded note and does not slow at the corner."
+            ],
+            "exits": [
+                {
+                    "to": "shipwrights_moot",
+                    "label": "In at the Shipwrights' Moot"
+                },
+                {
+                    "to": "the_factors_house",
+                    "label": "Up the steps to the Factor's House"
+                },
+                {
+                    "to": "the_wet_hall",
+                    "label": "Down the causeway to the Wet Hall"
+                },
+                {
+                    "to": "the_charthouse",
+                    "label": "Along to the Charthouse"
+                },
+                {
+                    "to": "venniks",
+                    "label": "In at Vennik's"
+                },
+                {
+                    "to": "the_sounding_line",
+                    "label": "In at the Sounding Line"
+                },
+                {
+                    "to": "old_waer_square",
+                    "label": "North, down into Old Waer"
+                },
+                {
+                    "to": "boomhead",
+                    "label": "West, down the steps to the Boom"
+                },
+                {
+                    "to": "the_tar_steps",
+                    "label": "East, down the Tar Steps"
+                }
+            ]
+        },
+        "shipwrights_moot": {
+            "name": "The Shipwrights' Moot",
+            "type": "building",
+            "map_pos": [
+                62.8,
+                56.1
+            ],
+            "description": "A long low hall of black oak with a half-built hull frame standing permanently in the middle of the floor — ribs, keel, no planking, and no intention of ever being finished. Masters are elected under that frame and buried within sight of it. The benches down both sides are worn into shallow dishes by four hundred years of the same eleven families sitting in the same eleven places.",
+            "ambience": [
+                "Somebody runs a hand along the frame's garboard on the way past, the way you touch a doorpost.",
+                "The masters' bench is empty. The apprentices' bench is not, and is watching the door.",
+                "An argument about scarf joints stops when you come in and does not start again."
+            ],
+            "exits": [
+                {
+                    "to": "moot_yard",
+                    "label": "Out into the yard"
+                }
+            ]
+        },
+        "the_factors_house": {
+            "name": "The Factor's House",
+            "type": "building",
+            "map_pos": [
+                21.6,
+                30.7
+            ],
+            "description": "Three storeys of imported Ardennian stone in a city that builds in timber, which tells you what Lathmere thinks of Waerhaven and what Waerhaven thinks of the Factor. A hall, a strongroom, a writing room with a window onto the harbour, and a staff of four who were all born here and none of whom were chosen by the man they work for.",
+            "ambience": [
+                "A clerk carries out a basket of spoiled paper and does not meet your eye.",
+                "There is a fire lit in the writing room in a month that does not want one, and the grate has more ash in it than coal.",
+                "The League's arms over the door have been recut once. You can see where."
+            ],
+            "exits": [
+                {
+                    "to": "moot_yard",
+                    "label": "Down the steps to the yard"
+                }
+            ]
+        },
+        "the_wet_hall": {
+            "name": "The Wet Hall",
+            "type": "building",
+            "map_pos": [
+                36.9,
+                36.2
+            ],
+            "description": "The League's hall, built on piles over a tidal cut so that its ground floor floods twice a day and always has. The founders meant it as a joke about where League power actually comes from, and the joke has outlived every one of them. Council meets on the dry upper floor. The charter is read from a balcony over water.",
+            "ambience": [
+                "The tide is in, and the ground floor is a room with a floor of moving water, and nobody remarks on it.",
+                "Halvia Corr's writ hangs framed by the stair. The glass has not been cleaned in some time.",
+                "Somewhere below, something knocks against a pile, twice, and stops."
+            ],
+            "exits": [
+                {
+                    "to": "moot_yard",
+                    "label": "Up the causeway to the yard"
+                }
+            ]
+        },
+        "the_charthouse": {
+            "name": "The Charthouse",
+            "type": "building",
+            "map_pos": [
+                78.4,
+                18.9
+            ],
+            "description": "Every sounding, shoal, bank and anchorage of the Ythan Mere, on vellum, in presses, under lock, in a room kept dry by a stove that is fed before anybody in the building is. Pilots are licensed here and licensed nowhere else. The north wall's presses are the ones nobody opens, and three of their drawers now shut a little too easily.",
+            "ambience": [
+                "A pilot copies a sounding line by lamp, slowly, mouthing the numbers.",
+                "The stove is fed. The clerks are not.",
+                "Somebody asks for the northern shore, is told a thing, and goes away without arguing, which is new."
+            ],
+            "exits": [
+                {
+                    "to": "moot_yard",
+                    "label": "Out to the yard"
+                }
+            ]
+        },
+        "venniks": {
+            "name": "Vennik's",
+            "type": "building",
+            "map_pos": [
+                71.7,
+                32.7
+            ],
+            "description": "Instruments: glasses, compasses, dividers, a beam-scale small enough to weigh a letter and accurate enough to be worth stealing. The proprietor is a gnome out of Lathmere who has been here nine years, speaks to everyone, remembers everything, and writes a great deal of it down and sends it south. Lately he has begun leaving things out of what he sends, which is a thing he could hang for.",
+            "ambience": [
+                "Vennik breathes on a lens, holds it up, and finds fault with it that you cannot see.",
+                "The little beam-scale on the counter is under a glass dome. It is the only thing in the shop that is.",
+                "A sealed packet sits addressed to Lathmere, and has been sitting there long enough to have dust on it."
+            ],
+            "exits": [
+                {
+                    "to": "moot_yard",
+                    "label": "Out to the yard"
+                }
+            ]
+        },
+        "the_sounding_line": {
+            "name": "The Sounding Line",
+            "type": "building",
+            "map_pos": [
+                66.6,
+                37.1
+            ],
+            "inn_cost": 15,
+            "description": "Respectable, expensive, and full of pilots and factors talking quietly at separate tables about the same three things. Real glass in the windows, a fire that is kept up, and a rule against carrying tools indoors that exists to keep the Slipways out. Charts change hands in the upstairs rooms that the Charthouse has never heard of.",
+            "ambience": [
+                "A pilot folds something away into a coat as you pass, unhurriedly, which is worse than hurrying.",
+                "The wine is Ardennian, badly kept, and drunk anyway because of what it says about the drinker.",
+                "Two men agree on a price without either of them naming what for."
+            ],
+            "exits": [
+                {
+                    "to": "moot_yard",
+                    "label": "Out to the yard"
+                }
+            ]
+        }
+    }
+}

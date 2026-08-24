@@ -1,0 +1,13 @@
+{
+  "item_key": "league_standard_weight",
+  "name": "The League Standard Weight",
+  "description": "A cylinder of cast bronze the size of a loaf, stamped with the Mere and the League's arms and a date forty-one years old, and kept in a sealed box with three locks because everything in this city is weighed against it. Set it on a true beam and it comes up four ounces light. The filing is on the underside, where the stamp is, and it is not new.",
+  "item_type": "misc",
+  "rarity": "rare",
+  "weight": 14,
+  "value_gp": 0,
+  "properties": {
+    "quest_item": true
+  },
+  "icon": "treasure"
+}

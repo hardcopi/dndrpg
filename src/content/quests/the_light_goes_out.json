@@ -1,0 +1,63 @@
+{
+    "quest_key": "the_light_goes_out",
+    "title": "The Light Goes Out",
+    "act": 2,
+    "description": "The Waer Light has burned every night for a hundred and forty years except four this spring, and on each of those four nights a boat came into the deep water under the point and nobody logged it.",
+    "giver": "ellsa_waer",
+    "on_job_board": true,
+    "required_level": 3,
+    "rewards": {
+        "xp": 400,
+        "gold": 100
+    },
+    "stages": {
+        "up_the_point": {
+            "title": "Up the point",
+            "objective": "Talk to the keeper.",
+            "journal": "Ellsa Waer will not send her own people up the point to ask her own grandson what he has been doing, and she has been very clear that this is not because she is afraid of the answer.",
+            "target": {
+                "location": "the_waer_light"
+            }
+        },
+        "four_nights": {
+            "title": "Four nights",
+            "objective": "Find out what came ashore.",
+            "journal": "Four dark nights, four boats, all on the deep side where there is forty fathoms right up to the rock. Nothing was landed on the quay and nothing went through the Counting Boom, and the oil store up there is fuller than it has any business being in spring.",
+            "target": {
+                "location": "the_waer_light"
+            }
+        },
+        "stopped": {
+            "title": "The light stays lit",
+            "terminal": true,
+            "resolution": "stopped",
+            "outcome": "success",
+            "journal": "It burns every night now, and Nel Waer told his grandmother himself, in the Fish Hall, standing up, which cost him more than the money did. Whoever was landing on the deep side will have to land somewhere with a witness.",
+            "effects": [
+                {
+                    "set_flag": "light_fate",
+                    "value": "stopped"
+                },
+                {
+                    "xp": 120
+                }
+            ]
+        },
+        "joined": {
+            "title": "Four more nights",
+            "terminal": true,
+            "resolution": "joined",
+            "outcome": "success",
+            "journal": "I took the arrangement over rather than closing it. The light goes dark when we say and the boats come in on the deep side and nothing goes through anybody's book, and Nel Waer is very grateful and slightly frightened of me now.",
+            "effects": [
+                {
+                    "set_flag": "light_fate",
+                    "value": "joined"
+                },
+                {
+                    "give_gold": 200
+                }
+            ]
+        }
+    }
+}

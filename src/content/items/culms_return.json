@@ -1,0 +1,14 @@
+{
+  "item_key": "culms_return",
+  "name": "The Factor's Return",
+  "description": "Eleven months of quarterly returns to Lathmere in Bevis Culm's small upright hand, each one declaring the granary's holding, each one wrong by the same growing margin. The first is wrong by two weeks. The last is wrong by nine. Nothing in the arithmetic is careless.",
+  "item_type": "misc",
+  "rarity": "rare",
+  "weight": 0.4,
+  "value_gp": 0,
+  "properties": {
+    "quest_item": true,
+    "readable": true
+  },
+  "icon": "scroll"
+}

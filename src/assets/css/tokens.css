@@ -221,7 +221,7 @@
    * on the chart; somewhere glimpsed through a doorway is not filled at all.
    */
   --pg-paper-lit: #f2e5c2;      /* the room the party is standing in */
-  --pg-paper: #e9e1cd;          /* walked: room fill, corridor floor */
+  --pg-paper: #efe6d4;          /* walked: room fill, corridor floor */
   --pg-paper-dim: #d6c298;      /* seen, not visited; a door glyph */
   --pg-paper-out: #a99a7e;      /* a way that is shut */
 
@@ -282,7 +282,20 @@
    */
   --pg-red: #8c2f22;
   --pg-focus: #7a5c34;          /* the keyboard's mark: a wash and a casing */
-  --pg-rock: #191008;           /* the stone the level is cut out of */
+  /* The ground a floor plan is drawn on — and the floor itself, which is the
+     SAME colour (see --pg-paper). On a hand-inked plate nothing separates the
+     inside of a room from the blank page around it except the wall: an
+     outline, with a band of scribbled fill hung on the outside of it. Giving
+     the rock a colour of its own has the plan reading as a cut-out pasted onto
+     a background — it was stone #ccbba3 for a while, and near-black #191008
+     before that, when rock meant the absence of floor. */
+  --pg-rock: #efe6d4;
+  /* What the rock USED to be, kept for the plan editor's stage. That stage is
+     a dark tool panel with a plan floating on it, not a drawn plate, and it
+     did not ask to be re-inked along with the chart. */
+  --pg-rock-dark: #191008;
+  --pg-rock-line: #1a1612;      /* the ink the wall is drawn and filled in */
+  --pg-rock-shade: #d4d0c7;     /* the soft grey the wall casts around itself */
 
   /* The dialogue panel's own ground — warm, unlike the cold chrome, because a
      conversation is staged rather than administered. Two stops of a gradient,
@@ -301,7 +314,7 @@
 
   /* Glimpsed: a doorway and a guess at what is behind it. Unfilled, so the
      rock shows through, with the shape's own line at part strength. */
-  --pg-glimpse: color-mix(in srgb, var(--pg-paper) 40%, transparent);
+  --pg-glimpse: color-mix(in srgb, var(--pg-rock-line) 55%, transparent);
   --pg-glimpse-wall: color-mix(in srgb, var(--pg-ink) 45%, transparent);
 
   /* ==================================================================

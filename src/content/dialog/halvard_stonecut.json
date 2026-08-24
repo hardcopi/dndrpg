@@ -1,0 +1,257 @@
+{
+    "npc_key": "halvard_stonecut",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "flag": "forge_pattern_seen"
+                    },
+                    {
+                        "flag": "karrun_silence"
+                    }
+                ],
+                "text": "Halvard has the unmarked gauge on the counter in front of him and has not moved it since you put it there.\n\n\"I have had eight months of writing letters,\" he says, \"and one afternoon of holding this. I know which of the two has told me more and I do not like it.\"",
+                "choices": [
+                    {
+                        "label": "\"What is it for?\"",
+                        "next": "the_gauge"
+                    },
+                    {
+                        "label": "\"Show me what you sell.\"",
+                        "effects": [
+                            {
+                                "open_shop": "halvard_stonecut"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Leave him.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "karrun_silence"
+                    }
+                ],
+                "text": "The bundle on the hook behind the counter has one more letter in it than it had.\n\n\"Twelve,\" says Halvard, seeing you count. \"Twelve, and the twelfth went on Tuesday, and I will write a thirteenth.\"",
+                "choices": [
+                    {
+                        "label": "\"Why keep sending them?\"",
+                        "next": "why_send"
+                    },
+                    {
+                        "label": "\"Show me what you sell.\"",
+                        "effects": [
+                            {
+                                "open_shop": "halvard_stonecut"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "met_halvard"
+                    }
+                ],
+                "text": "\"Back,\" says Halvard Stonecut, and puts down whatever he is holding in the right tray, which he does not always do.",
+                "choices": [
+                    {
+                        "label": "\"Show me what you sell.\"",
+                        "effects": [
+                            {
+                                "open_shop": "halvard_stonecut"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "\"Those letters on the hook.\"",
+                        "next": "the_letters"
+                    },
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "Nails in ninety sizes, chain by the fathom, and a smell of oil and cold iron that is the same in every ironmonger's on the continent.\n\nThe dwarf behind the counter is turning a nail over and putting it deliberately in the wrong tray.\n\n\"Halvard Stonecut,\" he says. \"Forty years on this promontory and there is not a fastening in this city I did not sell somebody. If it holds two pieces of wood together I have got it and if I have not got it you do not want it.\"\n\nBehind him, on a hook, hangs a bundle of letters addressed north in one hand, tied with twine.",
+                "on_enter": [
+                    {
+                        "set_flag": "met_halvard"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "\"Show me what you sell.\"",
+                        "effects": [
+                            {
+                                "open_shop": "halvard_stonecut"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "\"What are the letters?\"",
+                        "next": "the_letters"
+                    },
+                    {
+                        "label": "\"Forty years and you still say the continent, not the city.\"",
+                        "next": "forty_years"
+                    },
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_letters": [
+            {
+                "conditions": [
+                    {
+                        "flag": "karrun_silence"
+                    }
+                ],
+                "text": "\"You have had that,\" Halvard says. \"It has not got better since.\"",
+                "choices": [
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ]
+            },
+            {
+                "text": "Halvard does not look round at them, which takes effort, because you can see him not doing it.\n\n\"Post north,\" he says. \"Zharrund, by Venddock and the highway and the Kalder road. Six weeks each way in a good season. My brother's daughter keeps the counting house at Durgate and she has written to me on the first of the month for nineteen years.\"\n\nHe puts the nail down.\n\n\"Eight months.\"",
+                "choices": [
+                    {
+                        "label": "\"Eight months is a bad road, not a bad sign.\"",
+                        "next": "not_the_road"
+                    },
+                    {
+                        "label": "\"Has anyone else had word out of Karrun-Deep?\"",
+                        "next": "anyone_else"
+                    },
+                    {
+                        "label": "Leave it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "not_the_road": {
+            "text": "\"That is what I said,\" Halvard agrees. \"For the first three. The road is bad, the pass is shut, the post is a shambles, the Thanes have quarrelled about something and stopped the carriers. All of that has happened before and all of it is true about once a decade.\"\n\nHe leans on the counter with both hands.\n\n\"But I sell iron. I have bought Karrun iron every quarter for forty years off four different factors and every one of them stopped in the same season, and none of them will tell me why, and two of them have started buying Ardennian instead and charging me for the difference without being asked to.\"\n\n\"Factors do not go quiet together. Factors compete. When four of them go quiet in one season it is not a road.\"",
+            "on_enter": [
+                {
+                    "set_flag": "karrun_silence"
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"Three of the nine holds have gone silent. It is said in the Sounding Line.\"",
+                    "next": "the_three_holds"
+                },
+                {
+                    "label": "\"What do you think it is?\"",
+                    "next": "the_three_holds"
+                }
+            ]
+        },
+        "anyone_else": {
+            "text": "\"No,\" Halvard says. \"And that is the whole of it, and it took me five months to notice, because I was busy being the only man in Waerhaven who had a reason to be watching.\"\n\n\"There are eleven of us out of the holds on this promontory. Eleven. I have asked all eleven. Nobody has had a letter since the back end of last year and every single one of us thought we were the only one.\"",
+            "on_enter": [
+                {
+                    "set_flag": "karrun_silence"
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"What do you think it is?\"",
+                    "next": "the_three_holds"
+                },
+                {
+                    "label": "Leave him.",
+                    "end": true
+                }
+            ]
+        },
+        "the_three_holds": {
+            "text": "\"I think,\" says Halvard, and stops, and starts again.\n\n\"The Deepmoot took a vote in the spring on whether to discuss the silence. Six to nothing, not to discuss it.\"\n\nHe waits for you to do the arithmetic, and when you do not, he does it for you.\n\n\"There are nine Thanes. Six votes were cast. Three Thanes did not vote against discussing it, because three Thanes were not in the room.\"\n\nHe picks the nail back up.\n\n\"That is a sentence I have been carrying about for four months. You are the first person I have said it to who did not immediately tell me it was probably the road.\"",
+            "choices": [
+                {
+                    "label": "\"Why go on writing?\"",
+                    "next": "why_send"
+                },
+                {
+                    "label": "Say nothing.",
+                    "next": "why_send"
+                }
+            ]
+        },
+        "why_send": {
+            "text": "Halvard looks at the bundle properly for the first time.\n\n\"Because a letter that is never written is a decision,\" he says. \"And a letter that is written and not answered is only a fact.\"\n\nHe hangs the twelfth on the hook with the rest.\n\n\"I would rather have facts. I have been forty years in a city that runs on the other thing.\"",
+            "choices": [
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "the_gauge": [
+            {
+                "conditions": [
+                    {
+                        "flag": "forge_pattern_seen"
+                    }
+                ],
+                "text": "He turns it over twice more and holds it up against the light of the door.\n\n\"Two notches, no stamp, no maker, no date. A gauge is a thing you take to a court, so a gauge with no marks on it is a thing somebody has decided will never be taken to one.\"\n\nHe sets it down.\n\n\"And it is not chain. Chain is a link and a link is a shape I have gauged ten thousand times. This is the throat of an anchor, and the anchor it is the throat of would hold four hundred tons in a running sea.\"\n\nHe lets that sit in the shop for a while.\n\n\"There is nothing in this harbour that weighs four hundred tons, and if there were, it would not need holding in a running sea, because it would be in a harbour with a chain across the mouth of it.\"",
+                "choices": [
+                    {
+                        "label": "\"So it is for a hull that means to lie off a coast with no harbour.\"",
+                        "next": "the_conclusion"
+                    },
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ]
+            },
+            {
+                "text": "\"Bring me the thing itself,\" Halvard says, \"and I will tell you what it is for in about ten seconds, and then I will be very quiet for a good deal longer.\"",
+                "choices": [
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ]
+            }
+        ],
+        "the_conclusion": {
+            "text": "\"That is what I said,\" Halvard agrees. \"Ten seconds. And then the quiet.\"\n\nHe puts the gauge in a drawer, and then takes it out and puts it on the counter again, where it can be seen.\n\n\"Somebody in Tarrow is forging ground tackle for a vessel that intends to anchor off an open shore, in weather, and hold. And three charts of the northern shore have walked out of a press on Highstrand. And I have not had a letter out of the Kalder Wall since the back end of last year.\"\n\n\"Three things,\" he says. \"And I am an ironmonger, and I have got no business at all putting them in a row, and I have put them in a row.\"",
+            "choices": [
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "forty_years": {
+            "text": "Halvard considers this with the seriousness of a man being asked about his trade.\n\n\"Because I came out of a hold,\" he says. \"You are born in a room and the room is in a hold and the hold is under a wall, and everything you are told about the world outside is told to you by somebody who has come back from it.\"\n\n\"Then you go out. And it is not a world. It is roads with things at the ends of them, and the roads matter more than the things, and I have never once managed to say the city without meaning the road that got me here.\"\n\nHe glances at the letters.\n\n\"And there is no road north out of Waerhaven. Eighty-five miles of forest and no track worth the name. I chose the one city on this shore that only goes one way, and I have had forty years to think about why.\"",
+            "choices": [
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        }
+    }
+}

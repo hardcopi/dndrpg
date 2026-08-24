@@ -139,6 +139,47 @@
     const here = map.nodes.find((n) => n.current);
     const hereId = here ? here.id : null;
 
+    // A token is one square, and the square is whatever the level says it is.
+    //
+    // This was a flat 0.78 on any floor plan, chosen by eye against the room
+    // sizes of the day. Once the plan was ruled in its own ten-foot tiles the
+    // number could be checked instead of judged, and it was wrong: a party
+    // face came out 2.27 squares across and an NPC 1.94, so every creature on
+    // the chart was standing in twenty feet of floor. Medium creatures take
+    // one square, and now they take one.
+    //
+    // Derived rather than fixed because the pitch is not a constant — a floor
+    // from the map service rules at about 1.17 units to the square and this
+    // generator's own at 3.11, so any single number would be right for one of
+    // them and wrong for the other. The smaller of the two axes, since the
+    // chart stretches x and y by different amounts and a token has to fit the
+    // square either way round.
+    const ruling = map.floorplan && map.floorplan.grid;
+    const scale = !map.floorplan ? 1
+      : ruling && ruling.dx > 0.01 && ruling.dy > 0.01
+        ? Math.min(ruling.dx, ruling.dy) / (PC_R * 2)
+        : 0.78;
+    // The pins are drawn at r=2 with their glyph and stroke weights written
+    // to match, so they are scaled as a whole rather than re-specified: one
+    // number here keeps the disc, the letter and the ring in proportion, and
+    // the CSS goes on saying what it always said.
+    //
+    // A pin ends up about one square across, the same as a token. They were
+    // sized against a chart that opened at 1.7 and a token that was two
+    // squares wide; now that a plan opens on its own grid, a pin left at r=2
+    // is nearly two squares and sits on the map like a dinner plate.
+    const pinScale = ruling && ruling.dx > 0.01
+      ? Math.min(ruling.dx, ruling.dy) / 4
+      : 1;
+
+    // The arrowhead, sized to the square where there is one and to the
+    // region's own scale where there is not. About four fifths of a square
+    // long on a plan, which is big enough to read against a hairline shaft
+    // and small enough to sit inside the passage it is drawn over.
+    const headLen = ruling && ruling.dx > 0.01 ? Math.min(ruling.dx, ruling.dy) * 0.85 : 1.8;
+    const headHalf = ruling && ruling.dx > 0.01 ? Math.min(ruling.dx, ruling.dy) * 0.38 : 0.75;
+
+
     // Corridors, keyed by the pair they join, when this region is a generated
     // dungeon floor. An edge that has one is drawn as the passage it actually
     // On a floor plan the passages ARE the edges — each one is drawn as its own
@@ -165,25 +206,42 @@
         way && way.locked ? 'is-locked' : '',
       ].filter(Boolean).join(' ');
 
-      return `<line class="${cls}"
+      // The head goes on the end you would be walking TOWARD, which is the
+      // end that is not the room you are standing in. An edge is stored in
+      // whichever order it was authored, so it cannot be assumed to run away
+      // from here.
+      const outward = isWay
+        ? (e.to === hereId ? a : b)
+        : null;
+      const shaft = `<line class="${cls}"
         x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}"/>`;
+      if (!outward) return shaft;
+      const tail = outward === b ? a : b;
+      return shaft + arrowHead(tail.x, tail.y, outward.x, outward.y, headLen, headHalf,
+        `wm-edge-head is-way${way && way.locked ? ' is-locked' : ''}`);
     }).join('');
 
     const arrows = (map.neighbors || [])
-      .map((n) => neighborArrow(n, byId, ways, hereId))
+      .map((n) => neighborArrow(n, byId, ways, hereId, !!map.floorplan, pinScale, headLen, headHalf))
       .filter(Boolean)
       .join('');
-    // A generated floor is drawn at room scale — its labels are a third
-    // smaller than a region's — so the faces come down with them. A pile of
-    // full-size tokens under a room name spills out of the room it is in.
-    const marks = map.floorplan ? partyMarks(opts && opts.party, 0.78) : partyMarks(opts && opts.party, 1);
+    const marks = partyMarks(opts && opts.party, scale);
+    // Somebody with a spot of their own is drawn on the chart rather than on
+    // the place marker, so a shopkeeper can stand in his shop.
+    const people = (opts && opts.people) || [];
+    const atNode = people.filter((p) => !(Number.isFinite(+p.x) && Number.isFinite(+p.y)));
+    const atSpot = people.filter((p) => Number.isFinite(+p.x) && Number.isFinite(+p.y));
+    const folk = npcMarks(atNode, scale);
+    const standing = npcMarks(atSpot, scale, { placed: true });
     // Nothing names a place nobody has walked into, on a floor plan as much as
     // on a region. A generated floor used to name every room, on the argument
     // that the plan already drew the whole level so there was nothing left to
     // protect — that argument died with the fog: the plan now draws what the
     // party has seen, and a name over an unvisited room would be the one thing
     // on the chart that still knew the whole floor.
-    const nodes = map.nodes.map((n) => node(n, ways, quests, marks)).filter(Boolean).join('');
+    const nodes = map.nodes
+      .map((n) => node(n, ways, quests, marks, folk, !!map.floorplan, pinScale))
+      .filter(Boolean).join('');
 
     // A painted map for this region, if one has been drawn. Optional by
     // design: with no file the chart falls back to the parchment ground and
@@ -217,7 +275,13 @@
     const cls = ['worldmap', art ? '' : 'is-bare', map.floorplan ? 'is-plan' : '']
       .filter(Boolean).join(' ');
 
-    return `<svg class="${cls}"
+    // The square's size, carried on the element so the zoom can find it.
+    // controls() is handed a root and nothing else — it has never seen the map
+    // object — and how far a floor plan should open is a question about the
+    // grid, not about the chart's dimensions.
+    const pitch = ruling && ruling.dx > 0.01 ? ` data-plan-pitch="${round3(Math.min(ruling.dx, ruling.dy))}"` : '';
+
+    return `<svg class="${cls}"${pitch}
                  viewBox="${-PAD_X} ${-PAD_TOP} ${VIEW_W + PAD_X * 2} ${VIEW_H + PAD_TOP + PAD_BOTTOM}"
                  role="img" aria-label="Map of ${esc(map.name)}">
       <defs>
@@ -230,6 +294,7 @@
       ${plan}
       <g class="wm-edges">${edges}${arrows}</g>
       <g class="wm-nodes">${nodes}</g>
+      <g class="wm-folk-placed">${standing}</g>
     </svg>`;
   }
 
@@ -243,8 +308,38 @@
   const PC_R = 1.7;
   /** Centre-to-centre. Under 2R on purpose: they overlap, like people do. */
   const PC_STEP = 2.3;
-  /** How far under the place-name the pile sits. */
-  const PC_Y = 4.4;
+  /**
+   * How far under the node's own point the pile sits.
+   *
+   * Zero: the party stands IN the room, on the spot the room is anchored at.
+   *
+   * It was 4.4 — a pile hung below a place-NAME, which is what a node used to
+   * be on every chart. A floor plan has no name to hang off any more, and once
+   * a token was one square rather than two the offset stopped reading as
+   * "under the label" and started reading as "beside the room": at the current
+   * scale it put the pile 1.4 units below centre, which in a passage drawn 2.4
+   * wide is outside the passage altogether.
+   */
+  const PC_Y = 0;
+
+  /**
+   * Where the people who live here stand.
+   *
+   * Above the place, where the party is below it: the two never collide, and
+   * the pair reads as "these are the locals, those are you". Same disc, ring
+   * and clipped face as a party mark — a token is a token — but a little
+   * smaller, because whose party this is should be the louder of the two.
+   */
+  const NPC_R = 1.45;
+  const NPC_STEP = 2.0;
+  /**
+   * Still above the party rather than on it — the pair reads as "these are the
+   * locals, those are you" — but close enough now to stay inside the room. At
+   * the old -4.6 the locals stood a room's-worth clear of a floor drawn at the
+   * new scale, which on a passage put them in the rock.
+   */
+  const NPC_Y = -3.2;
+  const NPC_MAX = 4;
 
   /**
    * The party as a pile of faces, ready to be dropped into the current node.
@@ -325,6 +420,74 @@
     </g>`;
   }
 
+  /**
+   * The people standing in this scene, as tokens over the place they are in.
+   *
+   * Clickable, and clickable by exactly the means everything else already
+   * uses: `data-npc` is what game.js's delegate listens for, so a token opens
+   * the same conversation the row in the HERE panel does. Two ways in to one
+   * thing, which is the point — the panel is the list, the token is where they
+   * are standing.
+   *
+   * A name is not written under them. Four names over one place is a wall of
+   * text on a picture, and the tooltip carries it for a pointer while the
+   * panel carries it for everyone else.
+   */
+  function npcMarks(people, scale, opts) {
+    const all = (people || []).filter((p) => p && p.id);
+    if (!all.length) return '';
+    // Placed people carry their own spot on the chart and are drawn there;
+    // everyone else is stacked at the place marker. Two passes over one
+    // function so both kinds get the identical token.
+    const placed = !!(opts && opts.placed);
+
+    const r = NPC_R * scale;
+    const step = NPC_STEP * scale;
+    const y = NPC_Y * scale;
+    const clipId = `wm-npc-clip-${Math.round(r * 100)}`;
+
+    const shown = placed ? all : all.slice(0, NPC_MAX);
+    const extra = placed ? 0 : all.length - shown.length;
+    const cols = shown.length + (extra > 0 ? 1 : 0);
+    const x0 = -((cols - 1) * step) / 2;
+
+    const faces = shown.map((n, i) => {
+      const label = n.label || n.name || 'Someone';
+      const initial = (String(label).trim()[0] || '?').toUpperCase();
+      const at = placed
+        ? `${(+n.x).toFixed(2)} ${(+n.y).toFixed(2)}`
+        : `${(x0 + i * step).toFixed(2)} ${y.toFixed(2)}`;
+      return `<g class="wm-npc" transform="translate(${at})"
+        data-npc="${esc(n.id)}" role="button" tabindex="0">
+        <title>${esc(label)}${n.hint ? ` — ${esc(n.hint)}` : ''}</title>
+        <circle class="wm-npc-disc" r="${r.toFixed(2)}"/>
+        <text class="wm-npc-initial" dy="${(r * 0.36).toFixed(2)}"
+              font-size="${(r * 1.15).toFixed(2)}">${esc(initial)}</text>
+        ${n.face ? `<image class="wm-npc-face" href="${esc(n.face)}"
+          x="${(-r).toFixed(2)}" y="${(-r).toFixed(2)}"
+          width="${(r * 2).toFixed(2)}" height="${(r * 2).toFixed(2)}"
+          clip-path="url(#${clipId})" preserveAspectRatio="xMidYMid slice"
+          onerror="this.remove()"/>` : ''}
+        <circle class="wm-npc-ring" r="${r.toFixed(2)}"/>
+      </g>`;
+    }).reverse().join('');
+
+    const more = extra > 0
+      ? `<g class="wm-npc is-more" transform="translate(${(x0 + shown.length * step).toFixed(2)} ${y.toFixed(2)})">
+          <title>${esc(all.slice(NPC_MAX).map((n) => n.label || n.name).join(', '))}</title>
+          <circle class="wm-npc-disc" r="${r.toFixed(2)}"/>
+          <text class="wm-npc-initial" dy="${(r * 0.36).toFixed(2)}"
+                font-size="${(r * 1.0).toFixed(2)}">+${extra}</text>
+          <circle class="wm-npc-ring" r="${r.toFixed(2)}"/>
+        </g>`
+      : '';
+
+    return `<g class="wm-folk">
+      <clipPath id="${clipId}"><circle r="${r.toFixed(2)}"/></clipPath>
+      ${more}${faces}
+    </g>`;
+  }
+
   // `corridorIndex` and `pairKey` used to live here, matching a drawn run
   // against the edge between the two rooms it joined. There is no such edge
   // now — the graph runs room, passage, room — and a passage carries its own
@@ -333,8 +496,370 @@
 
   /** How wide a passage is drawn, in chart units. */
   const HALL_W = 2.4;
+  /** The stair glyph's own width, before it is scaled to its room. */
+  const GLYPH_SPAN = 3.8;
   /** How thick its walls are, per side. */
   const HALL_WALL = 0.45;
+
+  /* --- the ink pass -------------------------------------------------------
+
+     What a hand-drawn plate has that a rectangle with a stroke on it does not
+     is the ROCK: a heavy line round the floor, and hatching combed into the
+     stone. The look is Dyson / Inkkeep: poisson-disk clusters of THREE
+     parallel strokes, each cluster at an angle that is neither parallel nor
+     square to its neighbours, clipped where they cross. A grey under-stroke
+     of the same geometry sits in `shadow` so existing `.wm-rock-shadow` CSS
+     reads as the fat collar under the ink.
+
+     Patterns and masks over this chart freeze Chrome; a few thousand plain
+     hairlines in one <path> do not. Jitter is hashed from coordinates so a
+     redraw never crawls. */
+
+  /** Sample spacing along the wall, in chart units. */
+  const INK_STEP = 0.4;
+
+  /**
+   * Cluster hatch, scaled from Inkkeep's canvas (cell 14px, depth 18px)
+   * into this chart (a ten-foot square is HALL_W = 2.4).
+   */
+  const HATCH_BAND = 3.05;
+  const STROKE_SPACING = 0.45;
+  const POISSON_R = STROKE_SPACING * 2;
+  const STROKE_LEN = POISSON_R * 2;
+  const NEIGHBOR_R = POISSON_R * 1.55;
+  const MIN_STROKE = STROKE_LEN * 0.35;
+  const HATCH_LIFT = 0.18;
+
+  /** Whether a floor plan rules its rooms in ten-foot squares. See below. */
+  const PLAN_RULED = true;
+
+  /**
+   * Deterministic noise in [0,1) from a position.
+   *
+   * Hand-drawn is jitter, but it has to be the SAME jitter every repaint: the
+   * chart re-renders on travel, on zoom and on any state that touches the
+   * plate, and hatching that reshuffled each time would crawl. So the jitter
+   * is hashed from the coordinate rather than drawn from Math.random — the
+   * same wall grows the same whiskers for as long as the level exists.
+   */
+  function inkNoise(x, y, salt) {
+    let h = Math.imul(Math.round(x * 512) | 0, 0x27d4eb2d)
+          ^ Math.imul(Math.round(y * 512) | 0, 0x165667b1)
+          ^ Math.imul(salt | 0, 0x9e3779b1);
+    h ^= h >>> 15; h = Math.imul(h, 0x2545f491);
+    h ^= h >>> 13; h = Math.imul(h, 0x27d4eb2d);
+    h ^= h >>> 16;
+    return (h >>> 0) / 4294967296;
+  }
+
+  /**
+   * Every rectangle of floor on a level, as [x0, y0, x1, y1].
+   *
+   * A passage is expanded only ACROSS its run, never along it — expanding both
+   * ways would push each end half a passage-width further than the passage
+   * goes, which at a dead end is a stub of floor sticking into the rock. The
+   * corners that leaves are filled by a square at each turn.
+   */
+  function floorRects(plan, keep) {
+    const rects = [];
+    (plan.rooms || []).filter(keep).forEach((r) => {
+      rects.push([r.x, r.y, r.x + r.w, r.y + r.h]);
+    });
+    const h = HALL_W / 2;
+    (plan.corridors || [])
+      .filter((c) => (c.points || []).length >= 2 && keep(c))
+      .forEach((c) => {
+        const pts = c.points;
+        for (let k = 0; k < pts.length - 1; k++) {
+          const [x1, y1] = pts[k];
+          const [x2, y2] = pts[k + 1];
+          if (Math.abs(x2 - x1) < 1e-6) {
+            rects.push([x1 - h, Math.min(y1, y2), x1 + h, Math.max(y1, y2)]);
+          } else {
+            rects.push([Math.min(x1, x2), y1 - h, Math.max(x1, x2), y1 + h]);
+          }
+        }
+        for (let k = 1; k < pts.length - 1; k++) {
+          rects.push([pts[k][0] - h, pts[k][1] - h, pts[k][0] + h, pts[k][1] + h]);
+        }
+      });
+    return rects;
+  }
+
+  /**
+   * The rock, drawn: its edge, its hatching, its shadow and its rubble.
+   *
+   * Returns four path strings, each meant for one <path>. Empty when the level
+   * has no lit floor yet, which is every level for the moment before the party
+   * walks off the entrance stair.
+   *
+   * Hatch is Inkkeep's Dyson collar: poisson samples in a band of rock outside
+   * the floor, three parallel strokes per sample, angles that refuse to sit
+   * parallel or square to a neighbour, clipped at crossings. `shadow` is the
+   * same geometry so a fat grey CSS stroke can sit under the ink.
+   */
+  function inkRock(rects) {
+    if (!rects.length) return { edge: '', hatch: '', shadow: '', grit: '' };
+
+    const EPS = 0.06;
+    const inside = (x, y) => {
+      for (let i = 0; i < rects.length; i++) {
+        const r = rects[i];
+        if (x > r[0] + EPS && x < r[2] - EPS && y > r[1] + EPS && y < r[3] - EPS) return true;
+      }
+      return false;
+    };
+    const isRock = (x, y) => !inside(x, y);
+
+    const sides = (r) => [
+      { x0: r[0], y0: r[1], x1: r[2], y1: r[1], nx: 0, ny: -1 },
+      { x0: r[0], y0: r[3], x1: r[2], y1: r[3], nx: 0, ny: 1 },
+      { x0: r[0], y0: r[1], x1: r[0], y1: r[3], nx: -1, ny: 0 },
+      { x0: r[2], y0: r[1], x1: r[2], y1: r[3], nx: 1, ny: 0 },
+    ];
+
+    let edge = '', grit = '';
+
+    const hypot = (x, y) => Math.hypot(x, y) || 1;
+    const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
+
+    const segmentT = (a, b) => {
+      const ax = a.b.x - a.a.x, ay = a.b.y - a.a.y;
+      const bx = b.b.x - b.a.x, by = b.b.y - b.a.y;
+      const den = ax * by - ay * bx;
+      if (Math.abs(den) < 1e-8) return null;
+      const dx = b.a.x - a.a.x, dy = b.a.y - a.a.y;
+      const t = (dx * by - dy * bx) / den;
+      const u = (dx * ay - dy * ax) / den;
+      if (t < 0 || t > 1 || u < 0 || u > 1) return null;
+      return t;
+    };
+
+    const clipStroke = (stroke, neighbors) => {
+      let t0 = 0, t1 = 1, hit = false;
+      for (let n = 0; n < neighbors.length; n++) {
+        const strokes = neighbors[n].strokes;
+        for (let s = 0; s < strokes.length; s++) {
+          const t = segmentT(stroke, strokes[s]);
+          if (t == null) continue;
+          hit = true;
+          if (t < 0.5) t0 = Math.max(t0, t);
+          else t1 = Math.min(t1, t);
+        }
+      }
+      if (!hit) return stroke;
+      if (t1 - t0 < 0.2) return null;
+      const a = {
+        x: stroke.a.x + (stroke.b.x - stroke.a.x) * t0,
+        y: stroke.a.y + (stroke.b.y - stroke.a.y) * t0,
+      };
+      const b = {
+        x: stroke.a.x + (stroke.b.x - stroke.a.x) * t1,
+        y: stroke.a.y + (stroke.b.y - stroke.a.y) * t1,
+      };
+      if (dist(a, b) < MIN_STROKE) return null;
+      return { a, b };
+    };
+
+    const pickAngle = (x, y, neighbors) => {
+      for (let k = 0; k < 22; k++) {
+        const cand = inkNoise(x, y, 71 + k * 11) * Math.PI;
+        let ok = true;
+        for (let n = 0; n < neighbors.length; n++) {
+          const c = Math.abs(Math.cos(cand - neighbors[n].angle));
+          if (c > 0.88 || c < 0.12) { ok = false; break; }
+        }
+        if (ok) return cand;
+      }
+      if (neighbors[0]) return neighbors[0].angle + 0.7 + (inkNoise(x, y, 99) - 0.5) * 0.24;
+      return inkNoise(x, y, 71) * Math.PI;
+    };
+
+    // Poisson samples in the rock band just outside the floor.
+    const samples = [];
+    const grid = new Map();
+    const cell = POISSON_R / Math.SQRT2;
+    const gkey = (x, y) => `${x},${y}`;
+    const tooClose = (p) => {
+      const gx = Math.floor(p.x / cell);
+      const gy = Math.floor(p.y / cell);
+      for (let oy = -2; oy <= 2; oy++) {
+        for (let ox = -2; ox <= 2; ox++) {
+          const list = grid.get(gkey(gx + ox, gy + oy));
+          if (!list) continue;
+          for (let i = 0; i < list.length; i++) {
+            if (dist(p, list[i]) < POISSON_R) return true;
+          }
+        }
+      }
+      return false;
+    };
+    const addSample = (p) => {
+      samples.push(p);
+      const k = gkey(Math.floor(p.x / cell), Math.floor(p.y / cell));
+      const list = grid.get(k);
+      if (list) list.push(p);
+      else grid.set(k, [p]);
+    };
+
+    const layers = Math.max(3, Math.round(HATCH_BAND / (POISSON_R * 0.62)));
+
+    rects.forEach((r) => {
+      sides(r).forEach((sd) => {
+        const dx = sd.x1 - sd.x0, dy = sd.y1 - sd.y0;
+        const len = hypot(dx, dy);
+        if (len < 1e-6) return;
+        const ux = dx / len, uy = dy / len;
+        const steps = Math.max(1, Math.round(len / INK_STEP));
+        let runFrom = null, prevT = 0;
+        for (let i = 0; i <= steps; i++) {
+          const t = (i / steps) * len;
+          const x = sd.x0 + ux * t, y = sd.y0 + uy * t;
+          const out = isRock(x + sd.nx * 0.12, y + sd.ny * 0.12);
+          if (out) {
+            if (runFrom === null) runFrom = t;
+            prevT = t;
+          }
+          if ((!out || i === steps) && runFrom !== null) {
+            const ax = sd.x0 + ux * runFrom, ay = sd.y0 + uy * runFrom;
+            const bx = sd.x0 + ux * prevT, by = sd.y0 + uy * prevT;
+            if (prevT - runFrom > 1e-6) {
+              // A hair of wall wobble so the ink edge is not a plotter line.
+              const n = 4;
+              let d = `M ${round3(ax)} ${round3(ay)} `;
+              for (let s = 1; s <= n; s++) {
+                const tt = runFrom + (prevT - runFrom) * (s / n);
+                const px = sd.x0 + ux * tt, py = sd.y0 + uy * tt;
+                const j = (inkNoise(px, py, 7) - 0.5) * 0.16;
+                d += `L ${round3(px + sd.nx * j)} ${round3(py + sd.ny * j)} `;
+              }
+              edge += d;
+            }
+            runFrom = null;
+          }
+          if (!out) continue;
+
+          let rockDepth = HATCH_BAND;
+          for (let d = 0.4; d <= HATCH_BAND; d += 0.4) {
+            if (inside(x + sd.nx * d, y + sd.ny * d)) { rockDepth = d; break; }
+          }
+          const reach = rockDepth >= HATCH_BAND ? HATCH_BAND : rockDepth * 0.5;
+
+          for (let layer = 0; layer < layers; layer++) {
+            const along = (inkNoise(x, y, 41 + layer * 13) - 0.5) * POISSON_R * 0.8;
+            const outD = HATCH_LIFT + layer * (reach / layers)
+              + (inkNoise(x, y, 43 + layer * 17) - 0.5) * 0.24;
+            if (outD > reach) continue;
+            const q = {
+              x: x + sd.nx * outD + ux * along,
+              y: y + sd.ny * outD + uy * along,
+              d: outD,
+            };
+            if (!isRock(q.x, q.y)) continue;
+            if (tooClose(q)) continue;
+            addSample(q);
+          }
+
+          if (inkNoise(x, y, 13) > 0.972) {
+            const d = 0.35 + inkNoise(x, y, 17) * 1.2;
+            const rr = 0.13 + inkNoise(x, y, 19) * 0.12;
+            const gx = x + sd.nx * d + uy * (inkNoise(x, y, 23) - 0.5) * 0.8;
+            const gy = y + sd.ny * d - ux * (inkNoise(x, y, 23) - 0.5) * 0.8;
+            grit += `M ${round3(gx - rr)} ${round3(gy)} a ${round3(rr)} ${round3(rr)} 0 1 0 ${round3(rr * 2)} 0 `
+                  + `a ${round3(rr)} ${round3(rr)} 0 1 0 ${round3(-rr * 2)} 0 `;
+          }
+        }
+      });
+    });
+
+    samples.sort((a, b) => a.d - b.d);
+
+    const clusters = [];
+    const hashCell = POISSON_R;
+    const buckets = new Map();
+    const bkey = (x, y) => `${x},${y}`;
+    const neighborsOf = (p) => {
+      const gx = Math.floor(p.x / hashCell);
+      const gy = Math.floor(p.y / hashCell);
+      const reach = Math.ceil(NEIGHBOR_R / hashCell) + 1;
+      const out = [];
+      for (let oy = -reach; oy <= reach; oy++) {
+        for (let ox = -reach; ox <= reach; ox++) {
+          const list = buckets.get(bkey(gx + ox, gy + oy));
+          if (!list) continue;
+          for (let j = 0; j < list.length; j++) {
+            const other = clusters[list[j]];
+            if (dist(p, other.origin) <= NEIGHBOR_R) out.push(other);
+          }
+        }
+      }
+      return out;
+    };
+
+    let hatch = '';
+    for (let i = 0; i < samples.length; i++) {
+      const p = samples[i];
+      const nearby = neighborsOf(p);
+      const angle = pickAngle(p.x, p.y, nearby);
+      const cluster = { origin: p, angle, strokes: [] };
+      const dx = Math.cos(angle), dy = Math.sin(angle);
+      for (let s = 0; s < 3; s++) {
+        const offset = (s - 1) * STROKE_SPACING;
+        const variation = (inkNoise(p.x, p.y, 53 + s * 23) - 0.5) * 0.2 * STROKE_LEN;
+        const half = STROKE_LEN / 2 + variation;
+        const jitter = (inkNoise(p.x, p.y, 59 + s * 29) - 0.5) * 0.08;
+        const sdx = Math.cos(angle + jitter), sdy = Math.sin(angle + jitter);
+        const raw = {
+          a: { x: p.x + offset * dy - sdx * half, y: p.y - offset * dx - sdy * half },
+          b: { x: p.x + offset * dy + sdx * half, y: p.y - offset * dx + sdy * half },
+        };
+        const clipped = clipStroke(raw, nearby);
+        if (!clipped) continue;
+        cluster.strokes.push(clipped);
+        hatch += `M ${round3(clipped.a.x)} ${round3(clipped.a.y)} L ${round3(clipped.b.x)} ${round3(clipped.b.y)} `;
+      }
+      const idx = clusters.length;
+      clusters.push(cluster);
+      const k = bkey(Math.floor(p.x / hashCell), Math.floor(p.y / hashCell));
+      const list = buckets.get(k);
+      if (list) list.push(idx);
+      else buckets.set(k, [idx]);
+    }
+
+    return { edge, hatch, shadow: hatch, grit };
+  }
+
+  /**
+   * The head of an arrow, at (x2,y2), pointing the way the line runs.
+   *
+   * A separate <path> rather than a `marker-end`. Markers would size
+   * themselves off the stroke, which is the one thing here that must stay
+   * hairline — a way out is drawn thin on purpose — so the head would vanish
+   * with it. They are also the same class of paint feature as the patterns
+   * and masks that froze this chart's rasteriser; a triangle costs nothing
+   * and cannot surprise anyone.
+   *
+   * Returns '' for a zero-length line, which is what a road between a place
+   * and itself would be, and what a stub clamped hard against the border can
+   * become.
+   */
+  function arrowHead(x1, y1, x2, y2, len, half, cls) {
+    const dx = x2 - x1, dy = y2 - y1;
+    const dist = Math.hypot(dx, dy);
+    if (!(dist > 1e-6) || !(len > 0)) return '';
+    const ux = dx / dist, uy = dy / dist;
+    // The perpendicular, for the two back corners.
+    const px = -uy, py = ux;
+    const bx = x2 - ux * len, by = y2 - uy * len;
+    return `<path class="${cls}" d="M ${round3(x2)} ${round3(y2)} `
+      + `L ${round3(bx + px * half)} ${round3(by + py * half)} `
+      + `L ${round3(bx - px * half)} ${round3(by - py * half)} Z"/>`;
+  }
+
+  /** Three decimals is plenty at this scale, and keeps the markup readable. */
+  function round3(n) {
+    return Math.round(n * 1000) / 1000;
+  }
 
   /**
    * One door glyph, in the old-school grammar: the reader learns the
@@ -395,16 +920,37 @@
     // click target — and a glyph under ink is two things saying one thing.
     const cy = r.y + r.h * 0.3;
     const wide = r.w >= r.h;   // ticks perpendicular to the room's long axis
+
+    // Sized to the room it stands in, not to the chart.
+    //
+    // The five ticks are written at a fixed 3.8 by 3.3 units, which was a
+    // comfortable third of a room back when a floor was drawn on a 48-column
+    // field and the rooms came out around 16 units across. They are nearer 10
+    // now, and the same glyph fills them. Rather than pick a new constant that
+    // would go stale the next time the field changes — or one tied to the
+    // grid, which would swing the other way on this generator's own levels,
+    // where a square is nearly three times the size — it is measured off the
+    // room: the flight takes a bit under half the room's shorter side. On the
+    // old dimensions that lands within a hair of the old size, which is the
+    // check that it is the right quantity to hang it on.
+    const k = Math.max(0.45, Math.min(1.4, (Math.min(r.w, r.h) * 0.45) / GLYPH_SPAN));
+
     const ticks = [];
     for (let i = 0; i < 5; i++) {
       const t = up ? i : 4 - i;
       const half = 0.55 + t * 0.28;
       const off = (i - 2) * 0.95;
+      // Drawn about the origin so one transform can place and size it.
       ticks.push(wide
-        ? `<line x1="${cx + off}" y1="${cy - half}" x2="${cx + off}" y2="${cy + half}"/>`
-        : `<line x1="${cx - half}" y1="${cy + off}" x2="${cx + half}" y2="${cy + off}"/>`);
+        ? `<line x1="${off}" y1="${-half}" x2="${off}" y2="${half}"/>`
+        : `<line x1="${-half}" y1="${off}" x2="${half}" y2="${off}"/>`);
     }
-    return `<g class="wm-stair-ticks" aria-hidden="true">${ticks.join('')}</g>`;
+    // Which way the flight goes, said in the class as well as in the taper.
+    // The two rooms that matter on a floor are the one you came in by and the
+    // one that goes deeper, and they are worth telling apart at a glance now
+    // that you can only climb out from the first of them.
+    return `<g class="wm-stair-ticks ${up ? 'is-up' : 'is-down'}" aria-hidden="true"
+      transform="translate(${round3(cx)} ${round3(cy)}) scale(${round3(k)})">${ticks.join('')}</g>`;
   }
 
   /**
@@ -440,9 +986,13 @@
     if (!plan || !plan.rooms) return '';
 
     // The rock the level is cut from. Under everything, out to the padded
-    // edges of the viewBox, so the plate reads as a hole in the dark rather
-    // than shapes floating on parchment — the parchment stays outside the
-    // frame, on .map-body, where the region charts keep it.
+    // edges of the viewBox.
+    //
+    // This used to be near-black, so the plate read as a hole in the dark. It
+    // is stone-coloured now, because the plate it is copied from draws the
+    // rock as a material and not as an absence — the floor is the pale thing
+    // and the rock around it is hatched, shadowed and littered. You cannot
+    // hatch a void; the hatching has to sit ON something.
     const rock = `<rect class="wm-rock" x="${-PAD_X}" y="${-PAD_TOP}"
       width="${VIEW_W + PAD_X * 2}" height="${VIEW_H + PAD_TOP + PAD_BOTTOM}"/>`;
 
@@ -459,7 +1009,16 @@
     const lit = (o) => o.seen !== false;
     const shown = (o) => o.seen !== false || o.glimpsed === true;
 
-    const seenRooms = plan.rooms.filter(shown);
+    // Rooms are drawn only where the party has BEEN. A glimpsed room used to
+    // get a dashed outline — you have seen the doorway, so here is the shape
+    // behind it — and that was a guess the chart had no business making: the
+    // outline is the room's true footprint, so "we have seen a door" was being
+    // drawn as "we know how big it is and which way it runs". What you can see
+    // from a doorway is the doorway. Go through it and the room is drawn.
+    //
+    // `shown` is still what the passages use: a passage you have looked down
+    // is a passage you have seen the length of.
+    const seenRooms = plan.rooms.filter(lit);
     const rooms = seenRooms.map((r) => {
       const cls = [
         'wm-room',
@@ -504,65 +1063,165 @@
       </g>`;
     }).join('');
 
-    // The graph-paper ruling, as plain line elements in one path per kind —
-    // a room is ruled both ways from its own corner, a corridor is ticked
-    // across its run every cell. Nothing clever: no <pattern>, no <mask>.
-    // Both of those were tried and both, repainted on scroll, froze Chrome's
+    // The graph paper, ruled across the whole page.
+    //
+    // Two things about it were wrong for a long time and are worth recording,
+    // because both looked right.
+    //
+    // It was ruled at HALL_W, on the reasoning that a corridor is ten feet
+    // wide so a square the width of a corridor is a ten-foot square. The
+    // premise is false: a passage on these floors is drawn 2.4 units wide but
+    // is TWO tiles of the level it was generated from, and the tiles are the
+    // ten-foot ones. So the ruling was at roughly twenty feet while claiming
+    // ten, and — because HALL_W has nothing to do with the level's own grid —
+    // room edges landed wherever they happened to. A 7x6-tile room came out
+    // 3.40 by 2.73 squares. The pitch now comes from the plan, which measures
+    // it through the one projection that exists (see DungeonGen::plan), so a
+    // square IS a tile and every wall lands on a line.
+    //
+    // And it was ruled only inside rooms and passages the party had walked,
+    // to avoid graph paper "claiming the floor" of somewhere unvisited. That
+    // reasoning came from ruling the FLOOR. Ruling the PAGE says nothing about
+    // any room: it is the paper the plan is drawn on, and it runs under the
+    // rock and off the edges exactly as it would on a real plate. Nothing is
+    // claimed and the sheet stops stopping at the walls.
+    //
+    // Plain line elements in one <path>. Nothing clever: no <pattern>, no
+    // <mask>. Both were tried and both, repainted on scroll, froze Chrome's
     // renderer solid — a pattern-stroked polyline is apparently a paint the
-    // rasteriser will sit down and think about. A few hundred hairlines in
-    // one <path> is nothing. Cell = HALL_W, so a corridor reads as one
-    // square wide: the 10-foot corridor of every graph-paper dungeon.
-    // Ruled only where the party has been. A glimpsed room is a doorway seen
-    // from a passage, and graph paper inside it would be claiming its floor.
+    // rasteriser will sit down and think about. Two hundred hairlines in one
+    // <path> is nothing.
     let rules = '';
-    plan.rooms.filter(lit).forEach((r) => {
-      for (let gx = HALL_W; gx < r.w - 0.05; gx += HALL_W) {
-        rules += `M ${r.x + gx} ${r.y} v ${r.h} `;
+    const ruling = plan.grid;
+    if (PLAN_RULED && ruling && ruling.dx > 0.01 && ruling.dy > 0.01) {
+      // The page, padded: the ground rect runs to these bounds and the ruling
+      // has to reach them or the paper stops before the plate does.
+      const x0 = -PAD_X, x1 = VIEW_W + PAD_X;
+      const y0 = -PAD_TOP, y1 = VIEW_H + PAD_BOTTOM;
+      // Anchored on the grid's own origin and stepped out in both directions,
+      // so the lines sit on tile boundaries rather than merely near them.
+      // Stepped by INDEX rather than by adding the pitch each time round.
+      // Adding accumulates the float error along with the position, and a
+      // hundred additions of a rounded pitch is the same drift again by the
+      // far edge of the page.
+      const from = (origin, pitch, lo) => Math.ceil((lo - origin) / pitch);
+      const upto = (origin, pitch, hi) => Math.floor((hi - origin) / pitch);
+      for (let k = from(ruling.x, ruling.dx, x0); k <= upto(ruling.x, ruling.dx, x1); k++) {
+        const x = ruling.x + k * ruling.dx;
+        rules += `M ${round3(x)} ${round3(y0)} V ${round3(y1)} `;
       }
-      for (let gy = HALL_W; gy < r.h - 0.05; gy += HALL_W) {
-        rules += `M ${r.x} ${r.y + gy} h ${r.w} `;
+      for (let k = from(ruling.y, ruling.dy, y0); k <= upto(ruling.y, ruling.dy, y1); k++) {
+        const y = ruling.y + k * ruling.dy;
+        rules += `M ${round3(x0)} ${round3(y)} H ${round3(x1)} `;
       }
-    });
-    const tickHalf = HALL_W / 2;
-    runs.filter(lit).forEach((c) => {
-      const pts = c.points;
-      for (let k = 0; k < pts.length - 1; k++) {
-        const [x1, y1] = pts[k];
-        const [x2, y2] = pts[k + 1];
-        const vert = Math.abs(x2 - x1) < 1e-6;
-        const len = vert ? Math.abs(y2 - y1) : Math.abs(x2 - x1);
-        const step = (vert ? Math.sign(y2 - y1) : Math.sign(x2 - x1)) * HALL_W;
-        for (let d = HALL_W; d < len - 0.05; d += HALL_W) {
-          const t = d / HALL_W;
-          rules += vert
-            ? `M ${x1 - tickHalf} ${y1 + step * t} h ${HALL_W} `
-            : `M ${x1 + step * t} ${y1 - tickHalf} v ${HALL_W} `;
-        }
-      }
-    });
-    const grid = `<path class="wm-grid-line" d="${rules}"/>`;
+    }
+    const grid = rules ? `<path class="wm-grid-line" d="${rules}"/>` : '';
 
-    // The stairs, in ticks; the way down shortens, the way up widens.
-    // The way down is a thing you find by walking into the room that holds it.
+    // The rock's edge, worked from the union of everything the party has
+    // actually walked. Glimpsed shapes are left out on purpose: a doorway seen
+    // from a passage tells you a room is there, not where its walls run, and
+    // hatching it would be the chart claiming to know. They keep the dashed
+    // outline the fog rules give them.
+    const ink = inkRock(floorRects(plan, lit));
+    // `shadow` is the same path as `hatch` — a fat grey stroke of
+    // `.wm-rock-shadow` (try stroke #d4d0c7, width ~1.05, round caps) sits
+    // under `.wm-hatch` (ink #1a1612, width ~0.18, butt caps).
+    const rockwork = `
+      <path class="wm-rock-shadow" d="${ink.shadow}"/>
+      <path class="wm-hatch" d="${ink.hatch}"/>
+      <path class="wm-rock-edge" d="${ink.edge}"/>
+      <path class="wm-rubble" d="${ink.grit}"/>`;
+
+    // The stair down, in ticks that shorten as they go — a thing you find by
+    // walking into the room that holds it.
+    //
+    // The way OUT is not drawn as a flight at all. It was, and the two came
+    // out very nearly identical: two dashed gold rooms, each with a taper of
+    // ticks in it, told apart only by which end of the taper was longer. That
+    // is a distinction you have to be looking for, and the way out is the one
+    // mark on a floor plan you may be looking for in a hurry — you can only
+    // climb out from that room now, so a party deep in a level and running out
+    // of hit points has to be able to pick it off the chart at a glance.
+    //
+    // So it takes the mark the chart already uses for leaving: an arrow in a
+    // disc, the same one on the end of the stub that runs off the border. One
+    // vocabulary — a disc with an arrow in it means daylight, wherever it is
+    // drawn — and nothing to compare tapers over.
+    const stairPin = ruling && ruling.dx > 0.01
+      ? Math.min(ruling.dx, ruling.dy) / 4
+      : 1;
     const stairs = plan.rooms.filter(lit).map((r) => {
       if (r.role === 'stair') return stairTicks(r, false);
-      if (r.role === 'entrance') return stairTicks(r, true);
-      return '';
+      if (r.role !== 'entrance') return '';
+      // In the corner, not the middle. The middle already belongs to the
+      // room's own pin, and at one square each the two discs simply sat on top
+      // of one another. Inset by about a square, and clamped so it stays
+      // inside a small room rather than riding out onto the wall.
+      const sq = ruling && ruling.dx > 0.01 ? Math.min(ruling.dx, ruling.dy) : 2.4;
+      const inset = Math.min(sq * 0.85, r.w * 0.28, r.h * 0.28);
+      const cx = r.x + inset;
+      const cy = r.y + inset;
+      return `<g class="wm-waypin" aria-hidden="true"
+          transform="translate(${round3(cx)} ${round3(cy)}) scale(${round3(stairPin)})">
+        <circle class="wm-waypin-disc" cx="0" cy="0" r="2"/>
+        <text class="wm-waypin-mark" dy="0.78">↑</text>
+      </g>`;
     }).join('');
 
     // One glyph per threshold, and each doorway has two — at_a is the wall
     // the corridor leaves, at is the wall it arrives at. Orientation comes
     // from the segment actually meeting that wall, so a dogleg's two glyphs
     // can face different ways and both sit square across their own door.
+    //
+    // A door is also the way THROUGH it. Each threshold has a place on either
+    // side — a room and the passage that meets it — and if the party is
+    // standing on one of them, clicking the door is a step onto the other.
+    // Which side is the target therefore depends on where you are: the same
+    // glyph leads into the room from the passage and into the passage from the
+    // room. A threshold with the party on neither side is drawn and left
+    // inert; stepping through a door two rooms away is not a move.
+    // An open threshold and an arch are drawn with no glyph at all — there is
+    // nothing hanging in the gap to draw — but they are still a way through,
+    // and on a floor generated by DungeonGen rather than by the map service
+    // they are SIXTY PER CENT of the thresholds (see DungeonGen::door). They
+    // get the same invisible pad the glyphs get, or those rooms would have no
+    // way in that a pointer could find.
     const doors = runs.map((c) => {
-      if (!c.door || c.door === 'open' || c.door === 'arch') return '';
+      if (!c.door) return '';
       const pts = c.points;
       const ends = [
-        { p: c.at_a || pts[0], n: pts[1] },
-        { p: c.at || pts[pts.length - 1], n: pts[pts.length - 2] },
+        { p: c.at_a || pts[0], n: pts[1], room: c.from },
+        { p: c.at || pts[pts.length - 1], n: pts[pts.length - 2], room: c.to },
       ];
-      return ends.map(({ p, n }) =>
-        doorGlyph(c.door, p[0], p[1], Math.abs(n[0] - p[0]) < 1e-6)).join('');
+      return ends.map(({ p, n, room }) => {
+        const glyph = doorGlyph(c.door, p[0], p[1], Math.abs(n[0] - p[0]) < 1e-6);
+        // The two places this threshold joins, and the one that is not here.
+        const through = hereId != null && room != null && c.location_id != null
+          ? (hereId === room ? c.location_id : (hereId === c.location_id ? room : null))
+          : null;
+        // Nothing drawn and nowhere to go: an open threshold the party is not
+        // standing beside is not worth an element.
+        if (through == null) return glyph ? `<g class="wm-doorway">${glyph}</g>` : '';
+        const name = c.door === 'locked' ? 'Try the locked door'
+          : c.door === 'trapped' ? 'Through the door — you know it is trapped'
+          : c.door === 'stuck' ? 'Force the stuck door'
+          : c.door === 'portcullis' ? 'Through the portcullis'
+          : (c.door === 'open' || c.door === 'arch') ? 'Through the opening'
+          : 'Through the door';
+        // A pad, because the glyph itself is a hairline box a door's width
+        // across and the pointer needs something to land on.
+        // `data-door-to` rather than `data-map-node`: a door is no longer a
+        // click that travels. It opens the menu of things a party can do at a
+        // threshold — look it over, disarm what they found, pick, force,
+        // brace — and walking through is the first item on it. game.js turns
+        // the place beyond into the exit that leads there.
+        return `<g class="wm-doorway is-through" data-door-to="${through}"
+                   role="button" tabindex="0" aria-label="${esc(name)}"
+                   data-room-pin data-room-name="${esc(name)}">
+          <circle class="wm-door-hit" cx="${round3(p[0])}" cy="${round3(p[1])}" r="${round3(HALL_W * 0.7)}"/>
+          ${glyph}
+        </g>`;
+      }).join('');
     }).join('');
 
     // Traps the party has met, one mark each: hollow where it was spotted,
@@ -576,7 +1235,12 @@
       </path>`;
     }).join('');
 
-    return `<g class="wm-plan">${rock}${walls}${floors}${rooms}${grid}${stairs}${doors}${trapMarks}</g>`;
+    // Order matters: the rockwork goes down on the bare rock, and the floors
+    // and rooms are painted over the top of it. That is what lets a hatch
+    // stroke start a hair inside the wall — the overshoot is covered by the
+    // floor that lands on it, so every stroke meets the edge line cleanly
+    // instead of floating a gap away from it.
+    return `<g class="wm-plan">${rock}${rockwork}${walls}${floors}${rooms}${grid}${stairs}${doors}${trapMarks}</g>`;
   }
 
   /**
@@ -610,7 +1274,7 @@
    * Genuinely hidden places are not on the chart at all until found — see
    * `hidden_until_visited`, which is a stronger thing than being unvisited.
    */
-  function node(n, ways, quests, marks) {
+  function node(n, ways, quests, marks, folk, floorplan, pinScale) {
     // A passage has no label — the chart draws its RUN, in floorplan(), and
     // that run is the click target. Naming it would put "A Low Way" across the
     // rooms either side of it, twelve times a level, for a place whose whole
@@ -670,22 +1334,87 @@
     // The keys are gone from the game; a way you have not walked is drawn as an
     // empty ring instead, which says the same thing without pretending to be a
     // name or an index.
+    // Where you are already standing gets no name written across it.
+    //
+    // It is the one label that was never a control — the current place is not
+    // clickable, because travelling to where you already are is an error the
+    // server would rightly refuse — so it was a caption and nothing more. And
+    // it captioned something the screen says twice over: the bar above the
+    // chart carries the region, the heading carries "<place>, <region>", and
+    // the party's own faces are drawn on the spot. What it did do was lie
+    // across the middle of the map art, which on a region with one location in
+    // it is most of the picture.
+    //
+    // The group stays — the tooltip still names the place, and the party marks
+    // are rendered inside it.
+    // On a floor plan the name is a marker you ask, not a caption you read.
+    //
+    // A region chart is mostly empty parchment and a place-name sitting on it
+    // is the whole of what is drawn — there is nothing for it to cover. A floor
+    // plan is the opposite: the rooms ARE drawn, at their real shapes, and a
+    // level of them is a dozen names laid across a dozen boxes, each one wider
+    // than the room it belongs to and overlapping its neighbours. The chart
+    // stopped being a map of the level and became a list of names arranged
+    // roughly like one.
+    //
+    // So down here the name goes behind an `i`: small, in the room it belongs
+    // to, hovered for the name and clicked to walk there. The rooms are legible
+    // again and nothing is lost — the name was never doing any work a tooltip
+    // cannot do.
+    // On a floor plan, a room nobody has walked into is not drawn at all —
+    // not even as the ring that used to stand in for it. The ring was the
+    // click target for a room you had seen the door of, and the door is that
+    // target now; leaving the ring as well marked the position of a room the
+    // chart has just stopped claiming to know anything about. Its group is not
+    // rendered either, so there is no invisible hit pad sitting in the rock
+    // where the room is going to turn out to be.
+    //
+    // Region charts keep it. There are no doors out there, and the ring is the
+    // documented way an unvisited place stays clickable.
+    if (floorplan && unknown) return '';
+
+    const pin = floorplan && !unknown && !n.current;
     const mark = unknown
       ? '<circle class="wm-unwalked" cx="0" cy="0" r="1.5"/>'
-      : `<text class="wm-label" dy="0.85">${esc(n.name)}</text>`;
+      : n.current
+        ? ''
+        : pin
+          ? `<g class="wm-roompin" transform="scale(${round3(pinScale || 1)})">
+               <circle class="wm-roompin-disc" cx="0" cy="0" r="2"/>
+               <text class="wm-roompin-i" dy="0.72" aria-hidden="true">i</text>
+             </g>`
+          : `<text class="wm-label" dy="0.85">${esc(n.name)}</text>`;
+
+    // The hit pad is the width of what is drawn: a name is wide, a pin is not,
+    // and a 20-unit pad around a 4-unit marker would swallow the room next door
+    // on a plan where the rooms are small.
+    const pad = unknown ? 'x="-3.2" width="6.4"'
+      : pin ? 'x="-3" width="6"'
+      : 'x="-10" width="20"';
+
+    // The tooltip hook goes on the node, not on the drawn pin: the pin is
+    // `pointer-events: none` and the hit rect is its sibling, so a hook on the
+    // pin itself is one the mouse can never reach.
+    //
+    // A named node keeps `<title>`, which is both its accessible name and the
+    // browser's own tooltip. A pinned one takes `aria-label` instead — same
+    // name for a screen reader, but without the native tooltip arriving a
+    // second and a half after the styled one to say the same thing twice.
+    const asks = pin ? ` data-room-pin data-room-name="${esc(n.name)}"` : '';
+    const aria = pin ? ` aria-label="${esc(title)}"` : '';
 
     return `<g class="${cls}" transform="translate(${n.x} ${n.y})"
-      ${n.current ? '' : `data-map-node="${n.id}" role="button" tabindex="0"`}>
-      <title>${esc(title)}</title>
-      <rect class="wm-hit" ${unknown ? 'x="-3.2" width="6.4"' : 'x="-10" width="20"'}
-            y="-4" height="8" rx="1"/>
+      ${n.current ? '' : `data-map-node="${n.id}" role="button" tabindex="0"`}${asks}${aria}>
+      ${pin ? '' : `<title>${esc(title)}</title>`}
+      <rect class="wm-hit" ${pad} y="-4" height="8" rx="1"/>
       ${mark}
-      ${quest ? `<g data-quest-pin
+      ${quest ? `<g data-quest-pin transform="scale(${round3(pinScale || 1)})"
           data-quest-info="${esc((quest.lines.length ? quest.lines : ['Something wants you here']).join('\n'))}">
         <circle class="wm-quest-hit" cx="0" cy="-4.2" r="3.4"/>
         <text class="wm-quest${quest.tracked ? ' is-tracked' : ''}"
           dy="-2.9" aria-hidden="true">?</text>
       </g>` : ''}
+      ${n.current ? (folk || '') : ''}
       ${n.current ? (marks || '') : ''}
     </g>`;
   }
@@ -708,7 +1437,7 @@
    * but not captioned and not clickable. `visited` here is of the location on
    * the far side, which is what "we have been through there" means.
    */
-  function neighborArrow(nb, byId, ways, hereId) {
+  function neighborArrow(nb, byId, ways, hereId, floorplan, pinScale, headLen, headHalf) {
     const from = byId.get(nb.from);
     if (!from) return '';
     // Push toward whichever border the source location is already nearest, so
@@ -748,14 +1477,44 @@
     // Clicking a caption you cannot read is not travel, it is a guess.
     const clickable = !unknown || isWayFromHere;
 
+    // On a floor plan the caption becomes a pin, for the reason the room
+    // names did — but with a sharper one behind it. A region chart is mostly
+    // empty parchment and a road out has room to be captioned; a floor plan is
+    // a level drawn at room scale, and this caption was landing straight
+    // across whatever room happened to lie between the border and the edge of
+    // the chart. On the level it was found on it covered the stair down: the
+    // way OUT was written over the way DEEPER, and read as a room in its own
+    // right because a name on a plan is what a room looks like.
+    //
+    // So down here it is an arrow in a disc at the end of the stub, named on
+    // hover through the same tip the rooms use. The stub still runs to the
+    // border, so the direction is still drawn — only the words move.
+    const pinned = floorplan && !!caption;
+    const label = pinned
+      ? `<g class="wm-exitpin" transform="translate(${tx + dx * 2.4} ${ty}) scale(${round3(pinScale || 1)})">
+           <circle class="wm-exitpin-hit" cx="0" cy="0" r="3.2"/>
+           <circle class="wm-exitpin-disc" cx="0" cy="0" r="2"/>
+           <text class="wm-exitpin-mark" dy="0.78" aria-hidden="true">↑</text>
+         </g>`
+      : `<text class="wm-out-label" x="${tx + dx * 2.4}" y="${ty + 0.9}"
+            text-anchor="${anchor}">${esc(caption)}</text>`;
+
+    // A pinned exit takes its name from the tip rather than from <title>, so
+    // the browser's own tooltip does not turn up a second and a half later to
+    // say the same thing again. Unpinned, <title> is still the accessible name.
+    const tip = pinned ? ` data-room-pin data-room-name="${esc(title)}"` : '';
+
     return `<g class="${cls}"${clickable
         ? ` data-map-node="${nb.to_location_id}" role="button" tabindex="0"`
-        : ' aria-hidden="true"'}>
-      <title>${esc(title)}</title>
+        : ' aria-hidden="true"'}${tip}${pinned ? ` aria-label="${esc(title)}"` : ''}>
+      ${pinned ? '' : `<title>${esc(title)}</title>`}
       <line class="wm-edge is-out${isWayFromHere ? ' is-way' : ''}${way && way.locked ? ' is-locked' : ''}"
             x1="${from.x}" y1="${from.y}" x2="${tx}" y2="${ty}"/>
-      <text class="wm-out-label" x="${tx + dx * 2.4}" y="${ty + 0.9}"
-            text-anchor="${anchor}">${esc(caption)}</text>
+      ${isWayFromHere
+        ? arrowHead(from.x, from.y, tx, ty, headLen, headHalf,
+            `wm-edge-head is-way${way && way.locked ? ' is-locked' : ''}`)
+        : ''}
+      ${label}
     </g>`;
   }
 
@@ -779,6 +1538,18 @@
   // Open roughly halfway between fitted and close — enough to read the street
   // around you without losing the rest of the town to the edge.
   const ZOOM_OPEN = 2.5;
+  /**
+   * How big a ten-foot square wants to be, in CSS pixels, when a floor plan
+   * first opens.
+   *
+   * A token is one square (see the scale in svg()), and a square that opens at
+   * ten pixels is a face you cannot recognise. The old fixed open zoom was
+   * chosen when a token was two squares across and could afford it; sizing the
+   * token honestly means opening closer, which is the trade — less of the
+   * level on screen, but what is on it can be read. Twenty-six is about the
+   * smallest a cropped portrait stays a person at.
+   */
+  const PLAN_SQUARE_PX = 26;
 
   const BASE = {
     x: -PAD_X,
@@ -786,6 +1557,23 @@
     w: VIEW_W + PAD_X * 2,
     h: VIEW_H + PAD_TOP + PAD_BOTTOM,
   };
+
+  /**
+   * How close a floor plan should open, from the size of its own squares.
+   *
+   * Zero for anything that is not a plan, and for a plan measured before it
+   * has been laid out — a width of nothing would divide into an absurd zoom,
+   * and the caller's fallback is the better answer than a guess.
+   */
+  function planOpenZoom(svgEl) {
+    const pitch = parseFloat(svgEl.getAttribute('data-plan-pitch') || '');
+    if (!(pitch > 0.01)) return 0;
+    const width = svgEl.getBoundingClientRect().width;
+    if (!(width > 1)) return 0;
+    const pxPerUnit = width / BASE.w;          // at the fitted zoom
+    const z = PLAN_SQUARE_PX / (pitch * pxPerUnit);
+    return Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, z));
+  }
 
   /**
    * Authoring coordinates of "you are here", if the chart has one.
@@ -813,7 +1601,10 @@
     if (!svgEl || !window.SvgView) return null;
 
     const here = herePoint(svgEl);
-    const opens = openZoom || ZOOM_OPEN;
+    // A floor plan opens to its own grid rather than to the caller's guess.
+    // The caller's number stays the fallback, and is still what a region chart
+    // uses — a region has no squares to open to.
+    const opens = planOpenZoom(svgEl) || openZoom || ZOOM_OPEN;
     const api = window.SvgView(svgEl, {
       base: BASE,
       zoomMin: ZOOM_MIN,
@@ -834,7 +1625,10 @@
       // Left button, anywhere that is not a place-name. Labels keep the click
       // for travel; the rest of the chart is for looking around. Middle-button
       // still pans too, including over a label, for people who already use it.
-      canPan: (e) => (e.button === 0 && !e.target.closest('[data-map-node]'))
+      canPan: (e) => (e.button === 0
+                      && !e.target.closest('[data-map-node]')
+                      && !e.target.closest('[data-door-to]')
+                      && !e.target.closest('[data-npc]'))
         || e.button === 1,
       onApply: (view) => svgEl.classList.toggle('is-zoomed', view.z > 1.001),
     });

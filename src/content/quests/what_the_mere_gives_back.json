@@ -1,0 +1,64 @@
+{
+    "quest_key": "what_the_mere_gives_back",
+    "title": "What the Mere Gives Back",
+    "act": 2,
+    "description": "For six years the offerings thrown off the temple rail have been washing back ashore. They are not weathered. Some of them are not the offerings that were thrown.",
+    "giver": "sister_nairn",
+    "on_job_board": false,
+    "required_level": 4,
+    "rewards": {
+        "xp": 600,
+        "gold": 80
+    },
+    "stages": {
+        "the_locked_room": {
+            "title": "The back room",
+            "objective": "Get Sister Nairn to unlock it.",
+            "journal": "She has been collecting them for six years because putting them back feels like an insult to something. She has not counted them. That is the sentence she said, and the way she said it was the thing worth noticing.",
+            "target": {
+                "location": "temple_of_the_deep_mere"
+            }
+        },
+        "the_drowned_room": {
+            "title": "The room that does not drain",
+            "objective": "Go down into the Underquay and look at the bottom.",
+            "journal": "The Waerfolk have a name for one room under the old quay and use it about once a generation. What is on the bottom of it was put there rather than lost there, and it is laid out, and the laying out is recent.",
+            "target": {
+                "location": "the_drowned_room"
+            }
+        },
+        "answered": {
+            "title": "Answered",
+            "terminal": true,
+            "resolution": "answered",
+            "outcome": "success",
+            "journal": "Six years of returned offerings went back over the rail in one afternoon with the whole of Old Waer standing on the shingle, and every one of them was named as it went, by the person who threw it, out loud. Nothing came back. Sister Nairn says that is not the same as being forgiven and she is right, and she is also the only person on this shore who looks like she slept.",
+            "effects": [
+                {
+                    "set_flag": "mere_fate",
+                    "value": "answered"
+                },
+                {
+                    "give_item": "mere_token",
+                    "quantity": 1
+                },
+                {
+                    "xp": 220
+                }
+            ]
+        },
+        "quiet": {
+            "title": "Kept quiet",
+            "terminal": true,
+            "resolution": "quiet",
+            "outcome": "neutral",
+            "journal": "The room stays locked and the Temple stays quiet and the Waerfolk go on throwing things into forty fathoms and going down at dawn to see what is on the shingle. Sister Nairn was relieved. She was relieved in the way you are relieved when somebody agrees not to look at a thing you have been looking at alone for six years.",
+            "effects": [
+                {
+                    "set_flag": "mere_fate",
+                    "value": "quiet"
+                }
+            ]
+        }
+    }
+}

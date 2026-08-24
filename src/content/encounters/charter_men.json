@@ -1,0 +1,30 @@
+{
+    "encounter_key": "charter_men",
+    "name": "The Second Door",
+    "description": "The bolted door was bolted from the other side, and the other side has been listening. There are two chairs in this room and there were always going to be more people than that — and none of them are League, and none of them are Watch, and every one of them is being paid by somebody who cannot afford to be named in a court.",
+    "difficulty": "hard",
+    "monsters": [
+        {
+            "monster": "thief_captain",
+            "quantity": 1,
+            "rank": "back"
+        },
+        {
+            "monster": "bandit",
+            "quantity": 3,
+            "rank": "front"
+        },
+        {
+            "monster": "wererat",
+            "quantity": 1,
+            "rank": "front"
+        }
+    ],
+    "allow_flee": true,
+    "allow_parley": false,
+    "victory_flag": "charter_men_beaten",
+    "ambush": true,
+    "place": {
+        "location": "the_quiet_charter"
+    }
+}

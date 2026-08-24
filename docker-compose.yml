@@ -23,9 +23,32 @@ services:
       DB_NAME: rpg_5e
       DB_USERNAME: web
       DB_PASSWORD: devpassword
+      # Unity editor / local WebGL. Unset in production — a standalone
+      # player does not enforce CORS, and the workshop is same-origin.
+      RPG_CORS_ORIGINS: local
+      # Where the dungeon generator lives. Unset it and MapService falls back to
+      # the PHP generator, which is also what happens if the service is down —
+      # so this is a preference, never a dependency.
+      RPG_MAPGEN_URL: http://mapgen:8091
     depends_on:
       db:
         condition: service_healthy
+    restart: unless-stopped
+
+  # The dungeon generator, vendored from the TypeScript original.
+  #
+  # No `ports:` on purpose. It is reachable from php over the compose network
+  # and from nowhere else, which is why it needs no authentication — see
+  # docker/mapgen/src/server.mjs. Not in php's `depends_on` either: the game
+  # generates its own dungeons when this is missing, and a hard dependency would
+  # turn a nicer map into a reason the site will not start.
+  mapgen:
+    build: ./docker/mapgen
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:8091/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     restart: unless-stopped
 
   db:

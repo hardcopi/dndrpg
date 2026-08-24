@@ -80,6 +80,17 @@ try {
     $checks[] = [false, 'uq_active_name index present', $e->getMessage()];
 }
 
+try {
+    $tok = $db->query(
+        "SELECT COUNT(*) FROM information_schema.TABLES
+          WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'api_tokens'"
+    )->fetchColumn();
+    $checks[] = [(int) $tok > 0, 'api_tokens table present',
+        (int) $tok > 0 ? null : 'CREATE TABLE api_tokens — see schema.sql'];
+} catch (Throwable $e) {
+    $checks[] = [false, 'api_tokens table present', $e->getMessage()];
+}
+
 $failed = 0;
 foreach ($checks as [$ok, $label, $note]) {
     printf("  %-4s %-40s %s\n", $ok ? 'ok' : 'FAIL', $label, $note ?? '');

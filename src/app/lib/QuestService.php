@@ -160,6 +160,60 @@ class QuestService
      * failure ending should use that stage instead, so the journal records what
      * happened rather than only that it stopped.
      */
+    /**
+     * Walking into a room, as a way of getting on with a quest.
+     *
+     * GENERATED QUESTS ONLY, and the `_dg_q_` prefix is the whole of the guard.
+     * An authored stage with a target location is a place the quest is POINTING
+     * AT — the marker on the map — and it advances when its own effect fires,
+     * from a conversation or a fight. Advancing those by arrival would march
+     * every authored quest forward the moment a party wandered past, which is
+     * the sort of thing that cannot be undone in a save.
+     *
+     * A generated floor has nobody to talk to, so arrival is all there is.
+     *
+     * ONLY THE VERY NEXT STAGE, never a later one that happens to be here.
+     * Matching any unpassed stage let a party walk into the last room first and
+     * finish the errand without doing it — observed, not theorised: a delve
+     * jumped from stage one to stage three and closed the quest, because room
+     * three was nearer the door than room two. The errand is a route.
+     *
+     * Two consecutive steps in the SAME room resolve one after the other, on
+     * consecutive looks, which is right: the generator writes those when a room
+     * is worth two beats.
+     */
+    public function arriveAt(int $partyId, int $locationId): array
+    {
+        if ($partyId <= 0 || $locationId <= 0) {
+            return Effects::blank() + ['ok' => true];
+        }
+
+        $stmt = $this->db->prepare(
+            "SELECT q.quest_key, s.stage_key
+               FROM party_quests pq
+               INNER JOIN quests q ON q.id = pq.quest_id
+               INNER JOIN quest_stages s ON s.quest_id = q.id
+              WHERE pq.party_id = ?
+                AND pq.status = 'active'
+                AND q.quest_key LIKE '\_dg\_q\_%'
+                AND s.target_location_id = ?
+                AND s.sort_order = (
+                      SELECT MIN(n.sort_order) FROM quest_stages n
+                       WHERE n.quest_id = q.id
+                         AND n.sort_order > COALESCE(
+                               (SELECT cs.sort_order FROM quest_stages cs
+                                 WHERE cs.id = pq.current_stage_id), 0))
+              LIMIT 1"
+        );
+        $stmt->execute([$partyId, $locationId]);
+        $next = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (!$next) {
+            return Effects::blank() + ['ok' => true];
+        }
+
+        return $this->advance($partyId, (string) $next['quest_key'], (string) $next['stage_key']);
+    }
+
     public function fail(int $partyId, string $questKey): array
     {
         $quest = $this->questByKey($questKey);

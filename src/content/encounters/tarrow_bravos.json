@@ -1,0 +1,22 @@
+{
+    "encounter_key": "tarrow_bravos",
+    "name": "The Houses Answer",
+    "description": "Nobody raises a voice. Mother Reth goes on skimming the near cauldron, and the gate is shut behind you by somebody you did not see arrive, and three men come off the fence with the unhurried competence of people paid by the week.",
+    "difficulty": "hard",
+    "monsters": [
+        {
+            "monster": "thief_captain",
+            "quantity": 1,
+            "rank": "back"
+        },
+        {
+            "monster": "bandit",
+            "quantity": 3,
+            "rank": "front"
+        }
+    ],
+    "allow_flee": true,
+    "allow_parley": true,
+    "parley_node": "mother_reth:she_calls_them_off",
+    "victory_flag": "tarrow_bravos_beaten"
+}

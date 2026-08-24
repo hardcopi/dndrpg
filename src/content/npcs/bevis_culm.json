@@ -1,0 +1,12 @@
+{
+    "npc_key": "bevis_culm",
+    "name": "Factor Bevis Culm",
+    "role": "League Factor",
+    "description": "Thin, precise, and appointed from Lathmere to a city that has never once done what he told it. He is eleven months into a lie about the granary that he cannot now unsay, and he did not start it, and that is the worst thing about it. He would take a great deal of help from anyone who offered it, and would owe them everything.",
+    "sprite_key": "scribe",
+    "is_quest_giver": true,
+    "dialog": "bevis_culm",
+    "place": {
+        "location": "the_factors_house"
+    }
+}

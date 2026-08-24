@@ -1,0 +1,722 @@
+{
+    "npc_key": "bevis_culm",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "flag": "culm_owes_you"
+                    }
+                ],
+                "text": "There is no fire lit in the writing room, in a month that wants one, and Factor Bevis Culm is at the window with the quarterly return in front of him and nothing crossed out on it.\n\n\"Twenty weeks,\" he says. \"And it is true. I have written a true sentence to Lathmere for the first time since March of last year and I sat here for an hour afterwards and could not think what to do with myself.\"\n\nHe turns round.\n\n\"I know what I am. I want to say that once, out loud, to the person who fixed it, and then never again. I am a man who was saved by somebody else doing what I should have done in February.\"",
+                "choices": [
+                    {
+                        "label": "\"You would not have survived doing it in February.\"",
+                        "next": "the_february"
+                    },
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "culm_broken"
+                    },
+                    {
+                        "flag": "granary_fate",
+                        "equals": "reported"
+                    }
+                ],
+                "text": "The Factor's House has a clerk carrying out a basket of spoiled paper, and this time it is not spoiled paper, it is the whole of the writing room's press, and the clerk will not meet anyone's eye.\n\n\"It has gone,\" says Bevis Culm. \"Under Tallowglass's seal, with the weight's arithmetic behind it, and Halvia Corr will have opened it herself.\"\n\nHe is perfectly calm.\n\n\"I have been waiting eleven months to be found out and it turns out the waiting was the whole of it. This part is quite easy. There is nothing left to arrange.\"",
+                "choices": [
+                    {
+                        "label": "\"What happens to you?\"",
+                        "next": "what_happens"
+                    },
+                    {
+                        "label": "\"It was six years of theft. Not yours.\"",
+                        "next": "not_yours"
+                    },
+                    {
+                        "label": "Leave him.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "culm_broken"
+                    }
+                ],
+                "text": "The League's arms over the door have been taken down. Not defaced — taken down, carefully, and put inside, which is somehow worse.\n\n\"The seals came off those doors in front of two thousand people,\" says Bevis Culm, \"and my writ now runs as far as my own front step, and I stood in that window and watched it and I did not send for the Watch.\"\n\nHe folds his hands.\n\n\"I could have. I have the writ. Forty men would have come, of whom twelve are sober. And I stood here.\"",
+                "choices": [
+                    {
+                        "label": "\"Why did you not send?\"",
+                        "next": "why_not_send"
+                    },
+                    {
+                        "label": "Leave him.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "granary_lie_known"
+                    },
+                    {
+                        "flag": "weight_fate",
+                        "equals": "proved"
+                    }
+                ],
+                "text": "Bevis Culm has the League standard weight on his own desk — you put it there — and he has not moved it in the time it took you to cross the room.\n\n\"Four ounces,\" he says. \"Six years. Nine weeks of bread.\"\n\nHe looks up and there is something in his face that has not been there before, and it takes you a moment to recognise it as fury.\n\n\"I have spent eleven months believing I was covering a mistake. My mistake. Some slippage, some rot, some clerk's arithmetic, mine to answer for. I have not slept since March of last year over a shortfall that this city was *robbed* of.\"",
+                "choices": [
+                    {
+                        "label": "\"By your predecessor.\"",
+                        "next": "the_predecessor"
+                    },
+                    {
+                        "label": "\"So what do we do?\"",
+                        "next": "the_three_answers"
+                    },
+                    {
+                        "label": "Later.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "two_granaries_known"
+                    },
+                    {
+                        "not": {
+                            "flag": "granary_fate"
+                        }
+                    }
+                ],
+                "text": "Bevis Culm is at the window and has clearly been there a while.\n\n\"Two granaries,\" he says, without turning. \"Forty yards apart. Neither of us knowing about the other. Both short. Both lying.\"\n\nHe turns round.\n\n\"I have been in this city four years being managed by a woman I have never had a conversation with, and it turns out she has spent six of them building the thing I should have built and could not, and she did it below the high-water mark because a clause in my own charter told her where my hands stop.\"\n\nHe almost smiles.\n\n\"I have read that clause eleven times and never once understood the point of it. She read it once.\"",
+                "choices": [
+                    {
+                        "label": "\"Then go and talk to her.\"",
+                        "conditions": [
+                            {
+                                "flag": "gedda_wants_asking"
+                            }
+                        ],
+                        "next": "the_asking"
+                    },
+                    {
+                        "label": "\"So what do we do?\"",
+                        "next": "the_three_answers"
+                    },
+                    {
+                        "label": "Later.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "granary_lie_known"
+                    }
+                ],
+                "text": "Culm does not get up. He has stopped getting up.\n\n\"You have been past the second bay,\" he says. \"There is no point in my asking how. Everybody in this city can get anywhere except me.\"",
+                "choices": [
+                    {
+                        "label": "\"Eleven weeks.\"",
+                        "next": "the_arithmetic"
+                    },
+                    {
+                        "label": "\"Why did you write twenty?\"",
+                        "next": "why_he_did_it"
+                    },
+                    {
+                        "label": "Later.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "granary_floor_seen"
+                    }
+                ],
+                "text": "Factor Culm is standing at the writing-room window with his back to the door, watching the harbour, which is what he does instead of working.\n\n\"You went in,\" he says, without turning. \"The granary. Past the second bay.\"\n\nHe does turn, then.\n\n\"I am not going to ask you not to say it. I have run out of that.\"",
+                "choices": [
+                    {
+                        "label": "\"Eleven weeks.\"",
+                        "next": "he_admits_it"
+                    },
+                    {
+                        "label": "\"Tell me yourself.\"",
+                        "next": "he_admits_it"
+                    },
+                    {
+                        "label": "Say nothing, and go.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "met_culm"
+                    }
+                ],
+                "text": "\"You again,\" says Bevis Culm, and for a man with no friends he is not very good at hiding that this is the best part of his day.",
+                "choices": [
+                    {
+                        "label": "\"Show me the granary.\"",
+                        "next": "the_tour"
+                    },
+                    {
+                        "label": "\"What does a Factor actually do here?\"",
+                        "next": "what_he_does"
+                    },
+                    {
+                        "label": "\"You have no staff of your own choosing.\"",
+                        "next": "the_staff"
+                    },
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "Three storeys of imported Ardennian stone in a city that builds in timber, and inside it a hall that is too big, a strongroom that is too small, and a writing room with a window onto the harbour and a fire lit in a month that does not want one.\n\nThe man at the desk is thin and precise and gets up, which nobody in Highstrand has done for you.\n\n\"Bevis Culm. Factor, appointed from Lathmere, four years next month.\"\n\nHe indicates the chair opposite, which has not been sat in recently.\n\n\"You are the first person to come through that door this week who is not a clerk. I am aware of how that sounds. I am going to say it anyway, because I have decided that pretending otherwise is what got me here.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_culm"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "\"Show me the granary.\"",
+                        "next": "the_tour"
+                    },
+                    {
+                        "label": "\"Got you where?\"",
+                        "next": "got_you_where"
+                    },
+                    {
+                        "label": "\"What does a Factor do in this city?\"",
+                        "next": "what_he_does"
+                    },
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "got_you_where": {
+            "text": "\"Into a chair,\" says Culm, \"in a stone house, in a city that builds in timber, holding a writ that nobody has obeyed in full for two years.\"\n\nHe sits back down.\n\n\"That is not self-pity. It is the actual constitutional position and it is in the charter if you care to read it. The Factor administers. The Moot decides. The Fish Hall settles. And the Boom Watch does whichever of the three has paid most recently.\"\n\n\"My predecessor understood this and went native. The one before him understood it and went home. I have spent four years trying to find a third option and I am beginning to suspect there is not one.\"",
+            "choices": [
+                {
+                    "label": "\"Show me the granary.\"",
+                    "next": "the_tour"
+                },
+                {
+                    "label": "\"What happened to your predecessor?\"",
+                    "next": "the_predecessor"
+                },
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "what_he_does": {
+            "text": "\"I count,\" says Bevis Culm. \"That is the whole of it and it is not a modest answer.\"\n\n\"Four times a year I write to Lathmere and say what this city holds, what it received, what it is owed and what it owes. Halvia Corr reads it — herself, they all do — and the grain barges are scheduled off the figure I send. Not off what Waerhaven asks for. Off what I say is in the granary.\"\n\nHe steeples his fingers.\n\n\"That is the only real power in this city and it is entirely made of arithmetic, and everybody here thinks I am a clerk in a stone house, and they are all quite right, and it is still the only real power.\"",
+            "choices": [
+                {
+                    "label": "\"Then the figure matters a great deal.\"",
+                    "next": "the_tour"
+                },
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "the_staff": {
+            "text": "\"Four,\" says Culm. \"All Waerhaven-born, none of them chosen by me, all of them here before I arrived and all of them here after I go.\"\n\nHe almost smiles.\n\n\"They are not spies. That would be simpler. They are perfectly loyal, in the sense that they do exactly what I ask and tell everybody in this city what I asked for by suppertime, and they do not think of that as a betrayal because it is how information has moved in Waerhaven for four hundred years.\"\n\n\"I have one clerk who has been here thirty years. When I write a return, he copies it. When I burn a draft, he carries out the ash.\"\n\nHe stops.\n\n\"That is not a thing I meant to say aloud.\"",
+            "choices": [
+                {
+                    "label": "\"Burn a draft of what?\"",
+                    "next": "the_drafts"
+                },
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "the_drafts": {
+            "text": "Bevis Culm looks at the grate, which has more ash in it than coal.\n\n\"A quarterly return,\" he says, \"takes me about forty minutes to write and eleven days to send.\"\n\nHe does not elaborate.\n\n\"Show me the granary is the question you came in with. Ask it again.\"",
+            "choices": [
+                {
+                    "label": "\"Show me the granary.\"",
+                    "next": "the_tour"
+                },
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "the_tour": [
+            {
+                "conditions": [
+                    {
+                        "flag": "granary_floor_seen"
+                    }
+                ],
+                "text": "\"You have seen it,\" says Culm. \"All of it. There is not a great deal I can add.\"",
+                "choices": [
+                    {
+                        "label": "\"Then say the number.\"",
+                        "next": "he_admits_it"
+                    },
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ]
+            },
+            {
+                "text": "He takes you himself, which is unusual, and he unlocks the seals himself, which is his office and his alone.\n\nThe granary is stone, raised on staddles, rat-proofed, six bays under one roof, and from the doorway it looks full.\n\nCulm walks you the length of the first bay, talking pleasantly about staddle stones and the eighty-year-old timber of the roof-tree. Then the second, more briefly.\n\nThen he stops, and turns, and puts his hand out toward the door.\n\n\"That is the whole of it,\" he says. \"Rats are the great enemy, of course. I could talk about rats for an hour.\"\n\nBehind him, the third bay is in shadow and there are four more after it.",
+                "choices": [
+                    {
+                        "label": "Walk past him into the third bay.",
+                        "next": "the_third_bay"
+                    },
+                    {
+                        "label": "\"Six bays. You have shown me two.\"",
+                        "next": "he_admits_it"
+                    },
+                    {
+                        "label": "Look at what is under the near stacks, not at him.",
+                        "check": {
+                            "skill": "perception",
+                            "dc": 13,
+                            "on_success": "the_third_bay",
+                            "on_failure": "he_walks_you_out"
+                        }
+                    },
+                    {
+                        "label": "Let him walk you out.",
+                        "next": "he_walks_you_out"
+                    }
+                ]
+            }
+        ],
+        "he_walks_you_out": {
+            "text": "He walks you out, still talking about rats, and locks the seals behind him with the care of a man doing the only part of his office that still works.\n\nAt the door he stops.\n\n\"You will come back,\" he says. It is not a threat and it is not quite a question.\n\n\"Everybody who is any good comes back. That is how I know which of them are any good. I have been shown two bays to about forty people and four of them came back and three of those four wanted money.\"",
+            "choices": [
+                {
+                    "label": "\"I am coming back.\"",
+                    "end": true
+                },
+                {
+                    "label": "Say nothing.",
+                    "end": true
+                }
+            ]
+        },
+        "the_third_bay": {
+            "text": "The third bay has grain in it to about the height of your knee.\n\nThe fourth has the dunnage laid and nothing on it. The fifth is being used to store the fifth bay's floor. The sixth has a cart in it, and a broom, and a chalked figure on the wall in a clerk's hand that has been rubbed out and rewritten eleven times, each one lower.\n\nThe near stacks in the first two bays are one sack deep against the wall, faced like a market stall.\n\nBevis Culm stands in the doorway of the third bay and does not follow you in.\n\n\"Eleven weeks,\" he says. \"At the current ration, which is not the ration, because there is no ration, because we do not have one, because having one would require me to say a number in the Wet Hall.\"",
+            "on_enter": [
+                {
+                    "set_flag": "granary_floor_seen"
+                },
+                {
+                    "start_quest": "eleven_weeks"
+                },
+                {
+                    "quest_stage": {
+                        "quest": "eleven_weeks",
+                        "stage": "the_third_bay"
+                    }
+                },
+                {
+                    "xp": 200
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"And you have told Lathmere twenty.\"",
+                    "next": "he_admits_it"
+                },
+                {
+                    "label": "Say nothing at all.",
+                    "next": "he_admits_it"
+                }
+            ]
+        },
+        "he_admits_it": {
+            "text": "\"Twenty,\" says Bevis Culm. \"Yes.\"\n\nHe stands in the doorway with the light behind him.\n\n\"Eleven months. Four returns. Each one a little further from the floor than the last, because a lie about grain is not a lie you tell once — the barges are scheduled off it, so the next quarter's shortfall is larger, so the next figure has to be higher, and the arithmetic of it runs away from you at a rate I could have predicted and did predict and wrote down and did anyway.\"\n\nHe finally comes into the bay.\n\n\"There. I have said it in the building. I have been rehearsing saying it in the building for eleven months.\"",
+            "on_enter": [
+                {
+                    "set_flag": "granary_lie_known"
+                },
+                {
+                    "quest_stage": {
+                        "quest": "eleven_weeks",
+                        "stage": "the_arithmetic"
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"Why?\"",
+                    "next": "why_he_did_it"
+                },
+                {
+                    "label": "\"Where did nine weeks go?\"",
+                    "next": "the_arithmetic"
+                }
+            ]
+        },
+        "why_he_did_it": {
+            "text": "\"February,\" says Bevis Culm.\n\n\"The quarterly came out two weeks short. Two. Not a catastrophe — a bad measure, a wet consignment, the sort of thing a Factor writes up honestly and Lathmere absorbs with a sigh.\"\n\nHe puts his hand on a staddle stone.\n\n\"Except that the League's rule is that a declared shortfall of over one week suspends the schedule pending an audit. It is in the charter. It is a perfectly sensible rule written for a city with a road.\"\n\n\"An audit takes a season. The barges stop while it runs. It was February. This city grows nothing.\"\n\nHe looks up.\n\n\"So I wrote the true figure, and looked at it, and thought about nineteen hundred people outside the wall who are not on any list and would therefore not be on the audit's ration either, and I wrote a different figure, once, for one quarter, intending to make it true by June.\"\n\n\"It has never once been true since.\"",
+            "choices": [
+                {
+                    "label": "\"Where did the nine weeks go?\"",
+                    "next": "the_arithmetic"
+                },
+                {
+                    "label": "\"You should have written the true one.\"",
+                    "next": "the_february"
+                },
+                {
+                    "label": "Say nothing.",
+                    "next": "the_arithmetic"
+                }
+            ]
+        },
+        "the_february": {
+            "text": "\"Yes,\" says Bevis Culm, immediately. \"Obviously. I have known that every day since and it has never once helped.\"\n\nHe straightens a paper that does not need straightening.\n\n\"Here is the thing nobody says about it. If I had written the true figure in February, I would have been correct, and the barges would have stopped, and I would have been recalled with honour in the spring, and a great many people in the Wardenswatch would have died in the interval, and not one of them would have appeared in any document connected to me.\"\n\n\"I would have been an honest Factor with a clean file. That is what the correct answer was worth.\"\n\nHe looks up.\n\n\"I am not defending it. I chose the other one and it has been eleven months of the worst kind of arithmetic and it is going to end me. I only want it understood that I was not choosing between honesty and dishonesty. Nobody ever is. That is a thing they tell you in Lathmere.\"",
+            "choices": [
+                {
+                    "label": "\"Where did the nine weeks go?\"",
+                    "next": "the_arithmetic"
+                },
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "the_arithmetic": [
+            {
+                "conditions": [
+                    {
+                        "flag": "weight_fate",
+                        "equals": "proved"
+                    },
+                    {
+                        "flag": "deep_store_seen"
+                    }
+                ],
+                "text": "Bevis Culm lays it out on the desk with a rule, because that is the only way he knows how to be frightened.\n\n\"Nine weeks,\" he says. \"Which is not one hole. It is three, and I have been staring at the wrong one for eleven months.\"\n\nHe writes.\n\n\"Four ounces in the hundredweight, six years, on grain. That is most of it, and it never came off a barge at all, and Lathmere shipped what Lathmere was paid for.\"\n\n\"Eighty quarters under the outer quay in a dry room with new boards on it, taken off the top before my seals ever touched it.\"\n\n\"And nineteen hundred mouths that do not appear in any figure I am permitted to write.\"\n\nHe puts the rule down.\n\n\"Three holes. One is a theft, one is a hoard, and one is a suburb. And every single one of them can be closed, and I have not got the standing to close any of them, and I have known both those things for a fortnight.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "eleven_weeks",
+                            "stage": "the_three_answers"
+                        }
+                    },
+                    {
+                        "xp": 150
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "\"Then let us close them.\"",
+                        "next": "the_three_answers"
+                    },
+                    {
+                        "label": "Later.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "\"I do not know,\" says Bevis Culm, and it is clearly the sentence he hates most in the world.\n\n\"That is the part that has kept me awake rather than the lie. Grain does not evaporate. Nine weeks of bread for twenty-six thousand people went somewhere between a barge at that quay and a floor in that building, and I have counted it four ways and I cannot find it.\"\n\nHe spreads his hands.\n\n\"I cannot investigate. Any question a Factor asks in this city is in the Fish Hall by suppertime and in the Moot by the next morning, and the moment anyone asks why the Factor is counting his own grain, the figure I have been sending south stops being a document and starts being a crime.\"\n\nHe looks at you.\n\n\"You can ask. Nobody knows who you are and nobody in this city owes you anything. Find out where nine weeks went and I will do whatever the answer requires, and I will not ask you first whether I will survive it.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "eleven_weeks",
+                            "stage": "the_arithmetic"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "\"The Counting Boom weighs everything in this city.\"",
+                        "next": "the_weight_lead"
+                    },
+                    {
+                        "label": "\"There is a dry room under the outer quay.\"",
+                        "conditions": [
+                            {
+                                "flag": "underquay_known"
+                            }
+                        ],
+                        "next": "the_quay_lead"
+                    },
+                    {
+                        "label": "\"I will find out.\"",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_weight_lead": {
+            "text": "Bevis Culm stops.\n\n\"The standard,\" he says. \"In the sealed box. Three keys.\"\n\nHe goes to a drawer, and opens it, and looks into it for slightly too long.\n\n\"I have had that key eleven months and I have never taken it out of this drawer, because taking it out requires the other two, and asking Gedda Halloway for hers would have meant explaining why.\"\n\nHe puts it on the desk.\n\n\"Take it. I am not going to pretend that is generous. It is the first useful thing I have been able to do since March of last year and I am giving it to a stranger because there is nobody else in this city I can hand it to.\"",
+            "on_enter": [
+                {
+                    "set_flag": "culm_key_given"
+                },
+                {
+                    "quest_stage": {
+                        "quest": "the_short_weight",
+                        "stage": "the_three_keys"
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "Take it.",
+                    "end": true
+                }
+            ]
+        },
+        "the_quay_lead": {
+            "text": "\"Under the quay,\" Culm repeats. \"Below the tide-mark, on League ground, forty yards from the Counting Boom.\"\n\nHe sits down.\n\n\"There is a line in the charter about the foreshore that I have read eleven times and never once understood the point of. It says the Factor's seals run to the high-water mark and no further.\"\n\nHe laughs, once, without any pleasure.\n\n\"Somebody read that before I did. Somebody read it six years ago and understood exactly what it meant, which is that there is a floor under this city that my office cannot reach.\"",
+            "choices": [
+                {
+                    "label": "\"I will go down.\"",
+                    "end": true
+                },
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "the_predecessor": {
+            "text": "\"Factor Ansel Ord,\" says Bevis Culm. \"Six years here. Recalled to Lathmere with a commendation and a house in the Silver Quarter, which is the sort of retirement a Factor gets after a posting in Thrailgate, not after six years on a promontory with no river.\"\n\nHe says it entirely evenly and you can hear him having decided, some time ago, to say it evenly.\n\n\"He held the third key before I did. The seal on that box was renewed in his last season. The wax on it is not as old as the box.\"\n\n\"And every quarter for six years this city has signed for more grain than it received, and Lathmere has been paid for the difference, and Ansel Ord went home with a commendation.\"\n\nHe looks up.\n\n\"I have written that sentence four times and burned it four times, because a Factor accusing his predecessor of theft with no proof is a Factor being recalled for spite. I need the weight. Not the ledger, not the pattern, not the arithmetic. The object, on an honest beam, in front of somebody Lathmere cannot dismiss.\"",
+            "choices": [
+                {
+                    "label": "\"Vennik Tallowglass has an honest beam.\"",
+                    "next": "the_weight_lead"
+                },
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "the_three_answers": {
+            "text": "Bevis Culm puts three sheets of paper on the desk, side by side, and does not write on any of them.\n\n\"There are three ways this ends,\" he says, \"and I have written all three out and I cannot choose between them, and I have concluded that is because it is not mine to choose. I am the man who lied. Nobody should hand me the decision as well.\"\n\nHe touches the first.\n\n\"Make the number true. Claw nine weeks back out of this city — the weight, what is under the quay, what the Houses are sitting on — and put it in those bays, and my return becomes an accurate document, and nothing changes, and nobody starves this winter.\"\n\nThe second.\n\n\"Report it. The true figure south under Tallowglass's seal with the weight's arithmetic behind it. The barges stop, the audit runs a season, Lathmere pays back six years, and the Wardenswatch has to not exist by the time the clerk walks through the Hallowgate.\"\n\nThe third.\n\n\"Or take it off me. The Fish Hall sets a ration, the Moot enforces it, the seals come off those doors in front of the whole city, and Waerhaven feeds itself for the first time in ninety years. And Lathmere answers it in the spring.\"\n\nHe sits back.\n\n\"I will sign whichever of the three you bring me the means for. And I want you to notice that in all three of them I am finished, and that I have stopped finding that the interesting part.\"",
+            "on_enter": [
+                {
+                    "quest_stage": {
+                        "quest": "eleven_weeks",
+                        "stage": "the_three_answers"
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"Before any of it: go down that hill and ask the Moot. Out loud. In front of witnesses.\"",
+                    "conditions": [
+                        {
+                            "flag": "gedda_wants_asking"
+                        }
+                    ],
+                    "next": "the_asking"
+                },
+                {
+                    "label": "\"Make it true. The weight, the quay store and the Houses.\"",
+                    "conditions": [
+                        {
+                            "flag": "weight_fate",
+                            "equals": "proved"
+                        },
+                        {
+                            "flag": "reth_deal"
+                        },
+                        {
+                            "any": [
+                                {
+                                    "flag": "charter_fate",
+                                    "equals": "seized"
+                                },
+                                {
+                                    "flag": "charter_fate",
+                                    "equals": "bought_in"
+                                }
+                            ]
+                        }
+                    ],
+                    "next": "the_filling"
+                },
+                {
+                    "label": "\"Report it. Under Vennik's seal.\"",
+                    "conditions": [
+                        {
+                            "flag": "vennik_offer"
+                        }
+                    ],
+                    "next": "the_reporting"
+                },
+                {
+                    "label": "\"It comes off you. The Hall sets the ration and the Moot holds the door.\"",
+                    "conditions": [
+                        {
+                            "flag": "gedda_knows"
+                        },
+                        {
+                            "flag": "met_ellsa"
+                        }
+                    ],
+                    "next": "the_breaking"
+                },
+                {
+                    "label": "\"Not yet. There are pieces of this I have not got.\"",
+                    "next": "not_yet"
+                }
+            ]
+        },
+        "not_yet": {
+            "text": "\"No,\" agrees Bevis Culm. \"There are.\"\n\nHe leaves the three sheets where they are.\n\n\"I shall not put them away. I have had them in a drawer for a fortnight and having them on the desk is the first thing in eleven months that has felt like an office rather than a hiding place.\"\n\nHe glances at them.\n\n\"The first one needs the weight proved, the quay store in somebody's hands, and Tarrow willing to open its stock — and Tarrow will not deal with me, and will deal with somebody who goes down those steps and bargains.\"\n\n\"The second needs Tallowglass, and he will not send it on my word, and he is quite right not to.\"\n\n\"The third needs the Moot to know, and the Fish Hall to be willing, and neither of those is in my gift and both of them are two streets from this house.\"",
+            "choices": [
+                {
+                    "label": "Go.",
+                    "end": true
+                }
+            ]
+        },
+        "the_filling": {
+            "text": "It takes nine days and it is not dramatic once.\n\nThe weight goes onto Vennik's beam in front of Sedge and Gedda Halloway and the Weighmaster's ninety years of ledgers, and six years of arithmetic comes out of it and goes into a letter that says, precisely and without accusation, what Waerhaven signed for and what Waerhaven received. Lathmere will settle rather than be asked that question in public.\n\nThe eighty quarters come up out of the Underquay on Doss's crane in daylight with a clerk writing every sack.\n\nAnd Mother Reth opens the north fence at February's price, in exchange for a sentence read out in the Wet Hall, in front of witnesses, in a book: that Tarrow was in the room when it was arranged.\n\nBevis Culm counts the bays himself, twice, with a rule, and then writes the quarterly return in about forty minutes and sends it the same day.\n\n\"Twenty weeks,\" he says. \"It is true. Nothing else about this city has changed by so much as a comma and I have never been so glad of a sentence in my life.\"",
+            "on_enter": [
+                {
+                    "quest_stage": {
+                        "quest": "eleven_weeks",
+                        "stage": "filled"
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"Nothing has changed.\"",
+                    "next": "the_february"
+                },
+                {
+                    "label": "Let him have it.",
+                    "end": true
+                }
+            ]
+        },
+        "the_reporting": {
+            "text": "Vennik Tallowglass writes it, because his hand is the one Lathmere opens, and Bevis Culm signs it under his own hand and his own seal without asking to read it twice.\n\nThe true figure. Eleven months of returns, appended, in order, each one wrong by a growing margin. The beam reading. Corran Sedge's ninety years, and the quarter where the sums stopped closing, and the date of it, and the name of the Factor who held the third key on that date.\n\nIt goes out on the Thursday courier.\n\n\"There,\" says Culm. \"The barges will stop within the month. The audit will take the season. Lathmere will pay back six years because the alternative is being asked about Ansel Ord in front of the Seven Syndics.\"\n\nHe puts down the pen.\n\n\"And nineteen hundred people have nine days to be somewhere that is not the Wardenswatch, and there is nowhere, and I have written a true document and made that somebody else's problem, and I am not going to insult you by pretending I have done a brave thing.\"",
+            "on_enter": [
+                {
+                    "quest_stage": {
+                        "quest": "eleven_weeks",
+                        "stage": "reported"
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"It was still the true thing.\"",
+                    "next": "not_yours"
+                },
+                {
+                    "label": "Say nothing.",
+                    "end": true
+                }
+            ]
+        },
+        "the_breaking": {
+            "text": "It is done on a Thursday afternoon in front of two thousand people and nobody makes a speech.\n\nEllsa Waer sets the ration in the Fish Hall by shouting, and it is counted correctly. Gedda Halloway puts sixty shipwrights on the granary doors, which is not a threat because it does not need to be. And the seals come off — not broken; cut, by the Factor, with his own knife, because Bevis Culm walks down the hill and does it himself rather than make anybody else a rioter.\n\nHe hands the knife to Gedda Halloway afterwards.\n\n\"There,\" he says. \"My writ now runs as far as my own front step, and this city has fed itself for the first time in ninety years, and both of those happened in about six minutes.\"\n\nHe looks at the crowd, which is not cheering, which is queueing.\n\n\"Lathmere will answer this in the spring. Everybody standing on that quay knows it. Every single one of them queued anyway.\"",
+            "on_enter": [
+                {
+                    "quest_stage": {
+                        "quest": "eleven_weeks",
+                        "stage": "broken"
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"Why cut them yourself?\"",
+                    "next": "why_not_send"
+                },
+                {
+                    "label": "Let him stand there.",
+                    "end": true
+                }
+            ]
+        },
+        "why_not_send": {
+            "text": "\"Because the writ is real,\" says Bevis Culm. \"That is the part nobody in this city has ever believed. It is not a piece of paper. Forty men would have come. Twelve of them sober, and twelve sober men on a granary door in front of two thousand hungry people is a massacre with a legal basis.\"\n\nHe puts his hands in his pockets.\n\n\"So the only question was whether the seals came off with my knife or somebody's shoulder. And a seal cut by the Factor is an administrative act. A seal broken by a crowd is an insurrection, and Lathmere hangs people for the second one and recalls people for the first.\"\n\nHe watches the queue.\n\n\"It is the only competent thing I have done in four years and it will read in Lathmere as the worst.\"",
+            "choices": [
+                {
+                    "label": "Leave him to it.",
+                    "end": true
+                }
+            ]
+        },
+        "what_happens": {
+            "text": "\"Recall,\" says Bevis Culm. \"Within the month. A hearing, which is not a trial, in a room in the Wet Hall of Lathmere with three Syndics and a clerk.\"\n\nHe is entirely composed about it.\n\n\"And here is the thing I have worked out and cannot stop being amused by. The report I signed makes it impossible for them to hang me and impossible for them to keep me. If they punish the man who reported a six-year theft, nobody in eleven chartered cities ever reports anything again. If they keep the man who lied to them for eleven months, the same.\"\n\n\"So I shall be found to have acted improperly and with candour, and I shall be given something in Ardennia counting tolls on a bridge, and I shall be forty-one years old and finished, and I shall be the reason Lathmere pays this city back six years.\"\n\nHe almost smiles.\n\n\"I have done a great deal of arithmetic in my life and that is the first sum that has ever come out in my favour by accident.\"",
+            "choices": [
+                {
+                    "label": "Leave him to it.",
+                    "end": true
+                }
+            ]
+        },
+        "not_yours": {
+            "text": "\"It was not mine,\" agrees Bevis Culm. \"Six years of it happened before I arrived and was done by a man who went home with a commendation.\"\n\nHe shakes his head slowly.\n\n\"And I would like you to notice how little difference that makes, because I have been noticing it for a fortnight.\"\n\n\"He stole it. I hid it. He will die in the Silver Quarter and I will be found to have acted improperly. And the actual difference between us is that he was not here in February, in a stone house, looking at a true figure and a rule about audits and nineteen hundred people who are not on any list.\"\n\nHe folds his hands.\n\n\"I do not know what I would have done in his chair. That is what I have got instead of innocence and I have decided it is worth having.\"",
+            "choices": [
+                {
+                    "label": "Leave him.",
+                    "end": true
+                }
+            ]
+        },
+        "the_asking": {
+            "text": "Bevis Culm looks at you as though you have suggested he learn to swim.\n\n\"Ask the Moot,\" he says. \"The Factor of the Ythan League. Walk down the Gate Way, into a hall with no charter and no standing, and ask eleven families of shipwrights what they think should be done about the League's granary.\"\n\nHe sits with it.\n\n\"That is not in my writ. There is no form for it. There is not a Factor in eleven chartered cities who has ever done it and if it goes in a return I shall be asked to explain myself.\"\n\nHe stands up.\n\n\"Which is a list of four reasons why it is the correct thing and I have just heard myself say all of them.\"\n\nHe does it on the Thursday. He walks down the hill on his own, with no clerk, and stands under the frame and asks — badly, in a room that has folded its arms — and Gedda Halloway lets him get all the way to the end of it before she says a single word.\n\nAnd what she says is: *thank you*. And it goes in the Moot's book, which is where it has needed to be for four hundred years.",
+            "on_enter": [
+                {
+                    "set_flag": "the_asking_done"
+                },
+                {
+                    "xp": 200
+                }
+            ],
+            "choices": [
+                {
+                    "label": "Back to the three sheets.",
+                    "next": "the_three_answers"
+                }
+            ]
+        }
+    }
+}

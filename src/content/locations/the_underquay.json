@@ -1,0 +1,92 @@
+{
+    "region_key": "the_underquay",
+    "module": "waerhaven",
+    "name": "The Underquay",
+    "region_type": "dungeon",
+    "description": "Before the League built the stone piers, Waerhaven's quay was a timber staging on the old shore, and its cellars were cut into the rock behind it. The piers were built out over the top and the cellars were left, and the sea got into them, and they are still there: a connected floor of flooded rooms under the Boom that fills to the ceiling twice a day and drains twice a day, and is very useful to people who do not like doors.",
+    "sort_order": 80,
+    "locations": {
+        "underquay_stair": {
+            "name": "The Old Quay Steps",
+            "type": "room",
+            "map_pos": [50, 14],
+            "allow_camp": false,
+            "random_encounter_pct": 10,
+            "description": "Twenty-two steps down under the stone of the outer quay, cut when this was the shore and left when it stopped being. The tide-mark on the wall is at the height of your chest and there is a second, older mark a hand above it. Somebody has driven a row of iron rings into the wall at the turn of the stair, recently, and hung a line on them, and the line is dry.",
+            "first_visit": "The cold comes up the stair before the smell does, and the smell is not rot. It is stone that has been wet since before the League, and salt, and something underneath both that you decide is tar.",
+            "ambience": [
+                "Water moves below, and the sound of it changes, which means the tide has turned.",
+                "The dry line on the iron rings has been used since it was hung. The wear is on one side."
+            ],
+            "exits": [
+                { "to": "the_great_crane", "label": "Up the steps, out onto the quay" },
+                { "to": "the_rest_cellar", "label": "Up the drain, into the Rest's cellar" },
+                { "to": "the_low_cellars", "label": "Into the low cellars" }
+            ]
+        },
+        "the_low_cellars": {
+            "name": "The Low Cellars",
+            "type": "room",
+            "map_pos": [40, 34],
+            "random_encounter_pct": 20,
+            "description": "Four rooms with the walls knocked through between them, floored in a foot of water at low tide and full to the vaulting at high, and stacked to shoulder height on brick plinths that somebody has built inside the last six years. What is on the plinths is under tarpaulin and is not timber. The brickwork is good. Somebody paid a bricklayer to work down here and that bricklayer has not mentioned it.",
+            "ambience": [
+                "Something crosses the water ahead of you and does not surface.",
+                "A tarpaulin has slipped. Under it is sacking, and the sacking is stencilled with a League mark.",
+                "The water is at your ankles. Twenty minutes ago it was not."
+            ],
+            "exits": [
+                { "to": "underquay_stair", "label": "Back to the steps" },
+                { "to": "the_tide_gate", "label": "West, toward the sound of the sea" },
+                { "to": "the_deep_store", "label": "North, into the dry room" }
+            ]
+        },
+        "the_tide_gate": {
+            "name": "The Tide Gate",
+            "type": "room",
+            "map_pos": [24, 54],
+            "random_encounter_pct": 20,
+            "description": "The seaward end: an arch under the outer quay closed by an iron grating that was hung to keep the sea's rubbish out and has been cut, at the bottom, in a curve exactly wide enough for a laden man in a small boat at half tide. Through it, when the water is low, you can see the legs of the Great Crane and a wedge of open harbour, and anybody standing at the crane can see nothing at all in here.",
+            "ambience": [
+                "The sea comes through the grating and goes out again and the whole room breathes with it.",
+                "The cut in the grating is old work, filed, not sawn — somebody spent nights on it.",
+                "Daylight lies on the water in a bar and something under the bar moves out of it."
+            ],
+            "exits": [
+                { "to": "the_low_cellars", "label": "Back east into the cellars" },
+                { "to": "the_drowned_room", "label": "Through the arch, into the deeper cut" }
+            ]
+        },
+        "the_drowned_room": {
+            "name": "The Drowned Room",
+            "type": "room",
+            "map_pos": [34, 68],
+            "random_encounter_pct": 25,
+            "description": "The one room down here that does not drain. It was cut lower than the rest, for a reason nobody has written down, and the water in it is black and still and stands at chest height at the ebb. The Waerfolk have a name for this room and use it about once a generation. There are things on the bottom that were put here rather than lost here, and they are laid out.",
+            "first_visit": "The sound stops. Every other room down here breathes with the sea and this one does not, and the water does not move even when you move it.",
+            "ambience": [
+                "Your light finds the bottom, and the bottom is arranged.",
+                "The water does not move. You are standing in it, and it does not move.",
+                "Something small and hard knocks against your knee, twice, and is gone."
+            ],
+            "exits": [
+                { "to": "the_tide_gate", "label": "Back through the arch" }
+            ]
+        },
+        "the_deep_store": {
+            "name": "The Deep Store",
+            "type": "room",
+            "map_pos": [58, 46],
+            "description": "The only dry room in the Underquay, cut up into the rock above the tide-mark and floored with new boards on new joists, warm, aired by a shaft that comes out somewhere in the warehouses and is screened at the top. It is a granary. There are eighty quarters of League grain in it in League sacking, stacked properly, dunnaged off the floor, kept better than the League Granary keeps its own.",
+            "first_visit": "The boards under your feet are dry, and after the last four rooms that is more frightening than the water was.",
+            "ambience": [
+                "The sacking is League. The stencil is Lathmere's. The stack is somebody else's work entirely.",
+                "There is a broom down here, and the floor has been swept.",
+                "The shaft brings down, very faintly, the sound of the crane drum turning."
+            ],
+            "exits": [
+                { "to": "the_low_cellars", "label": "Back down into the water" }
+            ]
+        }
+    }
+}

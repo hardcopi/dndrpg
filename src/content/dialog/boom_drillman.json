@@ -1,0 +1,77 @@
+{
+    "npc_key": "boom_drillman",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "flag": "city_standing",
+                        "equals": "free"
+                    }
+                ],
+                "text": "\"We drilled it this morning same as always,\" the boom hand says. \"Bell, bars, four minutes.\" He looks out at the chain. \"Only this morning about half of us were thinking about which way we would want it to be shut.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "pool": "idle",
+                "conditions": [
+                    {
+                        "flag": "met_skeld"
+                    }
+                ],
+                "text": "\"Eleven men, four minutes,\" he says, without being asked. \"Ninety years. Twice in anger. You want to know what the other times were? Practice. That is the whole trade. You practise a thing four thousand times so the twice goes right.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "pool": "idle",
+                "conditions": [
+                    {
+                        "flag": "met_skeld"
+                    }
+                ],
+                "text": "\"Paid by the drill,\" the boom hand says, cheerfully. \"Which means we are the only men in the Watch who have never once been paid for doing nothing, and we are also the only men in the Watch nobody trusts, and I have stopped trying to work that out.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "pool": "idle",
+                "conditions": [
+                    {
+                        "flag": "met_skeld"
+                    }
+                ],
+                "text": "He is greasing the pawl, which does not need greasing, which is the point. \"Somebody had at this in the spring,\" he says, without looking up. \"Took the pawl out. Put it back wrong. It was mended and nobody wrote it down and I have not stopped greasing it since.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "One of the boom crew is sitting on a capstan bar eating something out of a cloth, with a view of two hundred and ninety metres of chain and forty miles of grey water past it.\n\n\"Four minutes,\" he says, seeing where you are looking. \"Eleven of us. Any hour, any weather. It has been four minutes since before my father.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

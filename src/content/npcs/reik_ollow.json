@@ -1,0 +1,12 @@
+{
+    "npc_key": "reik_ollow",
+    "name": "Reik Ollow",
+    "role": "Forge hand",
+    "description": "Twenty-two years on the chain, which is four hearths and a trip hammer and a floor you feel through your boots. He can gauge a link by eye at nine paces and has never once been asked to gauge anything else, until this spring.",
+    "sprite_key": "smith",
+    "is_quest_giver": true,
+    "dialog": "reik_ollow",
+    "place": {
+        "location": "the_boom_forge"
+    }
+}

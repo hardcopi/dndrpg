@@ -1,0 +1,970 @@
+{
+    "npc_key": "yrsa",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "flag": "yrsa_fate",
+                        "equals": "told"
+                    }
+                ],
+                "expression": 2,
+                "text": "\"Do not,\" says Yrsa, before you have said anything. \"You are about to check on me. I can see you deciding how to phrase it.\"\n\nShe strings the bow and unstrings it again, which is what she does with her hands.\n\n\"I am all right. I said a thing out loud in a shed and nobody died of it. I am going to be insufferable about this for about a fortnight and then I am going to be normal, and I would take it kindly if you let me have the fortnight.\"",
+                "choices": [
+                    {
+                        "label": "Sit at the fire a while.",
+                        "conditions": [
+                            {
+                                "companion": "yrsa",
+                                "status": "active"
+                            }
+                        ],
+                        "next": "camp"
+                    },
+                    {
+                        "label": "\"Take the fortnight.\"",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "yrsa_fate",
+                        "equals": "unsaid"
+                    }
+                ],
+                "expression": 3,
+                "text": "\"You are looking at me,\" says Yrsa, without looking up.\n\n\"I am fine. I have got three sentences about the eleventh night and I say them very well now. Somebody asks, I say them, everybody is comfortable.\"\n\nShe checks the string.\n\n\"You gave me those. I am not being unkind. It was a kindness and I took it and I am not giving it back.\"",
+                "choices": [
+                    {
+                        "label": "Sit at the fire a while.",
+                        "conditions": [
+                            {
+                                "companion": "yrsa",
+                                "status": "active"
+                            }
+                        ],
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Say nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "yrsa",
+                        "status": "active"
+                    },
+                    {
+                        "flag": "forty_one_fate",
+                        "equals": "named"
+                    }
+                ],
+                "expression": 2,
+                "text": "\"Nineteen names in a shed,\" says Yrsa. \"By village. In order.\"\n\nShe is quiet a moment.\n\n\"I have been four years in a city where nobody said any of them, and I had got used to that, and it turns out that being used to a thing and being all right about it are not the same and I would like to have found that out somewhere with a door.\"",
+                "choices": [
+                    {
+                        "label": "\"I am here.\"",
+                        "end": true
+                    },
+                    {
+                        "label": "Sit at the fire a while.",
+                        "conditions": [
+                            {
+                                "companion": "yrsa",
+                                "status": "active"
+                            }
+                        ],
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Later.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "pool": "idle",
+                "conditions": [
+                    {
+                        "companion": "yrsa",
+                        "status": "active"
+                    }
+                ],
+                "text": "Yrsa has the bow strung and is not shooting anything with it, which is what she does when she is thinking.\n\n\"Where are we going,\" she says, \"and is there anywhere on the way where I can get proper nocks. Waerhaven nocks are cut for men with no fingers.\"",
+                "choices": [
+                    {
+                        "label": "Sit at the fire a while.",
+                        "conditions": [
+                            {
+                                "companion": "yrsa",
+                                "status": "active"
+                            }
+                        ],
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Later.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "pool": "idle",
+                "conditions": [
+                    {
+                        "companion": "yrsa",
+                        "status": "active"
+                    }
+                ],
+                "text": "\"This city has no north road,\" Yrsa says, apropos of nothing at all. \"Have you noticed that? Everybody here says it as though it were geography.\"\n\nShe unstrings the bow.\n\n\"It is not geography. It is that nobody in four hundred years has wanted to go.\"",
+                "choices": [
+                    {
+                        "label": "Sit at the fire a while.",
+                        "conditions": [
+                            {
+                                "companion": "yrsa",
+                                "status": "active"
+                            }
+                        ],
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Later.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "pool": "idle",
+                "conditions": [
+                    {
+                        "companion": "yrsa",
+                        "status": "active"
+                    }
+                ],
+                "text": "Yrsa has got a fire going in weather that should not allow one, out of wet pine, in about four minutes, and is entirely unimpressed with herself about it.\n\n\"Everybody does this,\" she says. \"Where I am from everybody does this. It is like being praised for shutting a door.\"",
+                "choices": [
+                    {
+                        "label": "Sit at the fire a while.",
+                        "conditions": [
+                            {
+                                "companion": "yrsa",
+                                "status": "active"
+                            }
+                        ],
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Later.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "met_yrsa"
+                    },
+                    {
+                        "flag": "vorn_trusts_you"
+                    }
+                ],
+                "expression": 4,
+                "text": "Yrsa is at the end of the long table with her back to the wall and her face to the only door, along with everybody else in the Green Bough, and she is the only one who appears to have noticed that this is what they are all doing.\n\n\"You have been talking to the Warden,\" she says. \"Properly, I mean. She has started saying your name in a tone.\"\n\nShe pushes the bench out with a foot.\n\n\"Sit down. I have got a thing to ask you and I have been waiting for somebody she does not manage.\"",
+                "choices": [
+                    {
+                        "label": "\"Ask.\"",
+                        "next": "the_recruit"
+                    },
+                    {
+                        "label": "Sit at the fire a while.",
+                        "conditions": [
+                            {
+                                "companion": "yrsa",
+                                "status": "active"
+                            }
+                        ],
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Later.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "met_yrsa"
+                    }
+                ],
+                "text": "\"You again,\" says Yrsa, from the end of the table. \"Beer is bad. It is bad properly, which is not the same as being bad badly, and I am not explaining that twice.\"",
+                "choices": [
+                    {
+                        "label": "\"You came south with Vorn.\"",
+                        "next": "the_road"
+                    },
+                    {
+                        "label": "Sit at the fire a while.",
+                        "conditions": [
+                            {
+                                "companion": "yrsa",
+                                "status": "active"
+                            }
+                        ],
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Leave her to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "A young woman at the end of the long table has a bow across her knees that is a good deal better than anything else in the room, and is watching the door in a way that would be tactful if forty other people in here were not doing it too.\n\n\"Yrsa,\" she says, when she catches you looking. \"Fell, if you need the other half, which nobody here does.\"\n\nShe nods at the bench.\n\n\"You are not Watch and you are not Charter. That leaves about four things and I would rather guess than ask.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_yrsa"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "\"You came south with Warden Vorn.\"",
+                        "next": "the_road"
+                    },
+                    {
+                        "label": "\"That is a very good bow for this room.\"",
+                        "next": "the_bow"
+                    },
+                    {
+                        "label": "Sit at the fire a while.",
+                        "conditions": [
+                            {
+                                "companion": "yrsa",
+                                "status": "active"
+                            }
+                        ],
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Leave her to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_bow": {
+            "text": "\"It is,\" Yrsa agrees. \"It is the best thing in this room and the second best is the door.\"\n\nShe turns it over.\n\n\"Wyrdpine yew, cut by somebody in a village that has not sent anybody south in two years, which means there is not going to be another one. I have it restrung twice a year by a man in Tarrow who charges me nothing and will not say why.\"\n\nShe puts it back across her knees.\n\n\"Everybody in Waerhaven who sees this asks me whether I hunt. Nobody has ever asked me what I shoot.\"",
+            "choices": [
+                {
+                    "label": "\"What do you shoot?\"",
+                    "next": "what_she_shoots"
+                },
+                {
+                    "label": "\"You came south with Vorn.\"",
+                    "next": "the_road"
+                },
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "what_she_shoots": {
+            "expression": 3,
+            "text": "\"Nothing,\" says Yrsa. \"Four years. Not one thing.\"\n\nShe says it perfectly levelly.\n\n\"There is nothing to shoot on a promontory. No deer, no boar, no wolf, no anything, because there is water on three sides and a wall on the fourth and eighty-five miles of forest past that which nobody goes into.\"\n\n\"I have got the best bow in this ward and I string it and unstring it about nine times a day and I have not put an arrow into a living thing since I was fourteen years old.\"\n\nShe looks at you.\n\n\"That is the first honest sentence I have said to a stranger in this city and I have no idea why I said it to you.\"",
+            "choices": [
+                {
+                    "label": "\"When you were fourteen.\"",
+                    "next": "the_road"
+                },
+                {
+                    "label": "Say nothing.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "the_road": {
+            "expression": 3,
+            "text": "\"Sixty of us,\" says Yrsa. \"Eighty-five miles. Fourteen nights, because you do not walk it in twelve unless you are prepared to leave people.\"\n\nShe stops.\n\n\"Forty-one arrived. Everybody in this city knows that number. It is the only thing about us anybody has bothered to learn.\"\n\nShe drinks the bad beer.\n\n\"I was fourteen. I was the one who carried the lamp, because a lamp at the back is worth more than a lamp at the front and I was the smallest and I could keep up.\"\n\n\"I know what happened on the eleventh night. I have got three sentences about the eleventh night that I say when somebody asks and everybody is very comfortable afterwards.\"",
+            "choices": [
+                {
+                    "label": "\"Say the three sentences.\"",
+                    "next": "the_three_sentences"
+                },
+                {
+                    "label": "\"I am not going to ask.\"",
+                    "next": "not_asking"
+                },
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "the_three_sentences": {
+            "expression": 5,
+            "text": "She says them. They are good sentences. They are worn smooth, the way a step is worn.\n\n\"It was the eleventh night. We lost people. The Warden did what a Warden has to do.\"\n\nThen she stops, and looks at the door, and does not go on, and the whole end of the table very kindly starts talking about something else, and a man puts another cup in front of her without being asked.\n\nThis has clearly happened before. It has clearly happened about once a month for four years.",
+            "choices": [
+                {
+                    "label": "Wait.",
+                    "next": "nobody_waits"
+                },
+                {
+                    "label": "Let the room take it.",
+                    "next": "not_asking"
+                }
+            ]
+        },
+        "nobody_waits": {
+            "expression": 6,
+            "text": "You wait.\n\nThe table goes on talking about something else. The cup sits there. Yrsa looks at the door for a while, and then at you, and then at the door again.\n\n\"You are not saying anything,\" she says.\n\n\"Nobody does that. Everybody in this room is extremely good to me. Every single time, somebody says something kind at exactly that point, and I have been very grateful for four years, and I have not got to the end of that sentence once.\"\n\nShe puts the cup down untouched.\n\n\"Do not do it again in here. If you are going to make me finish it, do not make me finish it in the Bough.\"",
+            "on_enter": [
+                {
+                    "set_flag": "yrsa_wants_to_say_it"
+                },
+                {
+                    "xp": 80
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"Then somewhere else.\"",
+                    "end": true
+                },
+                {
+                    "label": "\"Understood.\"",
+                    "end": true
+                }
+            ]
+        },
+        "not_asking": {
+            "expression": 2,
+            "text": "\"Thank you,\" says Yrsa, and means it, and the room relaxes around her the way it always does.\n\nAnd then, about four seconds later, she looks at you with an expression that has some irritation in it.\n\n\"Everybody says that,\" she says. \"You are the eleventh person to say that. It is the correct thing to say. I have got no complaint about it at all.\"\n\nShe picks the bow up.\n\n\"It is only that after four years of the correct thing I have started to wonder what the incorrect thing would sound like.\"",
+            "on_enter": [
+                {
+                    "set_flag": "yrsa_wants_to_say_it"
+                }
+            ],
+            "choices": [
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "the_recruit": {
+            "expression": 4,
+            "text": "\"Take me with you,\" says Yrsa.\n\nShe says it flatly, having clearly practised it, and then goes on before you can answer because she has practised that too.\n\n\"I am not asking to be rescued. I am asked to be rescued about twice a year by people who mean it beautifully. I have got a bed, work when the Oakum House has it, forty people who look after me and a Warden who would put herself between me and a cart.\"\n\nShe puts her hand flat on the table.\n\n\"What I have not got is one person in this city who did not watch me arrive. Every face out there met me at fourteen on the worst night of my life and has been being careful with me ever since, and I love them, and I cannot breathe.\"\n\n\"You did not meet me on the road. You met me in a room. That is the whole qualification and it is the only one I have ever wanted.\"",
+            "choices": [
+                {
+                    "label": "\"Come on, then.\"",
+                    "effects": [
+                        {
+                            "recruit": "yrsa"
+                        },
+                        {
+                            "xp": 100
+                        }
+                    ],
+                    "next": "she_comes"
+                },
+                {
+                    "label": "\"Vorn will not thank me.\"",
+                    "next": "about_vorn_first"
+                },
+                {
+                    "label": "\"Not yet.\"",
+                    "end": true
+                }
+            ]
+        },
+        "about_vorn_first": {
+            "expression": 3,
+            "text": "\"She will not,\" agrees Yrsa. \"She will say yes in about one second and she will not thank you for a year.\"\n\n\"Aske Vorn brought nineteen people out of the Wyrdpines and lost nineteen and has spent four years keeping every single one of the forty-one alive in a city that has not got a word for us. If I go, that is one of the forty-one out of her sight.\"\n\nShe pulls her coat straight.\n\n\"And she will say yes. Because she knows exactly what she has been doing to us, and she has not been able to stop, and she has been waiting four years for somebody to take one of us out of the room.\"",
+            "choices": [
+                {
+                    "label": "\"Come on, then.\"",
+                    "effects": [
+                        {
+                            "recruit": "yrsa"
+                        },
+                        {
+                            "xp": 100
+                        }
+                    ],
+                    "next": "she_comes"
+                },
+                {
+                    "label": "\"Not yet.\"",
+                    "end": true
+                }
+            ]
+        },
+        "she_comes": {
+            "expression": 2,
+            "text": "Yrsa gets up, picks up a pack that has been ready by the wall for a considerable time, and is at the door before you have stood up.\n\n\"I packed it in March,\" she says, seeing your face. \"That is not sad. That is a person who has been ready.\"",
+            "choices": [
+                {
+                    "label": "Go.",
+                    "end": true
+                }
+            ]
+        },
+        "camp": [
+            {
+                "conditions": [
+                    {
+                        "quest": "the_nineteen",
+                        "status": "completed"
+                    }
+                ],
+                "expression": 2,
+                "text": "Yrsa has the fire built the way she builds it, which is small, hot and behind something, and she is sitting where she can see the dark rather than where she can see the flames.\n\n\"Sit down,\" she says. \"I am not going to say anything enormous tonight.\"",
+                "choices": [
+                    {
+                        "label": "\"How is it, since?\"",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "flag": "camp_yrsa_fate"
+                                }
+                            }
+                        ],
+                        "next": "camp_yrsa_fate"
+                    },
+                    {
+                        "label": "Tell me about your village.",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "flag": "camp_yrsa_village"
+                                }
+                            }
+                        ],
+                        "next": "camp_yrsa_village"
+                    },
+                    {
+                        "label": "That bow.",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "flag": "camp_yrsa_bow"
+                                }
+                            }
+                        ],
+                        "next": "camp_yrsa_bow"
+                    },
+                    {
+                        "label": "What was the first winter here like?",
+                        "conditions": [
+                            {
+                                "companion": "yrsa",
+                                "approval_at_least": 30
+                            },
+                            {
+                                "not": {
+                                    "flag": "camp_yrsa_winter"
+                                }
+                            }
+                        ],
+                        "next": "camp_yrsa_winter"
+                    },
+                    {
+                        "label": "Stay by the fire.",
+                        "conditions": [
+                            {
+                                "companion": "yrsa",
+                                "romance_stage": 1
+                            }
+                        ],
+                        "next": "romance_two"
+                    },
+                    {
+                        "label": "Goodnight.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "yrsa",
+                        "status": "active"
+                    }
+                ],
+                "text": "Yrsa has the fire built small and hot and behind something, and she is sitting where she can see the dark rather than where she can see the flames, which she does every night and has never once mentioned.\n\n\"Sit,\" she says. \"You want to ask me something. You have had the face on since the afternoon.\"",
+                "choices": [
+                    {
+                        "label": "Tell me about your village.",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "flag": "camp_yrsa_village"
+                                }
+                            }
+                        ],
+                        "next": "camp_yrsa_village"
+                    },
+                    {
+                        "label": "That bow.",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "flag": "camp_yrsa_bow"
+                                }
+                            }
+                        ],
+                        "next": "camp_yrsa_bow"
+                    },
+                    {
+                        "label": "Everybody in the Bough is careful with you.",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "flag": "camp_yrsa_kindness"
+                                }
+                            }
+                        ],
+                        "next": "camp_yrsa_kindness"
+                    },
+                    {
+                        "label": "What is Aske Vorn to you?",
+                        "conditions": [
+                            {
+                                "companion": "yrsa",
+                                "approval_at_least": 15
+                            },
+                            {
+                                "not": {
+                                    "flag": "camp_yrsa_vorn"
+                                }
+                            }
+                        ],
+                        "next": "camp_yrsa_vorn"
+                    },
+                    {
+                        "label": "What was the first winter here like?",
+                        "conditions": [
+                            {
+                                "companion": "yrsa",
+                                "approval_at_least": 30
+                            },
+                            {
+                                "not": {
+                                    "flag": "camp_yrsa_winter"
+                                }
+                            }
+                        ],
+                        "next": "camp_yrsa_winter"
+                    },
+                    {
+                        "label": "Aske Vorn told me what the mark means.",
+                        "conditions": [
+                            {
+                                "flag": "nineteen_told"
+                            },
+                            {
+                                "not": {
+                                    "flag": "camp_yrsa_the_mark"
+                                }
+                            }
+                        ],
+                        "next": "camp_yrsa_the_mark"
+                    },
+                    {
+                        "label": "The eleventh night. Finish the sentence.",
+                        "conditions": [
+                            {
+                                "flag": "yrsa_wants_to_say_it"
+                            },
+                            {
+                                "not": {
+                                    "flag": "camp_yrsa_eleventh"
+                                }
+                            }
+                        ],
+                        "next": "the_eleventh_night"
+                    },
+                    {
+                        "label": "\"Ask me the thing you have not been asking.\"",
+                        "conditions": [
+                            {
+                                "companion": "yrsa",
+                                "approval_at_least": 30
+                            },
+                            {
+                                "not": {
+                                    "companion": "yrsa",
+                                    "romance_stage": 1
+                                }
+                            },
+                            {
+                                "not": {
+                                    "companion": "yrsa",
+                                    "romance_locked": true
+                                }
+                            }
+                        ],
+                        "next": "romance_one"
+                    },
+                    {
+                        "label": "Stay by the fire.",
+                        "conditions": [
+                            {
+                                "companion": "yrsa",
+                                "romance_stage": 1
+                            }
+                        ],
+                        "next": "romance_two"
+                    },
+                    {
+                        "label": "Goodnight.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "There is no fire and no camp and nobody to sit at it.",
+                "choices": [
+                    {
+                        "label": "Back.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "camp_yrsa_village": {
+            "text": "\"Hallowfell,\" says Yrsa. \"Which is a joke, because there is nothing hallowed about it and it is not in a fell. It is eleven houses in a clearing and a byre and a road that goes two places.\"\n\nShe feeds the fire.\n\n\"Sixty-one people. Nine of them came south. Four of the nine are alive and three of the four are in the Wardenswatch and one of them is me.\"\n\nShe says the numbers the way you say numbers you have said to yourself a great many times in the dark.\n\n\"Nobody in Waerhaven has ever asked me the name of it. Four years. Everybody asks how many came out. Nobody asks out of where.\"",
+            "on_enter": [
+                {
+                    "set_flag": "camp_yrsa_village"
+                },
+                {
+                    "approval": {
+                        "yrsa": 6
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "Back to the fire.",
+                    "next": "camp"
+                }
+            ],
+            "expression": 3
+        },
+        "camp_yrsa_bow": {
+            "text": "\"Wyrdpine yew,\" says Yrsa, \"cut and backed by a man called Orre who taught every child in eleven houses to shoot because there was nothing else to do between the first snow and the thaw.\"\n\nShe runs a thumb along it.\n\n\"He is not one of the nine. He is not one of the sixty, either. He stood at his own door and told the Warden he was too old for eighty-five miles and would rather see to the stock.\"\n\nShe is quiet.\n\n\"That was the sensible thing and everybody agreed and we walked out of the clearing and he shut the door. I have thought about that door a great deal more than I have thought about the eleventh night, and nobody has ever asked me about it, because a shut door is not a story.\"",
+            "on_enter": [
+                {
+                    "set_flag": "camp_yrsa_bow"
+                },
+                {
+                    "approval": {
+                        "yrsa": 5
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "Back to the fire.",
+                    "next": "camp"
+                }
+            ],
+            "expression": 3
+        },
+        "camp_yrsa_kindness": {
+            "text": "\"They are,\" says Yrsa. \"They are relentlessly careful with me and they have been for four years and it is the kindest thing anyone has ever done and I have started to hate it, and I would like that on the record as a fault of mine and not of theirs.\"\n\nShe pokes the fire.\n\n\"Here is what it is. Forty people out there watched me arrive at fourteen, at the end of it, carrying a lamp. And every single one of them has decided, separately, without discussing it, that Yrsa Fell must never be made to say anything difficult.\"\n\n\"So they finish my sentences. They change the subject at exactly the right moment. They put another cup down. It is beautifully done and it is done by people who love me and the result is that I am nineteen years old and I have not completed a sentence about my own life since I was fourteen.\"\n\n\"You waited. That is all you did. You waited about four seconds longer than anybody else has and I have been thinking about it since.\"",
+            "on_enter": [
+                {
+                    "set_flag": "camp_yrsa_kindness"
+                },
+                {
+                    "approval": {
+                        "yrsa": 7
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "Back to the fire.",
+                    "next": "camp"
+                }
+            ],
+            "expression": 6
+        },
+        "camp_yrsa_vorn": {
+            "text": "\"She is the reason I am here,\" says Yrsa, \"and I mean that in the plain way and not in the warm way.\"\n\nShe watches the dark.\n\n\"She carried me for the last two miles. I was fourteen and I had walked eighty-three of them and I could not do the last two, and she picked me up and carried me and never once mentioned it and does not know that I remember.\"\n\n\"And on the eleventh night she said a name three times and wrote a mark and walked on, and I was holding the lamp, and I saw her hand while she wrote it.\"\n\nShe looks up.\n\n\"Both of those are the same woman doing the same job. That is the thing about her that this city cannot get hold of. They want her to be one or the other and she is not being brave about it, she is just doing what a Warden does, and it costs exactly what it costs.\"",
+            "on_enter": [
+                {
+                    "set_flag": "camp_yrsa_vorn"
+                },
+                {
+                    "approval": {
+                        "yrsa": 6
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "Back to the fire.",
+                    "next": "camp"
+                }
+            ],
+            "expression": 5
+        },
+        "camp_yrsa_winter": {
+            "text": "\"Warm,\" says Yrsa.\n\nShe laughs at your face.\n\n\"That is the answer and it is the one nobody wants. The first winter here was warm. There was a roof, and it did not snow above the ankle once, and there was bread every single day out of a cart, and I lay in the lazar house with forty other people and I was warm every night for four months.\"\n\nShe feeds the fire.\n\n\"And I did not sleep. Not properly, not once, and neither did anybody else in that room, and after about eight weeks somebody worked out why and said it out loud, and it was a man from a village two valleys from mine and he said: it is that we are safe and they are not.\"\n\n\"Everybody in that room had left a door shut behind them. And we were warm.\"",
+            "on_enter": [
+                {
+                    "set_flag": "camp_yrsa_winter"
+                },
+                {
+                    "approval": {
+                        "yrsa": 7
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "Back to the fire.",
+                    "next": "camp"
+                }
+            ],
+            "expression": 6
+        },
+        "the_eleventh_night": {
+            "expression": 7,
+            "text": "Yrsa puts the bow down, which she does not do.\n\n\"It was the eleventh night,\" she says. \"We lost people. The Warden did what a Warden has to do.\"\n\nAnd then she stops, exactly where she always stops, and the fire pops, and nobody says anything kind.\n\nShe waits. You wait.\n\n\"I was carrying the lamp,\" she says. \"At the back. That is the job you give the smallest one, because the lamp at the back is what stops the line stretching, and a stretched line is how you lose people in the dark.\"\n\n\"Ilsa Ordsdaughter stopped walking. She was nineteen. She stopped and turned round and faced back up the way we had come and she would not answer her name.\"\n\n\"The Warden said it three times. That is the rule, it is in the manual, three times. And then she wrote the mark and we went on.\"\n\nShe looks straight at you.\n\n\"And I was at the back with the lamp. So I was the last one past her. And she was still standing there when the light went off her, and she was facing back the way we had come, and she was perfectly calm, and I have never told anybody the last part.\"\n\n\"She said thank you. As I went past. Quite clearly.\"",
+            "on_enter": [
+                {
+                    "set_flag": "camp_yrsa_eleventh"
+                },
+                {
+                    "start_quest": "the_nineteen"
+                },
+                {
+                    "quest_stage": {
+                        "quest": "the_nineteen",
+                        "stage": "she_says_it"
+                    }
+                },
+                {
+                    "approval": {
+                        "yrsa": 10
+                    }
+                },
+                {
+                    "xp": 150
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"Thank you for what?\"",
+                    "next": "thank_you_for_what"
+                },
+                {
+                    "label": "Say nothing at all.",
+                    "next": "thank_you_for_what"
+                }
+            ]
+        },
+        "thank_you_for_what": {
+            "expression": 8,
+            "text": "\"I do not know,\" says Yrsa. \"That is the whole of it. Four years and I do not know and there is nobody left to ask.\"\n\nShe wraps her arms round her knees, which makes her look exactly fourteen.\n\n\"For the lamp, perhaps. For eleven nights of it. Or for going on, which is what I have decided it was at about three in the morning on about four hundred occasions.\"\n\n\"Or she was thanking somebody else and I happened to be walking past.\"\n\nShe puts her chin on her arms.\n\n\"That is the sentence. That is the end of it. I have been carrying the end of that sentence for four years and it is not even terrible. It is a girl saying thank you. And every single person who loves me has spent four years making very sure I never got to it.\"",
+            "on_enter": [
+                {
+                    "quest_stage": {
+                        "quest": "the_nineteen",
+                        "stage": "the_road_south"
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"Say it in the chapel. All of it. Out loud.\"",
+                    "next": "the_chapel"
+                },
+                {
+                    "label": "\"You have said it now. That is enough.\"",
+                    "next": "you_need_not"
+                }
+            ]
+        },
+        "the_chapel": {
+            "expression": 6,
+            "text": "She does it on the Thursday, in the Chapel of the Grey Road, in front of about forty people who have been kind to her for four years.\n\nShe says the whole thing. Not the three sentences. The lamp, the line, the rule about saying a name three times, Ilsa Ordsdaughter facing back up the road, and the thank you.\n\nNobody finishes it for her. Two people try and are stopped — by Aske Vorn, without a word, with a hand.\n\nAfterwards Yrsa is furious for about an hour, at everybody, on no particular grounds, and then she is not.\n\n\"That was awful,\" she says, later, at the fire. \"That was completely awful and I would like to do the next one on Tuesday.\"",
+            "on_enter": [
+                {
+                    "quest_stage": {
+                        "quest": "the_nineteen",
+                        "stage": "told"
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"There is a next one?\"",
+                    "end": true
+                },
+                {
+                    "label": "Say nothing.",
+                    "end": true
+                }
+            ]
+        },
+        "you_need_not": {
+            "expression": 3,
+            "text": "\"No,\" agrees Yrsa. \"No, you are right.\"\n\nShe picks the bow back up, and something in her face closes very slightly and very politely.\n\n\"That is kind. I mean that, it is genuinely kind, and it is the twelfth time and I can tell you the tone of all twelve.\"\n\nShe strings it, checks it, unstrings it.\n\n\"I shall be easier now. You will notice that. Everybody notices that I am easier afterwards.\"\n\nShe puts it across her knees.\n\n\"Goodnight.\"",
+            "on_enter": [
+                {
+                    "quest_stage": {
+                        "quest": "the_nineteen",
+                        "stage": "unsaid"
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"Goodnight.\"",
+                    "end": true
+                }
+            ]
+        },
+        "camp_yrsa_fate": [
+            {
+                "conditions": [
+                    {
+                        "flag": "yrsa_fate",
+                        "equals": "told"
+                    }
+                ],
+                "expression": 2,
+                "text": "\"Better,\" says Yrsa. \"Not fixed. Better.\"\n\nShe feeds the fire.\n\n\"I have said her name eleven times this week and nobody has flinched and I have stopped counting whether they flinch, which is the actual improvement.\"\n\nShe looks over.\n\n\"And I have started thinking about the door. Orre's door. Which I could not do before, because there was a girl standing in a road in front of it.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "camp_yrsa_fate"
+                    },
+                    {
+                        "approval": {
+                            "yrsa": 6
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Back to the fire.",
+                        "next": "camp"
+                    }
+                ]
+            },
+            {
+                "expression": 3,
+                "text": "\"Fine,\" says Yrsa, and it is the well-rehearsed one.\n\nThen she stops, and looks at the fire, and does something she has not done.\n\n\"That is not true and you would know if you had not agreed to let me off. Which you did. Which I asked for.\"\n\nShe shrugs.\n\n\"I am all right. I would like it noted that I got here by being let off, and that I am not sure that is the same as getting here.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "camp_yrsa_fate"
+                    },
+                    {
+                        "approval": {
+                            "yrsa": 6
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Back to the fire.",
+                        "next": "camp"
+                    }
+                ]
+            }
+        ],
+        "romance_one": {
+            "expression": 5,
+            "text": "\"Right,\" says Yrsa, and puts the bow down, and sits back on her heels.\n\n\"The thing I have not been asking. Yes. All right.\"\n\nShe looks at the dark rather than at you, which is where she looks when it matters.\n\n\"I am nineteen and every single person who has ever wanted anything from me has wanted to look after me. That is not a complaint about them, it is a description of me — I arrived here at fourteen at the end of eighty-five miles and I have been a thing that gets looked after ever since, and it turns out that is extremely difficult to stop being.\"\n\nShe glances over.\n\n\"You put me in the front of a fight last month. Without discussing it. Without checking afterwards whether I was all right about it.\"\n\n\"Nobody has done that in four years. I have thought about it every day since and I am not going to pretend I have not.\"",
+            "on_enter": [
+                {
+                    "romance": {
+                        "companion": "yrsa",
+                        "stage": 1
+                    }
+                },
+                {
+                    "approval": {
+                        "yrsa": 5
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"You are the best shot I have got. That is the whole of it.\"",
+                    "next": "romance_one_answer"
+                },
+                {
+                    "label": "\"I will keep doing it.\"",
+                    "next": "romance_one_answer"
+                },
+                {
+                    "label": "\"Get some sleep.\"",
+                    "next": "camp"
+                }
+            ]
+        },
+        "romance_one_answer": {
+            "expression": 2,
+            "text": "\"Good,\" says Yrsa.\n\nShe picks the bow back up, which is what she does with her hands, and does not string it.\n\n\"Do not be nice to me about this. I will know, and I have got very fast at spotting it, and it will finish the whole thing inside a week.\"\n\nShe puts another stick on the fire.\n\n\"Sit there. You do not have to say anything. That is the entire offer.\"",
+            "choices": [
+                {
+                    "label": "Sit.",
+                    "end": true
+                }
+            ]
+        },
+        "romance_two": {
+            "expression": 2,
+            "text": "She does not move over, exactly. She stops sitting where she can see the dark, and sits where she can see the fire, and lets you be the one facing out.\n\nIt is the largest thing she has ever done and neither of you says a word about it.\n\n\"Wake me at the turn,\" she says, after a while. \"Do not let me sleep through. I hate being let sleep through.\"",
+            "on_enter": [
+                {
+                    "romance": {
+                        "companion": "yrsa",
+                        "stage": 2
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"At the turn.\"",
+                    "end": true
+                }
+            ]
+        },
+        "camp_yrsa_the_mark": {
+            "expression": 6,
+            "text": "Yrsa is quiet for a while.\n\n\"She told you,\" she says. \"Out loud. To a stranger.\"\n\nShe puts a stick on the fire.\n\n\"Nobody in the Wardenswatch has ever been told what that mark means. Forty people out there have been looking at a sheet of paper they have never seen, for four years, and being kind to the woman carrying it.\"\n\nShe wraps her arms round her knees.\n\n\"And she said it to you in an afternoon.\"\n\nShe is not angry. It takes you a while to work out what she is, and it is something more like relief.\n\n\"Good,\" she says at last. \"Good. That is one of us out from under it. It was always going to have to be her first.\"",
+            "on_enter": [
+                {
+                    "set_flag": "camp_yrsa_the_mark"
+                },
+                {
+                    "approval": {
+                        "yrsa": 6
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "Back to the fire.",
+                    "next": "camp"
+                }
+            ]
+        }
+    }
+}

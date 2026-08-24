@@ -19,17 +19,12 @@ $me = require_admin_page();
   <link rel="stylesheet" href="<?= asset('assets/css/style.css') ?>">
 </head>
 <body class="admin-page">
+  <?php require APP_PATH . '/inc/site_bar.php'; ?>
   <header class="admin-head">
     <div>
       <p class="auth-eyebrow">Rivermark Chronicles</p>
       <h1>Accounts</h1>
     </div>
-    <nav class="admin-nav">
-      <a class="btn" href="content.php">Content</a>
-      <a class="btn" href="index.php">Characters</a>
-      <a class="btn" href="game.php">Adventure</a>
-      <button type="button" class="btn" id="btn-signout">Sign out</button>
-    </nav>
   </header>
 
   <main class="admin-main">
@@ -219,11 +214,6 @@ $me = require_admin_page();
         } catch (ex) { fail(ex); out.textContent = ''; }
         btn.disabled = false;
         btn.textContent = was;
-      });
-
-      $('#btn-signout').addEventListener('click', async () => {
-        try { await API.post('auth/logout', {}); } catch (e) { /* going anyway */ }
-        location.href = 'login.php';
       });
 
       load();

@@ -1,0 +1,157 @@
+{
+    "region_key": "the_slipways",
+    "module": "waerhaven",
+    "name": "The Slipways",
+    "region_type": "town",
+    "description": "Six building slips, a dry dock, the mast pond and a ropewalk three hundred and eighty metres long — the longest continuous roofed structure on the continent, and the only reason Waerhaven matters more than Venddock. Every hull in the Ythan fleet was laid down here, out of timber that was cut forty miles away and dragged in on oxen, because this city has no river.",
+    "sort_order": 40,
+    "locations": {
+        "the_great_slip": {
+            "name": "The Great Slip",
+            "type": "square",
+            "map_pos": [
+                52.5,
+                22.1
+            ],
+            "description": "The head of the six slips, where the ways run down into the water and a hull stands on each of the first four in some state of being wrong. Adzes, steam off the bending kilns, and the ox-mill grinding away behind it all like a headache you have got used to. The Moot's quota is chalked on the gable and the chalk has been changed twice this month, upward both times.",
+            "first_visit": "You can hear the Slipways from the market. Standing in it is different: forty men on one hull, all hitting it, and the whole frame ringing like something alive being argued with.",
+            "ambience": [
+                "Steam comes off a plank as it is drawn out of the kiln and bent onto the frame by six men and a great deal of swearing.",
+                "The quota chalked on the gable is read by a sawyer, who says nothing, at length.",
+                "Somebody's apprentice is sent for the second time to fetch a tool that does not exist.",
+                "Work stops on the third slip for want of timber, and the men stand about, and nobody sends them home."
+            ],
+            "exits": [
+                {
+                    "to": "the_nine_masts",
+                    "label": "In at the Nine Masts"
+                },
+                {
+                    "to": "the_mast_pond",
+                    "label": "Over to the mast pond"
+                },
+                {
+                    "to": "the_ropehouse",
+                    "label": "Along to the Ropehouse"
+                },
+                {
+                    "to": "the_sailmakers_loft",
+                    "label": "Up the stair to the Sailmaker's Loft"
+                },
+                {
+                    "to": "the_dry_dock",
+                    "label": "Down to the dry dock"
+                },
+                {
+                    "to": "boomhead",
+                    "label": "North, along the Strand to the harbour"
+                },
+                {
+                    "to": "hallowmarket",
+                    "label": "East, up to Hallowmarket"
+                }
+            ]
+        },
+        "the_nine_masts": {
+            "name": "The Nine Masts",
+            "type": "building",
+            "map_pos": [
+                21.7,
+                30.6
+            ],
+            "allow_camp": true,
+            "description": "The shipwrights' own house, and no more welcoming for that. One long room, one long table, and nine masts painted on the beam over the fire — one for every hull class the Moot has ever laid down, added by the master who designed it, in front of witnesses, once. There are ten on the beam now. Nobody will admit to the tenth and nobody will paint it out.",
+            "ambience": [
+                "Every so often somebody glances up at the beam, and then very deliberately does not.",
+                "The apprentices' end of the table is loud. The masters' end is not.",
+                "A drawing is unrolled, weighted at the corners with cups, and rolled up again before you get near it."
+            ],
+            "exits": [
+                {
+                    "to": "the_great_slip",
+                    "label": "Out to the slips"
+                }
+            ]
+        },
+        "the_mast_pond": {
+            "name": "The Mast Pond",
+            "type": "site",
+            "map_pos": [
+                12.7,
+                37.2
+            ],
+            "description": "A black rectangle of still water behind the slips where great pines lie submerged for two years to season before they are shaped. Cold, deep, and full of timber that belongs to the League and is counted once a year with a pole and a tally-board. Last autumn's count came in nine short. The count was not repeated.",
+            "ambience": [
+                "Something breaks the surface, unhurried, and is a log, and is not quite where a log ought to be.",
+                "The tally-board hangs on its post with last autumn's figure still chalked on it.",
+                "The water gives back the sky and nothing else, which is the point of it."
+            ],
+            "exits": [
+                {
+                    "to": "the_great_slip",
+                    "label": "Back up to the slips"
+                }
+            ]
+        },
+        "the_ropehouse": {
+            "name": "The Ropehouse",
+            "type": "building",
+            "map_pos": [
+                57.2,
+                54.0
+            ],
+            "description": "Three hundred and eighty metres of roofed ropewalk, one straight line under one roof, where cable is laid for the entire Ythan fleet by men walking backwards away from a wheel. It is the longest straight line in the city and the only place in Waerhaven where two people can talk and be certain of not being overheard, because anyone within earshot is visible for two hundred metres in both directions.",
+            "ambience": [
+                "The wheel turns and the yarn runs out and a man walks backwards away from you for a very long time.",
+                "Somebody two hundred metres down the walk stops talking when you come in, and starts again when you do not come further.",
+                "Hemp dust hangs in the light from the roof lights in one unbroken bar, all the way down."
+            ],
+            "exits": [
+                {
+                    "to": "the_great_slip",
+                    "label": "Out to the slips"
+                }
+            ]
+        },
+        "the_sailmakers_loft": {
+            "name": "The Sailmaker's Loft",
+            "type": "building",
+            "map_pos": [
+                70.8,
+                40.1
+            ],
+            "description": "A long upper floor over the mould loft where canvas is spread, marked and cut. Twenty women work here with the windows on the quay side, and they miss nothing that happens on the quay, and they have been comparing what they see for eleven years. It is the best information network in Waerhaven and the only one in the city that is not for sale.",
+            "ambience": [
+                "A bolt of canvas is walked out flat by four women who do not need to speak to do it.",
+                "Somebody at the window says a name, quietly, and three heads come up and go down again.",
+                "The cutting chalk squeaks. Twenty women hear a thing on the quay below and none of them look up."
+            ],
+            "exits": [
+                {
+                    "to": "the_great_slip",
+                    "label": "Down the stair to the slips"
+                }
+            ]
+        },
+        "the_dry_dock": {
+            "name": "The Dry Dock",
+            "type": "site",
+            "map_pos": [
+                38.8,
+                35.4
+            ],
+            "description": "Gated, pumped, and the only dock north of Lathmere that can take a war-hull out of the water whole. There is a boat in it now, and it is not a war-hull and it is not the League's: a Drennmark coasting boat with her garboards stove, being made good for nothing, by nobody's order, in daylight, in the most expensive dock on the northern shore.",
+            "ambience": [
+                "The pump gang works the dock dry for the third time this week and nobody has signed for the labour.",
+                "The Drennmark boat's stem has a device carved on it that has been recently, badly, chiselled off.",
+                "Two shipwrights work on her at the end of their own shift and go home in the dark."
+            ],
+            "exits": [
+                {
+                    "to": "the_great_slip",
+                    "label": "Up to the slips"
+                }
+            ]
+        }
+    }
+}

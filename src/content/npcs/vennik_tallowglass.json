@@ -1,0 +1,42 @@
+{
+    "npc_key": "vennik_tallowglass",
+    "name": "Vennik Tallowglass",
+    "role": "Instrument-maker",
+    "description": "A gnome of Lathmere, nine years resident, who sells glasses and compasses and dividers and reports everything he hears to the League. He has lately begun leaving things out of his reports, because he has grown fond of the place, and he is aware of exactly what that is called.",
+    "sprite_key": "wizard",
+    "is_merchant": true,
+    "is_quest_giver": true,
+    "dialog": "vennik_tallowglass",
+    "shop": [
+        {
+            "item": "thieves_tools",
+            "stock": 1,
+            "markup_pct": 120
+        },
+        {
+            "item": "surveyors_plumb",
+            "stock": 1
+        },
+        {
+            "item": "antitoxin",
+            "stock": 2
+        },
+        {
+            "item": "scroll_of_mending_flesh",
+            "stock": 1,
+            "markup_pct": 115
+        },
+        {
+            "item": "amulet_of_warding",
+            "stock": 1,
+            "markup_pct": 140
+        },
+        {
+            "item": "oil_of_embers",
+            "stock": 2
+        }
+    ],
+    "place": {
+        "location": "venniks"
+    }
+}

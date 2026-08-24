@@ -1,0 +1,12 @@
+{
+    "npc_key": "ione_brack",
+    "name": "Chart-Master Ione Brack",
+    "role": "Chart-Master of Waerhaven",
+    "description": "Licenses every pilot on this shore and holds every sounding of the Ythan Mere in her presses, and has not reported a theft from those presses because the theft would have to be described, and describing it would mean saying out loud which drawer it came from.",
+    "sprite_key": "sorcerer",
+    "is_quest_giver": true,
+    "dialog": "ione_brack",
+    "place": {
+        "location": "the_charthouse"
+    }
+}

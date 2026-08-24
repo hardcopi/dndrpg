@@ -8,6 +8,13 @@ declare(strict_types=1);
 
 require_once dirname(__DIR__) . '/app/bootstrap.php';
 
+cors_apply();
+
+if (strtoupper((string) ($_SERVER['REQUEST_METHOD'] ?? 'GET')) === 'OPTIONS') {
+    http_response_code(204);
+    exit;
+}
+
 $route = $_GET['r'] ?? '';
 if ($route === '' && isset($_SERVER['PATH_INFO'])) {
     $route = trim($_SERVER['PATH_INFO'], '/');
@@ -121,6 +128,7 @@ function handle_auth(string $action): void
             ] : null,
             'is_admin'           => $auth->isAdmin(),
             'registration_open'  => $auth->registrationOpen(),
+            'via'                => $user === null ? null : ($auth->usingToken() ? 'token' : 'session'),
         ]);
     }
 
@@ -128,9 +136,12 @@ function handle_auth(string $action): void
         require_method('POST');
         $body = read_json_body();
         $user = $auth->login((string) ($body['username'] ?? ''), (string) ($body['password'] ?? ''));
+        $issued = $auth->issueToken((int) $user['id'], (string) ($body['client'] ?? 'api'));
         json_response([
-            'ok'   => true,
-            'user' => ['id' => (int) $user['id'], 'username' => $user['username'], 'role' => $user['role']],
+            'ok'         => true,
+            'user'       => ['id' => (int) $user['id'], 'username' => $user['username'], 'role' => $user['role']],
+            'token'      => $issued['token'],
+            'expires_at' => $issued['expires_at'],
         ]);
     }
 
@@ -149,9 +160,12 @@ function handle_auth(string $action): void
         // chose, twice, to reach the thing they registered for is friction with
         // nothing on the other side of it.
         $auth->login((string) $body['username'], (string) $body['password']);
+        $issued = $auth->issueToken((int) $user['id'], (string) ($body['client'] ?? 'api'));
         json_response([
-            'ok'   => true,
-            'user' => ['id' => (int) $user['id'], 'username' => $user['username'], 'role' => $user['role']],
+            'ok'         => true,
+            'user'       => ['id' => (int) $user['id'], 'username' => $user['username'], 'role' => $user['role']],
+            'token'      => $issued['token'],
+            'expires_at' => $issued['expires_at'],
         ]);
     }
 
@@ -226,6 +240,9 @@ function handle_admin(string $action): void
         $active = (bool) ($body['is_active'] ?? true);
         admin_assert_not_last_admin($userId, $active, false);
         $db->prepare('UPDATE users SET is_active = ? WHERE id = ?')->execute([$active ? 1 : 0, $userId]);
+        if (!$active) {
+            $auth->revokeAllTokens($userId);
+        }
         json_response(['ok' => true]);
     }
 
@@ -418,9 +435,13 @@ function handle_content(string $action): void
     }
 
     if ($action === 'chart') {
+        $hereId = isset($_GET['here_id']) && $_GET['here_id'] !== ''
+            ? (int) $_GET['here_id'] : null;
+        $regionId = isset($_GET['region_id']) && $_GET['region_id'] !== ''
+            ? (int) $_GET['region_id'] : null;
         json_response([
             'ok'    => true,
-            'chart' => $ed->moduleChart((int) ($_GET['module_id'] ?? 0)),
+            'chart' => $ed->moduleChart((int) ($_GET['module_id'] ?? 0), $hereId, $regionId),
         ]);
     }
 
@@ -482,6 +503,25 @@ function handle_content(string $action): void
         json_response(['ok' => true, 'encounter' => $ed->createEncounter(read_json_body())]);
     }
 
+    if ($action === 'items') {
+        json_response(['ok' => true, 'items' => $ed->listItems()]);
+    }
+
+    if ($action === 'item') {
+        json_response(['ok' => true, 'item' => $ed->getItem((int) ($_GET['id'] ?? 0))]);
+    }
+
+    if ($action === 'save_item') {
+        require_method('POST');
+        json_response(['ok' => true, 'item' => $ed->saveItem(read_json_body())]);
+    }
+
+    if ($action === 'delete_item') {
+        require_method('POST');
+        $body = read_json_body();
+        json_response(['ok' => true, 'result' => $ed->deleteItem((int) ($body['id'] ?? 0))]);
+    }
+
     if ($action === 'add_item') {
         require_method('POST');
         $body = read_json_body();
@@ -511,7 +551,9 @@ function handle_content(string $action): void
             'art' => $ed->saveArt(
                 (string) ($body['kind'] ?? ''),
                 (string) ($body['key'] ?? ''),
-                (string) ($body['image'] ?? '')
+                (string) ($body['image'] ?? ''),
+                isset($body['npc_id']) && $body['npc_id'] !== '' && $body['npc_id'] !== null
+                    ? (int) $body['npc_id'] : null
             ),
         ]);
     }
@@ -569,7 +611,7 @@ function handle_content(string $action): void
                    FROM monsters ORDER BY name'
             )->fetchAll(),
             'items'     => db()->query(
-                'SELECT item_key, name FROM items ORDER BY name'
+                'SELECT item_key, name, item_type, rarity FROM items ORDER BY name'
             )->fetchAll(),
             'sprites'    => $ed->listSprites(),
             'companions' => db()->query(
@@ -1114,7 +1156,10 @@ function handle_session(string $action): void
         // question inside a game and the wrong one here: the whole point of the
         // picker is to read a character from a game you are NOT currently in.
         // This is the same widening sheet_print.php made for the same reason,
-        // so it asks the same question, through assert_character_manageable.
+        // and one step further: a companion may be READ here, because the tabs
+        // across the top of the sheet draw the whole marching party and a tab
+        // that cannot open is worse than no tab. Retiring one is still refused,
+        // in the gate that is about retiring.
         //
         // The numbers are CharacterSheet's, which are Rules'. Nothing on this
         // page does arithmetic — a second rules engine in the front-page script
@@ -1220,6 +1265,14 @@ function handle_session(string $action): void
         // NOT out of the counts — a party already inside one keeps showing up
         // in the character list and has to remain playable. Hiding a module is
         // for stopping new games in it, not for confiscating running ones.
+        // Nothing at all while the adventures are hidden. The shelf is drawn
+        // from this, so an empty answer is what makes it not exist rather than
+        // exist and be empty — and it means a page that has not been updated
+        // still cannot start a game in a module nobody can see.
+        if (!ADVENTURES_ENABLED) {
+            json_response(['ok' => true, 'modules' => []]);
+        }
+
         $auth = auth();
         $stmt = db()->prepare(
             'SELECT m.id, m.module_key, m.name, m.blurb, m.attribution,
@@ -1534,6 +1587,56 @@ function handle_character(string $action): void
         ]);
     }
 
+    /**
+     * Keep the portraits the 3D creator rendered.
+     *
+     * `portrait`, not `model`: `character/model` stores the recipe — the list
+     * of part names that says what somebody looks like — and this stores the
+     * picture of it. The recipe is the truth and the picture is a cache of it,
+     * which is why either can be posted without the other and why re-dressing
+     * posts both.
+     *
+     * The pictures come from the browser because that is the only place in this
+     * system that can draw them; there is no renderer on this host. Everything
+     * that follows from that is in ModelPortrait: the bytes are re-encoded
+     * rather than saved, the filename comes from the character id and never
+     * from the request, and the walk sprite is inherited so the four files a
+     * sprite_key promises all exist.
+     */
+    if ($action === 'portrait') {
+        require_method('POST');
+        $body = read_json_body();
+        $id = (int) ($body['character_id'] ?? session_character_id() ?? 0);
+        if ($id <= 0) {
+            json_error('character_id required', 400);
+        }
+        assert_character_accessible($id);
+
+        // What they would have shown without a portrait, which is what the map
+        // keeps showing. Read before the update, or it reads back its own answer.
+        $before = $gen->getCharacter($id);
+        $fallback = (string) ($before['sprite_key'] ?? '') ?: 'fighter';
+
+        try {
+            $key = ModelPortrait::bake(
+                $id,
+                (string) ($body['bust'] ?? ''),
+                (string) ($body['face'] ?? ''),
+                $fallback
+            );
+        } catch (RuntimeException $e) {
+            json_error($e->getMessage(), 422);
+        }
+
+        $db->prepare('UPDATE characters SET sprite_key = ? WHERE id = ?')->execute([$key, $id]);
+
+        json_response([
+            'ok'         => true,
+            'sprite_key' => $key,
+            'character'  => $gen->getCharacter($id),
+        ]);
+    }
+
     if ($action === 'sheet') {
         $body = read_json_body();
         $id = (int) ($body['character_id'] ?? $_GET['character_id'] ?? session_character_id() ?? 0);
@@ -1607,6 +1710,79 @@ function handle_character(string $action): void
         ]);
     }
 
+    /**
+     * The 3D look, for the Unity client and for the character embed on the web.
+     *
+     * `model`, not `appearance`: `character/appearance` is the 2D paperdoll —
+     * it bakes PNG layers into a sprite — and the two are different pictures of
+     * the same person rather than two versions of one route. A client asking
+     * for one and getting the other would get a valid answer to a question it
+     * did not ask, which is the worst kind of wrong.
+     *
+     * GET reads it; POST writes it. Both take an explicit `character_id`,
+     * because the embed is often on a page that is not "the game" — a profile,
+     * a party roster, the creator opened from a link — and there may be no
+     * active character in the session at all. Falls back to the active one when
+     * none is named, which is what the in-game client always wants.
+     *
+     * assert_character_readable is the whole permission check, and it is the
+     * right one for both directions: it proves the character is yours, and
+     * re-dressing somebody you own is not a privileged act. It 404s rather than
+     * 403s on somebody else's id, so this is not a way to count other people's
+     * characters.
+     */
+    if ($action === 'model') {
+        $write = strtoupper((string) ($_SERVER['REQUEST_METHOD'] ?? 'GET')) === 'POST';
+        $body = $write ? read_json_body() : [];
+
+        $id = (int) ($_GET['character_id'] ?? $body['character_id'] ?? 0);
+        if ($id <= 0) {
+            $id = require_character_id();
+        }
+        $row = assert_character_readable($id);
+
+        // The race travels with the character, not with the recipe.
+        //
+        // A character who has never been dressed has no recipe at all, and the
+        // creator has to open on something. Opening every one of them on a
+        // human made the race the first thing every player had to correct,
+        // including the ones whose sheet already said Dragonborn. Sending it
+        // here lets the creator open as who they already are.
+        $who = $db->prepare('SELECT name, race FROM characters WHERE id = ?');
+        $who->execute([$id]);
+        $found = $who->fetch(PDO::FETCH_ASSOC) ?: [];
+        $character = [
+            'id'   => $id,
+            'name' => (string) ($found['name'] ?? ''),
+            'race' => (string) ($found['race'] ?? ''),
+        ];
+
+        try {
+            if (!$write) {
+                json_response([
+                    'ok'         => true,
+                    'character'  => $character,
+                    'appearance' => SidekickAppearance::load($db, $id),
+                ]);
+            }
+
+            $look = SidekickAppearance::normalise($body['appearance'] ?? null);
+            if ($look === null) {
+                json_error('That appearance has no parts in it.', 422);
+            }
+            json_response([
+                'ok'         => true,
+                'character'  => $character,
+                'appearance' => SidekickAppearance::save($db, $id, $look),
+            ]);
+        } catch (InvalidArgumentException $e) {
+            json_error($e->getMessage(), 422);
+        } catch (RuntimeException $e) {
+            // The migration has not been run. Say which one.
+            json_error($e->getMessage(), 500);
+        }
+    }
+
     json_error('Unknown character action', 404);
 }
 
@@ -1662,6 +1838,86 @@ function handle_location(string $action): void
             (string) ($body['check_id'] ?? ''),
             is_array($boosts) ? $boosts : []
         ));
+    }
+
+    // The other way through a locked door, for a party carrying tools. Same
+    // two phases as forcing; a different skill, a harder DC and no noise.
+    if ($action === 'pick_lock') {
+        require_method('POST');
+        $id = require_character_id();
+        $body = read_json_body();
+        json_response($engine->pickLock($id, (int) ($body['exit_id'] ?? 0)));
+    }
+
+    if ($action === 'pick_lock_resolve') {
+        require_method('POST');
+        $id = require_character_id();
+        $body = read_json_body();
+        $boosts = $body['boosts'] ?? [];
+        json_response($engine->pickLockResolve(
+            $id,
+            (string) ($body['check_id'] ?? ''),
+            is_array($boosts) ? $boosts : []
+        ));
+    }
+
+    // --- doors, as things you do something to -------------------------------
+    // The menu is asked for rather than assembled by the client: what a party
+    // may do at a threshold depends on what they are carrying and what they
+    // have found, and neither is a browser's business.
+    if ($action === 'door_menu') {
+        require_method('POST');
+        $id = require_character_id();
+        $body = read_json_body();
+        json_response((new DoorEngine($db))->menu($id, (int) ($body['exit_id'] ?? 0)));
+    }
+
+    if ($action === 'door_inspect') {
+        require_method('POST');
+        $id = require_character_id();
+        $body = read_json_body();
+        json_response((new DoorEngine($db))->inspect($id, (int) ($body['exit_id'] ?? 0)));
+    }
+
+    if ($action === 'door_disarm') {
+        require_method('POST');
+        $id = require_character_id();
+        $body = read_json_body();
+        json_response((new DoorEngine($db))->disarm($id, (int) ($body['exit_id'] ?? 0)));
+    }
+
+    if ($action === 'door_disarm_resolve') {
+        require_method('POST');
+        $id = require_character_id();
+        $body = read_json_body();
+        $boosts = $body['boosts'] ?? [];
+        json_response((new DoorEngine($db))->disarmResolve(
+            $id, (string) ($body['check_id'] ?? ''), is_array($boosts) ? $boosts : []
+        ));
+    }
+
+    if ($action === 'door_barricade') {
+        require_method('POST');
+        $id = require_character_id();
+        $body = read_json_body();
+        json_response((new DoorEngine($db))->barricade($id, (int) ($body['exit_id'] ?? 0)));
+    }
+
+    if ($action === 'door_barricade_resolve') {
+        require_method('POST');
+        $id = require_character_id();
+        $body = read_json_body();
+        $boosts = $body['boosts'] ?? [];
+        json_response((new DoorEngine($db))->barricadeResolve(
+            $id, (string) ($body['check_id'] ?? ''), is_array($boosts) ? $boosts : []
+        ));
+    }
+
+    if ($action === 'door_clear') {
+        require_method('POST');
+        $id = require_character_id();
+        $body = read_json_body();
+        json_response((new DoorEngine($db))->clearBarricade($id, (int) ($body['exit_id'] ?? 0)));
     }
 
     if ($action === 'loot') {

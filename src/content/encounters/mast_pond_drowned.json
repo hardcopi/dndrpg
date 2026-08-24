@@ -1,0 +1,26 @@
+{
+    "encounter_key": "mast_pond_drowned",
+    "name": "Under the Masts",
+    "description": "A log rolls where no log should roll, and the black water lets go of something that has been down there among the seasoning pines rather longer than two years.",
+    "difficulty": "medium",
+    "monsters": [
+        {
+            "monster": "grey_ooze",
+            "quantity": 1,
+            "rank": "front"
+        },
+        {
+            "monster": "pale_crawler",
+            "quantity": 2,
+            "rank": "front"
+        }
+    ],
+    "allow_flee": true,
+    "allow_parley": false,
+    "ambush": true,
+    "victory_flag": "mast_pond_beaten",
+    "place": {
+        "location": "the_mast_pond"
+    },
+    "victory_quest_stage": "nine_masts:the_dry_dock"
+}

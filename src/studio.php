@@ -24,16 +24,13 @@ $moduleKey = preg_replace('/[^a-z0-9_]/', '', (string) ($_GET['module'] ?? ''));
   <link rel="stylesheet" href="<?= asset('assets/css/style.css') ?>">
 </head>
 <body class="studio-page">
+  <?php require APP_PATH . '/inc/site_bar.php'; ?>
   <header class="admin-head">
     <div>
       <p class="auth-eyebrow">Rivermark Chronicles</p>
       <h1 id="st-title">Studio</h1>
     </div>
-    <nav class="admin-nav" id="st-nav">
-      <a class="btn" href="studio.php">All adventures</a>
-      <a class="btn" href="content.php">Copy desk</a>
-      <a class="btn" href="index.php">Shelf</a>
-    </nav>
+    <nav class="admin-nav" id="st-nav"></nav>
   </header>
 
   <p class="admin-error" id="st-error" role="alert" aria-live="polite"></p>

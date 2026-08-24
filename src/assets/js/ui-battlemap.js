@@ -43,8 +43,55 @@
 (function () {
   const esc = (s) => window.Game.esc(s);
 
-  const W = 16;
-  const H = 12;
+  /**
+   * The board's size, in cells.
+   *
+   * Not constants any more. Sixteen by twelve is what BattleMapGen builds and
+   * what most fights are still fought on, but a fight inside a delve room is
+   * fought on THE ROOM — see RoomBattleMap — so the board is whatever shape
+   * that room is, up to about twice this. They are read off the terrain at the
+   * top of every render rather than passed around, because every one of the
+   * dozen places below that wants them is downstream of that point, and
+   * threading two numbers through all of them would be noise.
+   *
+   * The values here are the fallback for a caller that asks about the board
+   * before one has been drawn.
+   */
+  let W = 16;
+  let H = 12;
+
+  /** Take the board's dimensions from the terrain the server sent. */
+  function sizeFrom(terrain) {
+    const rows = Array.isArray(terrain) ? terrain : [];
+    H = rows.length || 12;
+    W = (rows[0] || '').length || 16;
+  }
+
+  /** Unique pattern ids so a gallery of boards on one page do not share fills. */
+  let patternSeq = 0;
+
+  function artUrl(path) {
+    if (!path) return '';
+    const ver = (window.Game && window.Game.TILE_CACHE_VER)
+      ? `?v=${window.Game.TILE_CACHE_VER}` : '';
+    return `/assets/images/${path}${ver}`;
+  }
+
+  /**
+   * A hand-drawn board carries its own picture — see FixedBattleMaps.php.
+   *
+   * Two things follow from `grid.image` being set. The picture is laid over the
+   * floor at the board's full size and stretched to it rather than fitted:
+   * the crop was cut to the board's proportions on the way in, so `none` is
+   * honest here and `meet` would letterbox a picture that already fits.
+   *
+   * And the terrain stops painting itself. A generated board draws its walls
+   * because nothing else would; a drawn board already has walls in the picture,
+   * and a stone texture laid over the artist's is just a stone texture. The
+   * cells stay exactly where they are — they are what the rules read and what
+   * the pointer hits — they simply go quiet, which `.is-drawn` does in the
+   * stylesheet.
+   */
 
   /** Terrain character to a class, and to the words the tooltip uses. */
   const TERRAIN = {
@@ -77,8 +124,14 @@
   function html(state, opts) {
     const grid = state.grid || {};
     const terrain = grid.terrain || [];
+    sizeFrom(terrain);
     const ui = state.ui || null;
     const o = opts || {};
+
+    const pid = ++patternSeq;
+    const floorId = `bm-fl-${pid}`;
+    const wallId = `bm-wl-${pid}`;
+    const waterId = `bm-wt-${pid}`;
 
     return `<svg class="battlemap" viewBox="0 0 ${W} ${H}"
                  role="img" aria-label="The battlefield">
@@ -88,9 +141,24 @@
                  patternTransform="rotate(45)">
           <line x1="0" y1="0" x2="0" y2="0.5" stroke-width="0.12"/>
         </pattern>
+        ${grid.floor ? `<pattern id="${floorId}" width="1" height="1" patternUnits="userSpaceOnUse">
+          <image href="${esc(artUrl(grid.floor))}" width="1" height="1"
+                 preserveAspectRatio="xMidYMid slice"/></pattern>` : ''}
+        ${grid.wall ? `<pattern id="${wallId}" width="1" height="1" patternUnits="userSpaceOnUse">
+          <image href="${esc(artUrl(grid.wall))}" width="1" height="1"
+                 preserveAspectRatio="xMidYMid slice"/></pattern>` : ''}
+        <pattern id="${waterId}" width="1" height="1" patternUnits="userSpaceOnUse">
+          <image href="${esc(artUrl('tiles/water.png'))}" width="1" height="1"
+                 preserveAspectRatio="xMidYMid slice"/></pattern>
       </defs>
-      <rect class="bm-floor" x="0" y="0" width="${W}" height="${H}"/>
-      <g class="bm-terrain">${terrainHtml(terrain)}</g>
+      <rect class="bm-floor" x="0" y="0" width="${W}" height="${H}"
+            ${grid.floor ? `style="fill:url(#${floorId})"` : ''}/>
+      ${grid.image ? `<image class="bm-art" href="${esc(artUrl(grid.image))}"
+            x="0" y="0" width="${W}" height="${H}" preserveAspectRatio="none"/>` : ''}
+      <g class="bm-terrain${grid.image ? ' is-drawn' : ''}">${
+        terrainHtml(terrain, { wallId, waterId, hasWall: !grid.image && !!grid.wall })
+      }</g>
+      <g class="bm-props">${propsHtml(grid)}</g>
       <g class="bm-zones">${zonesHtml(grid, state)}</g>
       <g class="bm-reach">${reachHtml(ui)}</g>
       <g class="bm-threat">${threatHtml(ui)}</g>
@@ -105,17 +173,57 @@
     </svg>`;
   }
 
-  function terrainHtml(terrain) {
+  function terrainHtml(terrain, tex) {
     let out = '';
     for (let y = 0; y < H; y++) {
       const row = terrain[y] || '';
       for (let x = 0; x < W; x++) {
-        const spec = TERRAIN[row[x]];
+        const ch = row[x];
+        const spec = TERRAIN[ch];
         if (!spec) continue;
+        if (ch === '#' && tex && tex.hasWall) {
+          out += `<rect class="bm-cell is-wall" x="${x}" y="${y}" width="1" height="1"
+            style="fill:url(#${tex.wallId})"/>`;
+          continue;
+        }
+        if (ch === '~') {
+          out += `<rect class="bm-cell is-water" x="${x}" y="${y}" width="1" height="1"
+            style="fill:url(#${tex.waterId})"/>`;
+          continue;
+        }
         out += `<rect class="bm-cell ${spec[0]}" x="${x}" y="${y}" width="1" height="1"/>`;
       }
     }
     return out;
+  }
+
+  /**
+   * Furniture sitting on cover cells.
+   *
+   * The engine never reads these. Each sprite is a picture of the terrain
+   * character already in that rectangle — half cover, tall cover, or rough
+   * ground — so the highlight and the rule cannot disagree. `stand` sprites
+   * grow north of their footprint because they are 3/4-view, not tiles.
+   *
+   * Painted before the hit-cells so a barrel never eats a click.
+   */
+  function propsHtml(grid) {
+    const list = Array.isArray(grid.props) ? grid.props.slice() : [];
+    list.sort((a, b) => (a.y - b.y) || (a.x - b.x));
+    return list.map((p) => {
+      const w = Math.max(1, Number(p.w) || 1);
+      const h = Math.max(1, Number(p.h) || 1);
+      const x = Number(p.x) || 0;
+      const y = Number(p.y) || 0;
+      const stand = p.stand ? Math.min(1.1, 0.55 + h * 0.2) : 0;
+      const pad = 0.06;
+      return `<image class="bm-prop" href="${esc(artUrl(p.src))}"
+        x="${x + pad}" y="${y - stand + pad}"
+        width="${w - pad * 2}" height="${h + stand - pad * 2}"
+        preserveAspectRatio="xMidYMid meet"
+        pointer-events="none"
+        onerror="this.remove()"/>`;
+    }).join('');
   }
 
   /**
@@ -229,16 +337,24 @@
         ? ` — ${shot.dist} ft${shot.why ? ', ' + shot.why : ''}`
         : '';
 
-      return `<g class="${cls}" transform="translate(${c.x + 0.5} ${c.y + 0.5})"
+      const face = esc(o.faceUrl(c));
+      const stamped = !!c.token;
+      const art = stamped
+        ? `<image class="bm-face is-token" href="${face}" x="-0.46" y="-0.46"
+             width="0.92" height="0.92" preserveAspectRatio="xMidYMid meet"
+             onerror="this.remove()"/>`
+        : `<image class="bm-face" href="${face}" x="-0.34" y="-0.34"
+             width="0.68" height="0.68" clip-path="url(#bm-round)"
+             preserveAspectRatio="xMidYMid slice"
+             onerror="this.remove()"/>`;
+
+      return `<g class="${cls}${stamped ? ' has-token' : ''}" transform="translate(${c.x + 0.5} ${c.y + 0.5})"
           data-cid="${esc(c.cid)}" ${dead ? '' : 'role="button" tabindex="0"'}>
         <title>${esc(c.name)} — HP ${esc(c.hp)}/${esc(c.max_hp)}, AC ${esc(c.ac)}${esc(note)}</title>
         <circle class="bm-hit-token" r="0.48"/>
         <circle class="bm-turn" r="0.46"/>
-        <circle class="bm-ring" r="0.40"/>
-        <image class="bm-face" href="${esc(o.faceUrl(c))}" x="-0.34" y="-0.34"
-               width="0.68" height="0.68" clip-path="url(#bm-round)"
-               preserveAspectRatio="xMidYMid slice"
-               onerror="this.remove()"/>
+        <circle class="bm-ring" r="${stamped ? '0.47' : '0.40'}" ${stamped ? 'fill="none"' : ''}/>
+        ${art}
         <rect class="bm-hp-back" x="-0.36" y="0.38" width="0.72" height="0.12" rx="0.06"/>
         <rect class="bm-hp ${pct > 0.5 ? 'ok' : pct > 0.25 ? 'mid' : 'low'}"
               x="-0.36" y="0.38" width="${(0.72 * pct).toFixed(3)}" height="0.12" rx="0.06"/>
@@ -497,10 +613,23 @@
       zoomMax: ZOOM_MAX,
       zoomStep: ZOOM_STEP,
       start: boardView,
-      // Space or the middle button. Never a bare left-click: that is a move
-      // order, and a board where clicking the ground sometimes walks you and
-      // sometimes slides the camera is a board you cannot trust.
-      canPan: (e) => (e.button === 0 && spaceHeld) || e.button === 1,
+      // Drag with any button. A bare left-click is still a move order and
+      // still only a move order — what separates the two is distance, not which
+      // finger you used: SvgView ignores movement under its few pixels of slop,
+      // and the click handler below asks `consumePan()` so a drag that ends over
+      // a cell never also counts as having clicked it.
+      //
+      // This used to demand Space or the middle button, on the reasoning that a
+      // board where clicking the ground sometimes walks you and sometimes
+      // slides the camera is a board you cannot trust. The reasoning was right
+      // and the remedy was wrong: the slop already tells a click from a drag,
+      // and what it actually bought was a zoomed-in board you could not move at
+      // all unless you knew about a keypress nothing on screen mentions. The
+      // scene chart has worked this way the whole time.
+      //
+      // Space still pans, and still swallows the click while it is held, for
+      // anyone who wants to look around with no chance of ordering anything.
+      canPan: (e) => e.button === 0 || e.button === 1,
       onApply: (v) => {
         boardView = { z: v.z, cx: v.cx, cy: v.cy };
         root.classList.toggle('is-zoomed', v.z > ZOOM_MIN * 1.001);
@@ -529,8 +658,14 @@
       const el = ev.target.closest('[data-bm-cell]');
       return el ? parseKey(el.dataset.bmCell) : null;
     };
+    // The dead are not tokens as far as a click is concerned. The handler
+    // below asks this before it asks cellOf() and returns on the first answer,
+    // so anything this matches is a square you cannot walk into. The corpse is
+    // also `pointer-events: none` in the stylesheet — this is the same rule
+    // said where the precedence actually lives, so restyling cannot bring the
+    // bug back.
     const tokenOf = (ev) => {
-      const el = ev.target.closest('.bm-token[data-cid]');
+      const el = ev.target.closest('.bm-token[data-cid]:not(.is-dead)');
       return el ? el.dataset.cid : null;
     };
 

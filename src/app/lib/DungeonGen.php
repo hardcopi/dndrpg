@@ -717,6 +717,36 @@ final class DungeonGen
         $rooms = self::placeRooms($rng, $spec['rooms'][0], $spec['rooms'][1]);
         $edges = self::joinRooms($rng, $rooms, self::rint($rng, $spec['loops'][0], $spec['loops'][1]));
 
+        return self::finish($rng, $seed, $depth, $profile, $rooms, $edges);
+    }
+
+    /**
+     * Everything a layout needs to become a level.
+     *
+     * Split out of generate() so that a layout from somewhere else can have it
+     * too. GeneratedLevel builds its rooms and edges from the map service and
+     * then calls this, which is why a floor from the service is stocked, named,
+     * dressed and trapped by the same code as one from here — the parts of a
+     * dungeon that are about the GAME rather than about the shape of the place.
+     *
+     * A caller with its own prose passes it in `$names`, keyed by room id, and
+     * whatever it does not name is named here. That is the whole of the seam:
+     * the service knows what a room is called, this knows what is standing in
+     * it, and neither has an opinion about the other.
+     *
+     * @param  array<int,array{name:string,description:string}> $names
+     */
+    public static function finish(
+        int &$rng,
+        int $seed,
+        int $depth,
+        string $profile,
+        array $rooms,
+        array $edges,
+        array $names = []
+    ): array {
+        $spec = self::PROFILES[$profile];
+
         // Entrance and stair as far apart as the plan allows, so a level is a
         // journey rather than a doorway. Chosen before stocking, because both
         // are roles that override whatever the contents table would have said.
@@ -724,6 +754,22 @@ final class DungeonGen
         self::unsealEntrance($edges, $entrance);
         self::stock($rng, $rooms, $entrance, $stair, $spec['boss']);
         self::describe($rng, $rooms, $profile);
+
+        // Borrowed prose wins, room by room. Applied after describe() rather
+        // than instead of it so that a caller that names half its rooms still
+        // gets a name for the other half.
+        foreach ($rooms as $i => $room) {
+            $given = $names[(int) $room['id']] ?? null;
+            if ($given === null) {
+                continue;
+            }
+            if (!empty($given['name'])) {
+                $rooms[$i]['name'] = (string) $given['name'];
+            }
+            if (!empty($given['description'])) {
+                $rooms[$i]['description'] = (string) $given['description'];
+            }
+        }
 
         // One passage per edge, given its own identity. An edge used to be a
         // line between two rooms and nothing else; it is now somewhere the
@@ -982,11 +1028,38 @@ final class DungeonGen
      *
      * @return array{0:float, 1:float}
      */
-    public static function project(float $gx, float $gy): array
+    public static function project(float $gx, float $gy, ?int $gw = null, ?int $gh = null): array
+    {
+        $gw ??= self::GRID_W;
+        $gh ??= self::GRID_H;
+        return [
+            round(8 + ($gx / $gw) * (self::VIEW_W - 16), 2),
+            round(7 + ($gy / $gh) * (self::VIEW_H - 16), 2),
+        ];
+    }
+
+    /**
+     * The lattice a level is drawn on: width, height, and tiles per cell.
+     *
+     * Authored levels and this generator's own say nothing and get the
+     * constants, which is every level that existed before the map service. A
+     * level from the service carries its own — its rooms are rectangles on a
+     * 64x48 tile grid rather than slots on a 9x7 one — and everything
+     * downstream reads the numbers rather than assuming them.
+     *
+     * Which is the whole trick: the chart, the fog raster and the passage
+     * router are resolution-independent already; they were simply never told
+     * they could be anything else. `sub` is 1 for a level whose rooms are
+     * already measured in tiles.
+     *
+     * @return array{0:int,1:int,2:int} grid width, grid height, sub-tiles per cell
+     */
+    public static function gridOf(array $level): array
     {
         return [
-            round(8 + ($gx / self::GRID_W) * (self::VIEW_W - 16), 2),
-            round(7 + ($gy / self::GRID_H) * (self::VIEW_H - 16), 2),
+            (int) ($level['grid_w'] ?? self::GRID_W),
+            (int) ($level['grid_h'] ?? self::GRID_H),
+            (int) ($level['sub'] ?? self::SUB),
         ];
     }
 
@@ -1359,6 +1432,7 @@ final class DungeonGen
      */
     public static function plan(array $level): array
     {
+        [$gw, $gh, $sub] = self::gridOf($level);
         $rooms = [];
         foreach ($level['rooms'] as $r) {
             // The room's own footprint, exactly. Not inset and not grown.
@@ -1377,8 +1451,8 @@ final class DungeonGen
             // of somebody's chamber with no door at either end, and the sweep's
             // count of those jumps from 1.8% of levels to 8.7% and stays there.
             // The room size came from the grid instead; see GRID_W.
-            [$x1, $y1] = self::project($r['gx'], $r['gy']);
-            [$x2, $y2] = self::project($r['gx'] + $r['w'], $r['gy'] + $r['h']);
+            [$x1, $y1] = self::project($r['gx'], $r['gy'], $gw, $gh);
+            [$x2, $y2] = self::project($r['gx'] + $r['w'], $r['gy'] + $r['h'], $gw, $gh);
             $rooms[] = [
                 'id'   => (int) $r['id'],
                 'x'    => $x1,
@@ -1410,7 +1484,7 @@ final class DungeonGen
             $r = $routes[$id];
             $points = [];
             foreach (array_merge([$r['from']], $r['run'], [$r['to']]) as $tile) {
-                $points[] = self::tilePoint($tile);
+                $points[] = self::tilePoint($tile, $gw, $gh, $sub);
             }
             $points = self::straighten($points);
             $points = self::clipEnds($points, $rect[(int) $e['a']], $rect[(int) $e['b']]);
@@ -1442,7 +1516,44 @@ final class DungeonGen
             ];
         }
 
-        return ['rooms' => $rooms, 'corridors' => $corridors];
+        // The ten-foot grid the level is actually built on, in the chart's
+        // own units, so the renderer can rule the page without owning a second
+        // copy of the projection. `sub` is subtiles per cell, so one TILE is
+        // 1/sub of a cell — 1/1 for a level from the map service, whose cells
+        // ARE tiles, and 1/3 for this generator's own.
+        //
+        // Measured through project() rather than derived beside it. The header
+        // promises the conversion is written once and nothing downstream
+        // repeats it; computing a pitch as (VIEW_W - 16) / ($gw * $sub) here
+        // would be exactly the second copy it warns about.
+        // Measured across the WHOLE grid and divided, not taken from one
+        // tile. project() rounds its answer to two places, which on a single
+        // tile is a rounding of the pitch itself — 84/72 comes back as 1.17
+        // against a true 1.166667 — and the renderer then multiplies that
+        // error by a column index. Over the full span the rounding lands once,
+        // on a number near 92, and divides away to nothing.
+        [$ox, $oy] = self::project(0, 0, $gw, $gh);
+        [$fx, $fy] = self::project($gw, $gh, $gw, $gh);
+        $tilesX = max(1, $gw * $sub);
+        $tilesY = max(1, $gh * $sub);
+
+        return [
+            'rooms'     => $rooms,
+            'corridors' => $corridors,
+            'grid'      => [
+                'x'  => $ox,
+                'y'  => $oy,
+                // Six places, not the two the chart rounds coordinates to.
+                // The renderer multiplies this pitch by a column index up to
+                // the width of the level, so an error in it is multiplied too:
+                // at four places, 84/72 rounds to 1.1700 against a true
+                // 1.166667, and by the far side of a 72-column floor the lines
+                // have walked a fifth of a square off the rooms they are
+                // supposed to be measuring.
+                'dx' => round(($fx - $ox) / $tilesX, 6),
+                'dy' => round(($fy - $oy) / $tilesY, 6),
+            ],
+        ];
     }
 
     /**
@@ -1630,7 +1741,9 @@ final class DungeonGen
      */
     public static function routes(array $level): array
     {
-        [$roomAt, $near, $centre] = self::roomTiles($level['rooms']);
+        [$gw, $gh, $sub] = self::gridOf($level);
+        $tw = $sub * $gw + 2;
+        [$roomAt, $near, $centre] = self::roomTiles($level['rooms'], $gw, $gh, $sub);
         $taken = [];    // tiles an earlier corridor stands on: never enterable
         $beside = [];   // tiles next to one: enterable, at a price
         $out = [];
@@ -1643,13 +1756,14 @@ final class DungeonGen
                 $taken,
                 $beside,
                 (int) $e['a'],
-                (int) $e['b']
+                (int) $e['b'],
+                $tw
             );
             if ($run === null) {
                 continue;
             }
-            $from = self::roomSideOf($roomAt, $run[0], (int) $e['a']);
-            $to = self::roomSideOf($roomAt, $run[count($run) - 1], (int) $e['b']);
+            $from = self::roomSideOf($roomAt, $run[0], (int) $e['a'], $tw);
+            $to = self::roomSideOf($roomAt, $run[count($run) - 1], (int) $e['b'], $tw);
             if ($from === null || $to === null) {
                 continue;
             }
@@ -1657,7 +1771,7 @@ final class DungeonGen
 
             foreach ($run as $i) {
                 $taken[$i] = true;
-                foreach (self::steps() as $off) {
+                foreach (self::steps($tw) as $off) {
                     $beside[$i + $off] = true;
                 }
             }
@@ -1666,9 +1780,10 @@ final class DungeonGen
     }
 
     /** Tile-index offsets for N, E, S, W. The border makes them always safe. */
-    private static function steps(): array
+    private static function steps(?int $tw = null): array
     {
-        return [-self::TILE_W, 1, self::TILE_W, -1];
+        $tw ??= self::TILE_W;
+        return [-$tw, 1, $tw, -1];
     }
 
     /**
@@ -1692,21 +1807,26 @@ final class DungeonGen
      * @return array{0: list<int>, 1: list<int>, 2: array<int,array{0:int,1:int}>}
      *         roomAt (-1 for rock), near, and each room's centre tile as [x, y]
      */
-    private static function roomTiles(array $rooms): array
+    private static function roomTiles(array $rooms, ?int $gw = null, ?int $gh = null, ?int $sub = null): array
     {
-        $n = self::TILE_W * self::TILE_H;
+        $gw ??= self::GRID_W;
+        $gh ??= self::GRID_H;
+        $sub ??= self::SUB;
+        $tw = $sub * $gw + 2;
+        $th = $sub * $gh + 2;
+        $n = $tw * $th;
         $roomAt = array_fill(0, $n, -1);
         $centre = [];
 
         foreach ($rooms as $r) {
             $id = (int) $r['id'];
-            $x0 = self::SUB * (int) $r['gx'] + 1;
-            $x1 = self::SUB * ((int) $r['gx'] + (int) $r['w']);
-            $y0 = self::SUB * (int) $r['gy'] + 1;
-            $y1 = self::SUB * ((int) $r['gy'] + (int) $r['h']);
+            $x0 = $sub * (int) $r['gx'] + 1;
+            $x1 = $sub * ((int) $r['gx'] + (int) $r['w']);
+            $y0 = $sub * (int) $r['gy'] + 1;
+            $y1 = $sub * ((int) $r['gy'] + (int) $r['h']);
             for ($y = $y0; $y <= $y1; $y++) {
                 for ($x = $x0; $x <= $x1; $x++) {
-                    $roomAt[$y * self::TILE_W + $x] = $id;
+                    $roomAt[$y * $tw + $x] = $id;
                 }
             }
             $centre[$id] = [intdiv($x0 + $x1, 2), intdiv($y0 + $y1, 2)];
@@ -1714,16 +1834,16 @@ final class DungeonGen
 
         $near = array_fill(0, $n, -1);
         for ($i = 0; $i < $n; $i++) {
-            $x = $i % self::TILE_W;
-            $y = intdiv($i, self::TILE_W);
-            if ($x === 0 || $y === 0 || $x === self::TILE_W - 1 || $y === self::TILE_H - 1) {
+            $x = $i % $tw;
+            $y = intdiv($i, $tw);
+            if ($x === 0 || $y === 0 || $x === $tw - 1 || $y === $th - 1) {
                 $near[$i] = -2;
                 continue;
             }
             if ($roomAt[$i] >= 0) {
                 continue;
             }
-            foreach (self::steps() as $off) {
+            foreach (self::steps($tw) as $off) {
                 $r = $roomAt[$i + $off];
                 if ($r < 0) {
                     continue;
@@ -1735,9 +1855,10 @@ final class DungeonGen
     }
 
     /** The tile of room $room that a door on $tile opens onto. */
-    private static function roomSideOf(array $roomAt, int $tile, int $room): ?int
+    private static function roomSideOf(array $roomAt, int $tile, int $room, ?int $tw = null): ?int
     {
-        foreach (self::steps() as $off) {
+        $tw ??= self::TILE_W;
+        foreach (self::steps($tw) as $off) {
             if (($roomAt[$tile + $off] ?? -1) === $room) {
                 return $tile + $off;
             }
@@ -1786,8 +1907,10 @@ final class DungeonGen
         array $taken,
         array $beside,
         int $a,
-        int $b
+        int $b,
+        ?int $tw = null
     ): ?array {
+        $tw ??= self::TILE_W;
         $dist = [];
         $prev = [];
         $buckets = [];
@@ -1797,7 +1920,7 @@ final class DungeonGen
             if ($besideRoom !== $a || $roomAt[$i] >= 0 || isset($taken[$i])) {
                 continue;
             }
-            $start = self::DOOR_COST * self::doorOffset($roomAt, $centre, $i, $a)
+            $start = self::DOOR_COST * self::doorOffset($roomAt, $centre, $i, $a, $tw)
                 + (isset($beside[$i]) ? self::ADJACENT_COST : 0);
             for ($d = 0; $d < 4; $d++) {
                 $k = ($i << 2) | $d;
@@ -1810,7 +1933,7 @@ final class DungeonGen
             return null;
         }
 
-        $offs = self::steps();
+        $offs = self::steps($tw);
 
         for ($cost = 0; $cost <= $top; $cost++) {
             if (!isset($buckets[$cost])) {
@@ -1849,7 +1972,7 @@ final class DungeonGen
                         // arriving at it, not added once the goal is popped:
                         // a penalty applied after settling is a penalty
                         // Dijkstra never got to weigh against the alternatives.
-                        + ($besideRoom === $b ? self::DOOR_COST * self::doorOffset($roomAt, $centre, $j, $b) : 0);
+                        + ($besideRoom === $b ? self::DOOR_COST * self::doorOffset($roomAt, $centre, $j, $b, $tw) : 0);
                     $nk = ($j << 2) | $nd;
                     if (($dist[$nk] ?? PHP_INT_MAX) <= $step) {
                         continue;
@@ -1873,20 +1996,21 @@ final class DungeonGen
      * distance east means nothing. Which wall it is on is read from where the
      * room is, so no side has to be worked out twice.
      */
-    private static function doorOffset(array $roomAt, array $centre, int $tile, int $room): int
+    private static function doorOffset(array $roomAt, array $centre, int $tile, int $room, ?int $tw = null): int
     {
+        $tw ??= self::TILE_W;
         if (!isset($centre[$room])) {
             return 0;
         }
         [$cx, $cy] = $centre[$room];
-        foreach (self::steps() as $k => $off) {
+        foreach (self::steps($tw) as $k => $off) {
             if (($roomAt[$tile + $off] ?? -1) !== $room) {
                 continue;
             }
             // steps() is N, E, S, W; east and west are the upright walls.
             return $k === 1 || $k === 3
-                ? abs(intdiv($tile, self::TILE_W) - $cy)
-                : abs($tile % self::TILE_W - $cx);
+                ? abs(intdiv($tile, $tw) - $cy)
+                : abs($tile % $tw - $cx);
         }
         return 0;
     }
@@ -1928,11 +2052,15 @@ final class DungeonGen
      *
      * @return array{0:float,1:float}
      */
-    public static function tilePoint(int $tile): array
+    public static function tilePoint(int $tile, ?int $gw = null, ?int $gh = null, ?int $sub = null): array
     {
-        $x = $tile % self::TILE_W;
-        $y = intdiv($tile, self::TILE_W);
-        return self::project(($x - 0.5) / self::SUB, ($y - 0.5) / self::SUB);
+        $gw ??= self::GRID_W;
+        $gh ??= self::GRID_H;
+        $sub ??= self::SUB;
+        $tw = $sub * $gw + 2;
+        $x = $tile % $tw;
+        $y = intdiv($tile, $tw);
+        return self::project(($x - 0.5) / $sub, ($y - 0.5) / $sub, $gw, $gh);
     }
 
     /**
@@ -1964,21 +2092,27 @@ final class DungeonGen
      */
     public static function tiles(array $level): array
     {
-        $n = self::TILE_W * self::TILE_H;
+        // The lattice this level is drawn on, rather than the one every level
+        // used to be drawn on. See gridOf().
+        [$gw, $gh, $sub] = self::gridOf($level);
+        $tw = $sub * $gw + 2;
+        $th = $sub * $gh + 2;
+
+        $n = $tw * $th;
         $solid = array_fill(0, $n, true);
         $owner = array_fill(0, $n, null);
         $spines = ['room' => [], 'corridor' => []];
 
         foreach ($level['rooms'] as $r) {
             $id = (int) $r['id'];
-            $x0 = self::SUB * (int) $r['gx'] + 1;
-            $x1 = self::SUB * ((int) $r['gx'] + (int) $r['w']);
-            $y0 = self::SUB * (int) $r['gy'] + 1;
-            $y1 = self::SUB * ((int) $r['gy'] + (int) $r['h']);
+            $x0 = $sub * (int) $r['gx'] + 1;
+            $x1 = $sub * ((int) $r['gx'] + (int) $r['w']);
+            $y0 = $sub * (int) $r['gy'] + 1;
+            $y1 = $sub * ((int) $r['gy'] + (int) $r['h']);
 
             for ($y = $y0; $y <= $y1; $y++) {
                 for ($x = $x0; $x <= $x1; $x++) {
-                    $i = $y * self::TILE_W + $x;
+                    $i = $y * $tw + $x;
                     $solid[$i] = false;
                     $owner[$i] = ['room', $id];
                 }
@@ -1986,7 +2120,7 @@ final class DungeonGen
             // The middle of the chamber, which is where a party arriving from
             // anywhere is put down. intdiv on both bounds, so an even-sided
             // room takes the lower of its two middles rather than a half tile.
-            $spines['room'][$id] = intdiv($y0 + $y1, 2) * self::TILE_W + intdiv($x0 + $x1, 2);
+            $spines['room'][$id] = intdiv($y0 + $y1, 2) * $tw + intdiv($x0 + $x1, 2);
         }
 
         $routes = self::routes($level);
@@ -2048,13 +2182,13 @@ final class DungeonGen
         }
 
         return [
-            'w' => self::TILE_W,
-            'h' => self::TILE_H,
-            'sub' => self::SUB,
+            'w' => $tw,
+            'h' => $th,
+            'sub' => $sub,
             'solid' => $solid,
             'owner' => $owner,
             'doors' => $doors,
-            'walls' => self::partitions($owner, $doors),
+            'walls' => self::partitions($owner, $doors, $tw),
             'stairs' => $stairs,
             'spines' => $spines,
             'shared' => $shared,
@@ -2086,8 +2220,9 @@ final class DungeonGen
      * @param  list<array{tile:int,dir:int,kind:string}> $doors
      * @return list<array{tile:int,dir:int}>
      */
-    private static function partitions(array $owner, array $doors): array
+    private static function partitions(array $owner, array $doors, ?int $tw = null): array
     {
+        $tw ??= self::TILE_W;
         // A doorway is a face that IS a way through. Both sides are already in
         // the list — see where it is built — so there is nothing to mirror.
         $ways = [];
@@ -2098,7 +2233,7 @@ final class DungeonGen
         $walls = [];
         // East and south name every face exactly once; each one is then
         // recorded again from the tile on its other side.
-        foreach ([1 => 1, 2 => self::TILE_W] as $dir => $off) {
+        foreach ([1 => 1, 2 => $tw] as $dir => $off) {
             foreach ($owner as $i => $o) {
                 if ($o === null) {
                     continue;

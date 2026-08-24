@@ -1,0 +1,11 @@
+{
+    "npc_key": "nessa_reth",
+    "name": "Nessa Reth",
+    "role": "Of the Tarrow Houses",
+    "description": "Mother Reth's granddaughter, raised on the oakum bench to know exactly what a hand is worth by the hour, and done with the Houses in a way she has not yet told anybody. She counts, out loud, and it makes people uncomfortable, which she enjoys.",
+    "sprite_key": "joss_frayle",
+    "dialog": "nessa_reth",
+    "place": {
+        "location": "the_oakum_house"
+    }
+}

@@ -1,0 +1,20 @@
+{
+    "encounter_key": "rest_cellar_rats",
+    "name": "Up the Drain",
+    "description": "They come out from behind the barrels in the flat, unhurried way of animals that have not been disturbed here before and have no reason to think they are about to be.",
+    "difficulty": "easy",
+    "monsters": [
+        {
+            "monster": "giant_rat",
+            "quantity": 4,
+            "rank": "front"
+        }
+    ],
+    "allow_flee": true,
+    "allow_parley": false,
+    "ambush": true,
+    "victory_flag": "cellar_rats_beaten",
+    "place": {
+        "location": "the_rest_cellar"
+    }
+}

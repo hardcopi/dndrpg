@@ -1,0 +1,432 @@
+{
+    "npc_key": "corran_sedge",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "flag": "weight_fate",
+                        "equals": "proved"
+                    }
+                ],
+                "text": "Corran Sedge has the ninety years of ledgers off the shelf and open on the floor in a row, and he is going back through them with a rule, quarter by quarter, from six years ago to last month.\n\n\"I am doing the arithmetic,\" he says. \"All of it. Every barge. It will take me until winter.\" He does not look up. \"I have wanted to do this for four years and I could not, because until somebody put that thing on a true beam I was a careful old man with a suspicion, and a careful old man with a suspicion is a nuisance.\"",
+                "choices": [
+                    {
+                        "label": "\"What will the total be?\"",
+                        "next": "the_total"
+                    },
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "weight_fate",
+                        "equals": "sold"
+                    }
+                ],
+                "text": "The box is back on the wall with a new seal on it. Sedge is at his desk with his hands flat on a closed ledger, and he does not open it while you are in the room.\n\n\"I know what you did,\" he says, pleasantly enough. \"I am not going to say anything. I am seventy-one and I have one key of three and no witnesses, and that is exactly the position I was in on Monday.\"\n\nHe pauses.\n\n\"I would only ask you not to come in here again.\"",
+                "choices": [
+                    {
+                        "label": "Go.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "weight_fate",
+                        "equals": "lie"
+                    }
+                ],
+                "text": "\"You put it back,\" Sedge says. \"So did I, four years ago, in my head, about eleven times.\"\n\nHe straightens a rule that is already straight.\n\n\"I am not going to pretend I think less of you for it. I would like to. I have not got the standing.\"",
+                "choices": [
+                    {
+                        "label": "Go.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "box_opened"
+                    }
+                ],
+                "text": "Sedge is doing nothing at all, which for him is an event. The ledger is shut. The rule is put away.\n\n\"It is out of the box,\" he says. \"After four years of it being in the box. I find I have no idea what to do with my hands.\"",
+                "choices": [
+                    {
+                        "label": "\"We put it on Vennik's beam.\"",
+                        "next": "to_venniks"
+                    },
+                    {
+                        "label": "\"Tell me about the filing again.\"",
+                        "next": "the_filing"
+                    },
+                    {
+                        "label": "Later.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "weight_suspected"
+                    }
+                ],
+                "text": "Corran Sedge looks up, sees who it is, and looks at the door behind you to see whether it shut.\n\n\"You came back,\" he says. \"People do not, usually. They come once, they get the ninety years of ledgers and the tour, and they go away satisfied.\"",
+                "choices": [
+                    {
+                        "label": "\"You want to tell me. Come somewhere you can.\"",
+                        "next": "the_ropewalk"
+                    },
+                    {
+                        "label": "\"Open the box.\"",
+                        "next": "the_three_keys"
+                    },
+                    {
+                        "label": "Not now.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "met_sedge"
+                    }
+                ],
+                "text": "\"Back again,\" says Sedge, and gets a ledger down without being asked, because a ledger is what he has instead of small talk.",
+                "choices": [
+                    {
+                        "label": "\"Tell me about the standard weight.\"",
+                        "next": "the_box"
+                    },
+                    {
+                        "label": "\"Show me the returns to Lathmere.\"",
+                        "next": "the_returns"
+                    },
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "The great beam settles, and settles again, and the old man at the desk writes down the second figure without hesitating over which one it was.\n\n\"Corran Sedge,\" he says. \"Weighmaster. Ninety years of ledgers on that wall and I have read all of them, which is a thing I say to strangers so that they will go away, and it works about half the time.\"\n\nHe puts the pen down.\n\n\"It is not working, is it.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_sedge"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "\"Tell me about the standard weight.\"",
+                        "next": "the_box"
+                    },
+                    {
+                        "label": "\"Show me the returns to Lathmere.\"",
+                        "next": "the_returns"
+                    },
+                    {
+                        "label": "\"Ninety years is a long time. What has changed?\"",
+                        "next": "what_changed"
+                    },
+                    {
+                        "label": "Leave him to his beam.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_box": [
+            {
+                "conditions": [
+                    {
+                        "flag": "box_opened"
+                    }
+                ],
+                "text": "\"It is out,\" Sedge says. \"There is nothing more I can tell you about the box. The box was never the interesting part.\"",
+                "choices": [
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ]
+            },
+            {
+                "text": "He does not look at the wall behind him, which is how you know exactly where the box is.\n\n\"The standard weight,\" he says. \"Bronze, cast in Lathmere, forty-one years old, and everything that comes into this city is weighed against it. Grain, timber, pitch, salt. The beam out there is calibrated to it every quarter-day and the calibration is signed by me.\"\n\n\"It lives in an iron box on that wall with three locks. Factor, Master Shipwright, Weighmaster. Three keys, three people, and nobody can open it alone. That was thought very clever when it was arranged and I have come round to thinking it is the stupidest arrangement in the Ythan League.\"",
+                "choices": [
+                    {
+                        "label": "\"Why stupid?\"",
+                        "next": "why_stupid"
+                    },
+                    {
+                        "label": "\"Open it.\"",
+                        "next": "the_three_keys"
+                    },
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ]
+            }
+        ],
+        "why_stupid": {
+            "text": "\"Because it takes three of us to open it,\" Sedge says, \"and one of us to have already opened it.\"\n\nHe lets that sit.\n\n\"Three locks means no man may be alone with it. Three locks does not mean no man has ever been alone with it. Those are different sentences and this city has spent forty-one years reading the wrong one.\"",
+            "on_enter": [
+                {
+                    "set_flag": "weight_suspected"
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"You think it has been got at.\"",
+                    "next": "he_will_not_say"
+                },
+                {
+                    "label": "\"Open it and let us see.\"",
+                    "next": "the_three_keys"
+                }
+            ]
+        },
+        "he_will_not_say": {
+            "text": "Sedge looks at the open door of his own weigh house, and at the two men on the floor, and at the cart standing on the plate.\n\n\"I think,\" he says, carefully, \"that I am a weighmaster of seventy-one in a shed with no door on it, and that I have one key of three, and that if I say a sentence of that shape in this room it will be in Highstrand by supper and I will not be weighmaster in the morning, and the next one will be somebody's cousin.\"\n\nHe picks the pen back up.\n\n\"That is all I have got. I am sorry. It is not much of an answer and I have been giving it to myself for four years.\"",
+            "choices": [
+                {
+                    "label": "\"Then come somewhere with no door and no room.\"",
+                    "next": "the_ropewalk"
+                },
+                {
+                    "label": "\"Four years.\"",
+                    "next": "four_years"
+                },
+                {
+                    "label": "Leave it.",
+                    "end": true
+                }
+            ]
+        },
+        "four_years": {
+            "text": "\"Four years,\" Sedge agrees. \"I noticed it in a ledger. That is the only way I notice anything. I do the same twelve sums every quarter and one of them stopped closing, by a very little, and it went on not closing.\"\n\n\"I checked my own arithmetic for a year and a half before I let myself think it might not be mine.\"\n\nHe almost smiles.\n\n\"You may take from that whatever you like about the character of weighmasters.\"",
+            "choices": [
+                {
+                    "label": "\"Come somewhere you can talk.\"",
+                    "next": "the_ropewalk"
+                },
+                {
+                    "label": "Leave him.",
+                    "end": true
+                }
+            ]
+        },
+        "the_ropewalk": {
+            "text": "He does not say yes and he does not say no. He puts the pen down and looks at the floor of his own weigh house for long enough that one of the men on the plate calls out to ask whether he is well.\n\n\"There is nowhere,\" he says. \"That is what you do not understand about this city. There is no room in Waerhaven that is not somebody's.\"",
+            "choices": [
+                {
+                    "label": "\"The Ropehouse. Three hundred and eighty metres, and you can see both ends.\"",
+                    "tag": "SAILOR",
+                    "conditions": [
+                        {
+                            "origin": "sailor"
+                        }
+                    ],
+                    "next": "he_agrees"
+                },
+                {
+                    "label": "\"Then walk with me and say it out of doors.\"",
+                    "check": {
+                        "skill": "persuasion",
+                        "dc": 13,
+                        "on_success": "he_agrees",
+                        "on_failure": "he_shuts_up"
+                    }
+                },
+                {
+                    "label": "\"You have got a key. Use it and say nothing at all.\"",
+                    "check": {
+                        "skill": "intimidation",
+                        "dc": 16,
+                        "on_success": "he_agrees",
+                        "on_failure": "he_shuts_up"
+                    }
+                },
+                {
+                    "label": "Leave it.",
+                    "end": true
+                }
+            ]
+        },
+        "he_agrees": {
+            "text": "The ropewalk is empty at the noon hour and you can see two hundred metres of it in both directions, and Corran Sedge stands in the middle of that and puts his hands behind his back like a man about to be sentenced.\n\n\"Six years ago,\" he says, \"the returns to Lathmere and the weight of grain on my own floor stopped agreeing. Not by much. Four ounces in the quarter. Nobody argues about four ounces; there is not a scale on this shore that will hold four ounces against a wind.\"\n\n\"Four ounces in the quarter, over six years, on the grain alone, is nine weeks of this city's bread.\"\n\nHe turns and looks down the empty walk.\n\n\"I have not got a name for you. I have got a number and one key of three and no standing whatsoever, and I am asking you, please, to take my key and find somebody with a beam that does not belong to the League.\"",
+            "on_enter": [
+                {
+                    "set_flag": "box_opened"
+                },
+                {
+                    "quest_stage": {
+                        "quest": "the_short_weight",
+                        "stage": "the_box_open"
+                    }
+                },
+                {
+                    "xp": 120
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"Vennik has a beam under a glass dome.\"",
+                    "next": "to_venniks"
+                },
+                {
+                    "label": "\"Who else could have got at it?\"",
+                    "next": "the_three_keys"
+                }
+            ]
+        },
+        "he_shuts_up": {
+            "text": "Sedge waits until you have finished, and then goes back to the ledger, and the whole of him closes like a press.\n\n\"You have been very clear,\" he says. \"I will consider it. Please shut the gate on the plate side when you go, the ox gets out.\"\n\nHe does not look up again. Whatever he was three sentences away from saying has gone back where it has lived for four years, and it is going to stay there for anybody who arrives in this room and asks him for it directly.",
+            "on_enter": [
+                {
+                    "set_flag": "sedge_closed"
+                }
+            ],
+            "choices": [
+                {
+                    "label": "Go.",
+                    "end": true
+                }
+            ]
+        },
+        "the_three_keys": [
+            {
+                "conditions": [
+                    {
+                        "flag": "sedge_closed"
+                    }
+                ],
+                "text": "\"Three keys,\" Sedge says, \"and I hold one, and I have told you what I am going to tell you.\"\n\nHe does not look up.",
+                "choices": [
+                    {
+                        "label": "Go.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "\"Factor Culm has the second,\" Sedge says. \"He has had it eleven months and I do not believe he has ever taken it out of the drawer. He is not a fool but he is a man doing one enormous piece of arithmetic in his head at all times, and it is not this one.\"\n\n\"Master Halloway has the third. She has had hers for nineteen years.\"\n\nHe closes the ledger.\n\n\"And the man who had the Factor's key before Culm was recalled to Lathmere six years ago with a commendation, and the seal on that box was renewed the same season, and the wax on it now is not as old as the box is. I did not say any of that.\"",
+                "choices": [
+                    {
+                        "label": "\"Come and say it somewhere safe.\"",
+                        "next": "the_ropewalk"
+                    },
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ]
+            }
+        ],
+        "to_venniks": {
+            "text": "\"Vennik Tallowglass,\" Sedge says, and for the first time there is something in his face other than care. \"Yes. Yes. A gnome of Lathmere with a beam that will read a letter, who reports everything he sees to the League and who has, I notice, stopped sending as much as he used to.\"\n\nHe takes a key off a cord round his neck — off his neck, not out of a drawer — and puts it into your hand still warm.\n\n\"Two more,\" he says. \"And then a walk up the hill carrying fourteen pounds of bronze that everybody in this city can recognise. Do it at the noon hour. Nobody looks at anything at the noon hour.\"",
+            "choices": [
+                {
+                    "label": "\"I have the Factor's and the Master's already.\"",
+                    "conditions": [
+                        {
+                            "flag": "culm_key_given"
+                        },
+                        {
+                            "flag": "gedda_key_given"
+                        }
+                    ],
+                    "next": "all_three"
+                },
+                {
+                    "label": "Take it.",
+                    "end": true
+                }
+            ]
+        },
+        "the_filing": {
+            "text": "\"Underneath,\" Sedge says. \"Where the stamp is. Which is the only face of it a man setting it on a beam never looks at, because the stamp is what tells you it is the right weight and once you have seen the stamp you stop looking.\"\n\n\"It is filed, not cast short. You can see the strokes. Somebody sat down with it in their lap and took four ounces off it over an evening, and put it back, and let the wax cool.\"\n\nHe rubs his eyes.\n\n\"Whoever did it understood exactly one thing very well: that a lie about a weight does not have to be believed. It only has to be heavier than the doubt.\"",
+            "choices": [
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "the_returns": [
+            {
+                "conditions": [
+                    {
+                        "flag": "granary_lie_known"
+                    }
+                ],
+                "text": "\"You have seen the Factor's,\" Sedge says. \"Then you will have noticed that mine and his do not say the same thing, and that mine is the one nobody in Lathmere has ever asked for.\"",
+                "choices": [
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ]
+            },
+            {
+                "text": "He has them out in a moment, because they are the thing he is proudest of.\n\n\"Every quarter for ninety years. What came through the gate, what came off a keel, what it weighed and what it was charged.\" He turns a page with real affection. \"Two weighmasters before me kept it badly and were made to do it again. There is not another record like it on the Mere.\"\n\n\"The Factor's return to Lathmere is a different document, mind. His is what the city holds. Mine is what the city received. Nobody in ninety years has ever put the two side by side, because they measure different things and there is no reason to.\"\n\nHe stops.\n\n\"There is no reason to,\" he says again, slightly differently.",
+                "on_enter": [
+                    {
+                        "set_flag": "weight_suspected"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "\"Put them side by side.\"",
+                        "next": "he_will_not_say"
+                    },
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ]
+            }
+        ],
+        "what_changed": {
+            "text": "\"In ninety years?\" Sedge says. \"Everything, and nothing that matters. The tare on a timber cart. The number of hands on the Boom. Whether the Fish Hall's price is written down.\"\n\nHe thinks about it properly, which is what he does instead of being polite.\n\n\"The traffic has changed. Six years ago this city started taking in people it is not allowed to have, and every one of them eats, and not one of them appears in a single figure I am permitted to write. I keep the most complete record of anything in Waerhaven and it has a hole in it the size of a suburb.\"",
+            "choices": [
+                {
+                    "label": "\"And the weight?\"",
+                    "next": "the_box"
+                },
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "the_total": {
+            "text": "\"Nine weeks,\" Sedge says. \"Give or take four days, and I will have the four days by Michaelmas.\"\n\nHe sits back.\n\n\"Nine weeks of bread for twenty-six thousand people, taken four ounces at a time, over six years, by somebody who has almost certainly never once thought of it as taking anything. That is what I have got to say to Lathmere and it will fit on one side of a sheet.\"\n\nHe looks at the row of open ledgers on the floor.\n\n\"Ninety years of this, and the useful part of it fits on one side of a sheet. I find I do not mind.\"",
+            "choices": [
+                {
+                    "label": "Leave him to it.",
+                    "end": true
+                }
+            ]
+        },
+        "all_three": {
+            "text": "Corran Sedge looks at the three keys lying in your hand and does not say anything for rather a long time.\n\n\"Forty-one years,\" he says at last. \"That box was made in the year I was born and there has never once been a day when all three of those were in one place.\"\n\nHe picks up his rule, puts it down, picks it up again.\n\n\"That was thought very clever when it was arranged. And what it actually did was make sure that for forty-one years nobody has ever looked, and that the one man who wanted to look could not, and that the only person who could ever get all three together was somebody with no business having any of them.\"\n\nHe almost laughs.\n\n\"That is you. A stranger off the Hallowgate road. That is what forty-one years of very careful arrangement has produced.\"",
+            "choices": [
+                {
+                    "label": "Go to Vennik's.",
+                    "end": true
+                }
+            ]
+        }
+    }
+}

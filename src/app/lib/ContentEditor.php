@@ -40,6 +40,12 @@ class ContentEditor
 
     private const REGION_TYPES = ['town', 'wilderness', 'dungeon'];
 
+    /** Mirrors ITEM_TYPES in tools/load_content.py. */
+    private const ITEM_TYPES = ['weapon', 'armor', 'potion', 'scroll', 'misc', 'treasure'];
+
+    /** Mirrors ITEM_SLOTS in tools/load_content.py. */
+    private const ITEM_SLOTS = ['ring', 'amulet', 'cloak', 'boots'];
+
     private PDO $db;
 
     /** The world's flag read/write sets, gathered once per request. */
@@ -1215,23 +1221,92 @@ class ContentEditor
     }
 
     /**
-     * The module's first region as the chart payload WorldMap.svg already draws.
+     * One region of a module, as the chart payload WorldMap.svg already draws.
+     *
+     * A module can have several maps — Rivermark is a town, a road, a fen, a
+     * warren. The first region is the default so a new studio still opens on
+     * something, but `$regionId` is how the desk switches. A generated delve
+     * floor (`_dg_%`) is a party's scratch and is not offered.
      *
      * Every node is visited: this is the GM's copy, not a party's fog. The
-     * start room is marked current so the chart has a "here" to sit on.
+     * start room is marked current when it sits on this map; otherwise the
+     * first place on the map is, so the chart has a "here" to sit on.
      */
-    public function moduleChart(int $moduleId, ?int $hereId = null): array
+    public function moduleChart(int $moduleId, ?int $hereId = null, ?int $regionId = null): array
     {
         $module = $this->getModule($moduleId);
-        $stmt = $this->db->prepare(
-            'SELECT * FROM regions WHERE module_id = ? ORDER BY sort_order, id LIMIT 1'
+
+        $listed = $this->db->prepare(
+            'SELECT id, region_key, name, region_type
+               FROM regions
+              WHERE module_id = ? AND region_key NOT LIKE \'_dg_%\'
+              ORDER BY sort_order, id'
         );
-        $stmt->execute([$moduleId]);
+        $listed->execute([$moduleId]);
+        $listed = $listed->fetchAll();
+
+        // A "here" without a map: sit on the map that place is actually on,
+        // so walking an exit into the wilds does not leave you looking at
+        // the town.
+        if ($hereId !== null && $regionId === null) {
+            $fromHere = $this->db->prepare(
+                'SELECT l.region_id FROM locations l
+                  INNER JOIN regions r ON r.id = l.region_id
+                 WHERE l.id = ? AND r.module_id = ?'
+            );
+            $fromHere->execute([$hereId, $moduleId]);
+            $got = $fromHere->fetchColumn();
+            if ($got !== false) {
+                $regionId = (int) $got;
+            }
+        }
+
+        $pickId = null;
+        if ($regionId !== null) {
+            foreach ($listed as $row) {
+                if ((int) $row['id'] === $regionId) {
+                    $pickId = $regionId;
+                    break;
+                }
+            }
+            if ($pickId === null) {
+                throw new InvalidArgumentException('That map is not in this adventure.');
+            }
+        } elseif ($listed) {
+            $pickId = (int) $listed[0]['id'];
+        }
+
+        if ($pickId === null) {
+            return [
+                'region_id'   => null,
+                'region_key'  => null,
+                'name'        => $module['name'],
+                'region_type' => 'dungeon',
+                'nodes'       => [],
+                'edges'       => [],
+                'neighbors'   => [],
+                'floorplan'   => null,
+                'plan'        => null,
+                'regions'     => [],
+            ];
+        }
+
+        $stmt = $this->db->prepare('SELECT * FROM regions WHERE id = ?');
+        $stmt->execute([$pickId]);
         $region = $stmt->fetch();
         if (!$region) {
-            return ['region_id' => null, 'region_key' => null, 'name' => $module['name'],
-                    'region_type' => 'dungeon', 'nodes' => [], 'edges' => [],
-                    'neighbors' => [], 'floorplan' => null];
+            return [
+                'region_id'   => null,
+                'region_key'  => null,
+                'name'        => $module['name'],
+                'region_type' => 'dungeon',
+                'nodes'       => [],
+                'edges'       => [],
+                'neighbors'   => [],
+                'floorplan'   => null,
+                'plan'        => null,
+                'regions'     => $listed,
+            ];
         }
 
         $locs = $this->db->prepare(
@@ -1250,7 +1325,7 @@ class ContentEditor
             }
         }
         if ($hereId === null) {
-            $hereId = $startId;
+            $hereId = $startId ?? ($rows ? (int) $rows[0]['id'] : null);
         }
 
         $nodes = [];
@@ -1318,6 +1393,7 @@ class ContentEditor
             'floorplan'   => $floorplan,
             'plan'        => !empty($region['plan_json'])
                 ? json_decode((string) $region['plan_json'], true) : null,
+            'regions'     => $listed,
         ];
     }
 
@@ -1451,7 +1527,7 @@ class ContentEditor
 
         return [
             'plan'  => $plan,
-            'chart' => $this->moduleChart((int) $region['module_id']),
+            'chart' => $this->moduleChart((int) $region['module_id'], null, $regionId),
         ];
     }
 
@@ -2107,6 +2183,220 @@ class ContentEditor
         return $this->getLocation((int) $locId);
     }
 
+    // =======================================================================
+    // Items
+    // =======================================================================
+
+    /**
+     * The shared catalogue. Not scoped to a module — a longsword is a
+     * longsword, the same rule as a goblin.
+     */
+    public function listItems(): array
+    {
+        return $this->db->query(
+            'SELECT id, item_key, name, item_type, rarity, value_gp, slot
+               FROM items ORDER BY item_type, name'
+        )->fetchAll();
+    }
+
+    public function getItem(int $id): array
+    {
+        $stmt = $this->db->prepare('SELECT * FROM items WHERE id = ?');
+        $stmt->execute([$id]);
+        $row = $stmt->fetch();
+        if (!$row) {
+            throw new InvalidArgumentException('No such item.');
+        }
+        $props = json_decode((string) ($row['properties'] ?? ''), true);
+        $row['properties'] = is_array($props) ? $props : [];
+        return $row;
+    }
+
+    /**
+     * Create or rewrite an item in the shared catalogue.
+     *
+     * Identified by `id` when the caller has one and by `item_key` otherwise.
+     * The key is editable: inventory and drops hold ids, so renaming one
+     * repoints nothing. The next export writes the new name into the file.
+     */
+    public function saveItem(array $data): array
+    {
+        $key = $this->requireKey($data['item_key'] ?? '', 'item');
+        if (mb_strlen($key) > 60) {
+            throw new InvalidArgumentException('That key is too long for the column (60).');
+        }
+
+        $id = isset($data['id']) && $data['id'] !== null && $data['id'] !== ''
+            ? (int) $data['id'] : null;
+
+        $clash = $this->db->prepare('SELECT id FROM items WHERE item_key = ?');
+        $clash->execute([$key]);
+        $found = $clash->fetchColumn();
+        if ($found !== false && $id === null) {
+            $id = (int) $found;
+        } elseif ($found !== false && (int) $found !== $id) {
+            throw new InvalidArgumentException("There is already an item keyed {$key}.");
+        }
+        if ($id !== null) {
+            $this->getItem($id);
+        }
+
+        $name = trim((string) ($data['name'] ?? ''));
+        if ($name === '') {
+            throw new InvalidArgumentException('An item needs a name.');
+        }
+        if (mb_strlen($name) > 100) {
+            throw new InvalidArgumentException('That name is too long for the column (100).');
+        }
+
+        $type = trim((string) ($data['item_type'] ?? ''));
+        if (!in_array($type, self::ITEM_TYPES, true)) {
+            throw new InvalidArgumentException(
+                'An item type is one of: ' . implode(', ', self::ITEM_TYPES) . '.'
+            );
+        }
+
+        $rarity = trim((string) ($data['rarity'] ?? 'common'));
+        if ($rarity === '') {
+            $rarity = 'common';
+        }
+        if (mb_strlen($rarity) > 30) {
+            throw new InvalidArgumentException('That rarity is too long for the column (30).');
+        }
+
+        $slot = $this->nullIfBlank($data['slot'] ?? null);
+        if ($slot !== null) {
+            if (!in_array($slot, self::ITEM_SLOTS, true)) {
+                throw new InvalidArgumentException(
+                    'A slot is one of: ' . implode(', ', self::ITEM_SLOTS) . '.'
+                );
+            }
+        }
+
+        $props = $data['properties'] ?? [];
+        if (is_string($props)) {
+            $trim = trim($props);
+            $props = $trim === '' ? [] : json_decode($trim, true);
+            if (!is_array($props)) {
+                throw new InvalidArgumentException('Properties is a JSON object.');
+            }
+        }
+        if (!is_array($props)) {
+            throw new InvalidArgumentException('Properties is a JSON object.');
+        }
+        if ($props !== [] && array_is_list($props)) {
+            throw new InvalidArgumentException('Properties is a JSON object, not a list.');
+        }
+        $use = $props['use_effect'] ?? null;
+        if (is_array($use) && isset($use['cast'])) {
+            $spell = trim((string) $use['cast']);
+            if ($spell !== '') {
+                $ok = $this->db->prepare('SELECT 1 FROM spells WHERE spell_key = ?');
+                $ok->execute([$spell]);
+                if ($ok->fetchColumn() === false) {
+                    throw new InvalidArgumentException("No spell keyed {$spell}.");
+                }
+            }
+        }
+        $propsJson = $props === [] ? null : json_encode(
+            $props,
+            JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
+        );
+
+        $weight = $data['weight'] ?? 0;
+        if ($weight === '' || $weight === null) {
+            $weight = 0;
+        }
+        if (!is_numeric($weight) || (float) $weight < 0) {
+            throw new InvalidArgumentException('Weight cannot be less than nothing.');
+        }
+
+        $value = $data['value_gp'] ?? 0;
+        if ($value === '' || $value === null) {
+            $value = 0;
+        }
+        $value = (int) $value;
+        if ($value < 0) {
+            throw new InvalidArgumentException('A price cannot be less than nothing.');
+        }
+
+        $armorBonus = null;
+        if (isset($data['armor_bonus']) && $data['armor_bonus'] !== '' && $data['armor_bonus'] !== null) {
+            $armorBonus = (int) $data['armor_bonus'];
+        }
+
+        $fields = [
+            $key,
+            $name,
+            $this->nullIfBlank($data['description'] ?? null),
+            $type,
+            $rarity,
+            (float) $weight,
+            $value,
+            $this->nullIfBlank($data['damage_dice'] ?? null),
+            $this->nullIfBlank($data['damage_type'] ?? null),
+            $armorBonus,
+            $this->nullIfBlank($data['armor_type'] ?? null),
+            $slot,
+            $propsJson,
+            $this->nullIfBlank($data['icon'] ?? null),
+        ];
+
+        if ($id === null) {
+            $this->db->prepare(
+                'INSERT INTO items
+                     (item_key, name, description, item_type, rarity, weight, value_gp,
+                      damage_dice, damage_type, armor_bonus, armor_type, slot,
+                      properties, icon)
+                 VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)'
+            )->execute($fields);
+            $id = (int) $this->db->lastInsertId();
+        } else {
+            $fields[] = $id;
+            $this->db->prepare(
+                'UPDATE items
+                    SET item_key = ?, name = ?, description = ?, item_type = ?,
+                        rarity = ?, weight = ?, value_gp = ?, damage_dice = ?,
+                        damage_type = ?, armor_bonus = ?, armor_type = ?,
+                        slot = ?, properties = ?, icon = ?
+                  WHERE id = ?'
+            )->execute($fields);
+        }
+
+        return $this->getItem($id);
+    }
+
+    /**
+     * Remove an item from the catalogue.
+     *
+     * Refuses if anybody is carrying it: cascading that would empty a pack
+     * from the copy desk. Ground drops and shop stock go with it (the FKs
+     * already say so). The file under content/items/ is removed when we can
+     * write there, so the next load does not put the row back.
+     */
+    public function deleteItem(int $id): array
+    {
+        $item = $this->getItem($id);
+        $held = $this->db->prepare(
+            'SELECT COUNT(*) FROM character_inventory WHERE item_id = ?'
+        );
+        $held->execute([$id]);
+        $n = (int) $held->fetchColumn();
+        if ($n > 0) {
+            throw new InvalidArgumentException(
+                $n === 1
+                    ? 'Someone is carrying this. Take it off them first.'
+                    : "{$n} characters are carrying this. Take it off them first."
+            );
+        }
+        $this->db->prepare('DELETE FROM items WHERE id = ?')->execute([$id]);
+        $path = APP_ROOT . '/content/items/' . $item['item_key'] . '.json';
+        if (is_file($path) && is_writable($path)) {
+            unlink($path);
+        }
+        return ['deleted' => true, 'item_key' => $item['item_key']];
+    }
+
     /**
      * Put a draft on the public shelf, or take it off.
      *
@@ -2122,15 +2412,25 @@ class ContentEditor
     }
 
     /**
-     * Cover art or a region plate, named for the key the renderer already uses.
+     * Cover art, a region plate, or an NPC bust.
      *
-     * No new column: a module cover is assets/images/modules/<key>.jpg and a
-     * town plate is assets/images/maps/<region_key>.png. A dungeon does not
-     * take a plate — the plan is the map.
+     * No new column: a module cover is assets/images/modules/<key>.jpg, a
+     * town plate is assets/images/maps/<region_key>.png, and a person is
+     * `<sprite>_bust.png` plus `<sprite>_face.png`. A dungeon does not take
+     * a plate — the plan is the map.
+     *
+     * A bust is the one picture the user paints. The face is cut from the
+     * top of it, the same crop tools/cut_face.py uses, because two separate
+     * generations of "a weathered miner" are two different men.
      */
-    public function saveArt(string $kind, string $key, string $payload): array
+    public function saveArt(string $kind, string $key, string $payload, ?int $npcId = null): array
     {
-        $key = $this->requireKey($key, $kind === 'cover' ? 'module' : 'region');
+        $which = match ($kind) {
+            'cover' => 'module',
+            'npc'   => 'sprite',
+            default => 'region',
+        };
+        $key = $this->requireKey($key, $which);
         if ($kind === 'cover') {
             $found = $this->db->prepare('SELECT id FROM modules WHERE module_key = ?');
             $found->execute([$key]);
@@ -2159,10 +2459,129 @@ class ContentEditor
             $this->writeImage($payload, $path, 'png');
             return ['kind' => 'plate', 'key' => $key, 'path' => 'assets/images/maps/' . $key . '.png'];
         }
-        throw new InvalidArgumentException('Art is a cover or a plate.');
+        if ($kind === 'npc') {
+            $im = $this->decodeImage($payload);
+            $dir = APP_ROOT . '/assets/images/npcs/';
+            $bustRel = 'assets/images/npcs/' . $key . '_bust.png';
+            $faceRel = 'assets/images/npcs/' . $key . '_face.png';
+            try {
+                $this->writeGd($im, $dir . $key . '_bust.png', 'png');
+                $face = $this->faceFromBust($im);
+                $this->writeGd($face, $dir . $key . '_face.png', 'png');
+                imagedestroy($face);
+            } finally {
+                imagedestroy($im);
+            }
+            if ($npcId !== null && $npcId > 0) {
+                $this->getNpc($npcId);
+                $this->db->prepare('UPDATE npcs SET sprite_key = ? WHERE id = ?')
+                    ->execute([$key, $npcId]);
+            }
+            return [
+                'kind' => 'npc',
+                'key'  => $key,
+                'bust' => $bustRel,
+                'face' => $faceRel,
+                'path' => $bustRel,
+            ];
+        }
+        throw new InvalidArgumentException('Art is a cover, a plate or a person.');
     }
 
-    private function writeImage(string $payload, string $path, string $format): void
+    /**
+     * A square of head, cut from the top of a bust and sized to FACE_PX.
+     *
+     * Port of tools/cut_face.py. Kept here rather than shelled out because
+     * the PHP image is already in memory, and because a missing face is the
+     * hole this upload exists to close — handing it to a script that may
+     * not be on the path would leave the bust saved and the save refused.
+     */
+    private function faceFromBust(\GdImage $bust): \GdImage
+    {
+        $w = imagesx($bust);
+        $h = imagesy($bust);
+        [$left0, $top0, $right0, $bottom0] = $this->subjectBox($bust);
+        $subjectH = max(1, $bottom0 - $top0);
+        $side = max(16, (int) ($subjectH * 0.44));
+        $side = min($side, $w, $h);
+        $top = max(0, $top0 - (int) ($side * 0.06));
+        $top = min($top, max(0, $h - $side));
+        $cx = $this->headCentreX($bust, $top, max(1, intdiv($side, 2)));
+        $left = max(0, min($cx - intdiv($side, 2), $w - $side));
+
+        $facePx = Paperdoll::FACE_PX;
+        $face = imagecreatetruecolor($facePx, $facePx);
+        imagealphablending($face, false);
+        imagesavealpha($face, true);
+        $clear = imagecolorallocatealpha($face, 0, 0, 0, 127);
+        imagefilledrectangle($face, 0, 0, $facePx, $facePx, $clear);
+        imagecopyresampled($face, $bust, 0, 0, $left, $top, $facePx, $facePx, $side, $side);
+        return $face;
+    }
+
+    /** @return array{0:int,1:int,2:int,3:int} left, top, right, bottom */
+    private function subjectBox(\GdImage $im): array
+    {
+        $w = imagesx($im);
+        $h = imagesy($im);
+        $minX = $w;
+        $minY = $h;
+        $maxX = -1;
+        $maxY = -1;
+        for ($y = 0; $y < $h; $y++) {
+            for ($x = 0; $x < $w; $x++) {
+                $a = ((imagecolorat($im, $x, $y) & 0x7F000000) >> 24);
+                if ($a >= 120) {
+                    continue;
+                }
+                if ($x < $minX) {
+                    $minX = $x;
+                }
+                if ($x > $maxX) {
+                    $maxX = $x;
+                }
+                if ($y < $minY) {
+                    $minY = $y;
+                }
+                if ($y > $maxY) {
+                    $maxY = $y;
+                }
+            }
+        }
+        if ($maxX < 0) {
+            return [0, 0, $w, $h];
+        }
+        return [$minX, $minY, $maxX + 1, $maxY + 1];
+    }
+
+    private function headCentreX(\GdImage $im, int $top, int $depth): int
+    {
+        $w = imagesx($im);
+        $h = imagesy($im);
+        $bottom = min($h, $top + $depth);
+        $minX = $w;
+        $maxX = -1;
+        for ($y = $top; $y < $bottom; $y++) {
+            for ($x = 0; $x < $w; $x++) {
+                $a = ((imagecolorat($im, $x, $y) & 0x7F000000) >> 24);
+                if ($a >= 120) {
+                    continue;
+                }
+                if ($x < $minX) {
+                    $minX = $x;
+                }
+                if ($x > $maxX) {
+                    $maxX = $x;
+                }
+            }
+        }
+        if ($maxX < 0) {
+            return intdiv($w, 2);
+        }
+        return intdiv($minX + $maxX + 1, 2);
+    }
+
+    private function decodeImage(string $payload): \GdImage
     {
         if (preg_match('#^data:image/[\w+.-]+;base64,#', $payload)) {
             $payload = substr($payload, (int) strpos($payload, ',') + 1);
@@ -2178,13 +2597,32 @@ class ContentEditor
         if ($im === false) {
             throw new InvalidArgumentException('That file is not a PNG or JPEG.');
         }
+        return $im;
+    }
+
+    private function writeImage(string $payload, string $path, string $format): void
+    {
+        $im = $this->decodeImage($payload);
+        try {
+            $this->writeGd($im, $path, $format);
+        } finally {
+            imagedestroy($im);
+        }
+    }
+
+    private function writeGd(\GdImage $im, string $path, string $format): void
+    {
         $dir = dirname($path);
         if (!is_dir($dir) || !is_writable($dir)) {
-            imagedestroy($im);
             throw new InvalidArgumentException('Cannot write art to ' . $dir . '.');
         }
-        $ok = $format === 'jpeg' ? imagejpeg($im, $path, 88) : imagepng($im, $path);
-        imagedestroy($im);
+        if ($format === 'jpeg') {
+            $ok = imagejpeg($im, $path, 88);
+        } else {
+            imagealphablending($im, false);
+            imagesavealpha($im, true);
+            $ok = imagepng($im, $path);
+        }
         if (!$ok) {
             throw new InvalidArgumentException('The image could not be written.');
         }

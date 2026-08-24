@@ -1,0 +1,430 @@
+{
+    "npc_key": "sister_nairn",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "flag": "mere_fate",
+                        "equals": "answered"
+                    }
+                ],
+                "expression": 2,
+                "text": "The back room is open and empty and has been swept, and the door is propped with a stone so that it cannot shut.\n\n\"Six years of it went over that rail in one afternoon,\" says Sister Nairn, \"with the whole district on the shingle and every single one named aloud by the person who threw it. Four hours. Nobody left.\"\n\nShe looks at the water.\n\n\"Nothing has come back. That is not forgiveness. I want to be very clear with you about that, because everybody in Old Waer has decided it is, and I have not got the standing to argue with a district that has started sleeping again.\"",
+                "choices": [
+                    {
+                        "label": "\"Then what is it?\"",
+                        "next": "not_forgiveness"
+                    },
+                    {
+                        "label": "Leave her to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "mere_fate",
+                        "equals": "quiet"
+                    }
+                ],
+                "expression": 5,
+                "text": "The back room is locked. Sister Nairn checks the lock after she has locked it, and then checks it again, which she did not use to do twice.\n\n\"It is quiet,\" she says. \"You agreed and I am grateful and I have been grateful every day since in a way I do not much care for.\"\n\nShe puts the key back inside her collar.\n\n\"There were eleven more on the shingle on Tuesday. I have had to unlock it after all. That is the only thing I am going to say about it.\"",
+                "choices": [
+                    {
+                        "label": "Say nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "drowned_room_beaten"
+                    }
+                ],
+                "expression": 4,
+                "text": "Sister Nairn has been standing at the rail for some time and has not thrown anything over it.\n\n\"You have been in the room,\" she says. \"You need not describe it. I was mate on a grain hoy for nineteen years and I have had one recurring dream since I was twenty-six and you have just been standing in it.\"",
+                "choices": [
+                    {
+                        "label": "\"They were laid out. Recently.\"",
+                        "next": "laid_out"
+                    },
+                    {
+                        "label": "\"What do you want to do?\"",
+                        "next": "the_choice"
+                    },
+                    {
+                        "label": "Not yet.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "offerings_seen"
+                    }
+                ],
+                "expression": 3,
+                "text": "\"You have seen them,\" says Sister Nairn, \"so we are past the part where I decide whether to tell you, and I find I am enormously relieved and also would quite like you to leave.\"",
+                "choices": [
+                    {
+                        "label": "\"How many are there?\"",
+                        "next": "how_many"
+                    },
+                    {
+                        "label": "\"What do we do?\"",
+                        "next": "the_choice"
+                    },
+                    {
+                        "label": "Later.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "met_nairn"
+                    }
+                ],
+                "text": "\"Back,\" says Sister Nairn, and goes on doing what she is doing, which is mopping a line of wet that runs from the rail inward across the nave floor and will be wet again in an hour.",
+                "choices": [
+                    {
+                        "label": "\"The room at the back.\"",
+                        "next": "the_room"
+                    },
+                    {
+                        "label": "\"Why is the floor wet in a line?\"",
+                        "next": "the_wet_line"
+                    },
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "There is no altar. The nave runs out to a rail over forty fathoms of open water and that is the whole of the arrangement, and it is considerably more frightening than a statue would be.\n\nThe woman mopping the floor has a sailor's forearms and a sailor's stance and does not look round.\n\n\"Sister Nairn,\" she says. \"Keeper. Offerings go over the rail, not onto anything. There is no collection, there is nothing to buy and there is nothing I can promise you.\"\n\nShe wrings the mop out.\n\n\"If you have come to ask what is down there, the answer the Temple gives is the Mere, and the answer I give is that I have been asking for nineteen years and the Temple's answer is better than mine.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_nairn"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "\"What is in the room at the back?\"",
+                        "next": "the_room"
+                    },
+                    {
+                        "label": "\"Why is the floor wet in a line?\"",
+                        "next": "the_wet_line"
+                    },
+                    {
+                        "label": "\"Ellsa Waer said to ask you how many.\"",
+                        "next": "how_many"
+                    },
+                    {
+                        "label": "Leave her to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_wet_line": {
+            "text": "Sister Nairn stops mopping.\n\n\"Because things come out of the water,\" she says, \"and they come out at the rail, and somebody carries them in.\"\n\nShe goes back to it.\n\n\"That is the true answer and it takes about four seconds and everybody who hears it decides I am being funny. Go on. Ask the other question.\"",
+            "choices": [
+                {
+                    "label": "\"What is in the room at the back?\"",
+                    "next": "the_room"
+                },
+                {
+                    "label": "\"How many?\"",
+                    "next": "how_many"
+                }
+            ]
+        },
+        "the_room": [
+            {
+                "conditions": [
+                    {
+                        "flag": "offerings_seen"
+                    }
+                ],
+                "expression": 3,
+                "text": "\"It is open,\" says Nairn. \"It has been open since you were last here. I have not gone in.\"",
+                "choices": [
+                    {
+                        "label": "\"How many are there?\"",
+                        "next": "how_many"
+                    },
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ]
+            },
+            {
+                "text": "Nairn puts the mop in the bucket and stands with both hands on the handle of it, which is what she does instead of folding her arms.\n\n\"Offerings,\" she says. \"That have come back.\"\n\nShe lets it sit.\n\n\"For six years. Thrown off that rail into forty fathoms with the tide going out, and found on the shingle at the foot of Old Waer three and four days later. Not weathered. Not fouled. A copper luck-piece that went in on a Tuesday comes out on a Friday warmer than the hand that finds it.\"\n\n\"I have been putting them in that room because throwing them back feels like an insult to something, and because the alternative is telling four hundred Waerfolk that the water they have been giving to for four hundred years has started giving back.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "nairn_told_you"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "\"Open it.\"",
+                        "next": "she_unlocks_it"
+                    },
+                    {
+                        "label": "\"Ellsa Waer told me to ask you how many.\"",
+                        "next": "how_many"
+                    },
+                    {
+                        "label": "Leave it locked.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "how_many": [
+            {
+                "conditions": [
+                    {
+                        "flag": "offerings_seen"
+                    }
+                ],
+                "expression": 4,
+                "text": "\"More than went in,\" says Nairn. \"That is the count and it is why I stopped counting.\"",
+                "choices": [
+                    {
+                        "label": "\"What do we do?\"",
+                        "next": "the_choice"
+                    },
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "nairn_told_you"
+                    }
+                ],
+                "expression": 4,
+                "text": "Nairn takes the key out from inside her collar and holds it without going anywhere.\n\n\"She would ask that,\" she says. \"Eighty-one years old and she goes straight to the one question I have arranged my whole life around not answering.\"\n\nShe unlocks the door.\n\n\"Come and see, then, and count them yourself, and tell me I am wrong. I would take that. I would take being told I am wrong by a stranger over another six years of this.\"",
+                "choices": [
+                    {
+                        "label": "Go in.",
+                        "next": "she_unlocks_it"
+                    }
+                ]
+            },
+            {
+                "text": "Nairn goes very still.\n\n\"That is not a question about offerings,\" she says. \"That is a question about arithmetic, and there is exactly one person on this shore who would think to ask it.\"\n\nShe wrings the mop out very carefully.\n\n\"You had better come and see the room.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "nairn_told_you"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Go in.",
+                        "next": "she_unlocks_it"
+                    }
+                ]
+            }
+        ],
+        "she_unlocks_it": {
+            "expression": 4,
+            "text": "It is a small dry room with shelves that were built for candles and hymnals, and it is full.\n\nCopper luck-pieces. A wedding ring. Fish-hooks bound in thread. A child's shoe. A carved wooden gull with the paint still on it. Eleven silver Waerfolk marriage-tokens, which are given once and thrown once and never made twice. None of it corroded. None of it fouled. A rope-end on the second shelf still smells of the tar it was dipped in.\n\n\"Six years,\" says Sister Nairn behind you.\n\n\"And here is what I have never said aloud. I have kept the Temple's book since I came ashore. Every offering given from that rail is written in it, because the giving is a sacrament and the sacraments are written.\"\n\nShe does not come into the room.\n\n\"There are things on those shelves that are not in the book.\"",
+            "on_enter": [
+                {
+                    "set_flag": "offerings_seen"
+                },
+                {
+                    "start_quest": "what_the_mere_gives_back"
+                },
+                {
+                    "quest_stage": {
+                        "quest": "what_the_mere_gives_back",
+                        "stage": "the_locked_room"
+                    }
+                },
+                {
+                    "xp": 150
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"Not in the book — meaning nobody threw them.\"",
+                    "next": "not_in_the_book"
+                },
+                {
+                    "label": "\"Show me one.\"",
+                    "next": "not_in_the_book"
+                }
+            ]
+        },
+        "not_in_the_book": {
+            "expression": 5,
+            "text": "She reaches past you and takes a thing off the second shelf without looking at it, which means she knows exactly where it is.\n\nA net-mender's bone needle, worn to a shine at the grip, with three notches cut in the shank.\n\n\"That is a Waer needle,\" she says. \"Those notches are a family mark and they belong to a house that has not had anybody in it for eleven years. Nobody threw this off my rail. Nobody has thrown anything off my rail on behalf of that house since the last of them died.\"\n\nShe puts it back.\n\n\"It came out of the water in April. And there are nine more like it, and one of them is a thing I threw off that rail myself, at my mother's burial, in the year I came ashore.\"",
+            "choices": [
+                {
+                    "label": "\"Then it is not giving them back. It is answering.\"",
+                    "next": "the_answer"
+                },
+                {
+                    "label": "\"Where do they come ashore?\"",
+                    "next": "where_ashore"
+                }
+            ]
+        },
+        "the_answer": {
+            "expression": 5,
+            "text": "Sister Nairn looks at you for a long moment and then sits down on the step of her own back room, which a keeper does not do.\n\n\"Yes,\" she says. \"Yes, that is it, that is the sentence, and I have not been able to make it in six years.\"\n\n\"It is not returning them. Returning would be all of them or none. It is choosing. Somebody down there is selecting, and sending, and about a tenth of what comes ashore was never thrown at all — it is being offered *to* us. In the same currency. In our own tokens.\"\n\nShe puts her head in her hands for a moment, professionally, the way you do a thing you have practised.\n\n\"And for six years I have been locking the correspondence in a cupboard.\"",
+            "choices": [
+                {
+                    "label": "\"Where do they come ashore?\"",
+                    "next": "where_ashore"
+                },
+                {
+                    "label": "\"What do you want to do?\"",
+                    "next": "the_choice"
+                }
+            ]
+        },
+        "where_ashore": {
+            "text": "\"The shingle under Old Waer,\" says Nairn, \"which is where anything in this harbour comes ashore, and which is the useless answer.\"\n\nShe gets up.\n\n\"The useful one is that they come up on the ebb, and only on the ebb, and never anywhere else on this shore. Not the North Horn. Not the Boom. Not the point.\"\n\n\"And there is one place in this harbour that fills and empties with the ebb and has done since before the piers were built, and the Waerfolk have a name for one room in it and use the name about once a generation.\"\n\nShe meets your eye.\n\n\"Under the old quay. The room that does not drain.\"",
+            "on_enter": [
+                {
+                    "quest_stage": {
+                        "quest": "what_the_mere_gives_back",
+                        "stage": "the_drowned_room"
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"I will go down.\"",
+                    "end": true
+                },
+                {
+                    "label": "\"What is in it?\"",
+                    "next": "the_choice"
+                }
+            ]
+        },
+        "laid_out": {
+            "expression": 5,
+            "text": "\"Laid out,\" Nairn repeats.\n\nShe puts both hands on the rail.\n\n\"Not sunk. Not dropped. Arranged, on a floor, under water that does not move, by something that has hands or something that has patience, and I cannot decide which of those two I would rather.\"\n\n\"Nineteen years I was at sea. I have hauled things up on a line that I did not look at twice. And every one of those was an accident of the water.\"\n\nShe turns round.\n\n\"This is not the water. The water is what it is being done through.\"",
+            "on_enter": [
+                {
+                    "quest_stage": {
+                        "quest": "what_the_mere_gives_back",
+                        "stage": "the_drowned_room"
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"So what do we do?\"",
+                    "next": "the_choice"
+                }
+            ]
+        },
+        "the_choice": [
+            {
+                "conditions": [
+                    {
+                        "flag": "drowned_room_beaten"
+                    }
+                ],
+                "expression": 4,
+                "text": "\"Two things,\" says Sister Nairn, \"and I have been standing at this rail for four days failing to choose between them, and I am going to make you do it, and I am aware that is a cowardice.\"\n\nShe holds up one hand.\n\n\"We answer. Every one of them goes back over this rail in one afternoon, in front of the whole district, and every single one is named aloud by the person who threw it. Not a service. A reply. Six years of correspondence answered in the same currency, publicly, so that whatever is down there knows it was heard and so that four hundred Waerfolk know their city heard it too.\"\n\nThe other hand.\n\n\"Or the room stays locked. The Temple stays quiet. The district goes on picking things off the shingle at dawn and not saying anything, which is what Old Waer is best at, and nobody has to find out what happens when you answer.\"",
+                "choices": [
+                    {
+                        "label": "\"Answer it.\"",
+                        "next": "the_answering"
+                    },
+                    {
+                        "label": "\"Keep it quiet.\"",
+                        "next": "the_quiet_choice"
+                    },
+                    {
+                        "label": "\"Not yet.\"",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "\"I do not know,\" says Sister Nairn, \"and I have decided to stop pretending that I am about to.\"\n\n\"But there is a room under the old quay that does not drain, and things come ashore on the ebb, and I have been keeping a locked cupboard rather than walking down twenty-two steps for six years.\"\n\nShe hands you the key on its cord.\n\n\"Go and look at the bottom of it. Then come back and we will both be looking at the same thing, which is more than I have had since I came ashore.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "what_the_mere_gives_back",
+                            "stage": "the_drowned_room"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Take the key.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_answering": {
+            "expression": 2,
+            "text": "Sister Nairn does not thank you. She goes and opens the back room and props the door with a stone so that it cannot shut, and then she goes out onto the shingle and starts telling people.\n\nIt takes four hours. Nobody leaves. Every piece goes over the rail into forty fathoms and every one is named aloud by whoever gave it — and the ten that nobody threw are named by Nairn herself, house by house, including the empty one.\n\nNothing comes back.\n\n\"That is not forgiveness,\" she says afterwards, hoarse, on the rail. \"I want that written down somewhere. It is a letter answered. We do not know what we have agreed to.\"",
+            "on_enter": [
+                {
+                    "quest_stage": {
+                        "quest": "what_the_mere_gives_back",
+                        "stage": "answered"
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"No. We do not.\"",
+                    "end": true
+                }
+            ]
+        },
+        "the_quiet_choice": {
+            "expression": 3,
+            "text": "Sister Nairn nods, and locks the back room, and checks the lock, and then checks it again.\n\n\"Thank you,\" she says, and means it, and it is awful.\n\n\"I have been alone with it for six years and what I wanted was not help. I have had four offers of help. What I wanted was one other person to look at the whole of it and agree that the right thing is to do nothing, so that it stops being my decision.\"\n\nShe puts the key back inside her collar.\n\n\"You have given me that. I am going to be grateful to you for it for a very long time and I do not think either of us should be pleased.\"",
+            "on_enter": [
+                {
+                    "quest_stage": {
+                        "quest": "what_the_mere_gives_back",
+                        "stage": "quiet"
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "Go.",
+                    "end": true
+                }
+            ]
+        },
+        "not_forgiveness": {
+            "expression": 3,
+            "text": "\"A reply,\" says Sister Nairn. \"That is all. Somebody wrote to this city for six years in the only language it had, and this city finally wrote back, and now it is a correspondence rather than a haunting.\"\n\nShe watches the water.\n\n\"And a correspondence goes on. That is what nobody on that shingle has thought about yet. They are sleeping because the shelves are empty.\"\n\nShe glances at the propped door.\n\n\"I left the room open. There will be more. There will be more and now we have told it that we are listening, and I would like you to be in the district when the next one comes ashore.\"",
+            "choices": [
+                {
+                    "label": "\"I will be.\"",
+                    "end": true
+                }
+            ]
+        }
+    }
+}

@@ -42,14 +42,14 @@ if (!session_character_id()) {
   -->
   <div class="game-shell">
     <!--
-      The fight's top line: the initiative ribbon and the round/turn header.
+      The fight's top line: the encounter, the round, whose turn it is.
 
       It is a child of the shell rather than of `#combat-root` so that it can
-      span BOTH columns — the ribbon is a row of tokens as long as the fight is,
-      and confined to the board's column it scrolled while 300px of rail sat
-      beside it doing nothing. ui-combat.js renders into it by id, the same
-      arrangement `#cbt-inspector` uses; the CSS below shows it only in a fight,
-      and the rail starts under it.
+      span BOTH columns — the board and the log — rather than sitting in the
+      board's column alone. Initiative is a list on the left of the board now,
+      so this row is only the facts you play the round off. ui-combat.js
+      renders into it by id, the same arrangement `#cbt-inspector` uses; the
+      CSS below shows it only in a fight, and the rail starts under it.
     -->
     <div class="cbt-top" id="cbt-top"></div>
 

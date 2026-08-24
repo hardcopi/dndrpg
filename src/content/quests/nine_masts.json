@@ -1,0 +1,75 @@
+{
+    "quest_key": "nine_masts",
+    "title": "Nine Masts",
+    "act": 1,
+    "description": "Nine seasoned masts are gone from the pond and the Moot wants them found before the League asks. They are not so much stolen as moved, and where they went is a question about who is quietly building a hull nobody ordered.",
+    "giver": "gedda_halloway",
+    "on_job_board": true,
+    "required_level": 2,
+    "rewards": {
+        "xp": 300,
+        "gold": 80,
+        "item": "caulkers_maul"
+    },
+    "stages": {
+        "count_the_pond": {
+            "title": "Count the pond",
+            "objective": "Take a pole and a tally-board out on the mast pond.",
+            "journal": "Gedda wants the count done again by somebody who is not a shipwright, because every shipwright in this city has a reason to come back with the number she already has.",
+            "target": {
+                "location": "the_mast_pond"
+            }
+        },
+        "the_dry_dock": {
+            "title": "Where nine masts could go",
+            "objective": "Nine great pines do not walk. Find out what moved them.",
+            "journal": "Nine short, and the pond has not been dragged, which means they went out on the surface in front of everybody. There is only one crane in Waerhaven that can lift a mast and only one dock warm enough to work one in.",
+            "target": {
+                "location": "the_dry_dock"
+            }
+        },
+        "the_beam_in_the_masts": {
+            "title": "The tenth mast",
+            "objective": "Ask about the beam at the Nine Masts.",
+            "journal": "Somebody painted a tenth mast on the beam over the fire and nobody will admit to it and nobody will paint it out, and a house of shipwrights does not leave a wrong thing standing over its own hearth for six months by accident.",
+            "target": {
+                "location": "the_nine_masts"
+            }
+        },
+        "found": {
+            "title": "Nine found",
+            "terminal": true,
+            "resolution": "found",
+            "outcome": "success",
+            "journal": "They are in the dry dock, under the Drennmark boat, dunnaged and chocked and being shaped. Not stolen. Moved, by shipwrights, at the end of their own shifts, for nothing. Gedda listened to the whole of it without her face doing anything at all.",
+            "effects": [
+                {
+                    "set_flag": "masts_fate",
+                    "value": "found"
+                },
+                {
+                    "set_flag": "tenth_mast_seen"
+                },
+                {
+                    "xp": 120
+                }
+            ]
+        },
+        "covered": {
+            "title": "Nine covered",
+            "terminal": true,
+            "resolution": "covered",
+            "outcome": "success",
+            "journal": "I gave the Moot a count of nine short and an honest account of the pond bottom, and left out where they went. The League will be told the pond lost them. Somebody in this city now has nine masts and a year.",
+            "effects": [
+                {
+                    "set_flag": "masts_fate",
+                    "value": "covered"
+                },
+                {
+                    "set_flag": "tenth_mast_seen"
+                }
+            ]
+        }
+    }
+}

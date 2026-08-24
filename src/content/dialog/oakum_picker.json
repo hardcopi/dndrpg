@@ -1,0 +1,92 @@
+{
+    "npc_key": "oakum_picker",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "flag": "nessa_fate",
+                        "equals": "split"
+                    }
+                ],
+                "text": "\"She read it out,\" the picker says, and her hands do not stop. \"In the yard. To her own grandmother.\" A long pause, filled with rope. \"We knew we were being had. Nobody had ever put a figure on it. There is a difference and I could not have told you what it was until Tuesday.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "nessa_fate",
+                        "equals": "stayed"
+                    }
+                ],
+                "text": "\"Bread went up,\" the picker says. \"Third again on the cart. No reason given.\" Her hands do not stop. \"Somebody did something. That is all anybody here knows and it is more than we usually get.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "pool": "idle",
+                "conditions": [
+                    {
+                        "flag": "met_reth"
+                    }
+                ],
+                "text": "\"Tokens,\" she says, when she sees you looking at the tin. \"One loaf. From the one cart. You cannot spend it in the market and you cannot save it, because they change the stamp.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "pool": "idle",
+                "conditions": [
+                    {
+                        "flag": "met_reth"
+                    }
+                ],
+                "text": "The woman beside her is perhaps nine and has her hands wrapped in rag to the second knuckle. Neither of them stops or comments or looks up.",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "pool": "idle",
+                "conditions": [
+                    {
+                        "flag": "met_reth"
+                    }
+                ],
+                "text": "\"Mother Reth feeds four hundred of us,\" the picker says, flatly, in the tone of somebody quoting. \"She does, and all. That is the trouble with it.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "A hundred and ten metres of bench, four hundred pairs of hands, and almost no noise at all. The woman nearest you picks a length of old cable apart into hemp without once looking at what she is doing.\n\n\"Mind the ends,\" she says. \"There is tar in them. It gets in the splits.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

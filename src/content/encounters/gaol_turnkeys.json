@@ -1,0 +1,21 @@
+{
+    "encounter_key": "gaol_turnkeys",
+    "name": "On Nobody's Authority",
+    "description": "The Tar Gaol is kept by the Houses on a warrant no court has ever seen, which means the men keeping it have thought harder than most about what happens to them if the arrangement ever ends. They are thinking about it now.",
+    "difficulty": "hard",
+    "monsters": [
+        {
+            "monster": "city_guard",
+            "quantity": 3,
+            "rank": "front"
+        },
+        {
+            "monster": "bugbear",
+            "quantity": 1,
+            "rank": "front"
+        }
+    ],
+    "allow_flee": true,
+    "allow_parley": false,
+    "victory_flag": "gaol_opened"
+}

@@ -10,10 +10,10 @@ require_once __DIR__ . '/app/bootstrap.php';
   <link rel="stylesheet" href="<?= asset('assets/css/style.css') ?>">
 </head>
 <body>
+  <?php require APP_PATH . '/inc/site_bar.php'; ?>
   <header class="hero" style="padding:1.5rem 1rem">
     <h1>About &amp; Legal</h1>
     <p>Open game content, attribution, and license text.</p>
-    <a class="btn" href="index.php">← Home</a>
   </header>
 
   <main class="container">

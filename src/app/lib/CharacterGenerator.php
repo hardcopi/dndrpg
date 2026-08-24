@@ -420,6 +420,28 @@ class CharacterGenerator
             // character to a save that is otherwise perfectly playable.
         }
 
+        // With the adventures hidden there is one world and nobody chooses it.
+        //
+        // AFTER the party and before the request, and the order is the whole
+        // point. A party that is already inside a module lives there — this is
+        // also how a defeated party finds its way to the right haven, and put
+        // ahead of the party lookup it marched everybody who lost a fight in
+        // the Undervault out to the Proving Yard. A request that NAMES a module
+        // is a different matter: a stale link or an old bookmark must not put a
+        // new character into a game nobody can see, so it is overruled.
+        if (!ADVENTURES_ENABLED) {
+            $stmt = $this->db->prepare('SELECT * FROM modules WHERE module_key = ?');
+            $stmt->execute([FREE_PLAY_MODULE]);
+            $row = $stmt->fetch();
+            if (!$row) {
+                throw new RuntimeException(
+                    'The ' . FREE_PLAY_MODULE . ' module is missing. '
+                    . 'Run sql/migrations/2026-08-21-free-play.sql.'
+                );
+            }
+            return $row;
+        }
+
         $key = trim((string) ($data['module'] ?? ''));
         if ($key !== '') {
             $stmt = $this->db->prepare(

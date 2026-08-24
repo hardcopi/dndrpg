@@ -1,0 +1,7 @@
+# Build output. The character embed is a Unity WebGL player and its part
+# bundles — tens of megabytes of generated binaries — produced by
+# rpg-unity/build-embed.sh and copied in here. It is a build artefact of
+# another repository, not source, and does not belong in this one.
+*
+!.gitignore
+!README.md

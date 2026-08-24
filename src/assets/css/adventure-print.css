@@ -368,6 +368,19 @@ p { margin: 0 0 0.07in; }
 }
 .stat-trait { margin: 0 0 0.04in; }
 .stat-trait b { font-style: italic; }
+.stat-source {
+  font-family: var(--sans);
+  font-size: 7pt;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin: 0.06in 0 0;
+}
+.stat { scroll-margin-top: 0.55in; }
+.toc a { color: inherit; text-decoration: none; }
+@media screen {
+  .toc a:hover { color: var(--accent); }
+}
 
 /* ------------------------------------------------------------------------ */
 /* Appendices                                                                */

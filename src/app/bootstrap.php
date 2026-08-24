@@ -5,12 +5,62 @@
 
 declare(strict_types=1);
 
+/**
+ * True when this request presented an API token rather than a cookie.
+ *
+ * Asked before session_start() so a Bearer request does not get a PHPSESSID
+ * it will never send back. Unity stores the token; issuing a cookie beside
+ * it would be a second credential the client did not ask for, and a jar
+ * that later started sending it would mix an empty cookie session with a
+ * live token.
+ */
+function request_has_bearer(): bool
+{
+    $header = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
+    if ($header === '' && function_exists('getallheaders')) {
+        $headers = getallheaders();
+        if (is_array($headers)) {
+            foreach ($headers as $name => $value) {
+                if (strcasecmp((string) $name, 'Authorization') === 0) {
+                    $header = (string) $value;
+                    break;
+                }
+            }
+        }
+    }
+    return preg_match('/^Bearer\s+\S+/i', $header) === 1;
+}
+
 if (session_status() === PHP_SESSION_NONE) {
-    session_start();
+    if (request_has_bearer()) {
+        $_SESSION = [];
+    } else {
+        session_start();
+    }
 }
 
 define('APP_ROOT', dirname(__DIR__));
 define('APP_PATH', __DIR__);
+
+/**
+ * Whether the authored adventures are on offer.
+ *
+ * Off means the game is characters and random encounters and nothing else: the
+ * shelf is not drawn, Play does not open a module, creation does not ask which
+ * world, and every new character starts in the Proving Yard — the arena in the
+ * `_freeplay` module, which is a module only because `regions.module_id` is NOT
+ * NULL and a place has to hang off something.
+ *
+ * One constant rather than a scatter of conditions, because "for now" is the
+ * whole point: the adventures are still in the database, their locations and
+ * quests untouched, and turning this back on is this line. What it cannot undo
+ * is the parties' module links, which were wiped deliberately and separately —
+ * see backups/ for the dump taken first.
+ */
+define('ADVENTURES_ENABLED', false);
+
+/** The world a character stands in when there is no adventure. */
+define('FREE_PLAY_MODULE', '_freeplay');
 
 spl_autoload_register(static function (string $class): void {
     $paths = [
@@ -59,6 +109,59 @@ function json_response(array $data, int $code = 200): void
     header('Content-Type: application/json; charset=utf-8');
     echo json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     exit;
+}
+
+/**
+ * CORS for clients that are not same-origin — Unity WebGL, a local editor
+ * webview. A standalone player does not ask; browsers do.
+ *
+ * Off unless RPG_CORS_ORIGINS is set. `local` means any http(s) localhost,
+ * 127.0.0.1 or 10.0.2.2 origin (the last is the host as seen from a VM).
+ * Anything else is an exact Origin match. There is no `*`: a token in the
+ * Authorization header is a credential and reflecting every origin would
+ * let any page that can reach this host spend it.
+ */
+function cors_apply(): void
+{
+    $origin = cors_allowed_origin();
+    if ($origin === null) {
+        return;
+    }
+    header('Access-Control-Allow-Origin: ' . $origin);
+    header('Access-Control-Allow-Headers: Authorization, Content-Type, Accept');
+    header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+    header('Access-Control-Max-Age: 86400');
+    header('Vary: Origin');
+}
+
+function cors_allowed_origin(): ?string
+{
+    $raw = getenv('RPG_CORS_ORIGINS');
+    if ($raw === false || trim((string) $raw) === '') {
+        return null;
+    }
+    $origin = (string) ($_SERVER['HTTP_ORIGIN'] ?? '');
+    if ($origin === '') {
+        return null;
+    }
+    foreach (array_map('trim', explode(',', (string) $raw)) as $item) {
+        if ($item === '') {
+            continue;
+        }
+        if ($item === 'local') {
+            if ($origin === 'null') {
+                return 'null';
+            }
+            if (preg_match('#^https?://(localhost|127\.0\.0\.1|10\.0\.2\.2)(:\d+)?$#', $origin) === 1) {
+                return $origin;
+            }
+            continue;
+        }
+        if ($item === $origin) {
+            return $origin;
+        }
+    }
+    return null;
 }
 
 function json_error(string $message, int $code = 400, array $extra = []): void

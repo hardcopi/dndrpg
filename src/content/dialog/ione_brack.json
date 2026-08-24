@@ -1,0 +1,257 @@
+{
+    "npc_key": "ione_brack",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "flag": "charts_gone"
+                    },
+                    {
+                        "flag": "doren_fate",
+                        "equals": "owned"
+                    }
+                ],
+                "text": "Chart-Master Brack has the north wall's presses open, all of them, and a young shipwright at the table with three drawers' worth of the northern shore spread in front of him and a lamp of his own.\n\n\"He asked,\" she says, before you can. \"That is all it ever wanted. Somebody to come to the front counter and ask, and be told no, and ask again in writing so that the no had to be signed.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "doren_took_charts"
+                    }
+                ],
+                "text": "Ione Brack has the north wall's presses open — three of them, the three — and is going through them drawer by drawer with her rule and a lamp.\n\n\"They are all here,\" she says. \"All three. Back in the right drawers in the right order, and I have checked every sheet against the index, and there is not a page missing.\"\n\nShe closes one.\n\n\"He put them back. Whoever it was put them back, which means he did not want the charts. He wanted what was on them, and he learnt it, and he gave me back the objects.\"\n\nShe looks at you.\n\n\"That is a very great deal more frightening than a theft, and I would rather you did not tell me his name.\"",
+                "choices": [
+                    {
+                        "label": "\"Then I will not.\"",
+                        "next": "she_does_not_want_it"
+                    },
+                    {
+                        "label": "\"You should ask him yourself.\"",
+                        "next": "she_does_not_want_it"
+                    },
+                    {
+                        "label": "Leave her to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "charts_gone"
+                    }
+                ],
+                "text": "\"You know,\" says Ione Brack, and does not stop ruling the line she is ruling. \"I have not reported it and I am not going to, and I would like to tell you it is because I am protecting somebody.\"",
+                "choices": [
+                    {
+                        "label": "\"Then why?\"",
+                        "next": "why_not_reported"
+                    },
+                    {
+                        "label": "\"What was on them?\"",
+                        "next": "the_northern_shore"
+                    },
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "met_brack"
+                    }
+                ],
+                "text": "\"Back,\" says the Chart-Master, without looking up. \"The presses are shut and the pilots' book is at the counter and the answer to whichever of those you were going to ask about is no.\"",
+                "choices": [
+                    {
+                        "label": "\"The north wall.\"",
+                        "next": "the_north_wall"
+                    },
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "The room is warm, which no other room in Waerhaven is, because the stove that keeps the vellum dry is fed before anybody in the building is. A tall woman is ruling a sounding line by lamp with a rule that has been in somebody's hand for forty years.\n\n\"Ione Brack, Chart-Master,\" she says. \"Every sounding of the Ythan Mere is in this room and none of it is for sale. If you want a pilot, the book is at the counter and the fee is fixed. If you want a chart, you want a pilot.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_brack"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "\"What is on the north wall?\"",
+                        "next": "the_north_wall"
+                    },
+                    {
+                        "label": "\"Who has asked you for the northern shore lately?\"",
+                        "next": "who_asked"
+                    },
+                    {
+                        "label": "Leave her to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_north_wall": [
+            {
+                "conditions": [
+                    {
+                        "flag": "charts_gone"
+                    }
+                ],
+                "text": "\"Three drawers,\" Brack says. \"You have had that.\"",
+                "choices": [
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ]
+            },
+            {
+                "text": "\"The northern shore,\" says Brack, and her rule keeps moving, and her voice does not change at all, which is the tell. \"Soundings from the Horn round to the Drennmark coast. Very old work, mostly. Nobody has run that shore in commerce since the Wyrdpines went bad.\"\n\n\"Which is why nobody asks for it. Which is why it is on the north wall, where the stove does not reach, which is a thing I have complained about in writing four times.\"",
+                "choices": [
+                    {
+                        "label": "Look at the drawers, not at her.",
+                        "check": {
+                            "skill": "investigation",
+                            "dc": 13,
+                            "on_success": "the_three_drawers",
+                            "on_failure": "she_closes_it"
+                        }
+                    },
+                    {
+                        "label": "\"Three of them shut a little too easily.\"",
+                        "tag": "SCRIBE",
+                        "conditions": [
+                            {
+                                "origin": "scribe"
+                            }
+                        ],
+                        "check": {
+                            "skill": "investigation",
+                            "dc": 10,
+                            "on_success": "the_three_drawers",
+                            "on_failure": "she_closes_it"
+                        }
+                    },
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ]
+            }
+        ],
+        "the_three_drawers": {
+            "text": "Fourteen presses on the north wall, all of them stiff with damp and cold and forty years of not being opened. Eleven of them fight the hand.\n\nThree do not. Three run out sweet and shut sweet, because they have been opened and shut recently and often enough to wear the runners clean.\n\nBrack has stopped ruling.\n\n\"Yes,\" she says, to the wall rather than to you. \"In the spring. Three. And I have not reported it.\"",
+            "on_enter": [
+                {
+                    "set_flag": "charts_gone"
+                },
+                {
+                    "xp": 100
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"Why not?\"",
+                    "next": "why_not_reported"
+                },
+                {
+                    "label": "\"What was on them?\"",
+                    "next": "the_northern_shore"
+                }
+            ]
+        },
+        "she_closes_it": {
+            "text": "Brack puts the rule down, walks the length of the north wall, and leans on it with her arms folded — in front of the presses, deliberately, the way you stand in a doorway.\n\n\"It is cold on this side of the room,\" she says pleasantly. \"You will want the stove. Pilots' book is at the counter.\"\n\nShe stays there until you leave.",
+            "choices": [
+                {
+                    "label": "Go.",
+                    "end": true
+                }
+            ]
+        },
+        "why_not_reported": {
+            "text": "\"Because a theft has to be described,\" Brack says. \"That is what a report is. It is a description.\"\n\nShe comes back to the table and sits down, which she has not done since you came in.\n\n\"To report it I write down which drawer, and which drawer says which shore, and the moment I write which shore, Lathmere has been told in a signed document that somebody in Waerhaven wants the northern soundings. And Lathmere has spent six years arranging not to be told anything about the north.\"\n\n\"So I would be reporting a theft of three charts and confessing a great deal more than that, on the League's own paper, in my own hand.\"",
+            "choices": [
+                {
+                    "label": "\"Who took them?\"",
+                    "next": "who_asked"
+                },
+                {
+                    "label": "\"What was on them?\"",
+                    "next": "the_northern_shore"
+                },
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "the_northern_shore": {
+            "text": "\"Anchorages,\" says Brack. \"That is the honest answer and it is not the one you want, so here is the rest of it.\"\n\n\"Four inlets on the Drennmark coast that a deep hull can lie in. The ice line as it stood forty years ago. Two runs of soundings taken by a pilot named Orrow who went up there three times and came back twice.\"\n\nShe folds her hands.\n\n\"Nobody steals that to smuggle with. There is nothing up there to smuggle. You steal that if you intend to go, and to come back, and to be able to tell somebody else how.\"",
+            "choices": [
+                {
+                    "label": "\"Who has been asking?\"",
+                    "next": "who_asked"
+                },
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "who_asked": [
+            {
+                "conditions": [
+                    {
+                        "flag": "charts_gone"
+                    }
+                ],
+                "text": "\"Formally? Warden Vorn. Twice, in writing, and I refused her twice in writing, and the second refusal is the one I am least proud of.\"\n\nBrack looks at the north wall.\n\n\"Informally, this city has a great many people in it who can read a chart, and about nine of them work in a building where they would not have to explain themselves for being in a room with one.\"",
+                "choices": [
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ]
+            },
+            {
+                "text": "\"For the northern shore? Nobody, in nine years.\"\n\nBrack rules another line.\n\n\"And then twice, in one spring, in writing, by a Grey Warden of Drennmark who wanted to know whether her own coast is still where she left it. I refused her. It is not in my gift and she knew it was not, and she asked twice anyway, which is either stupidity or a woman making a record of having asked.\"\n\n\"It was the second one. She is not stupid.\"",
+                "choices": [
+                    {
+                        "label": "\"What is on the north wall?\"",
+                        "next": "the_north_wall"
+                    },
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ]
+            }
+        ],
+        "she_does_not_want_it": {
+            "text": "\"I have refused that shore in writing twice this year,\" says Ione Brack. \"Both refusals are signed and both are in the book and both of them are correct.\"\n\nShe shuts the last drawer.\n\n\"And somebody read it anyway, and put it back, and now the fact that a person in Waerhaven knows the four inlets on the Drennmark coast exists in the world whether I have written it down or not.\"\n\nShe puts the lamp out.\n\n\"That is the whole of what a Charthouse is, you know. Not a room with vellum in it. A decision about which shores this city is able to reach. I have been making that decision for eleven years by not reaching for a drawer, and I have never once had to say it out loud, and I have just said it out loud.\"",
+            "choices": [
+                {
+                    "label": "Leave her to it.",
+                    "end": true
+                }
+            ]
+        }
+    }
+}

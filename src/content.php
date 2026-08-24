@@ -20,15 +20,13 @@ require_admin_page();
   <link rel="stylesheet" href="<?= asset('assets/css/style.css') ?>">
 </head>
 <body class="admin-page">
+  <?php require APP_PATH . '/inc/site_bar.php'; ?>
   <header class="admin-head">
     <div>
       <p class="auth-eyebrow">Rivermark Chronicles</p>
       <h1>Content</h1>
     </div>
     <nav class="admin-nav">
-      <a class="btn" href="studio.php">Studio</a>
-      <a class="btn" href="game.php">Adventure</a>
-      <a class="btn" href="admin.php">Accounts</a>
       <!--
         Two exports, and they are not the same thing. "Export to files" writes
         the database back to content/**/*.json so the work can be committed;
@@ -49,6 +47,7 @@ require_admin_page();
     <button type="button" class="ce-tab" data-tab="quests" role="tab">Quests</button>
     <button type="button" class="ce-tab" data-tab="places" role="tab">Places</button>
     <button type="button" class="ce-tab" data-tab="talk" role="tab">Conversations</button>
+    <button type="button" class="ce-tab" data-tab="items" role="tab">Items</button>
   </div>
 
   <main class="ce-main">

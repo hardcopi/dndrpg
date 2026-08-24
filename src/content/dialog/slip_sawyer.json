@@ -1,0 +1,77 @@
+{
+    "npc_key": "slip_sawyer",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "flag": "masts_fate",
+                        "equals": "found"
+                    }
+                ],
+                "text": "\"They were in the dock the whole time,\" the sawyer says, and spits. \"Under a Drennmark boat. Half this yard knew and the other half worked out not to ask.\" He looks at the chalked quota on the gable. \"And we are still short of timber, and that is still a real number, and nobody has moved it.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "pool": "idle",
+                "conditions": [
+                    {
+                        "flag": "met_gedda"
+                    }
+                ],
+                "text": "\"Doubled,\" the sawyer says, pointing his chin at the gable. \"The quota. Doubled. On what timber? You cannot saw a promise.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "pool": "idle",
+                "conditions": [
+                    {
+                        "flag": "met_gedda"
+                    }
+                ],
+                "text": "\"Sawyers' Hall votes Thursday,\" he says. \"On whether to down tools. It will not carry. It has not carried in eleven years. We take the vote anyway because the year it does carry, everybody wants to have been in the room.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "pool": "idle",
+                "conditions": [
+                    {
+                        "flag": "met_gedda"
+                    }
+                ],
+                "text": "He watches the third slip, where nothing is happening and forty men are standing about being paid to stand about. \"That is what a shortage looks like from inside,\" he says. \"Not hunger. Waiting.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "A pit-sawyer sits on the end of a baulk with his forearms on his knees, resting in the deliberate way of a man on somebody else's time.\n\n\"Mind the ways,\" he says, nodding at the greased slip. \"Two men a year go down those and it is always somebody who has been here long enough to stop looking.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

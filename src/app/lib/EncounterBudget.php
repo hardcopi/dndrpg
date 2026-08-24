@@ -21,26 +21,42 @@ declare(strict_types=1);
 final class EncounterBudget
 {
     /**
-     * XP thresholds per character, by level: easy, medium, hard.
+     * XP thresholds per character, by level: easy, medium, hard, deadly.
      *
-     * Straight from the 5e encounter-building tables. Deadly is deliberately
-     * absent — the pit will not sell a tier whose honest description is "you
-     * will probably die", and a generated dungeon should not put one behind an
-     * unmarked door either. A boss room reaches for `hard` and the multiplier
-     * does the rest.
+     * Straight from the 5e encounter-building tables, deadly included.
+     *
+     * Deadly used to be left out on the argument that nothing should build a
+     * fight whose honest description is "you will probably die". That still
+     * holds for anything the player did not ask for — a generated dungeon must
+     * not put one behind an unmarked door — but it was never a good argument
+     * about the pit, where the whole transaction is choosing your own fight off
+     * a board with three prices on it. A hard match that tops out at the hard
+     * threshold is the one the crowd asks for its money back on.
+     *
+     * So the column exists, and reaching it is opt-in: see who asks for it.
      */
     public const THRESHOLDS = [
-        1  => [25, 50, 75],       2  => [50, 100, 150],     3  => [75, 150, 225],
-        4  => [125, 250, 375],    5  => [250, 500, 750],     6  => [300, 600, 900],
-        7  => [350, 750, 1100],   8  => [450, 900, 1400],    9  => [550, 1100, 1600],
-        10 => [600, 1200, 1900],  11 => [800, 1600, 2400],  12 => [1000, 2000, 3000],
-        13 => [1100, 2200, 3400], 14 => [1250, 2500, 3800], 15 => [1400, 2800, 4300],
-        16 => [1600, 3200, 4800], 17 => [2000, 3900, 5900], 18 => [2100, 4200, 6300],
-        19 => [2400, 4900, 7300], 20 => [2800, 5700, 8500],
+        1  => [25, 50, 75, 100],        2  => [50, 100, 150, 200],
+        3  => [75, 150, 225, 400],      4  => [125, 250, 375, 500],
+        5  => [250, 500, 750, 1100],    6  => [300, 600, 900, 1400],
+        7  => [350, 750, 1100, 1700],   8  => [450, 900, 1400, 2100],
+        9  => [550, 1100, 1600, 2400],  10 => [600, 1200, 1900, 2800],
+        11 => [800, 1600, 2400, 3600],  12 => [1000, 2000, 3000, 4500],
+        13 => [1100, 2200, 3400, 5100], 14 => [1250, 2500, 3800, 5700],
+        15 => [1400, 2800, 4300, 6400], 16 => [1600, 3200, 4800, 7200],
+        17 => [2000, 3900, 5900, 8800], 18 => [2100, 4200, 6300, 9500],
+        19 => [2400, 4900, 7300, 10900], 20 => [2800, 5700, 8500, 12700],
     ];
 
-    /** Tier name to the column of THRESHOLDS it reads. */
-    public const TIERS = ['warmup' => 0, 'fair' => 1, 'hard' => 2];
+    /**
+     * Tier name to the column of THRESHOLDS it reads.
+     *
+     * `deadly` is a name a caller has to type on purpose. Nothing maps to it by
+     * accident: CombatEngine still sends an authored `deadly` encounter to the
+     * hard column, because an author writing that word is describing a room,
+     * not agreeing to a budget.
+     */
+    public const TIERS = ['warmup' => 0, 'fair' => 1, 'hard' => 2, 'deadly' => 3];
 
     /**
      * The XP a fight of this tier may spend on a party of these levels.

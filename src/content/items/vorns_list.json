@@ -1,0 +1,14 @@
+{
+  "item_key": "vorns_list",
+  "name": "Warden Vorn's List",
+  "description": "Sixty names in one hand, with the village each came out of and the day they left it, and forty-one of them ticked. The nineteen that are not ticked have a mark against them instead, and the mark is the same mark nineteen times, and it is not a cross.",
+  "item_type": "misc",
+  "rarity": "rare",
+  "weight": 0.2,
+  "value_gp": 0,
+  "properties": {
+    "quest_item": true,
+    "readable": true
+  },
+  "icon": "book"
+}

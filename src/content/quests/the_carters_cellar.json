@@ -1,0 +1,65 @@
+{
+    "quest_key": "the_carters_cellar",
+    "title": "The Carters' Cellar",
+    "act": 1,
+    "description": "Something has been getting into the Waerman's Rest through the cellar drain, and Hesta Orrow would like it dealt with before it starts on the beds.",
+    "giver": "hesta_orrow",
+    "on_job_board": true,
+    "required_level": 1,
+    "rewards": {
+        "xp": 150,
+        "gold": 20
+    },
+    "stages": {
+        "go_down": {
+            "title": "Down the trap",
+            "objective": "Find out what has been getting into the cellar.",
+            "journal": "Hesta says she is losing a barrel a week and it is not the carters. There is a drain in the cellar the width of a man's shoulders and she has stopped going down alone.",
+            "target": {
+                "location": "the_rest_cellar"
+            }
+        },
+        "the_drain": {
+            "title": "The grate has been moved",
+            "objective": "Look at the drain properly.",
+            "journal": "The rats came up the drain, which is what rats do. What rats do not do is lift a grate that has been mortared in for thirty years and set it back down square.",
+            "target": {
+                "location": "the_rest_cellar"
+            }
+        },
+        "cleared": {
+            "title": "Dealt with",
+            "terminal": true,
+            "resolution": "cleared",
+            "outcome": "success",
+            "journal": "Killed, cleared, and the grate wedged with a baulk of pine. Hesta paid out of the till and did not ask me what I thought about the mortar, and I did not tell her.",
+            "effects": [
+                {
+                    "set_flag": "cellar_cleared"
+                }
+            ]
+        },
+        "the_way_in_found": {
+            "title": "There is a way under the city",
+            "terminal": true,
+            "resolution": "found_the_way",
+            "outcome": "success",
+            "journal": "The drain is not a drain. It runs twenty feet and drops into a cut stair under the outer quay, and there is a line hung on iron rings at the turn of it, and the line is dry, and it is used. Half of Waerhaven is standing on a floor that somebody else is walking about under.",
+            "effects": [
+                {
+                    "set_flag": "cellar_cleared"
+                },
+                {
+                    "set_flag": "underquay_known"
+                },
+                {
+                    "give_item": "ropewalk_line",
+                    "quantity": 1
+                },
+                {
+                    "xp": 80
+                }
+            ]
+        }
+    }
+}

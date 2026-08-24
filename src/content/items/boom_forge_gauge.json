@@ -1,0 +1,13 @@
+{
+  "item_key": "boom_forge_gauge",
+  "name": "The Unmarked Gauge",
+  "description": "A gauge from the Boom Forge's fifth hearth: a hand's length of iron with two notches and no League stamp, no maker's mark and no date, which is three things a gauge is never without. What it gauges is not chain. It is the throat of an anchor a good deal heavier than anything in this harbour needs.",
+  "item_type": "misc",
+  "rarity": "uncommon",
+  "weight": 2,
+  "value_gp": 0,
+  "properties": {
+    "quest_item": true
+  },
+  "icon": "tools"
+}

@@ -1,0 +1,389 @@
+{
+    "npc_key": "mother_reth",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "flag": "nessa_fate",
+                        "equals": "split"
+                    }
+                ],
+                "text": "Mother Reth is skimming the near cauldron herself, which she has not done in nine years and which everybody in the yard has noticed.\n\n\"She read it out,\" she says. \"In this yard. To me. In front of both her uncles, who have not spoken to each other in six years and who agreed about it inside a minute, which I would call progress if it were about anything else.\"\n\nShe skims.\n\n\"Every figure in it was right. I checked. I sat up with it and I checked every one and they are all right.\"",
+                "choices": [
+                    {
+                        "label": "\"And?\"",
+                        "next": "and_what"
+                    },
+                    {
+                        "label": "Leave her to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "nessa_fate",
+                        "equals": "stayed"
+                    }
+                ],
+                "text": "\"Bread went up a third on the cart,\" says Mother Reth, \"and no reason given, and four hundred people think it was the fleet order.\"\n\nShe does not look at you.\n\n\"It was not the fleet order. And she is still on that bench, and she will be on that bench in twenty years, and she will be very good at this and nobody will ever have thanked her for the one week of it that was hard.\"",
+                "choices": [
+                    {
+                        "label": "\"You could thank her.\"",
+                        "next": "and_what"
+                    },
+                    {
+                        "label": "Leave her.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "granary_fate",
+                        "equals": "broken"
+                    }
+                ],
+                "text": "\"Ration,\" says Mother Reth, with enormous satisfaction. \"Set by a fish market. Enforced by a shipwrights' guild. On a city chartered out of Lathmere.\"\n\nShe laughs, one syllable.\n\n\"Do you know what a ration is? It is a promise that everybody gets some. Nobody in Waerhaven has made that promise in ninety years except me, in bread, out of that cart, at a price I set. And now the whole city is doing it and they are all very pleased with themselves and not one of them has come down here to say so.\"",
+                "choices": [
+                    {
+                        "label": "\"You want to be thanked.\"",
+                        "next": "the_thanks"
+                    },
+                    {
+                        "label": "Leave her to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "charter_fate",
+                        "equals": "seized"
+                    }
+                ],
+                "text": "Mother Reth is waiting for you, and has arranged to be, and there are two men on the gate behind you.\n\n\"Eighty quarters,\" she says. \"Into the League's granary. Off the arrangement that has been feeding half of Tarrow through every winter since the Wyrdpines went bad.\"\n\nShe skims the cauldron.\n\n\"I do not need to do anything to you. I want you to understand that. In eleven weeks the market price will do it, and I shall not have to lift a finger, and every one of those four hundred will know exactly whose fault it was.\"",
+                "choices": [
+                    {
+                        "label": "\"Then say it plainly.\"",
+                        "next": "the_terms"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "reth_deal"
+                    }
+                ],
+                "text": "\"You again,\" says Mother Reth, and has a stool brought, which in this yard is a treaty.",
+                "choices": [
+                    {
+                        "label": "\"The pitch price.\"",
+                        "next": "the_pitch_price"
+                    },
+                    {
+                        "label": "\"The Tar Gaol.\"",
+                        "next": "the_gaol"
+                    },
+                    {
+                        "label": "\"The bread cart.\"",
+                        "next": "the_bread"
+                    },
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "met_reth"
+                    }
+                ],
+                "text": "\"Back,\" says Mother Reth, over the cauldrons, and does not have you shown out, which is as much welcome as this yard does.",
+                "choices": [
+                    {
+                        "label": "\"The pitch price.\"",
+                        "next": "the_pitch_price"
+                    },
+                    {
+                        "label": "\"The bread cart.\"",
+                        "next": "the_bread"
+                    },
+                    {
+                        "label": "\"What would it take to deal with you?\"",
+                        "next": "the_terms"
+                    },
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "The gate is opened for you by somebody who does not ask your business, which means somebody at the top of the Tar Steps sent word down before you were halfway.\n\nThe old woman at the near cauldron is skimming it with a long iron and putting the skim into a second cauldron, because nothing in this yard is thrown away.\n\n\"You will be the one asking questions,\" she says. \"Reth. There is no other name and there has not been for forty years.\"\n\nShe does not stop skimming.\n\n\"Ask, then. It saves you working round to it and it saves me watching you do it.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_reth"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "\"Pitch has tripled and your output has not moved.\"",
+                        "next": "the_pitch_price"
+                    },
+                    {
+                        "label": "\"There are children on that bench.\"",
+                        "next": "the_bread"
+                    },
+                    {
+                        "label": "\"Who is in the Tar Gaol, and on whose warrant?\"",
+                        "next": "the_gaol"
+                    },
+                    {
+                        "label": "Nothing yet.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_pitch_price": {
+            "text": "\"Tripled,\" Reth agrees. \"And we have not made a barrel more, and the north fence is stacked full, and every word of that is true and you have said it as though it were an accusation.\"\n\nShe sets the iron down.\n\n\"The Moot doubled the quota in February. Doubled. On a fleet order out of Lathmere that arrives with no timber, no oakum and no extra hands attached to it, and every one of those three has to come out of Tarrow.\"\n\n\"So I put the price up and I held the stock. And what that bought — and I would like you to follow this, because nobody on that ridge ever does — is four hundred people who were still being paid in March.\"\n\n\"If I had sold at the old price I would have been out of pitch by May, and out of work by June, and four hundred people would have been on the shingle in Old Waer begging off the fish. I have seen that happen. In this city. In my lifetime.\"",
+            "choices": [
+                {
+                    "label": "\"You are also making a great deal of money.\"",
+                    "next": "the_money"
+                },
+                {
+                    "label": "\"And the fleet does not get built.\"",
+                    "next": "the_fleet"
+                },
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "the_money": {
+            "text": "\"I am,\" says Reth. \"Enormously. I would not insult you by pretending otherwise.\"\n\n\"Both are true. That is the part everybody who comes down these steps cannot hold in their head at once. I am making a fortune and I am the only person in Waerhaven who has ever guaranteed four hundred people bread in a bad year, and the second thing is not a story I tell to excuse the first. They are the same act. You cannot have one without the other and I have never once been able to get a man from Highstrand to understand that.\"",
+            "choices": [
+                {
+                    "label": "\"Nessa understands it.\"",
+                    "conditions": [
+                        {
+                            "flag": "met_nessa"
+                        }
+                    ],
+                    "next": "about_nessa"
+                },
+                {
+                    "label": "\"Four hundred people paid in tin tokens.\"",
+                    "next": "the_bread"
+                },
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "the_fleet": {
+            "text": "\"The fleet,\" says Mother Reth, \"is the Ythan League's army. That is what it is for and everybody says it as though it were a shipbuilding matter.\"\n\nShe picks the iron back up.\n\n\"Gedda Halloway can stop it by folding her arms. Everybody knows that; it is the great fact of this city. Nobody ever notices that I can stop it by putting a price on a barrel, and that I have been doing so since February, and that not one person has come down these steps to negotiate with me about it.\"\n\n\"They send Watch. They send letters. They have never once sent somebody to bargain, because bargaining would mean admitting who they are bargaining with.\"",
+            "choices": [
+                {
+                    "label": "\"I am here to bargain.\"",
+                    "next": "the_terms"
+                },
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "the_bread": {
+            "text": "\"Tin tokens,\" Reth says. \"One loaf, from the one cart. You cannot save them because we change the stamp and you cannot spend them anywhere else because nobody else will take them.\"\n\n\"That is a wage that cannot be drunk, cannot be gambled, cannot be lent at interest by Ilber Cass, and cannot be taken off a woman by her husband on a Friday. Four hundred people eat every day of the year, and I invented it, and I am not ashamed of it.\"\n\nShe looks at you properly for the first time.\n\n\"And it is a wage that can only ever buy one thing, from me, at whatever I say it is worth on the day. Both. Always both. If you have come down here to find a woman who does not know what she is, you have wasted a walk.\"",
+            "choices": [
+                {
+                    "label": "\"Then say what the tally would be.\"",
+                    "next": "the_terms"
+                },
+                {
+                    "label": "\"Half the pickers are children.\"",
+                    "next": "the_children"
+                },
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "the_children": {
+            "text": "\"Half,\" Reth agrees. \"Nearer a third, and the third is getting younger, and it is getting younger because the Wardenswatch is getting bigger.\"\n\nShe skims.\n\n\"I will make you the offer I have made to four priests and a Factor. Take them. Any of them. All of them. Go up to that bench and take every child off it and I will not lift a finger and I will not have a word said, and I will keep their mothers on at the same rate.\"\n\n\"And then you will have four hundred children and nowhere to put them, and in a fortnight they will be back on that bench and I shall have to be asked nicely to take them, and I will, and I will say nothing about it at all.\"\n\n\"That is not a challenge. Three of the four priests took it. It is where the Lazar House came from.\"",
+            "choices": [
+                {
+                    "label": "Say nothing.",
+                    "next": "greeting"
+                },
+                {
+                    "label": "\"That is the cruellest generous thing I have ever been offered.\"",
+                    "next": "the_thanks"
+                }
+            ]
+        },
+        "the_gaol": [
+            {
+                "conditions": [
+                    {
+                        "flag": "gaol_opened"
+                    }
+                ],
+                "text": "\"Open,\" says Reth. \"On nobody's authority, which is how it was shut, so I shall not pretend to be surprised.\"\n\nShe skims the cauldron.\n\n\"Half of them are back on the bench within the month. Not because I put them there. Because it is where the bread is. You will find that out and you will not enjoy it.\"",
+                "choices": [
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ]
+            },
+            {
+                "text": "\"Debtors,\" says Reth. \"Smugglers. People who took from the yards. And about half of them are Drennmark, held on no charge, because there is no charge, because there is no word in the charter for what they are.\"\n\n\"The warrant is my grandfather's and it is worth exactly nothing and everybody has agreed for sixty years not to look at it. The Watch will not come into Tarrow. So somebody keeps a gaol here, and it is me, and the alternative is not that there is no gaol. The alternative is that the yards deal with thieves themselves, on the spot, and I have seen that too.\"",
+                "choices": [
+                    {
+                        "label": "\"Let them out.\"",
+                        "next": "let_them_out"
+                    },
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ]
+            }
+        ],
+        "let_them_out": {
+            "text": "\"No,\" says Mother Reth, pleasantly.\n\n\"I will tell you what it would take, because I would rather be bargained with than admired. Every one of them owes the Houses something — a day, a barrel, a debt, an insult. Square it and they walk. That is not greed, that is the only rule this yard has ever had and it is the reason four hundred people do what I say without a single armed man in the place.\"\n\nShe sets down the iron.\n\n\"Or you take them out over my gate, and then it is not a gaol delivery, it is a war with the Houses, and you will lose it and so will they.\"",
+            "choices": [
+                {
+                    "label": "\"Then let us square it.\"",
+                    "next": "the_terms"
+                },
+                {
+                    "label": "\"Or I take them out.\"",
+                    "next": "she_calls_them"
+                },
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "the_terms": {
+            "text": "Mother Reth has the stool brought before you have finished the sentence, which means she has been waiting for somebody to say it for a considerable time.\n\n\"Terms,\" she says. \"Right. Here are mine and they have not changed in forty years.\"\n\n\"The Houses hold pitch, tar and oakum, and nobody comes into this yard to tell me my business. Tarrow is left alone. And whatever this city is arranging up on that ridge, Tarrow is in the room when it is arranged, because we are four hundred hands and one bread cart and we are the only thing standing between this city and its own poor.\"\n\nShe holds out a hand, black to the wrist.\n\n\"Give me that and I will give you the pitch at February's price, and the gaol opened for anybody whose debt you square, and my word in the Wet Hall, which nobody up there has ever once asked for.\"",
+            "choices": [
+                {
+                    "label": "Take the hand.",
+                    "next": "the_deal"
+                },
+                {
+                    "label": "\"Not while there are children on that bench.\"",
+                    "next": "the_children"
+                },
+                {
+                    "label": "\"No.\"",
+                    "next": "she_calls_them"
+                }
+            ]
+        },
+        "the_deal": {
+            "text": "Her grip is exactly as strong as you expected and she holds on about a second longer than a handshake needs, which is deliberate.\n\n\"Good,\" she says. \"Now go up those steps and tell them on the ridge that Tarrow bargained, and watch their faces, and come back and tell me what they did.\"\n\nShe lets go.\n\n\"And my granddaughter is on the bench in the oakum house counting something she will not show me. Ask her what it is. She will not tell me and she might tell you, and I would rather be told badly than not told.\"",
+            "on_enter": [
+                {
+                    "set_flag": "reth_deal"
+                },
+                {
+                    "xp": 150
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"I will ask her.\"",
+                    "end": true
+                }
+            ]
+        },
+        "she_calls_them": {
+            "text": "Mother Reth does not raise her voice and does not stop skimming the cauldron.\n\nThe gate goes shut behind you — not slammed; drawn, by somebody who was already standing at it — and three men come off the north fence with the unhurried competence of people who are paid by the week and have done this in this yard before.\n\n\"You may go,\" she says, \"and it costs nothing. Or you may stay and find out what four hundred hands and one bread cart looks like when it decides.\"",
+            "choices": [
+                {
+                    "label": "Go.",
+                    "end": true
+                },
+                {
+                    "label": "Stand your ground and keep talking.",
+                    "next": "she_calls_them_off"
+                },
+                {
+                    "label": "Stay, and fight.",
+                    "effects": [
+                        {
+                            "start_combat": "tarrow_bravos"
+                        }
+                    ]
+                }
+            ]
+        },
+        "she_calls_them_off": {
+            "text": "\"Enough,\" says Mother Reth, and it is enough, immediately, which is the most frightening thing that has happened in this yard.\n\nShe puts the iron down.\n\n\"Say it properly, then. You came down here to say something and you have said it with your hands, which is the way people from up the hill always say it in the end.\"",
+            "choices": [
+                {
+                    "label": "\"Terms. Yours and mine.\"",
+                    "next": "the_terms"
+                },
+                {
+                    "label": "\"Open the gaol.\"",
+                    "next": "let_them_out"
+                },
+                {
+                    "label": "Nothing. Go.",
+                    "end": true
+                }
+            ]
+        },
+        "about_nessa": {
+            "text": "Mother Reth stops skimming.\n\n\"She does,\" she says. \"She is the only one of them who has ever understood it, and it has done her no good at all, and I have watched that happen and let it.\"\n\n\"Her uncles think the Houses are a business. She knows they are an arrangement, and an arrangement has to be held, and holding it costs somebody. And she has worked out — she worked it out at about fourteen — that the somebody is the four hundred, and that I know, and that I do it anyway.\"\n\nShe picks the iron back up.\n\n\"That is a great deal to know about your grandmother at fourteen. I would have spared her it if I could think of a way to run a pitch yard that did not require it, and I have had eleven years and I cannot.\"",
+            "choices": [
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "and_what": {
+            "text": "\"And nothing,\" says Mother Reth. \"That is what you want me to say, and I will not, because it is not true.\"\n\nShe skims.\n\n\"The bread went up a third. It will stay up. Four hundred people are eating better this week than last and not one of them will ever know why, and my granddaughter will not be told either, because if I tell her she will think she won and she did not win, and I am not going to lie to her about the one thing she got right.\"\n\nShe puts the iron down.\n\n\"She made me read a number. Forty years and nobody has made me read a number. That is not nothing and I am not going to say it out loud to anybody who will repeat it.\"",
+            "choices": [
+                {
+                    "label": "Leave her to it.",
+                    "end": true
+                }
+            ]
+        },
+        "the_thanks": {
+            "text": "Mother Reth looks at you for a long moment with the iron in her hand.\n\n\"No,\" she says. \"I do not want to be thanked. I have been thanked. Priests thank me. It is the cheapest thing anyone has ever handed me and it comes off cleaner than the tar.\"\n\n\"What I want is to be argued with. Properly. By somebody who has looked at what I do and can hold both halves of it at once and still thinks I am wrong.\"\n\nShe goes back to the cauldron.\n\n\"Nobody ever does. They come down these steps with the halves in one hand each and they drop one on the way and by the time they get to the gate they have decided I am a monster or a saint, and either way I have stopped being interested in about six seconds.\"",
+            "choices": [
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        }
+    }
+}

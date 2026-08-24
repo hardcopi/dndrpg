@@ -1,0 +1,11 @@
+{
+    "npc_key": "waer_singer",
+    "name": "Somebody singing",
+    "role": "Waerfolk",
+    "sprite_key": "jester",
+    "is_ambient": true,
+    "dialog": "waer_singer",
+    "place": {
+        "location": "old_waer_square"
+    }
+}

@@ -111,9 +111,23 @@ final class BattleGrid
         return [(int) ($parts[0] ?? 0), (int) ($parts[1] ?? 0)];
     }
 
-    public static function inBounds(int $x, int $y): bool
+    /**
+     * Is this cell on the board?
+     *
+     * Asked of the TERRAIN rather than of W and H, because the board is no
+     * longer one size. A fight in a dungeon room is fought on that room —
+     * see RoomBattleMap — so the board is whatever shape the room is, and a
+     * pair of constants cannot answer for it. W and H are still the size of a
+     * generated board, which is what BattleMapGen builds and most fights use.
+     *
+     * @param string[] $terrain rows of the board, top to bottom
+     */
+    public static function inBounds(array $terrain, int $x, int $y): bool
     {
-        return $x >= 0 && $y >= 0 && $x < self::W && $y < self::H;
+        if ($x < 0 || $y < 0 || $y >= count($terrain)) {
+            return false;
+        }
+        return $x < strlen($terrain[$y] ?? '');
     }
 
     /** Distance in cells. Chebyshev — a diagonal is one cell, same as a step. */
@@ -142,7 +156,7 @@ final class BattleGrid
      */
     public static function at(array $terrain, int $x, int $y): string
     {
-        if (!self::inBounds($x, $y)) {
+        if (!self::inBounds($terrain, $x, $y)) {
             return '?';
         }
         $row = $terrain[$y] ?? '';
@@ -631,7 +645,7 @@ final class BattleGrid
                     }
                     $nx = $cx + $dx;
                     $ny = $cy + $dy;
-                    if (!self::inBounds($nx, $ny)) {
+                    if (!self::inBounds($terrain, $nx, $ny)) {
                         continue;
                     }
                     $step = self::enterCost($terrain, $nx, $ny);
@@ -773,7 +787,7 @@ final class BattleGrid
         foreach ($threateners as $t) {
             $tx = (int) ($t['x'] ?? -1);
             $ty = (int) ($t['y'] ?? -1);
-            if (!self::inBounds($tx, $ty)) {
+            if (!self::inBounds($terrain, $tx, $ty)) {
                 continue;
             }
             // An explicit reach of zero means this creature threatens nothing —
@@ -788,7 +802,7 @@ final class BattleGrid
             $cid = (string) ($t['cid'] ?? '');
             for ($y = $ty - $r; $y <= $ty + $r; $y++) {
                 for ($x = $tx - $r; $x <= $tx + $r; $x++) {
-                    if (!self::inBounds($x, $y) || ($x === $tx && $y === $ty)) {
+                    if (!self::inBounds($terrain, $x, $y) || ($x === $tx && $y === $ty)) {
                         continue;
                     }
                     if (self::cells($tx, $ty, $x, $y) > $r) {
@@ -820,7 +834,7 @@ final class BattleGrid
         foreach ($threateners as $t) {
             $tx = (int) ($t['x'] ?? -1);
             $ty = (int) ($t['y'] ?? -1);
-            if (!self::inBounds($tx, $ty) || ($tx === $x && $ty === $y)) {
+            if (!self::inBounds($terrain, $tx, $ty) || ($tx === $x && $ty === $y)) {
                 continue;
             }
             $r = self::ftToCells((int) ($t['reach_ft'] ?? self::CELL_FT));
@@ -918,7 +932,7 @@ final class BattleGrid
             case 'sphere':
                 for ($y = $ty - $n; $y <= $ty + $n; $y++) {
                     for ($x = $tx - $n; $x <= $tx + $n; $x++) {
-                        if (self::inBounds($x, $y) && self::cells($tx, $ty, $x, $y) <= $n) {
+                        if (self::inBounds($terrain, $x, $y) && self::cells($tx, $ty, $x, $y) <= $n) {
                             $cells[] = [$x, $y];
                         }
                     }
@@ -931,7 +945,7 @@ final class BattleGrid
                 $half = intdiv($n - 1, 2);
                 for ($y = $ty - $half; $y < $ty - $half + $n; $y++) {
                     for ($x = $tx - $half; $x < $tx - $half + $n; $x++) {
-                        if (self::inBounds($x, $y)) {
+                        if (self::inBounds($terrain, $x, $y)) {
                             $cells[] = [$x, $y];
                         }
                     }
@@ -943,7 +957,7 @@ final class BattleGrid
                 for ($i = 1; $i <= $n; $i++) {
                     $x = $ox + $dx * $i;
                     $y = $oy + $dy * $i;
-                    if (self::inBounds($x, $y)) {
+                    if (self::inBounds($terrain, $x, $y)) {
                         $cells[] = [$x, $y];
                     }
                 }
@@ -953,7 +967,7 @@ final class BattleGrid
                 [$dx, $dy] = self::direction($ox, $oy, $tx, $ty);
                 for ($y = $oy - $n; $y <= $oy + $n; $y++) {
                     for ($x = $ox - $n; $x <= $ox + $n; $x++) {
-                        if (!self::inBounds($x, $y) || ($x === $ox && $y === $oy)) {
+                        if (!self::inBounds($terrain, $x, $y) || ($x === $ox && $y === $oy)) {
                             continue;
                         }
                         $d = self::cells($ox, $oy, $x, $y);

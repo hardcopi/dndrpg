@@ -94,6 +94,7 @@ if [ "$PHP_MODE" != none ]; then
     run "test_rules"          phprun test_rules.php
     run "test_checks"         phprun test_checks.php
     run "test_combat"         phprun test_combat.php
+    run "test_token_art"      phprun test_token_art.php
     run "test_content_rules"  phprun test_content_rules.php
     run "test_actions"        phprun test_actions.php
     run "test_class_features" phprun test_class_features.php
@@ -127,9 +128,11 @@ if [ "$PHP_MODE" != none ]; then
     run "test_dialogue_once"  phprun test_dialogue_once.php
     run "test_dialogue_lint"  phprun test_dialogue_lint.php
     run "test_content_export" phprun test_content_export.php
+    run "test_item_editor"    phprun test_item_editor.php
     run "test_studio_create"  phprun test_studio_create.php
     run "test_plan"           phprun test_plan.php
     run "test_book"           phprun test_book.php
+    run "test_bestiary"       phprun test_bestiary.php
     run "test_art"            phprun test_art.php
 
     run "image_libs"          phprun check_image_libs.php

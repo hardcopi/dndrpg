@@ -1,0 +1,14 @@
+{
+  "item_key": "mere_token",
+  "name": "An Offering That Came Back",
+  "description": "A fisherman's copper luck-piece with a hole drilled through it, thrown off the temple rail into forty fathoms and found four days later on the shingle, dry. It is not weathered. It is not corroded. It is a little warmer than the hand that holds it, and it stays that way.",
+  "item_type": "misc",
+  "rarity": "rare",
+  "weight": 0.1,
+  "value_gp": 0,
+  "slot": "amulet",
+  "properties": {
+    "save_bonus": 1
+  },
+  "icon": "amulet"
+}

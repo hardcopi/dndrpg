@@ -1,0 +1,241 @@
+{
+    "region_key": "hallowgate_ward",
+    "module": "waerhaven",
+    "name": "Hallowgate Ward",
+    "region_type": "town",
+    "description": "Inside the landward gate, where the ox-roads arrive and stop. Timber yards stacked four metres high, carters' yards, the Watch, the granary, and Hallowmarket — the only place in the city where you can buy everything and trust nothing. Everything Waerhaven eats comes through here on somebody else's cart.",
+    "sort_order": 10,
+    "locations": {
+        "waermans_rest": {
+            "name": "The Waerman's Rest",
+            "type": "building",
+            "map_pos": [
+                70.7,
+                21.3
+            ],
+            "inn_cost": 5,
+            "job_board": true,
+            "description": "The carters' inn, forty paces inside the gate, built long and low so a wagon team can be walked through the yard without unhitching. Beds by the hour upstairs and stabling by the night behind, and a common room that smells of ox, wet wool and the barley broth that is the only thing on. Every piece of news that reaches Waerhaven by land arrives in this room first, is argued over for an evening, and goes up the hill in the morning slightly wrong.",
+            "first_visit": "The gate is behind you and the noise of it — chain, iron tyre, a drover swearing at something patient — cuts off when the door shuts. Somebody has chalked the day's grain price on the beam over the hearth. Somebody else has rubbed it out and written it again lower.",
+            "ambience": [
+                "A carter counts coin onto the table in the slow way of a man who has already counted it twice.",
+                "The chalked price on the beam gets rubbed out and rewritten. Nobody comments.",
+                "Rain comes on outside, hard, and the whole room glances at the door without moving.",
+                "Two Drennmark women eat standing at the end of the bar, quickly, and leave without sitting down."
+            ],
+            "exits": [
+                {
+                    "to": "the_rest_cellar",
+                    "label": "Down the trap to the cellar"
+                },
+                {
+                    "to": "hallowmarket",
+                    "label": "Out into Hallowmarket"
+                },
+                {
+                    "to": "the_hallowgate",
+                    "label": "Along to the gate"
+                }
+            ]
+        },
+        "the_rest_cellar": {
+            "name": "The Rest's Cellar",
+            "type": "room",
+            "map_pos": [
+                76.2,
+                28.5
+            ],
+            "description": "Barrels on a brick floor that stands a hand lower at the seaward end than it did when it was laid, because Waerhaven is a promontory and everything under it is wet. There is a drain in the corner the width of a man's shoulders, grated, and the grate is old, and the grate has been moved.",
+            "ambience": [
+                "Water moves somewhere under the floor, unhurried, the way water moves when it is going somewhere.",
+                "The candle leans toward the drain and stays leaning."
+            ],
+            "exits": [
+                {
+                    "to": "waermans_rest",
+                    "label": "Up the trap to the common room"
+                },
+                {
+                    "to": "underquay_stair",
+                    "label": "Through the drain, into the dark",
+                    "hidden": true
+                }
+            ]
+        },
+        "hallowmarket": {
+            "name": "Hallowmarket",
+            "type": "square",
+            "map_pos": [
+                46.0,
+                16.3
+            ],
+            "description": "The city's only proper market, held in the widest part of the Gate Way where the timber road comes in, and running from before light until the Watch turns the stalls out at dusk. You can buy anything here — rope, salt beef, a Drennmark girl's wedding silver, a chart nobody will admit is a chart — and the one thing on offer that nobody has ever bought is a straight answer.",
+            "first_visit": "Green sawn pine, oxen, and dust that gets into the eyes. A woman with a board of six eggs is asking a price that would have been a scandal a year ago, and getting it.",
+            "ambience": [
+                "The grain queue at the far end has not moved in the time you have been standing here.",
+                "Somebody is selling Drennmark charms, and doing well, and looking over their shoulder.",
+                "Two carters argue about a weight. Neither of them has a scale.",
+                "A Watch pair walks the length of the market, slowly, looking at nothing in particular and everyone in general."
+            ],
+            "exits": [
+                {
+                    "to": "waermans_rest",
+                    "label": "In at the Waerman's Rest"
+                },
+                {
+                    "to": "the_hallowgate",
+                    "label": "South, down to the gate"
+                },
+                {
+                    "to": "hallowgate_keep",
+                    "label": "Across to the Keep"
+                },
+                {
+                    "to": "the_weigh_house",
+                    "label": "Over to the Weigh House"
+                },
+                {
+                    "to": "league_granary",
+                    "label": "Along to the granary"
+                },
+                {
+                    "to": "halvards_ironmongery",
+                    "label": "In at Halvard's"
+                },
+                {
+                    "to": "boomhead",
+                    "label": "West, down the Gate Way to the harbour"
+                },
+                {
+                    "to": "the_great_slip",
+                    "label": "South-west, along to the slipways"
+                },
+                {
+                    "to": "the_tar_steps",
+                    "label": "East, up Tarrow Road"
+                }
+            ]
+        },
+        "the_hallowgate": {
+            "name": "The Hallowgate",
+            "type": "gate",
+            "map_pos": [
+                40.1,
+                58.8
+            ],
+            "description": "One gate, two leaves, a portcullis nobody has dropped in living memory, and the whole of Waerhaven's connection to the world by land. Fifty-five miles of ox-road runs south-west from it to Venddock and on to Lathmere. There is no road north. The tally-clerk's hut is built into the arch, and the tally has stopped agreeing with the traffic.",
+            "ambience": [
+                "A team comes through, and the whole arch fills with the noise of it, and empties.",
+                "The gate-clerk writes something, looks at what he has written, and does not cross it out.",
+                "Somebody is let through northward on foot, at dusk, without being written down."
+            ],
+            "exits": [
+                {
+                    "to": "hallowmarket",
+                    "label": "North, into the market"
+                },
+                {
+                    "to": "waermans_rest",
+                    "label": "Along to the Waerman's Rest"
+                },
+                {
+                    "to": "hallowgate_keep",
+                    "label": "Up the stair to the Keep"
+                },
+                {
+                    "to": "wardens_road",
+                    "label": "Out of the gate, into the Wardenswatch"
+                }
+            ]
+        },
+        "hallowgate_keep": {
+            "name": "Hallowgate Keep",
+            "type": "building",
+            "map_pos": [
+                40.1,
+                49.0
+            ],
+            "description": "The gatehouse and the Watch's barracks in one square block of grey stone, the only stone building in the ward. Forty men on the roll, of whom perhaps twelve are sober before noon and perhaps four are actually here. The duty board by the door lists a night watch on the gate that has not been walked since spring.",
+            "ambience": [
+                "Somebody is being counted out his drill money at the table by the door, in coppers, slowly.",
+                "The duty board has a name scratched out and no name written over it."
+            ],
+            "exits": [
+                {
+                    "to": "hallowmarket",
+                    "label": "Out into the market"
+                },
+                {
+                    "to": "the_hallowgate",
+                    "label": "Down to the gate"
+                }
+            ]
+        },
+        "league_granary": {
+            "name": "The League Granary",
+            "type": "building",
+            "map_pos": [
+                23.5,
+                28.6
+            ],
+            "description": "Stone, rat-proofed, raised on staddles, and the single most important building in Waerhaven, because the city grows nothing. Six bays under one roof, a clerk's room at the north end, and a set of League seals on the doors that mean the Factor is the only man who may open them. From the doorway it looks full. It looks full from the doorway by design: the near bays are the ones that are stacked.",
+            "ambience": [
+                "The clerk's tally hangs on its nail, face to the wall.",
+                "A sparrow gets in, panics along the roof-tree, and finds nothing on the floor worth staying for.",
+                "The seals on the third and fourth doors are older than the seals on the first two."
+            ],
+            "exits": [
+                {
+                    "to": "hallowmarket",
+                    "label": "Out to the market"
+                },
+                {
+                    "to": "the_weigh_house",
+                    "label": "Across the yard to the Weigh House"
+                }
+            ]
+        },
+        "the_weigh_house": {
+            "name": "The Weigh House",
+            "type": "building",
+            "map_pos": [
+                76.5,
+                28.0
+            ],
+            "description": "Where inbound timber is measured and taxed at the gate, in a shed built round a beam-scale big enough to weigh a cart. The Weighmaster's ledgers go back ninety years and are the only continuous record of anything in this city. He will show you all of them and one of them twice, and he will not show you the box on the shelf behind him.",
+            "ambience": [
+                "The great beam settles, and settles again, and the Weighmaster writes down the second figure.",
+                "A load of pine is measured, argued over, measured again, and paid at the first figure."
+            ],
+            "exits": [
+                {
+                    "to": "hallowmarket",
+                    "label": "Out to the market"
+                },
+                {
+                    "to": "league_granary",
+                    "label": "Across the yard to the granary"
+                }
+            ]
+        },
+        "halvards_ironmongery": {
+            "name": "Halvard's Ironmongery",
+            "type": "building",
+            "map_pos": [
+                72.3,
+                16.2
+            ],
+            "description": "Nails in ninety sizes, chain by the fathom, adzes, augers, caulking irons and a smell of oil and cold iron. Halvard Stonecut came out of Karrun-Deep forty years ago and has sold this city every fastening in it. Behind the counter, on a hook, hangs a bundle of letters addressed north in the same hand, none of them opened, because none of them were ever answered.",
+            "ambience": [
+                "Halvard turns a nail over, twice, and puts it in the wrong tray on purpose so he can find it again.",
+                "The bundle of letters on the hook has one more in it than it had last week."
+            ],
+            "exits": [
+                {
+                    "to": "hallowmarket",
+                    "label": "Out to the market"
+                }
+            ]
+        }
+    }
+}

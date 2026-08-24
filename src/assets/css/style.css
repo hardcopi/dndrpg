@@ -17,7 +17,6 @@
  */
 @import url('tokens.css');
 
-
 * { box-sizing: border-box; }
 
 html, body {
@@ -806,7 +805,7 @@ body.game-page {
    too rather than letting the two overlap. */
 body.in-dialogue .hud-actions { display: none; }
 
-/* Combat takes the whole frame and draws its own portraits, initiative ribbon
+/* Combat takes the whole frame and draws its own portraits, initiative list
    and action economy. Leaving the exploration HUD on top of it would be two
    sets of the same information disagreeing, so it stands down — except the log,
    which is the one panel that is *more* useful in a fight. */
@@ -827,12 +826,12 @@ body.in-combat .hud-actions { display: none; }
 body.in-combat .game-shell {
   grid-template-columns: minmax(0, 1fr) var(--rail-w, 390px);
   /* A row for the top line above the two columns. `auto` so it is exactly as
-     tall as the tokens; the rail below is shorter by that much, which is the
-     trade — the ribbon is the one thing on this screen that wants the whole
-     width, and the log is the one thing that does not mind losing 60px. */
+     tall as the header; the rail below is shorter by that much, which is the
+     trade — the round and the turn want the whole width, and the log is the
+     one thing that does not mind losing those pixels. */
   grid-template-rows: auto minmax(0, 1fr);
   /* The shell's 1rem is a gap between COLUMNS — panels standing side by side.
-     Applied to the new row as well it put 16px between the initiative ribbon
+     Applied to the new row as well it put 16px between the combat header
      and the board it belongs to, which reads as two screens rather than one
      and is 16px of the thing that is short. Rows get a quarter of it; columns
      keep what they had. */
@@ -840,8 +839,8 @@ body.in-combat .game-shell {
   /* Wider than anywhere else in the game, and only here.
 
      The 1400px cap exists to keep a line of prose readable, and a tactical map
-     is not prose: four columns with a sixteen-by-twelve board across the
-     middle two does not fit in the ~970px a 1400px shell leaves after the
+     is not prose: three columns with a sixteen-by-twelve board across the
+     middle does not fit in the ~970px a 1400px shell leaves after the
      rail. This spends screen that only exists on the monitors that have it. */
   max-width: 1760px;
 }
@@ -856,7 +855,7 @@ body.in-combat .rail-right { grid-column: 2; grid-row: 2; }
 body.in-combat .cbt-top { grid-column: 1 / -1; grid-row: 1; }
 /* The scene's own stack — the icon toolbar, then the board — closes up too.
    0.6rem is written for a page of prose with panels down it; here it is one
-   more band between the ribbon and the board, and the board is what is short. */
+   more band between the header and the board, and the board is what is short. */
 body.in-combat .scene { gap: var(--sp-4); }
 
 /* And the log takes the whole of what is left. With the quest tracker hidden
@@ -900,10 +899,9 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
    
      The whole screen is a budget on a phone and this is where it is spent:
      board 240 (a 16-wide grid needs that much height for square cells at
-     360px), action bar 150, initiative 86, topbar 54, rosters 90, log 90.
-     That is 710 of 740, and the log is what gives — mid-fight it is the last
+     360px), action column, initiative list, topbar 54, log 90.
+     That is tight on 740, and the log is what gives — mid-fight it is the last
      four things that happened, and it still scrolls. */
-  body.in-combat .cbt-roster { max-height: 12vh; overflow-y: auto; }
   /* The rule that hid the inspector here was dead for as long as it existed.
      `body.in-combat .cbt-inspector { display: none }` inside a media query has
      exactly the specificity of `body.in-combat .cbt-inspector { display: flex }`
@@ -1450,6 +1448,17 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .pit-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  /* Every row the same height as the tallest.
+
+     The grid is two columns, so the last bout shares a row with the readout —
+     and the readout is a heading plus one line per tier, which is taller than
+     a two-line button. Left to itself the grid gave that row the extra height
+     and the bout in it came out visibly bigger than the two above, which read
+     as the hard match being a bigger button rather than a taller neighbour.
+
+     `1fr` on the rows spends the height evenly instead, so the three bouts are
+     one size whatever the readout has to say. */
+  grid-auto-rows: 1fr;
   gap: var(--sp-4);
   align-items: stretch;
 }
@@ -1694,9 +1703,22 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
    I go" before it finds the rest of the country. */
 .wm-edge.is-way {
   stroke: var(--pg-road-open);
-  stroke-width: 0.85;
+  stroke-width: 0.2;
   stroke-dasharray: none;
   opacity: 1;
+}
+/* The head on the end of it. A filled triangle drawn by ui-map.js rather than
+   a marker-end, so it keeps its size while the shaft stays hairline — see
+   arrowHead(). No stroke of its own: an outline at this size closes up into a
+   blob, and the fill is already the road's own colour. */
+.wm-edge-head {
+  fill: var(--pg-road-open);
+  stroke: none;
+  pointer-events: none;
+}
+.wm-edge-head.is-locked {
+  fill: var(--pg-road);
+  opacity: 0.55;
 }
 .wm-edge.is-way.is-locked {
   stroke: var(--pg-road);
@@ -1723,6 +1745,73 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
    beside the parchment frame reads as a dead screen region, not as stone. */
 .wm-rock { fill: var(--pg-rock); pointer-events: none; }
 
+.wm-rock-shadow { stroke: #d4d0c7; stroke-width: 1.05; stroke-linecap: round; }
+.wm-hatch       { stroke: #1a1612; stroke-width: 0.18; stroke-linecap: butt; }
+.wm-rock-edge   { stroke: #1a1612; stroke-width: 0.38; fill: none; stroke-linejoin: round; }
+
+/* --- the rockwork -------------------------------------------------------
+
+   Four paths, laid on the bare rock before any floor is painted over them.
+   Each is ONE <path> holding every stroke of its kind on the level — see the
+   note at the ruling for why that matters here more than it usually would. */
+
+/* The soft grey the wall throws onto the page: the scribble again, one dash
+   in three of it, pushed down and left and drawn underneath. A ragged echo
+   rather than a blur filter — a filter over this chart is the one effect that
+   reliably makes it stutter. */
+.wm-rock-shadow {
+  fill: none;
+  stroke: var(--pg-rock-shade);
+  stroke-width: 0.34;
+  stroke-linecap: round;
+  pointer-events: none;
+}
+/* The scribble filling the wall. Fatter than hatching wants to be, because it
+   is colouring in rather than shading, and the dashes have to read as dashes
+   at the size the chart is actually shown. */
+.wm-hatch {
+  fill: none;
+  stroke: var(--pg-rock-line);
+  stroke-width: 0.21;
+  /* Butt caps, not round. Squarer ends are closer to the plate's own dashes,
+     and on the deepest fully-walked level — five thousand of them — rounding
+     every end cost about a third of the frame during a continuous zoom. */
+  stroke-linecap: butt;
+  pointer-events: none;
+}
+/* The wall's own line, on the floor side of the scribble. The one crisp edge
+   on the plate: the fill is deliberately ragged, so if this is not clean the
+   room has no shape at all. */
+.wm-rock-edge {
+  fill: none;
+  stroke: var(--pg-rock-line);
+  stroke-width: 0.38;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+/* Chips fallen off the wall. Pure decoration, and sparse enough — about one
+   sample in forty — to read as litter rather than as texture. */
+.wm-rubble {
+  fill: var(--pg-paper);
+  stroke: var(--pg-rock-line);
+  stroke-width: 0.1;
+  pointer-events: none;
+}
+
+/* The wall is drawn ONCE now, by the ink pass, from the outline of the floor
+   as a whole. The per-shape strokes that used to do it are switched off here:
+   a room's own rectangle drew a line straight across every doorway opening
+   into it, and a passage's casing doubled the wall it shares with the room at
+   each end. Both were invisible while each shape was outlined separately and
+   both are obvious once there is a single continuous wall to compare them to.
+   The strokes that survive are the ones carrying information rather than
+   shape — where you are, the stair, the way in, and anything glimpsed. */
+.worldmap.is-plan .wm-room:not(.is-here):not(.is-stair):not(.is-entrance):not(.is-glimpsed) {
+  stroke: none;
+}
+.worldmap.is-plan .wm-hall-wall:not(.is-glimpsed) { stroke: none; }
+
 /* A room: paper. The stroke is the wall, heavier than the corridor walls so
    the eye reads rooms first — the same hierarchy the old plates got from
    hand-inked outlines. Square corners; cut stone is not a rounded rectangle. */
@@ -1739,10 +1828,51 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   stroke: var(--pg-road-open);
   stroke-width: 0.8;
 }
+/* On a plan the same 0.8 reads as a heavy brown frame — it was sized against
+   a near-black ground where a warm line had to shout to be seen at all, and on
+   paper it shouts. Thinner here, which is what the rule above always meant:
+   the party's own faces are standing on the room, and they are most of the
+   highlight. */
+.worldmap.is-plan .wm-room.is-here { stroke-width: 0.32; }
 /* Where you came in and where you go down. The stair ticks say it in glyph;
    the dashed wall says it at a glance from across the chart. */
+/* The two rooms on a floor that go somewhere vertical, colour-coded to what
+   they do rather than both drawn as "special".
+
+   The stair DOWN is gold, like everything else that leads further in. The way
+   OUT takes the colour the exit arrow and the exit pin already use, so the
+   room, the stub leaving the chart and the mark on the end of it are one
+   sentence: this is the way back to daylight.
+
+   It matters more than it used to. Climbing out is no longer a button you can
+   press anywhere on the floor — DelveEngine::status gates it on standing in
+   this room — so a party deep in a level needs to be able to find it. */
 .wm-room.is-stair { stroke: var(--pg-stair); stroke-dasharray: 1.6 0.8; }
-.wm-room.is-entrance { stroke-dasharray: 1.6 0.8; }
+.wm-room.is-entrance {
+  stroke: var(--pg-road-open);
+  stroke-dasharray: 1.6 0.8;
+}
+.wm-stair-ticks.is-down line { stroke: var(--pg-stair); }
+/* Kept for a plan drawn by something that still asks for an up-flight; the
+   dungeon chart marks its way out with .wm-waypin instead. */
+.wm-stair-ticks.is-up line { stroke: var(--pg-road-open); }
+
+/* The way out of the floor, drawn IN the room you can leave from. The same
+   disc and arrow as the stub at the chart's border (.wm-exitpin) — one mark
+   for one meaning — but inert: the room's own pin is the click target, and
+   two things to click in one room is one too many. */
+.wm-waypin { pointer-events: none; }
+.wm-waypin-disc {
+  fill: var(--pg-road-open);
+  stroke: var(--pg-halo-dark);
+  stroke-width: 0.3;
+}
+.wm-waypin-mark {
+  fill: var(--pg-halo-dark);
+  font-size: 2.8px;
+  font-weight: var(--fw-bold);
+  text-anchor: middle;
+}
 
 /* --- the fog ------------------------------------------------------------
 
@@ -1753,14 +1883,25 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 
    Unfilled, and that is the whole idea. Paper means "we have been here and
    this is its floor"; a glimpsed room is a doorway and a guess at what is
-   behind it, so it gets the wall and the dark stays showing through. */
+   behind it, so it gets the wall and the ground stays showing through.
+
+   That used to be said in pale cream, which was legible while the rock behind
+   it was nearly black. On stone-coloured rock the same pale cream reads as
+   floor — brighter than the paper it was meant to be a ghost of — so a room
+   nobody had entered looked walked. It is thinned INK now: line only, no fill,
+   with the rock showing where the floor would be if there were one. */
 .wm-room.is-glimpsed {
   fill: none;
   stroke: var(--pg-glimpse);
   stroke-width: 0.4;
   stroke-dasharray: 1.2 1;
 }
-.wm-hall.is-glimpsed { stroke: var(--pg-glimpse); }
+/* A glimpsed passage is drawn in the ground, not in paper — the casing below
+   is the whole of it. The `.is-way` pairing is not redundant: a glimpsed run
+   that is also a way out is highlighted further down the file, and without
+   this it would come back as the brightest floor on the chart.  */
+.wm-hall.is-glimpsed,
+.wm-hall.is-glimpsed.is-way { stroke: var(--pg-rock); }
 /* The wall under a glimpsed run goes with it: a black casing round a passage
    nobody has walked draws it more firmly than the room it leads to. It carries
    its own class rather than being selected through the run, because the walls
@@ -1770,10 +1911,14 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 
 /* The ruling, one <path> of hairlines per chart. Faint: texture, not
    information. */
+/* The ruling. 0.12 was set when a plan opened at 1.7 and the line landed
+   around a pixel; a plan opens on its own grid now, at nearly four, and the
+   same width came out close to three pixels — graph paper drawn in pencil
+   rather than in print. */
 .wm-grid-line {
   fill: none;
   stroke: var(--pg-rule);
-  stroke-width: 0.12;
+  stroke-width: 0.09;
   pointer-events: none;
 }
 
@@ -1793,12 +1938,100 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 
 /* A floor plan is denser than any authored region: eleven to fourteen rooms
    on a field the towns use for six or seven, every one of them named. At the
-   chart's usual 3.1px a label is about a fifth of the width and neighbouring
-   names overlap into an unreadable stack. Smaller here, and only here — the
-   room rectangle is now carrying the shape the label used to have to imply,
-   so the text has less work to do. Open the map full-size for the rest. */
+   chart's usual 3.1px the names overlapped into an unreadable stack, so down
+   here the rooms answer to a pin instead (.wm-roompin below) and keep their
+   drawn shape. What labels remain on a plan are the ways off the level, which
+   sit out at the border with nothing to collide with — still shrunk, because
+   they share the same crowded field. */
 .worldmap.is-plan .wm-label { font-size: 2.5px; stroke-width: 0.7; }
 .worldmap.is-plan .wm-hit { x: -7.5px; width: 15px; }
+
+/* A room's name, folded into a pin.
+
+   Sized to sit inside the smallest room on a plan rather than to be read at a
+   glance — it is a thing you point at, and the tooltip does the reading. The
+   disc is filled so it reads against floor, wall or party mark alike, and the
+   whole mark brightens on hover and focus so the pointer and the keyboard get
+   the same answer about what is live. */
+.wm-roompin { pointer-events: none; }
+.wm-roompin-disc {
+  fill: var(--pg-halo-dark);
+  stroke: var(--gold-dim);
+  stroke-width: 0.35;
+  transition: fill var(--dur-fast) var(--ease-out),
+              stroke var(--dur-fast) var(--ease-out);
+}
+.wm-roompin-i {
+  fill: var(--gold-dim);
+  font-size: 2.6px;
+  font-style: italic;
+  font-weight: var(--fw-bold);
+  text-anchor: middle;
+  transition: fill var(--dur-fast) var(--ease-out);
+}
+.wm-node[data-map-node]:hover .wm-roompin-disc,
+.wm-node[data-map-node]:focus-visible .wm-roompin-disc {
+  fill: var(--gold-dim);
+  stroke: var(--gold);
+}
+.wm-node[data-map-node]:hover .wm-roompin-i,
+.wm-node[data-map-node]:focus-visible .wm-roompin-i {
+  fill: var(--pg-halo-dark);
+}
+/* A doorway you can step through. The glyph is a hairline box a door's width
+   across — far too little to aim at — so an invisible pad carries the pointer
+   and the glyph itself stays inert. */
+.wm-doorway .wm-door-hit {
+  fill: transparent;
+  stroke: none;
+  pointer-events: none;
+}
+.wm-doorway.is-through .wm-door-hit { pointer-events: all; cursor: pointer; }
+.wm-doorway.is-through:focus-visible { outline: none; }
+.wm-doorway.is-through:hover .wm-doorbox,
+.wm-doorway.is-through:focus-visible .wm-doorbox { fill: var(--pg-road-open); }
+.wm-doorway.is-through:hover .wm-door,
+.wm-doorway.is-through:hover .wm-portcullis,
+.wm-doorway.is-through:focus-visible .wm-door,
+.wm-doorway.is-through:focus-visible .wm-portcullis { stroke: var(--pg-road-open); }
+
+/* The way out of the level, pinned. Same disc as a room so the two read as
+   one vocabulary, with an arrow instead of an `i` — the difference between
+   somewhere on this floor and the way off it. Filled rather than outlined,
+   because it is the one mark on a plan that is worth finding in a hurry. */
+/* The mark is inert and the pad under it takes the clicks. The caption this
+   replaced was its own click target — text is clickable — and without a pad
+   the only thing left to hit would be the hairline stub. */
+.wm-exitpin { pointer-events: none; }
+.wm-exitpin-hit {
+  fill: transparent;
+  stroke: none;
+  pointer-events: all;
+}
+.wm-exitpin-disc {
+  fill: var(--gold-dim);
+  stroke: var(--pg-halo-dark);
+  stroke-width: 0.3;
+  transition: fill var(--dur-fast) var(--ease-out);
+}
+.wm-exitpin-mark {
+  fill: var(--pg-halo-dark);
+  font-size: 2.8px;
+  font-weight: var(--fw-bold);
+  text-anchor: middle;
+}
+.wm-neighbor[data-map-node]:hover .wm-exitpin-disc,
+.wm-neighbor[data-map-node]:focus-visible .wm-exitpin-disc { fill: var(--gold); }
+.worldmap.is-plan .wm-neighbor[data-map-node] { cursor: pointer; }
+
+/* The pin is the room's hit target, so it wants the asking cursor the quest
+   pin has — but it travels on click, so the pointer stays a pointer. */
+.worldmap.is-plan .wm-node[data-map-node] .wm-hit { cursor: pointer; }
+/* `x` and `width` are geometry properties here, so the plan's wide-label pad
+   above outranks the narrow one the markup asks for and has to be undone
+   rather than simply not applied. A pin wants a pad its own size — at the
+   label's 15 units it would answer for the room next door. */
+.worldmap.is-plan .wm-node[data-room-pin] .wm-hit { x: -3px; width: 6px; }
 
 /* A passage: a run of floor with a wall down each side.
 
@@ -2003,11 +2236,11 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .wm-pc-ring {
   fill: none;
   stroke: var(--pg-red);
-  stroke-width: 0.32;
+  stroke-width: 0.1;
 }
 .wm-pc.is-active .wm-pc-ring {
   stroke: var(--gold-bright);
-  stroke-width: 0.45;
+  stroke-width: 0.1;
 }
 /* Somebody at 0 hp is greyed and outlined dark: on a map at this size the ring
    colour is the only channel there is, so it says the one thing worth saying
@@ -2025,6 +2258,36 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   fill: var(--pg-way-ink);
 }
 .wm-pc.is-more .wm-pc-disc { fill: var(--pg-paper-dim); }
+
+/* The people who are already here.
+
+   Same token as a party mark so the chart has one visual idea of "somebody is
+   standing there", and a different ring so it is never in doubt which of them
+   is you: the party ring is red, theirs is the ink the roads are drawn in.
+
+   Unlike a party mark this one is a control — it opens the conversation — so
+   it takes a pointer and answers hover and focus the way the place names do. */
+.wm-npc { pointer-events: all; cursor: pointer; }
+.wm-npc-disc { fill: var(--pg-paper-lit); stroke: none; }
+.wm-npc-ring {
+  fill: none;
+  stroke: var(--pg-way-ink);
+  stroke-width: 0.26;
+}
+.wm-npc:hover .wm-npc-ring,
+.wm-npc:focus-visible .wm-npc-ring {
+  stroke: var(--gold-bright);
+  stroke-width: 0.4;
+}
+.wm-npc:focus-visible { outline: none; }
+.wm-npc-initial {
+  text-anchor: middle;
+  font-family: var(--font-display, Georgia, serif);
+  font-weight: var(--fw-bold);
+  fill: var(--pg-way-ink);
+}
+.wm-npc.is-more .wm-npc-disc { fill: var(--pg-paper-dim); }
+.wm-npc.is-more { cursor: default; pointer-events: none; }
 
 /* On the move. The transform is driven frame by frame from ui-map.js, so
    there is no CSS transition here to fight it — this is only the look. The
@@ -2168,20 +2431,30 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 /* ---------------------------------------------------------------------------
    The creation wizard.
 
-   This is the one page in the game that deliberately does not scroll on a
-   desktop. The whole thing is a flex column pinned to the viewport height, and
-   `.wiz-body` is the only part allowed to give — so a step either fits or the
-   step is too big and wants splitting, which is a design answer rather than a
-   scrollbar.
+   This page used to be pinned to the viewport and refuse to scroll: the whole
+   thing a flex column at `100dvh`, with `.wiz-body` the only part allowed to
+   give. A step either fit or it wanted splitting, and that was the design
+   rather than an oversight.
 
-   `100dvh` rather than `100vh` because on mobile browsers `vh` includes the
-   address bar that is about to slide away, which puts the footer — the Next
-   button, the only way forward — just off the bottom of the screen.
+   The 3D creator ended that. It wants real height to be usable — its own
+   pickers run down the side of the character — and no arrangement of a fixed
+   viewport gives it that and the two lines of identity above it as well. The
+   pinned version bought "no scrollbar on the window" at the price of a
+   scrollbar inside the panel instead, which is the same scrollbar somewhere
+   worse: it clipped the step's own furniture rather than the page's, and left
+   the rail and the Next button floating above content that could not reach
+   them.
+
+   So the page scrolls, all of it, the way every other page here does. One
+   scrollbar on the window instead of a second one nested in a panel. Nothing
+   is pinned and nothing needs a `min-height: 0` to be allowed to shrink,
+   because nothing is being asked to shrink any more.
    --------------------------------------------------------------------------- */
 .wizard-page {
-  height: 100dvh;
-  overflow: hidden;
+  /* No height and no overflow: the document is the scroller. */
   display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
 }
 .wizard {
   display: flex;
@@ -2191,7 +2464,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   margin: 0 auto;
   padding: var(--sp-16) var(--sp-20) var(--sp-16);
   gap: var(--sp-12);
-  min-height: 0;   /* lets .wiz-body actually shrink inside the flex column */
+  flex: 1 1 auto;
 }
 
 .wiz-head { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--sp-16); }
@@ -2252,9 +2525,12 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .wiz-pip-l { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 .wiz-body {
+  /* Fills the window on a short step and grows past it on a tall one.
+     `flex-grow` takes the slack under a step that does not need it, so the
+     panel is not a different height on every step; `flex-basis: auto` with no
+     `min-height: 0` means a step taller than the window pushes the page down
+     rather than being squeezed. The window scrolls; this never does. */
   flex: 1 1 auto;
-  min-height: 0;
-  overflow: auto;   /* the escape hatch for short windows, not the design */
   background: var(--bg-panel);
   border: 1px solid var(--border);
   border-radius: var(--r-lg);
@@ -2277,71 +2553,81 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 
 .wiz-pair { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-12); }
 
-/* Fields on the left, the picture on the right.
+/* ---- The identity line ------------------------------------------------- */
 
-   Wider than `.wiz-narrow` on purpose, but only the LEFT column is allowed to
-   be narrow: the reason that cap exists is that a long text input is harder to
-   read, and that argument is about the input, not about the step. So the form
-   column keeps its measure and the aside takes what is left.
+/* Who they are, on one line: name, gender, race, subrace.
 
-   The aside is capped rather than proportional. A 4:3 plate given half of an
-   1100px step is 550px wide and taller than the form beside it, which makes
-   the picture the subject of the page and the character creation an annotation
-   on it. */
-.wiz-split {
+   A grid rather than flex, because these four want fixed proportions and not
+   equal thirds — the name is the field somebody types a sentence into and the
+   three selects hold one word each. `align-items: end` lines the controls up
+   along their bottoms, which is what makes it read as one line rather than as
+   four stacked label-and-field pairs that happen to be side by side. */
+.wiz-idline {
   display: grid;
-  grid-template-columns: minmax(0, 34rem) minmax(0, 24rem);
-  gap: var(--sp-24);
-  align-items: start;
+  grid-template-columns: minmax(14rem, 2.2fr) minmax(7rem, 1fr) minmax(8rem, 1fr) minmax(8rem, 1fr);
+  gap: var(--sp-12);
+  align-items: end;
 }
-.wiz-split-main { min-width: 0; }
-.wiz-split-aside { min-width: 0; }
+.wiz-idfield { min-width: 0; }
+.wiz-idfield select { width: 100%; }
 
-/* No plate, no column. Without this the grid holds a 24rem track open for an
-   element with nothing in it, and the form sits off-centre against a void for
-   every race nobody has painted yet. */
-.wiz-split:has(#racial-art[hidden]) { grid-template-columns: minmax(0, 34rem); }
-
-/* One column, picture last: the selects are what you came to this step to
-   operate, and on a phone they should not be below a landscape painting. */
+/* Two rows before one column: at the width where four fields stop fitting, the
+   name still deserves the full measure, and pairing gender with race keeps the
+   line's reading order intact. Only below that does it become a stack. */
 @media (max-width: 62rem) {
-  .wiz-split { grid-template-columns: minmax(0, 1fr); }
-  .wiz-split-aside { max-width: 34rem; }
+  .wiz-idline { grid-template-columns: 1fr 1fr; }
+  .wiz-idfield-name { grid-column: 1 / -1; }
+}
+@media (max-width: 34rem) {
+  .wiz-idline { grid-template-columns: 1fr; }
 }
 
-/* Who a race is, above the line of numbers it grants. Serif, because it is
-   voice rather than interface, and set on a quiet inset so it reads as a note
-   about the world instead of another field label. Only the races we wrote
-   carry one — `:empty` keeps an SRD race from leaving a lit box with nothing
-   in it. */
-.wiz-lore {
-  font-family: var(--font-display);
+/* What the race grants — speed, ability bonuses, traits — under the line that
+   chose it. One line of interface facts, so it is set in the UI face rather
+   than the display one and kept quiet: it is a consequence of the selects
+   above, not a thing to read before operating them. */
+.wiz-benefits {
+  margin: 0;
   color: var(--text-dim);
-  line-height: var(--lh-prose);
   font-size: var(--fs-sm);
-  margin: var(--sp-12) 0 0;
-  padding: var(--sp-12) var(--sp-14);
-  border-left: 2px solid var(--ornament);
-  background: rgba(0, 0, 0, 0.16);
-  border-radius: 0 4px 4px 0;
+  line-height: var(--lh-tight, 1.35);
 }
-.wiz-lore:empty { display: none; }
+.wiz-benefits:empty { display: none; }
 
-/* The race plate: a man and a woman of that people, back to back. Framed in
-   unlit brass, because it is a picture of the world rather than a control —
-   the same treatment a module cover gets on the shelf.
+/* ---- The creator ------------------------------------------------------- */
 
-   No top margin: it is the first thing in its own column now and sits level
-   with the Name label, not below anything. `hidden` needs saying here or the
-   `display: block` above would override the attribute. */
-.wiz-race-art {
-  display: block;
-  width: 100%;
-  border: 1px solid var(--ornament);
+/* Sized for its contents, and the step scrolls if the window is short.
+
+   This is the one step on this page allowed to do that. It was tried the other
+   way — the creator taking whatever the two lines above did not use — and that
+   guarantees no scrollbar at the price of the thing worth looking at: on a
+   laptop it left about 340px, which is under what the creator's own tallest
+   tab needs, so the panel silently clipped its last swatches instead.
+
+   The height is measured rather than guessed. The panel's tallest tab is now
+   Dress — two outfit pickers and eight attachment slots — at about 668 units of
+   the creator's own 1440x900 reference space, ahead of Colour at 582. Its
+   scroll viewport is the panel height less 188 for the title, tabs and footer,
+   and because the canvas scales with `matchWidthOrHeight: 0.5` the viewport in
+   reference units grows as sqrt(H * 1440 * 900 / W). At the 997px this box gets
+   on a full window that puts 700px at a 766-unit viewport, which clears Dress
+   with room for another slot or two. It was 640 before the attachment pickers
+   were added, which cleared Colour and would have clipped Dress. */
+[data-step="identity"]:not([hidden]) {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-12);
+}
+
+/* An iframe fills its box, and an iframe in a zero-height box is a blank page
+   that looks exactly like a broken build — so this box is always given one. */
+#look-model-well {
+  height: 700px;
   border-radius: var(--r-md);
-  background: var(--bg-inset);
+  overflow: hidden;
+  background: #1e1a15;
+  border: 1px solid var(--border);
 }
-.wiz-race-art[hidden] { display: none; }
 
 .wiz-nav {
   display: flex;
@@ -2362,9 +2648,19 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 /* Re-dressing an existing character is the look step with the wizard removed. */
 .redress-mode .wiz-nav { justify-content: flex-end; }
 
+/* Re-dressing is the creator and nothing else — no rail, no identity line, no
+   other step — so it has a screen's worth of room the creation step spends on
+   fields, and the box takes it.
+
+   `max()` rather than a flex remainder now that the page scrolls: the creator
+   fills a tall window, and on a short one it stops at the 700px its own tallest
+   tab needs and lets the window scroll instead of clipping the last row of
+   swatches. The 240px is the site bar, the title, the panel padding and the
+   Save button underneath. */
+.redress-mode #look-model-well { height: max(700px, calc(100dvh - 240px)); }
+
 @media (max-width: 720px) {
-  /* Nothing fits one screen on a phone, so stop pretending and let it scroll. */
-  .wizard-page { height: auto; overflow: visible; }
+  /* The page scrolls everywhere now, so the phone no longer needs telling. */
   .wiz-pip-l { display: none; }
   .wiz-pair { grid-template-columns: 1fr; }
 }
@@ -4497,7 +4793,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 }
 
 /* ====================================================================
-   The rank combat board
+   The combat board
    ==================================================================== */
 
 .combat-screen {
@@ -4506,139 +4802,67 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   z-index: var(--z-combat);
   display: flex;
   flex-direction: column;
-  gap: var(--sp-8);
-  padding: var(--sp-8);
-  overflow: auto;
-  background:
-    radial-gradient(ellipse at 50% 0%, var(--bg-panel) 0%, transparent 60%),
-    var(--bg-inset);
+  gap: 0;
+  padding: 0;
+  overflow: hidden;
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
 }
 .combat-screen.hidden { display: none; }
 
-/* The ribbon and the round/turn line share one row.
-
-   They were stacked, and the board pays for that twice over: it is bound by
-   height, not width — sixteen by twelve in a column with room to spare
-   sideways — so every row above it comes off the *drawing*, and comes off it
-   at four-thirds, since losing height loses the width that went with it.
-   The head is one line of text with a screen's worth of empty beside it, so
-   the two sit together and the board keeps the difference. */
-/* It sits in the shell markup and is empty out of combat, so it is hidden
-   rather than left as a 0px grid item that still eats the row's gap. */
+/* The fight's top line. It sits in the shell markup and is empty out of
+   combat, so it is hidden rather than left as a 0px grid item that still
+   eats the row's gap. */
 .cbt-top { display: none; }
 body.in-combat .cbt-top {
   display: flex;
   align-items: center;
-  gap: var(--sp-12);
+  gap: var(--sp-16);
   flex-shrink: 0;
   min-width: 0;
-}
-/* The header shares this row with the initiative ribbon, and it grew when the
-   turn's economy moved into it — so it is capped rather than allowed to push
-   the ribbon into a scrollbar. What gives way when the row is tight is the
-   encounter's name: it is scene-setting, the log names the fight as well, and
-   everything else on this line is a number you are playing off. */
-.cbt-top .cbt-head { flex: 0 1 auto; min-width: 0; }
-/* `nowrap` on the row and an ellipsis on the name: without it the header's
-   own words wrapped when it was squeezed, and three lines of header is taller
-   than the row the bar just gave back. */
-.cbt-head { white-space: nowrap; }
-.cbt-head strong {
-  /* A floor, or the name is the only shrinkable thing on the row and gets cut
-     to one letter while the ribbon — which scrolls, and is meant to — keeps
-     everything it asked for. */
-  min-width: 7rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* Initiative. The old screen never showed turn order at all — it iterated
-   `combatants` while `state.order` sat unused — which is the single thing a
-   turn-based fight is unplayable without. */
-.cbt-ribbon {
-  display: flex;
-  gap: var(--sp-4);
-  /* `0` and not `auto`: the ribbon's content is as wide as the fight is long,
-     so an `auto` basis made it the biggest thing in the row and every pixel the
-     row was short came off both of them proportionally — squeezing the header
-     it sits beside. Basis zero means it takes what is left after the header and
-     scrolls, which is what `overflow-x` below is for. */
-  flex: 1 1 0;
-  min-width: 0;
-  overflow-x: auto;
-  /* Thin, and it matters here: this row's height is the board's, and a
-     platform-default scrollbar under the tokens is a third of what the names
-     cost before them. */
-  scrollbar-width: thin;
-  padding-bottom: var(--sp-2);
-}
-/* A token per slot, the same round counter the party rail uses, so a face on
-   the ribbon and a face on a card are recognisably the same object. The slot
-   was a bordered plate 78px wide with a 34px letterboxed crop in it; the box
-   was doing the work the ring does now, and doing it in twice the width. */
-.ribbon-slot {
-  flex: 0 0 auto;
-  /* The token and the room its badge needs, and nothing else — the name that
-     used to set this width is gone; see ribbonEntry(). */
-  width: 2.9rem;
-  text-align: center;
-  padding: var(--sp-2) var(--sp-2) var(--sp-4);
-  border: 0;
-  background: none;
-}
-/* The side lives on the ring rather than on an underline, which is why the
-   plate could go: one mark, on the thing being looked at. */
-.ribbon-slot.is-party img { border-color: var(--accent); }
-.ribbon-slot.is-foe img { border-color: var(--danger); }
-.ribbon-slot.is-now {
-  transform: translateY(-2px);
-}
-.ribbon-slot.is-now img {
-  border-color: var(--gold);
-  box-shadow: var(--sh-glow);
-}
-.ribbon-slot.is-out { opacity: 0.35; filter: grayscale(1); }
-/* Shrink-wrapped to the token so the badge below can hang off the circle
-   rather than off the corner of a box wider than it. `line-height: 0` is
-   the descender trick, not a leading: an inline-block holding one <img>
-   is otherwise a few pixels taller than the image. */
-.ribbon-art { position: relative; display: inline-block; line-height: 0; }
-.ribbon-slot img {
-  display: block;
-  width: 2.4rem;
-  height: 2.4rem;
-  object-fit: cover;
-  object-position: center 22%;
-  border-radius: var(--r-circle);
-  border: 2px solid var(--border);
-  background: linear-gradient(180deg, var(--bg-panel), var(--bg));
-}
-/* The initiative roll, which used to live only in the `title`. Two bandits are
-   the same face and the same truncated name; the number is what tells the
-   player which one is about to go.
-
-   Under the chin rather than in a corner: a round token has no corner, and a
-   badge at the bounding box's edge floats off the portrait diagonally. */
-.ribbon-init {
-  position: absolute;
-  left: 50%;
-  bottom: -3px;
-  transform: translateX(-50%);
-  min-width: 15px;
-  padding: 0 var(--sp-2);
-  font-family: var(--mono);
-  font-size: var(--fs-2xs);
-  line-height: var(--lh-snug);
-  text-align: center;
-  color: var(--text);
-  background: rgba(0, 0, 0, 0.82);
+  min-height: 2.75rem;
+  padding: 0 var(--sp-16);
+  background: linear-gradient(180deg, var(--bg-panel) 0%, var(--bg) 100%);
   border: 1px solid var(--border);
   border-radius: var(--r-md);
 }
-/* `.ribbon-name` lived here — a name under each token, truncated from its front
-   so the trailing number that tells six bandits apart survived the ellipsis.
-   It is gone with the label; the initiative badge does that job and the row is
-   a third shorter for it. */
+.cbt-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-8);
+  flex: 0 0 auto;
+  font-family: var(--font-display);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-md);
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.cbt-brand-icon {
+  width: 1.15rem;
+  height: 1.15rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+/* What gives way when the row is tight is the encounter's name: it is
+   scene-setting, the log names the fight as well, and everything else on this
+   line is a number you are playing off. */
+.cbt-top .cbt-head { flex: 1 1 auto; min-width: 0; }
+.cbt-head { white-space: nowrap; }
+.cbt-head strong {
+  display: block;
+  min-width: 7rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: var(--font-display);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--text);
+}
 
 .cbt-head {
   display: flex;
@@ -4648,75 +4872,163 @@ body.in-combat .cbt-top {
   font-size: var(--fs-sm);
   color: var(--text-dim);
 }
-.cbt-head strong { color: var(--gold); }
-.cbt-turn { color: var(--player); }
+.cbt-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-10);
+  flex: 0 1 auto;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.cbt-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-6);
+  padding: var(--sp-2) var(--sp-10);
+  background: var(--bg-inset);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  font-size: var(--fs-xs);
+  color: var(--text-dim);
+}
+.cbt-pill strong { color: var(--gold); font-weight: var(--fw-semibold); }
+.cbt-turn { color: var(--text-dim); }
+.cbt-turn strong { color: var(--text); }
 .cbt-move { color: var(--gold); font-family: var(--mono); }
 .cbt-move.spent { color: var(--text-dim); text-decoration: line-through; }
 
-/* Four columns: your side, the battlefield across the middle two, the enemy.
-   Named tracks rather than `flex: 1` on everything, because the map wants two
-   of the four and the rosters want a fixed width the cards already have.
+/* Three columns: the order, the battlefield, the verbs for this turn.
+   Named tracks rather than `flex: 1` on everything, because the map wants the
+   leftover and the two side panels want a width the cards and the keys already
+   have.
 
-   200px and not more. The board looks like it has width to spare — it is 4:3
-   inside a wider column, so there is always slack beside it — but the slack is
-   only there because height is what it ran out of. Give it a taller window and
-   it becomes width-bound and spends every pixel of that column. Widening the
-   rosters into it trades a permanent loss on big screens for margin the cards
-   do not use: `.cbt-card` is capped at 150 and centred either way. */
+   The board is 4:3 inside a wider column, so there is always slack beside it
+   until height runs out. Give it a taller window and it becomes width-bound
+   and spends every pixel of that middle track. The side panels are capped so
+   they cannot eat that. */
 .cbt-field {
   display: grid;
   grid-template-columns:
-    var(--cbt-roster-w, 200px) minmax(0, 1fr) minmax(0, 1fr) var(--cbt-roster-w, 200px);
-  grid-template-areas: "party map map foe";
+    minmax(13rem, 15.5rem) minmax(0, 1fr) minmax(14rem, 16.5rem);
+  grid-template-areas: "init map panel";
   flex: 1 1 auto;
   min-height: 0;
-  gap: var(--sp-8);
+  gap: 0;
 }
 /* Placed by name. The trap documented at `body.in-combat .game-shell` is that a
    `display: none` grid item stops being a grid item at all and the survivors
    fall onto the first tracks; naming the areas is what makes this survive
    somebody hiding a column. */
-.cbt-roster.side-party { grid-area: party; }
+.cbt-init { grid-area: init; }
 .cbt-map { grid-area: map; }
-.cbt-roster.side-foe { grid-area: foe; }
+.cbt-panel { grid-area: panel; }
 
-.cbt-roster {
+.cbt-init,
+.cbt-panel {
   min-width: 0;
+  min-height: 0;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: var(--sp-6);
-  padding: var(--sp-8);
   background: var(--bg-panel);
-  border: 1px solid var(--border);
-  border-radius: var(--r-md);
-  /* Each side scrolls inside itself. The fighting pit will happily send six
-     foes, which grew the box past the height the row gave it and painted
-     straight over the action bar underneath. `min-height: 0` is the half that
-     matters: without it a flex item refuses to be shorter than its content and
-     there is nothing to scroll. */
+}
+.cbt-init { border-right: 1px solid var(--border); }
+.cbt-panel { border-left: 1px solid var(--border); }
+
+.cbt-init > h3,
+.cbt-board-fx > h3,
+.cbt-act-label {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  color: var(--gold);
+  padding: var(--sp-10) var(--sp-12) var(--sp-6);
+}
+
+.cbt-init-list {
+  flex: 1 1 0;
   min-height: 0;
   overflow-y: auto;
   scrollbar-width: thin;
+  padding: 0 var(--sp-8) var(--sp-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
 }
-.cbt-roster h3 {
-  margin: 0;
-  align-self: stretch;
+
+.cbt-board-fx {
+  flex: 0 0 auto;
+  min-height: 0;
+  max-height: 42%;
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--border);
+}
+.cbt-board-fx-list {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  margin: 0 var(--sp-8) var(--sp-8);
+  padding: var(--sp-6);
+  background: var(--bg-inset);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--r-md);
   font-size: var(--fs-2xs);
-  letter-spacing: var(--ls-caps);
-  text-transform: uppercase;
   color: var(--text-dim);
-  /* Stays put while its own side scrolls, so a long enemy list never leaves
-     you looking at cards with no idea whose they are. */
-  position: sticky;
-  top: -0.5rem;
-  z-index: 1;            /* local: over the roster cards scrolling under it */
-  margin: calc(-1 * var(--sp-8)) calc(-1 * var(--sp-8)) 0;
-  padding: var(--sp-8) var(--sp-8) var(--sp-4);
-  background: var(--bg-panel);
+  line-height: var(--lh-snug);
 }
-.side-party { border-left: 3px solid var(--accent); }
-.side-foe { border-right: 3px solid var(--danger); }
+.cbt-fx-empty { margin: 0; color: var(--text-dim); }
+.cbt-fx-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-6);
+  width: 100%;
+  margin: 0 0 var(--sp-4);
+  padding: var(--sp-4) var(--sp-6);
+  background: transparent;
+  border: 0;
+  border-radius: var(--r-md);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.cbt-fx-row:last-child { margin-bottom: 0; }
+.cbt-fx-row:hover,
+.cbt-fx-row:focus-visible,
+.cbt-fx-row.is-on {
+  background: var(--bg-panel);
+  outline: none;
+}
+.cbt-fx-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  min-width: 0;
+}
+.cbt-fx-who {
+  color: var(--text-dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cbt-fx-line { color: var(--text); }
+.cbt-fx-note { color: var(--text-dim); }
+.cbt-fx-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--r-circle);
+  margin-top: 0.35em;
+  flex-shrink: 0;
+  background: var(--text-dim);
+}
+.cbt-fx-row.is-cond .cbt-fx-dot { background: var(--danger); }
+.cbt-fx-row.is-boon .cbt-fx-dot { background: var(--success); }
+.cbt-fx-row.is-conc .cbt-fx-dot { background: var(--accent); }
+
 .rank-empty { color: var(--text-dim); padding: var(--sp-8) var(--sp-4); }
 
 /* --- the battlefield --------------------------------------------------- */
@@ -4728,10 +5040,9 @@ body.in-combat .cbt-top {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--sp-6);
-  background: var(--bg-inset);
-  border: 1px solid var(--border);
-  border-radius: var(--r-md);
+  padding: var(--sp-4);
+  background:
+    radial-gradient(ellipse at 50% 40%, var(--bg-panel) 0%, var(--bg-inset) 70%);
 }
 /* An SVG at `height: 100%` with no definite height on its parent falls back to
    its own aspect ratio and overflows — the same trap the world map's modal
@@ -4795,18 +5106,44 @@ body.bm-pan-ready .battlemap { cursor: grab; }
    the drawing and the box you could see was never the box you could walk in.
    A floor a shade off the panel is the difference between the two. */
 .bm-floor { fill: rgba(245, 236, 214, 0.035); }
+.bm-prop { pointer-events: none; }
 .bm-edge {
   fill: none;
   stroke: color-mix(in srgb, var(--border) 85%, var(--gold));
   stroke-width: 0.06;
 }
 
-.bm-cell.is-rough { fill: color-mix(in srgb, var(--grass) 35%, transparent); }
+.bm-cell.is-rough { fill: color-mix(in srgb, var(--grass) 28%, transparent); }
 .bm-cell.is-water { fill: color-mix(in srgb, var(--water) 45%, transparent); }
-.bm-cell.is-low   { fill: color-mix(in srgb, var(--building) 70%, transparent); stroke: var(--border); stroke-width: 0.03; }
-.bm-cell.is-tall  { fill: var(--building); stroke: var(--wall); stroke-width: 0.05; }
+.bm-cell.is-low   { fill: color-mix(in srgb, var(--building) 38%, transparent); stroke: var(--border); stroke-width: 0.03; }
+.bm-cell.is-tall  { fill: color-mix(in srgb, var(--building) 50%, transparent); stroke: var(--wall); stroke-width: 0.05; }
 .bm-cell.is-wall  { fill: var(--wall); }
 .bm-cell.is-pit   { fill: var(--pit); }
+
+/* A board that came with a picture.
+
+   The terrain still exists — it is what the rules read and what the pointer
+   hits — but it stops painting itself, because the walls and the furniture are
+   already drawn and a flat fill over them only hides the drawing. What is left
+   is the faintest wash, enough that a player who has zoomed out can still tell
+   at a glance which squares are solid without having to read the picture.
+
+   Deliberately not zero. An invisible obstacle is the oldest complaint in the
+   genre, and "the art shows a table there" is not a rule anyone can see from
+   across the board. */
+.bm-terrain.is-drawn .bm-cell.is-rough,
+.bm-terrain.is-drawn .bm-cell.is-water { fill: none; }
+.bm-terrain.is-drawn .bm-cell.is-low,
+.bm-terrain.is-drawn .bm-cell.is-tall,
+.bm-terrain.is-drawn .bm-cell.is-wall {
+  fill: color-mix(in srgb, var(--wall) 16%, transparent);
+  stroke: color-mix(in srgb, var(--wall) 45%, transparent);
+  stroke-width: 0.02;
+}
+.bm-terrain.is-drawn .bm-cell.is-pit { fill: color-mix(in srgb, var(--pit) 55%, transparent); }
+/* The drawn map is the ground; nothing should be able to click it out of the
+   way, and the cells above it keep every hit test they had. */
+.bm-art { pointer-events: none; }
 
 .bm-zone { fill: none; stroke-width: 0.06; stroke-dasharray: 0.3 0.2; opacity: 0.55; }
 .bm-zone.is-party { stroke: var(--accent); }
@@ -4876,7 +5213,25 @@ body.bm-pan-ready .battlemap { cursor: grab; }
 .bm-token.is-selected .bm-ring { stroke: var(--gold); }
 .bm-token.is-selected .bm-turn { stroke: var(--gold); stroke-width: 0.05; opacity: 0.6; }
 .bm-token.is-downed { opacity: 0.5; filter: grayscale(0.8); }
-.bm-token.is-dead { opacity: 0.28; filter: grayscale(1); cursor: default; }
+/* A body on the floor is scenery, not a target.
+   
+   `pointer-events: none` rather than a cursor change, because the problem was
+   never what the pointer LOOKED like: the click handler asks tokenOf() before
+   cellOf() and returns on the first answer, so a corpse lying in a square
+   swallowed every click meant for the square. You could not step into the
+   space of something you had just killed — which is the one square you most
+   want, having just fought your way to it.
+   
+   The server was already of this opinion. reachable() skips anything not
+   alive, so a dead creature's cell is neither occupied nor blocked; only the
+   drawing disagreed. Nothing is lost by making the body inert — it is already
+   out of the initiative order, has no `role` or `tabindex`, and its name and
+   the blow that finished it are in the log. */
+.bm-token.is-dead {
+  opacity: 0.28;
+  filter: grayscale(1);
+  pointer-events: none;
+}
 /* --- things that happen for a moment on the board ----------------------
    Every length below is a CELL, not a pixel. These elements live inside the
    `0 0 16 12` viewBox, where a CSS px is one user unit and one user unit is
@@ -4978,39 +5333,31 @@ body.bm-pan-ready .battlemap { cursor: grab; }
 .cbt-dist.is-advantage { color: var(--gold); }
 .econ.is-on { color: var(--success); border-color: var(--success); }
 
-/* Four tracks need a narrower window than the shell does before they stop
-   working, and there was no breakpoint inside `.cbt-field` at all. Below this
-   the map goes above and the two rosters sit side by side under it, which is
-   the only arrangement that keeps a sixteen-wide board legible. */
+/* Three tracks need a narrower window than the shell does before they stop
+   working. Below this the map goes above and the order and the verbs sit
+   side by side under it, which is the only arrangement that keeps a
+   sixteen-wide board legible. */
 @media (max-width: 1180px) {
-  /* The head drops under the ribbon again rather than squeezing it: below this
-     width there is no longer a screen's worth of empty beside one line of
-     text, and the board has stopped being the thing height is scarce for. */
   .cbt-top { flex-wrap: wrap; }
-  .cbt-top .cbt-head { flex: 1 0 100%; }
+  .cbt-top .cbt-head { flex: 1 1 10rem; }
   .cbt-field {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    grid-template-rows: minmax(0, 1fr) auto;
+    grid-template-rows: minmax(0, 1fr) minmax(0, 40%);
     grid-template-areas:
       "map map"
-      "party foe";
+      "init panel";
   }
-  .cbt-roster { flex-direction: row; flex-wrap: wrap; align-items: flex-start; max-height: 40vh; }
-  .cbt-roster h3 { flex: 1 0 100%; }
-  .cbt-roster .cbt-card { width: 88px; }
+  .cbt-init { border-right: 1px solid var(--border); border-top: 1px solid var(--border); }
+  .cbt-panel { border-left: 0; border-top: 1px solid var(--border); }
   /* The inspector used to be hidden here, because it was an overlay and this is
      the width at which the board has no spare corner to put one in. It is in
      the rail now and takes nothing off the board, so it stays. */
 }
 
-/* A roster is a column now rather than a wrapping row, so the cards take the
-   width they are given instead of a fixed 88px. Everything else about them is
+/* The cards take the width the list gives them. Everything else about them is
    untouched on purpose: playClip(), flash(), float() and stepHp() all resolve
-   `.cbt-card[data-cid]` and every animation the rank board had still plays.
-   No `max-width` any more: a card is a token beside a readout, and capping it
-   at the old portrait's width left the readout wrapping with the column half
-   empty beside it. */
-.cbt-roster .cbt-card { width: 100%; }
+   `.cbt-card[data-cid]` and every animation the rank board had still plays. */
+.cbt-init .cbt-card { width: 100%; }
 
 /* Token left, everything about them right — BOTH SIDES. The party got this
    layout first and the enemy kept the old portrait-on-top plate, which read as
@@ -5027,7 +5374,7 @@ body.bm-pan-ready .battlemap { cursor: grab; }
   gap: var(--sp-8);
   padding: var(--sp-6);
   background: var(--bg);
-  border: 1px solid var(--border);
+  border: 1px solid transparent;
   border-radius: var(--r-md);
   color: var(--text);
   font-family: inherit;
@@ -5036,7 +5383,33 @@ body.bm-pan-ready .battlemap { cursor: grab; }
   cursor: pointer;
   overflow: visible;
 }
-.cbt-card:hover, .cbt-card:focus-visible { border-color: var(--gold-dim); outline: none; }
+.cbt-init-num {
+  flex: 0 0 auto;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: var(--r-circle);
+  background: var(--bg-inset);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mono);
+  font-size: var(--fs-2xs);
+  font-weight: var(--fw-semibold);
+  color: var(--text-dim);
+}
+.cbt-card.is-actor .cbt-init-num {
+  background: var(--gold);
+  color: var(--ink-on-gold);
+}
+.cbt-klass {
+  color: var(--text-dim);
+  font-weight: var(--fw-normal);
+}
+.cbt-card:hover, .cbt-card:focus-visible { border-color: var(--gold-dim); outline: none; background: var(--bg-panel-2); }
+.cbt-card.is-actor {
+  background: var(--gold-well);
+  border-color: var(--gold-dim);
+}
 /* Whose turn it is.
  *
  * Drawn as a pseudo-element rather than an inset box-shadow, because
@@ -5121,6 +5494,15 @@ body.bm-pan-ready .battlemap { cursor: grab; }
    read as two different kinds of thing looking at each other across the board.
    They are the same kind of thing; the only difference worth drawing is whose
    they are, and that is the ring's colour and the roster's own edge. */
+.cbt-init .cbt-face {
+  width: 2rem;
+  height: 2rem;
+}
+.cbt-face.is-token {
+  object-position: center;
+  object-fit: contain;
+  background: #0b0d10;
+}
 .cbt-face {
   width: 3.2rem;
   height: 3.2rem;
@@ -5360,22 +5742,16 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
 .pip > em { font-style: normal; font-size: 0.85em; opacity: 0.8; margin-left: 0.1em; }
 
 .cbt-bar {
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  gap: var(--sp-6);
-  /* No left margin. There used to be one the width of the log, from when the
-     log floated over the board's bottom-left; in a fight it does not float at
-     all — `body.in-combat .game-shell` gives it a grid column of its own on the
-     right — so all the margin did was push the bar 362px clear of the board it
-     belongs to and out under the enemy roster. */
-  /* Tight, because this row is paid for by the board. The bar holds one row of
-     keys now — what the turn has left moved into the header — and the padding
-     is the only other thing in here with a say in its height. */
-  padding: var(--sp-4) var(--sp-8);
-  background: var(--bg-panel);
-  border: 1px solid var(--border);
-  border-radius: var(--r-md);
+  flex: 1 1 auto;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto auto;
+  gap: var(--sp-8);
+  padding: var(--sp-8);
+  overflow: hidden;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
 }
 .cbt-economy {
   display: inline-flex;
@@ -5389,8 +5765,8 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
    its text and a row of pills has no useful one; `margin-left: 0` because the
    slot dots' `auto` was pushing them to the far end of a bar that no longer
    holds them. */
-.cbt-head .cbt-economy { align-self: center; }
-.cbt-head .econ-slots { margin-left: 0; }
+.cbt-meta .cbt-economy { align-self: center; }
+.cbt-meta .econ-slots { margin-left: 0; }
 .econ {
   padding: var(--sp-1) var(--sp-6);
   border: 1px solid var(--success);
@@ -5438,6 +5814,74 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
   align-items: center;
   gap: var(--sp-4);
 }
+.cbt-actions.is-stack {
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  gap: var(--sp-8);
+}
+.cbt-actions.is-stack .act-sep { display: none; }
+.cbt-act-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+.cbt-actions.is-stack .cbt-act-label { padding: var(--sp-4) var(--sp-4) 0; }
+.cbt-actions.is-stack .cbt-manual { margin: 0 var(--sp-4); }
+.cbt-actions.is-stack .act-tip { display: none; }
+
+.act-text { display: none; }
+.act-num {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.cbt-actions.is-stack .act-slot {
+  width: auto;
+  height: auto;
+  justify-content: flex-start;
+  gap: var(--sp-10);
+  padding: var(--sp-8) var(--sp-10);
+  text-align: left;
+}
+.cbt-actions.is-stack .act-num {
+  flex: 0 0 auto;
+  width: 1.4rem;
+  height: 1.4rem;
+  border-radius: var(--r-sm, var(--r-md));
+  background: var(--bg-inset);
+}
+.cbt-actions.is-stack .act-slot.is-armed .act-num,
+.cbt-actions.is-stack .act-slot:hover:not(:disabled) .act-num {
+  background: var(--gold-well);
+}
+.cbt-actions.is-stack .act-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  min-width: 0;
+  flex: 1 1 auto;
+}
+.cbt-actions.is-stack .act-name {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--text);
+}
+.cbt-actions.is-stack .act-desc {
+  font-size: var(--fs-2xs);
+  color: var(--text-dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cbt-actions.is-stack .act-slot:disabled .act-name { color: var(--text-dim); }
+.cbt-actions.is-stack .act-slot:disabled .act-desc { color: var(--danger-ink); }
 
 .act-slot {
   position: relative;
@@ -5540,6 +5984,58 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
   background: var(--border);
 }
 
+.cbt-move-box {
+  flex: 0 0 auto;
+  margin-top: auto;
+  padding: var(--sp-8) var(--sp-10);
+  background: var(--bg-inset);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--r-md);
+  font-size: var(--fs-2xs);
+}
+.cbt-move-label {
+  color: var(--text-dim);
+  margin-bottom: var(--sp-4);
+  font-family: var(--mono);
+}
+.cbt-move-bar {
+  height: 6px;
+  background: var(--bg);
+  border-radius: var(--r-pill);
+  overflow: hidden;
+}
+.cbt-move-bar > span {
+  display: block;
+  height: 100%;
+  background: var(--gold);
+}
+.cbt-move-box.is-spent .cbt-move-bar > span { background: var(--border); }
+.cbt-move-box.is-spent .cbt-move-label { text-decoration: line-through; }
+
+.cbt-end-turn {
+  width: 100%;
+  flex: 0 0 auto;
+  margin-top: var(--sp-4);
+  padding: var(--sp-10) var(--sp-16);
+  font-family: var(--font-display);
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-sm);
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  color: var(--gold);
+  background: linear-gradient(180deg, var(--gold-well), var(--bg));
+  border: 1px solid var(--gold-dim);
+  border-radius: var(--r-md);
+  cursor: pointer;
+}
+.cbt-end-turn:hover,
+.cbt-end-turn:focus-visible {
+  color: var(--gold-bright);
+  border-color: var(--gold);
+  box-shadow: var(--sh-glow-sm);
+  outline: none;
+}
+
 .act-tip {
   position: absolute;
   left: 0;
@@ -5567,10 +6063,17 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
   align-items: center;
   gap: var(--sp-12);
 }
+.cbt-panel .cbt-outcome {
+  flex-direction: column;
+  align-items: stretch;
+  text-align: center;
+  padding: var(--sp-16) 0;
+}
 .cbt-outcome strong { font-size: var(--fs-xl); }
 .cbt-outcome.outcome-victory strong { color: var(--gold); }
 .cbt-outcome.outcome-defeat strong { color: var(--danger); }
 .cbt-outcome .btn { margin-left: auto; }
+.cbt-panel .cbt-outcome .btn { margin-left: 0; }
 
 /* Spell and item pickers */
 .spell-list { display: flex; flex-direction: column; gap: var(--sp-4); }
@@ -5943,10 +6446,14 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
    else, so they read as the same product rather than as scaffolding. */
 
 .auth-page {
-  display: grid;
-  place-items: center;
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
-  padding: var(--sp-24);
+  padding: 0;
+}
+.auth-page .auth-card {
+  margin: auto;
+  width: min(26rem, calc(100% - 2 * var(--sp-24)));
 }
 .auth-card {
   width: min(26rem, 100%);
@@ -6154,6 +6661,10 @@ body.home-page > main { flex: 1 0 auto; padding-top: var(--sp-32); }
   border-bottom: 1px solid var(--border-soft);
   background: var(--bg-inset);
   font-size: var(--fs-xs);
+  flex: 0 0 auto;
+  position: sticky;
+  top: 0;
+  z-index: 20;
 }
 .site-bar-in {
   max-width: 1200px;
@@ -6171,6 +6682,20 @@ body.home-page > main { flex: 1 0 auto; padding-top: var(--sp-32); }
 .site-who strong { color: var(--text-dim); font-weight: var(--fw-semibold); }
 .site-bar a { color: var(--text-dim); }
 .site-bar a:hover { color: var(--gold); text-decoration: none; }
+.site-bar a[aria-current="page"] { color: var(--text); }
+
+/* Admin and studio pages pad and centre the body. The bar has to sit on the
+   viewport, not in that column, or it would be a 62-rem strip with the page's
+   padding showing above it. */
+body.admin-page > .site-bar,
+body.studio-page > .site-bar {
+  width: 100vw;
+  max-width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  margin-top: calc(-1 * var(--sp-24));
+  margin-bottom: var(--sp-24);
+}
 
 /* --- The hero ---------------------------------------------------------
    A title, a rule, a sentence and a button. The lighting is three stacked
@@ -7223,6 +7748,22 @@ body.home-page > main { flex: 1 0 auto; padding-top: var(--sp-32); }
 .ce-hint.is-ok { color: var(--success); }
 .ce-hint.is-bad { color: var(--danger); }
 .ce-actions { display: flex; align-items: center; justify-content: flex-end; gap: var(--sp-10); margin-top: var(--sp-12); }
+.ce-npc-art {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--sp-12);
+  margin: var(--sp-12) 0 0;
+}
+.ce-bust {
+  width: 5rem;
+  height: 6.5rem;
+  object-fit: cover;
+  object-position: center 15%;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  background: var(--bg-inset);
+  flex: 0 0 auto;
+}
 
 /* The dialogue document. Monospace because it is JSON and the indentation is
    the only structure a reader has to go on. */
@@ -7842,16 +8383,93 @@ body.home-page > main { flex: 1 0 auto; padding-top: var(--sp-32); }
      floor plus the pixel or two its border costs — at 360px that is a 304-wide
      box 240 tall, and a 16x12 grid contained in it comes out at 19px a cell
      against the 15.4 it had. */
+  body.in-combat .combat-screen {
+    /* The desktop overlay is a single viewport. Below the fold the page
+       scrolls, and an `inset: 0` box with `overflow: hidden` clips the
+       initiative list and the verbs under the map. Relative lets the three
+       bands stack and the log sit under them, which is the reading order. */
+    position: relative;
+    inset: auto;
+    overflow: visible;
+    height: auto;
+  }
+  body.in-combat .scene .topbar { display: none; }
   body.in-combat .cbt-map { min-height: 15rem; }
 
-  /* The action bar stays put while the log scrolls under it. It is the one
+  body.in-combat .cbt-field {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(15rem, 38vh) auto;
+    grid-template-areas:
+      "init"
+      "map"
+      "panel";
+  }
+  body.in-combat .cbt-init,
+  body.in-combat .cbt-panel {
+    border-left: 0;
+    border-right: 0;
+    border-top: 0;
+  }
+  body.in-combat .cbt-init {
+    max-height: none;
+    border-bottom: 1px solid var(--border);
+  }
+  body.in-combat .cbt-init-list {
+    flex: 0 0 auto;
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+  body.in-combat .cbt-init .cbt-card {
+    width: 11rem;
+    flex: 0 0 auto;
+  }
+  body.in-combat .cbt-init > h3 { display: none; }
+  body.in-combat .cbt-board-fx {
+    display: flex;
+    flex: 0 0 auto;
+    min-height: 0;
+    max-height: 5.5rem;
+    border-top: 1px solid var(--border);
+  }
+  body.in-combat .cbt-board-fx > h3 {
+    padding: var(--sp-6) var(--sp-12) var(--sp-2);
+  }
+  body.in-combat .cbt-fx-note { display: none; }
+  body.in-combat .cbt-fx-body {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: var(--sp-4);
+    align-items: baseline;
+  }
+  body.in-combat .cbt-fx-who { flex: 0 1 auto; }
+  body.in-combat .cbt-fx-who::after { content: " ·"; }
+  body.in-combat .cbt-fx-line {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  body.in-combat .cbt-fx-row { padding: var(--sp-2) var(--sp-4); margin-bottom: var(--sp-2); }
+  body.in-combat .cbt-board-fx-list {
+    margin: 0 var(--sp-8) var(--sp-6);
+    padding: var(--sp-4) var(--sp-6);
+  }
+
+  /* The action column stays put while the log scrolls under it. It is the one
      band you reach for rather than read, and a fight where you scroll to find
      your own actions is worse than a fight with a short log. */
-  body.in-combat .cbt-bar {
+  body.in-combat .cbt-panel {
     position: sticky;
     bottom: 0;
     z-index: 1;            /* local: over the log sliding past beneath it */
-    background: var(--bg-inset);
+    background: var(--bg-panel);
+    max-height: 46vh;
+    overflow: hidden;
+  }
+  body.in-combat .cbt-bar {
+    background: var(--bg-panel);
   }
 }
 
@@ -7890,6 +8508,17 @@ body.home-page > main { flex: 1 0 auto; padding-top: var(--sp-32); }
   padding: 0;
 }
 .st-map .loc-map { min-height: 16rem; }
+.st-regions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-6);
+  margin: 0 0 var(--sp-12);
+}
+.st-regions[hidden] { display: none; }
+.st-region.is-on {
+  border-color: var(--gold);
+  color: var(--gold);
+}
 
 .st-plan-tools {
   display: flex;
@@ -7909,7 +8538,7 @@ body.home-page > main { flex: 1 0 auto; padding-top: var(--sp-32); }
   display: block;
   width: 100%;
   height: auto;
-  background: var(--pg-rock);
+  background: var(--pg-rock-dark);
   border: 1px solid var(--border);
   border-radius: var(--r-sm);
   touch-action: none;
@@ -8057,3 +8686,40 @@ body.home-page > main { flex: 1 0 auto; padding-top: var(--sp-32); }
   margin: 0 0 var(--sp-8);
 }
 .st-stages em { font-size: var(--fs-xs); color: var(--gold); }
+
+
+/* --- the door menu ------------------------------------------------------
+   What a party can do at a threshold, as a short list of verbs. Opening is
+   always first and always present, so the common case — walk through — is the
+   top item and one press of Enter. */
+.door-menu {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  padding: var(--sp-4);
+}
+.door-opt {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: var(--sp-4);
+  text-align: left;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  color: inherit;
+  cursor: pointer;
+}
+.door-opt:hover:not(:disabled),
+.door-opt:focus-visible:not(:disabled) { border-color: var(--gold-dim); }
+.door-opt:first-child .door-opt-label { color: var(--gold); }
+.door-opt-label { font-weight: var(--fw-bold); }
+.door-opt-hint { font-size: 0.85em; opacity: 0.75; }
+/* A verb the party cannot reach — no tools for the lock, nothing to disarm.
+   Shown rather than hidden, so the menu says why not instead of going quiet. */
+.door-opt.is-off { opacity: 0.45; cursor: not-allowed; }
+.door-tally {
+  margin: var(--sp-2) 0 0;
+  font-size: 0.85em;
+  opacity: 0.8;
+}

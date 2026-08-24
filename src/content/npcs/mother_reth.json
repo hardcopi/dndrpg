@@ -1,0 +1,12 @@
+{
+    "npc_key": "mother_reth",
+    "name": "Old Mother Reth",
+    "role": "Head of the Tarrow Houses",
+    "description": "Three families, the pitch, the tar, the oakum and four hundred desperate workers, all of it hers in everything but writing. She believes she is the only person in Waerhaven who actually feeds the poor, and the infuriating thing about her is that she is very nearly right.",
+    "sprite_key": "miner",
+    "is_quest_giver": true,
+    "dialog": "mother_reth",
+    "place": {
+        "location": "the_pitch_yards"
+    }
+}

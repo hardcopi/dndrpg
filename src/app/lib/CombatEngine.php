@@ -1383,19 +1383,31 @@ class CombatEngine
         // holding it, so a brawl in a tavern gets tables and a fight in the Old
         // City gets stalagmites without anybody drawing either.
         $place = $this->db->prepare(
-            'SELECT l.location_type, r.region_type
+            'SELECT l.location_key, l.location_type, r.region_type
                FROM locations l
           LEFT JOIN regions r ON r.id = l.region_id
               WHERE l.id = ?'
         );
         $place->execute([$locationId]);
         $where = $place->fetch() ?: [];
-        $palette = BattleMapGen::paletteFor(
-            (string) ($where['location_type'] ?? ''),
-            (string) ($where['region_type'] ?? '')
-        );
         $mapSeed ??= (int) crc32($encounterId . ':' . $locationId);
-        $grid = BattleMapGen::generate($mapSeed, $palette);
+
+        // Three sources, in order of how much is actually known about the
+        // ground. A place with its own hand-drawn board uses it. A room on a
+        // delve floor is fought on the room — it has a real footprint and real
+        // doorways, and inventing terrain for it would put the party somewhere
+        // that looks nothing like where they were standing. Everything else is
+        // generated, which is still almost everywhere.
+        $locationKey = (string) ($where['location_key'] ?? '');
+        $grid = FixedBattleMaps::get($locationKey, $mapSeed)
+            ?? RoomBattleMap::forLocation($this->db, $locationKey);
+        if ($grid === null) {
+            $palette = BattleMapGen::paletteFor(
+                (string) ($where['location_type'] ?? ''),
+                (string) ($where['region_type'] ?? '')
+            );
+            $grid = BattleMapGen::generate($mapSeed, $palette);
+        }
 
         $combatants = [];
         $id = 1;
@@ -1590,6 +1602,14 @@ class CombatEngine
                 'ac'         => (int) $m['armor_class'],
                 'image_url'  => $img,
                 'sprite_key' => $m['sprite_key'] ?? null,
+                // A distinct face from the token pack when we have one, so
+                // three goblins are three goblins rather than one goblin
+                // drawn three times. Null keeps `_face.png`.
+                'token'      => TokenArt::pick(
+                    isset($m['monster_key']) ? (string) $m['monster_key'] : null,
+                    $i,
+                    $mapSeed
+                ),
                 'str'        => (int) $m['strength'],
                 'dex'        => (int) $m['dexterity'],
                 'con'        => (int) $m['constitution'],
@@ -2058,8 +2078,182 @@ class CombatEngine
             // Attack at a different level.
             'attacks_left' => max(0, self::attacksAllowed($actor)
                 - (int) ($actor['attacks_made'] ?? 0)),
+            // What else this character may do, worked out here for the same
+            // reason as attacks_left: a class table in the client would be a
+            // second copy of BONUS_ACTIONS, and it would drift the first time
+            // a feature changed level or a class gained one.
+            'bonus'  => self::bonusOffer($actor),
+            'ready'  => empty($actor['readied']) && empty($actor['action_used']),
+            'actions' => self::actionOffers($actor),
+            'spells'  => $this->castableSpells($actor),
         ];
         return $state;
+    }
+
+    /**
+     * What this character could cast right now, for the board's spell picker.
+     *
+     * The same join doCast() makes, filtered by the same reaction rule, so the
+     * list cannot offer a spell the cast would then refuse. Slot levels are not
+     * repeated here — combatants already carry `slots`, derived beside this from
+     * Rules::slotTable and the character's spent counts, and the picker reads
+     * that for what may pay for the spell.
+     *
+     * Empty for anything that is not a player character, and cheap enough to do
+     * per turn: it is one indexed join returning a handful of rows.
+     */
+    private function castableSpells(array $actor): array
+    {
+        if (($actor['type'] ?? '') !== 'pc' || empty($actor['character_id'])) {
+            return [];
+        }
+
+        $stmt = $this->db->prepare(
+            'SELECT s.id, s.name, s.level, s.school, s.damage_dice, s.damage_type,
+                    s.casting_time, s.range_text, s.target_kind, s.concentration
+               FROM spells s
+               INNER JOIN character_spells cs ON cs.spell_id = s.id
+              WHERE cs.character_id = ?
+              ORDER BY s.level, s.name'
+        );
+        $stmt->execute([(int) $actor['character_id']]);
+
+        $out = [];
+        foreach ($stmt->fetchAll() as $spell) {
+            // Reaction spells are cast by their trigger, not from the bar. The
+            // same test doCast() makes, so the picker does not show a card that
+            // is going to be refused.
+            if (stripos((string) ($spell['casting_time'] ?? ''), 'reaction') !== false) {
+                continue;
+            }
+            $out[] = [
+                'id'          => (int) $spell['id'],
+                'name'        => (string) $spell['name'],
+                'level'       => (int) $spell['level'],
+                'school'      => (string) ($spell['school'] ?? ''),
+                'damage_dice' => (string) ($spell['damage_dice'] ?? ''),
+                'range'       => (string) ($spell['range_text'] ?? ''),
+                // What the cast needs pointing at, straight off the content row
+                // rather than guessed from the name: the board uses it to decide
+                // whether to ask for a combatant, a cell, or nothing at all.
+                'target_kind' => (string) ($spell['target_kind'] ?? ''),
+                'concentration' => (bool) ($spell['concentration'] ?? false),
+                // Cantrips cost nothing; everything else needs a slot at least
+                // its own level, which is what the picker offers.
+                'needs_slot'  => ((int) $spell['level']) > 0,
+            ];
+        }
+        return $out;
+    }
+
+    /**
+     * Everything this character may attempt, and what each one still needs.
+     *
+     * The board renders this list rather than carrying one of its own. That is
+     * the same rule attacks_left follows and for the same reason: a hardcoded
+     * bar in the client is a second opinion about what a Paladin can do, and it
+     * goes stale the first time a feature moves level.
+     *
+     * Eligibility is asked of Rules::hasFeature — the very function the do*
+     * guards ask — so the bar cannot offer something the engine will refuse for
+     * a reason the bar did not know about. Resource checks are deliberately NOT
+     * duplicated here: those live in the do* methods, which throw a sentence
+     * worth showing, and the client reports what it is told.
+     *
+     * `needs` tells the board what to collect before sending:
+     *   none   send it
+     *   target pick a combatant, send target_cid
+     *   spell  pick a spell and slot, send spell_id and cast_level
+     *   item   pick from the pack, send inventory_id
+     *   level  pick a slot level, send level
+     *   which  pick a named option, send which
+     */
+    private static function actionOffers(array $actor): array
+    {
+        $class = (string) ($actor['class'] ?? '');
+        $level = (int) ($actor['level'] ?? 1);
+        $pc = ($actor['type'] ?? '') === 'pc';
+        $has = static fn (string $f): bool => $pc && Rules::hasFeature($class, $level, $f);
+
+        $offers = [
+            ['key' => 'dodge',     'label' => 'Dodge',     'needs' => 'none',   'show' => true],
+            ['key' => 'disengage', 'label' => 'Disengage', 'needs' => 'none',   'show' => true],
+            ['key' => 'hide',      'label' => 'Hide',      'needs' => 'none',   'show' => true],
+            ['key' => 'help',      'label' => 'Help',      'needs' => 'target', 'show' => true],
+            ['key' => 'grapple',   'label' => 'Grapple',   'needs' => 'target', 'show' => true],
+            ['key' => 'shove',     'label' => 'Shove',     'needs' => 'target', 'show' => true],
+            ['key' => 'cast',      'label' => 'Cast',      'needs' => 'spell',  'show' => $pc],
+            ['key' => 'use_item',  'label' => 'Use item',  'needs' => 'item',   'show' => $pc],
+            ['key' => 'offhand',   'label' => 'Off-hand',  'needs' => 'target', 'show' => $pc],
+            ['key' => 'surge',     'label' => 'Action Surge',    'needs' => 'none',   'show' => $has('action_surge')],
+            ['key' => 'reckless',  'label' => 'Reckless',        'needs' => 'none',   'show' => $has('reckless_attack')],
+            ['key' => 'smite',     'label' => 'Divine Smite',    'needs' => 'level',  'show' => $has('divine_smite')],
+            ['key' => 'channel',   'label' => 'Channel Divinity','needs' => 'which',  'show' => $has('channel_divinity'),
+             // The two the engine accepts, named here so the bar does not keep
+             // its own copy of the list doChannelDivinity() validates against.
+             'options' => [
+                 ['key' => 'turn_undead',    'label' => 'Turn Undead'],
+                 ['key' => 'preserve_life',  'label' => 'Preserve Life'],
+             ]],
+            ['key' => 'divine_sense', 'label' => 'Divine Sense', 'needs' => 'none',   'show' => $has('divine_sense')],
+            ['key' => 'lay_on_hands', 'label' => 'Lay on Hands', 'needs' => 'target', 'show' => $has('lay_on_hands')],
+        ];
+
+        $out = [];
+        foreach ($offers as $offer) {
+            if (!$offer['show']) {
+                continue;
+            }
+            unset($offer['show']);
+            $out[] = $offer;
+        }
+        return $out;
+    }
+
+    /**
+     * The bonus action this character could take right now, or null.
+     *
+     * Mirrors the checks bonusAction() makes before it accepts one, so the board
+     * never offers a button that is going to be refused. It reports rather than
+     * decides: everything here is read off the actor the engine is already
+     * holding, and spending it still goes through bonusAction().
+     */
+    private static function bonusOffer(array $actor): ?array
+    {
+        $available = self::BONUS_ACTIONS[$actor['class'] ?? ''] ?? null;
+        if (!$available) {
+            return null;
+        }
+
+        $why = null;
+        if (!empty($actor['bonus_used'])) {
+            $why = 'Already spent this turn.';
+        } else {
+            $allowance = self::usesPerRest($available['key'], (int) ($actor['level'] ?? 1));
+            if ($allowance === null) {
+                if (in_array($available['key'], (array) ($actor['bonus_features_used'] ?? []), true)) {
+                    $why = 'Already used in this fight.';
+                }
+            } elseif ((int) ($actor['bonus_uses_left'] ?? 0) < 1) {
+                $why = 'Spent — needs a long rest.';
+            } elseif ($available['key'] === 'rage') {
+                foreach ((array) ($actor['boons'] ?? []) as $held) {
+                    if (($held['key'] ?? '') === 'rage') {
+                        $why = 'Already raging.';
+                        break;
+                    }
+                }
+            }
+        }
+
+        return [
+            'key'       => $available['key'],
+            'label'     => $available['label'],
+            'hint'      => $available['hint'] ?? '',
+            'options'   => array_values((array) ($available['options'] ?? [])),
+            'available' => $why === null,
+            'reason'    => $why,
+        ];
     }
 
     /**
@@ -3682,7 +3876,7 @@ class CombatEngine
         if ($budget <= 0) {
             throw new InvalidArgumentException(self::whyStuck($actor));
         }
-        if (!BattleGrid::inBounds($x, $y)) {
+        if (!BattleGrid::inBounds($state['grid']['terrain'] ?? [], $x, $y)) {
             throw new InvalidArgumentException('That is off the battlefield.');
         }
 
@@ -5276,7 +5470,8 @@ class CombatEngine
      */
     private function aimPoint(array $state, array $actor, string $targetCid, ?int $x, ?int $y): array
     {
-        if ($x !== null && $y !== null && BattleGrid::inBounds($x, $y)) {
+        if ($x !== null && $y !== null
+            && BattleGrid::inBounds($state['grid']['terrain'] ?? [], $x, $y)) {
             return [$x, $y];
         }
         $target = $targetCid === '' ? null : $this->getCombatant($state, $targetCid);

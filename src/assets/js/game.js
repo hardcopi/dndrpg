@@ -444,7 +444,7 @@
     if (fpOn()) return firstPersonScene();
     return `<div class="loc-map" id="scene-map">
       ${window.WorldMap.svg(state.regionMap,
-        { ways: currentWays(), quests: questPins(), party: partyMarks() })}
+        { ways: currentWays(), quests: questPins(), party: partyMarks(), people: npcMarks() })}
       <div class="map-zoom" role="group" aria-label="Zoom">
         <button type="button" class="icon-btn icon-btn-sm" data-zoom="out"
                 title="Zoom out (−)" aria-label="Zoom out">−</button>
@@ -771,6 +771,35 @@
       </div>` : ''}`;
   }
 
+  /**
+   * The people here, for the tokens the chart draws over this place.
+   *
+   * The same list the HERE panel builds its rows from, and named by the same
+   * rule: somebody you have not been introduced to is their role, not their
+   * name. A token that knew more than the panel would be a leak dressed as a
+   * convenience.
+   *
+   * Ambient folk are left out. They are scenery — a crowd, a sweeper, the
+   * penned boys — and a face on the map is a promise that there is somebody
+   * there worth crossing the room for.
+   */
+  function npcMarks() {
+    const npcs = (state.location && state.location.npcs) || [];
+    return npcs
+      .filter((n) => n && n.id && !n.is_ambient)
+      .map((n) => ({
+        id: n.id,
+        label: n.known ? n.name : (n.role || 'A stranger'),
+        hint: n.is_merchant ? 'sells goods' : (n.has_work ? 'has work' : ''),
+        face: variantUrl(n.image_url, '_face')
+          || spriteArtUrl(n.sprite_key || DEFAULT_SPRITE_KEY, '_face'),
+        // Where they stand, when somebody has said. Undefined otherwise, and
+        // the chart puts them with everyone else at the place marker.
+        x: n.map_x == null ? undefined : +n.map_x,
+        y: n.map_y == null ? undefined : +n.map_y,
+      }));
+  }
+
   function personRow(n) {
     const face = variantUrl(n.image_url, '_face')
       || spriteArtUrl(n.sprite_key || DEFAULT_SPRITE_KEY, '_face');
@@ -889,6 +918,17 @@
           act: 'force', id: e.id,
         });
       }
+      // The quiet way, offered only when somebody is carrying tools for it.
+      // The server decides that (exits carry `can_pick`); the client never
+      // works it out from the party, so a door cannot be picked by editing a
+      // character sheet in a console.
+      if (e.locked && e.can_pick) {
+        acts.push({
+          label: `Pick: ${e.label}`,
+          hint: 'Tools and patience — harder than a shoulder, and silent',
+          act: 'pick', id: e.id,
+        });
+      }
     });
     acts.push({ key: 'S', label: 'Search', hint: 'Look the place over', act: 'search' });
     if (loc.job_board) {
@@ -941,9 +981,11 @@
           act: 'leave_dungeon',
         });
     }
-    // Offered wherever a long rest is, because whatever makes a place safe
-    // enough to sleep makes it safe enough to sit down for an hour.
-    if (loc.allow_camp || loc.inn_cost !== null) {
+    // Looser than sleeping now, and the server says which: anywhere you could
+    // camp, plus any room on a delve floor. Getting your back to a wall in a
+    // chamber you have just fought through is not the same claim as bedding
+    // down in it — and the hit dice are what keep it honest either way.
+    if (loc.allow_short_rest) {
       acts.push({
         key: 'H', label: 'Take an hour',
         hint: 'A short rest: one hit die each, and Second Wind back',
@@ -1139,7 +1181,7 @@
   }
 
   /**
-   * The quest pins, explaining themselves on hover.
+   * The pins on the chart, explaining themselves on hover.
    *
    * One scripted tooltip, for the combat bar's reasons: the browser's own
    * cannot be styled and arrives a second and a half late. Fixed-positioned at
@@ -1158,14 +1200,21 @@
     document.body.appendChild(tip);
 
     box.addEventListener('mouseover', (ev) => {
-      const pin = ev.target.closest('[data-quest-pin]');
+      // Two kinds of pin want the same tooltip. A quest pin explains why
+      // something wants you somewhere; a room pin on a floor plan is simply
+      // the room's name, which is the label the plan stopped drawing.
+      const pin = ev.target.closest('[data-quest-pin], [data-room-pin]');
       if (!pin) return;
-      tip.innerHTML = (pin.dataset.questInfo || '').split('\n').filter(Boolean)
-        .map((line) => {
-          const [quest, objective] = line.split('\t');
-          return `<span class="wm-tip-name">${esc(quest || '')}</span>`
-            + (objective ? `<span class="wm-tip-why">${esc(objective)}</span>` : '');
-        }).join('');
+      if (pin.hasAttribute('data-room-pin')) {
+        tip.innerHTML = `<span class="wm-tip-name">${esc(pin.dataset.roomName || '')}</span>`;
+      } else {
+        tip.innerHTML = (pin.dataset.questInfo || '').split('\n').filter(Boolean)
+          .map((line) => {
+            const [quest, objective] = line.split('\t');
+            return `<span class="wm-tip-name">${esc(quest || '')}</span>`
+              + (objective ? `<span class="wm-tip-why">${esc(objective)}</span>` : '');
+          }).join('');
+      }
       tip.hidden = false;
       const at = pin.getBoundingClientRect();
       const below = at.top < 76;                    // no room above — flip under
@@ -1178,7 +1227,7 @@
       tip.style.left = `${Math.round(cx)}px`;
     });
     box.addEventListener('mouseout', (ev) => {
-      if (ev.target.closest('[data-quest-pin]')) tip.hidden = true;
+      if (ev.target.closest('[data-quest-pin], [data-room-pin]')) tip.hidden = true;
     });
     ['pointerdown', 'wheel'].forEach((evName) => {
       box.addEventListener(evName, () => { tip.hidden = true; }, { passive: true });
@@ -1265,11 +1314,25 @@
     document.body.addEventListener('click', (ev) => {
       // The chart, anywhere on the page: a place-name travels, wherever the
       // chart happens to be drawn.
+      // A door first: it shares the chart with the place-names but it is not
+      // one, and clicking it opens what you can DO there rather than walking.
+      const door = ev.target.closest('[data-door-to]');
+      if (door) { openDoorMenu(+door.dataset.doorTo); return; }
+
       const node = ev.target.closest('[data-map-node]');
       if (node) { travelTo(+node.dataset.mapNode); return; }
 
       const person = ev.target.closest('[data-npc]');
       if (person) { talkTo(+person.dataset.npc); return; }
+
+      // The door menu's own buttons. Above the #location-root guard below,
+      // because a modal is not inside the location panel — it is in the modal
+      // stack, and a handler scoped to the scene never sees it.
+      const dact = ev.target.closest('[data-door-act]');
+      if (dact) {
+        doDoorAct(dact.dataset.doorAct, dact.dataset.exit, dact.dataset.to);
+        return;
+      }
 
       if (!ev.target.closest('#location-root')) return;
 
@@ -1281,6 +1344,8 @@
     // do not fire a click on Enter the way a <button> would.
     document.body.addEventListener('keydown', (ev) => {
       if (ev.key !== 'Enter' && ev.key !== ' ') return;
+      const door = ev.target.closest && ev.target.closest('[data-door-to]');
+      if (door) { ev.preventDefault(); openDoorMenu(+door.dataset.doorTo); return; }
       const node = ev.target.closest && ev.target.closest('[data-map-node]');
       if (!node) return;
       ev.preventDefault();
@@ -1302,6 +1367,7 @@
       case 'pit': return takeBout(String(id));
       case 'board': return readBoard();
       case 'force': return doForce(+id);
+      case 'pick': return doPick(+id);
       case 'travel': return travelTo(+id);
       default: return undefined;
     }
@@ -1451,6 +1517,137 @@
       (after.messages || []).forEach((m) => log(m, after.opened ? 'success' : 'danger'));
       // Opened: the exit's condition now passes, so the scene and the chart
       // both need re-reading either way — the map redraws the way unlocked.
+      await refreshAll();
+      await handleEvents(after.events || []);
+    });
+  }
+
+  /**
+   * Pick a lock: the same ceremony as forcing, and deliberately so.
+   *
+   * The only thing that differs on this side is which pair of endpoints the
+   * die is spent against. Everything the player sees — the DC, the boosts,
+   * walking away without rolling — is the ceremony's, so the two ways through
+   * a door feel like one mechanism with a choice in it rather than two
+   * features that happen to open the same door.
+   */
+  function doPick(exitId) {
+    return guarded(async () => {
+      const r = await API.post('location/pick_lock', { exit_id: exitId });
+      let after = null;
+      const rolled = await window.Check.open(r.check, {
+        resolve: async (checkId, boosts) => {
+          after = await API.post('location/pick_lock_resolve', { check_id: checkId, boosts });
+          return after.result;
+        },
+      });
+      if (!rolled || !after) return;
+      (after.messages || []).forEach((m) => log(m, after.opened ? 'success' : 'danger'));
+      await refreshAll();
+      await handleEvents(after.events || []);
+    });
+  }
+
+  /**
+   * The exit that leads to a place, from where the party is standing.
+   *
+   * The chart knows where a door GOES — that is what it is drawn from — but
+   * the verbs are addressed to the exit row, so the two are matched here. The
+   * location payload already carries the exits; nothing extra is fetched.
+   */
+  function exitTowards(locationId) {
+    const exits = (state.location && state.location.exits) || [];
+    return exits.find((e) => +e.to_location_id === +locationId) || null;
+  }
+
+  /**
+   * Everything a party can do at a threshold, asked for and drawn.
+   *
+   * The options come from the server (`location/door_menu`) and are rendered
+   * exactly as they arrive — whether a lock can be picked depends on what the
+   * party is carrying, and whether a trap can be disarmed depends on what they
+   * have found, and neither is something to work out in a browser.
+   */
+  async function openDoorMenu(locationId) {
+    const exit = exitTowards(locationId);
+    if (!exit) { travelTo(locationId); return; }   // not a door we know: just go
+    let menu;
+    try {
+      menu = await API.post('location/door_menu', { exit_id: exit.id });
+    } catch (e) {
+      showError(e.message);
+      return;
+    }
+    const b = menu.barricade || { doors: 0, braced: 0, sealed: false };
+    const rows = (menu.options || []).map((o) => `
+      <button type="button" class="door-opt${o.enabled ? '' : ' is-off'}"
+              data-door-act="${esc(o.act)}" data-exit="${exit.id}"
+              data-to="${locationId}" ${o.enabled ? '' : 'disabled'}>
+        <span class="door-opt-label">${esc(o.label)}</span>
+        <span class="door-opt-hint">${esc(o.hint || '')}</span>
+      </button>`).join('');
+    window.UI.showModal(`
+      <div class="modal-head">
+        <h2>${esc(menu.label || 'The door')}</h2>
+        <button type="button" class="icon-btn modal-x" data-modal-close
+                title="Close (Esc)" aria-label="Close">×</button>
+      </div>
+      <div class="door-menu">
+        ${rows}
+        ${b.doors ? `<p class="door-tally">${b.braced} of ${b.doors} ways out braced${
+          b.sealed ? ' — you could sleep here' : ''}.</p>` : ''}
+      </div>`, { size: 'narrow', slot: 'door', label: menu.label || 'The door' });
+  }
+
+  /** One verb at a door. The menu closes first: every one of these re-renders. */
+  function doDoorAct(act, exitId, toId) {
+    if (window.UI && window.UI.closeTopModal) window.UI.closeTopModal();
+    if (act === 'open') return travelTo(+toId);
+    if (act === 'force') return doForce(+exitId);
+    if (act === 'pick') return doPick(+exitId);
+    if (act === 'inspect') return doDoorInspect(+exitId);
+    if (act === 'clear') return doDoorClear(+exitId);
+    if (act === 'disarm') return doDoorCeremony(+exitId, 'disarm', (r) =>
+      r.sprung ? 'danger' : (r.disarmed ? 'success' : 'important'));
+    if (act === 'barricade') return doDoorCeremony(+exitId, 'barricade', (r) =>
+      r.braced ? 'success' : 'important');
+    return null;
+  }
+
+  /** A look at the frame. No ceremony — it is a look, not a feat. */
+  function doDoorInspect(exitId) {
+    return guarded(async () => {
+      const r = await API.post('location/door_inspect', { exit_id: exitId });
+      (r.messages || []).forEach((m) => log(m, r.found ? 'important' : 'story'));
+      await refreshAll();
+    });
+  }
+
+  function doDoorClear(exitId) {
+    return guarded(async () => {
+      const r = await API.post('location/door_clear', { exit_id: exitId });
+      (r.messages || []).forEach((m) => log(m, 'story'));
+      await refreshAll();
+    });
+  }
+
+  /**
+   * Disarming and bracing, through the same two-phase die every other check
+   * uses. `tone` reads the result the endpoint hands back, because "failed"
+   * and "failed and it went off" are not the same news.
+   */
+  function doDoorCeremony(exitId, verb, tone) {
+    return guarded(async () => {
+      const r = await API.post(`location/door_${verb}`, { exit_id: exitId });
+      let after = null;
+      const rolled = await window.Check.open(r.check, {
+        resolve: async (checkId, boosts) => {
+          after = await API.post(`location/door_${verb}_resolve`, { check_id: checkId, boosts });
+          return after.result;
+        },
+      });
+      if (!rolled || !after) return;
+      (after.messages || []).forEach((m) => log(m, tone(after)));
       await refreshAll();
       await handleEvents(after.events || []);
     });

@@ -1,0 +1,12 @@
+{
+    "npc_key": "oren_skeld",
+    "name": "Watch-Captain Oren Skeld",
+    "role": "Captain of the Boom Watch",
+    "description": "Takes money from three parties, lets Drennmark folk through the gate at night for nothing, and considers that the account balances. It does not, and he knows the arithmetic perfectly well, and he sleeps.",
+    "sprite_key": "paladin",
+    "is_quest_giver": true,
+    "dialog": "oren_skeld",
+    "place": {
+        "location": "hallowgate_keep"
+    }
+}

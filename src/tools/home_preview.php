@@ -38,11 +38,11 @@ $src = file_get_contents(dirname(__DIR__) . '/' . $page . '.php');
 // Everything from <!DOCTYPE onwards — i.e. the page with its PHP head cut off.
 $body = substr($src, strpos($src, '<!DOCTYPE'));
 
-/* The page's own PHP — the admin-only buttons, the signed-in-as line — is
-   served as text rather than run, and its closing tags show up as literal
-   punctuation in the header. Strip it. What goes with it is only the account
-   chrome, which is not what this bench is for; the module shelf below is
-   PHP-free markup and its script, untouched.
+/* The page's own PHP — including the site-bar include — is served as text
+   rather than run, and its closing tags show up as literal punctuation in
+   the header. Strip it. What goes with it is the account chrome, which is
+   not what this bench is for; the module shelf below is PHP-free markup
+   and its script, untouched.
 
    Written without quoting a closing tag, and this is not fussiness: a `?>`
    inside a `//` comment ENDS the PHP block. The first draft of this comment

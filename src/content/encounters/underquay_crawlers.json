@@ -1,0 +1,26 @@
+{
+    "encounter_key": "underquay_crawlers",
+    "name": "Something in the Low Cellars",
+    "description": "The water ahead of you stops being water in two places at once. Whatever lives down here has learned the tide, and the tide is what brings it food, and you have arrived on the tide.",
+    "difficulty": "medium",
+    "monsters": [
+        {
+            "monster": "pale_crawler",
+            "quantity": 2,
+            "rank": "front"
+        },
+        {
+            "monster": "giant_rat",
+            "quantity": 3,
+            "rank": "front"
+        }
+    ],
+    "allow_flee": true,
+    "allow_parley": false,
+    "ambush": true,
+    "victory_flag": "underquay_cleared",
+    "place": {
+        "location": "the_low_cellars"
+    },
+    "victory_quest_stage": "the_carters_cellar:the_way_in_found"
+}

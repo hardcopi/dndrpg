@@ -1,0 +1,134 @@
+{
+    "region_key": "old_waer",
+    "module": "waerhaven",
+    "name": "Old Waer",
+    "region_type": "town",
+    "description": "The fishing village that was here four centuries before the charter was, and has never forgiven the charter for arriving. Lanes too narrow for a cart, houses built against houses and over them, and a population that still calls itself Waerfolk rather than League. The point's light burns at the top of it, over the deepest water on this shore.",
+    "sort_order": 50,
+    "locations": {
+        "old_waer_square": {
+            "name": "Old Waer Square",
+            "type": "square",
+            "map_pos": [
+                47.0,
+                46.2
+            ],
+            "description": "Not a square so much as the one place in Old Waer where four lanes fail to meet a fifth, widened by a fire two hundred years ago and never built back over. Nets on frames, a well nobody drinks from, and the six family marks cut into the corner stones of the six houses that matter, which are the same six houses that mattered before there was a League to matter to.",
+            "first_visit": "The lanes close over your head almost at once and open again here, and the whole square turns and looks at you, without hostility, the way you look at weather.",
+            "ambience": [
+                "Somebody is singing badly, out of sight, and does not stop.",
+                "A woman mends a net without looking at it and watches you the whole time.",
+                "Woodsmoke comes down into the square and stays, because the lanes do not let it out.",
+                "Two children argue about whose grandmother is older, at length, with dates."
+            ],
+            "exits": [
+                {
+                    "to": "the_cold_anchor",
+                    "label": "In at the Cold Anchor"
+                },
+                {
+                    "to": "the_fish_hall",
+                    "label": "Across to the Fish Hall"
+                },
+                {
+                    "to": "temple_of_the_deep_mere",
+                    "label": "Down to the Temple of the Deep Mere"
+                },
+                {
+                    "to": "the_waer_light",
+                    "label": "Up the point, to the light"
+                },
+                {
+                    "to": "moot_yard",
+                    "label": "South, up the hill to Highstrand"
+                },
+                {
+                    "to": "boomhead",
+                    "label": "South-west, along the shore to the harbour"
+                }
+            ]
+        },
+        "the_cold_anchor": {
+            "name": "The Cold Anchor",
+            "type": "building",
+            "map_pos": [
+                52.8,
+                36.8
+            ],
+            "inn_cost": 4,
+            "description": "Waerfolk only, in practice, though nobody has ever said so and there is no rule. Four centuries of the same six families drinking in the same low room with an anchor stock over the door that came off a boat nobody now living saw float. The oldest woman in the room remembers what the Mere sounded like before, and will tell you, and it is not a story.",
+            "ambience": [
+                "The room takes you in, notes you, and goes back to what it was saying, at a slightly lower volume.",
+                "Somebody's grandmother is asked what year it was and answers with a weather.",
+                "The talk turns to the Temple, and stops, all at once, like a door."
+            ],
+            "exits": [
+                {
+                    "to": "old_waer_square",
+                    "label": "Out to the square"
+                }
+            ]
+        },
+        "the_fish_hall": {
+            "name": "The Fish Hall",
+            "type": "building",
+            "map_pos": [
+                39.6,
+                50.6
+            ],
+            "description": "Old Waer's market and its parliament in one open-sided shed on the shingle, where the night's catch is sold before dawn and everything else in the district is settled before noon, loudly, by people standing up. It has no authority of any kind. It voted last month to refuse the League's grain price, and the League's grain price in Old Waer has been what the Fish Hall says it is ever since.",
+            "ambience": [
+                "A vote is taken by shouting and is counted, somehow, correctly.",
+                "Ellsa Waer says four words and a room of ninety people stops talking.",
+                "The League's posted price is nailed to the post by the door with three other things nailed over it."
+            ],
+            "exits": [
+                {
+                    "to": "old_waer_square",
+                    "label": "Out to the square"
+                }
+            ]
+        },
+        "temple_of_the_deep_mere": {
+            "name": "The Temple of the Deep Mere",
+            "type": "building",
+            "map_pos": [
+                55.8,
+                58.8
+            ],
+            "allow_camp": true,
+            "description": "The city's chief temple, built out over the water on the deep side of the point, dedicated to the cold thing that is politely called the Mere. There is no altar. Offerings go over the rail into forty fathoms and are not expected back. The clergy are all former sailors and none of them will say the word for what is down there in front of a stranger.",
+            "ambience": [
+                "Somebody drops something small over the rail and does not watch it go.",
+                "The floor of the nave is wet in a line, from the rail inward, and has been mopped and is wet again.",
+                "Sister Nairn comes out of the back room, locks it, checks the lock, and goes on as though she has not."
+            ],
+            "exits": [
+                {
+                    "to": "old_waer_square",
+                    "label": "Up to the square"
+                }
+            ]
+        },
+        "the_waer_light": {
+            "name": "The Waer Light",
+            "type": "site",
+            "map_pos": [
+                60.4,
+                16.2
+            ],
+            "description": "A stone tower on the very end of the point, burning rendered fish-oil in a lantern the size of a small room, in all weathers, visible eleven miles. It has burned every night for a hundred and forty years except four this spring. On each of those four nights a boat came into the deep water under the point and was not logged by anybody, and on each of those four mornings the keeper had nothing to say about it.",
+            "ambience": [
+                "The wind comes off the water hard enough to lean on and the lantern does not flicker.",
+                "The oil store is fuller than it should be for the time of year.",
+                "From up here you can see the whole harbour, the chain, and one boat standing off further out than any working boat has business to be."
+            ],
+            "exits": [
+                {
+                    "to": "old_waer_square",
+                    "label": "Back down the point"
+                }
+            ]
+        }
+    }
+}

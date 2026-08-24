@@ -1,0 +1,840 @@
+{
+    "npc_key": "nessa_reth",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "flag": "nessa_fate",
+                        "equals": "split"
+                    }
+                ],
+                "text": "Nessa has cut her hair off at the jaw, badly, herself, with a knife, and is entirely unrepentant about it.\n\n\"It got in the tar,\" she says. \"It has got in the tar since I was six. I have been meaning to do it for eleven years and I did it in a doorway on the Tar Steps on Tuesday with about four people watching.\"\n\nShe shrugs.\n\n\"Everything I own is in that bag. It is a small bag. I have counted what is in it, obviously.\"",
+                "choices": [
+                    {
+                        "label": "Sit at the fire a while.",
+                        "conditions": [
+                            {
+                                "companion": "nessa_reth",
+                                "status": "active"
+                            }
+                        ],
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Later.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "nessa_fate",
+                        "equals": "stayed"
+                    }
+                ],
+                "expression": 3,
+                "text": "\"Bread went up a third,\" says Nessa. \"On the cart. No reason given, no announcement, nothing said to anybody.\"\n\nShe is counting something under her breath and does not stop.\n\n\"Four hundred people are eating better and not one of them knows why and that is exactly what I asked for and I have not slept properly since Thursday.\"",
+                "choices": [
+                    {
+                        "label": "\"You got what you wanted.\"",
+                        "next": "what_she_wanted"
+                    },
+                    {
+                        "label": "Sit at the fire a while.",
+                        "conditions": [
+                            {
+                                "companion": "nessa_reth",
+                                "status": "active"
+                            }
+                        ],
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Later.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "pool": "idle",
+                "conditions": [
+                    {
+                        "companion": "nessa_reth",
+                        "status": "active"
+                    }
+                ],
+                "text": "Nessa is counting something under her breath. When she catches you noticing she does not stop, she just does it louder, out of spite.\n\n\"Forty-one paces to that corner,\" she says. \"Thirty-eight coming back, because there is a slope. Everybody in the world does this and pretends they do not.\"",
+                "choices": [
+                    {
+                        "label": "Sit at the fire a while.",
+                        "conditions": [
+                            {
+                                "companion": "nessa_reth",
+                                "status": "active"
+                            }
+                        ],
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Later.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "pool": "idle",
+                "conditions": [
+                    {
+                        "companion": "nessa_reth",
+                        "status": "active"
+                    }
+                ],
+                "text": "\"You paid too much for that,\" says Nessa, of something you bought three hours ago in another district. \"I am not going to say how much too much. I am going to let you work out that I know.\"",
+                "choices": [
+                    {
+                        "label": "Sit at the fire a while.",
+                        "conditions": [
+                            {
+                                "companion": "nessa_reth",
+                                "status": "active"
+                            }
+                        ],
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Later.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "pool": "idle",
+                "conditions": [
+                    {
+                        "companion": "nessa_reth",
+                        "status": "active"
+                    }
+                ],
+                "text": "Nessa has her boots off and is looking at her own hands, palms up, in the firelight.\n\n\"Four months,\" she says, when she sees you. \"That is how long it takes for the splits to close if you stop. I have been off the bench four months and eleven days.\"",
+                "choices": [
+                    {
+                        "label": "Sit at the fire a while.",
+                        "conditions": [
+                            {
+                                "companion": "nessa_reth",
+                                "status": "active"
+                            }
+                        ],
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Later.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "met_nessa"
+                    },
+                    {
+                        "flag": "reth_deal"
+                    }
+                ],
+                "expression": 3,
+                "text": "Nessa Reth is at the end of the bench, picking, at a speed that is frankly alarming, and she does not slow down when you come and stand over her.\n\n\"You bargained with her,\" she says. \"Down there. In the yard. She sent for a stool.\"\n\nShe pulls a length of cable apart.\n\n\"Forty years and nobody has bargained with my grandmother. Four priests, a Factor and about nine Watch-Captains and every one of them either shouted at her or thanked her.\"\n\nShe finally looks up.\n\n\"Sit down. I have got something and I have had it a year and I am going to be sick if I carry it another month.\"",
+                "choices": [
+                    {
+                        "label": "Sit down.",
+                        "next": "the_tally"
+                    },
+                    {
+                        "label": "Sit at the fire a while.",
+                        "conditions": [
+                            {
+                                "companion": "nessa_reth",
+                                "status": "active"
+                            }
+                        ],
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Later.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "met_nessa"
+                    }
+                ],
+                "text": "\"Back,\" says Nessa, without slowing down. \"You have got about four minutes before the gang boss decides you are stopping the bench.\"",
+                "choices": [
+                    {
+                        "label": "\"What are you counting?\"",
+                        "next": "what_counting"
+                    },
+                    {
+                        "label": "\"You are Reth's granddaughter.\"",
+                        "next": "the_granddaughter"
+                    },
+                    {
+                        "label": "Sit at the fire a while.",
+                        "conditions": [
+                            {
+                                "companion": "nessa_reth",
+                                "status": "active"
+                            }
+                        ],
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Leave her to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "A hundred and ten metres of bench and four hundred pairs of hands, and almost no noise at all, which is the thing about it.\n\nThe young woman nearest the door is picking twice as fast as anybody else and is also, quite clearly, counting something that is not rope.\n\n\"You are the one from the gate,\" she says, without looking up. \"Nessa. And before you ask, yes, and everybody asks, and yes she is, and no it does not help.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_nessa"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "\"What are you counting?\"",
+                        "next": "what_counting"
+                    },
+                    {
+                        "label": "\"Yes she is what?\"",
+                        "next": "the_granddaughter"
+                    },
+                    {
+                        "label": "Sit at the fire a while.",
+                        "conditions": [
+                            {
+                                "companion": "nessa_reth",
+                                "status": "active"
+                            }
+                        ],
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Leave her to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_granddaughter": {
+            "text": "\"My grandmother,\" says Nessa. \"Reth. The pitch, the tar, the oakum, four hundred hands and one bread cart.\"\n\nShe pulls a length of cable apart with a snap.\n\n\"And I am on this bench, which everybody finds either touching or sinister, and it is neither. It is that she put every one of us on it at six, and the two who complained are running the yards now and the one who did not is me.\"\n\n\"You can tell everything about a House by where it puts its own children. Mine puts them on the bench. That is either the most honest thing about her or the cleverest, and I have had seventeen years to decide and I have not.\"",
+            "choices": [
+                {
+                    "label": "\"What are you counting?\"",
+                    "next": "what_counting"
+                },
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "what_counting": {
+            "expression": 3,
+            "text": "Nessa's hands do not stop, which is the tell.\n\n\"Tokens,\" she says. \"Tin. One loaf, from the one cart. I count the ones that come onto this bench in a day and I have been counting them for a year.\"\n\nShe glances up.\n\n\"That is the boring answer. Ask the boring question and you get the boring answer.\"\n\nShe pulls another length apart.\n\n\"The interesting question is what a day off this bench sells for by the time it leaves Tarrow, and I have got that too, off the ledgers in the counting shed, which I am not supposed to be able to read.\"",
+            "choices": [
+                {
+                    "label": "\"And the difference?\"",
+                    "next": "the_difference"
+                },
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "the_difference": {
+            "expression": 3,
+            "text": "Nessa's hands stop. It is the first time you have seen them stop.\n\n\"No,\" she says.\n\nShe starts again immediately.\n\n\"Not on a bench with four hundred people on it and a gang boss at the far end who counts us in by name. Not to somebody I met eleven minutes ago.\"\n\nShe pulls a cable apart.\n\n\"Go and do whatever it is you are doing in this city. Go and do it where my grandmother can see you doing it. And if she deals with you rather than having you walked out of her gate, come back and sit down and I will tell you a number.\"",
+            "choices": [
+                {
+                    "label": "\"I will come back.\"",
+                    "end": true
+                }
+            ]
+        },
+        "the_tally": {
+            "expression": 3,
+            "text": "She gives it to you in about ninety seconds, because she has been rehearsing it for a year.\n\n\"Six years. Four hundred hands, give or take, and I have the give and take. Tokens issued: I have counted every day for a year and taken the year before off the cart's own tally, which nobody keeps because nobody thinks a bread cart needs a ledger.\"\n\nHer hands keep moving.\n\n\"Oakum sold: off the counting shed's book, in hundredweight, at the price on the day, which is in the same book two pages later because whoever rules those columns is lazy.\"\n\nShe finally stops.\n\n\"The difference is eleven thousand four hundred marks.\"\n\nShe lets it sit.\n\n\"That is not profit. Profit is fine, profit is what a yard is. I have taken out the pitch, the kilns, the sheds, the carts, the bread, the wastage and the two uncles. Eleven thousand four hundred is what is left after she has fed everybody and paid for everything.\"\n\n\"And she is not lying about feeding us. That is the part. Every word she says about the bread is true. And there is eleven thousand four hundred marks on top of it.\"",
+            "on_enter": [
+                {
+                    "set_flag": "nessa_tally"
+                },
+                {
+                    "start_quest": "what_the_houses_owe"
+                },
+                {
+                    "quest_stage": {
+                        "quest": "what_the_houses_owe",
+                        "stage": "the_bench"
+                    }
+                },
+                {
+                    "xp": 150
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"Come with me.\"",
+                    "next": "the_recruit"
+                },
+                {
+                    "label": "\"What do you want to do with it?\"",
+                    "next": "what_to_do"
+                },
+                {
+                    "label": "\"Why have you not shown anyone?\"",
+                    "next": "why_not_shown"
+                }
+            ]
+        },
+        "why_not_shown": {
+            "expression": 3,
+            "text": "\"Because there is nobody to show it to,\" says Nessa, \"and I have been through the list about four hundred times.\"\n\nShe counts them off.\n\n\"The bench. Four hundred people who would believe it in about a second and could do nothing whatsoever about it, and would be worse off for knowing, and half of whom would tell my uncles inside a week to get on the right side of it.\"\n\n\"The Watch, who take a retainer from us. The Factor, who cannot get a Watch-Captain to walk a gate. The Moot, who need the pitch. The Fish Hall, who are two districts away and would love it and could do nothing.\"\n\nShe pulls the cable apart.\n\n\"And her. Which is the only one that would actually do anything, and is the one I have been not doing for a year.\"",
+            "choices": [
+                {
+                    "label": "\"Then show her.\"",
+                    "next": "what_to_do"
+                },
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "what_to_do": {
+            "expression": 3,
+            "text": "\"Two things,\" says Nessa, \"and I have been picking rope for a year with both of them in my head.\"\n\n\"Read it out. In the yard. In front of both uncles and the gang bosses and whoever else is standing there. Four hundred people hear a number by suppertime and every one of them knows exactly what they are worth and what they are being paid, and my grandmother has to stand in her own yard and be told it by me.\"\n\n\"Or give it to her privately. On a page. And she reads it, and she is not a fool and she has never once been a fool, and something changes on that cart within the fortnight and nobody knows why.\"\n\nShe puts her hands flat on the bench.\n\n\"The first one is true and does nothing. The second one does something and is a lie by arrangement.\"\n\n\"I have not been able to choose and I have started to think that is because I have been choosing between what I want and what works, and I have wanted to be talked out of the second one for about six months.\"",
+            "on_enter": [
+                {
+                    "quest_stage": {
+                        "quest": "what_the_houses_owe",
+                        "stage": "the_reckoning"
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"Come with me first. Sit with it on a road.\"",
+                    "next": "the_recruit"
+                },
+                {
+                    "label": "\"Read it out.\"",
+                    "next": "the_reading"
+                },
+                {
+                    "label": "\"Give it to her.\"",
+                    "next": "the_page"
+                },
+                {
+                    "label": "\"Not yet. Sit with it.\"",
+                    "end": true
+                }
+            ]
+        },
+        "the_reading": {
+            "expression": 3,
+            "text": "She does it at the end of the shift, in the pitch yard, standing on the stone stand of the near cauldron, with both uncles there and about sixty people who have come up from the sheds because word went round the bench in under four minutes.\n\nShe reads the whole thing. Tokens issued. Oakum sold. Costs, itemised, including the bread, out loud, correctly. And the difference.\n\nMother Reth listens to every word of it without moving.\n\nAnd then she says, in a voice that carries: \"Every figure in that is right,\" and turns round and goes back to skimming the cauldron, and does not say anything else, and that is worse than shouting and everybody in the yard knows it.\n\nNessa is gone before dark with everything she owns in one bag.\n\n\"They will not change anything,\" she says on the Tar Steps. \"I know. I have always known. Four hundred people know a number now. That is not nothing.\"\n\nShe does not sound convinced, and she does not pretend to.",
+            "on_enter": [
+                {
+                    "quest_stage": {
+                        "quest": "what_the_houses_owe",
+                        "stage": "split"
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"It is not nothing.\"",
+                    "end": true
+                },
+                {
+                    "label": "Walk down with her.",
+                    "end": true
+                }
+            ]
+        },
+        "the_page": {
+            "expression": 3,
+            "text": "She writes it out fair — she has a good hand, which nobody would guess — and gives it to her grandmother in the counting shed with the door shut, and comes out about eleven minutes later.\n\n\"She read it twice,\" says Nessa. \"She read it twice and then she asked me one question about the wastage and I had the answer and she said good.\"\n\nShe is very calm and her hands are not.\n\n\"Bread will go up. I know how she works. It will go up a third on the cart within the fortnight and no reason will be given and four hundred people will decide it was the fleet order.\"\n\nShe looks back at the shed.\n\n\"That is what I asked for. I want that on the record. Nobody made me do it this way.\"",
+            "on_enter": [
+                {
+                    "quest_stage": {
+                        "quest": "what_the_houses_owe",
+                        "stage": "stayed"
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "Say nothing.",
+                    "end": true
+                }
+            ]
+        },
+        "what_she_wanted": {
+            "expression": 3,
+            "text": "\"I did,\" says Nessa. \"That is the whole trouble with it.\"\n\nShe counts under her breath for a while.\n\n\"Here is the thing nobody warns you about. A number that changes something and a number that is said out loud are not the same number, and I have spent a year telling myself they are, because I wanted them to be, because I am the sort of person who counts things and I wanted counting to be enough.\"\n\nShe stops.\n\n\"Four hundred people are eating better. And every one of them still thinks a bread cart is a kindness. I have made the kindness bigger.\"\n\nShe pulls her coat straight.\n\n\"She is very good at this. I did not beat her. I got a result out of her, which is what everybody who has ever dealt with my grandmother has got, and she has been letting people get results out of her for forty years.\"",
+            "choices": [
+                {
+                    "label": "Say nothing.",
+                    "end": true
+                }
+            ]
+        },
+        "the_recruit": {
+            "expression": 3,
+            "text": "\"Take me with you,\" says Nessa, \"and before you make a face about it, I am not asking to be rescued from a bench. I am extremely good at the bench.\"\n\nShe puts the rope down.\n\n\"I have been in Tarrow my entire life. Seventeen years, one district, downwind by law. I can tell you the price of everything in it and I have never once seen a room where a price was decided.\"\n\n\"You have been in the Factor's House. And the Moot. And the Charthouse, which I did not know was a building until last month.\"\n\nShe looks at you levelly.\n\n\"I count things. It is the only thing I am for and I am very good at it, and I have spent seventeen years counting a bench because it was the only thing in front of me. Put something else in front of me.\"",
+            "choices": [
+                {
+                    "label": "\"Come on, then.\"",
+                    "effects": [
+                        {
+                            "recruit": "nessa_reth"
+                        },
+                        {
+                            "xp": 100
+                        }
+                    ],
+                    "next": "she_comes"
+                },
+                {
+                    "label": "\"Your grandmother will take that badly.\"",
+                    "next": "about_reth_first"
+                },
+                {
+                    "label": "\"Not yet.\"",
+                    "end": true
+                }
+            ]
+        },
+        "about_reth_first": {
+            "text": "\"She will not,\" says Nessa. \"That is the thing everybody gets wrong about her.\"\n\n\"She will be pleased. She will be pleased in a way that will not be mentioned and will not be shown and will absolutely be there, because the one thing my grandmother has never been able to stand is somebody standing still.\"\n\nShe picks her coat up.\n\n\"Both my uncles stood still. She has spent thirty years watching two men she made stand still in the yard she made, and neither of them speaks to the other, and she has never once said a word about it to anybody.\"\n\n\"If I walk out of that gate with you she will not say goodbye and she will tell nobody and she will be pleased.\"",
+            "choices": [
+                {
+                    "label": "\"Come on, then.\"",
+                    "effects": [
+                        {
+                            "recruit": "nessa_reth"
+                        },
+                        {
+                            "xp": 100
+                        }
+                    ],
+                    "next": "she_comes"
+                },
+                {
+                    "label": "\"Not yet.\"",
+                    "end": true
+                }
+            ]
+        },
+        "she_comes": {
+            "expression": 2,
+            "text": "She finishes the length she is on first, which takes about forty seconds and is entirely deliberate, and puts it in the basket, and stands up.\n\n\"Right,\" she says. \"I have got seventeen years of Tarrow and a knife and a number in my head. What are we counting?\"",
+            "choices": [
+                {
+                    "label": "Go.",
+                    "end": true
+                }
+            ]
+        },
+        "camp": [
+            {
+                "conditions": [
+                    {
+                        "companion": "nessa_reth",
+                        "status": "active"
+                    }
+                ],
+                "text": "Nessa has counted the firewood, the rations, the distance to the water and the number of people who came past on the road today, and has told nobody any of it, and will produce all four the moment it becomes relevant and be insufferable about it.\n\n\"Sit down,\" she says. \"You have got that face on. The one where you are about to ask me something you think is delicate.\"",
+                "choices": [
+                    {
+                        "label": "Why do you count everything?",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "flag": "camp_nessa_counting"
+                                }
+                            }
+                        ],
+                        "next": "camp_nessa_counting"
+                    },
+                    {
+                        "label": "Tell me about the bench.",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "flag": "camp_nessa_bench"
+                                }
+                            }
+                        ],
+                        "next": "camp_nessa_bench"
+                    },
+                    {
+                        "label": "Your uncles.",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "flag": "camp_nessa_uncles"
+                                }
+                            }
+                        ],
+                        "next": "camp_nessa_uncles"
+                    },
+                    {
+                        "label": "Is your grandmother a good person?",
+                        "conditions": [
+                            {
+                                "companion": "nessa_reth",
+                                "approval_at_least": 15
+                            },
+                            {
+                                "not": {
+                                    "flag": "camp_nessa_grandmother"
+                                }
+                            }
+                        ],
+                        "next": "camp_nessa_grandmother"
+                    },
+                    {
+                        "label": "What do you want, when this is over?",
+                        "conditions": [
+                            {
+                                "companion": "nessa_reth",
+                                "approval_at_least": 30
+                            },
+                            {
+                                "not": {
+                                    "flag": "camp_nessa_after"
+                                }
+                            }
+                        ],
+                        "next": "camp_nessa_after"
+                    },
+                    {
+                        "label": "The tin tokens. You were paid in them too.",
+                        "conditions": [
+                            {
+                                "flag": "nessa_tally"
+                            },
+                            {
+                                "not": {
+                                    "flag": "camp_nessa_tokens"
+                                }
+                            }
+                        ],
+                        "next": "camp_nessa_tokens"
+                    },
+                    {
+                        "label": "How is it, since the yard?",
+                        "conditions": [
+                            {
+                                "flag": "nessa_fate"
+                            },
+                            {
+                                "not": {
+                                    "flag": "camp_nessa_fate"
+                                }
+                            }
+                        ],
+                        "next": "camp_nessa_fate"
+                    },
+                    {
+                        "label": "\"You have been counting me.\"",
+                        "conditions": [
+                            {
+                                "companion": "nessa_reth",
+                                "approval_at_least": 30
+                            },
+                            {
+                                "not": {
+                                    "companion": "nessa_reth",
+                                    "romance_stage": 1
+                                }
+                            },
+                            {
+                                "not": {
+                                    "companion": "nessa_reth",
+                                    "romance_locked": true
+                                }
+                            }
+                        ],
+                        "next": "romance_one"
+                    },
+                    {
+                        "label": "Stay up.",
+                        "conditions": [
+                            {
+                                "companion": "nessa_reth",
+                                "romance_stage": 1
+                            }
+                        ],
+                        "next": "romance_two"
+                    },
+                    {
+                        "label": "Goodnight.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "Nobody is at this fire counting anything.",
+                "choices": [
+                    {
+                        "label": "Back.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "camp_nessa_counting": {
+            "text": "\"Because nobody else does,\" says Nessa, \"and because the entire arrangement I was raised in depends on that.\"\n\nShe pokes the fire.\n\n\"A token is one loaf. Everybody on that bench knows that. Nobody on that bench knows how many tokens went out last Tuesday, or what the oakum they picked on Tuesday sold for on Thursday, because those two facts live in two different buildings and neither of them is a building you are allowed into.\"\n\n\"That is not a conspiracy. Nobody sat down and arranged it. It is just that counting is boring and nobody does it, and the whole world runs on nobody doing it.\"\n\nShe shrugs.\n\n\"So I count. It costs me nothing. I have got hands that are busy and a head that is not.\"",
+            "on_enter": [
+                {
+                    "set_flag": "camp_nessa_counting"
+                },
+                {
+                    "approval": {
+                        "nessa_reth": 5
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "Back to the fire.",
+                    "next": "camp"
+                }
+            ],
+            "expression": 2
+        },
+        "camp_nessa_bench": {
+            "text": "\"A hundred and ten metres,\" says Nessa. \"Four hundred people. And almost no noise, which is the thing everybody notices and nobody can explain.\"\n\nShe looks at her hands.\n\n\"It is because you cannot talk and pick fast. Not properly. The rope takes the rhythm out of your voice. So four hundred people sit shoulder to shoulder for eleven hours and say about nine sentences to each other.\"\n\n\"Which means that if you want to know anything about the person next to you, you have to work it out from their hands. And you can. That is the thing I have never been able to explain to anybody. I know about two hundred people on that bench extremely well and I have had a conversation with about six of them.\"",
+            "on_enter": [
+                {
+                    "set_flag": "camp_nessa_bench"
+                },
+                {
+                    "approval": {
+                        "nessa_reth": 6
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "Back to the fire.",
+                    "next": "camp"
+                }
+            ],
+            "expression": 3
+        },
+        "camp_nessa_uncles": {
+            "text": "\"Corrin and Vell,\" says Nessa. \"They have not spoken to each other in six years and they have never once told anybody what it was about, and I know exactly what it was about because I was fourteen and standing in the counting shed and neither of them noticed.\"\n\nShe grins, briefly and without warmth.\n\n\"It was over four hundred marks. That is all. Four hundred marks in the spring of the year the Wardenswatch started, on a shipment they both claimed to have arranged, and neither of them will say it out loud because saying it out loud would mean admitting the figure was small.\"\n\nShe puts a stick on the fire.\n\n\"Six years of a family split over a number both of them think is embarrassing. And my grandmother has known the whole time and has never said a word, because two men who will not talk to each other cannot combine against her.\"",
+            "on_enter": [
+                {
+                    "set_flag": "camp_nessa_uncles"
+                },
+                {
+                    "approval": {
+                        "nessa_reth": 5
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "Back to the fire.",
+                    "next": "camp"
+                }
+            ],
+            "expression": 3
+        },
+        "camp_nessa_grandmother": {
+            "text": "\"Yes,\" says Nessa, immediately, and then sits with it for a long time.\n\n\"That is the answer and it took me until about last year to get to it and it has ruined everything.\"\n\nShe feeds the fire.\n\n\"She is not lying. Not about any of it. Four hundred people eat every day of the year in a district that would otherwise be starving in a bad winter, and she built that, and it did not exist before her, and nobody in Waerhaven has ever built anything like it.\"\n\n\"And she takes eleven thousand four hundred marks a year off it and calls the tokens a wage.\"\n\nShe looks up.\n\n\"If she were a monster I could have left at fourteen. That is what I want you to understand. Every single person who comes down those steps decides she is a monster or a saint inside six minutes, and both of them get to go home. I have got to hold both halves, in one head, about my grandmother, for the rest of my life.\"",
+            "on_enter": [
+                {
+                    "set_flag": "camp_nessa_grandmother"
+                },
+                {
+                    "approval": {
+                        "nessa_reth": 7
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "Back to the fire.",
+                    "next": "camp"
+                }
+            ],
+            "expression": 3
+        },
+        "camp_nessa_tokens": {
+            "text": "\"Six to eleven,\" says Nessa. \"Then the counting shed, because I could read.\"\n\nShe turns her hands over and looks at the palms.\n\n\"Five years on the bench, paid in tin, same as everybody. And here is the thing I have not said to anyone.\"\n\nShe is quiet a moment.\n\n\"I liked it. The tokens. When I was seven I liked them very much, because they were mine, and because you could hold up a token and get a loaf and nobody could argue with you about it. There is no haggling in a token. It is one loaf. It is the only completely honest thing in Tarrow.\"\n\nShe closes her hands.\n\n\"And it is a wage that can only ever buy one thing, from one cart, at whatever she says. And I did not see that until I was fourteen, and I had been extremely happy about it for seven years, and she watched me be happy about it.\"",
+            "on_enter": [
+                {
+                    "set_flag": "camp_nessa_tokens"
+                },
+                {
+                    "approval": {
+                        "nessa_reth": 6
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "Back to the fire.",
+                    "next": "camp"
+                }
+            ],
+            "expression": 3
+        },
+        "camp_nessa_after": {
+            "text": "\"A ledger of my own,\" says Nessa, and then laughs at herself.\n\n\"That is genuinely it. I have thought about this a great deal and it is not a farm and it is not a ship and it is not a house on Highstrand. It is a book, in a room, with a door I can shut, and the whole of something in it, correctly.\"\n\nShe pulls her knees up.\n\n\"There are about four books in Waerhaven that are actually complete. Sedge's ninety years. The Charthouse's soundings. The Temple's offerings. And whatever the Quiet Charter keeps, which is in nine hands and balances, and I would give a year to read it.\"\n\n\"Everything else in this city is a guess that people have agreed to stop arguing about.\"\n\nShe looks over.\n\n\"I would like to make one true thing. That is the whole ambition. It is a very small ambition and I have never said it out loud because people find it disappointing.\"",
+            "on_enter": [
+                {
+                    "set_flag": "camp_nessa_after"
+                },
+                {
+                    "approval": {
+                        "nessa_reth": 7
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "Back to the fire.",
+                    "next": "camp"
+                }
+            ],
+            "expression": 2
+        },
+        "camp_nessa_fate": [
+            {
+                "conditions": [
+                    {
+                        "flag": "nessa_fate",
+                        "equals": "split"
+                    }
+                ],
+                "expression": 3,
+                "text": "\"Nothing has changed,\" says Nessa. \"In the yards. Nothing. Same price, same tokens, same cart.\"\n\nShe pokes the fire.\n\n\"And about eleven people have said the number back to me. Not asked about it. Said it back. Somebody in the sheds has been telling it to people who were not there and getting it right to the mark.\"\n\nShe almost smiles.\n\n\"That is not nothing. It is not much. But a number that four hundred people can say is a different object from a number in my head, and I did not know that until Tuesday.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "camp_nessa_fate"
+                    },
+                    {
+                        "approval": {
+                            "nessa_reth": 6
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Back to the fire.",
+                        "next": "camp"
+                    }
+                ]
+            },
+            {
+                "expression": 3,
+                "text": "\"Bread is up,\" says Nessa. \"Third again. Held three weeks.\"\n\nShe counts something under her breath.\n\n\"Nine hundred marks a year, that is. Off her eleven thousand four hundred. So she gave up about an twelfth of it and I have decided not to work out the exact figure because I would know it forever.\"\n\nShe stops.\n\n\"Four hundred people are better off and none of them know why and I did that, and it worked, and I have been trying for a fortnight to feel like somebody who won.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "camp_nessa_fate"
+                    },
+                    {
+                        "approval": {
+                            "nessa_reth": 6
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Back to the fire.",
+                        "next": "camp"
+                    }
+                ]
+            }
+        ],
+        "romance_one": {
+            "expression": 3,
+            "text": "\"I have,\" says Nessa, without the slightest embarrassment. \"Obviously I have. I count everything.\"\n\nShe stares into the fire.\n\n\"Eleven times you have put yourself between somebody and something. Four of those were me. Twice you have been offered money to do a thing that would have cost somebody on a bench and you have not taken it, and once you took it and I have not brought that up and I am not going to.\"\n\nShe pulls her knees up.\n\n\"That is what I have got instead of feelings. That is what I have always had instead of feelings. I am not going to pretend to be somebody who says things.\"\n\nShe glances over, and it is the first time she has ever looked away first.\n\n\"But the tally is very good. I want you to know that the tally on you is extremely good and I have checked it twice.\"",
+            "on_enter": [
+                {
+                    "romance": {
+                        "companion": "nessa_reth",
+                        "stage": 1
+                    }
+                },
+                {
+                    "approval": {
+                        "nessa_reth": 5
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"That is the best thing you know how to say.\"",
+                    "next": "romance_one_answer"
+                },
+                {
+                    "label": "\"Read me the whole tally.\"",
+                    "next": "romance_one_answer"
+                },
+                {
+                    "label": "\"Get some sleep.\"",
+                    "next": "camp"
+                }
+            ]
+        },
+        "romance_one_answer": {
+            "expression": 2,
+            "text": "\"It is,\" agrees Nessa. \"It is exactly the best thing I know how to say, and I would like it noted that it took me four months to get to it.\"\n\nShe puts a stick on the fire, and then moves it, because it was badly placed.\n\n\"I am not going to be any good at this. Not in the way people mean. There will not be speeches.\"\n\nShe settles.\n\n\"What there will be is that I will always know exactly what you are owed, and by whom, and I will never once let anybody short you. That is what I have got. Everybody else in your life will give you the other thing.\"",
+            "choices": [
+                {
+                    "label": "\"That is not the other thing. That is better.\"",
+                    "end": true
+                },
+                {
+                    "label": "Say nothing.",
+                    "end": true
+                }
+            ]
+        },
+        "romance_two": {
+            "expression": 2,
+            "text": "She has stopped counting. That is the whole event, and it takes you about ten minutes to notice it, and when you do she catches you noticing.\n\n\"Yes,\" she says. \"Twenty minutes. I sat here for twenty minutes and did not count anything.\"\n\nShe sounds slightly alarmed.\n\n\"I have not done that since I was six. I do it to go to sleep. I do it in fights. I did it at my mother's burial and I counted the people.\"\n\nShe leans against you, which she does like somebody carrying out a calculation and then committing to it.\n\n\"Do not say anything clever. I am working out whether I like it.\"",
+            "on_enter": [
+                {
+                    "romance": {
+                        "companion": "nessa_reth",
+                        "stage": 2
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "Say nothing.",
+                    "end": true
+                }
+            ]
+        }
+    }
+}

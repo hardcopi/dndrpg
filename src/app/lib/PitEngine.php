@@ -25,11 +25,20 @@ declare(strict_types=1);
 
 class PitEngine
 {
-    /** What the pit offers, easiest first. */
+    /**
+     * What the pit offers, easiest first.
+     *
+     * `budget` is which of EncounterBudget's columns the tier may spend, and it
+     * is not always the tier's own name. A hard match buys the DEADLY column —
+     * the pit is the one place in the game where the player picks the fight off
+     * a board before it starts, knows which of three they are picking, and can
+     * walk back up the stairs. A hard match held to the hard threshold was a
+     * fair match with a worse name.
+     */
     public const TIERS = [
-        'warmup' => ['label' => 'A warm-up',    'column' => 0, 'blurb' => 'Something to break a sweat on.'],
-        'fair'   => ['label' => 'A fair match', 'column' => 1, 'blurb' => 'An honest fight, evenly made.'],
-        'hard'   => ['label' => 'A hard match', 'column' => 2, 'blurb' => 'The crowd will get its money back.'],
+        'warmup' => ['label' => 'A warm-up',    'budget' => 'warmup', 'blurb' => 'Something to break a sweat on.'],
+        'fair'   => ['label' => 'A fair match', 'budget' => 'fair',   'blurb' => 'An honest fight, evenly made.'],
+        'hard'   => ['label' => 'A hard match', 'budget' => 'deadly', 'blurb' => 'The crowd will get its money back. Some of them do not.'],
     ];
 
     /**
@@ -279,10 +288,18 @@ class PitEngine
 
     // -----------------------------------------------------------------------
 
-    /** What this party's tier is worth, in monster XP. */
+    /**
+     * What this party's tier is worth, in monster XP.
+     *
+     * Through the tier table rather than straight to EncounterBudget, so the
+     * pit's own idea of what a tier costs is the one that applies — see TIERS,
+     * where a hard match spends the deadly column. An unknown tier falls to a
+     * fair match, which is the safe end to be wrong at.
+     */
     private function budget(int $partyId, string $tier, ?array $only = null): int
     {
-        return EncounterBudget::forParty($this->levels($partyId, $only), $tier);
+        $column = self::TIERS[$tier]['budget'] ?? 'fair';
+        return EncounterBudget::forParty($this->levels($partyId, $only), $column);
     }
 
     /** EncounterBudget's, kept under the old name so `pick()` reads unchanged. */

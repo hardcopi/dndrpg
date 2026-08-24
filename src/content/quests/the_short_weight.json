@@ -1,0 +1,88 @@
+{
+    "quest_key": "the_short_weight",
+    "title": "The Short Weight",
+    "act": 1,
+    "description": "Ilber Cass has been buying by the Counting Boom's standard weight for six years and has begun to suspect what that has cost him. Proving it means getting into a sealed box that three people can open, none of whom will.",
+    "giver": "ilber_cass",
+    "on_job_board": true,
+    "required_level": 2,
+    "rewards": {
+        "xp": 300,
+        "gold": 90
+    },
+    "stages": {
+        "ask_the_weighmaster": {
+            "title": "Ask Corran Sedge",
+            "objective": "The Weighmaster holds one of the three keys. Find out what he will say.",
+            "journal": "Ilber will pay to have the League standard weight put on a true beam. It lives in a sealed box on the Counting Boom's wall with three locks: the Factor, the Master Shipwright, and the Weighmaster.",
+            "target": {
+                "location": "the_weigh_house"
+            }
+        },
+        "the_three_keys": {
+            "title": "Three keys, three people",
+            "objective": "Get the box open, or get round it.",
+            "journal": "Sedge will not open it and will not say why in a room with a door. Whatever else he is, he is not a thief — he is a careful man who has worked out something and has nobody safe to tell.",
+            "target": {
+                "location": "the_counting_boom"
+            }
+        },
+        "the_box_open": {
+            "title": "On a true beam",
+            "objective": "Weigh the standard against something honest.",
+            "journal": "Vennik has a beam under a glass dome that will read a letter. Put the League's weight on it and the argument is over in the time it takes the pointer to stop.",
+            "target": {
+                "location": "venniks"
+            }
+        },
+        "proved": {
+            "title": "Four ounces",
+            "terminal": true,
+            "resolution": "proved",
+            "outcome": "success",
+            "journal": "Four ounces light, and the filing is on the underside where the stamp is, and it is six years old. Six years of grain weighed against it, every quarter, every barge. Waerhaven has not been cheating Lathmere. Waerhaven has been paying for grain by weight and receiving it by a lie, and the lie is in this city's own box and was cut with somebody's own file.",
+            "effects": [
+                {
+                    "set_flag": "weight_fate",
+                    "value": "proved"
+                },
+                {
+                    "give_item": "league_standard_weight",
+                    "quantity": 1
+                },
+                {
+                    "xp": 150
+                }
+            ]
+        },
+        "sold_the_proof": {
+            "title": "Sold back",
+            "terminal": true,
+            "resolution": "sold",
+            "outcome": "success",
+            "journal": "I took the weight to the people it would have ruined, and they paid, and it went back in the box, and the box was sealed again with a seal that is a very good copy. Everything in Waerhaven is still weighed against it.",
+            "effects": [
+                {
+                    "set_flag": "weight_fate",
+                    "value": "sold"
+                },
+                {
+                    "give_gold": 250
+                }
+            ]
+        },
+        "let_it_lie": {
+            "title": "Left in the box",
+            "terminal": true,
+            "resolution": "lie",
+            "outcome": "neutral",
+            "journal": "I put it back and said nothing. Ilber will keep buying by it, and so will the granary, and in eleven weeks it will not matter what anybody buys by.",
+            "effects": [
+                {
+                    "set_flag": "weight_fate",
+                    "value": "lie"
+                }
+            ]
+        }
+    }
+}

@@ -70,9 +70,7 @@
 
   function renderShelf() {
     $('#st-title').textContent = 'Studio';
-    $('#st-nav').innerHTML = `
-      <a class="btn" href="content.php">Copy desk</a>
-      <a class="btn" href="index.php">Shelf</a>`;
+    $('#st-nav').innerHTML = '';
 
     const cards = state.modules.map((m) => {
       const key = encodeURIComponent(m.module_key);
@@ -186,8 +184,7 @@
       <a class="btn" href="create.php?module=${key}">Play</a>
       <a class="btn" href="adventure_print.php?module=${key}">Book</a>
       <button type="button" class="btn" id="st-export">Export to files</button>
-      <button type="button" class="btn" id="st-bundle">Download</button>
-      <a class="btn" href="content.php">Copy desk</a>`;
+      <button type="button" class="btn" id="st-bundle">Download</button>`;
 
     const live = Number(m.is_active) === 1;
     $('#st-main').innerHTML = `
@@ -203,6 +200,7 @@
       <div class="st-desk">
         <section class="st-pane st-map">
           <h2>Map</h2>
+          <div id="st-regions" class="st-regions" hidden></div>
           <div id="st-chart"></div>
         </section>
         <section class="st-pane st-scene">
@@ -285,12 +283,17 @@
     renderScene();
     renderRun();
     mountMap();
+    paintRegionTabs();
   }
 
   async function loadHere(id) {
     err(null);
     try {
       state.here = (await API.get('content/location', { id })).location;
+      if (state.here.region_id && state.chart
+          && Number(state.here.region_id) !== Number(state.chart.region_id)) {
+        await reloadChart(Number(state.here.region_id));
+      }
       state.view = 'scene';
       state.talk = null;
       state.talkNpc = null;
@@ -298,11 +301,61 @@
     } catch (e) { err(e); }
   }
 
-  async function reloadChart() {
-    state.chart = (await API.get('content/chart', { module_id: state.module.id })).chart;
+  async function reloadChart(regionId) {
+    const q = { module_id: state.module.id };
+    const rid = regionId ?? (state.chart && state.chart.region_id);
+    if (rid) q.region_id = rid;
+    if (state.here && state.here.id && Number(state.here.region_id) === Number(rid)) {
+      q.here_id = state.here.id;
+    }
+    state.chart = (await API.get('content/chart', q)).chart;
     state.beats = (await API.get('content/run', { module_id: state.module.id })).beats || [];
     renderRun();
     mountMap();
+    paintRegionTabs();
+  }
+
+  /**
+   * The other maps in this adventure. Hidden when there is only one — a
+   * new dungeon has nothing to switch to.
+   */
+  function paintRegionTabs() {
+    const host = $('#st-regions');
+    if (!host) return;
+    const regions = (state.chart && state.chart.regions) || [];
+    if (regions.length < 2) {
+      host.innerHTML = '';
+      host.hidden = true;
+      return;
+    }
+    host.hidden = false;
+    const here = state.chart.region_id;
+    host.innerHTML = regions.map((r) =>
+      `<button type="button" class="btn st-region${Number(r.id) === Number(here) ? ' is-on' : ''}"
+        data-region="${r.id}">${esc(r.name)}</button>`
+    ).join('');
+    host.querySelectorAll('[data-region]').forEach((btn) => {
+      btn.addEventListener('click', () => showRegion(Number(btn.getAttribute('data-region'))));
+    });
+  }
+
+  async function showRegion(regionId) {
+    if (state.chart && Number(state.chart.region_id) === Number(regionId)) return;
+    err(null);
+    try {
+      await reloadChart(regionId);
+      const node = (state.chart.nodes || []).find((n) => n.current)
+        || (state.chart.nodes || [])[0];
+      if (node) {
+        state.here = (await API.get('content/location', { id: node.id })).location;
+      } else {
+        state.here = null;
+      }
+      state.view = 'scene';
+      state.talk = null;
+      state.talkNpc = null;
+      renderScene();
+    } catch (e) { err(e); }
   }
 
   async function reloadHere() {
@@ -362,9 +415,10 @@
     const monOpts = (state.refs.monsters || []).map((m) =>
       `<option value="${esc(m.monster_key)}">${esc(m.name)}</option>`
     ).join('');
-    const itemOpts = (state.refs.items || []).map((it) =>
-      `<option value="${esc(it.item_key)}">${esc(it.name)}</option>`
-    ).join('');
+    const itemOpts = (state.refs.items || []).map((it) => {
+      const tag = it.rarity && it.rarity !== 'common' ? ' · ' + it.rarity : '';
+      return `<option value="${esc(it.item_key)}">${esc(it.name)}${esc(tag)}</option>`;
+    }).join('');
     box.innerHTML = `
       <h3 class="ce-title">${esc(here.name)} <code>${esc(here.location_key)}</code></h3>
       <label>Name<input type="text" id="sc-name" value="${esc(here.name)}"></label>
@@ -391,6 +445,10 @@
               `<option value="${esc(s)}">${esc(s)}</option>`).join('')}
           </select>
         </label>
+        <label>Or paint them
+          <input type="file" id="np-art" accept="image/png,image/jpeg">
+        </label>
+        <p class="help-hint">A bust. The face is cut from the top. Filed under their key, so name them first.</p>
         <div class="ce-actions"><button type="button" class="btn" id="np-go">Create</button></div>
       </details>
 
@@ -458,6 +516,40 @@
         .replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
     });
     $('#np-key').addEventListener('input', () => { $('#np-key').dataset.touched = '1'; });
+    $('#np-art').addEventListener('change', async (ev) => {
+      const file = ev.target.files && ev.target.files[0];
+      if (!file) return;
+      const key = $('#np-key').value.trim();
+      if (!key) {
+        ev.target.value = '';
+        return err(new Error('Name them first — the portrait is filed under their key.'));
+      }
+      err(null);
+      const reader = new FileReader();
+      reader.onload = async () => {
+        try {
+          const art = (await API.post('content/save_art', {
+            kind: 'npc',
+            key,
+            image: reader.result,
+          })).art;
+          if (!state.refs.sprites) state.refs.sprites = [];
+          if (!state.refs.sprites.includes(art.key)) {
+            state.refs.sprites.push(art.key);
+            state.refs.sprites.sort();
+          }
+          const sel = $('#np-sprite');
+          if (sel && ![...sel.options].some((o) => o.value === art.key)) {
+            const opt = document.createElement('option');
+            opt.value = art.key;
+            opt.textContent = art.key;
+            sel.appendChild(opt);
+          }
+          if (sel) sel.value = art.key;
+        } catch (e) { err(e); }
+      };
+      reader.readAsDataURL(file);
+    });
     $('#np-go').addEventListener('click', async () => {
       err(null);
       try {
@@ -600,6 +692,10 @@
           ).join('')}
         </select>
       </label>
+      <label>Or paint them
+        <input type="file" id="tk-art" accept="image/png,image/jpeg">
+      </label>
+      <p class="help-hint">A bust, filed under ${esc(npc.npc_key)}. The face is cut from the top.</p>
       <div class="ce-actions">
         <button type="button" class="btn" id="tk-save-npc">Save person</button>
       </div>
@@ -628,6 +724,36 @@
       state.talk = null;
       state.talkNpc = null;
       renderScene();
+    });
+    $('#tk-art').addEventListener('change', async (ev) => {
+      const file = ev.target.files && ev.target.files[0];
+      if (!file) return;
+      err(null);
+      const reader = new FileReader();
+      reader.onload = async () => {
+        try {
+          const art = (await API.post('content/save_art', {
+            kind: 'npc',
+            key: npc.npc_key,
+            npc_id: npc.id,
+            image: reader.result,
+          })).art;
+          if (!state.refs.sprites) state.refs.sprites = [];
+          if (!state.refs.sprites.includes(art.key)) {
+            state.refs.sprites.push(art.key);
+            state.refs.sprites.sort();
+          }
+          const sel = $('#tk-sprite');
+          if (sel && ![...sel.options].some((o) => o.value === art.key)) {
+            const opt = document.createElement('option');
+            opt.value = art.key;
+            opt.textContent = art.key;
+            sel.appendChild(opt);
+          }
+          if (sel) sel.value = art.key;
+        } catch (e) { err(e); }
+      };
+      reader.readAsDataURL(file);
     });
     $('#tk-save-npc').addEventListener('click', async () => {
       err(null);

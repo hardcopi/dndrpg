@@ -1,0 +1,302 @@
+{
+    "npc_key": "tam_ryke",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "flag": "charter_fate",
+                        "equals": "seized"
+                    }
+                ],
+                "text": "The cutting floor is quiet. Twenty women are working and nobody is at the windows, which in this loft is a statement.\n\n\"Eighty quarters into the League's granary,\" Tam Ryke says, cutting. \"And nineteen hundred people outside the wall who were being fed off it and are not being fed off anything now.\"\n\nShe does not look up.\n\n\"I asked you to find out what it was. I did not ask you to decide.\"",
+                "choices": [
+                    {
+                        "label": "\"It was a theft.\"",
+                        "next": "the_argument"
+                    },
+                    {
+                        "label": "\"You are right. I decided.\"",
+                        "next": "she_accepts_it"
+                    },
+                    {
+                        "label": "Leave her to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "charter_fate",
+                        "equals": "burned"
+                    }
+                ],
+                "text": "Tam Ryke is at the window and has been for some time.\n\n\"Six years that ran under my floor,\" she says, \"and I watched every load of it come up out of that stair, and I have never told a living soul, and now there is nothing to tell.\"\n\nShe turns round.\n\n\"I do not know whether to thank you. I have been trying to decide since Thursday and I do not know.\"",
+                "choices": [
+                    {
+                        "label": "Say nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "charter_fate",
+                        "equals": "bought_in"
+                    }
+                ],
+                "text": "\"You are in it,\" Tam says. She is cutting, and the chalk does not stop. \"That is fine. That is one of the outcomes I costed.\"\n\nShe marks a curve.\n\n\"Twenty women watch that quay. If it starts riding lower going out, I will come and find you rather than somebody else, and that is not a threat, that is the only favour I have got left to do you.\"",
+                "choices": [
+                    {
+                        "label": "\"Understood.\"",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "deep_store_seen"
+                    }
+                ],
+                "text": "Tam Ryke sends the nearest three women to the far end of the loft with a look, and they go without a word and without hurrying.\n\n\"You went down,\" she says. \"Tell me the room.\"",
+                "choices": [
+                    {
+                        "label": "\"It is a granary. A better one than the League's.\"",
+                        "next": "she_hears_it"
+                    },
+                    {
+                        "label": "\"League grain. Six years of it. Off the top of every barge.\"",
+                        "next": "she_hears_it"
+                    },
+                    {
+                        "label": "Not yet.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "what_goes_out",
+                        "status": "active"
+                    }
+                ],
+                "text": "\"Still up here,\" says Tam, cutting. \"The stair is behind the warehouses off Doss's quay and the ebb is at four. I cannot tell you any of that on a quay and I have just told you all of it in a room with twenty witnesses who will all swear I was talking about canvas.\"",
+                "choices": [
+                    {
+                        "label": "Back to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "met_ryke"
+                    }
+                ],
+                "text": "\"Back,\" says Tam Ryke. The chalk does not stop. \"Mind the bolt, it is wet-marked.\"",
+                "choices": [
+                    {
+                        "label": "\"What have your windows seen?\"",
+                        "next": "the_windows"
+                    },
+                    {
+                        "label": "\"Tell me about the crane.\"",
+                        "next": "what_goes_out_q"
+                    },
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "A long upper floor with the windows on the quay side and a hundred metres of canvas on it, and twenty women working, and not one of them looks up when you come in, which takes practice.\n\nThe forewoman marks a curve, straightens, and looks at you over the chalk.\n\n\"Tam Ryke. Sailmaker's loft. Whatever you are about to ask me — no, it is not for sale, and yes, we did see it.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_ryke"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "\"Saw what?\"",
+                        "next": "the_windows"
+                    },
+                    {
+                        "label": "\"Not for sale at any price?\"",
+                        "next": "not_for_sale"
+                    },
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "not_for_sale": {
+            "text": "\"Not for sale at any price,\" Tam says, \"and I will tell you exactly why, because everybody assumes it is honour and it is arithmetic.\"\n\n\"Twenty women. Eleven years. What we have got is not a fact here and a fact there — it is eleven years of the same quay, compared every day at this table, by twenty people who all know when one of the others is guessing.\"\n\nShe marks another curve.\n\n\"Sell one piece of it and every woman on this floor knows that what she says at this table can end up on a quay. And then they stop saying it, and then in about a fortnight I have got twenty sailmakers and no loft.\"\n\n\"You cannot sell it. It only exists because it is not for sale.\"",
+            "choices": [
+                {
+                    "label": "\"Then what would you trade it for?\"",
+                    "next": "the_trade"
+                },
+                {
+                    "label": "\"What have the windows seen?\"",
+                    "next": "the_windows"
+                }
+            ]
+        },
+        "the_windows": [
+            {
+                "conditions": [
+                    {
+                        "flag": "charter_known"
+                    }
+                ],
+                "text": "\"You have been talking to Doss,\" Tam says. \"Then you know as much as the quay knows and considerably less than this floor does.\"",
+                "choices": [
+                    {
+                        "label": "\"So tell me the rest.\"",
+                        "next": "what_goes_out_q"
+                    },
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ]
+            },
+            {
+                "text": "\"Everything,\" says Tam, without any drama at all. \"That is the honest answer and it is useless to you, so here is a useful one.\"\n\n\"Six years ago the Wardenswatch was a lazar house and a cart track. It is nineteen hundred people now. Every one of them came in past that gate or off a boat, and about half of them came off a boat, and boats are ours.\"\n\nShe puts the chalk down, which she has not done.\n\n\"People coming in is a cost. I have been watching that cost be paid for six years and I have never once seen where the money comes from, and I am the person in this city best placed to see it.\"",
+                "choices": [
+                    {
+                        "label": "\"And that bothers you.\"",
+                        "next": "what_goes_out_q"
+                    },
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ]
+            }
+        ],
+        "what_goes_out_q": {
+            "text": "\"The Great Crane lifts a load twice a year that nobody logs,\" Tam says. \"That is common quay gossip and it is not what I have got.\"\n\n\"What I have got is this. Twice a year a lighter comes off the outer quay under that crane. Twenty women have watched it every time for six years. And every single time, that lighter is riding lower going out than she was coming in.\"\n\nShe lets that sit.\n\n\"Going out. Loaded. From a crane that is supposedly lifting something in.\"\n\n\"I cannot say that on a quay. I cannot say it to the Watch, who are bought, or to the Moot, who would want to know how I know, or to the Factor, who would write it down. So it has been sitting in this loft for six years being true.\"",
+            "choices": [
+                {
+                    "label": "\"I will go and look.\"",
+                    "next": "the_trade"
+                },
+                {
+                    "label": "\"Why me?\"",
+                    "next": "why_you"
+                },
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "why_you": {
+            "text": "\"Because you have got no loft,\" Tam says. \"No bench, no gang, no family in Old Waer, no debt to Ilber Cass, nothing on the ways and nobody to be got at.\"\n\n\"There are twenty-six thousand people in this city and every one of them is holding something they cannot afford to have shaken. That is not a moral failing. That is what a city is.\"\n\nShe picks the chalk up.\n\n\"And then somebody walks in off the Hallowgate road with nothing in the water at all. Do you know how rare that is? I have been waiting six years for a pair of hands with nothing in the water.\"",
+            "choices": [
+                {
+                    "label": "\"All right.\"",
+                    "next": "the_trade"
+                },
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "the_trade": {
+            "text": "\"Then here is the trade,\" says Tam Ryke, \"and it is the only one I do.\"\n\n\"You go under the quay and you find out what is down there, and you come back here and tell me — me, this floor, first, before the Moot and before the Factor and before whichever of them you have decided you like.\"\n\n\"And in exchange you get eleven years of what twenty women have seen out of these windows. Once. Whatever you ask me, I answer, and I answer straight.\"\n\nShe holds out a hand with chalk on it.\n\n\"That is a better price than anybody in Waerhaven has ever been offered and I want you to know I know it.\"",
+            "on_enter": [
+                {
+                    "start_quest": "what_goes_out"
+                }
+            ],
+            "choices": [
+                {
+                    "label": "Take the hand.",
+                    "end": true
+                }
+            ]
+        },
+        "she_hears_it": {
+            "text": "Tam Ryke listens all the way through without cutting, which she has not done once since you met her.\n\n\"A granary,\" she repeats.\n\nShe sets the shears down.\n\n\"Six years. Off the top of every barge, before the Factor's seals ever touch it, and put somewhere with new boards and a broom in the corner.\"\n\n\"I costed four things it could be. Smuggled arms. Charts. Somebody's private fortune. A slave run.\" She almost laughs. \"I did not cost bread. I have watched that lighter ride low for six years and I never once thought that somebody down there was doing the one thing this city refuses to do, which is plan for a winter.\"",
+            "on_enter": [
+                {
+                    "quest_stage": {
+                        "quest": "what_goes_out",
+                        "stage": "whose_grain"
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"It is still the League's grain.\"",
+                    "next": "the_argument"
+                },
+                {
+                    "label": "\"Who is keeping it?\"",
+                    "next": "the_name"
+                }
+            ]
+        },
+        "the_name": {
+            "text": "\"I do not know,\" Tam says, and it visibly costs her. \"Eleven years of windows and I do not know.\"\n\n\"Three names get said and I can tell you which two are wrong. Ilber Cass wants it to be him so badly that it cannot be — he has been dropping hints about the Charter for four years and no man running a thing like that would. And Vennik reports to Lathmere, and Lathmere is the one party in the world that must never be told.\"\n\nShe looks out of the window at the quay.\n\n\"The third name I have never heard said, because nobody has one. There is a book on that table in nine hands. Nine. That is not a person, that is a rota. Whoever set that up did it so that there would be no name to give.\"",
+            "choices": [
+                {
+                    "label": "\"Then I will go and sit in the room until somebody comes.\"",
+                    "end": true
+                },
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "the_argument": {
+            "text": "\"It is the League's grain,\" Tam agrees. \"It is. And the League's grain is bought with the League's money out of the League's tax on a city that is not allowed to have nineteen hundred of the people who are eating it.\"\n\nShe picks the shears back up.\n\n\"I am not telling you what to do. I asked you to find out and you found out, and you did the part of it I could not do and I am not going to now stand here and tell you the answer. That would be the cheapest thing anybody has done in this loft in eleven years.\"\n\n\"But do not tell me it is simple. You have been in that room. It is not simple and you know it is not, and I would think a good deal less of you if you came up out of there certain.\"",
+            "choices": [
+                {
+                    "label": "\"I am not certain.\"",
+                    "effects": [
+                        {
+                            "xp": 60
+                        }
+                    ],
+                    "end": true
+                },
+                {
+                    "label": "Say nothing.",
+                    "end": true
+                }
+            ]
+        },
+        "she_accepts_it": {
+            "text": "Tam Ryke stops cutting. She stands with both hands flat on the canvas for a while.\n\n\"Yes,\" she says. \"You did. And somebody was always going to, and it was never going to be me, because I have twenty women and a loft and I have spent eleven years being the person who watches.\"\n\nShe straightens.\n\n\"That is my share of it and I will carry it. Come up here again. I said once and I meant once, and I have decided that was a stupid thing to say to the only person who has ever come back up those stairs to tell me what they did.\"",
+            "choices": [
+                {
+                    "label": "\"I will come back.\"",
+                    "effects": [
+                        {
+                            "xp": 80
+                        }
+                    ],
+                    "end": true
+                },
+                {
+                    "label": "Go.",
+                    "end": true
+                }
+            ]
+        }
+    }
+}

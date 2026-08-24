@@ -1,0 +1,25 @@
+{
+    "encounter_key": "the_drowned_ones",
+    "name": "What Was Laid Out",
+    "description": "The arrangement on the bottom of the drowned room is not an arrangement. It is a queue, and it has been waiting, and the water does not move even now.",
+    "difficulty": "hard",
+    "monsters": [
+        {
+            "monster": "drowned_man",
+            "quantity": 3,
+            "rank": "front"
+        },
+        {
+            "monster": "drowned_clerk",
+            "quantity": 1,
+            "rank": "back"
+        }
+    ],
+    "allow_flee": true,
+    "allow_parley": false,
+    "ambush": true,
+    "victory_flag": "drowned_room_beaten",
+    "place": {
+        "location": "the_drowned_room"
+    }
+}

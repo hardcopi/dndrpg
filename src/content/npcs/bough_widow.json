@@ -1,0 +1,11 @@
+{
+    "npc_key": "bough_widow",
+    "name": "A woman of the Bough",
+    "role": "Wardenswatch",
+    "sprite_key": "beggar",
+    "is_ambient": true,
+    "dialog": "bough_widow",
+    "place": {
+        "location": "the_green_bough"
+    }
+}

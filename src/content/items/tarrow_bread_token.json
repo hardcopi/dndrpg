@@ -1,0 +1,13 @@
+{
+  "item_key": "tarrow_bread_token",
+  "name": "Tarrow Bread Token",
+  "description": "A stamped tin disc that buys one loaf at the Oakum House cart, issued in place of wages, redeemable only from the Houses, and worth precisely what Mother Reth says it is worth on the day. There are more of these in circulation in Tarrow than there are coins.",
+  "item_type": "misc",
+  "rarity": "common",
+  "weight": 0.05,
+  "value_gp": 1,
+  "properties": {
+    "currency_token": true
+  },
+  "icon": "coin"
+}

@@ -1,0 +1,12 @@
+{
+    "npc_key": "nel_waer",
+    "name": "Nel Waer",
+    "role": "Keeper of the Waer Light",
+    "description": "Ellsa Waer's grandson, twenty-six, and the fifth of his name to keep this light. It has burned every night for a hundred and forty years except four this spring, and he knows exactly which four, and he has an answer ready that he has not had to give yet.",
+    "sprite_key": "farmer",
+    "is_quest_giver": true,
+    "dialog": "nel_waer",
+    "place": {
+        "location": "the_waer_light"
+    }
+}

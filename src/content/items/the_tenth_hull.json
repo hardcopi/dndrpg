@@ -1,0 +1,14 @@
+{
+  "item_key": "the_tenth_hull",
+  "name": "Lines of a Tenth Hull",
+  "description": "Sheer, half-breadth and body plan of a vessel the Moot has no class for: shorter than a fleet hull, far deeper, double-framed forward and sheathed to the wale in a way that only makes sense against ice. Drawn at night by somebody who has never been given a drawing board of their own.",
+  "item_type": "misc",
+  "rarity": "rare",
+  "weight": 0.3,
+  "value_gp": 0,
+  "properties": {
+    "quest_item": true,
+    "readable": true
+  },
+  "icon": "scroll"
+}

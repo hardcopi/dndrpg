@@ -64,7 +64,9 @@ require_signed_in_page();
         <div class="rail-head">
           <h2>Your characters</h2>
           <button type="button" class="btn btn-small" id="btn-new"
-                  title="Start a new party, in whichever adventure you like">New</button>
+                  title="<?= ADVENTURES_ENABLED
+                      ? 'Start a new party, in whichever adventure you like'
+                      : 'Make a new character' ?>">New</button>
         </div>
         <div id="char-list" class="rail-list"><p class="help-hint">Loading…</p></div>
       </aside>
@@ -104,15 +106,10 @@ require_signed_in_page();
     const state = {
       characters: [],
       modules: [],
+      adventures: <?= ADVENTURES_ENABLED ? 'true' : 'false' ?>,
       selected: null,      // character id whose sheet is open
       sheets: new Map(),   // id -> the payload, so flicking through the list is free
       fetching: new Set(), // ids already on their way, so a prefetch is asked once
-      // Who marches out when a fight is asked for, per party. A Set of
-      // character ids, seeded from whoever is on their feet the first time a
-      // party's sheet is drawn and then left to the player. Per page load:
-      // "who am I taking THIS time" is a decision about the next ten minutes,
-      // not a setting about the character.
-      joining: new Map(),   // party_id -> Set(character id)
       arming: null,         // the character whose Retire has been pressed once
       // Which face of the detail pane is up: the sheet, the bag, or the store.
       // Reset to the sheet whenever the character changes, because a bag is
@@ -141,12 +138,22 @@ require_signed_in_page();
       const order = new Map(state.modules.map((m, i) => [m.module_key, i]));
       const groups = new Map();
       for (const c of state.characters) {
-        const key = c.module_key || '';
+        // One group when there are no adventures, whatever the party remembers.
+        //
+        // `_freeplay` is a module row because `regions.module_id` is NOT NULL
+        // and a place has to hang off something — it is not a game anybody
+        // chose. Grouping by it split the rail into "FREE PLAY" and "YOUR
+        // CHARACTERS", which is the plumbing showing through: the difference it
+        // was drawing is whether a character was made before or after the
+        // adventures were put away, and no player has any use for that.
+        const key = state.adventures ? (c.module_key || '') : '';
         if (!groups.has(key)) {
           groups.set(key, {
             key,
-            name: c.module_name || 'Not in an adventure',
-            rank: order.has(key) ? order.get(key) : (c.module_key ? 900 : 999),
+            name: state.adventures
+              ? (c.module_name || 'Not in an adventure')
+              : 'Your characters',
+            rank: order.has(key) ? order.get(key) : (key ? 900 : 999),
             members: [],
           });
         }
@@ -224,6 +231,34 @@ require_signed_in_page();
       state.selected = null;
       renderRail();
       const host = document.getElementById('detail');
+
+      // No adventures: no shelf, and a how-to about a different game. What is
+      // left is the only thing there is to say — make somebody, take them out
+      // to the yard, fight.
+      if (!state.adventures) {
+        host.innerHTML = `
+          <div class="section-head">
+            <h2>The Proving Yard</h2>
+            <p class="section-hint">The adventures are put away for now. What is
+              open is the yard, and whatever is brought into it.</p>
+          </div>
+          <p><a class="btn btn-primary btn-lg" href="create.php">Make a hero</a></p>
+          <section class="panel home-howto">
+            <h2>How to play</h2>
+            <ol class="howto">
+              <li>Make a hero — point buy, standard array, or random rolls.</li>
+              <li>Pick them from the list and choose a fight:
+                <strong>a warm-up</strong>, <strong>a fair match</strong>, or
+                <strong>a hard match</strong>. Each is built to their level and
+                pays what the monsters in it are worth.</li>
+              <li>Fight it turn by turn. Loot what falls.</li>
+              <li><strong>Make camp</strong> to heal up, then go again. It does
+                not run out.</li>
+            </ol>
+          </section>`;
+        return;
+      }
+
       host.innerHTML = `
         <div class="section-head">
           <h2>${esc(heading)}</h2>
@@ -290,30 +325,6 @@ require_signed_in_page();
     }
 
     /**
-     * Who walks out with you, for one party.
-     *
-     * Seeded the first time a party is drawn with everybody on their feet,
-     * which is what a player who never touches a tick would expect, and then
-     * owned by the player. Held per party rather than globally because two
-     * parties are two decisions, and flicking between them must not carry one
-     * party's choice into the other's tabs.
-     *
-     * The downed are never in it. Anybody knocked out since the set was made is
-     * dropped on the way past, so a tick cannot outlive the character it
-     * belonged to falling over.
-     */
-    function joiners(partyId, party) {
-      if (!partyId) return new Set();
-      let set = state.joining.get(partyId);
-      if (!set) {
-        set = new Set(party.filter((m) => m.current_hp > 0).map((m) => Number(m.id)));
-        state.joining.set(partyId, set);
-      }
-      party.forEach((m) => { if (m.current_hp <= 0) set.delete(Number(m.id)); });
-      return set;
-    }
-
-    /**
      * The party strip.
      *
      * Drawn above the sheet and above the bag, because both are about one
@@ -324,29 +335,18 @@ require_signed_in_page();
      * these and the rail down the right, where pressing a name means "show me
      * somebody else" and lands on their sheet.
      *
-     * `ticks` is the fight roster, and only the sheet wants it: a tick is about
-     * who walks out to a fight and would be a question with no meaning over a
-     * list of somebody's rope and rations.
+     * There is no tick any more. It chose who walked out to the random
+     * encounter offered beside the sheet, and that door has moved into the game
+     * — the yard asks the same question where the fight actually happens.
      */
-    function partyTabs(party, currentId, partyId, ticks) {
+    function partyTabs(party, currentId, partyId) {
       if (!party || party.length < 2) return '';
-      const coming = ticks ? joiners(partyId, party) : null;
       return `<div class="party-tabs" role="tablist" aria-label="Party members">
         ${party.map((m) => {
           const hurt = m.max_hp > 0 && m.current_hp / m.max_hp <= 0.34 ? ' is-hurt' : '';
           const on = m.id == currentId;
           const down = m.current_hp <= 0;
           return `<div class="party-tab${on ? ' is-active' : ''}${m.companion ? ' is-companion' : ''}${down ? ' is-down' : ''}">
-            ${coming
-              ? `<input type="checkbox" class="tab-join" data-join="${esc(m.id)}"
-                        ${coming.has(Number(m.id)) ? 'checked' : ''} ${down ? 'disabled' : ''}
-                        aria-label="${down
-                          ? esc(m.name) + ' is down and cannot fight'
-                          : 'Take ' + esc(m.name) + ' into the fight'}"
-                        title="${down
-                          ? esc(m.name) + ' is down and cannot fight.'
-                          : 'Take ' + esc(m.name) + ' into a random encounter'}">`
-              : ''}
             <button type="button" class="tab-open" role="tab"
                     aria-selected="${on ? 'true' : 'false'}"
                     data-pick="${esc(m.id)}" data-keep="1"
@@ -427,29 +427,6 @@ require_signed_in_page();
              state.arming === Number(c.id) ? 'Really retire?' : 'Retire'}</button>`;
 
       /*
-       * Camp is the other half of a fight, and this is where the fight now
-       * ends: a party back from a skirmish at two hit points has nowhere on
-       * this page to sleep it off, and walking into the game to press the same
-       * button is the walk the fight button exists to skip.
-       *
-       * Offered only where they may actually sleep. `can_camp` is the engine's
-       * own answer to the question location/camp asks when this is pressed, so
-       * the button and the route cannot disagree; where they may not sleep the
-       * reason is said, rather than the button quietly going missing.
-       *
-       * Built here rather than inline below, because this comment is full of
-       * the sort of prose that wants backticks in it and a backtick inside a
-       * template literal ends the template literal.
-       */
-      const camp = ctx.can_camp
-        ? `<button type="button" class="btn btn-small camp-btn"
-                   data-party="${esc(ctx.party_id)}"
-                   title="A long rest: wounds close, spells return, hit dice come back. Free where the party is standing.">
-             Make camp
-           </button>`
-        : '<span class="camp-no" title="Camping needs open ground or an inn.">No camp here</span>';
-
-      /*
        * The party, across the top of their own sheet. See partyTabs().
        *
        * The rail on the right already lists everybody, but it lists them by
@@ -472,52 +449,25 @@ require_signed_in_page();
        * with nothing to choose.
        */
       const party = payload.party || [];
-      /*
-       * Each tab is a tick and a door, and they are two controls rather than
-       * one: a checkbox nested inside a button is not valid HTML and, more to
-       * the point, "bring them" and "show me them" are different questions
-       * about the same person. The tick decides who walks out when a fight is
-       * asked for; the rest of the tab opens their sheet.
-       *
-       * Somebody at nought hit points cannot be ticked. The engine drops them
-       * from the field anyway, so a tick that could be set and then ignored
-       * would be a promise the fight does not keep.
-       */
-      const tabs = partyTabs(party, c.id, ctx.party_id, true);
+      const tabs = partyTabs(party, c.id, ctx.party_id);
 
       const play = ctx.party_id
         ? `<div class="play-doors">
              <button type="button" class="btn btn-primary btn-lg play-btn"
                      data-party="${esc(ctx.party_id)}">
                <svg aria-hidden="true"><use href="#i-play"></use></svg>
-               Play ${esc(ctx.module_name || 'this adventure')}
+               ${state.adventures ? 'Play ' + esc(ctx.module_name || 'this adventure') : 'Enter the yard'}
              </button>
            </div>
-           ${where ? `<p class="play-where">${esc(where)}</p>` : ''}
-           <div class="fight-row">
-             <span class="fight-label">
-               <svg aria-hidden="true"><use href="#i-swords"></use></svg>
-               Random encounter
-             </span>
-             ${(payload.tiers || []).map((t) => `
-               <button type="button" class="btn btn-small fight-btn"
-                       data-party="${esc(ctx.party_id)}" data-tier="${esc(t.tier)}"
-                       title="${esc(t.blurb)} Built to this party's size and level, and worth exactly what the same monsters are worth anywhere else.">
-                 ${esc(t.label)}
-               </button>`).join('')}
-             ${camp}
-           </div>`
+           ${where ? `<p class="play-where">${esc(where)}</p>` : ''}`
         : `<p class="help-hint">This one never joined a party, so there is no
              game to resume.</p>`;
 
       /*
        * How far off the next level is.
        *
-       * On the sheet because of the button beside it: a random encounter is
-       * offered here as a way of earning experience, and a page that offers
-       * that without ever showing what it bought is asking the player to take
-       * it on trust. `xp_progress` is Rules::xpProgress, computed on the server
-       * and carried on every character — the ladder is never restated here.
+       * `xp_progress` is Rules::xpProgress, computed on the server and carried
+       * on every character — the ladder is never restated here.
        */
       const xp = c.xp_progress;
       const xpBar = xp ? `
@@ -812,6 +762,14 @@ require_signed_in_page();
     });
 
     document.getElementById('btn-new').addEventListener('click', () => {
+      // The shelf was the way through to the wizard: you chose an adventure and
+      // its card linked to create.php with the module on the query string. With
+      // no shelf there is nothing to choose between, and stopping at a pane
+      // that only says "make a hero" is a button that does nothing.
+      if (!state.adventures) {
+        window.location.href = 'create.php';
+        return;
+      }
       renderShelf('Which adventure?');
     });
 
@@ -936,7 +894,7 @@ require_signed_in_page();
       }).join('');
 
       host.innerHTML = panelHead(who, 'The bag')
-        + partyTabs(party, id, payload?.context?.party_id, false)
+        + partyTabs(party, id, payload?.context?.party_id)
         + handTo
         + (items.length
           ? `<ul class="bag-list">${rows}</ul>`
@@ -1049,7 +1007,6 @@ require_signed_in_page();
         // The party's marching order has changed, so any sheet that draws tabs
         // for it is now drawing a member who has gone.
         state.sheets.clear();
-        state.joining.clear();
         renderRail();
         const next = state.characters[0];
         if (next) {
@@ -1064,46 +1021,7 @@ require_signed_in_page();
       }
     }
 
-    /**
-     * A night's sleep, from here.
-     *
-     * `location/camp` is the game's own route and the rules stay in it: it
-     * refuses where camping is not allowed, it heals everyone at the fire
-     * including the companions who are waiting there, it gives the hit dice
-     * back, and it is where a companion whose approval has bottomed out walks
-     * away. All this page does is make the party active first — the route
-     * answers for the session, exactly as it does in the game — and then read
-     * the world again, because a long rest changes every character in the
-     * party and the sheet on screen is one of them.
-     */
-    async function makeCamp(btn) {
-      btn.disabled = true;
-      try {
-        await API.post('session/select', { party_id: Number(btn.dataset.party) });
-        const r = await API.post('location/camp', {});
-        // Every cached sheet, not this one: a long rest heals the whole party,
-        // so any of them that is looked at next would be drawn from a copy
-        // taken before the fire.
-        state.sheets.clear();
-        try {
-          state.characters = (await API.get('session/list')).characters || [];
-        } catch (e) { /* the rail keeps what it had; the sheet still reloads */ }
-        renderRail();
-        await showSheet(state.selected);
-        showNotice([r.message, ...(r.messages || [])].filter(Boolean).join(' '));
-      } catch (err) {
-        showError(err.message || 'They could not make camp here.');
-      } finally {
-        btn.disabled = false;
-      }
-    }
-
     document.getElementById('detail').addEventListener('click', async (e) => {
-      const camp = e.target.closest('.camp-btn');
-      if (camp) {
-        await makeCamp(camp);
-        return;
-      }
       // The bag, the store, and the way back to the sheet.
       const open = e.target.closest('[data-open]');
       if (open) {
@@ -1216,19 +1134,6 @@ require_signed_in_page();
         await retireCharacter(retire);
         return;
       }
-      // A tick on a tab: who comes to the next fight. Read off the box rather
-      // than toggled here, so the checkbox remains the thing that holds the
-      // state and a keyboard press needs no second code path.
-      const join = e.target.closest('[data-join]');
-      if (join) {
-        const party = state.sheets.get(state.selected)?.context?.party_id;
-        const set = party ? state.joining.get(party) : null;
-        if (set) {
-          if (join.checked) set.add(Number(join.dataset.join));
-          else set.delete(Number(join.dataset.join));
-        }
-        return;   // no redraw: a tick is not a change of view
-      }
       // A party tab: same door as a name in the rail, so the same handler
       // answers it and the rail's highlight moves with the sheet.
       const tab = e.target.closest('[data-pick]');
@@ -1236,60 +1141,15 @@ require_signed_in_page();
         openCharacter(Number(tab.dataset.pick), { keep: tab.dataset.keep === '1' });
         return;
       }
-      const btn = e.target.closest('.play-btn, .fight-btn');
+      const btn = e.target.closest('.play-btn');
       if (!btn) return;
-      const fight = btn.classList.contains('fight-btn');
       btn.disabled = true;
       try {
         await API.post('session/select', { party_id: Number(btn.dataset.party) });
-        /*
-         * The fight is arranged BEFORE the page changes, not after.
-         *
-         * game.php reads `session/status` on boot and opens in combat when the
-         * session has an active fight, so a skirmish started here is already
-         * on the board by the time the game draws itself — one navigation, and
-         * no moment where the player is standing on a map wondering whether
-         * the button worked. It is also the only order that can report a
-         * refusal: a party with nobody on their feet is told so here, on a
-         * page that can say it, rather than in a game they have just been sent
-         * to.
-         */
-        if (fight) {
-          const r = await API.post('combat/random', {
-            tier: btn.dataset.tier || 'fair',
-            // Who was ticked. Sent for a party of one as well, where there are
-            // no tabs and the set is simply that one person — the route takes
-            // the same shape either way rather than the page having two ways
-            // of asking for a fight.
-            members: [...(state.joining.get(Number(btn.dataset.party)) || [])],
-          });
-          /*
-           * Which fight to come back from.
-           *
-           * A skirmish is a sortie from this page and the player is returned
-           * here when it ends, which the game has to be told because the fight
-           * itself is an ordinary one — same engine, same board, same payout —
-           * and nothing about it says where it was arranged.
-           *
-           * The session's OWN id, not a bare "came from the picker" flag: the
-           * flag would still be sitting there an hour later when some authored
-           * fight ended and would bounce the player out of their game. Matched
-           * against the fight that is ending, it can only ever fire once, for
-           * the fight it was written for.
-           *
-           * sessionStorage rather than the server, because this is where a
-           * browser tab is going next — not a fact about the playthrough. It
-           * belongs to the tab, survives a reload of it, and does not follow
-           * the save into a window that never pressed this button.
-           */
-          sessionStorage.setItem('rpg:picker-fight', String(r.combat?.id ?? ''));
-        }
         location.href = 'game.php';
       } catch (err) {
         btn.disabled = false;
-        showError(err.message || (fight
-          ? 'Could not find them a fight.'
-          : 'Could not open that game.'));
+        showError(err.message || 'Could not open that game.');
       }
     });
 

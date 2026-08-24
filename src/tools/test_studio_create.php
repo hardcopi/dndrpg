@@ -388,6 +388,49 @@ try {
         unlink($platePath);
     }
 
+    $bustIm = imagecreatetruecolor(200, 280);
+    imagealphablending($bustIm, false);
+    imagesavealpha($bustIm, true);
+    $clear = imagecolorallocatealpha($bustIm, 0, 0, 0, 127);
+    imagefilledrectangle($bustIm, 0, 0, 199, 279, $clear);
+    imagealphablending($bustIm, true);
+    $skin = imagecolorallocate($bustIm, 190, 150, 120);
+    $cloak = imagecolorallocate($bustIm, 40, 50, 70);
+    imagefilledellipse($bustIm, 100, 70, 80, 90, $skin);
+    imagefilledrectangle($bustIm, 50, 130, 150, 270, $cloak);
+    ob_start();
+    imagepng($bustIm);
+    $bustPng = ob_get_clean();
+    imagedestroy($bustIm);
+    $bustData = 'data:image/png;base64,' . base64_encode($bustPng);
+
+    $warden = $db->prepare('SELECT id FROM npcs WHERE npc_key = ?');
+    $warden->execute([$tag . '_warden']);
+    $wardenId = (int) $warden->fetchColumn();
+    $npcArt = $ed->saveArt('npc', $tag . '_warden', $bustData, $wardenId);
+    ok('a person can take a bust', ($npcArt['kind'] ?? '') === 'npc');
+    $bustFile = dirname(__DIR__) . '/assets/images/npcs/' . $tag . '_warden_bust.png';
+    $faceFile = dirname(__DIR__) . '/assets/images/npcs/' . $tag . '_warden_face.png';
+    ok('the bust is on disk', is_file($bustFile));
+    ok('and the face was cut beside it', is_file($faceFile));
+    if (is_file($faceFile)) {
+        $info = getimagesize($faceFile);
+        ok('the face is FACE_PX square',
+            ($info[0] ?? 0) === Paperdoll::FACE_PX && ($info[1] ?? 0) === Paperdoll::FACE_PX,
+            ($info[0] ?? '?') . 'x' . ($info[1] ?? '?'));
+    }
+    ok('the key is now in the sprite list',
+        in_array($tag . '_warden', $ed->listSprites(), true));
+    $worn = $db->prepare('SELECT sprite_key FROM npcs WHERE id = ?');
+    $worn->execute([$wardenId]);
+    ok('and they are wearing it', (string) $worn->fetchColumn() === $tag . '_warden');
+    if (is_file($bustFile)) {
+        unlink($bustFile);
+    }
+    if (is_file($faceFile)) {
+        unlink($faceFile);
+    }
+
     $pack = $ed->packModule($moduleId);
     ok('a bundle names the format', ($pack['format'] ?? '') === 'rivermark.adventure');
     ok('and carries the plan', count($pack['regions'][0]['plan']['rooms'] ?? []) === 4);
@@ -447,5 +490,48 @@ try {
     }
 }
 
+echo "\n== the maps of an adventure ==\n";
+
+$rvId = (int) $db->query("SELECT id FROM modules WHERE module_key = 'rivermark'")->fetchColumn();
+ok('rivermark is there to open', $rvId > 0);
+if ($rvId > 0) {
+    $first = $ed->moduleChart($rvId);
+    $maps = $first['regions'] ?? [];
+    ok('the chart names every authored map', count($maps) >= 2, count($maps) . ' maps');
+    $keys = array_column($maps, 'region_key');
+    ok('and none of them is a generated floor',
+        count(array_filter($keys, static fn ($k) => str_starts_with((string) $k, '_dg_'))) === 0);
+
+    $defaultKey = (string) ($first['region_key'] ?? '');
+    ok('opening with no map asked for sits on the first one', $defaultKey !== '');
+
+    $other = null;
+    foreach ($maps as $r) {
+        if ((int) $r['id'] !== (int) $first['region_id']) {
+            $other = $r;
+            break;
+        }
+    }
+    ok('there is another map to switch to', $other !== null);
+    if ($other !== null) {
+        $switched = $ed->moduleChart($rvId, null, (int) $other['id']);
+        same_chart('switching lands on that map', (string) $other['region_key'], (string) $switched['region_key']);
+        $onFirst = array_column($first['nodes'], 'key');
+        $onOther = array_column($switched['nodes'], 'key');
+        ok('and the places on it are not the first map\'s',
+            $onOther !== [] && array_intersect($onFirst, $onOther) === []);
+        $names = array_column($switched['regions'], 'region_key');
+        ok('the switcher still lists every map', $names === $keys);
+    }
+
+    $msg = threw(fn () => $ed->moduleChart($rvId, null, 0));
+    ok('a map from nowhere is refused', $msg !== null && str_contains((string) $msg, 'not in this adventure'));
+}
+
 echo "\n{$pass} passed, {$fail} failed\n";
 exit($fail === 0 ? 0 : 1);
+
+function same_chart(string $n, $want, $got): void
+{
+    ok($n, $want === $got, 'expected ' . var_export($want, true) . ', got ' . var_export($got, true));
+}

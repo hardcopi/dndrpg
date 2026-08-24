@@ -14,9 +14,9 @@
   /**
    * Cache-bust an art URL.
    *
-   * This page builds its own portrait and paperdoll URLs and never loads
-   * game.js, so `TILE_CACHE_VER` is not in scope here — which meant a re-slice
-   * left the creator showing stale faces and busts indefinitely. `ART_VER` is
+   * This page builds its own portrait URLs and never loads game.js, so
+   * `TILE_CACHE_VER` is not in scope here — which meant a re-slice left the
+   * review showing a stale face indefinitely. `ART_VER` is
    * injected by create.php from the art manifests' mtimes, so the URL changes
    * exactly when the art does.
    *
@@ -31,6 +31,17 @@
 
   const state = {
     method: 'standard',
+    /** The 3D recipe, when the look was built in the creator. Null otherwise. */
+    model: null,
+    /**
+     * The last stills the creator rendered, or null.
+     *
+     * Cached because two things want them — the review, to show who you made,
+     * and the submit, to save them — and a render is a second or two of the
+     * embed's time. Thrown away the moment the look changes, which is the only
+     * thing that can make them wrong.
+     */
+    portrait: null,
     /** Index into STEPS. */
     step: 0,
     /** How far Next has ever taken them, so the rail knows what is clickable. */
@@ -66,39 +77,11 @@
     feat: '',
     abilities: { strength: 15, dexterity: 14, constitution: 13, intelligence: 12, wisdom: 10, charisma: 8 },
     partyId: null,
-    avatars: [],
-    spriteKey: null,
-    // Whether the player has picked a portrait themselves. Until they do, the
-    // grid follows whatever the chosen class defaults to.
-    avatarTouched: false,
 
     // Set when this page is re-dressing an existing character rather than
     // making a new one.
     redressId: null,
-
-    // 'preset' picks a whole actor from the packs; 'built' stacks the modular
-    // paperdoll layers. Only one is submitted.
-    look: 'preset',
-    paperdoll: null,        // the served catalogue
-    pdSex: 'male',
-    pdLayers: {},           // category -> variant key
-    pdFacing: 0,            // row of the walk sheet the preview shows
   };
-
-  /**
-   * Which walk-sheet row each facing is, and what to call it.
-   *
-   * Row order is the one slice_paperdoll.py writes and the renderer animates:
-   * S, W, E, N, then the diagonals. The preview only offers the four cardinals —
-   * being able to see the back of a haircut matters, being able to see it from
-   * the north-east does not.
-   */
-  const PD_FACINGS = [
-    { row: 0, label: 'Front' },
-    { row: 3, label: 'Back' },
-    { row: 1, label: 'Left' },
-    { row: 2, label: 'Right' },
-  ];
 
   const $ = (s) => document.querySelector(s);
   const ABILS = ['strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma'];
@@ -114,6 +97,19 @@
   const STANDARD_ARRAY = [15, 14, 13, 12, 10, 8];
 
   /**
+   * Races that exist but are not on offer.
+   *
+   * Put away rather than deleted, and put away in the same spirit as the
+   * `hidden` flag on the 3D creator's own race table — the rows stay in the
+   * `races` table, every character who already is one keeps their sheet, their
+   * traits and their look, and nothing about the API changes. The only thing
+   * that goes is the option to become one, which is this list.
+   *
+   * Emptying this array puts them back.
+   */
+  const RACES_WITHHELD = ['Dragonborn', 'Tiefling'];
+
+  /**
    * The wizard, in order.
    *
    * `ready()` returns null to allow Next, or the sentence to show instead. It is
@@ -125,6 +121,10 @@
       id: 'identity',
       label: 'Identity',
       blurb: 'Who are they?',
+      // The 3D creator always has somebody in it — it opens on a member of the
+      // chosen race rather than on nothing — so there is no such thing as not
+      // having chosen a look yet, and this step gates on the name alone just as
+      // it did before the appearance step was folded into it.
       ready: () => {
         const name = $('#name').value.trim();
         if (!name) return 'A name is required.';
@@ -154,19 +154,6 @@
         const spent = pointBuyCost();
         const budget = state.pointBuy?.budget || 27;
         if (spent > budget) return `That is ${spent - budget} points over budget.`;
-        return null;
-      },
-    },
-    {
-      id: 'look',
-      label: 'Appearance',
-      blurb: 'What do they look like?',
-      ready: () => {
-        if (state.look === 'preset') {
-          return state.spriteKey ? null : 'Pick a portrait.';
-        }
-        if (!state.paperdoll) return 'The layer library is not available.';
-        if (!state.pdLayers.body) return 'Choose a body.';
         return null;
       },
     },
@@ -208,6 +195,13 @@
 
     $('#wiz-title').textContent = step.label;
     $('#wiz-blurb').textContent = step.blurb;
+
+    // Mounted from here rather than at load, because a WebGL player and forty
+    // megabytes of meshes is not what somebody who came back to change their
+    // class should pay for on the way past. `mountModel` is a no-op once the
+    // race it was mounted for is still the race, so calling it on every render
+    // costs a string compare.
+    if (step.id === 'identity') mountModel();
 
     // The rail. A step you have reached is a button; one you have not is inert
     // text, because letting somebody jump to Review before choosing a class
@@ -369,11 +363,10 @@
     // layers, same preview, same bake — only the submit differs.
     if (params.get('redress')) state.redressId = parseInt(params.get('redress'), 10);
 
-    const [races, classes, pb, avatars, feats] = await Promise.all([
+    const [races, classes, pb, feats] = await Promise.all([
       API.get('meta/races'),
       API.get('meta/classes'),
       API.get('meta/point_buy'),
-      API.get('meta/avatars'),
       API.get('meta/feats'),
     ]);
     state.races = races.races;
@@ -381,11 +374,18 @@
     state.keyAbilities = classes.key_abilities || {};
     state.classes = classes.classes;
     state.pointBuy = pb;
-    state.avatars = avatars.avatars || [];
     state.originFeats = feats.feats || [];
     renderGiftGrid();
 
-    // Unique race names
+    // Unique race names, minus the ones not currently on offer.
+    //
+    // Filtered out of `state.races` rather than only out of the select, so the
+    // subrace list, the racial line, the review and the race the creator is
+    // mounted for are all reading the same catalogue. Filtering the select
+    // alone would leave `currentRace()` able to return a race no option can
+    // reach — which is how a hidden race comes back as a default nobody chose.
+    state.races = state.races.filter((r) => !RACES_WITHHELD.includes(r.name));
+
     const raceNames = [...new Set(state.races.map((r) => r.name))];
     const raceSel = $('#race');
     raceNames.forEach((n) => {
@@ -404,15 +404,8 @@
       o.textContent = `${c.name} (d${c.hit_die})`;
       classSel.appendChild(o);
     });
-    classSel.addEventListener('change', () => {
-      followClassAvatar();
-      updateClassPreview();
-    });
+    classSel.addEventListener('change', updateClassPreview);
     updateClassPreview();
-
-    renderAvatars();
-    followClassAvatar();
-    await initPaperdoll();
 
     $('#name').addEventListener('input', checkNameSoon);
 
@@ -447,7 +440,12 @@
     resetStandardArray();
     renderAbilities();
 
-    if (!state.redressId) {
+    // Re-dressing an existing character reuses this page rather than growing a
+    // second copy of the creator inside the character sheet — same embed, same
+    // recipe, only the submit differs.
+    if (state.redressId) {
+      await enterRedressMode();
+    } else {
       initWizard();
       goToStep(0);
     }
@@ -480,122 +478,234 @@
     }</dl>`;
   }
 
+  // =========================================================================
+  // The 3D creator
+  // =========================================================================
+
   /**
-   * The portrait grid.
+   * The embed, and the race it was mounted for.
    *
-   * Faces rather than busts: twelve busts at 320px is most of a screen, and
-   * the face is what the party rail and the initiative ribbon actually show,
-   * so picking on the face is picking on what you will mostly look at.
+   * Remounted only when the race changes, because the race is baked into the
+   * embed's URL — it is what the creator opens as — and somebody who chose
+   * Tiefling and then chose Dwarf must not still be looking at horns. The race
+   * cannot be changed over postMessage, so this is a fresh iframe and a fresh
+   * WebGL player every time, which is why the remount is debounced below.
+   *
+   * The embed does not show a race picker of its own here: it is given a race
+   * it recognises, and a fixed race is a picker it does not draw. The select on
+   * the line above is the only race control on the page, which is the point —
+   * two of them could disagree, and the sheet and the portrait would then say
+   * different things about the same character.
    */
-  function renderAvatars() {
-    const grid = $('#avatar-grid');
-    if (!grid || !state.avatars.length) return;
-    grid.innerHTML = '';
-    state.avatars.forEach((a) => {
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'avatar-option';
-      btn.dataset.key = a.sprite_key;
-      btn.setAttribute('role', 'radio');
-      btn.setAttribute('aria-checked', 'false');
-      btn.title = a.label;
-      btn.innerHTML =
-        `<img src="${artUrl(`assets/images/npcs/${a.sprite_key}_face.png`)}" alt="" loading="lazy">` +
-        `<span>${a.label}</span>`;
-      btn.addEventListener('click', () => {
-        // A deliberate pick is sticky: from here the class selector stops
-        // moving the portrait, because silently reverting somebody's choice
-        // when they reconsider their class is worse than a default that
-        // no longer matches.
-        state.avatarTouched = true;
-        selectAvatar(a.sprite_key);
-      });
-      grid.appendChild(btn);
-    });
-  }
+  let modelEmbed = null;
+  let modelRace = null;
+  let mountTimer = null;
 
-  function selectAvatar(key) {
-    state.spriteKey = key;
-    document.querySelectorAll('#avatar-grid .avatar-option').forEach((b) => {
-      const on = b.dataset.key === key;
-      b.classList.toggle('selected', on);
-      b.setAttribute('aria-checked', on ? 'true' : 'false');
-    });
-  }
-
-  /** Track the class default until the player overrides it. */
-  function followClassAvatar() {
-    if (state.avatarTouched) return;
-    const cls = state.classes.find((c) => c.name === $('#class').value);
-    const key = (cls && cls.sprite_key) || 'fighter';
-    // Only follow to a portrait that is actually offered — the avatars table
-    // is the whitelist the server validates against, and a class default
-    // missing from it would select nothing at all.
-    if (state.avatars.some((a) => a.sprite_key === key)) {
-      selectAvatar(key);
-    }
-  }
-
-  // =========================================================================
-  // Building a character out of paperdoll layers
-  // =========================================================================
-
-  async function initPaperdoll() {
-    document.querySelectorAll('[data-look]').forEach((tab) => {
-      tab.addEventListener('click', () => {
-        state.look = tab.dataset.look;
-        document.querySelectorAll('[data-look]').forEach((t) => {
-          const on = t === tab;
-          t.classList.toggle('active', on);
-          t.setAttribute('aria-selected', on ? 'true' : 'false');
-        });
-        $('#look-preset').classList.toggle('hidden', state.look !== 'preset');
-        $('#look-built').classList.toggle('hidden', state.look !== 'built');
-        renderWizard();
-      });
-    });
-
-    try {
-      state.paperdoll = await API.get('meta/paperdoll');
-    } catch (e) {
-      // The library has to be sliced before it can be worn. Say so where the
-      // player is looking rather than failing silently on submit.
-      $('#look-built').innerHTML =
-        '<p class="help-hint">No layer library on this install — '
-        + 'run <code>tools/slice_paperdoll.py</code>.</p>';
-      document.querySelector('[data-look="built"]').disabled = true;
-      return;
-    }
-
-    $('#pd-facing').addEventListener('click', () => {
-      state.pdFacing = (state.pdFacing + 1) % PD_FACINGS.length;
-      drawPaperdoll();
-    });
-    $('#pd-random').addEventListener('click', () => {
-      randomisePaperdoll();
-      renderPaperdollPickers();
-      drawPaperdoll();
-    });
-
-    randomisePaperdoll();
-
-    // Re-dressing starts from what they are already wearing, so the page opens
-    // on the character rather than on a stranger.
-    if (state.redressId) {
-      await enterRedressMode();
-    }
-
-    renderPaperdollPickers();
-    drawPaperdoll();
+  /**
+   * Remount, but not on every keystroke through the race list.
+   *
+   * A select fires `change` per arrow key, and each one of those is forty
+   * megabytes of meshes torn down and fetched again. The delay is short enough
+   * to feel immediate when somebody picks a race and long enough that scrolling
+   * past six of them costs one load rather than six.
+   */
+  function mountModelSoon() {
+    // Re-dressing has no race select to follow — the identity line is not on
+    // that page — and a pending remount there would land on a creator that was
+    // deliberately opened on a character and throw the character away.
+    if (state.redressId) return;
+    clearTimeout(mountTimer);
+    mountTimer = setTimeout(() => { mountModel(); }, 400);
   }
 
   /**
-   * Strip the page down to the Appearance step.
+   * Put the creator in its box, replacing whatever was in it.
+   *
+   * `options.character` is the re-dress case: an id makes the embed fetch the
+   * look that character is already wearing. Creation passes nothing, because
+   * there is no character yet — only a race to open as.
+   */
+  async function mountModel(options = {}) {
+    const well = $('#look-model-well');
+    if (!well) return;
+
+    // A mount asked for now supersedes one that was merely scheduled. Without
+    // this, filling the race select during startup leaves a timer armed that
+    // fires a few hundred milliseconds later and remounts over whatever was
+    // put in the box in the meantime.
+    clearTimeout(mountTimer);
+
+    const race = $('#race')?.value || '';
+    const key = options.character ? 'id:' + options.character : 'race:' + race;
+    if (modelEmbed && modelRace === key) return;
+
+    if (modelEmbed) {
+      modelEmbed.destroy();
+      modelEmbed = null;
+      state.model = null;
+      state.portrait = null;
+    }
+    modelRace = key;
+
+    // Dynamic import: this file is a classic script and the embed's helper is
+    // an ES module.
+    //
+    // Resolved against the document rather than written relative. A dynamic
+    // import inside a classic script resolves against the SCRIPT's URL, not the
+    // page's — so './assets/js/...' from a file that already lives in
+    // /assets/js/ asks for /assets/js/assets/js/ and 404s. Going through
+    // document.baseURI also keeps it right if the app is ever served under a
+    // subpath, which is why this is not just a leading slash.
+    const helper = new URL('assets/js/rivermark-character.js', document.baseURI).href;
+    const { mountCharacter } = await import(helper);
+
+    modelEmbed = mountCharacter(well, {
+      mode: 'create',
+      // The race is how the creator knows what to open as when there is no
+      // saved look to fetch. Save stays off in both modes: this page's own
+      // button is the only commit, and a second one inside the frame would mean
+      // something different from the one underneath it.
+      race,
+      character: options.character,
+      save: false,
+    });
+
+    modelEmbed.on('change', (d) => {
+      state.model = d.recipe || null;
+      // A picture of who they were a moment ago is worse than no picture.
+      state.portrait = null;
+    });
+    modelEmbed.on('save', (d) => { state.model = d.recipe || state.model; });
+  }
+
+  /**
+   * The recipe the creator is showing, asked for rather than remembered.
+   *
+   * A player who likes what the race gave them and touches nothing never fires
+   * a change — the embed deliberately does not announce the character it was
+   * asked to build — so waiting for one would quietly drop the look of
+   * everybody who was happy first time. Asking answers with a `save` event, and
+   * with no character id behind it the embed replies without going near the
+   * server.
+   */
+  function askModel() {
+    if (!modelEmbed) return Promise.resolve(state.model);
+    return new Promise((resolve) => {
+      let done = false;
+      const finish = () => {
+        if (done) return;
+        done = true;
+        resolve(state.model);
+      };
+      modelEmbed.on('save', finish);
+      modelEmbed.save();
+      // It is one postMessage across an iframe on the same origin, so this is
+      // a stuck-embed timeout rather than a wait. Whatever the last change
+      // reported still goes, which is the right answer in every case except a
+      // creator that never loaded.
+      setTimeout(finish, 2000);
+    });
+  }
+
+  /**
+   * A bust and a face of whoever is in the creator, or null.
+   *
+   * Same shape as askModel and for the same reason: the embed answers with an
+   * event rather than a return value, and a creator that never loaded must not
+   * leave the page waiting. The timeout is longer because this one renders two
+   * frames and base64s them before it can reply, where a save only serialises a
+   * recipe it already has.
+   *
+   * Null is a perfectly good answer. A character with no portrait falls back to
+   * the class art, which is exactly where they were before this existed.
+   */
+  function askPortrait() {
+    if (state.portrait) return Promise.resolve(state.portrait);
+    if (!modelEmbed) return Promise.resolve(null);
+    return new Promise((resolve) => {
+      let done = false;
+      const finish = (shot) => {
+        if (done) return;
+        done = true;
+        state.portrait = shot && shot.bust && shot.face ? shot : null;
+        resolve(state.portrait);
+      };
+      modelEmbed.on('portrait', finish);
+      modelEmbed.portrait();
+      setTimeout(() => finish(null), 8000);
+    });
+  }
+
+  /**
+   * Crop the transparent margin off a rendered still.
+   *
+   * The embed renders into a square frame with the character somewhere in the
+   * middle of it, and the server crops that to the character before saving —
+   * so a review showing the raw frame would show them a third of the size of
+   * the portrait they are about to get. This is the same crop, done here, for
+   * the same reason the server does it: a preview that does not match what
+   * gets saved is worse than no preview.
+   *
+   * Falls back to the uncropped image on any failure. It is a picture on a
+   * review screen; nothing here is worth an exception.
+   */
+  function cropToCharacter(b64) {
+    return new Promise((resolve) => {
+      const src = 'data:image/png;base64,' + b64;
+      const img = new Image();
+      img.onload = () => {
+        try {
+          const w = img.naturalWidth;
+          const h = img.naturalHeight;
+          const cut = document.createElement('canvas');
+          cut.width = w;
+          cut.height = h;
+          const ctx = cut.getContext('2d', { willReadFrequently: true });
+          ctx.drawImage(img, 0, 0);
+          const data = ctx.getImageData(0, 0, w, h).data;
+
+          let minX = w, minY = h, maxX = -1, maxY = -1;
+          for (let y = 0; y < h; y++) {
+            for (let x = 0; x < w; x++) {
+              // 8 of 255, the same "not quite invisible" line Paperdoll::trim draws.
+              if (data[(y * w + x) * 4 + 3] > 8) {
+                if (x < minX) minX = x;
+                if (x > maxX) maxX = x;
+                if (y < minY) minY = y;
+                if (y > maxY) maxY = y;
+              }
+            }
+          }
+          if (maxX < 0) { resolve(src); return; }
+
+          const cw = maxX - minX + 1;
+          const ch = maxY - minY + 1;
+          const out = document.createElement('canvas');
+          out.width = cw;
+          out.height = ch;
+          out.getContext('2d').drawImage(img, minX, minY, cw, ch, 0, 0, cw, ch);
+          resolve(out.toDataURL('image/png'));
+        } catch (_) {
+          resolve(src);
+        }
+      };
+      img.onerror = () => resolve(src);
+      img.src = src;
+    });
+  }
+
+  /**
+   * Strip the page down to the creator.
    *
    * Everything else here — abilities, race, class — is decided once at creation
-   * and is not a wardrobe, so re-dressing shows one step and no wizard chrome at
-   * all: no rail, no Back, no Next, just the pickers and Save. Hiding rather than
-   * building a second page keeps one implementation of the picker.
+   * and is not a wardrobe, so re-dressing shows the 3D creator and no wizard
+   * chrome at all: no rail, no Back, no Next, just the character and Save.
+   * Hiding rather than building a second page keeps one implementation of it.
+   *
+   * The identity line goes with the chrome. A name is not a wardrobe either, and
+   * a race select that silently remounted the creator on somebody else's body
+   * would be the one control on this page that could change a character into a
+   * different character.
    */
   async function enterRedressMode() {
     let sheet;
@@ -608,44 +718,31 @@
     const c = sheet.character;
 
     document.body.classList.add('redress-mode');
-    // The look step is the only one that exists now, so show it and drop the
-    // rest out of the document rather than merely hiding them — a hidden step
-    // still holds required-looking form controls.
+    // The identity step is the only one that exists now, so show it and drop
+    // the rest out of the document rather than merely hiding them — a hidden
+    // step still holds required-looking form controls.
     document.querySelectorAll('.wiz-step').forEach((sec) => {
-      sec.hidden = sec.dataset.step !== 'look';
+      sec.hidden = sec.dataset.step !== 'identity';
     });
     $('#wiz-rail').remove();
     $('#wiz-back').remove();
     $('#wiz-next').remove();
+    $('.wiz-idline')?.remove();
+    $('#name-check')?.remove();
+    $('#racial-preview')?.remove();
 
-    document.querySelectorAll('[data-look]').forEach((t) => {
-      if (t.dataset.look === 'built') t.click();
-    });
-    // Choosing a shared NPC portrait is a creation-time decision, so re-dress
-    // offers only the layers it can actually re-bake.
-    $('[data-step="look"] .tabs')?.classList.add('hidden');
     $('#submit-btn').classList.remove('hidden');
     $('#submit-btn').textContent = 'Save appearance';
     $('#wiz-title').textContent = c.name;
     $('#wiz-blurb').textContent =
       `Level ${c.level} ${c.race} ${c.class} — change how they look.`;
 
-    state.look = 'built';
-
-    // What they are wearing, if they were built rather than given a portrait.
-    let worn = null;
-    try {
-      worn = c.appearance_json ? JSON.parse(c.appearance_json) : null;
-    } catch (_) {
-      worn = null;
-    }
-    if (worn && worn.sex && state.paperdoll.sexes[worn.sex]) {
-      state.pdSex = worn.sex;
-      state.pdLayers = {};
-      for (const [cat, key] of Object.entries(worn)) {
-        if (cat !== 'sex' && key) state.pdLayers[cat] = key;
-      }
-    }
+    // By id rather than by race: the embed fetches whatever they are already
+    // wearing and opens on it, so re-dressing starts from the character rather
+    // than from a stranger of the right species. The race still travels with
+    // the fetch, which is how somebody who has never been dressed opens as
+    // themselves instead of as a human.
+    await mountModel({ character: state.redressId });
   }
 
   function showFormError(message) {
@@ -653,256 +750,6 @@
     if (!err) return;
     err.textContent = message;
     err.classList.remove('hidden');
-  }
-
-  function pdCategories() {
-    return (state.paperdoll?.sexes?.[state.pdSex]) || [];
-  }
-
-  /**
-   * A plausible starting character, and the Randomise button.
-   *
-   * Optional layers are sometimes skipped rather than always filled, because a
-   * character who is always wearing a hat and an accessory reads as a costume.
-   * The body is never skipped — there is nothing underneath it.
-   */
-  function randomisePaperdoll() {
-    const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
-    state.pdLayers = {};
-    for (const cat of pdCategories()) {
-      // Roughly a third of optional slots are left empty, except clothes, which
-      // are worn far more often than not.
-      if (cat.optional) {
-        const skip = ['head', 'accessory', 'facialhair', 'gloves'].includes(cat.category)
-          ? Math.random() < 0.55
-          : Math.random() < 0.12;
-        if (skip) continue;
-      }
-      const style = pick(cat.styles);
-      state.pdLayers[cat.category] = pick(style.colours).key;
-    }
-    // A dress replaces trousers rather than joining them; the server refuses
-    // both, so the UI must not offer the combination it would reject.
-    if (state.pdLayers.dress) delete state.pdLayers.pants;
-  }
-
-  function renderPaperdollPickers() {
-    const wrap = $('#pd-pickers');
-    if (!wrap) return;
-
-    const sexes = Object.keys(state.paperdoll?.sexes || {});
-    let html = `<div class="pd-group">
-      <h3>Body</h3>
-      <div class="pd-swatches" role="radiogroup" aria-label="Body">
-        ${sexes.map((s) => `<button type="button" class="pd-chip${s === state.pdSex ? ' on' : ''}"
-          data-sex="${s}">${s === 'male' ? 'Male' : 'Female'}</button>`).join('')}
-      </div>
-    </div>`;
-
-    for (const cat of pdCategories()) {
-      const chosen = state.pdLayers[cat.category];
-      html += `<div class="pd-group">
-        <h3>${cat.label}${cat.optional ? ' <span class="pd-opt">optional</span>' : ''}</h3>
-        <div class="pd-swatches" role="radiogroup" aria-label="${cat.label}">
-          ${cat.optional ? `<button type="button" class="pd-chip${!chosen ? ' on' : ''}"
-              data-cat="${cat.category}" data-key="">None</button>` : ''}
-          ${cat.styles.map((st, i) => {
-            // One chip per style, showing the currently chosen colour of it.
-            const mine = st.colours.find((c) => c.key === chosen);
-            const shown = mine || st.colours[0];
-            return `<button type="button" class="pd-chip pd-style${mine ? ' on' : ''}"
-              data-cat="${cat.category}" data-key="${shown.key}"
-              title="${cat.label} ${i + 1}">${i + 1}</button>`;
-          }).join('')}
-        </div>
-        ${colourRowHtml(cat, chosen)}
-      </div>`;
-    }
-    wrap.innerHTML = html;
-    tintSwatches(wrap);
-
-    wrap.querySelectorAll('[data-sex]').forEach((b) => {
-      b.addEventListener('click', () => {
-        if (b.dataset.sex === state.pdSex) return;
-        state.pdSex = b.dataset.sex;
-        // The libraries do not share keys, so a female dress cannot survive a
-        // switch to the male body. Re-roll rather than half-clear.
-        randomisePaperdoll();
-        renderPaperdollPickers();
-        drawPaperdoll();
-      });
-    });
-
-    wrap.querySelectorAll('[data-cat]').forEach((b) => {
-      b.addEventListener('click', () => {
-        const cat = b.dataset.cat;
-        const key = b.dataset.key;
-        if (!key) delete state.pdLayers[cat];
-        else state.pdLayers[cat] = key;
-        if (cat === 'dress' && key) delete state.pdLayers.pants;
-        if (cat === 'pants' && key) delete state.pdLayers.dress;
-        renderPaperdollPickers();
-        drawPaperdoll();
-      });
-    });
-  }
-
-  /**
-   * The colour row for whichever style is currently chosen.
-   *
-   * The `_Alt_N` variants share an identical silhouette with their base — the
-   * alpha channels match exactly — so they are the same hairstyle in another
-   * colour, and showing them as separate styles would pad six haircuts into
-   * thirty and hide that there are only six.
-   */
-  function colourRowHtml(cat, chosen) {
-    const style = cat.styles.find((st) => st.colours.some((c) => c.key === chosen));
-    if (!style || style.colours.length < 2) return '';
-    return `<div class="pd-swatches pd-colours" role="radiogroup" aria-label="${cat.label} colour">
-      ${style.colours.map((c, i) => `<button type="button"
-        class="pd-chip pd-colour${c.key === chosen ? ' on' : ''}"
-        data-cat="${cat.category}" data-key="${c.key}"
-        title="Colour ${i + 1}"
-        data-tint="${c.preview}"></button>`).join('')}
-    </div>`;
-  }
-
-  /**
-   * Paint each colour swatch with the colour it actually represents.
-   *
-   * Showing the preview frame as a background image was the obvious thing and it
-   * was useless: a beard covers maybe 300 of a 128x128 frame's pixels, so
-   * scaled into a 22px chip it is a grey smudge, and five smudges look
-   * identical. What the player is choosing is a colour, so show the colour —
-   * the mean of the non-transparent pixels, which for a single garment or head
-   * of hair is exactly the thing they are picking between.
-   *
-   * Averaging is done once per key and cached for the page's life; the rows
-   * re-render on every click and re-reading pixels each time would be silly.
-   */
-  const tintCache = new Map();
-
-  function tintSwatches(root) {
-    root.querySelectorAll('[data-tint]').forEach((el) => {
-      const src = el.dataset.tint;
-      const hit = tintCache.get(src);
-      if (hit) { el.style.backgroundColor = hit; return; }
-      // `src` stays the bare URL because it is also this chip's identity -- the
-      // cache key and the querySelectorAll below both match on it. Only the two
-      // actual fetches get versioned.
-      const fetchUrl = artUrl(src);
-      // Until it resolves, the frame is better than a blank chip.
-      el.style.backgroundImage = `url('${fetchUrl}')`;
-      const img = new Image();
-      img.onload = () => {
-        let colour;
-        try {
-          colour = meanColour(img);
-        } catch (e) {
-          colour = null; // tainted canvas; keep the image fallback
-        }
-        if (!colour) return;
-        tintCache.set(src, colour);
-        // The row may have re-rendered while we waited, so paint every chip
-        // currently showing this source rather than the element we captured.
-        document.querySelectorAll(`[data-tint="${CSS.escape(src)}"]`).forEach((c) => {
-          c.style.backgroundImage = 'none';
-          c.style.backgroundColor = colour;
-        });
-      };
-      img.src = fetchUrl;
-    });
-  }
-
-  function meanColour(img) {
-    const cv = document.createElement('canvas');
-    cv.width = img.naturalWidth;
-    cv.height = img.naturalHeight;
-    const cx = cv.getContext('2d', { willReadFrequently: true });
-    cx.drawImage(img, 0, 0);
-    const px = cx.getImageData(0, 0, cv.width, cv.height).data;
-    let r = 0, g = 0, b = 0, n = 0;
-    for (let i = 0; i < px.length; i += 4) {
-      // Half-transparent pixels are the sprite's antialiased edge, which is a
-      // blend with whatever was behind it. Including them drags every colour
-      // toward the same muddy middle.
-      if (px[i + 3] < 200) continue;
-      r += px[i]; g += px[i + 1]; b += px[i + 2]; n++;
-    }
-    if (!n) return null;
-    return `rgb(${Math.round(r / n)},${Math.round(g / n)},${Math.round(b / n)})`;
-  }
-
-  /**
-   * Stack the chosen layers, in the order the server will bake them.
-   *
-   * Absolutely-positioned 128px frames on top of each other, each showing the
-   * same cell of its own walk sheet. They line up because nothing in the library
-   * is trimmed — every layer shares the base body's coordinate space, which is
-   * the one rule the whole approach rests on.
-   */
-  function drawPaperdoll() {
-    const stage = $('#pd-preview');
-    if (!stage || !state.paperdoll) return;
-
-    const order = state.paperdoll.layer_order || [];
-    const facing = PD_FACINGS[state.pdFacing];
-    const byKey = {};
-    for (const cat of pdCategories()) {
-      for (const st of cat.styles) {
-        for (const c of st.colours) byKey[c.key] = c;
-      }
-    }
-
-    // The chosen layers, in bake order, resolved to their library entry once so
-    // both views draw from the same list rather than each rebuilding it.
-    const worn = order
-      .filter((cat) => state.pdLayers[cat])
-      .map((cat) => byKey[state.pdLayers[cat]])
-      .filter(Boolean);
-
-    stage.innerHTML = worn
-      .map((v) => {
-        // The preview file is one 128px cell — the south frame — so the other
-        // facings come from the full sheet, offset by row.
-        const sheet = artUrl(v.preview.replace('_prev.png', '_sheet.png'));
-        return `<img class="pd-layer" src="${sheet}" alt=""
-          style="left:0;top:${-facing.row * 128}px">`;
-      })
-      .join('');
-
-    drawPaperdollBust(worn);
-
-    const n = Object.keys(state.pdLayers).length;
-    $('#pd-note').textContent =
-      `${facing.label} · ${n} layer${n === 1 ? '' : 's'}`;
-  }
-
-  /**
-   * The same stack again as a portrait.
-   *
-   * Bust frames are 320px squares that share their own coordinate space exactly
-   * as the walk cells share theirs, so this is the same absolute-positioning
-   * trick at a different size — no facing offset, because a bust only faces you.
-   *
-   * Boots are the only thing in the library with no bust frame, which is correct
-   * rather than missing: a portrait stops above the ankle. A layer whose bust
-   * fails to load removes itself, mirroring the server's `is_file` skip, so one
-   * absent file cannot leave a broken-image icon sitting on the character's
-   * chest.
-   */
-  function drawPaperdollBust(worn) {
-    const bust = $('#pd-bust');
-    if (!bust) return;
-
-    bust.innerHTML = worn
-      .map((v) => `<img class="pd-bust-layer"
-        src="${artUrl(v.preview.replace('_prev.png', '_bust.png'))}" alt="">`)
-      .join('');
-
-    bust.querySelectorAll('img').forEach((img) => {
-      img.addEventListener('error', () => img.remove());
-    });
   }
 
   function fillSubraces() {
@@ -933,39 +780,16 @@
     Object.entries(map).forEach(([k, label]) => {
       if (parseInt(r[k], 10)) bonuses.push(`${label} +${r[k]}`);
     });
-    $('#racial-preview').textContent = `Speed ${r.speed} ft. Bonuses: ${bonuses.join(', ') || 'none'}. ${r.traits || ''}`;
+    const line = $('#racial-preview');
+    if (line) {
+      line.textContent = `Speed ${r.speed} ft. Bonuses: ${bonuses.join(', ') || 'none'}. ${r.traits || ''}`.trim();
+    }
     showNameRoll(r);
-    // textContent, not innerHTML: this is prose out of a database column that
-    // an admin can edit, and the creator is the one page it is read on.
-    const lore = $('#racial-lore');
-    if (lore) lore.textContent = r.description || '';
-    showRaceArt(r.name);
-  }
 
-  /**
-   * The race plate, if one has been painted.
-   *
-   * Keyed off the race NAME, not the subrace: a Wood Elf and a High Elf are
-   * both elves and there is one painting of elves. The filename rule is the
-   * same one WorldState::tag() uses server-side — lowercased, and anything
-   * that is not a letter or a digit becomes an underscore — so "Half-Orc"
-   * looks for `half_orc.png` and nothing has to carry a second key column.
-   *
-   * `hidden` goes back on before the load rather than after the failure: the
-   * element is reused as the player scrolls through the list, and a race with
-   * no plate would otherwise keep showing the previous race's people. The
-   * vhost answers a missing file with the homepage HTML and a 200, so `error`
-   * is the only signal that there is no painting — a status check would pass.
-   */
-  function showRaceArt(name) {
-    const img = $('#racial-art');
-    if (!img) return;
-    const key = String(name || '').toLowerCase().replace(/[^a-z0-9]+/g, '_');
-    img.hidden = true;
-    if (!key) return;
-    img.onload = () => { img.hidden = false; };
-    img.onerror = () => { img.hidden = true; };
-    img.src = `assets/images/races/${encodeURIComponent(key)}.png`;
+    // The creator opens as whoever the line above says they are, so changing
+    // the race changes the body underneath it. Debounced: the race is baked
+    // into the embed's URL and every change is a fresh WebGL player.
+    mountModelSoon();
   }
 
   /**
@@ -983,12 +807,13 @@
    */
   function showNameRoll(race) {
     const btn = $('#name-roll');
-    const gender = $('#name-gender');
     if (!btn) return;
     const tables = state.nameTables || [];
     const has = !!race && (tables.includes(race.subrace || '') || tables.includes(race.name));
     btn.hidden = !has;
-    if (gender) gender.hidden = !has;
+    // The gender select is not hidden with it. It shares a line with three
+    // other fields now, and a control that disappears for some races takes the
+    // ones beside it for a walk every time the race changes.
   }
 
   /**
@@ -1426,7 +1251,16 @@
     });
 
     $('#review-name').textContent = $('#name').value.trim() || 'Unnamed';
-    const sub = [race?.subrace, race?.name, cls?.name].filter(Boolean).join(' ');
+    // "Dark Elf Elf Barbarian" was what joining all three gave, because half
+    // the subraces already say what they are a subrace of: Dark Elf, Hill
+    // Dwarf, Wood Elf. The other half do not — a Lightfoot is a Halfling and a
+    // Forest Gnome is a Gnome — so the race name is added only when the
+    // subrace has not already said it.
+    const kin = !race ? ''
+      : !race.subrace ? race.name
+      : race.subrace.includes(race.name) ? race.subrace
+      : `${race.subrace} ${race.name}`;
+    const sub = [kin, cls?.name].filter(Boolean).join(' ');
     $('#review-sub').textContent =
       `Level 1 ${sub} · ${$('#background').value} · ${$('#alignment').value}`;
 
@@ -1469,49 +1303,57 @@
       ['Starting gear', (cls?.starting_gear || []).join(', ') || 'none'],
       ['Racial traits', race?.traits || 'none'],
       ['Origin feat', state.originFeats.find((f) => f.key === state.feat)?.name || 'none taken'],
-      ['Look', state.look === 'built'
-        ? `built from ${Object.keys(state.pdLayers).length} layers`
-        : 'a portrait from the packs'],
+      ['Look', 'built in 3D'],
     ].map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('');
 
     renderReviewPortrait();
   }
 
   /**
-   * Whichever look they chose, shown the same size.
+   * The character, as they will actually appear.
    *
-   * A built look reuses the bust stack; a preset look has one baked bust already
-   * on disk. Both land in the same box so the review does not change shape
-   * depending on which tab they used.
+   * This used to draw the class default, and that was right: a 3D look saved no
+   * portrait, so the class art was genuinely what the party rail and the
+   * conversations were going to show, and printing the 3D character here would
+   * have promised a face nobody was going to get. The creator now renders a
+   * real portrait and the server keeps it, so the honest answer changed — and a
+   * review showing a stock barbarian for the dwarf you spent ten minutes on is
+   * the one screen that disagrees with every other one.
+   *
+   * The class art is still drawn first and left up until the render arrives. It
+   * is the fallback for a creator that never loaded, and it means the box is
+   * never empty while the embed is thinking.
    */
   function renderReviewPortrait() {
     const box = $('#review-bust');
     if (!box) return;
 
-    if (state.look === 'built' && state.paperdoll) {
-      const order = state.paperdoll.layer_order || [];
-      const byKey = {};
-      for (const cat of pdCategories()) {
-        for (const st of cat.styles) for (const c of st.colours) byKey[c.key] = c;
-      }
-      box.innerHTML = order
-        .filter((cat) => state.pdLayers[cat])
-        .map((cat) => byKey[state.pdLayers[cat]])
-        .filter(Boolean)
-        .map((v) => `<img class="pd-bust-layer" src="${artUrl(v.preview.replace('_prev.png', '_bust.png'))}" alt="">`)
-        .join('');
-      box.querySelectorAll('img').forEach((im) => im.addEventListener('error', () => im.remove()));
-      return;
-    }
-
-    const key = state.spriteKey || 'fighter';
+    const key = ($('#class').value || 'fighter').toLowerCase();
     box.innerHTML =
       `<img class="pd-bust-layer" src="${artUrl(`assets/images/npcs/${key}_bust.png`)}" alt="">`;
     // Not every actor was cut with a bust; the face always exists.
     box.querySelector('img').addEventListener('error', (e) => {
       e.target.src = artUrl(`assets/images/npcs/${key}_face.png`);
     });
+
+    // Whose turn at the box this is. A player who steps back to change their
+    // class before the render lands would otherwise get the old character
+    // pasted over the new class's art a second later.
+    const mine = ++reviewDraw;
+    askPortrait().then((shot) => {
+      if (!shot || mine !== reviewDraw) return;
+      return cropToCharacter(shot.bust).then((src) => {
+        if (mine !== reviewDraw) return;
+        const img = box.querySelector('img');
+        if (img) img.src = src;
+      });
+    }).catch(() => {
+      // The class art is already up, which is the right thing to be showing.
+    });
   }
+
+  /** Bumped every time the review portrait is drawn. See renderReviewPortrait. */
+  let reviewDraw = 0;
 
   /**
    * The AC the character will have once created, armour and all.
@@ -1547,16 +1389,31 @@
     const err = $('#form-error');
     err.classList.add('hidden');
 
-    // Re-dressing only ever posts the appearance; nothing else on this form is
-    // theirs to change any more.
+    // Re-dressing only ever posts the look; nothing else on this form is theirs
+    // to change any more.
     if (state.redressId) {
       $('#submit-btn').disabled = true;
       try {
-        await API.post('character/appearance', {
+        const look3d = await askModel();
+        if (!look3d) throw new Error('The creator has not finished loading.');
+        const shot = await askPortrait();
+        await API.post('character/model', {
           character_id: state.redressId,
-          sex: state.pdSex,
-          layers: state.pdLayers,
+          appearance: look3d,
         });
+        // A re-dressed character whose portrait still showed the old outfit
+        // would be the one screen that disagreed with every other one.
+        if (shot) {
+          try {
+            await API.post('character/portrait', {
+              character_id: state.redressId,
+              bust: shot.bust,
+              face: shot.face,
+            });
+          } catch (_) {
+            // The look saved; the picture of it can be remade next time.
+          }
+        }
         window.location.href = 'game.php';
       } catch (ex) {
         showFormError(ex.message);
@@ -1580,10 +1437,10 @@
       abilities: state.abilities,
       background: $('#background').value,
       alignment: $('#alignment').value,
-      // A built look has no sprite until it is baked, and it cannot be baked
-      // until the character has an id to name it after — so this is left empty
-      // and the appearance is posted immediately afterwards.
-      sprite_key: state.look === 'built' ? '' : (state.spriteKey || ''),
+      // A 3D look has no 2D sprite at all, so this is left empty and the
+      // server falls back to the class default — which is what the party rail
+      // and the conversation portraits will show.
+      sprite_key: '',
     };
     if (state.feat) payload.feat = state.feat;
     if (state.partyId) payload.party_id = state.partyId;
@@ -1591,21 +1448,48 @@
 
     try {
       $('#submit-btn').disabled = true;
+
+      // Asked before the character is created rather than after, so a creator
+      // that never loaded is a look nobody gets rather than a character created
+      // and then left waiting on an iframe.
+      const look3d = await askModel();
+      // Asked before creation for the same reason the recipe is: a creator that
+      // never loaded should cost nobody a half-made character.
+      const shot = await askPortrait();
+
       const data = await API.post('character/create', payload);
 
-      if (state.look === 'built') {
-        // Baked after creation because the sprite key is `pc_<id>`. If this
-        // fails the character still exists and still has a class default to
-        // wear, so the error is worth showing but not worth blocking on — they
-        // can re-dress from the character sheet.
+      if (look3d) {
+        // Posted after creation rather than with it: the route takes a
+        // character id and there was no character until a moment ago.
+        // Same tolerance too — a character with no 3D look is a character who
+        // can build one later from their sheet, so this is worth reporting and
+        // not worth blocking on.
         try {
-          await API.post('character/appearance', {
+          await API.post('character/model', {
             character_id: data.character.id,
-            sex: state.pdSex,
-            layers: state.pdLayers,
+            appearance: look3d,
           });
         } catch (ex) {
-          err.textContent = 'Created, but the appearance could not be baked: ' + ex.message;
+          err.textContent = 'Created, but the 3D look could not be saved: ' + ex.message;
+          err.classList.remove('hidden');
+          await new Promise((r) => setTimeout(r, 2500));
+        }
+      }
+
+      if (shot) {
+        // After the recipe, and just as tolerant. The recipe is what the
+        // character IS; the portraits are a picture of it that can be rebuilt
+        // from the recipe at any time, so failing here costs a portrait and not
+        // a character.
+        try {
+          await API.post('character/portrait', {
+            character_id: data.character.id,
+            bust: shot.bust,
+            face: shot.face,
+          });
+        } catch (ex) {
+          err.textContent = 'Created, but the portrait could not be saved: ' + ex.message;
           err.classList.remove('hidden');
           await new Promise((r) => setTimeout(r, 2500));
         }

@@ -45,7 +45,7 @@ $verbose = in_array('--list', $argv, true);
 /* Everything a request can reach, plus the tools themselves. Vendor
    directories are excluded because a dependency that does not parse is its
    author's bug and not ours to report on every run. */
-$dirs = ['', 'app', 'app/lib', 'app/config', 'api', 'tools'];
+$dirs = ['', 'app', 'app/lib', 'app/config', 'app/inc', 'api', 'tools'];
 $files = [];
 foreach ($dirs as $d) {
     $path = $root . ($d === '' ? '' : '/' . $d);

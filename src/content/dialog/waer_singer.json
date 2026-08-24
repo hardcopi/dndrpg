@@ -1,0 +1,77 @@
+{
+    "npc_key": "waer_singer",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "flag": "mere_fate",
+                        "equals": "answered"
+                    }
+                ],
+                "text": "The singing has changed. It is the same tune and there are words in it now, and the words are names, and every so often somebody in a doorway supplies one and the singer takes it and puts it in.",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "pool": "idle",
+                "conditions": [
+                    {
+                        "flag": "met_ellsa"
+                    }
+                ],
+                "text": "\"It is not a good song,\" the singer says, breaking off. \"It has been sung here for four hundred years and it is not a good song. That is not what it is for.\" And carries on.",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "pool": "idle",
+                "conditions": [
+                    {
+                        "flag": "met_ellsa"
+                    }
+                ],
+                "text": "\"Six houses,\" the singer says, tapping a corner stone with a knuckle as they pass it. \"That mark. And that one. All six still standing and all six still in it. Go and look at the charter and see how many of the League's names are still in Lathmere.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "pool": "idle",
+                "conditions": [
+                    {
+                        "flag": "met_ellsa"
+                    }
+                ],
+                "text": "They are singing the third verse, which is about a boat that did not come back, and the two women mending nets in the doorway have joined in on it without appearing to have decided to.",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "Somebody is singing in the square, badly, with total confidence, and stops when you come near enough to be a stranger.\n\n\"You are up from the gate,\" they say, not unkindly. \"You can tell. You are walking like the lanes are going to open out again.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

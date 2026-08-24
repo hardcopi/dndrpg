@@ -1,0 +1,49 @@
+{
+    "companion_key": "doren_ferrow",
+    "name": "Doren Ferrow",
+    "title": "the Tenth Mast",
+    "description": "Six years out of his apprenticeship, the best hand with a scarf joint under the Moot's roof, and passed over for it every year since. He has been drawing a hull nobody asked for, at night, for two years, and he has read three charts he should not have.",
+    "race": "Human",
+    "class": "Fighter",
+    "background": "Artisan",
+    "alignment": "Chaotic Good",
+    "level": 1,
+    "abilities": {
+        "strength": 15,
+        "dexterity": 13,
+        "constitution": 15,
+        "intelligence": 13,
+        "wisdom": 10,
+        "charisma": 12
+    },
+    "sprite_key": "bard",
+    "combat_rank": "front",
+    "npc_key": "doren_ferrow",
+    "personal_quest": "the_beam",
+    "recruit": {
+        "location": "the_nine_masts",
+        "conditions": [
+            {
+                "flag": "met_doren"
+            },
+            {
+                "flag": "tenth_mast_seen"
+            }
+        ]
+    },
+    "approval": {
+        "leave_at": -20,
+        "hostile_at": -50,
+        "romance_at": 30
+    },
+    "romanceable": true,
+    "gear": [
+        "caulkers_maul",
+        "leather_armor",
+        "potion_healing"
+    ],
+    "spells": [],
+    "feats": [
+        "great_weapon_fighting"
+    ]
+}

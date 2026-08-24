@@ -1,0 +1,996 @@
+{
+    "npc_key": "gedda_halloway",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "flag": "charter_fate"
+                    }
+                ],
+                "expression": 6,
+                "text": "Gedda Halloway is under the frame with her arms folded, and for the first time since you met her the posture reads as a woman holding something up rather than refusing something.\n\n\"Six years,\" she says. \"Six years of a thing nobody could be told about, ended in an afternoon, and I have been trying to decide since whether I am relieved.\"\n\nShe looks at the frame.\n\n\"I am. That is the answer and I do not much care for it.\"",
+                "choices": [
+                    {
+                        "label": "Leave her to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "deep_store_seen"
+                    },
+                    {
+                        "not": {
+                            "flag": "charter_head_known"
+                        }
+                    }
+                ],
+                "expression": 7,
+                "text": "The Moot is empty. It is never empty. There are eleven benches worn into shallow dishes by four hundred years of the same eleven families and there is nobody on any of them, and the Master Shipwright is standing under the frame with her back to the door.\n\n\"Shut it,\" says Gedda Halloway.\n\nShe does not turn round.\n\n\"You have been under the outer quay. Doss told me at about the third hour, which is what Doss is paid to do and the only thing he has ever been paid to do.\"\n\n\"Shut the door and say what you found and do not be gentle with it. I have had nineteen years of this hall being gentle with me.\"",
+                "choices": [
+                    {
+                        "label": "\"Eighty quarters of League grain in a dry room, kept better than the League keeps its own.\"",
+                        "next": "the_second_door"
+                    },
+                    {
+                        "label": "\"Whose is it?\"",
+                        "next": "the_second_door"
+                    },
+                    {
+                        "label": "Say nothing, and go.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "the_asking_done"
+                    },
+                    {
+                        "not": {
+                            "flag": "granary_fate"
+                        }
+                    }
+                ],
+                "expression": 2,
+                "text": "There is a new entry in the Moot's book and Gedda Halloway has left it open on the masters' table where anybody coming in can read it.\n\n*The Factor of the League attended this hall and asked the masters what should be done. Answered: thank you.*\n\n\"Four hundred years,\" she says. \"Three Factors before him and not one of them came down that road, and the whole time every single one of them knew perfectly well who runs this city.\"\n\nShe closes it, carefully.\n\n\"He was terrible at it. He got about half of it out and had to start again twice and nobody helped him.\" She turns her good ear away. \"I have not been able to stop thinking about it since Thursday.\"",
+                "choices": [
+                    {
+                        "label": "\"He walked down on his own. No clerk.\"",
+                        "next": "the_asking_reflection"
+                    },
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "charter_men_beaten"
+                    },
+                    {
+                        "not": {
+                            "flag": "charter_head_known"
+                        }
+                    }
+                ],
+                "expression": 8,
+                "text": "The Moot is empty and Gedda Halloway is standing under the frame, and she has been told, and she is not pretending otherwise.\n\n\"Four men,\" she says. \"Behind a bolted door, in a counting room with two chairs in it, and you put them on their backs.\"\n\nShe turns round.\n\n\"They are shipwrights. Two of them are off the fourth slip. One of them has been in this yard since he was eleven and I stood at his mother's burial.\"\n\nShe folds her arms, and unfolds them again.\n\n\"Shut the door and sit down. I am going to tell you what they were guarding, and I would rather have told you before you hurt them, and that is entirely my fault and not yours.\"",
+                "choices": [
+                    {
+                        "label": "Shut the door.",
+                        "next": "the_second_door"
+                    },
+                    {
+                        "label": "Say nothing, and go.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "vorn_wants_the_moot"
+                    },
+                    {
+                        "flag": "gedda_wants_asking"
+                    },
+                    {
+                        "not": {
+                            "flag": "vorn_in_the_moot"
+                        }
+                    }
+                ],
+                "expression": 3,
+                "text": "\"You have got something,\" says Gedda Halloway, turning her good ear. \"You have got the face of somebody carrying a request they think I will refuse.\"",
+                "choices": [
+                    {
+                        "label": "\"Warden Aske Vorn. In this hall, with her map, in front of eleven families.\"",
+                        "next": "the_warden_in_the_hall"
+                    },
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "granary_fate",
+                        "equals": "broken"
+                    }
+                ],
+                "expression": 6,
+                "text": "The Moot is sitting, which it does not do out of session, and the half-built frame in the middle of the floor has eleven masters standing round it rather than under it.\n\n\"We enforced a ration set by a fish market,\" says Gedda Halloway. \"On a chartered League city. With our own men on the granary door.\"\n\nShe puts a hand on the frame.\n\n\"Four hundred years this hall has been very careful never to be a government. And on Thursday afternoon we were one for about six hours, and every master in this room has spent the days since working out that we cannot go back to not being one.\"",
+                "choices": [
+                    {
+                        "label": "\"Is that what you wanted?\"",
+                        "next": "what_she_wanted"
+                    },
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "granary_fate",
+                        "equals": "reported"
+                    }
+                ],
+                "expression": 7,
+                "text": "Gedda Halloway is alone in the Moot with the frame, and the frame is the only thing she is looking at.\n\n\"Audit,\" she says. \"A season. And the fleet order stands, and I have not got the hands to meet it, because in nine days the hands will be a field of people walking south-west in October.\"\n\nShe turns.\n\n\"You did the honest thing. I want that said, because I am about to spend a great deal of the winter saying the other thing, and I would rather have said this first.\"",
+                "choices": [
+                    {
+                        "label": "\"Will you meet the order?\"",
+                        "next": "the_order_now"
+                    },
+                    {
+                        "label": "Leave her.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "granary_fate",
+                        "equals": "filled"
+                    }
+                ],
+                "expression": 2,
+                "text": "\"Twenty weeks,\" says Gedda Halloway. \"In the bays. Counted by a man with a rule and countersigned by me.\"\n\nShe is standing under the frame with her arms folded, which is the posture the whole city talks about.\n\n\"And nothing has changed. The charter still says nineteen hundred people are not there, the Watch is still bought, the Houses still hold the pitch, and I am still one folded pair of arms away from stopping the Ythan League's navy.\"\n\n\"You have bought this city a winter. I am not going to pretend that is small and I am not going to pretend it is what I asked for.\"",
+                "choices": [
+                    {
+                        "label": "\"What did you ask for?\"",
+                        "next": "what_she_wanted"
+                    },
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "masts_fate",
+                        "equals": "found"
+                    },
+                    {
+                        "flag": "doren_fate",
+                        "equals": "owned"
+                    }
+                ],
+                "expression": 2,
+                "text": "There are lines pinned out on the masters' table — sheer, half-breadth and body plan — and Gedda Halloway is standing over them with her rule and her one good ear turned to the room.\n\n\"Double-framed forward,\" she says, without looking up. \"Sheathed to the wale. Short, deep, and drawn by a man who has never been given a board of his own.\"\n\nShe taps the paper.\n\n\"It is wrong at the garboard and it is wrong in a way I have only ever seen once, in a Hjaldmark hull, on purpose. Which means he did not get that out of his head. Which means he has been reading.\"",
+                "choices": [
+                    {
+                        "label": "\"Will you build it?\"",
+                        "next": "will_she_build"
+                    },
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "masts_fate",
+                        "equals": "found"
+                    }
+                ],
+                "expression": 3,
+                "text": "\"Nine masts in my own dry dock,\" says Gedda Halloway, \"under a Drennmark boat that is being repaired for nothing on nobody's authority, by my own shipwrights, at the end of their own shifts.\"\n\nShe is not angry. That is the unsettling part.\n\n\"I have been Master here nineteen years and I did not know. Somebody in this hall has run a second yard under my floor for two years and every single man who worked on it went home and said nothing to me.\"",
+                "choices": [
+                    {
+                        "label": "\"What will you do?\"",
+                        "next": "what_she_does"
+                    },
+                    {
+                        "label": "\"They were not hiding it from you. They were hiding it from Lathmere.\"",
+                        "next": "not_from_you"
+                    },
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "masts_fate",
+                        "equals": "covered"
+                    }
+                ],
+                "expression": 4,
+                "text": "Gedda Halloway takes the count, reads it twice, and puts it face down on the table.\n\n\"Nine short,\" she says. \"Lost off the pond. That will do for Lathmere and it will not do for me, and you know it will not, and you have decided that is a thing you can live with.\"\n\nShe pushes it away.\n\n\"You have been paid. Do not come in here expecting me to like it.\"",
+                "choices": [
+                    {
+                        "label": "Go.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "met_gedda"
+                    }
+                ],
+                "text": "\"Back,\" says Gedda Halloway, and turns her good ear to you, which is how this hall shows it is listening.",
+                "choices": [
+                    {
+                        "label": "\"The mast pond.\"",
+                        "next": "the_pond"
+                    },
+                    {
+                        "label": "\"The doubled quota.\"",
+                        "next": "the_quota"
+                    },
+                    {
+                        "label": "\"The standard weight in the Counting Boom.\"",
+                        "next": "the_third_key"
+                    },
+                    {
+                        "label": "\"The granary.\"",
+                        "next": "the_granary"
+                    },
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "A long hall of black oak with a half-built hull frame standing in the middle of the floor: ribs, keel, no planking, and no intention of ever being finished.\n\nA woman in her sixties is running a hand along its garboard on the way past, the way you touch a doorpost, and turns her head so that her left ear is toward you before she speaks.\n\n\"Gedda Halloway. Master here. Say it to this side and say it once — I lost the other ear to forty years of caulking hammers and I have no patience left for being asked to repeat myself.\"\n\nShe stops beside the frame.\n\n\"You are not a shipwright and you are not League. That makes you the third most interesting thing in this hall this month.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "met_gedda"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "\"What are the first two?\"",
+                        "next": "the_first_two"
+                    },
+                    {
+                        "label": "\"Why is that frame never finished?\"",
+                        "next": "the_frame"
+                    },
+                    {
+                        "label": "\"I hear you can stop the fleet.\"",
+                        "next": "the_folded_arms"
+                    },
+                    {
+                        "label": "Leave her to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_frame": {
+            "text": "\"Because a finished hull is a thing you have decided about,\" says Gedda Halloway.\n\nShe puts her hand flat on a rib.\n\n\"That is the ninth class. Every master since the charter has been elected standing under it, and every one of them has had to say, out loud, in front of the hall, what they would change about it. That is the whole election. There is no vote until after.\"\n\n\"If it were planked there would be nothing to say. It is left open so that everyone who is going to run this yard has to stand in front of eleven families and admit that the thing they were raised on is wrong somewhere.\"\n\nShe takes her hand off it.\n\n\"Four hundred years. Not one master has ever got out of it. I said the garboard. My father said the garboard. He was wrong about it and so was I.\"",
+            "choices": [
+                {
+                    "label": "\"And nobody has ever added a tenth?\"",
+                    "next": "the_beam_question"
+                },
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "the_first_two": {
+            "text": "\"A count that came back short and was not repeated,\" says Gedda Halloway, \"and a beam in a tavern with ten masts painted on it.\"\n\nShe looks at you steadily.\n\n\"I am told you have come up the Hallowgate road with nothing in the water. That is a rare thing in this city and I am not going to waste it on politeness.\"",
+            "choices": [
+                {
+                    "label": "\"Tell me about the count.\"",
+                    "next": "the_pond"
+                },
+                {
+                    "label": "\"Tell me about the beam.\"",
+                    "next": "the_beam_question"
+                },
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "the_pond": [
+            {
+                "conditions": [
+                    {
+                        "flag": "mast_pond_beaten"
+                    },
+                    {
+                        "quest": "nine_masts",
+                        "status": "active"
+                    }
+                ],
+                "expression": 5,
+                "text": "\"You had something out of the pond,\" says Gedda Halloway.\n\nIt is not a question and she does not sound surprised, which is the worst possible response.\n\n\"There has been something in that water since my father's time. Every count, once a generation, somebody goes out with a pole and comes back white, and the Moot writes down that the pond is deep and cold and lets it alone.\"\n\nShe turns her good ear.\n\n\"So now you have got it out and I shall have to have the pond dragged, which I have wanted done for nineteen years and have never once had a reason for.\"\n\nShe almost smiles.\n\n\"Do not tell me what it was. Tell the sawyers. They will make it a great deal better and it will be in the Nine Masts by Thursday and every apprentice in this yard will be frightened of that water for another forty years, which is the only thing that has ever kept anybody out of it.\"",
+                "choices": [
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "nine_masts",
+                        "status": "active"
+                    }
+                ],
+                "expression": 3,
+                "text": "\"Pole and a tally-board,\" says Gedda. \"They are by the north post. Count the whole pond and count it in the order you find them, not in the order they ought to be in.\"",
+                "choices": [
+                    {
+                        "label": "Back to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "\"Nine short,\" says Gedda Halloway. \"Last autumn's count. Great pines, two years under water, seasoning. Nine of them not there.\"\n\n\"And the count was not repeated, and I did not repeat it, and I have had eleven months to think about why I did not.\"\n\nShe turns her good ear away for a moment, which is this hall's version of looking at the floor.\n\n\"Because I knew what the second count would say. And because a count that is done twice goes into the Moot's book, and the Moot's book goes to Lathmere with the fleet return, and then it is not nine masts. It is nine masts and a theft and a question about who.\"",
+                "choices": [
+                    {
+                        "label": "\"So why have it counted now?\"",
+                        "next": "why_now"
+                    },
+                    {
+                        "label": "\"Nine great pines do not walk.\"",
+                        "next": "why_now"
+                    },
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ]
+            }
+        ],
+        "why_now": {
+            "expression": 3,
+            "text": "\"Because the League has doubled the order,\" says Gedda Halloway, \"and in about six weeks a clerk from Lathmere will walk round that pond with a pole of his own.\"\n\n\"I would like to know before he does. Not so that I can hide it — I have thought about that and I am too old to enjoy it — but because there is a difference between a master who reports a theft and a master who is told about one.\"\n\nShe is quiet a moment.\n\n\"And because I do not think it is a theft. That is the part I cannot say in this hall. Nine masts is not a thing you sell. There is one market on this Mere for a seasoned pine that size and it is this room.\"\n\n\"Somebody moved them. In front of everybody. Take a pole and a board and count that pond, and then go and look at the only building in this city warm enough to work one in.\"",
+            "on_enter": [
+                {
+                    "start_quest": "nine_masts"
+                },
+                {
+                    "quest_stage": {
+                        "quest": "nine_masts",
+                        "stage": "count_the_pond"
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"The dry dock.\"",
+                    "end": true
+                },
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "the_beam_question": [
+            {
+                "conditions": [
+                    {
+                        "flag": "tenth_mast_seen"
+                    }
+                ],
+                "expression": 2,
+                "text": "\"You have stood under it,\" says Gedda. \"Then you know that a house of shipwrights has left a wrong thing over its own hearth for six months, and that nobody in this city does that by accident.\"",
+                "choices": [
+                    {
+                        "label": "\"Who painted it?\"",
+                        "next": "who_painted"
+                    },
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ]
+            },
+            {
+                "text": "\"Nine masts on that beam,\" says Gedda Halloway. \"One for every hull class this Moot has ever laid down. They are put up by the master who designed the class, in front of witnesses, once, and there has not been a new one in eighty-one years.\"\n\n\"There are ten on it now.\"\n\nShe lets that sit in the hall.\n\n\"Somebody went into the Nine Masts at night with a brush and painted a class that does not exist onto a beam that eleven families are buried within sight of. It has been there since the spring.\"\n\n\"And no shipwright in this city will paint it out. I have asked. Twice. Politely the first time.\"",
+                "choices": [
+                    {
+                        "label": "\"Why will they not paint it out?\"",
+                        "next": "why_not_painted"
+                    },
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ]
+            }
+        ],
+        "why_not_painted": {
+            "expression": 3,
+            "text": "Gedda Halloway is quiet for a while.\n\n\"Because they agree with it,\" she says.\n\n\"That is what it is. It is not a prank and it is not a boast. Somebody put up a tenth class and the whole yard has silently declined to take it down, which in this hall is a vote, and it is a vote against me, and it was taken without a word being said in a room I have run for nineteen years.\"\n\nShe turns the rule over in her hands.\n\n\"I do not mind being voted against. I mind not being told. Four hundred years this Moot has argued about scarf joints at the top of its voice and now it has learned to do the important part in silence, and I taught it that, by being a master who could stop the fleet.\"",
+            "choices": [
+                {
+                    "label": "\"Who painted it?\"",
+                    "next": "who_painted"
+                },
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "who_painted": [
+            {
+                "conditions": [
+                    {
+                        "flag": "doren_fate",
+                        "equals": "owned"
+                    }
+                ],
+                "text": "\"He told me himself,\" says Gedda. \"Standing under it. In front of the house.\"\n\nShe almost smiles.\n\n\"I asked him about the garboard. He gave me the wrong answer and he gave it fast, which is the answer I wanted.\"",
+                "choices": [
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ]
+            },
+            {
+                "text": "\"I know who,\" says Gedda Halloway, \"and I am not going to tell you, and you may make what you like of that.\"\n\nShe puts the rule down.\n\n\"There is one hand in this yard that draws a full-bodied stem with the rabbet carried right up, and it is the best hand under this roof and it has been passed over every year for six years because it belongs to somebody with no family in this hall.\"\n\n\"If he wants it, he can stand up under that beam and say so. That is how it is done. It has been how it is done since before the charter and I am not going to spare him it and I am not going to do it for him.\"",
+                "choices": [
+                    {
+                        "label": "\"That is a very hard kindness.\"",
+                        "next": "hard_kindness"
+                    },
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ]
+            }
+        ],
+        "hard_kindness": {
+            "expression": 2,
+            "text": "\"It is the only one I have got,\" says Gedda Halloway.\n\n\"If I go to him he is a man the Master took an interest in, for the rest of his life, and every drawing he ever makes is mine. If he stands up under that beam he is a shipwright who put a class on it.\"\n\nShe glances at the frame in the middle of the floor.\n\n\"I stood under that thing at forty-two and said my father was wrong about the garboard, with my father in the room. It was the worst afternoon of my life and it is the only reason anybody in this hall has ever done a thing I asked.\"",
+            "choices": [
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "the_quota": {
+            "expression": 3,
+            "text": "\"Doubled,\" says Gedda Halloway. \"In February. By a letter.\"\n\n\"The Ythan League has a fleet instead of an army, which everybody says as though it were a proverb, and it means that when Lathmere is frightened of something it orders hulls. It has been frightened since the spring and it will not say of what, and the order arrived with no timber, no oakum, no cordage and no hands attached to it.\"\n\nShe holds up fingers.\n\n\"Timber comes forty miles overland on oxen. Pitch comes from a woman in Tarrow who has trebled her price and is right to. Hands come from a suburb the charter says is not there. And bread for all of it comes out of one stone building in Hallowgate Ward.\"\n\n\"Every single one of those is somebody else's, and every single one of them is short. And I am the one who will be asked in the spring why there are four hulls on the ways instead of eight.\"",
+            "choices": [
+                {
+                    "label": "\"So fold your arms.\"",
+                    "next": "the_folded_arms"
+                },
+                {
+                    "label": "\"The bread is the one that will break first.\"",
+                    "next": "the_granary"
+                },
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "the_folded_arms": {
+            "expression": 4,
+            "text": "Gedda Halloway looks at you for a long moment with her good ear turned.\n\n\"Everybody knows I can,\" she says. \"Nobody has ever said it out loud in this hall, including me, and you have now said it twice in one conversation.\"\n\nShe folds them, deliberately, and unfolds them again.\n\n\"There. That is the great fact of Waerhaven, and here is what it is actually worth. If I stop the fleet, Lathmere does not negotiate. Lathmere finds another yard. There is not another yard — there is Venddock, which has a river and no ropewalk and could not lay down a war-hull in five years — but Lathmere does not know that in its stomach, only in its books.\"\n\n\"So I can stop the fleet once. Once, ever. And afterwards this city is either the place that had to be listened to or the place that had to be replaced, and I will not know which until it is done.\"\n\n\"Nineteen years I have been holding a thing I can use once. Do you know what that does to a person? It makes them extremely careful and completely useless.\"",
+            "choices": [
+                {
+                    "label": "\"Then what would make it worth using?\"",
+                    "next": "what_she_wanted"
+                },
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "what_she_wanted": {
+            "expression": 6,
+            "text": "\"To be asked,\" says Gedda Halloway.\n\n\"Not to be obeyed. To be asked. This Moot has decided every real thing in Waerhaven for four hundred years and it has done it by folding its arms in a hall that has no standing, and the Wet Hall has never once sent anybody down that road to ask us what we thought before deciding.\"\n\nShe puts her hand on the frame.\n\n\"I have watched three Factors come and go. Every one of them found out in his second year that the yard runs this city, and every one of them decided the correct response was to manage me. Culm has not managed me. Culm has avoided me for eleven months, which is at least honest.\"\n\n\"So: what would make it worth using. Somebody standing in this hall saying we cannot do this without you, in front of witnesses, in a way that goes in a book. That is all. Four hundred years and nobody has spent a sentence on it.\"",
+            "choices": [
+                {
+                    "label": "\"Eleven miles a year. Six years. Then the fell, and then eighty-five miles of forest, and then this promontory.\"",
+                    "conditions": [
+                        {
+                            "flag": "vorn_told_you"
+                        }
+                    ],
+                    "next": "the_fell"
+                },
+                {
+                    "label": "\"I will get you the sentence.\"",
+                    "effects": [
+                        {
+                            "set_flag": "gedda_wants_asking"
+                        },
+                        {
+                            "xp": 100
+                        }
+                    ],
+                    "end": true
+                },
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "the_third_key": [
+            {
+                "conditions": [
+                    {
+                        "flag": "box_opened"
+                    }
+                ],
+                "text": "\"You have got Sedge's,\" says Gedda. \"Then you have got two of three and the Factor has never opened his drawer, and I do not need to ask what you did about the third.\"\n\nShe turns her ear away.\n\n\"Nineteen years I have carried that key and never once used it. Whatever comes of this, that is on the list.\"",
+                "choices": [
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ]
+            },
+            {
+                "text": "\"I have got one of three,\" says Gedda Halloway. \"I have had it nineteen years and I have never taken it out of the box it lives in, and I could not tell you today which drawer that box is in.\"\n\nShe frowns.\n\n\"That is not a thing to be proud of and I have only just heard myself say it.\"\n\n\"Why do you want it?\"",
+                "choices": [
+                    {
+                        "label": "\"Because the League's weight is four ounces light.\"",
+                        "next": "she_gives_the_key"
+                    },
+                    {
+                        "label": "\"Because Corran Sedge has been frightened for four years.\"",
+                        "next": "she_gives_the_key"
+                    },
+                    {
+                        "label": "Never mind.",
+                        "next": "greeting"
+                    }
+                ]
+            }
+        ],
+        "she_gives_the_key": {
+            "expression": 5,
+            "text": "Gedda Halloway does not ask for proof, which you were braced for.\n\n\"Corran Sedge,\" she says, \"has weighed every stick of timber that has come into this yard for thirty-one years and has never once been wrong, and has never once been asked his opinion about anything.\"\n\nShe is already going to the press at the end of the masters' bench.\n\n\"If Sedge is frightened, then he has been carrying something for four years, and the reason he has been carrying it alone is that the only three people who could open that box are a Factor who has never met him, a Master Shipwright who has not spoken to him outside a weighing in nineteen years, and himself.\"\n\nShe puts the key on the table, hard.\n\n\"Take it. And when you have got your answer, bring it to me before you take it up that hill.\"",
+            "on_enter": [
+                {
+                    "set_flag": "gedda_key_given"
+                },
+                {
+                    "quest_stage": {
+                        "quest": "the_short_weight",
+                        "stage": "the_three_keys"
+                    }
+                },
+                {
+                    "xp": 120
+                }
+            ],
+            "choices": [
+                {
+                    "label": "Take it.",
+                    "end": true
+                }
+            ]
+        },
+        "the_granary": [
+            {
+                "conditions": [
+                    {
+                        "flag": "granary_lie_known"
+                    }
+                ],
+                "expression": 7,
+                "text": "Gedda Halloway goes to the door of the Moot and shuts it, which nobody in this hall has ever seen her do.\n\n\"Eleven weeks,\" she says. \"Say it.\"\n\nAnd when you have, she stands with her back against her own door for a while.\n\n\"I have four hulls on the ways and eight ordered and a suburb full of hands that this city is not allowed to have, and every one of them eats out of a building with the Factor's seals on it.\"\n\n\"I can stop the fleet. I have spent nineteen years learning that I can only do it once.\" She looks up. \"This is it, is it not. This is the once.\"",
+                "on_enter": [
+                    {
+                        "set_flag": "gedda_knows"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "\"Not yet. Wait until I know what the arithmetic is.\"",
+                        "next": "she_will_wait"
+                    },
+                    {
+                        "label": "\"It might be.\"",
+                        "next": "she_will_wait"
+                    }
+                ]
+            },
+            {
+                "text": "\"The granary,\" says Gedda Halloway, \"is the only building in Waerhaven I have never been inside.\"\n\nShe says it lightly and then hears it.\n\n\"League seals. The Factor's to open. Which is correct and proper and has been the arrangement since the charter, and it means that the woman who can stop this city's fleet has no idea how much bread is in it.\"\n\n\"I have asked Culm twice. He walked me as far as the second bay both times and talked a great deal about rats.\"",
+                "choices": [
+                    {
+                        "label": "\"Both times only as far as the second bay?\"",
+                        "next": "the_second_bay"
+                    },
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ]
+            }
+        ],
+        "the_second_bay": {
+            "expression": 3,
+            "text": "Gedda Halloway stops.\n\n\"Both times,\" she says. \"And I have just this moment heard it.\"\n\nShe is very still.\n\n\"There are six bays. He walked me to the second one, both times, and turned round, and I let him, because I was being shown a granary by a Factor and it did not occur to me that I was being shown two-sixths of one.\"\n\n\"Go up that hill. Get past the second bay. And when you have, come back down here and tell me, and do not tell anybody else first.\"",
+            "choices": [
+                {
+                    "label": "\"I will.\"",
+                    "effects": [
+                        {
+                            "xp": 80
+                        }
+                    ],
+                    "end": true
+                },
+                {
+                    "label": "Back.",
+                    "next": "greeting"
+                }
+            ]
+        },
+        "she_will_wait": {
+            "expression": 6,
+            "text": "\"I will wait,\" says Gedda Halloway, \"and I want you to understand what that costs, because everybody in this city thinks waiting is what I am for.\"\n\n\"Every week I do not fold my arms is a week four hundred people in the Wardenswatch go on working in a yard that cannot pay them out of a granary that cannot feed them. My patience is not free. It is being paid for by other people and I have been letting them pay for nineteen years.\"\n\nShe opens the door again.\n\n\"Find me the arithmetic. Quickly. And when you come back with it, bring somebody from that suburb into this hall with you, because I have never once had one in it and that is going to look very bad in about a hundred years.\"",
+            "choices": [
+                {
+                    "label": "\"I will.\"",
+                    "end": true
+                }
+            ]
+        },
+        "what_she_does": {
+            "expression": 5,
+            "text": "\"Nothing,\" says Gedda Halloway. \"Today.\"\n\n\"Nine masts are in my dry dock. They have not left this yard. They were not sold. Nobody is a penny richer. And the Moot's return to Lathmere says the pond is nine short, which is true, and does not say where they went, which is also true, because nobody asked.\"\n\nShe sets the rule down.\n\n\"I am going to do the thing this hall has always done, which is fold my arms and say nothing and let it go on. And this is the first time in nineteen years I have done it because I want to rather than because I have to, and I find that is not the same feeling at all.\"",
+            "on_enter": [
+                {
+                    "quest_stage": {
+                        "quest": "nine_masts",
+                        "stage": "found"
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"Report it as nine lost off the pond, and leave the rest out.\"",
+                    "next": "the_covered_report"
+                },
+                {
+                    "label": "\"Then go and look at what they are building.\"",
+                    "next": "will_she_build"
+                },
+                {
+                    "label": "Leave her to it.",
+                    "end": true
+                }
+            ]
+        },
+        "not_from_you": {
+            "expression": 2,
+            "text": "Gedda Halloway takes that one properly, standing still, the way she takes a figure.\n\n\"Say that again,\" she says.\n\nAnd when you have, she puts a hand on the frame.\n\n\"Yes. All right. Yes. Nobody told me because telling me would put it in the Moot's book and the Moot's book goes to Lathmere with the fleet return, and every man who worked on that hull knew that and worked out that the kindest thing they could do for their Master was to leave her able to say she did not know.\"\n\nShe is quiet.\n\n\"Nineteen years, and my own yard has been protecting me. From the thing I am for.\"",
+            "on_enter": [
+                {
+                    "quest_stage": {
+                        "quest": "nine_masts",
+                        "stage": "found"
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"Then stop being protected.\"",
+                    "next": "will_she_build"
+                },
+                {
+                    "label": "Leave her to it.",
+                    "end": true
+                }
+            ]
+        },
+        "will_she_build": {
+            "expression": 8,
+            "text": "Gedda Halloway looks at the lines for a very long time.\n\n\"It is a hull for ice,\" she says at last. \"Short, deep, double-framed forward, sheathed to the wale. There has not been a hull for ice on this Mere in four hundred years because there has been nowhere to take one.\"\n\nShe straightens.\n\n\"Somebody in this yard has decided there is somewhere to take one. And three charts of the northern shore have walked out of a press on this ridge, and the Boom Forge is making ground tackle for an anchorage in open water, and my own men are keeping the timber warm in my own dock.\"\n\n\"They are not stealing from me. They are getting ready, and they have not told me what for, and I do not think they know. I think somebody has looked at what is coming south out of the Wyrdpines for six years and worked out that at some point this city is going to want to go and look.\"\n\nShe rolls the drawing carefully.\n\n\"Not this year. Not with eight hulls ordered and eleven weeks of bread. But it will be built, and when it is, it will be built in this yard, in the open, with a tenth mast on that beam and a name in the book.\"",
+            "on_enter": [
+                {
+                    "set_flag": "tenth_hull_known"
+                },
+                {
+                    "xp": 150
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"Then build it. You know what is coming south.\"",
+                    "conditions": [
+                        {
+                            "flag": "gedda_knows_the_north"
+                        }
+                    ],
+                    "next": "the_hull_and_the_north"
+                },
+                {
+                    "label": "Leave her with it.",
+                    "end": true
+                }
+            ]
+        },
+        "the_order_now": {
+            "expression": 7,
+            "text": "\"No,\" says Gedda Halloway. \"Not eight. Not four. I shall lay down two and I shall lay them down properly and Lathmere may do what it likes.\"\n\nShe touches the frame.\n\n\"And I shall write and say so, in my own hand, and put in the letter that the reason is that this city was audited into a winter with nineteen hundred of its hands on the road. Somebody in Lathmere will read that. Probably not the right one.\"\n\nShe turns her good ear away.\n\n\"You did the honest thing and it has cost the honest people. I have been a shipwright for fifty years and I have never once found a way to say that which does not sound like an excuse for the other kind.\"",
+            "choices": [
+                {
+                    "label": "Leave her to it.",
+                    "end": true
+                }
+            ]
+        },
+        "the_second_door": {
+            "expression": 8,
+            "text": "\"Mine,\" says Gedda Halloway.\n\nShe turns round.\n\n\"Not the Moot's. The Moot has never voted on it and never will, because a vote is a record. Nine masters keep that book on a rota, a page each, in nine hands, so that there is no hand in it and no name to give — and the nine are chosen by me, and I have been choosing them for six years, and every one of them thinks she is the ninth of an arrangement rather than one of nine.\"\n\nShe puts her hand flat on the frame.\n\n\"Six years ago the Wyrdpines went bad and people started coming south, and I did two sums in one week. The first was that this yard could not meet a fleet order without them. The second was that the League's charter forbids this city to take them, and that the League would rather have the hulls than enforce it, and would say nothing, and would go on saying nothing right up until the day it needed somebody to blame.\"\n\n\"So we take them. And we feed them off the top of every barge before your Factor's seals ever touch it, and we store it below the high-water mark, where the charter says his seals do not run.\"\n\nShe is entirely level.\n\n\"I am not a smuggler. I have never sold a grain of it. There are eighty quarters under that quay and every one of them is for the winter the League fails us, and I have been quietly certain that winter is coming since the spring of the second year.\"",
+            "on_enter": [
+                {
+                    "set_flag": "charter_head_known"
+                },
+                {
+                    "xp": 250
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"The Factor is eleven weeks off the same winter and does not know you exist.\"",
+                    "next": "the_two_granaries"
+                },
+                {
+                    "label": "\"You have been stealing from a granary you knew was short.\"",
+                    "next": "the_accusation"
+                },
+                {
+                    "label": "\"What happens to it now?\"",
+                    "next": "the_charter_choice"
+                }
+            ]
+        },
+        "the_accusation": {
+            "expression": 7,
+            "text": "\"Yes,\" says Gedda Halloway.\n\nShe does not flinch and she does not explain it away, and the fact that she has clearly rehearsed this makes it worse rather than better.\n\n\"I did not know it was short at first. I found out in the second year, from a weighmaster's face rather than from anything he said, and by then there were four hundred people outside that wall who ate because of the arrangement.\"\n\n\"And I made the calculation that everybody in this city makes, and I made it the way everybody in this city makes it: I decided that what I was doing kept my people alive, and that whoever was carrying the shortfall in the League Granary was carrying it for the League and not for me.\"\n\nShe takes her hand off the frame.\n\n\"That is the entire moral content of it. I have never once been able to make it come out better and I have stopped trying.\"",
+            "choices": [
+                {
+                    "label": "\"What happens to it now?\"",
+                    "next": "the_charter_choice"
+                },
+                {
+                    "label": "\"Culm is eleven weeks off the same winter.\"",
+                    "next": "the_two_granaries"
+                }
+            ]
+        },
+        "the_two_granaries": {
+            "expression": 6,
+            "text": "Gedda Halloway is quiet for a long time.\n\n\"Two granaries,\" she says. \"In one city. Forty yards apart. Neither of them knowing about the other, both of them short, both of them lying, and both of them lying for exactly the same reason, which is nineteen hundred people who are not allowed to exist.\"\n\nShe sits down on the masters' bench, which she does not do.\n\n\"He has been in that stone house for four years and I have been in this hall for nineteen and neither of us has ever sent anybody down the road to ask the other one anything.\"\n\n\"Do you know what that is? That is not cunning and it is not politics. That is two people doing the same arithmetic in separate rooms because the alternative was one of them having to say out loud that the League is not coming.\"",
+            "on_enter": [
+                {
+                    "set_flag": "two_granaries_known"
+                },
+                {
+                    "xp": 150
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"What happens to it now?\"",
+                    "next": "the_charter_choice"
+                }
+            ]
+        },
+        "the_charter_choice": {
+            "expression": 5,
+            "text": "\"That is not mine to say,\" says Gedda Halloway, \"and it is the first sentence of that shape I have said in nineteen years, so let it stand.\"\n\nShe counts it on her fingers, which is how a shipwright thinks.\n\n\"You put it in the League Granary. Openly, up Doss's crane, in daylight, with a clerk writing every sack. My arrangement ends. The Factor's number gets nearer to true. And the people outside that wall lose the only supply that was ever actually theirs, and they find that out in the winter.\"\n\n\"Or you take a share and a key and it goes on exactly as it is, and you are in it, and so am I, and in about a year one of the nine will be careless.\"\n\n\"Or you end it. The tide gate down, the store spoiled, the book in a fire. Nobody runs grain under this quay again — and nobody runs people under it either, because it is the same door, and I would rather you heard that from me than worked it out afterwards.\"\n\nShe folds her arms.\n\n\"Three, and I will not choose, and I have been standing under this frame for four days finding out what that is like.\"",
+            "choices": [
+                {
+                    "label": "\"It goes into the League Granary. In daylight.\"",
+                    "next": "she_gives_it_up"
+                },
+                {
+                    "label": "\"It goes on. Give me a key.\"",
+                    "next": "she_cuts_you_in"
+                },
+                {
+                    "label": "\"It ends. Tonight.\"",
+                    "next": "you_burn_it"
+                },
+                {
+                    "label": "\"Not yet.\"",
+                    "end": true
+                }
+            ]
+        },
+        "she_gives_it_up": {
+            "expression": 7,
+            "text": "It is done in daylight, on the Great Crane, in front of the whole quay, which is the only way Gedda Halloway will do anything.\n\nEighty quarters, up out of the Underquay, onto League carts, with a clerk of the Factor's writing every sack and Doss walking in the drum and not saying a word.\n\nAfterwards she stands at the head of the pier and watches the last cart go up the Gate Way.\n\n\"Six years,\" she says. \"And I have handed it to a man in a stone house who has never once come down this road to ask me anything.\"\n\nShe turns.\n\n\"He will use it properly. I have decided to believe that, because the alternative is that I have just done it for nothing, and I have got a fleet to build.\"",
+            "on_enter": [
+                {
+                    "quest_stage": {
+                        "quest": "what_goes_out",
+                        "stage": "seized"
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "Watch it go.",
+                    "end": true
+                }
+            ]
+        },
+        "she_cuts_you_in": {
+            "expression": 4,
+            "text": "\"Right,\" says Gedda Halloway, and does not look pleased, and does not look surprised either.\n\n\"A page of the book. A key to the tide gate. And the fourth of the month at half tide, which is when the lighter comes off and which you will now be expected at.\"\n\nShe hands both over.\n\n\"And here is what nobody tells you about being in an arrangement rather than looking at one. There is no moment afterwards where you decide again. There is only the fourth of the month, and then the fourth of the month, and then the fourth of the month, and one day one of the nine is careless.\"\n\nShe goes back under the frame.\n\n\"I have had six years of the fourth of the month. You have had one. Do not tell me in a year that nobody warned you.\"",
+            "on_enter": [
+                {
+                    "quest_stage": {
+                        "quest": "what_goes_out",
+                        "stage": "bought_in"
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "Take the key.",
+                    "end": true
+                }
+            ]
+        },
+        "you_burn_it": {
+            "expression": 8,
+            "text": "The tide gate comes down at the ebb — properly, with wedges and a maul, by people who know how a thing is built and therefore how it comes apart.\n\nThe store is spoiled with sea water in about forty minutes. The book goes into the fifth hearth at the Boom Forge in front of a witness, and the witness is Gedda Halloway, who insisted.\n\n\"There,\" she says, when it has caught. \"Nobody runs grain under that quay again.\"\n\nShe watches it.\n\n\"And nobody runs people under it either. Same door. I told you that and you did it anyway and I want it said out loud that you were told, because in about six weeks somebody is going to walk eighty-five miles to a stair that is not there.\"\n\nShe turns away from the hearth.\n\n\"It was the honest thing. I have spent nineteen years finding out what those cost and I have never once managed to make anybody believe me about it beforehand.\"",
+            "on_enter": [
+                {
+                    "quest_stage": {
+                        "quest": "what_goes_out",
+                        "stage": "burned"
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "Watch it burn.",
+                    "end": true
+                }
+            ]
+        },
+        "the_covered_report": {
+            "expression": 4,
+            "text": "Gedda Halloway takes the count, reads it twice, and writes the Moot's return herself in about four lines.\n\n*Nine seasoned pines short on the autumn count. Cause not established. Pond not dragged.*\n\nEvery word of it is true. None of it is the truth, and she knows it, and she signs it anyway.\n\n\"Four hundred years,\" she says, \"and that is the first sentence this hall has ever sent Lathmere that was arranged rather than said.\"\n\nShe blots it.\n\n\"I have been telling myself for a fortnight that I would know the difference when I did it. I did not. It took about four lines and I was thinking about the fourth slip the whole time.\"",
+            "on_enter": [
+                {
+                    "quest_stage": {
+                        "quest": "nine_masts",
+                        "stage": "covered"
+                    }
+                }
+            ],
+            "choices": [
+                {
+                    "label": "Leave her to it.",
+                    "end": true
+                }
+            ]
+        },
+        "the_warden_in_the_hall": {
+            "expression": 6,
+            "text": "Gedda Halloway does not answer at once.\n\n\"A Grey Warden of Drennmark,\" she says. \"In the Shipwrights' Moot. Which has no charter, no standing and no authority to receive anybody, and is therefore the only room in Waerhaven that can.\"\n\nShe looks at the empty benches.\n\n\"Four hundred years and there has never been a foreigner under this roof who was not selling us timber.\"\n\nShe puts her hand on the frame.\n\n\"Bring her. Thursday. And tell her she gets as long as she wants and that nobody will interrupt her, and that eleven families will be sitting there, and that they will all have their arms folded, and that this is not hostility — it is what we do instead of listening politely.\"",
+            "on_enter": [
+                {
+                    "set_flag": "vorn_in_the_moot"
+                },
+                {
+                    "xp": 150
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"Thursday.\"",
+                    "end": true
+                }
+            ]
+        },
+        "the_fell": {
+            "expression": 7,
+            "text": "Gedda Halloway listens to the whole of it without moving, which is what she does with a figure.\n\n\"Say the last part again,\" she says.\n\nAnd when you have, she goes and stands at the Moot's one window, which looks north over the Mere and forty miles of open grey water and nothing at all beyond it.\n\n\"There is no road north out of this city,\" she says. \"Everybody says that as though it were geography. It is not geography. It is that in four hundred years nobody has wanted to go, and so nobody cut one, and so the day somebody needs to come the other way there is nothing to come down.\"\n\nShe stays at the window.\n\n\"I have eight hulls ordered by a League that is frightened of something it will not name. And a suburb of people who walked out of the thing it will not name. And you have just told me that they are the same sentence and I have been living in this city for sixty-one years without once putting them in one.\"",
+            "on_enter": [
+                {
+                    "set_flag": "gedda_knows_the_north"
+                },
+                {
+                    "xp": 150
+                }
+            ],
+            "choices": [
+                {
+                    "label": "\"Then get her into this hall.\"",
+                    "next": "what_she_wanted"
+                },
+                {
+                    "label": "Leave her at the window.",
+                    "end": true
+                }
+            ]
+        },
+        "the_asking_reflection": {
+            "expression": 6,
+            "text": "\"I know,\" says Gedda Halloway. \"That is the part.\"\n\nShe puts her hand on the frame.\n\n\"A Factor with a clerk is the League in a room. A Factor on his own is a man of forty-one asking eleven families for help in a hall his own charter says has no standing.\"\n\nShe is quiet.\n\n\"I have spent nineteen years waiting to be asked and rehearsing what I would say, and what I actually said was thank you, and I have been furious with myself about that for four days and I have worked out why.\"\n\n\"It was not enough. He came down that hill with nothing, and I gave him two words and a line in a book, and I have got eighty quarters of grain under a quay.\"",
+            "choices": [
+                {
+                    "label": "Say nothing.",
+                    "end": true
+                }
+            ]
+        },
+        "the_hull_and_the_north": {
+            "expression": 8,
+            "text": "Gedda Halloway looks at the lines for a long time with her hand flat on them.\n\n\"Not this year,\" she says. \"That is not a refusal. That is a shipwright's answer and it is the only kind I have got.\"\n\n\"A hull that size is eighteen months from keel to launch with a full yard on her, and I have not got a full yard, and I have got eight ordered and eleven weeks of bread.\"\n\nShe rolls the drawing.\n\n\"But I shall lay her down. In the open. On the sixth slip, which has been empty since my father's time, and in the Moot's book, and with a tenth mast on that beam and the name of the man who drew her under it.\"\n\nShe hands it back to you rather than keeping it.\n\n\"And when she goes into the water there will be a Grey Warden of Drennmark standing on that slip, because it will be her coast, and because nobody in four hundred years has built anything in this yard for anybody who was not paying for it.\"",
+            "on_enter": [
+                {
+                    "set_flag": "tenth_hull_laid_down"
+                },
+                {
+                    "xp": 200
+                }
+            ],
+            "choices": [
+                {
+                    "label": "Take the drawing back to him.",
+                    "end": true
+                }
+            ]
+        }
+    }
+}

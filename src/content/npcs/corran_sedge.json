@@ -1,0 +1,12 @@
+{
+    "npc_key": "corran_sedge",
+    "name": "Weighmaster Corran Sedge",
+    "role": "Weighmaster of the Counting Boom",
+    "description": "Ninety years of ledgers behind him and one of the three keys to the standard weight in his pocket, and he has been a careful man his whole working life in a job where careful is the only virtue there is. He will show you all his books. He will show you one of them twice.",
+    "sprite_key": "baker",
+    "is_quest_giver": true,
+    "dialog": "corran_sedge",
+    "place": {
+        "location": "the_weigh_house"
+    }
+}

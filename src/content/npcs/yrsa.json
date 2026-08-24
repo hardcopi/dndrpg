@@ -1,0 +1,11 @@
+{
+    "npc_key": "yrsa",
+    "name": "Yrsa Fell",
+    "role": "Of the Wyrdpines",
+    "description": "One of the forty-one who reached the Hallowgate with Aske Vorn, and one of the few who will say so out loud. She shoots, she keeps a fire alight in weather that should not allow one, and she has spent four years being told by kind people that she is safe now.",
+    "sprite_key": "ranger",
+    "dialog": "yrsa",
+    "place": {
+        "location": "the_green_bough"
+    }
+}

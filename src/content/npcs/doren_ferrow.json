@@ -1,0 +1,11 @@
+{
+    "npc_key": "doren_ferrow",
+    "name": "Doren Ferrow",
+    "role": "Shipwright's man",
+    "description": "Six years out of his apprenticeship and the best hand with a scarf joint under this roof, which everybody says and nobody promotes him for. He has drawn a hull the Moot has no class for, on paper, at night, and he has been drawing it for two years.",
+    "sprite_key": "fighter",
+    "dialog": "doren_ferrow",
+    "place": {
+        "location": "the_nine_masts"
+    }
+}

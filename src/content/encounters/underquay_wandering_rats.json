@@ -1,0 +1,16 @@
+{
+    "encounter_key": "underquay_wandering_rats",
+    "name": "Off the Tide-mark",
+    "description": "They come along the tide-mark in a line, at the height a rat swims, and they are not frightened of the light.",
+    "difficulty": "easy",
+    "monsters": [
+        {
+            "monster": "giant_rat",
+            "quantity": 4,
+            "rank": "front"
+        }
+    ],
+    "allow_flee": true,
+    "is_random": true,
+    "region": "the_underquay"
+}

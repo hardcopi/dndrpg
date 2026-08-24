@@ -1110,7 +1110,10 @@ section('Generated battlefields');
 $first = BattleMapGen::generate(12345, 'cavern');
 $again = BattleMapGen::generate(12345, 'cavern');
 same('the same seed builds the same map', $first['terrain'], $again['terrain']);
+same('and dresses it the same way', $first['props'], $again['props']);
 ok('a different seed builds a different one', BattleMapGen::generate(999, 'cavern')['terrain'] !== $first['terrain']);
+ok('a cavern has a dungeon floor', str_contains((string) $first['floor'], 'dungeon'));
+ok('and ships some furniture', count($first['props']) > 0);
 same('the board is twelve rows', BattleGrid::H, count($first['terrain']));
 same('of sixteen characters', BattleGrid::W, strlen($first['terrain'][0]));
 ok('an unknown palette still builds something', count(BattleMapGen::generate(1, 'swamp')['terrain']) === BattleGrid::H);
@@ -1174,6 +1177,51 @@ foreach ($palettes as $palette) {
     }
 }
 same('1400 generated maps are all playable', [], array_slice($bad, 0, 5));
+
+/*
+ * Props are pictures of the terrain, not a second cover rule. A sprite that
+ * sits on open ground, or in a deployment zone, or names a file that is not
+ * on disk, is a lie the board would then draw.
+ */
+$artRoot = dirname(__DIR__) . '/assets/images/';
+$propBad = [];
+$dressed = 0;
+foreach ($palettes as $palette) {
+    for ($seed = 1; $seed <= 40; $seed++) {
+        $map = BattleMapGen::generate($seed * 7919, $palette);
+        if ($map['props']) {
+            $dressed++;
+        }
+        if (empty($map['floor']) || !is_file($artRoot . $map['floor'])) {
+            $propBad[] = "{$palette}/{$seed}: missing floor {$map['floor']}";
+        }
+        if (empty($map['wall']) || !is_file($artRoot . $map['wall'])) {
+            $propBad[] = "{$palette}/{$seed}: missing wall {$map['wall']}";
+        }
+        foreach ($map['props'] as $p) {
+            if (!is_file($artRoot . $p['src'])) {
+                $propBad[] = "{$palette}/{$seed}: missing {$p['src']}";
+                continue;
+            }
+            for ($j = 0; $j < $p['h']; $j++) {
+                for ($i = 0; $i < $p['w']; $i++) {
+                    $x = $p['x'] + $i;
+                    $y = $p['y'] + $j;
+                    $ch = $map['terrain'][$y][$x] ?? '.';
+                    if ($ch === '.' || $ch === '#') {
+                        $propBad[] = "{$palette}/{$seed}: {$p['src']} on '{$ch}' at {$x},{$y}";
+                    }
+                    if (BattleMapGen::inZone($x, $y, $map['zones']['party'])
+                        || BattleMapGen::inZone($x, $y, $map['zones']['foe'])) {
+                        $propBad[] = "{$palette}/{$seed}: {$p['src']} in a zone at {$x},{$y}";
+                    }
+                }
+            }
+        }
+    }
+}
+same('dressed maps only put art on cover cells that exist', [], array_slice($propBad, 0, 5));
+ok('most generated maps get furniture', $dressed > 200);
 
 // Deployment turns the old rank into a starting column and nothing else.
 $map = BattleMapGen::generate(4242, 'street');

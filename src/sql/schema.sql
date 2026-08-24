@@ -49,6 +49,7 @@ DROP TABLE IF EXISTS races;
 DROP TABLE IF EXISTS classes;
 DROP TABLE IF EXISTS characters;
 DROP TABLE IF EXISTS app_settings;
+DROP TABLE IF EXISTS api_tokens;
 DROP TABLE IF EXISTS users;
 
 CREATE TABLE users (
@@ -68,6 +69,28 @@ CREATE TABLE users (
     password_hash VARCHAR(255),
     last_login_at TIMESTAMP NULL DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Bearer tokens for clients that are not a browser — Unity, today.
+--
+-- The website still signs in with a PHP cookie session. A standalone player
+-- has no cookie jar that works like one, so login also issues one of these.
+-- The hash is stored, not the secret; `state_json` carries the same per-play
+-- bag the cookie session holds (active character, party, a pending ability
+-- roll, an in-flight check) so those routes do not grow a second store.
+CREATE TABLE api_tokens (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    user_id INT UNSIGNED NOT NULL,
+    token_hash CHAR(64) NOT NULL,
+    state_json JSON NULL,
+    label VARCHAR(60) NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    last_used_at TIMESTAMP NULL DEFAULT NULL,
+    expires_at TIMESTAMP NOT NULL,
+    revoked_at TIMESTAMP NULL DEFAULT NULL,
+    UNIQUE KEY uq_api_tokens_hash (token_hash),
+    KEY idx_api_tokens_user (user_id, revoked_at),
+    CONSTRAINT fk_api_tokens_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Whether the public may sign themselves up. Lives in the database rather than
@@ -146,6 +169,20 @@ CREATE TABLE characters (
     -- character can never be re-dressed, and a later fix to the layer order or
     -- the art could not re-bake anybody.
     appearance_json VARCHAR(600) NULL,
+    -- The 3D look: which Sidekick parts the character wears, the three body
+    -- sliders, and the colours. Written by the Unity client and by the
+    -- character embed on the web; validated by SidekickAppearance, which is
+    -- also the only thing that should read it.
+    --
+    -- Beside the paperdoll rather than instead of it. They describe the same
+    -- person in two media and neither can be derived from the other: the
+    -- paperdoll is a stack of PNG layers and this is a list of meshes.
+    --
+    -- TEXT rather than VARCHAR: a full recipe is about 1.4 KB, and a VARCHAR
+    -- that size counts against InnoDB's 65,535-byte row limit on a table that
+    -- is already wide. TEXT is stored off-page and costs the row nothing.
+    -- SidekickAppearance caps what it writes at 4 KB regardless.
+    sidekick_json TEXT NULL,
     -- Where the character stands. The world is a graph of locations, not a
     -- grid: this one id is the whole of a character's position.
     current_location_id INT UNSIGNED NULL,

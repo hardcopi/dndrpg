@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
-  The whole combat board — rosters, battlefield, inspector, action bar — with
-  no fight running.
+  The whole combat board — initiative, battlefield, inspector, action column —
+  with no fight running.
 
   The board is four clicks and a won initiative roll away, and the parts worth
   judging are the ones that need the fight to be in a particular state: an
@@ -65,7 +65,7 @@
        So the only thing overridden here is the height, because the game's
        shell is 100dvh and this page has a note pinned under it. */
     .game-shell { height: calc(100dvh - 2.2rem); }
-    #combat-root { display: flex; flex-direction: column; gap: 0.5rem; min-height: 0; min-width: 0;
+    #combat-root { display: flex; flex-direction: column; gap: 0; min-height: 0; min-width: 0;
                    flex: 1 1 auto; }
     /* `.scene`'s own rules come from the stylesheet; it only needs a height
        here, which the shell gives it in the game. */
@@ -79,9 +79,8 @@
 <body class="game-page in-combat">
   <p class="bench-note" id="note"></p>
   <div class="game-shell">
-    <!-- Shell furniture, like the rail below: ui-combat.js draws the turn order
-         into this by id, and it spans both columns so the ribbon gets the whole
-         width. -->
+    <!-- Shell furniture, like the rail below: ui-combat.js draws the round and
+         the turn into this by id, and it spans both columns. -->
     <div class="cbt-top" id="cbt-top"></div>
     <!-- The scene column, as the shell builds it: the icon toolbar sits above
          the screen and is NOT hidden in a fight, so the board starts below it.
@@ -100,7 +99,7 @@
           <a class="icon-btn" href="#" title="Main menu"><svg aria-hidden="true"><use href="#i-home"></use></svg></a>
         </div>
       </div>
-      <div id="combat-root"></div>
+      <div class="combat-screen" id="combat-root"></div>
     </div>
     <aside class="rail rail-right">
       <div class="rail-bottom">
@@ -154,6 +153,7 @@
   const terrain = (() => {
     const rows = Array.from({ length: H }, () => '.'.repeat(W).split(''));
     for (const [x, y] of [[7, 3], [7, 4], [8, 4], [8, 5], [8, 6]]) rows[y][x] = 'n';
+    for (const [x, y] of [[6, 5], [6, 6]]) rows[y][x] = 'o';
     for (const [x, y] of [[5, 8], [6, 8], [6, 9], [7, 9]]) rows[y][x] = ',';
     return rows.map((r) => r.join(''));
   })();
@@ -192,6 +192,9 @@
     hp: i === 0 ? 22 : 8 + (i % 3), max_hp: i === 0 ? 27 : 11,
     ac: 13 + (i % 2), speed: 30, cr: i === 0 ? 2 : 0.25, alive: true,
     initiative: 16 - i, conditions: i === 1 ? [{ key: 'prone' }] : [], boons: [],
+    token: i === 0
+      ? 'tokens/thief_captain/00.webp'
+      : `tokens/bandit/${String((i - 1) % 12).padStart(2, '0')}.webp`,
   }));
 
   /* The derived block. Same shape the engine ships: which cells the actor can
@@ -201,7 +204,7 @@
   for (let y = 0; y < H; y++) {
     for (let x = 0; x < W; x++) {
       const d = Math.max(Math.abs(x - party[0].x), Math.abs(y - party[0].y)) * 5;
-      if (d <= 20 && terrain[y][x] !== 'n') reach[`${x},${y}`] = { cost: d, from: null };
+      if (d <= 20 && !'n#ov'.includes(terrain[y][x])) reach[`${x},${y}`] = { cost: d, from: null };
     }
   }
   const threat = {};
@@ -229,7 +232,25 @@
     turn_index: 0,
     encounter_name: 'Ambush at the ford',
     order: [...party, ...foes].sort((a, b) => b.initiative - a.initiative).map((c) => c.cid),
-    grid: { terrain, zones: null },
+    grid: {
+      terrain,
+      floor: 'tiles/floor_stone.png',
+      wall: 'tiles/wall_stone.png',
+      props: [
+        { x: 7, y: 3, w: 1, h: 1, src: 'decor/column.png', stand: true },
+        { x: 7, y: 4, w: 1, h: 1, src: 'decor/column.png', stand: true },
+        { x: 8, y: 4, w: 1, h: 1, src: 'decor/boulder.png', stand: false },
+        { x: 8, y: 5, w: 1, h: 1, src: 'decor/statue.png', stand: true },
+        { x: 8, y: 6, w: 1, h: 1, src: 'decor/column.png', stand: true },
+        { x: 6, y: 5, w: 1, h: 1, src: 'decor/crate.png', stand: false },
+        { x: 6, y: 6, w: 1, h: 1, src: 'decor/barrel.png', stand: false },
+        { x: 5, y: 8, w: 1, h: 1, src: 'decor/rocks.png', stand: false },
+        { x: 6, y: 8, w: 1, h: 1, src: 'decor/sacks.png', stand: false },
+        { x: 6, y: 9, w: 1, h: 1, src: 'decor/rocks.png', stand: false },
+        { x: 7, y: 9, w: 1, h: 1, src: 'decor/bones.png', stand: false },
+      ],
+      zones: null,
+    },
     combatants: [...party, ...foes],
     ui: { actor: 'pc_1', reach, threat, targets, attacks_left: 1 },
     events: [],
