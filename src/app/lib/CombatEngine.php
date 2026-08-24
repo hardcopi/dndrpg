@@ -558,9 +558,19 @@ class CombatEngine
     private static function usesPerRest(string $featureKey, int $level): ?int
     {
         return match ($featureKey) {
-            // SRD: two at 1st, three at 3rd, four at 6th. Rules::MAX_LEVEL is 6,
-            // so the table stops where the game does.
-            'rage' => $level >= 6 ? 4 : ($level >= 3 ? 3 : 2),
+            // SRD: two at 1st, three at 3rd, four at 6th, five at 12th, six at
+            // 17th, and no limit at all at 20th. `null` is this function's word
+            // for "not a limited resource", which is exactly what a 20th-level
+            // Barbarian's Rage becomes — so the ceiling falls out of the same
+            // return value that means a Fighter's Rage does not exist.
+            'rage' => match (true) {
+                $level >= 20 => null,
+                $level >= 17 => 6,
+                $level >= 12 => 5,
+                $level >= 6  => 4,
+                $level >= 3  => 3,
+                default      => 2,
+            },
             // The SRD gives this back on a short rest as well, and there is no
             // short rest here, so the long rest is the whole of it.
             'second_wind' => 1,
@@ -5834,8 +5844,8 @@ class CombatEngine
      * from a bigger slot adds `higher_level_json.dice_per_level` per level
      * above its own — the loader has already refused any spec whose die size
      * cannot fold into the base expression. A cantrip ignores slots and
-     * doubles its dice at caster level 5; MAX_LEVEL is 6, so the SRD's 11th-
-     * and 17th-level tiers have no rows here to be wrong about.
+     * gains a die at caster levels 5, 11 and 17 — all three reachable now that
+     * the game runs to 20, where before only the first was.
      */
     public static function scaledSpellDice(array $spell, int $casterLevel): string
     {
@@ -5849,9 +5859,12 @@ class CombatEngine
 
         $spellLevel = (int) ($spell['level'] ?? 0);
         if ($spellLevel === 0) {
-            if ($casterLevel >= 5) {
-                $count *= 2;
-            }
+            // The SRD's cantrip ladder is a die at 1st and one more at each of
+            // 5th, 11th and 17th — four dice at the top, not eight. Doubling
+            // was right for a game that stopped at 6, where 5th was the only
+            // step and doubling a single die and adding one are the same thing.
+            $count *= 1 + (int) ($casterLevel >= 5) + (int) ($casterLevel >= 11)
+                + (int) ($casterLevel >= 17);
             return $count . 'd' . $sides . $tail;
         }
 

@@ -222,26 +222,33 @@ class Rules
     ];
 
     /**
-     * The campaign stops at level 6, so slots never climb past 3rd level.
+     * The whole SRD ladder: twenty levels, and slots up to 9th.
      * Tables are indexed [character level][slot level - 1].
+     *
+     * These two move TOGETHER, and with the three slot tables below. Raising
+     * MAX_LEVEL alone is not a bigger game, it is a crash: slotTable() clamps
+     * the level it is given to MAX_LEVEL and then indexes the row directly, so
+     * a cap of 20 over a table that stops at 6 is an undefined index the first
+     * time a level-7 caster opens their sheet.
      */
-    public const MAX_LEVEL = 6;
-    public const MAX_SLOT_LEVEL = 3;
+    public const MAX_LEVEL = 20;
+    public const MAX_SLOT_LEVEL = 9;
 
     /**
      * Classes that learn to swing twice, and the level they learn it at.
      *
-     * Fifth, for all five of them, which is inside this game: MAX_LEVEL is 6,
-     * so a martial character spends the last two levels of their career with
-     * Extra Attack — and until now spent them swinging once, because nothing
-     * anywhere counted attacks. `action_used` was a boolean and one attack
-     * closed it.
+     * Fifth, for all five of them.
      *
-     * The Fighter's third attack is 11th and the fourth 20th, both far outside
-     * MAX_LEVEL; a table here would be two unreachable rows.
+     * The Fighter keeps going where the others stop: a third attack at 11th and
+     * a fourth at 20th. Those were two unreachable rows while the game stopped
+     * at 6 and are two reachable ones now, which is why FIGHTER_ATTACKS exists
+     * rather than a comment saying they are outside the cap.
      */
     public const EXTRA_ATTACK_AT = 5;
     public const EXTRA_ATTACK_CLASSES = ['Fighter', 'Barbarian', 'Paladin', 'Ranger', 'Monk'];
+
+    /** The Fighter's own ladder: level => attacks per Attack action. */
+    private const FIGHTER_ATTACKS = [20 => 4, 11 => 3, 5 => 2];
 
     /**
      * How many attacks one Attack action buys this character.
@@ -252,10 +259,19 @@ class Rules
      */
     public static function attacksPerAction(string $class, int $level): int
     {
-        return $level >= self::EXTRA_ATTACK_AT
-            && in_array(self::classKey($class), self::EXTRA_ATTACK_CLASSES, true)
-                ? 2
-                : 1;
+        $key = self::classKey($class);
+        if (!in_array($key, self::EXTRA_ATTACK_CLASSES, true)) {
+            return 1;
+        }
+        if ($key === 'Fighter') {
+            foreach (self::FIGHTER_ATTACKS as $at => $swings) {
+                if ($level >= $at) {
+                    return $swings;
+                }
+            }
+            return 1;
+        }
+        return $level >= self::EXTRA_ATTACK_AT ? 2 : 1;
     }
 
     /**
@@ -309,11 +325,14 @@ class Rules
     /**
      * Channel Divinity: how many times between breathers.
      *
-     * One at 2nd and two at 6th. The SRD's third comes at 18th, which this
-     * game cannot reach.
+     * One at 2nd, two at 6th, three at 18th — the last of which the game can
+     * reach now that it runs to 20.
      */
     public static function channelDivinityUses(int $level): int
     {
+        if ($level >= 18) {
+            return 3;
+        }
         return $level >= 6 ? 2 : 1;
     }
 
@@ -371,24 +390,49 @@ class Rules
 
     /**
      * Slot levels Arcane Recovery gives back: half the wizard's level, rounded
-     * up. The SRD also forbids recovering a slot of 6th or higher, which
-     * MAX_SLOT_LEVEL already makes unreachable.
+     * up. The SRD also forbids recovering a slot of 6th or higher — a rule
+     * MAX_SLOT_LEVEL used to enforce for free when it was 3, and which has to
+     * be written down now that a wizard can hold a 9th.
      */
+    public const ARCANE_RECOVERY_MAX_SLOT = 5;
+
     public static function arcaneRecoveryBudget(int $level): int
     {
         return (int) ceil(max(1, $level) / 2);
     }
 
     /**
+     * The die a Bard's Inspiration is worth, by level.
+     *
+     * d6, d8 at 5th, d10 at 10th, d12 at 15th. Lives here rather than in
+     * CheckService, which is where it was: it is a rules table, and the two
+     * other things that grow with a level — the Monk's fists and the Rogue's
+     * sneak dice — are already answered from one place.
+     */
+    public static function bardicInspirationDie(int $level): int
+    {
+        return match (true) {
+            $level >= 15 => 12,
+            $level >= 10 => 10,
+            $level >= 5  => 8,
+            default      => 6,
+        };
+    }
+
+    /**
      * The die a Monk's fists are worth, by level.
      *
-     * d4 at 1st and d6 at 5th. The SRD goes on to d8 at 11th and d10 at 17th,
-     * both outside MAX_LEVEL, so writing them would be two rows nobody can
-     * reach — the same reason there is no third Extra Attack above.
+     * d4 at 1st, d6 at 5th, d8 at 11th, d10 at 17th — the whole SRD ladder,
+     * all of it reachable now.
      */
     public static function martialArtsDie(int $level): int
     {
-        return $level >= 5 ? 6 : 4;
+        return match (true) {
+            $level >= 17 => 10,
+            $level >= 11 => 8,
+            $level >= 5  => 6,
+            default      => 4,
+        };
     }
 
     /**
@@ -641,7 +685,13 @@ class Rules
      * against the same ladder, and two copies of it is how a party levels for
      * killing the bandits but not for talking them down.
      */
-    public const XP_THRESHOLDS = [1 => 0, 2 => 300, 3 => 900, 4 => 2700, 5 => 6500, 6 => 14000];
+    /** The SRD's own ladder, all twenty rungs. */
+    public const XP_THRESHOLDS = [
+        1 => 0,       2 => 300,     3 => 900,     4 => 2700,    5 => 6500,
+        6 => 14000,   7 => 23000,   8 => 34000,   9 => 48000,   10 => 64000,
+        11 => 85000,  12 => 100000, 13 => 120000, 14 => 140000, 15 => 165000,
+        16 => 195000, 17 => 225000, 18 => 265000, 19 => 305000, 20 => 355000,
+    ];
 
     public const HIT_DICE = [
         'Barbarian' => 12,
@@ -651,23 +701,55 @@ class Rules
         'Sorcerer'  => 6, 'Wizard' => 6,
     ];
 
+    /** Bard, Cleric, Druid, Sorcerer, Wizard. Nine columns, one per slot level. */
     private const FULL_CASTER_SLOTS = [
-        1 => [2, 0, 0],
-        2 => [3, 0, 0],
-        3 => [4, 2, 0],
-        4 => [4, 3, 0],
-        5 => [4, 3, 2],
-        6 => [4, 3, 3],
+         1 => [2, 0, 0, 0, 0, 0, 0, 0, 0],
+         2 => [3, 0, 0, 0, 0, 0, 0, 0, 0],
+         3 => [4, 2, 0, 0, 0, 0, 0, 0, 0],
+         4 => [4, 3, 0, 0, 0, 0, 0, 0, 0],
+         5 => [4, 3, 2, 0, 0, 0, 0, 0, 0],
+         6 => [4, 3, 3, 0, 0, 0, 0, 0, 0],
+         7 => [4, 3, 3, 1, 0, 0, 0, 0, 0],
+         8 => [4, 3, 3, 2, 0, 0, 0, 0, 0],
+         9 => [4, 3, 3, 3, 1, 0, 0, 0, 0],
+        10 => [4, 3, 3, 3, 2, 0, 0, 0, 0],
+        11 => [4, 3, 3, 3, 2, 1, 0, 0, 0],
+        12 => [4, 3, 3, 3, 2, 1, 0, 0, 0],
+        13 => [4, 3, 3, 3, 2, 1, 1, 0, 0],
+        14 => [4, 3, 3, 3, 2, 1, 1, 0, 0],
+        15 => [4, 3, 3, 3, 2, 1, 1, 1, 0],
+        16 => [4, 3, 3, 3, 2, 1, 1, 1, 0],
+        17 => [4, 3, 3, 3, 2, 1, 1, 1, 1],
+        18 => [4, 3, 3, 3, 3, 1, 1, 1, 1],
+        19 => [4, 3, 3, 3, 3, 2, 1, 1, 1],
+        20 => [4, 3, 3, 3, 3, 2, 2, 1, 1],
     ];
 
-    /** Paladins and Rangers get nothing at 1st level; their table starts at 2. */
+    /**
+     * Paladins and Rangers get nothing at 1st level; their table starts at 2,
+     * and it never reaches past 5th-level slots however long they live.
+     */
     private const HALF_CASTER_SLOTS = [
-        1 => [0, 0, 0],
-        2 => [2, 0, 0],
-        3 => [3, 0, 0],
-        4 => [3, 0, 0],
-        5 => [4, 2, 0],
-        6 => [4, 2, 0],
+         1 => [0, 0, 0, 0, 0],
+         2 => [2, 0, 0, 0, 0],
+         3 => [3, 0, 0, 0, 0],
+         4 => [3, 0, 0, 0, 0],
+         5 => [4, 2, 0, 0, 0],
+         6 => [4, 2, 0, 0, 0],
+         7 => [4, 3, 0, 0, 0],
+         8 => [4, 3, 0, 0, 0],
+         9 => [4, 3, 2, 0, 0],
+        10 => [4, 3, 2, 0, 0],
+        11 => [4, 3, 3, 0, 0],
+        12 => [4, 3, 3, 0, 0],
+        13 => [4, 3, 3, 1, 0],
+        14 => [4, 3, 3, 1, 0],
+        15 => [4, 3, 3, 2, 0],
+        16 => [4, 3, 3, 2, 0],
+        17 => [4, 3, 3, 3, 1],
+        18 => [4, 3, 3, 3, 1],
+        19 => [4, 3, 3, 3, 2],
+        20 => [4, 3, 3, 3, 2],
     ];
 
     /**
@@ -676,12 +758,26 @@ class Rules
      * can cast, which is why the rows below are zero until the top slot moves.
      */
     private const WARLOCK_SLOTS = [
-        1 => [1, 0, 0],
-        2 => [2, 0, 0],
-        3 => [0, 2, 0],
-        4 => [0, 2, 0],
-        5 => [0, 0, 2],
-        6 => [0, 0, 2],
+         1 => [1, 0, 0, 0, 0],
+         2 => [2, 0, 0, 0, 0],
+         3 => [0, 2, 0, 0, 0],
+         4 => [0, 2, 0, 0, 0],
+         5 => [0, 0, 2, 0, 0],
+         6 => [0, 0, 2, 0, 0],
+         7 => [0, 0, 0, 2, 0],
+         8 => [0, 0, 0, 2, 0],
+         9 => [0, 0, 0, 0, 2],
+        10 => [0, 0, 0, 0, 2],
+        11 => [0, 0, 0, 0, 3],
+        12 => [0, 0, 0, 0, 3],
+        13 => [0, 0, 0, 0, 3],
+        14 => [0, 0, 0, 0, 3],
+        15 => [0, 0, 0, 0, 3],
+        16 => [0, 0, 0, 0, 3],
+        17 => [0, 0, 0, 0, 4],
+        18 => [0, 0, 0, 0, 4],
+        19 => [0, 0, 0, 0, 4],
+        20 => [0, 0, 0, 0, 4],
     ];
 
     public static function abilityMod(int $score): int
@@ -977,8 +1073,8 @@ class Rules
      * not list is the mismatch this whole change exists to remove. Add it to
      * the row and this table together, or not at all.
      *
-     * Two at 1st and two more at 6th. Rules::MAX_LEVEL is 6, so both steps are
-     * reachable and there is no third.
+     * Two at 1st and two more at 6th. There is no third step in the SRD, so
+     * this table is complete at any cap.
      */
     public static function expertiseCount(string $class, int $level): int
     {

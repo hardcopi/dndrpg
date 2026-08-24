@@ -104,9 +104,11 @@ public_head(
               beard.</li>
           <li><strong>Parties of four.</strong> Tab between them on one sheet, hand things
               across, and pick who walks out to a fight.</li>
-          <li><strong>Levels 1 to 6.</strong> Small on purpose — every feature in that
-              range is one the engine actually runs, rather than a line of text on a
-              sheet.</li>
+          <li><strong>Levels 1 to <?= Rules::MAX_LEVEL ?>.</strong> The whole ladder —
+              proficiency to +6, spell slots to 9th, an ability increase or a feat at
+              4th, 8th, 12th, 16th and 19th. The named class features the engine runs
+              arrive in the first six; the <a href="classes.php">class pages</a> say
+              exactly which, and which are only printed.</li>
         </ul>
         <p><a class="lp-btn" href="classes.php">See all <?= $nClasses ?> classes</a></p>
       </div>

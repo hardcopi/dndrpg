@@ -53,8 +53,10 @@
  *     through a level-up and must still be refused.
  *   - Fighting Style feats require the Fighting Style feature, which in the SRD
  *     belongs to the Fighter, the Paladin and the Ranger. `classes` says so.
- *   - Epic Boons are omitted entirely. They require level 19 and this campaign
- *     stops at Rules::MAX_LEVEL, which is 6.
+ *   - Epic Boons are omitted entirely — none is implemented. They require level
+ *     19, which USED to put them outside Rules::MAX_LEVEL and now does not, so
+ *     this is a real gap rather than a rule about the cap: a character reaching
+ *     19 gets an ordinary ability increase where the SRD offers a boon.
  *   - The Ability Score Improvement is itself a feat in 5.2, and it is one here:
  *     `ability_score_improvement` is an ordinary catalogue entry, marked
  *     `repeatable` so that taking it at level 4 does not remove it from the

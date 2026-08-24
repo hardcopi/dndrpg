@@ -1829,10 +1829,15 @@ class LocationEngine
             if ((int) ($world2->get($partyId, $flag) ?? 0) > 0) {
                 continue;
             }
+            // ARCANE_RECOVERY_MAX_SLOT, not MAX_SLOT_LEVEL. The SRD forbids
+            // recovering a slot of 6th level or higher, and while the game
+            // stopped at 6 the two constants were both 3 and the rule cost
+            // nothing to obey. Raising the cap to 20 made MAX_SLOT_LEVEL 9 and
+            // this line a way to get a 9th-level slot back over lunch.
             $given = (new Spellbook($this->db))->recover(
                 $id,
                 Rules::arcaneRecoveryBudget((int) $c['level']),
-                Rules::MAX_SLOT_LEVEL
+                Rules::ARCANE_RECOVERY_MAX_SLOT
             );
             if ($given === []) {
                 continue;                       // nothing spent; keep the recovery

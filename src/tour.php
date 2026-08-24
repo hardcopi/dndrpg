@@ -15,6 +15,11 @@
 require_once __DIR__ . '/app/inc/public_page.php';
 
 $nMonsters = (int) db()->query('SELECT COUNT(*) FROM monsters')->fetchColumn();
+$nClasses  = (int) db()->query('SELECT COUNT(*) FROM classes')->fetchColumn();
+// Counted, not written down. "ten peoples, fifteen rows" was true when it was
+// typed and false an hour later, when two races were withheld.
+$raceRows  = count(public_races());
+$nRaces    = public_race_count();
 $nSpells   = (int) db()->query('SELECT COUNT(*) FROM spells')->fetchColumn();
 $nItems    = (int) db()->query('SELECT COUNT(*) FROM items')->fetchColumn();
 
@@ -49,12 +54,13 @@ public_head(
       <li><strong>Roll or arrange.</strong> Abilities are rolled and assigned; the step
           tells you which ones your class actually leans on, so a wizard is not quietly
           advised to raise Strength.</li>
-      <li><strong>A race and a subrace</strong> — <a href="races.php">ten peoples</a>,
-          fifteen rows — each with its bonuses applied and its traits printed, marked
-          for whether the engine enforces them.</li>
-      <li><strong>A class and a path</strong> — <a href="classes.php">twelve of them</a>,
-          each with a subclass that arrives on its own schedule and brings features
-          with it.</li>
+      <li><strong>A race and a subrace</strong> —
+          <a href="races.php"><?= $nRaces ?> peoples</a>, <?= $raceRows ?> rows — each with
+          its bonuses applied and its traits printed, marked for whether the engine
+          enforces them.</li>
+      <li><strong>A class and a path</strong> —
+          <a href="classes.php"><?= $nClasses ?> of them</a>, each with a subclass that
+          arrives on its own schedule and brings features with it.</li>
       <li><strong>A face.</strong> A painted portrait for the party rail and the fight
           cards, and a 3D creator built into the first step if you want to choose the
           beard, the build and the coat.</li>
@@ -114,8 +120,13 @@ public_head(
       <div class="lp-fig"><b>1&ndash;<?= Rules::MAX_LEVEL ?></b><span>Levels</span></div>
     </div>
     <p class="lp-note" style="margin-top:var(--sp-12);max-width:70ch">
-      The level cap is deliberate. Every feature inside it is one the engine runs; the
-      <a href="classes.php">class pages</a> say which, and which are only printed.
+      The ladder runs the whole way: proficiency to +6, spell slots to 9th level, and an
+      ability increase or a feat at 4th, 8th, 12th, 16th and 19th. Be told the rest
+      plainly — the <strong>named</strong> class features this engine implements all
+      arrive by 6th, and past that a character grows by the numbers rather than by
+      collecting new buttons. The <a href="classes.php">class pages</a> list every one
+      the engine runs, with the level it arrives at, and mark the ones that are only
+      printed on the sheet.
     </p>
   </div>
 </section>

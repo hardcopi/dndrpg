@@ -599,9 +599,9 @@ class CheckService
                 'key'                 => 'bardic_inspiration',
                 'label'               => 'Bardic Inspiration',
                 'detail'              => $member['name'] . ', ' . $left . ' left',
-                // The die grows at 5th level. The campaign stops at 6, so the
-                // rest of the SRD's table never comes up.
-                'bonus_dice'          => (int) $member['level'] >= 5 ? '1d8' : '1d6',
+                // d6, then d8 at 5th, d10 at 10th and d12 at 15th. The last
+                // two used to be past the cap and are not any more.
+                'bonus_dice'          => '1d' . Rules::bardicInspirationDie((int) $member['level']),
                 'cost'                => 'use',
                 'source_character_id' => (int) $member['id'],
             ]);
