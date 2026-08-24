@@ -121,12 +121,12 @@ public_head(
     </div>
     <p class="lp-note" style="margin-top:var(--sp-12);max-width:70ch">
       The ladder runs the whole way: proficiency to +6, spell slots to 9th level, and an
-      ability increase or a feat at 4th, 8th, 12th, 16th and 19th. Be told the rest
-      plainly — the <strong>named</strong> class features this engine implements all
-      arrive by 6th, and past that a character grows by the numbers rather than by
-      collecting new buttons. The <a href="classes.php">class pages</a> list every one
-      the engine runs, with the level it arrives at, and mark the ones that are only
-      printed on the sheet.
+      ability increase or a feat at 4th, 8th, 12th, 16th and 19th. Named features keep
+      arriving past 6th for some classes and not for others — a rogue's Evasion at 7th,
+      a barbarian's Brutal Critical at 9th, a paladin's Improved Divine Smite at 11th,
+      a monk's Diamond Soul at 14th — and the <a href="classes.php">class pages</a> are
+      the honest list: every feature the engine actually runs, with the level it arrives
+      at, and separately the ones that are only printed on the sheet.
     </p>
   </div>
 </section>

@@ -355,12 +355,27 @@ class CombatEngine
      *
      * `half` rounds down, as the SRD says; `negate` leaves nothing.
      */
-    public static function saveDamage(int $damage, bool $passed, string $effect): int
-    {
-        if (!$passed) {
-            return max(0, $damage);
+    public static function saveDamage(
+        int $damage,
+        bool $passed,
+        string $effect,
+        bool $evasion = false
+    ): int {
+        $damage = max(0, $damage);
+
+        // Evasion shifts the whole ladder one rung: nothing at all on a
+        // success, half on a failure. It only applies where a save would
+        // otherwise have HALVED the damage — an effect that already negates
+        // outright has nothing left to give on a success, and one that offers
+        // no save at all never reaches this function.
+        if ($evasion && $effect !== 'negate') {
+            return $passed ? 0 : intdiv($damage, 2);
         }
-        return $effect === 'negate' ? 0 : intdiv(max(0, $damage), 2);
+
+        if (!$passed) {
+            return $damage;
+        }
+        return $effect === 'negate' ? 0 : intdiv($damage, 2);
     }
 
     /** Constitution DC to keep concentration after taking a hit. */
@@ -3032,6 +3047,43 @@ class CombatEngine
                 $dmg = self::retotal($dmg);
                 $damaged['notes'][] = "{$actor['name']} strikes savagely — an extra die rides the critical.";
             }
+        }
+
+        // Brutal Critical is Savage Attacks again, earned rather than
+        // inherited: the same extra weapon die on a melee critical, from 9th.
+        // They STACK, and that is the SRD — a half-orc barbarian rolls both,
+        // which is the whole reason a half-orc barbarian is a thing people
+        // build. Written as its own block rather than folded into the test
+        // above so that the note says which one fired.
+        if ($crit
+            && ($actor['attack_kind'] ?? 'melee') === 'melee'
+            && Rules::hasFeature(
+                (string) ($actor['class'] ?? ''),
+                (int) ($actor['level'] ?? 1),
+                'brutal_critical'
+            )) {
+            $sides = self::dieSides((string) $weapon['damage']);
+            if ($sides > 0) {
+                $dmg['rolls'][] = (int) Dice::rollDetailed('1d' . $sides)['total'];
+                $dmg = self::retotal($dmg);
+                $damaged['notes'][] = "{$actor['name']} lands it brutally — another die on the critical.";
+            }
+        }
+
+        // Improved Divine Smite: every melee hit carries 1d8 radiant from 11th,
+        // whether or not a slot is burned on it. Folded into the dice rather
+        // than added to the total for the same resistance reasoning as Sneak
+        // Attack and Savage Attacks — a target resistant to the weapon should
+        // not have this halved with it, and one resistant to radiant should.
+        if (($actor['attack_kind'] ?? 'melee') === 'melee'
+            && Rules::hasFeature(
+                (string) ($actor['class'] ?? ''),
+                (int) ($actor['level'] ?? 1),
+                'improved_divine_smite'
+            )) {
+            $dmg['rolls'][] = (int) Dice::rollDetailed('1d8')['total'];
+            $dmg = self::retotal($dmg);
+            $damaged['notes'][] = "{$actor['name']}'s blade carries its own light.";
         }
 
         // Colossus Slayer: +1d8 once a turn against a target already below
@@ -5758,7 +5810,18 @@ class CombatEngine
             ]);
 
             $raw = $dice === '' ? 0 : (int) Dice::rollDetailed($dice)['total'];
-            $amount = self::saveDamage($raw, $result['passed'], (string) ($spell['save_effect'] ?? 'half'));
+            $amount = self::saveDamage(
+                $raw,
+                $result['passed'],
+                (string) ($spell['save_effect'] ?? 'half'),
+                // Asked of the TARGET, which is the one place a defensive
+                // feature can be read from — the actor here is the caster.
+                Rules::hasFeature(
+                    (string) ($target['class'] ?? ''),
+                    (int) ($target['level'] ?? 1),
+                    'evasion'
+                )
+            );
 
             if ($amount > 0) {
                 $after = Rules::damageAfterDefenses($amount, $damageType, $target);

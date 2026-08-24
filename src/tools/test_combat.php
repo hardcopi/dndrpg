@@ -1105,6 +1105,24 @@ same('a sling outranges nothing much', 30, Rules::weaponRange($byKey('sling'))['
 same('and cannot be swung at all', null, Rules::weaponRange($byKey('sling'))['reach']);
 
 // ---------------------------------------------------------------------------
+section('Evasion');
+
+// Evasion shifts the ladder one rung: nothing on a success, half on a failure.
+same('evasion: a passed save takes nothing', 0,
+     CombatEngine::saveDamage(40, true, 'half', true));
+same('evasion: a failed save takes half', 20,
+     CombatEngine::saveDamage(40, false, 'half', true));
+same('without it a passed save still takes half', 20,
+     CombatEngine::saveDamage(40, true, 'half', false));
+same('without it a failed save takes all', 40,
+     CombatEngine::saveDamage(40, false, 'half', false));
+// A negate effect has nothing left to give on a success, so evasion is a no-op.
+same('evasion does not change a negate on a success', 0,
+     CombatEngine::saveDamage(40, true, 'negate', true));
+same('evasion does not halve a negate on a failure', 40,
+     CombatEngine::saveDamage(40, false, 'negate', true));
+
+
 section('Generated battlefields');
 
 $first = BattleMapGen::generate(12345, 'cavern');

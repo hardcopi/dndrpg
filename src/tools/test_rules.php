@@ -727,6 +727,44 @@ foreach (array_keys(Conditions::CATALOG) as $key) {
 }
 
 // ---------------------------------------------------------------------------
+section('Class features above 6th');
+
+// Diamond Soul: proficient in EVERY save from 14th, and the sheet's tick and
+// the roll's bonus must agree — they are one function now, and this is what
+// says so.
+$monk6  = ['class' => 'Monk', 'level' => 6,  'wisdom' => 10, 'charisma' => 10];
+$monk14 = ['class' => 'Monk', 'level' => 14, 'wisdom' => 10, 'charisma' => 10];
+ok('a monk at 6 is not proficient in Charisma saves',
+   !Rules::isSaveProficient($monk6, 'cha'));
+ok('a monk at 14 is',
+   Rules::isSaveProficient($monk14, 'cha'));
+// Charisma 10 is a +0 modifier, so the whole of a 14th-level monk's Charisma
+// save is the proficiency Diamond Soul granted — and a 6th-level one's is zero.
+same('a monk at 6 rolls Charisma saves flat', 0,
+     Rules::savingThrow($monk6, 'cha')['total']);
+same('and at 14 the roll adds the bonus the sheet ticked',
+     Rules::proficiencyBonus(14),
+     Rules::savingThrow($monk14, 'cha')['total']);
+ok('Strength and Dexterity were already proficient and are not doubled',
+   Rules::savingThrow($monk14, 'str')['total']
+     === Rules::abilityMod(10) + Rules::proficiencyBonus(14));
+
+// The levels each new feature arrives at, read from the engine's own table.
+foreach ([
+    ['Barbarian', 'brutal_critical', 9],
+    ['Monk', 'evasion', 7],
+    ['Monk', 'diamond_soul', 14],
+    ['Rogue', 'evasion', 7],
+    ['Paladin', 'improved_divine_smite', 11],
+] as [$class, $feature, $at]) {
+    ok("{$class} has no {$feature} at " . ($at - 1),
+       !Rules::hasFeature($class, $at - 1, $feature));
+    ok("{$class} has {$feature} at {$at}",
+       Rules::hasFeature($class, $at, $feature));
+    ok("and still at " . Rules::MAX_LEVEL,
+       Rules::hasFeature($class, Rules::MAX_LEVEL, $feature));
+}
+
 section('Conditions: attack context');
 
 $clean = ['cid' => 'mon_9', 'conditions' => []];

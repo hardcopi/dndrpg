@@ -296,6 +296,7 @@ class Rules
             'reckless_attack' => 2,
             'danger_sense'    => 2,
             'fast_movement'   => 5,
+            'brutal_critical' => 9,
         ],
         'Fighter' => [
             'action_surge'    => 2,
@@ -305,6 +306,8 @@ class Rules
         ],
         'Monk' => [
             'martial_arts'    => 1,
+            'evasion'         => 7,
+            'diamond_soul'    => 14,
         ],
         'Paladin' => [
             'lay_on_hands'    => 1,
@@ -313,9 +316,11 @@ class Rules
             // burn — HALF_CASTER_SLOTS gives a Paladin nothing at 1st, so a
             // Smite at 1st would be a button that could never be pressed.
             'divine_smite'    => 2,
+            'improved_divine_smite' => 11,
         ],
         'Rogue' => [
             'uncanny_dodge'   => 5,
+            'evasion'         => 7,
         ],
         'Wizard' => [
             'arcane_recovery' => 1,
@@ -1189,12 +1194,25 @@ class Rules
      */
     public static function isSaveProficient(array $actor, string $ability): bool
     {
-        $norm = self::normalise($actor);
-        $key = self::abilityKey($ability);
-        // Resilient is the other way to be proficient in a save, and the sheet
-        // must tick the same box savingThrow() adds the bonus for.
+        return self::saveProficiency($actor, self::normalise($actor), self::abilityKey($ability));
+    }
+
+    /**
+     * The three ways to be proficient in a saving throw, asked once.
+     *
+     * The class's own two, the Resilient feat's one, and a Monk's Diamond Soul,
+     * which is proficiency in ALL of them from 14th. This used to be an
+     * expression written out twice — once in isSaveProficient() for the sheet's
+     * tick and once in savingThrow() for the bonus — with a comment on each
+     * saying they had to agree. Adding a third way would have been adding it to
+     * both, and a sheet that ticks a box the roll does not add is exactly the
+     * disagreement CharacterSheet's header forbids.
+     */
+    private static function saveProficiency(array $actor, array $norm, string $key): bool
+    {
         return in_array($key, self::classSaveProficiencies($norm['class']), true)
-            || in_array($key, Feats::strings($actor, 'save_proficiency'), true);
+            || in_array($key, Feats::strings($actor, 'save_proficiency'), true)
+            || self::hasFeature((string) $norm['class'], (int) $norm['level'], 'diamond_soul');
     }
 
     /**
@@ -1223,12 +1241,11 @@ class Rules
             'value' => self::abilityMod($norm[$key]),
         ]];
 
-        // Resilient grants proficiency in one save, and it is the same
-        // proficiency the class grants rather than a second one stacked on top
-        // — a Fighter who takes Resilient (Constitution) is proficient once,
-        // not twice, which is why this is an OR and not two `parts` entries.
-        if (in_array($key, self::classSaveProficiencies($norm['class']), true)
-            || in_array($key, Feats::strings($actor, 'save_proficiency'), true)) {
+        // Proficiency once, however it was come by — the class's two, the
+        // Resilient feat, or a Monk's Diamond Soul. A Fighter who takes
+        // Resilient (Constitution) is proficient once and not twice, which is
+        // why this is one test and not a `parts` entry each.
+        if (self::saveProficiency($actor, $norm, $key)) {
             $parts[] = ['label' => 'Proficiency', 'value' => $norm['prof']];
         }
 

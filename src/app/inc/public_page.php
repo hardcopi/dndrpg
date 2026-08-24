@@ -46,6 +46,10 @@ const FEATURE_COPY = [
     'divine_smite'        => 'Burn a spell slot on a hit for 2d8 and more, with an extra die against the unclean.',
     'uncanny_dodge'       => 'Halve the damage of one attack you saw coming.',
     'arcane_recovery'     => 'Take slots back out of a short rest, once a day.',
+    'brutal_critical'     => 'Another weapon die on every melee critical — and it stacks with a half-orc\'s.',
+    'evasion'             => 'A save that would have halved the damage takes none of it; a failure takes half.',
+    'diamond_soul'        => 'Proficient in every saving throw, not only your class\'s two.',
+    'improved_divine_smite' => 'Every melee hit carries 1d8 radiant, with no slot spent on it.',
 
     // Rules::SUBCLASS_FEATURES
     'improved_critical'   => 'You crit on a 19 as well as a 20.',

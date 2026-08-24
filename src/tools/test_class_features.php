@@ -55,9 +55,17 @@ ok('a wizard has none of it', !Rules::hasFeature('Wizard', 6, 'action_surge'));
 ok('and neither does a class nobody has heard of',
     !Rules::hasFeature('Artificer', 6, 'reckless_attack'));
 
-same('the map the board is sent names only what is held',
-    ['reckless_attack' => true, 'danger_sense' => true, 'fast_movement' => false],
+// The map names every feature the CLASS has, with whether this level holds it —
+// so a feature added to CLASS_FEATURES appears here as `false` long before
+// anybody reaches it. Brutal Critical at 9th is why this row grew.
+same('the map the board is sent names the whole class, held or not',
+    ['reckless_attack' => true, 'danger_sense' => true, 'fast_movement' => false,
+     'brutal_critical' => false],
     Rules::featuresHeld('Barbarian', 2));
+same('and at 9th the last of them is held',
+    ['reckless_attack' => true, 'danger_sense' => true, 'fast_movement' => true,
+     'brutal_critical' => true],
+    Rules::featuresHeld('Barbarian', 9));
 same('and is empty for a class with none', [], Rules::featuresHeld('Sorcerer', 6));
 same('a wizard has exactly the one', ['arcane_recovery' => true],
     Rules::featuresHeld('Wizard', 6));
