@@ -49,6 +49,7 @@ means what it says.
 from __future__ import annotations
 
 import argparse
+import shlex
 import subprocess
 import sys
 from pathlib import Path
@@ -60,6 +61,27 @@ COMPOSE_DIR = ROOT.parent
 DB_SERVICE = "db"
 DB_USER = "web"
 DB_PASS = "devpassword"
+
+# How to reach a mysql client. The default is this project's compose stack,
+# which is where content is normally loaded. Production is not that: hermes
+# runs mysql natively and authenticates root over the socket, so there is no
+# `docker compose` to exec into and no password to pass. `--mysql` names the
+# client to run instead, and everything below goes through client_cmd() so the
+# two call sites cannot drift apart — one of them applies content.sql itself,
+# and a prefix that was right for the snapshot and wrong for the load would
+# take the snapshot from one database and rebuild another.
+CLIENT: list[str] | None = None
+
+
+def client_cmd() -> tuple[list[str], str | None]:
+    """The mysql invocation and the directory to run it in."""
+    if CLIENT is not None:
+        return list(CLIENT) + ["--default-character-set=utf8mb4"], None
+    return ([
+        "docker", "compose", "exec", "-T", DB_SERVICE,
+        "mysql", f"-u{DB_USER}", f"-p{DB_PASS}",
+        "--default-character-set=utf8mb4",
+    ], str(COMPOSE_DIR))
 
 
 # Each entry: the player table, a SELECT that renders its rows as content keys
@@ -245,13 +267,11 @@ SNAPSHOTS = [
 
 def mysql(database: str, sql: str, batch: bool = True) -> str:
     """One statement (or several) against one database, named explicitly."""
-    cmd = ["docker", "compose", "exec", "-T", DB_SERVICE,
-           "mysql", f"-u{DB_USER}", f"-p{DB_PASS}",
-           "--default-character-set=utf8mb4"]
+    cmd, cwd = client_cmd()
     if batch:
         cmd += ["-N", "-B"]
     cmd += [database, "-e", sql]
-    proc = subprocess.run(cmd, cwd=COMPOSE_DIR, capture_output=True, text=True)
+    proc = subprocess.run(cmd, cwd=cwd, capture_output=True, text=True)
     if proc.returncode != 0:
         err = "\n".join(l for l in proc.stderr.splitlines()
                         if "Using a password" not in l)
@@ -313,10 +333,9 @@ def apply_content(database: str) -> None:
         line for line in sql.splitlines()
         if not line.strip().lower().startswith("use ")
     )
-    cmd = ["docker", "compose", "exec", "-T", DB_SERVICE,
-           "mysql", f"-u{DB_USER}", f"-p{DB_PASS}",
-           "--default-character-set=utf8mb4", database]
-    proc = subprocess.run(cmd, cwd=COMPOSE_DIR, input=cleaned,
+    cmd, cwd = client_cmd()
+    cmd += [database]
+    proc = subprocess.run(cmd, cwd=cwd, input=cleaned,
                           capture_output=True, text=True)
     if proc.returncode != 0:
         err = "\n".join(l for l in proc.stderr.splitlines()
@@ -333,7 +352,15 @@ def main() -> int:
                     help="actually do it; without this nothing is written")
     ap.add_argument("--check", action="store_true",
                     help="report what is at risk and exit")
+    ap.add_argument("--mysql", default=None,
+                    help="mysql client to run, as a shell-style command "
+                         "(e.g. --mysql mysql). Default: this project's "
+                         "docker compose stack. Use it where there is none.")
     args = ap.parse_args()
+
+    if args.mysql:
+        global CLIENT
+        CLIENT = shlex.split(args.mysql)
 
     if not CONTENT_SQL.exists():
         print(f"No {CONTENT_SQL}. Run tools/load_content.py first.", file=sys.stderr)
