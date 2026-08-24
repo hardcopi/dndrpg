@@ -1,0 +1,73 @@
+{
+  "resistances": [
+    "cold"
+  ],
+  "immunities": [
+    "lightning",
+    "thunder"
+  ],
+  "vulnerabilities": [],
+  "condition_immunities": [],
+  "source": "5e SRD",
+  "monster_key": "storm_giant",
+  "name": "Storm Giant",
+  "size": "Huge",
+  "type": "giant",
+  "alignment": "chaotic good",
+  "armor_class": 16,
+  "hit_points": 230,
+  "hit_dice": "20d12+100",
+  "speed": "50 ft., swim 50 ft.",
+  "strength": 29,
+  "dexterity": 14,
+  "constitution": 20,
+  "intelligence": 16,
+  "wisdom": 18,
+  "charisma": 18,
+  "challenge_rating": 13,
+  "experience_points": 10000,
+  "traits": {
+    "Amphibious": "The giant can breathe air and water."
+  },
+  "actions": [
+    {
+      "name": "Greatsword",
+      "type": "melee",
+      "bonus": 14,
+      "damage": "6d6+9",
+      "damage_type": "slashing"
+    },
+    {
+      "name": "Rock",
+      "type": "ranged",
+      "bonus": 14,
+      "damage": "4d12+9",
+      "damage_type": "bludgeoning"
+    },
+    {
+      "name": "Lightning Strike",
+      "type": "ranged",
+      "bonus": 0,
+      "damage": "12d8",
+      "damage_type": "lightning",
+      "note": "A bolt of lightning. DC 17 Dexterity save for half.",
+      "save": {
+        "ability": "dex",
+        "dc": 17
+      },
+      "on_fail": {
+        "condition": "stunned",
+        "rounds": 1
+      }
+    }
+  ],
+  "saves": {
+    "str": 14,
+    "con": 10,
+    "wis": 9,
+    "cha": 9
+  },
+  "rank_pref": "front",
+  "sprite_key": "ogre",
+  "loot": []
+}

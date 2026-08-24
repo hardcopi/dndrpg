@@ -1,0 +1,60 @@
+{
+  "resistances": [],
+  "immunities": [],
+  "vulnerabilities": [],
+  "condition_immunities": [],
+  "source": "5e SRD",
+  "monster_key": "stone_giant",
+  "name": "Stone Giant",
+  "size": "Huge",
+  "type": "giant",
+  "alignment": "neutral",
+  "armor_class": 17,
+  "hit_points": 126,
+  "hit_dice": "11d12+55",
+  "speed": "40 ft.",
+  "strength": 23,
+  "dexterity": 15,
+  "constitution": 20,
+  "intelligence": 10,
+  "wisdom": 12,
+  "charisma": 9,
+  "challenge_rating": 7,
+  "experience_points": 2900,
+  "traits": {
+    "Stone Camouflage": "The giant has advantage on Stealth checks made to hide in rocky terrain."
+  },
+  "actions": [
+    {
+      "name": "Greatclub",
+      "type": "melee",
+      "bonus": 9,
+      "damage": "3d8+6",
+      "damage_type": "bludgeoning"
+    },
+    {
+      "name": "Rock",
+      "type": "ranged",
+      "bonus": 9,
+      "damage": "4d10+6",
+      "damage_type": "bludgeoning",
+      "note": "DC 17 Strength save or be knocked prone.",
+      "save": {
+        "ability": "str",
+        "dc": 17
+      },
+      "on_fail": {
+        "condition": "prone",
+        "rounds": 1
+      }
+    }
+  ],
+  "saves": {
+    "dex": 5,
+    "con": 8,
+    "wis": 4
+  },
+  "rank_pref": "front",
+  "sprite_key": "rock_man",
+  "loot": []
+}

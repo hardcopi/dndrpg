@@ -1,0 +1,27 @@
+{
+  "spell_key": "mass_cure_wounds",
+  "name": "Mass Cure Wounds",
+  "level": 5,
+  "school": "Evocation",
+  "casting_time": "1 action",
+  "range_text": "60 feet",
+  "components": "V, S",
+  "duration": "Instantaneous",
+  "description": "A wave of healing energy washes out from a point of your choosing within range.",
+  "concentration": false,
+  "duration_rounds": 0,
+  "target_kind": "all_allies",
+  "reaches_back_rank": true,
+  "source": "5e SRD",
+  "classes": [
+    "Bard",
+    "Cleric",
+    "Druid"
+  ],
+  "resolution": "heal",
+  "damage_dice": "3d8",
+  "damage_type": "healing",
+  "higher_level": {
+    "dice_per_level": "1d8"
+  }
+}

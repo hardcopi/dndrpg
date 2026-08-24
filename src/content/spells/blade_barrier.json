@@ -1,0 +1,24 @@
+{
+  "spell_key": "blade_barrier",
+  "name": "Blade Barrier",
+  "level": 6,
+  "school": "Evocation",
+  "casting_time": "1 action",
+  "range_text": "90 feet",
+  "components": "V, S",
+  "duration": "Concentration, up to 10 minutes",
+  "description": "You create a vertical wall of whirling, razor-sharp blades made of magical energy.",
+  "concentration": true,
+  "duration_rounds": 10,
+  "target_kind": "all_enemies",
+  "reaches_back_rank": true,
+  "source": "5e SRD",
+  "classes": [
+    "Cleric"
+  ],
+  "resolution": "save",
+  "save_ability": "dex",
+  "save_effect": "half",
+  "damage_dice": "6d10",
+  "damage_type": "slashing"
+}

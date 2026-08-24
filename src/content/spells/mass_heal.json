@@ -1,0 +1,22 @@
+{
+  "spell_key": "mass_heal",
+  "name": "Mass Heal",
+  "level": 9,
+  "school": "Evocation",
+  "casting_time": "1 action",
+  "range_text": "60 feet",
+  "components": "V, S",
+  "duration": "Instantaneous",
+  "description": "A flood of healing energy flows from you into injured creatures around you.",
+  "concentration": false,
+  "duration_rounds": 0,
+  "target_kind": "all_allies",
+  "reaches_back_rank": true,
+  "source": "5e SRD",
+  "classes": [
+    "Cleric"
+  ],
+  "resolution": "heal",
+  "damage_dice": "20d8",
+  "damage_type": "healing"
+}

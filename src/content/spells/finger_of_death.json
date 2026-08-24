@@ -1,0 +1,26 @@
+{
+  "spell_key": "finger_of_death",
+  "name": "Finger of Death",
+  "level": 7,
+  "school": "Necromancy",
+  "casting_time": "1 action",
+  "range_text": "60 feet",
+  "components": "V, S",
+  "duration": "Instantaneous",
+  "description": "You send negative energy coursing through a creature that you can see within range, causing it searing pain.",
+  "concentration": false,
+  "duration_rounds": 0,
+  "target_kind": "enemy",
+  "reaches_back_rank": true,
+  "source": "5e SRD",
+  "classes": [
+    "Sorcerer",
+    "Warlock",
+    "Wizard"
+  ],
+  "resolution": "save",
+  "save_ability": "con",
+  "save_effect": "half",
+  "damage_dice": "7d8+30",
+  "damage_type": "necrotic"
+}

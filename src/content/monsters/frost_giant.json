@@ -1,0 +1,51 @@
+{
+  "resistances": [],
+  "immunities": [
+    "cold"
+  ],
+  "vulnerabilities": [],
+  "condition_immunities": [],
+  "source": "5e SRD",
+  "monster_key": "frost_giant",
+  "name": "Frost Giant",
+  "size": "Huge",
+  "type": "giant",
+  "alignment": "neutral evil",
+  "armor_class": 15,
+  "hit_points": 138,
+  "hit_dice": "12d12+60",
+  "speed": "40 ft.",
+  "strength": 23,
+  "dexterity": 9,
+  "constitution": 21,
+  "intelligence": 9,
+  "wisdom": 10,
+  "charisma": 12,
+  "challenge_rating": 8,
+  "experience_points": 3900,
+  "traits": {},
+  "actions": [
+    {
+      "name": "Greataxe",
+      "type": "melee",
+      "bonus": 9,
+      "damage": "3d12+6",
+      "damage_type": "slashing"
+    },
+    {
+      "name": "Rock",
+      "type": "ranged",
+      "bonus": 9,
+      "damage": "4d10+6",
+      "damage_type": "bludgeoning"
+    }
+  ],
+  "saves": {
+    "con": 8,
+    "wis": 3,
+    "cha": 5
+  },
+  "rank_pref": "front",
+  "sprite_key": "ogre",
+  "loot": []
+}

@@ -1,0 +1,70 @@
+{
+  "resistances": [],
+  "immunities": [],
+  "vulnerabilities": [],
+  "condition_immunities": [],
+  "source": "5e SRD",
+  "monster_key": "purple_worm",
+  "name": "Purple Worm",
+  "size": "Gargantuan",
+  "type": "monstrosity",
+  "alignment": "unaligned",
+  "armor_class": 18,
+  "hit_points": 247,
+  "hit_dice": "15d20+90",
+  "speed": "50 ft., burrow 30 ft.",
+  "strength": 28,
+  "dexterity": 7,
+  "constitution": 22,
+  "intelligence": 1,
+  "wisdom": 8,
+  "charisma": 4,
+  "challenge_rating": 15,
+  "experience_points": 13000,
+  "traits": {
+    "Tunneler": "The worm burrows through solid rock at half its burrow speed."
+  },
+  "actions": [
+    {
+      "name": "Bite",
+      "type": "melee",
+      "bonus": 14,
+      "damage": "3d8+9",
+      "damage_type": "piercing",
+      "note": "DC 19 Dexterity save or be swallowed whole.",
+      "save": {
+        "ability": "dex",
+        "dc": 19
+      },
+      "on_fail": {
+        "condition": "restrained",
+        "rounds": 10,
+        "repeat_save": true
+      }
+    },
+    {
+      "name": "Tail Stinger",
+      "type": "melee",
+      "bonus": 14,
+      "damage": "3d6+9",
+      "damage_type": "piercing",
+      "note": "DC 19 Constitution save against the venom.",
+      "save": {
+        "ability": "con",
+        "dc": 19
+      },
+      "on_fail": {
+        "condition": "poisoned",
+        "rounds": 10,
+        "repeat_save": true
+      }
+    }
+  ],
+  "saves": {
+    "con": 11,
+    "wis": 4
+  },
+  "rank_pref": "front",
+  "sprite_key": "boss_worm",
+  "loot": []
+}

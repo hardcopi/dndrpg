@@ -1,0 +1,75 @@
+{
+  "resistances": [],
+  "immunities": [
+    "fire",
+    "poison",
+    "psychic"
+  ],
+  "vulnerabilities": [],
+  "condition_immunities": [
+    "charmed",
+    "frightened",
+    "paralyzed",
+    "poisoned"
+  ],
+  "source": "5e SRD",
+  "monster_key": "iron_golem",
+  "name": "Iron Golem",
+  "size": "Large",
+  "type": "construct",
+  "alignment": "unaligned",
+  "armor_class": 20,
+  "hit_points": 210,
+  "hit_dice": "20d10+100",
+  "speed": "30 ft.",
+  "strength": 24,
+  "dexterity": 9,
+  "constitution": 20,
+  "intelligence": 3,
+  "wisdom": 11,
+  "charisma": 1,
+  "challenge_rating": 16,
+  "experience_points": 15000,
+  "traits": {
+    "Magic Resistance": "Advantage on saving throws against spells and other magical effects.",
+    "Immutable Form": "Immune to any spell or effect that would alter its form.",
+    "Fire Absorption": "Damage from fire restores the golem instead of harming it."
+  },
+  "actions": [
+    {
+      "name": "Slam",
+      "type": "melee",
+      "bonus": 13,
+      "damage": "3d8+7",
+      "damage_type": "bludgeoning"
+    },
+    {
+      "name": "Sword",
+      "type": "melee",
+      "bonus": 13,
+      "damage": "3d10+7",
+      "damage_type": "slashing"
+    },
+    {
+      "name": "Poison Breath",
+      "type": "ranged",
+      "bonus": 0,
+      "damage": "10d8",
+      "damage_type": "poison",
+      "note": "A 15-foot cone of poison gas. DC 19 Constitution save for half.",
+      "save": {
+        "ability": "con",
+        "dc": 19
+      },
+      "on_fail": {
+        "condition": "poisoned",
+        "rounds": 5,
+        "repeat_save": true
+      }
+    }
+  ],
+  "saves": {},
+  "rank_pref": "front",
+  "sprite_key": "golem",
+  "loot": []
+}

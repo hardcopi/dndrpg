@@ -1,0 +1,29 @@
+{
+  "spell_key": "wall_of_fire",
+  "name": "Wall of Fire",
+  "level": 4,
+  "school": "Evocation",
+  "casting_time": "1 action",
+  "range_text": "120 feet",
+  "components": "V, S, M",
+  "duration": "Concentration, up to 1 minute",
+  "description": "You create a wall of fire on a solid surface within range. Each creature that ends its turn within 10 feet of the wall takes fire damage.",
+  "concentration": true,
+  "duration_rounds": 10,
+  "target_kind": "all_enemies",
+  "reaches_back_rank": true,
+  "source": "5e SRD",
+  "classes": [
+    "Druid",
+    "Sorcerer",
+    "Wizard"
+  ],
+  "resolution": "save",
+  "save_ability": "dex",
+  "save_effect": "half",
+  "damage_dice": "5d8",
+  "damage_type": "fire",
+  "higher_level": {
+    "dice_per_level": "1d8"
+  }
+}

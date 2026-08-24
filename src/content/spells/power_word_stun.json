@@ -1,0 +1,28 @@
+{
+  "spell_key": "power_word_stun",
+  "name": "Power Word Stun",
+  "level": 8,
+  "school": "Enchantment",
+  "casting_time": "1 action",
+  "range_text": "60 feet",
+  "components": "V",
+  "duration": "Instantaneous",
+  "description": "You speak a word of power that can overwhelm the mind of one creature you can see within range.",
+  "concentration": false,
+  "duration_rounds": 10,
+  "target_kind": "enemy",
+  "reaches_back_rank": true,
+  "source": "5e SRD",
+  "classes": [
+    "Bard",
+    "Sorcerer",
+    "Warlock",
+    "Wizard"
+  ],
+  "resolution": "debuff",
+  "save_ability": "con",
+  "save_effect": "negate",
+  "effect": {
+    "condition": "stunned"
+  }
+}

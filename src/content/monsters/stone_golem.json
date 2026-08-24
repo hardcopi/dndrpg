@@ -1,0 +1,66 @@
+{
+  "resistances": [],
+  "immunities": [
+    "poison",
+    "psychic"
+  ],
+  "vulnerabilities": [],
+  "condition_immunities": [
+    "charmed",
+    "frightened",
+    "paralyzed",
+    "poisoned"
+  ],
+  "source": "5e SRD",
+  "monster_key": "stone_golem",
+  "name": "Stone Golem",
+  "size": "Large",
+  "type": "construct",
+  "alignment": "unaligned",
+  "armor_class": 17,
+  "hit_points": 178,
+  "hit_dice": "17d10+85",
+  "speed": "30 ft.",
+  "strength": 22,
+  "dexterity": 9,
+  "constitution": 20,
+  "intelligence": 3,
+  "wisdom": 11,
+  "charisma": 1,
+  "challenge_rating": 10,
+  "experience_points": 5900,
+  "traits": {
+    "Magic Resistance": "Advantage on saving throws against spells and other magical effects.",
+    "Immutable Form": "Immune to any spell or effect that would alter its form."
+  },
+  "actions": [
+    {
+      "name": "Slam",
+      "type": "melee",
+      "bonus": 10,
+      "damage": "3d8+6",
+      "damage_type": "bludgeoning"
+    },
+    {
+      "name": "Slow",
+      "type": "ranged",
+      "bonus": 0,
+      "damage": "1d4",
+      "damage_type": "force",
+      "note": "DC 17 Wisdom save or be slowed to a crawl.",
+      "save": {
+        "ability": "wis",
+        "dc": 17
+      },
+      "on_fail": {
+        "condition": "restrained",
+        "rounds": 10,
+        "repeat_save": true
+      }
+    }
+  ],
+  "saves": {},
+  "rank_pref": "front",
+  "sprite_key": "golem",
+  "loot": []
+}

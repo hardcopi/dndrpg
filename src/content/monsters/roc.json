@@ -1,0 +1,61 @@
+{
+  "resistances": [],
+  "immunities": [],
+  "vulnerabilities": [],
+  "condition_immunities": [],
+  "source": "5e SRD",
+  "monster_key": "roc",
+  "name": "Roc",
+  "size": "Gargantuan",
+  "type": "monstrosity",
+  "alignment": "unaligned",
+  "armor_class": 15,
+  "hit_points": 248,
+  "hit_dice": "16d20+80",
+  "speed": "20 ft., fly 120 ft.",
+  "strength": 28,
+  "dexterity": 10,
+  "constitution": 20,
+  "intelligence": 3,
+  "wisdom": 10,
+  "charisma": 9,
+  "challenge_rating": 11,
+  "experience_points": 7200,
+  "traits": {
+    "Keen Sight": "Advantage on Perception checks that rely on sight."
+  },
+  "actions": [
+    {
+      "name": "Beak",
+      "type": "melee",
+      "bonus": 13,
+      "damage": "4d8+9",
+      "damage_type": "piercing"
+    },
+    {
+      "name": "Talons",
+      "type": "melee",
+      "bonus": 13,
+      "damage": "4d6+9",
+      "damage_type": "slashing",
+      "note": "DC 19 Strength save or be grappled.",
+      "save": {
+        "ability": "str",
+        "dc": 19
+      },
+      "on_fail": {
+        "condition": "grappled",
+        "rounds": 10,
+        "repeat_save": true
+      }
+    }
+  ],
+  "saves": {
+    "dex": 4,
+    "con": 9,
+    "wis": 4
+  },
+  "rank_pref": "front",
+  "sprite_key": "griffon",
+  "loot": []
+}

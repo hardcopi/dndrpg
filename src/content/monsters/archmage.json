@@ -1,0 +1,67 @@
+{
+  "resistances": [],
+  "immunities": [],
+  "vulnerabilities": [],
+  "condition_immunities": [],
+  "source": "5e SRD",
+  "monster_key": "archmage",
+  "name": "Archmage",
+  "size": "Medium",
+  "type": "humanoid",
+  "alignment": "any alignment",
+  "armor_class": 15,
+  "hit_points": 99,
+  "hit_dice": "18d8+18",
+  "speed": "30 ft.",
+  "strength": 10,
+  "dexterity": 14,
+  "constitution": 12,
+  "intelligence": 20,
+  "wisdom": 15,
+  "charisma": 16,
+  "challenge_rating": 12,
+  "experience_points": 8400,
+  "traits": {
+    "Magic Resistance": "Advantage on saving throws against spells and other magical effects."
+  },
+  "actions": [
+    {
+      "name": "Fire Bolt",
+      "type": "ranged",
+      "bonus": 9,
+      "damage": "4d10",
+      "damage_type": "fire"
+    },
+    {
+      "name": "Cone of Cold",
+      "type": "ranged",
+      "bonus": 0,
+      "damage": "8d8",
+      "damage_type": "cold",
+      "note": "A 60-foot cone. DC 17 Constitution save for half.",
+      "save": {
+        "ability": "con",
+        "dc": 17
+      },
+      "on_fail": {
+        "condition": "restrained",
+        "rounds": 2,
+        "repeat_save": true
+      }
+    },
+    {
+      "name": "Dagger",
+      "type": "melee",
+      "bonus": 6,
+      "damage": "1d4+2",
+      "damage_type": "piercing"
+    }
+  ],
+  "saves": {
+    "int": 9,
+    "wis": 6
+  },
+  "rank_pref": "back",
+  "sprite_key": "boss_wizard",
+  "loot": []
+}

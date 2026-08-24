@@ -1,0 +1,25 @@
+{
+  "spell_key": "meteor_swarm",
+  "name": "Meteor Swarm",
+  "level": 9,
+  "school": "Evocation",
+  "casting_time": "1 action",
+  "range_text": "1 mile",
+  "components": "V, S",
+  "duration": "Instantaneous",
+  "description": "Blazing orbs of fire plummet to the ground at four different points you can see within range.",
+  "concentration": false,
+  "duration_rounds": 0,
+  "target_kind": "all_enemies",
+  "reaches_back_rank": true,
+  "source": "5e SRD",
+  "classes": [
+    "Sorcerer",
+    "Wizard"
+  ],
+  "resolution": "save",
+  "save_ability": "dex",
+  "save_effect": "half",
+  "damage_dice": "20d6",
+  "damage_type": "fire"
+}

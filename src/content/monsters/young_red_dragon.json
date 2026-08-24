@@ -1,0 +1,70 @@
+{
+  "resistances": [],
+  "immunities": [
+    "fire"
+  ],
+  "vulnerabilities": [],
+  "condition_immunities": [],
+  "source": "5e SRD",
+  "monster_key": "young_red_dragon",
+  "name": "Young Red Dragon",
+  "size": "Large",
+  "type": "dragon",
+  "alignment": "chaotic evil",
+  "armor_class": 18,
+  "hit_points": 178,
+  "hit_dice": "17d10+85",
+  "speed": "40 ft., climb 40 ft., fly 80 ft.",
+  "strength": 23,
+  "dexterity": 10,
+  "constitution": 21,
+  "intelligence": 14,
+  "wisdom": 11,
+  "charisma": 19,
+  "challenge_rating": 10,
+  "experience_points": 5900,
+  "traits": {
+    "Fire Breath": "The dragon exhales fire in a 30-foot cone when it recharges."
+  },
+  "actions": [
+    {
+      "name": "Bite",
+      "type": "melee",
+      "bonus": 10,
+      "damage": "2d10+6",
+      "damage_type": "piercing"
+    },
+    {
+      "name": "Claw",
+      "type": "melee",
+      "bonus": 10,
+      "damage": "2d6+6",
+      "damage_type": "slashing"
+    },
+    {
+      "name": "Fire Breath",
+      "type": "ranged",
+      "bonus": 0,
+      "damage": "16d6",
+      "damage_type": "fire",
+      "note": "A 30-foot cone of fire. DC 17 Dexterity save for half.",
+      "save": {
+        "ability": "dex",
+        "dc": 17
+      },
+      "on_fail": {
+        "condition": "prone",
+        "rounds": 1
+      }
+    }
+  ],
+  "saves": {
+    "dex": 4,
+    "con": 9,
+    "wis": 4,
+    "cha": 8
+  },
+  "rank_pref": "front",
+  "sprite_key": "dragon",
+  "loot": []
+}

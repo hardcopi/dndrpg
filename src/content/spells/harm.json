@@ -1,0 +1,24 @@
+{
+  "spell_key": "harm",
+  "name": "Harm",
+  "level": 6,
+  "school": "Necromancy",
+  "casting_time": "1 action",
+  "range_text": "60 feet",
+  "components": "V, S",
+  "duration": "Instantaneous",
+  "description": "You unleash a virulent disease on a creature that you can see within range.",
+  "concentration": false,
+  "duration_rounds": 0,
+  "target_kind": "enemy",
+  "reaches_back_rank": true,
+  "source": "5e SRD",
+  "classes": [
+    "Cleric"
+  ],
+  "resolution": "save",
+  "save_ability": "con",
+  "save_effect": "half",
+  "damage_dice": "14d6",
+  "damage_type": "necrotic"
+}

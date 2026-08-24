@@ -1,0 +1,84 @@
+{
+  "resistances": [
+    "cold",
+    "lightning",
+    "necrotic"
+  ],
+  "immunities": [
+    "poison"
+  ],
+  "vulnerabilities": [],
+  "condition_immunities": [
+    "charmed",
+    "frightened",
+    "paralyzed",
+    "poisoned"
+  ],
+  "source": "5e SRD",
+  "monster_key": "lich",
+  "name": "Lich",
+  "size": "Medium",
+  "type": "undead",
+  "alignment": "any evil alignment",
+  "armor_class": 17,
+  "hit_points": 135,
+  "hit_dice": "18d8+54",
+  "speed": "30 ft.",
+  "strength": 11,
+  "dexterity": 16,
+  "constitution": 16,
+  "intelligence": 20,
+  "wisdom": 14,
+  "charisma": 16,
+  "challenge_rating": 21,
+  "experience_points": 33000,
+  "traits": {
+    "Magic Resistance": "Advantage on saving throws against spells and other magical effects.",
+    "Rejuvenation": "If it has a phylactery, a destroyed lich gains a new body in 1d10 days.",
+    "Turn Resistance": "Advantage on saving throws against any effect that turns undead."
+  },
+  "actions": [
+    {
+      "name": "Paralyzing Touch",
+      "type": "melee",
+      "bonus": 12,
+      "damage": "3d6",
+      "damage_type": "cold",
+      "note": "DC 18 Constitution save or be paralysed.",
+      "save": {
+        "ability": "con",
+        "dc": 18
+      },
+      "on_fail": {
+        "condition": "paralyzed",
+        "rounds": 10,
+        "repeat_save": true
+      }
+    },
+    {
+      "name": "Finger of Death",
+      "type": "ranged",
+      "bonus": 0,
+      "damage": "7d8+30",
+      "damage_type": "necrotic",
+      "note": "DC 18 Constitution save for half.",
+      "save": {
+        "ability": "con",
+        "dc": 18
+      },
+      "on_fail": {
+        "condition": "frightened",
+        "rounds": 2,
+        "repeat_save": true
+      }
+    }
+  ],
+  "saves": {
+    "con": 10,
+    "int": 12,
+    "wis": 9
+  },
+  "rank_pref": "back",
+  "sprite_key": "boss_wizard",
+  "loot": []
+}

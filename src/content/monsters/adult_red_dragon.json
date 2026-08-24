@@ -1,0 +1,71 @@
+{
+  "resistances": [],
+  "immunities": [
+    "fire"
+  ],
+  "vulnerabilities": [],
+  "condition_immunities": [],
+  "source": "5e SRD",
+  "monster_key": "adult_red_dragon",
+  "name": "Adult Red Dragon",
+  "size": "Huge",
+  "type": "dragon",
+  "alignment": "chaotic evil",
+  "armor_class": 19,
+  "hit_points": 256,
+  "hit_dice": "19d12+133",
+  "speed": "40 ft., climb 40 ft., fly 80 ft.",
+  "strength": 27,
+  "dexterity": 10,
+  "constitution": 25,
+  "intelligence": 16,
+  "wisdom": 13,
+  "charisma": 21,
+  "challenge_rating": 17,
+  "experience_points": 18000,
+  "traits": {
+    "Fire Breath": "The dragon exhales fire in a 60-foot cone when it recharges.",
+    "Frightful Presence": "Each creature within 120 feet must succeed on a DC 19 Wisdom save or be frightened."
+  },
+  "actions": [
+    {
+      "name": "Bite",
+      "type": "melee",
+      "bonus": 14,
+      "damage": "2d10+8",
+      "damage_type": "piercing"
+    },
+    {
+      "name": "Claw",
+      "type": "melee",
+      "bonus": 14,
+      "damage": "2d6+8",
+      "damage_type": "slashing"
+    },
+    {
+      "name": "Fire Breath",
+      "type": "ranged",
+      "bonus": 0,
+      "damage": "18d6",
+      "damage_type": "fire",
+      "note": "A 60-foot cone of fire. DC 21 Dexterity save for half.",
+      "save": {
+        "ability": "dex",
+        "dc": 21
+      },
+      "on_fail": {
+        "condition": "prone",
+        "rounds": 1
+      }
+    }
+  ],
+  "saves": {
+    "dex": 6,
+    "con": 13,
+    "wis": 7,
+    "cha": 11
+  },
+  "rank_pref": "front",
+  "sprite_key": "dragon",
+  "loot": []
+}

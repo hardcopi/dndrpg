@@ -1,0 +1,72 @@
+{
+  "resistances": [],
+  "immunities": [
+    "acid"
+  ],
+  "vulnerabilities": [],
+  "condition_immunities": [],
+  "source": "5e SRD",
+  "monster_key": "adult_black_dragon",
+  "name": "Adult Black Dragon",
+  "size": "Huge",
+  "type": "dragon",
+  "alignment": "chaotic evil",
+  "armor_class": 19,
+  "hit_points": 195,
+  "hit_dice": "17d12+85",
+  "speed": "40 ft., fly 80 ft., swim 40 ft.",
+  "strength": 23,
+  "dexterity": 14,
+  "constitution": 21,
+  "intelligence": 14,
+  "wisdom": 13,
+  "charisma": 17,
+  "challenge_rating": 14,
+  "experience_points": 11500,
+  "traits": {
+    "Amphibious": "The dragon can breathe air and water.",
+    "Acid Breath": "The dragon exhales acid in a 60-foot line when it recharges."
+  },
+  "actions": [
+    {
+      "name": "Bite",
+      "type": "melee",
+      "bonus": 11,
+      "damage": "2d10+7",
+      "damage_type": "piercing"
+    },
+    {
+      "name": "Claw",
+      "type": "melee",
+      "bonus": 11,
+      "damage": "2d6+7",
+      "damage_type": "slashing"
+    },
+    {
+      "name": "Acid Breath",
+      "type": "ranged",
+      "bonus": 0,
+      "damage": "12d8",
+      "damage_type": "acid",
+      "note": "A 60-foot line of acid. DC 18 Dexterity save for half.",
+      "save": {
+        "ability": "dex",
+        "dc": 18
+      },
+      "on_fail": {
+        "condition": "blinded",
+        "rounds": 2,
+        "repeat_save": true
+      }
+    }
+  ],
+  "saves": {
+    "dex": 7,
+    "con": 10,
+    "wis": 6,
+    "cha": 8
+  },
+  "rank_pref": "front",
+  "sprite_key": "dragon",
+  "loot": []
+}

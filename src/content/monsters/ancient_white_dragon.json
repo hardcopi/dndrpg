@@ -1,0 +1,74 @@
+{
+  "resistances": [],
+  "immunities": [
+    "cold"
+  ],
+  "vulnerabilities": [],
+  "condition_immunities": [],
+  "source": "5e SRD",
+  "monster_key": "ancient_white_dragon",
+  "name": "Ancient White Dragon",
+  "size": "Gargantuan",
+  "type": "dragon",
+  "alignment": "chaotic evil",
+  "armor_class": 20,
+  "hit_points": 333,
+  "hit_dice": "18d20+144",
+  "speed": "40 ft., burrow 40 ft., fly 80 ft., swim 40 ft.",
+  "strength": 26,
+  "dexterity": 10,
+  "constitution": 26,
+  "intelligence": 10,
+  "wisdom": 13,
+  "charisma": 18,
+  "challenge_rating": 20,
+  "experience_points": 25000,
+  "traits": {
+    "Ice Walk": "The dragon moves across icy surfaces without an ability check.",
+    "Cold Breath": "The dragon exhales an icy blast in a 90-foot cone when it recharges.",
+    "Frightful Presence": "Each creature within 120 feet must succeed on a DC 19 Wisdom save or be frightened."
+  },
+  "actions": [
+    {
+      "name": "Bite",
+      "type": "melee",
+      "bonus": 14,
+      "damage": "2d10+8",
+      "damage_type": "piercing",
+      "note": "The cold comes off it with the teeth."
+    },
+    {
+      "name": "Claw",
+      "type": "melee",
+      "bonus": 14,
+      "damage": "2d6+8",
+      "damage_type": "slashing"
+    },
+    {
+      "name": "Cold Breath",
+      "type": "ranged",
+      "bonus": 0,
+      "damage": "16d8",
+      "damage_type": "cold",
+      "note": "A 90-foot cone of frost. DC 22 Constitution save for half.",
+      "save": {
+        "ability": "con",
+        "dc": 22
+      },
+      "on_fail": {
+        "condition": "restrained",
+        "rounds": 2,
+        "repeat_save": true
+      }
+    }
+  ],
+  "saves": {
+    "dex": 6,
+    "con": 14,
+    "wis": 8,
+    "cha": 11
+  },
+  "rank_pref": "front",
+  "sprite_key": "dragon",
+  "loot": []
+}

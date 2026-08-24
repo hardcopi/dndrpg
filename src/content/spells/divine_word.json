@@ -1,0 +1,25 @@
+{
+  "spell_key": "divine_word",
+  "name": "Divine Word",
+  "level": 7,
+  "school": "Evocation",
+  "casting_time": "1 action",
+  "range_text": "30 feet",
+  "components": "V",
+  "duration": "Instantaneous",
+  "description": "You utter a word imbued with power that shapes the universe. Each creature that can hear you is struck by it.",
+  "concentration": false,
+  "duration_rounds": 2,
+  "target_kind": "all_enemies",
+  "reaches_back_rank": true,
+  "source": "5e SRD",
+  "classes": [
+    "Cleric"
+  ],
+  "resolution": "debuff",
+  "save_ability": "cha",
+  "save_effect": "negate",
+  "effect": {
+    "condition": "stunned"
+  }
+}

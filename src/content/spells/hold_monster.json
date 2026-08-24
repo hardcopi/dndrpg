@@ -1,0 +1,28 @@
+{
+  "spell_key": "hold_monster",
+  "name": "Hold Monster",
+  "level": 5,
+  "school": "Enchantment",
+  "casting_time": "1 action",
+  "range_text": "90 feet",
+  "components": "V, S, M",
+  "duration": "Concentration, up to 1 minute",
+  "description": "Choose a creature that you can see within range. The target must succeed on a Wisdom saving throw or be paralysed for the duration.",
+  "concentration": true,
+  "duration_rounds": 10,
+  "target_kind": "enemy",
+  "reaches_back_rank": true,
+  "source": "5e SRD",
+  "classes": [
+    "Bard",
+    "Sorcerer",
+    "Warlock",
+    "Wizard"
+  ],
+  "resolution": "debuff",
+  "save_ability": "wis",
+  "save_effect": "negate",
+  "effect": {
+    "condition": "paralyzed"
+  }
+}

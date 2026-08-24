@@ -1,0 +1,51 @@
+{
+  "resistances": [],
+  "immunities": [
+    "fire"
+  ],
+  "vulnerabilities": [],
+  "condition_immunities": [],
+  "source": "5e SRD",
+  "monster_key": "fire_giant",
+  "name": "Fire Giant",
+  "size": "Huge",
+  "type": "giant",
+  "alignment": "lawful evil",
+  "armor_class": 18,
+  "hit_points": 162,
+  "hit_dice": "13d12+78",
+  "speed": "30 ft.",
+  "strength": 25,
+  "dexterity": 9,
+  "constitution": 23,
+  "intelligence": 10,
+  "wisdom": 14,
+  "charisma": 13,
+  "challenge_rating": 9,
+  "experience_points": 5000,
+  "traits": {},
+  "actions": [
+    {
+      "name": "Greatsword",
+      "type": "melee",
+      "bonus": 11,
+      "damage": "6d6+7",
+      "damage_type": "slashing"
+    },
+    {
+      "name": "Rock",
+      "type": "ranged",
+      "bonus": 11,
+      "damage": "4d10+7",
+      "damage_type": "bludgeoning"
+    }
+  ],
+  "saves": {
+    "dex": 3,
+    "con": 10,
+    "cha": 5
+  },
+  "rank_pref": "front",
+  "sprite_key": "ogre",
+  "loot": []
+}

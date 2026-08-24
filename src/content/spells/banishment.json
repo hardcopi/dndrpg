@@ -1,0 +1,29 @@
+{
+  "spell_key": "banishment",
+  "name": "Banishment",
+  "level": 4,
+  "school": "Abjuration",
+  "casting_time": "1 action",
+  "range_text": "60 feet",
+  "components": "V, S, M",
+  "duration": "Concentration, up to 1 minute",
+  "description": "You attempt to send one creature that you can see within range to another plane of existence.",
+  "concentration": true,
+  "duration_rounds": 10,
+  "target_kind": "enemy",
+  "reaches_back_rank": true,
+  "source": "5e SRD",
+  "classes": [
+    "Cleric",
+    "Paladin",
+    "Sorcerer",
+    "Warlock",
+    "Wizard"
+  ],
+  "resolution": "debuff",
+  "save_ability": "cha",
+  "save_effect": "negate",
+  "effect": {
+    "condition": "incapacitated"
+  }
+}

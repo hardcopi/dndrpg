@@ -1,0 +1,63 @@
+{
+  "resistances": [],
+  "immunities": [],
+  "vulnerabilities": [],
+  "condition_immunities": [],
+  "source": "5e SRD",
+  "monster_key": "chimera",
+  "name": "Chimera",
+  "size": "Large",
+  "type": "monstrosity",
+  "alignment": "chaotic evil",
+  "armor_class": 14,
+  "hit_points": 114,
+  "hit_dice": "12d10+48",
+  "speed": "30 ft., fly 60 ft.",
+  "strength": 19,
+  "dexterity": 11,
+  "constitution": 19,
+  "intelligence": 3,
+  "wisdom": 14,
+  "charisma": 10,
+  "challenge_rating": 6,
+  "experience_points": 2300,
+  "traits": {
+    "Fire Breath": "The dragon head exhales fire in a 15-foot cone when it recharges."
+  },
+  "actions": [
+    {
+      "name": "Bite",
+      "type": "melee",
+      "bonus": 7,
+      "damage": "2d6+4",
+      "damage_type": "piercing"
+    },
+    {
+      "name": "Horns",
+      "type": "melee",
+      "bonus": 7,
+      "damage": "1d12+4",
+      "damage_type": "bludgeoning"
+    },
+    {
+      "name": "Fire Breath",
+      "type": "ranged",
+      "bonus": 0,
+      "damage": "7d8",
+      "damage_type": "fire",
+      "note": "A 15-foot cone of fire. DC 15 Dexterity save for half.",
+      "save": {
+        "ability": "dex",
+        "dc": 15
+      },
+      "on_fail": {
+        "condition": "prone",
+        "rounds": 1
+      }
+    }
+  ],
+  "saves": {},
+  "rank_pref": "front",
+  "sprite_key": "chimera",
+  "loot": []
+}

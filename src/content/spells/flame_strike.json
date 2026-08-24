@@ -1,0 +1,27 @@
+{
+  "spell_key": "flame_strike",
+  "name": "Flame Strike",
+  "level": 5,
+  "school": "Evocation",
+  "casting_time": "1 action",
+  "range_text": "60 feet",
+  "components": "V, S, M",
+  "duration": "Instantaneous",
+  "description": "A vertical column of divine fire roars down from the heavens in a location you specify.",
+  "concentration": false,
+  "duration_rounds": 0,
+  "target_kind": "all_enemies",
+  "reaches_back_rank": true,
+  "source": "5e SRD",
+  "classes": [
+    "Cleric"
+  ],
+  "resolution": "save",
+  "save_ability": "dex",
+  "save_effect": "half",
+  "damage_dice": "4d6",
+  "damage_type": "fire",
+  "higher_level": {
+    "dice_per_level": "1d6"
+  }
+}

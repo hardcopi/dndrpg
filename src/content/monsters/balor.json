@@ -1,0 +1,71 @@
+{
+  "resistances": [
+    "cold",
+    "lightning"
+  ],
+  "immunities": [
+    "fire",
+    "poison"
+  ],
+  "vulnerabilities": [],
+  "condition_immunities": [
+    "poisoned"
+  ],
+  "source": "5e SRD",
+  "monster_key": "balor",
+  "name": "Balor",
+  "size": "Huge",
+  "type": "fiend",
+  "alignment": "chaotic evil",
+  "armor_class": 19,
+  "hit_points": 262,
+  "hit_dice": "21d12+126",
+  "speed": "40 ft., fly 80 ft.",
+  "strength": 26,
+  "dexterity": 15,
+  "constitution": 22,
+  "intelligence": 20,
+  "wisdom": 16,
+  "charisma": 22,
+  "challenge_rating": 19,
+  "experience_points": 22000,
+  "traits": {
+    "Fire Aura": "A creature that hits the balor with a melee attack takes 3d6 fire damage.",
+    "Magic Resistance": "Advantage on saving throws against spells and other magical effects."
+  },
+  "actions": [
+    {
+      "name": "Longsword",
+      "type": "melee",
+      "bonus": 14,
+      "damage": "3d8+8",
+      "damage_type": "slashing",
+      "note": "The blade carries lightning as well as steel."
+    },
+    {
+      "name": "Whip",
+      "type": "melee",
+      "bonus": 14,
+      "damage": "2d6+8",
+      "damage_type": "slashing",
+      "note": "Reach 30 ft. DC 20 Strength save or be dragged off your feet.",
+      "save": {
+        "ability": "str",
+        "dc": 20
+      },
+      "on_fail": {
+        "condition": "prone",
+        "rounds": 1
+      }
+    }
+  ],
+  "saves": {
+    "str": 14,
+    "con": 13,
+    "wis": 9,
+    "cha": 12
+  },
+  "rank_pref": "front",
+  "sprite_key": "balor",
+  "loot": []
+}
