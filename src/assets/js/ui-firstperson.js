@@ -223,14 +223,23 @@
   const poly = (pts) => pts.map((p) => p[0] + ',' + p[1]).join(' ');
 
   /**
-   * Which surfaces carry grain, and how big the stones are at the near band.
+   * Which surfaces are textured, and HOW MANY TEXTURE SHEETS COVER ONE DUNGEON
+   * TILE. One means a wall face shows the whole brick sheet once, which is
+   * about ten courses of stone across a ten-foot wall.
    *
-   * The roof is not here on purpose: it is nearly black at every band and grain
-   * on it is noise nobody can see. `tile` is in the picture's own units — a
-   * whole tile projects to about F across at z = 1, so 24 puts roughly eight
-   * courses of brick on the nearest wall.
+   * Expressed as a ratio rather than as a size in picture units, which is what
+   * it was first and what made it wrong: 26 units against a face that projects
+   * to F across at the near band is 7.3 repeats, and 7.3 repeats of a
+   * ten-course sheet is seventy courses of brick on one wall. At that size the
+   * stones are a couple of units each, they average out, and the whole thing
+   * reads as a pale wash rather than as masonry — which is exactly how it
+   * looked. A ratio cannot go wrong that way: the projection is applied to it
+   * in defs() rather than guessed at here.
+   *
+   * The roof is not here on purpose: it is nearly black at every band, and a
+   * texture nobody can see the result of is a request nobody should pay for.
    */
-  const GRAIN = { wall: 26, side: 26, floor: 34 };
+  const GRAIN = { wall: 1, side: 1, floor: 1 };
 
   /**
    * How much of the band's token colour is laid OVER the texture, per depth.
@@ -242,7 +251,7 @@
    * as it crossed the boundary, and 0.92 keeps a suggestion of stone in the
    * dark.
    */
-  const SCRIM = [0.12, 0.3, 0.48, 0.64, 0.8, 0.92];
+  const SCRIM = [0.06, 0.2, 0.36, 0.54, 0.72, 0.88];
 
   /**
    * A surface's paint.
@@ -270,18 +279,21 @@
   /**
    * The paint servers, one per surface and band.
    *
-   * The stones grow toward the viewer, which is the whole of the perspective
-   * this gets: an SVG pattern cannot foreshorten, so a far wall carrying the
-   * same brick at the same size as a near one would read as wallpaper. Scaling
-   * the tile by the band is not correct projection and it is not pretending to
-   * be — it is the cheap approximation that makes distance legible, and at the
-   * opacities in GRAIN_FADE the eye takes it as surface rather than as pattern.
+   * The stones grow toward the viewer, and the rate is the projection's own:
+   * a one-tile face at depth z is F/z units across, so a sheet covering one
+   * tile is F/z units too. That is not a fudge — it is the same divide proj()
+   * does. What it cannot do is foreshorten WITHIN a face, so a wall running
+   * away from the viewer carries stones of one size along its whole length
+   * instead of converging. At one sheet per tile the eye takes that as masonry
+   * courses; at seven it took it as noise.
    */
   function defs(base) {
     const out = [];
     for (const surface of Object.keys(GRAIN)) {
       for (let band = 0; band <= DEPTH; band++) {
-        const size = GRAIN[surface] / (band + 1);
+        // The projection, applied once, here: F/z units per tile, divided by
+        // how many sheets are asked to cover it.
+        const size = F / ((band + 1) * GRAIN[surface]);
         const scrim = SCRIM[Math.min(band, SCRIM.length - 1)];
         out.push(
           '<pattern id="fp-' + surface + '-' + band + '" patternUnits="userSpaceOnUse" ' +
