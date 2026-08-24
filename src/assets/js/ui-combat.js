@@ -54,26 +54,41 @@
   };
 
   /**
-   * Slots that arm before they fire.
+   * Slots that arm before they fire: the ones that COST THE WHOLE TURN.
    *
-   * Every other action on the bar has a step between the click and the spending:
-   * Attack, Grapple, Help and the rest refuse to fire without a target selected,
-   * and Cast and Item open a picker that can be closed. These have neither —
-   * they commit the instant they are clicked, and spend an action, a bonus
-   * action or a daily use doing it. There is no undo in a fight, so a stray
-   * click on Dodge cost the whole turn.
+   * Every other action on the bar has a step between the click and the spending
+   * — Attack, Grapple and Help refuse to fire without a target, Cast and Item
+   * open a picker that can be closed. These four have neither: they commit on
+   * the click and there is no undo in a fight, so a stray one used to bin the
+   * turn.
+   *
+   * THE LINE IS "SPENDS THE ACTION", and it is drawn where the engine draws it
+   * rather than by eye. Dash, Dodge, Disengage and Channel Divinity all call
+   * `CombatEngine::acting($state)` — which refuses a character whose action is
+   * gone — and then set `action_used`. The three that used to be in this list
+   * and are not any more fail that test:
+   *
+   *   surge          doActionSurge sets `action_used => false`. It GIVES the
+   *                  action back; guarding it is guarding the undo.
+   *   divine_sense   `acting($state, false)` — it does not need the action and
+   *                  does not spend it.
+   *   bonus          Rage, Second Wind, Cunning Action. A bonus action, not the
+   *                  turn — and Rage carries a visible count of what is left,
+   *                  which is a different kind of mistake from silently
+   *                  throwing the turn away.
    *
    * One click arms the slot, the second commits it, and anything else puts it
    * back: a different slot, a few seconds' pause, or the bar redrawing under it.
    * Attack is deliberately NOT here — it is the verb the bar exists for, and
    * making the common case cost two clicks to save the rare one is a bad trade.
    */
-  const ARM_FIRST = new Set([
-    'dash', 'dodge', 'disengage', 'surge', 'channel', 'divine_sense', 'bonus',
-  ]);
+  const ARM_FIRST = new Set(['dash', 'dodge', 'disengage', 'channel']);
 
   /** How long an armed slot waits for its second click before forgetting. */
   const ARM_MS = 3000;
+
+  /** Said in three places at once — tooltip, slot face, and screen reader. */
+  const ARM_PROMPT = 'Click again — this spends your action';
 
   /** The pending disarm, so that arming a second slot cancels the first's. */
   let armTimer = null;
@@ -1375,7 +1390,8 @@
       <span class="act-text">
         <span class="act-name">${esc(b.label)}</span>
         <span class="act-desc">${esc(b.why)}</span>
-      </span>`}
+      </span>
+      <span class="act-confirm" aria-hidden="true">Click again</span>`}
       ${b.end ? esc(b.label) : ''}
     </button>`;
   }
@@ -1423,8 +1439,21 @@
   function armSlot(btn, scope) {
     disarmAll(scope);
     btn.dataset.whyWas = btn.dataset.why || '';
-    btn.dataset.why = 'Click again to confirm — this spends it';
-    btn.setAttribute('aria-label', `${btn.dataset.label || ''} — click again to confirm`);
+    btn.dataset.why = ARM_PROMPT;
+    btn.setAttribute('aria-label', `${btn.dataset.label || ''} — ${ARM_PROMPT}`);
+
+    // The DESCRIPTION on the face of the slot, and not only the tooltip's copy
+    // of it. In the stacked layout `.act-tip` is display:none and `.act-desc`
+    // is the only text there is, so swapping `data-why` alone changed nothing a
+    // player could see: the slot went gold and went on giving the reason to
+    // press it. The banner below covers the icon layout, where `.act-text` is
+    // hidden and the tooltip needs a pointer that a touch never provides.
+    const desc = btn.querySelector('.act-desc');
+    if (desc) {
+      btn.dataset.descWas = desc.textContent;
+      desc.textContent = ARM_PROMPT;
+    }
+
     btn.classList.add('is-armed');
     showTip(btn);
     armTimer = setTimeout(() => disarmSlot(btn), ARM_MS);
@@ -1435,6 +1464,11 @@
     btn.classList.remove('is-armed');
     btn.dataset.why = btn.dataset.whyWas || '';
     delete btn.dataset.whyWas;
+    const desc = btn.querySelector('.act-desc');
+    if (desc && btn.dataset.descWas !== undefined) {
+      desc.textContent = btn.dataset.descWas;
+      delete btn.dataset.descWas;
+    }
     btn.setAttribute('aria-label', btn.dataset.label || '');
   }
 
