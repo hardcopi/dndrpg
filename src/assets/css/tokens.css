@@ -372,6 +372,14 @@
   --fp-leaf-line: #170e04;
   --fp-bars: #8a8f96;                /* a portcullis, which you see through */
 
+  /* Door furniture: straps, studs and the ring. Dark, because this iron lies
+     ON a lit wooden leaf rather than across a dark opening — `--fp-bars` is
+     pale so a portcullis reads against the black behind it, and the same grey
+     on a door came out as painted bands rather than ironwork. The lit tone is
+     for the studs alone, so a rivet reads as domed rather than as a dot. */
+  --fp-iron: #2b2621;
+  --fp-iron-lit: #5a5147;
+
   /* ==================================================================
    * TERRAIN — the battlefield's 16×12 board
    *

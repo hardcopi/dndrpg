@@ -412,8 +412,86 @@
     }
     list.push({
       z: z - 0.001,
-      svg: '<polygon class="' + cls + '" points="' + poly(corners) + '"/>',
+      svg: '<polygon class="' + cls + '" points="' + poly(corners) + '"/>'
+         + ironwork(corners),
     });
+  }
+
+  /**
+   * The boards and the iron on a door leaf.
+   *
+   * A leaf was one flat quad, which read as a panel rather than as a door. This
+   * is what a door in this setting is made of: three or four vertical boards,
+   * two iron straps across them, studs along the straps, and a ring to pull it
+   * by. All of it is drawn INSIDE the quad the wall already cut, by bilinear
+   * interpolation between its corners — so it leans and foreshortens with the
+   * face for free, and a door in the left-hand wall is seen at the same slant
+   * as the wall it is set in. That is the one piece of real perspective in this
+   * whole view, and it comes from the corners rather than from any matrix.
+   *
+   * IT DISAPPEARS BEFORE IT BECOMES NOISE. Below about fourteen units across, a
+   * door is a few pixels wide and studs on it are dirt on the screen; under
+   * that only the plain leaf is drawn, which is still the sign that a way out
+   * is there. The strap count drops before the studs do, for the same reason.
+   *
+   * Colour is left to CSS as everything else here is, so `is-locked` still
+   * darkens the whole leaf and `is-stuck` still dashes its outline underneath.
+   */
+  function ironwork(corners) {
+    const [a, b, c, d] = corners;
+
+    // How wide the leaf actually is on screen, taken across its middle rather
+    // than along an edge: a door in a side wall has a short near edge and a
+    // long far one, and the average is what the eye is judging.
+    const wide = (Math.hypot(b[0] - a[0], b[1] - a[1])
+                + Math.hypot(c[0] - d[0], c[1] - d[1])) / 2;
+    if (wide < 14) return '';
+
+    // Bilinear across the quad: u runs a to b along the foot, v runs foot to
+    // head. Straight lines in this space follow the face's own slant.
+    const at = (u, v) => [
+      px(a[0] + (b[0] - a[0]) * u + (d[0] - a[0]) * v + (a[0] - b[0] + c[0] - d[0]) * u * v),
+      px(a[1] + (b[1] - a[1]) * u + (d[1] - a[1]) * v + (a[1] - b[1] + c[1] - d[1]) * u * v),
+    ];
+    const line = (u0, v0, u1, v1) => {
+      const p0 = at(u0, v0);
+      const p1 = at(u1, v1);
+      return '<line x1="' + p0[0] + '" y1="' + p0[1] +
+             '" x2="' + p1[0] + '" y2="' + p1[1] + '"/>';
+    };
+    const band = (v0, v1) => '<polygon points="' +
+      poly([at(0, v0), at(1, v0), at(1, v1), at(0, v1)]) + '"/>';
+
+    const out = [];
+
+    // The boards. Four of them on a wide door, three on a narrow one — a
+    // seam every few pixels is a texture, not joinery.
+    const seams = wide > 34 ? [0.25, 0.5, 0.75] : [0.34, 0.67];
+    out.push('<g class="fp-plank">' +
+      seams.map((u) => line(u, 0.02, u, 0.98)).join('') + '</g>');
+
+    // The straps. Two where there is room for two.
+    const straps = wide > 22 ? [[0.17, 0.27], [0.65, 0.75]] : [[0.58, 0.7]];
+    out.push('<g class="fp-strap">' + straps.map(([v0, v1]) => band(v0, v1)).join('') + '</g>');
+
+    // Studs, and the ring to pull it by. Both are the first things to go.
+    if (wide > 30) {
+      const r = px(Math.max(0.6, wide * 0.022));
+      const studs = [];
+      for (const [v0, v1] of straps) {
+        const v = (v0 + v1) / 2;
+        for (const u of [0.1, 0.35, 0.65, 0.9]) {
+          const p = at(u, v);
+          studs.push('<circle cx="' + p[0] + '" cy="' + p[1] + '" r="' + r + '"/>');
+        }
+      }
+      const ring = at(0.82, 0.46);
+      out.push('<g class="fp-stud">' + studs.join('') + '</g>');
+      out.push('<circle class="fp-ring" cx="' + ring[0] + '" cy="' + ring[1] +
+               '" r="' + px(Math.max(1, wide * 0.055)) + '"/>');
+    }
+
+    return out.join('');
   }
 
   /** A stair, as receding treads on the floor of the cell that holds one. */

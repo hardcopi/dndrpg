@@ -1125,6 +1125,31 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .fp-leaf.is-stuck { stroke-dasharray: 4 3; }
 .fp-leaf.is-locked { fill: color-mix(in srgb, var(--fp-leaf) 80%, #000); }
 .fp-leaf.is-portcullis line { stroke: var(--fp-bars); stroke-width: 2.4; }
+
+/* The joinery on a door leaf. Boards, two iron straps across them, studs and a
+   ring — drawn inside the quad the wall cut, so all of it leans with the face.
+   Coloured here rather than in the script for the reason every other surface in
+   this view is: the cave is relit from the stylesheet. */
+.fp-plank line {
+  stroke: var(--fp-leaf-line);
+  stroke-width: 0.8;
+  stroke-opacity: 0.75;
+}
+.fp-strap polygon {
+  fill: var(--fp-iron);
+  stroke: none;
+}
+.fp-stud circle {
+  fill: var(--fp-iron-lit);
+  stroke: var(--fp-iron);
+  stroke-width: 0.3;
+}
+/* The ring is drawn, not filled — a filled circle at this size is a blob. */
+.fp-ring {
+  fill: none;
+  stroke: var(--fp-iron);
+  stroke-width: 1.4;
+}
 .fp-stair polygon { fill: var(--pg-stair); fill-opacity: 0.55; stroke: var(--fp-edge); }
 
 /* Which way you are looking, over a ceiling that is nearly black — so it is
