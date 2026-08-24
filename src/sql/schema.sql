@@ -368,6 +368,13 @@ CREATE TABLE locations (
     -- game telling them about a notice they had never walked past. Reading the
     -- board here is what puts its jobs in the journal.
     has_job_board TINYINT(1) NOT NULL DEFAULT 0,
+    -- Whether a stair goes down from here into a generated dungeon.
+    --
+    -- A flag rather than a location_type because the Proving Yard is already
+    -- an `arena` and has to be both, the same way allow_camp and has_job_board
+    -- are flags. DelveEngine reads it on every look, so a database without
+    -- this column cannot draw a game screen.
+    has_delve TINYINT(1) NOT NULL DEFAULT 0,
     -- Percent chance, rolled per travel hop INTO this location, of a random
     -- encounter from this region's is_random pool interrupting the trip.
     random_encounter_pct TINYINT UNSIGNED NOT NULL DEFAULT 0,
@@ -557,10 +564,24 @@ CREATE TABLE dungeon_delves (
     -- The generated region the party is currently inside, so ending a delve
     -- knows what to drop without having to guess from a key pattern.
     region_id INT UNSIGNED NULL,
+    -- Where this delve began. A stair goes down from anywhere with
+    -- locations.has_delve set, so the mouth says both where to put the party
+    -- when they climb out and which module the floors below belong to.
+    mouth_location_id INT UNSIGNED NULL,
+    -- The floor the party is actually standing on, stored rather than
+    -- recomputed from the seed. That was sound while the generator was a
+    -- deterministic function in this repository; it stopped being sound when a
+    -- floor could come from the map service, which is allowed to be absent. A
+    -- floor WRITTEN from the service and REDRAWN from the fallback would be a
+    -- map of a different dungeon — every wall in the right place and every
+    -- room the wrong one. NULL for rows that predate the column, which
+    -- levelFor() still regenerates.
+    level_json LONGTEXT NULL,
     started_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UNIQUE KEY uq_delve_party (party_id),
     FOREIGN KEY (party_id) REFERENCES parties(id) ON DELETE CASCADE,
-    FOREIGN KEY (region_id) REFERENCES regions(id) ON DELETE SET NULL
+    FOREIGN KEY (region_id) REFERENCES regions(id) ON DELETE SET NULL,
+    FOREIGN KEY (mouth_location_id) REFERENCES locations(id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE npcs (
@@ -594,6 +615,14 @@ CREATE TABLE npcs (
     -- muted secondary list, still talkable, but they do not compete with Mara
     -- for the eye.
     is_ambient TINYINT(1) DEFAULT 0,
+    -- Where this person stands ON THE CHART, when somebody has said. Percent,
+    -- the same field locations.map_x uses. NULL means "with everyone else at
+    -- the place marker", which is right for almost everyone — only a location
+    -- drawn large enough to have rooms in it has anywhere for a shopkeeper to
+    -- be standing that is not simply "here". LocationEngine::npcsAt() selects
+    -- both on every look, so this is not an optional column.
+    map_x DECIMAL(5,2) NULL,
+    map_y DECIMAL(5,2) NULL,
     -- Where this person stands. NULL is "nowhere": recruited companions are
     -- subtracted from the scene by the engine, and an unplaced NPC simply
     -- does not appear. Placement lives on the NPC row because a person stands
