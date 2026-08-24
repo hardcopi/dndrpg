@@ -1,0 +1,396 @@
+/* ===========================================================================
+   The public face — the four pages a visitor sees before they have an account.
+   ===========================================================================
+
+   Layered ON TOP of style.css rather than beside it. style.css imports
+   tokens.css, so by the time this file is read every colour, type step and
+   spacing value the game uses is already declared, and the pitch is made of
+   the same brass and ink as the thing it is selling. A marketing page with its
+   own palette is a promise the product then breaks on the first screen.
+
+   Nothing in here is used by a signed-in page. It is linked by index.php only
+   when there is nobody signed in, and by tour/classes/races, which are public
+   in their own right.
+
+   ONE RULE ABOUT THE SCREENSHOTS. They are 1200-odd pixels wide and they are
+   pictures of a dark interface on a dark page, so they need an edge or they
+   read as a hole. Every `.lp-shot` has a border and a lift; none of them get a
+   drop shadow heavy enough to look like a sticker.
+   ========================================================================= */
+
+/* --- the page ----------------------------------------------------------- */
+
+.lp {
+  --lp-max: 1120px;              /* the reading column; wider than the game's */
+  --lp-gut: var(--sp-24);
+}
+
+.lp-wrap {
+  max-width: var(--lp-max);
+  margin: 0 auto;
+  padding: 0 var(--lp-gut);
+}
+
+/* A band. Alternating ground is what gives a long page its sections without
+   a rule between every one of them. */
+.lp-band { padding: var(--sp-64) 0; }
+.lp-band + .lp-band { padding-top: var(--sp-48); }
+.lp-band-inset { background: var(--bg-inset); border-block: 1px solid var(--border-soft); }
+
+.lp-eyebrow {
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--ls-eyebrow);
+  text-transform: uppercase;
+  color: var(--gold-dim);
+  margin: 0 0 var(--sp-8);
+}
+
+.lp h2 {
+  font-family: var(--font-display);
+  font-size: var(--fs-2xl);
+  line-height: var(--lh-display);
+  margin: 0 0 var(--sp-12);
+  color: var(--text);
+}
+
+.lp h3 {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  margin: 0 0 var(--sp-6);
+  color: var(--gold);
+}
+
+.lp p { line-height: var(--lh-prose); color: var(--text-dim); margin: 0 0 var(--sp-12); }
+.lp p.lp-lead { font-size: var(--fs-lg); color: var(--text); max-width: 62ch; }
+.lp p:last-child { margin-bottom: 0; }
+
+/* --- the hero ----------------------------------------------------------- */
+
+.lp-hero {
+  position: relative;
+  padding: var(--sp-64) 0 var(--sp-48);
+  text-align: center;
+  border-bottom: 1px solid var(--border-soft);
+  /* The vignette does the work a cover plate would, without asking for a
+     1600px painting that would have to be regenerated every time the art
+     direction moves. */
+  background:
+    radial-gradient(120% 90% at 50% 0%, var(--gold-well) 0%, transparent 62%),
+    var(--bg);
+}
+
+.lp-hero h1 {
+  font-family: var(--font-display);
+  font-size: var(--fs-4xl);
+  line-height: var(--lh-display);
+  letter-spacing: var(--ls-display);
+  margin: 0 0 var(--sp-12);
+  color: var(--gold-bright);
+}
+
+.lp-hero .lp-lead { margin: 0 auto var(--sp-24); }
+
+/* --- calls to action ---------------------------------------------------- */
+
+.lp-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-12);
+  justify-content: center;
+  margin: var(--sp-24) 0 0;
+}
+
+.lp-btn {
+  display: inline-block;
+  padding: var(--sp-12) var(--sp-28);
+  border-radius: var(--r-md);
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-md);
+  text-decoration: none;
+  border: 1px solid var(--border-strong);
+  color: var(--text);
+  background: var(--bg-raised);
+  transition: border-color var(--dur-fast) var(--ease),
+              background var(--dur-fast) var(--ease);
+}
+.lp-btn:hover, .lp-btn:focus-visible { border-color: var(--gold-dim); background: var(--bg-panel-2); }
+
+/* Gold means "you can act on this", the same as everywhere else in the game —
+   so exactly one button per view gets it, and it is always the one that starts
+   an account. */
+.lp-btn-go {
+  background: linear-gradient(180deg, var(--gold) 0%, var(--gold-dim) 100%);
+  border-color: var(--gold);
+  color: var(--ink-on-gold);
+}
+.lp-btn-go:hover, .lp-btn-go:focus-visible {
+  background: linear-gradient(180deg, var(--gold-bright) 0%, var(--gold) 100%);
+  border-color: var(--gold-bright);
+}
+
+.lp-note { font-size: var(--fs-sm); color: var(--text-faint); margin-top: var(--sp-12); }
+
+/* --- the numbers strip -------------------------------------------------- */
+
+.lp-figures {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--sp-12);
+  margin-top: var(--sp-32);
+}
+.lp-fig {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: var(--sp-16) var(--sp-12);
+  text-align: center;
+}
+.lp-fig b {
+  display: block;
+  font-family: var(--font-display);
+  font-size: var(--fs-2xl);
+  color: var(--gold);
+  line-height: var(--lh-flush);
+}
+.lp-fig span {
+  display: block;
+  margin-top: var(--sp-4);
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+/* --- a feature, with its picture ---------------------------------------- */
+
+/* Text and screenshot side by side, alternating which side the picture is on
+   down the page. On a narrow screen both stack and the picture always comes
+   after the words that explain it.
+
+   THE SWAP IS THE COLUMNS, NOT THE ORDER, and that distinction was a bug
+   first. `order: 2` on the text moves the two children round each other but
+   leaves the TRACKS where they were — so a flipped row handed the screenshot
+   the 5fr column and the paragraph the 7fr one, and every other picture down
+   the page came out two thirds the size of the one above it. The picture is
+   the wide half in both directions; what changes is which side it is on. */
+.lp-feature {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: var(--sp-32);
+  align-items: center;
+}
+.lp-feature + .lp-feature { margin-top: var(--sp-64); }
+.lp-feature .lp-feature-text { grid-column: 1; grid-row: 1; }
+.lp-feature .lp-figure { grid-column: 2; grid-row: 1; }
+
+.lp-feature.lp-flip { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
+.lp-feature.lp-flip .lp-feature-text { grid-column: 2; }
+.lp-feature.lp-flip .lp-figure { grid-column: 1; }
+
+.lp-shot {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-md);
+  box-shadow: var(--sh-2);
+  background: var(--bg-inset);
+}
+.lp-shot-wide { max-width: 100%; margin: var(--sp-24) auto 0; }
+figure.lp-figure { margin: 0; }
+figure.lp-figure figcaption {
+  margin-top: var(--sp-8);
+  font-size: var(--fs-xs);
+  color: var(--text-faint);
+  text-align: center;
+}
+
+/* --- plain lists that are really tables --------------------------------- */
+
+.lp-points { list-style: none; margin: var(--sp-12) 0 0; padding: 0; }
+.lp-points li {
+  position: relative;
+  padding-left: var(--sp-20);
+  margin-bottom: var(--sp-8);
+  color: var(--text-dim);
+  line-height: var(--lh-prose);
+}
+.lp-points li::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0.55em;
+  width: 6px; height: 6px;
+  border-radius: var(--r-circle);
+  background: var(--gold-dim);
+}
+.lp-points strong { color: var(--text); font-weight: var(--fw-semibold); }
+
+/* --- the card grids (classes, races, tiers) ----------------------------- */
+
+.lp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: var(--sp-16);
+  margin-top: var(--sp-24);
+}
+.lp-grid-3 { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+
+.lp-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: var(--sp-20);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-8);
+}
+.lp-card h3 { margin: 0; }
+.lp-card-sub {
+  font-size: var(--fs-xs);
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin: 0;
+}
+.lp-card p { margin: 0; font-size: var(--fs-sm); }
+
+/* The stat line under a class name: d10 · Strength · Str, Con. Monospaced so
+   twelve cards read as a column rather than twelve different rhythms. */
+.lp-stats {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: var(--sp-4) var(--sp-12);
+  margin: var(--sp-8) 0 0;
+  font-size: var(--fs-sm);
+}
+.lp-stats dt {
+  color: var(--text-faint);
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  padding-top: 0.15em;
+}
+.lp-stats dd { margin: 0; color: var(--text-dim); }
+
+/* --- "the game actually runs this" ------------------------------------- */
+
+/* The honest half of a class card. A feature the engine implements is printed
+   with the level it arrives at; one the SRD grants and this engine does not is
+   printed plainly and said so. Two colours, because the difference is the
+   whole point of the section and a reader should not have to count words. */
+.lp-feats { margin: var(--sp-4) 0 0; padding: 0; list-style: none; }
+.lp-feats li {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-8);
+  padding: var(--sp-4) 0;
+  border-top: 1px solid var(--border-soft);
+  font-size: var(--fs-sm);
+}
+.lp-feats li:first-child { border-top: 0; }
+.lp-feats .lp-feat-n {
+  flex: 0 0 auto;
+  min-width: 2.6em;
+  font-family: var(--mono);
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--ls-caps);
+  color: var(--gold-dim);
+}
+.lp-feats .lp-feat-b { color: var(--text); font-weight: var(--fw-medium); }
+.lp-feats .lp-feat-d { color: var(--text-faint); }
+.lp-feats li.is-flavour .lp-feat-n { color: var(--text-faint); }
+.lp-feats li.is-flavour .lp-feat-b { color: var(--text-dim); font-weight: var(--fw-normal); }
+
+.lp-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-16);
+  margin-top: var(--sp-16);
+  font-size: var(--fs-xs);
+  color: var(--text-faint);
+}
+.lp-legend span { display: inline-flex; align-items: center; gap: var(--sp-6); }
+.lp-swatch { width: 10px; height: 10px; border-radius: 2px; background: var(--gold-dim); }
+.lp-swatch-off { background: var(--text-faint); }
+
+/* --- race plates -------------------------------------------------------- */
+
+/* A race with no painting on disk is normal, not broken — the same rule the
+   creator's aside follows. `.is-bare` drops the frame rather than showing a
+   dark rectangle where a picture failed. */
+.lp-plate {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  object-position: 50% 22%;
+  border-radius: var(--r-md);
+  border: 1px solid var(--border);
+  background: var(--bg-inset);
+}
+.lp-card.is-bare .lp-plate { display: none; }
+
+.lp-abil {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-6);
+  margin: var(--sp-4) 0 0;
+  padding: 0;
+  list-style: none;
+}
+.lp-abil li {
+  font-family: var(--mono);
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--ls-caps);
+  padding: 2px var(--sp-8);
+  border-radius: var(--r-pill);
+  border: 1px solid var(--border);
+  background: var(--bg-inset);
+  color: var(--gold-dim);
+}
+
+/* --- the closing bar ---------------------------------------------------- */
+
+.lp-close {
+  text-align: center;
+  padding: var(--sp-64) 0;
+  background:
+    radial-gradient(100% 120% at 50% 100%, var(--gold-well) 0%, transparent 60%),
+    var(--bg-inset);
+  border-top: 1px solid var(--border-soft);
+}
+.lp-foot {
+  padding: var(--sp-24) 0 var(--sp-48);
+  font-size: var(--fs-xs);
+  color: var(--text-faint);
+  text-align: center;
+  line-height: var(--lh-prose);
+}
+.lp-foot a { color: var(--text-dim); }
+
+/* --- narrow ------------------------------------------------------------- */
+
+@media (max-width: 860px) {
+  .lp { --lp-gut: var(--sp-16); }
+  .lp-band { padding: var(--sp-40) 0; }
+  .lp-hero { padding: var(--sp-40) 0 var(--sp-32); }
+  .lp-hero h1 { font-size: var(--fs-3xl); }
+  .lp h2 { font-size: var(--fs-xl); }
+  /* One column, and the picture follows its explanation in every case — the
+     column assignments are cleared so the flipped rows stop flipping and
+     nothing tries to sit in a track that no longer exists. */
+  .lp-feature,
+  .lp-feature.lp-flip { grid-template-columns: 1fr; gap: var(--sp-16); }
+  .lp-feature .lp-feature-text,
+  .lp-feature .lp-figure,
+  .lp-feature.lp-flip .lp-feature-text,
+  .lp-feature.lp-flip .lp-figure { grid-column: 1; grid-row: auto; }
+  .lp-feature + .lp-feature { margin-top: var(--sp-40); }
+  .lp-grid, .lp-grid-3 { grid-template-columns: 1fr; }
+  .lp-btn { width: 100%; text-align: center; }
+}
+
+/* Somebody who has asked for less motion gets none of the hover transitions;
+   there is no other animation on these pages to turn off. */
+@media (prefers-reduced-motion: reduce) {
+  .lp-btn { transition: none; }
+}

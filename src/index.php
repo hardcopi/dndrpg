@@ -22,6 +22,25 @@
  * doors, drawn into the left-hand pane instead of across the top of the page.
  */
 require_once __DIR__ . '/app/page_guard.php';
+
+/*
+ * `/` is two pages, and which one you get is whether you have an account.
+ *
+ * Everything below this block is the picker, unchanged, and it still needs a
+ * session. What changed is what a signed-OUT visitor gets: this used to be
+ * require_signed_in_page(), which bounced them to a login form — which is the
+ * right answer for game.php and the wrong one for the front door of a game
+ * nobody has heard of. They get the pitch instead, and the login form is one of
+ * the two buttons on it.
+ *
+ * The guard is still the guard. A visitor who is not signed in never reaches a
+ * line of the picker's markup or a byte of its data; the landing page is
+ * `exit`-ed out of, not merged into it.
+ */
+if (auth()->currentUser() === null) {
+    require __DIR__ . '/app/inc/landing.php';
+    exit;
+}
 require_signed_in_page();
 ?>
 <!DOCTYPE html>

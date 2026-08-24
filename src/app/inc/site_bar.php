@@ -30,8 +30,15 @@ if ($signedIn) {
         $doors[] = ['bestiary.php', 'Bestiary'];
     }
 } else {
-    $doors[] = ['login.php', 'Sign in'];
+    // The public face. index.php serves the pitch rather than the picker when
+    // nobody is signed in, so "Home" is a real door here and is not the same
+    // page the signed-in branch above points at.
+    $doors[] = ['index.php', 'Home'];
+    $doors[] = ['tour.php', 'The game'];
+    $doors[] = ['classes.php', 'Classes'];
+    $doors[] = ['races.php', 'Races'];
     $doors[] = ['about.php', 'About &amp; legal'];
+    $doors[] = ['login.php', 'Sign in'];
 }
 ?>
 <div class="site-bar">

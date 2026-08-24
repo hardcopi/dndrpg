@@ -345,24 +345,60 @@ class CharacterSheet
     }
 
     /**
-     * Whether a printed race trait is one the engine enforces.
+     * The printed trait names whose RACE_FEATURES key is not simply the name
+     * lowercased with its spaces turned into underscores.
      *
-     * The trait strings in `races.traits` predate RACE_FEATURES and do not
-     * share its keys, so the handful whose names differ are mapped by hand.
-     * Dwarven Toughness is the odd one out: implemented directly in
-     * CharacterGenerator::hitPointsAtLevel() rather than through the table.
+     * `races.traits` predates RACE_FEATURES and does not share its keys, so the
+     * handful that differ are mapped by hand. Public because it is not only the
+     * sheet that has to answer "is this trait enforced" any more — the public
+     * races page asks the same question, and a second copy of this map is a
+     * copy that credits the wrong traits the first time either is edited. That
+     * is not hypothetical: the races page shipped without it for an afternoon
+     * and told every reader that a Dragonborn's Damage Resistance was decorative.
      */
+    public const TRAIT_KEYS = [
+        'Lucky'             => 'halfling_luck',
+        'Damage Resistance' => 'draconic_resistance',
+    ];
+
+    /**
+     * Traits that are enforced somewhere other than the RACE_FEATURES table,
+     * and so cannot be found by looking in it.
+     *
+     * Dwarven Toughness is the only one: it is implemented directly in
+     * CharacterGenerator::hitPointsAtLevel().
+     */
+    public const TRAITS_ENFORCED_ELSEWHERE = ['Dwarven Toughness'];
+
+    /** The RACE_FEATURES key a printed trait name corresponds to. */
+    public static function traitFeatureKey(string $trait): string
+    {
+        return self::TRAIT_KEYS[$trait]
+            ?? str_replace([' ', '-'], '_', strtolower(trim($trait)));
+    }
+
+    /** Whether a printed race trait is one the engine enforces. */
+    public static function traitEnforced(?string $race, ?string $subrace, string $trait): bool
+    {
+        foreach (self::TRAITS_ENFORCED_ELSEWHERE as $named) {
+            if (strcasecmp($trait, $named) === 0) {
+                return true;
+            }
+        }
+        return Rules::raceFeature(
+            ['race' => (string) $race, 'subrace' => $subrace],
+            self::traitFeatureKey($trait)
+        );
+    }
+
+    /** As above, for a character row that already carries its race. */
     private static function traitImplemented(array $char, string $trait): bool
     {
-        $named = [
-            'Lucky'             => 'halfling_luck',
-            'Damage Resistance' => 'draconic_resistance',
-        ];
-        if (strcasecmp($trait, 'Dwarven Toughness') === 0) {
-            return true;
-        }
-        $key = $named[$trait] ?? str_replace([' ', '-'], '_', strtolower(trim($trait)));
-        return Rules::raceFeature($char, $key);
+        return self::traitEnforced(
+            (string) ($char['race'] ?? ''),
+            isset($char['subrace']) ? (string) $char['subrace'] : null,
+            $trait
+        );
     }
 
     /**
