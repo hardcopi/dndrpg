@@ -82,6 +82,25 @@ function levelLabel(int $n): string
     }
     .hb-table th { font-variant: small-caps; letter-spacing: 0.04em; }
     .hb-table td.n, .hb-table th.n { text-align: right; font-variant-numeric: tabular-nums; }
+
+    /* The slot ladder is the one table that does not get to size itself.
+       A full caster's is ten columns wide and it lives in a 3.3in measure, so
+       "1st-level" headers put it half again over the column and out into the
+       gutter — five of the eight ran over. `table-layout: fixed` with a width
+       of 100% makes it fit BY CONSTRUCTION rather than by my arithmetic about
+       padding being right, and the headers become the bare numerals the
+       caption above them explains. */
+    .hb-slots { table-layout: fixed; }
+    .hb-slots th, .hb-slots td {
+      padding: 0.14rem 0.1rem; font-size: 0.74rem; text-align: center;
+      font-variant-numeric: tabular-nums;
+    }
+    .hb-slots th { font-variant: normal; letter-spacing: 0; }
+    .hb-slots .lv { width: 2.2em; }
+    .hb-slots-cap {
+      font-size: 0.74rem; font-variant: small-caps; letter-spacing: 0.05em;
+      margin: 0.5rem 0 0; opacity: 0.8;
+    }
     .hb-asi { font-weight: 700; }
     .hb-run { font-variant: small-caps; letter-spacing: 0.04em; }
     .hb-off { opacity: 0.62; }
@@ -304,18 +323,20 @@ function levelLabel(int $n): string
         <?php } ?>
 
         <?php if ($c['slots'] !== null) { ?>
-          <table class="hb-table">
+          <p class="hb-slots-cap">Spell slots — character level down the side,
+            spell level across the top</p>
+          <table class="hb-table hb-slots">
             <thead>
-              <tr><th class="n">Level</th>
+              <tr><th class="lv" scope="col">Lv</th>
                 <?php foreach ($c['slots']['levels'] as $sl) { ?>
-                  <th class="n"><?= e(levelLabel((int) $sl)) ?></th>
+                  <th scope="col"><?= (int) $sl ?></th>
                 <?php } ?>
               </tr>
             </thead>
             <tbody>
               <?php foreach ($c['slots']['rows'] as $level => $counts) { ?>
-                <tr><td class="n"><?= (int) $level ?></td>
-                  <?php foreach ($counts as $n) { ?><td class="n"><?= $n > 0 ? (int) $n : '—' ?></td><?php } ?>
+                <tr><th class="lv" scope="row"><?= (int) $level ?></th>
+                  <?php foreach ($counts as $n) { ?><td><?= $n > 0 ? (int) $n : '—' ?></td><?php } ?>
                 </tr>
               <?php } ?>
             </tbody>
