@@ -223,17 +223,85 @@
   const poly = (pts) => pts.map((p) => p[0] + ',' + p[1]).join(' ');
 
   /**
+   * Which surfaces carry grain, and how big the stones are at the near band.
+   *
+   * The roof is not here on purpose: it is nearly black at every band and grain
+   * on it is noise nobody can see. `tile` is in the picture's own units — a
+   * whole tile projects to about F across at z = 1, so 24 puts roughly eight
+   * courses of brick on the nearest wall.
+   */
+  const GRAIN = { wall: 26, side: 26, floor: 34 };
+
+  /**
+   * How much of the band's token colour is laid OVER the texture, per depth.
+   *
+   * This is the distance shading, and it runs the opposite way to the old
+   * scheme's fill: near the lamp the scrim is thin and the stone is Synty's,
+   * far from it the scrim is nearly solid and the wall is `--fp-wall-5`. The
+   * last band is not 1 — a wall that reached the flat colour exactly would pop
+   * as it crossed the boundary, and 0.92 keeps a suggestion of stone in the
+   * dark.
+   */
+  const SCRIM = [0.12, 0.3, 0.48, 0.64, 0.8, 0.92];
+
+  /**
    * A surface's paint.
    *
-   * THE ONE PLACE A SURFACE'S FILL IS DECIDED, kept alone so that a textured
-   * variant has somewhere to go: it would return a paint server here and
-   * change nothing else. Flat for now, and flat is what the games this is
-   * copying actually did — the depth bands are CSS custom properties so the
-   * whole cave can be relit from the stylesheet.
+   * THE ONE PLACE A SURFACE'S FILL IS DECIDED, and it is a paint server now
+   * rather than a colour — which is what the note that used to be here said it
+   * would become, and it has changed nothing else.
+   *
+   * THE TOKEN STILL DECIDES THE DARK. The pattern is the Synty texture with a
+   * scrim over it in the band's own colour, and the scrim thickens with
+   * distance — see SCRIM. So the texture says what the stone is and
+   * `--fp-wall-5` still says what the far dark looks like, which is the half of
+   * the old arrangement worth keeping. Delete the swatches and every face falls
+   * back to very nearly the flat colour it had, because the scrim is all that
+   * would be left.
    */
   function faceFill(surface, depth) {
     const band = Math.max(0, Math.min(DEPTH, Math.round(depth)));
-    return 'var(--fp-' + surface + '-' + band + ', var(--fp-' + surface + '))';
+    if (!GRAIN[surface]) {
+      return 'var(--fp-' + surface + '-' + band + ', var(--fp-' + surface + '))';
+    }
+    return 'url(#fp-' + surface + '-' + band + ')';
+  }
+
+  /**
+   * The paint servers, one per surface and band.
+   *
+   * The stones grow toward the viewer, which is the whole of the perspective
+   * this gets: an SVG pattern cannot foreshorten, so a far wall carrying the
+   * same brick at the same size as a near one would read as wallpaper. Scaling
+   * the tile by the band is not correct projection and it is not pretending to
+   * be — it is the cheap approximation that makes distance legible, and at the
+   * opacities in GRAIN_FADE the eye takes it as surface rather than as pattern.
+   */
+  function defs(base) {
+    const out = [];
+    for (const surface of Object.keys(GRAIN)) {
+      for (let band = 0; band <= DEPTH; band++) {
+        const size = GRAIN[surface] / (band + 1);
+        const scrim = SCRIM[Math.min(band, SCRIM.length - 1)];
+        out.push(
+          '<pattern id="fp-' + surface + '-' + band + '" patternUnits="userSpaceOnUse" ' +
+            'width="' + px(size) + '" height="' + px(size) + '">' +
+            // The texture first, then the dark over it. The bottom rect is the
+            // fallback: with no swatch on disk the image draws nothing and this
+            // is what shows through, which is the flat cave again.
+            '<rect width="' + px(size) + '" height="' + px(size) + '" ' +
+              'fill="var(--fp-' + surface + '-' + band + ', var(--fp-' + surface + '))"/>' +
+            '<image href="' + base + surface + '.png" x="0" y="0" ' +
+              'width="' + px(size) + '" height="' + px(size) + '" ' +
+              'preserveAspectRatio="none"/>' +
+            '<rect width="' + px(size) + '" height="' + px(size) + '" ' +
+              'fill="var(--fp-' + surface + '-' + band + ', var(--fp-' + surface + '))" ' +
+              'opacity="' + scrim + '"/>' +
+          '</pattern>'
+        );
+      }
+    }
+    return '<defs>' + out.join('') + '</defs>';
   }
 
   /** One quad, with the depth it sorts by. */
@@ -430,6 +498,7 @@
     return '<svg class="fp-view" viewBox="0 0 ' + VIEW_W + ' ' + VIEW_H + '" ' +
       'preserveAspectRatio="xMidYMid meet" role="img" ' +
       'aria-label="' + (o.label || 'The way ahead') + '">' +
+      defs(o.textures || 'assets/images/fp/') +
       '<rect class="fp-void" x="0" y="0" width="' + VIEW_W + '" height="' + VIEW_H + '"/>' +
       list.map((q) => q.svg).join('') +
       '</svg>';
