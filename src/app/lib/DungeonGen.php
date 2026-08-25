@@ -176,6 +176,47 @@ final class DungeonGen
      * from first level to second, and this module exists to be delved for
      * levels. Nearly half of every floor is alive now.
      */
+    /**
+     * What a room might have something IN, rather than merely lying on the floor.
+     *
+     * A stocked room used to write its loot straight into `location_items` and
+     * describe a place that never mentioned it — the prose talked about lamp
+     * brackets and drains while the treasure sat in the room as an abstraction
+     * nobody could see. A furnishing is the object the prose can name and the
+     * two maps can draw, and it is the LID on loot that already worked: while
+     * it is shut, itemsAt() hands the party nothing.
+     *
+     * `clause` is written to follow the room's four sentences, so it starts
+     * with the thing and not with a connective. `lock` and `trap` are the
+     * chances in a hundred that this kind of furnishing is fastened or rigged —
+     * a barrel is neither, a strongbox is usually both, and a sarcophagus is
+     * the one that is far more often trapped than locked.
+     */
+    public const FURNISHINGS = [
+        ['kind' => 'chest',  'weight' => 30, 'lock' => 55, 'trap' => 30,
+         'clause' => 'A banded chest stands against the wall.'],
+        ['kind' => 'strongbox', 'weight' => 14, 'lock' => 80, 'trap' => 45,
+         'clause' => 'A strongbox is bolted to the floor, too heavy to carry off.'],
+        ['kind' => 'barrel', 'weight' => 18, 'lock' => 0, 'trap' => 8,
+         'clause' => 'Two barrels sit in the corner, one of them stove in.'],
+        ['kind' => 'crate',  'weight' => 16, 'lock' => 0, 'trap' => 10,
+         'clause' => 'A stack of crates leans where somebody left it.'],
+        ['kind' => 'sarcophagus', 'weight' => 10, 'lock' => 25, 'trap' => 60,
+         'clause' => 'A stone sarcophagus lies across the middle of the room, its lid askew.'],
+        ['kind' => 'cabinet', 'weight' => 12, 'lock' => 40, 'trap' => 20,
+         'clause' => 'A cabinet stands open-doored against the far wall.'],
+    ];
+
+    /**
+     * Which room kinds are furnished.
+     *
+     * The three that DelveEngine actually stocks with treasure — see its
+     * stocking pass, which writes `location_items` for exactly these. A
+     * furnishing in an empty room would be a container with nothing in it,
+     * which is a promise the room cannot keep.
+     */
+    public const FURNISHED_KINDS = ['treasure' => true, 'hoard' => true, 'boss' => true];
+
     public const CONTENTS = [
         ['kind' => 'empty',    'weight' => 24],
         ['kind' => 'monster',  'weight' => 32],
@@ -926,6 +967,17 @@ final class DungeonGen
             }
         }
 
+        // --- furnishings -----------------------------------------------------
+        // LAST, and on this stream rather than the main one, which is the rule
+        // this whole function exists to keep: "if a new feature needs
+        // randomness, it takes it from THIS stream, below the last existing
+        // draw". Putting these three rolls in stock() instead moved the golden
+        // hash on the first run — every layout for every (seed, depth) that
+        // already existed would have come back different, which is the save-rot
+        // the hash is there to catch. Below the atmosphere block for the same
+        // reason: anything added above it shifts every roll after it.
+        self::furnish($rng, $rooms, $depth, $band);
+
         return $atmo;
     }
 
@@ -1289,6 +1341,77 @@ final class DungeonGen
     }
 
     /**
+     * Put something in the rooms that hold treasure.
+     *
+     * After stocking, because it reads the kind; before describing, because the
+     * description names what is here. Deeper floors fasten and rig more of them
+     * — the lock and trap chances climb with depth rather than the kinds
+     * changing, so a chest is a chest all the way down and it is the dungeon
+     * that gets meaner.
+     */
+    private static function furnish(int &$rng, array &$rooms, int $depth, string $band): void
+    {
+        $total = 0;
+        foreach (self::FURNISHINGS as $f) {
+            $total += $f['weight'];
+        }
+        // Ten points of each per floor below the first, capped so that the
+        // bottom of a deep delve is not a floor of uniformly locked, uniformly
+        // rigged boxes — at which point neither fact is information.
+        $harder = min(25, 10 * max(0, $depth - 1));
+
+        foreach ($rooms as $i => $room) {
+            if (!isset(self::FURNISHED_KINDS[$room['kind'] ?? ''])) {
+                continue;
+            }
+            $roll = self::rint($rng, 1, $total);
+            $pick = self::FURNISHINGS[0];
+            foreach (self::FURNISHINGS as $f) {
+                $roll -= $f['weight'];
+                if ($roll <= 0) {
+                    $pick = $f;
+                    break;
+                }
+            }
+            // Both rolled every time even when the chance is zero, so that the
+            // stream a level is made from does not depend on which furnishing
+            // came up. A barrel that skipped its lock roll would shift every
+            // die after it and make the rest of the floor a different floor.
+            $lockRoll = self::rint($rng, 1, 100);
+            $trapRoll = self::rint($rng, 1, 100);
+            $trapPick = self::rint($rng, 0, count(self::TRAPS[$band]) - 1);
+            $trapped = $pick['trap'] > 0 && $trapRoll <= min(85, $pick['trap'] + $harder);
+            $rooms[$i]['furnishing'] = [
+                'kind'    => $pick['kind'],
+                'clause'  => $pick['clause'],
+                'locked'  => $pick['lock'] > 0 && $lockRoll <= min(90, $pick['lock'] + $harder),
+                // The lid's own difficulty, and it is not the door's. A door
+                // is joinery in a frame somebody else built; a strongbox was
+                // made to be a strongbox. So the floor's number plus the
+                // furnishing's own — a barrel at zero is not locked at all and
+                // never reads this, a strongbox is the hardest thing on the
+                // level to open without the key.
+                'dc'      => 10 + $depth + intdiv((int) $pick['lock'], 20),
+                // The trap ITSELF, not a flag saying there is one. It is the
+                // same record a passage trap is — key, save, DC, damage, and
+                // the two pieces of prose — so FurnishingEngine can fire it
+                // through LocationEngine::fireTrapOn and a chest lid does the
+                // same damage in the same way as a tripwire. `trapped` stays
+                // beside it because a great deal of code only wants the yes or
+                // no, and `!== null` is a worse way to ask it.
+                'trapped' => $trapped,
+                'trap'    => $trapped ? self::TRAPS[$band][$trapPick] : null,
+            ];
+            // Appended here rather than woven into describe(), because this
+            // pass runs after it — the same way the atmosphere clause above is
+            // appended. It goes last in the paragraph on purpose: it is the
+            // thing a player is about to act on.
+            $rooms[$i]['description'] = rtrim((string) ($rooms[$i]['description'] ?? ''))
+                . ' ' . $pick['clause'];
+        }
+    }
+
+    /**
      * Give every room a name and four sentences.
      *
      * WITHOUT REPEATING ITSELF WITHIN A LEVEL, which is the whole difficulty.
@@ -1460,6 +1583,14 @@ final class DungeonGen
                 'w'    => round($x2 - $x1, 2),
                 'h'    => round($y2 - $y1, 2),
                 'role' => $r['role'],
+                // The chart draws the same furnishing the raster stands up and
+                // the prose names, so the two maps and the paragraph agree
+                // about what is in the room. The KIND only: whether it is
+                // locked or trapped is something a party finds out by trying
+                // it, and a plan that spelled it out would be the chart
+                // answering a question the room is asking.
+                'furnishing' => isset($r['furnishing'])
+                    ? (string) $r['furnishing']['kind'] : null,
             ];
         }
         $rect = array_column($rooms, null, 'id');
@@ -2087,6 +2218,7 @@ final class DungeonGen
      *   doors: list<array{x:int,y:int,dir:int,kind:string,corridor:int}>,
      *   stairs: list<array{x:int,y:int,dir:string,room:int}>,
      *   spines: array{room: array<int,array{0:int,1:int}>, corridor: array<int,array{0:int,1:int}>},
+     *   props: list<array{tile:int, kind:string, room:int}>
      *   shared: int
      * }
      */
@@ -2102,6 +2234,7 @@ final class DungeonGen
         $solid = array_fill(0, $n, true);
         $owner = array_fill(0, $n, null);
         $spines = ['room' => [], 'corridor' => []];
+        $props = [];
 
         foreach ($level['rooms'] as $r) {
             $id = (int) $r['id'];
@@ -2121,6 +2254,23 @@ final class DungeonGen
             // anywhere is put down. intdiv on both bounds, so an even-sided
             // room takes the lower of its two middles rather than a half tile.
             $spines['room'][$id] = intdiv($y0 + $y1, 2) * $tw + intdiv($x0 + $x1, 2);
+
+            // Where a furnishing stands, if this room has one.
+            //
+            // A CORNER, NOT THE MIDDLE — the middle is the spine, which is where
+            // a party is put down when they arrive, and standing them inside
+            // the chest would be a picture of a party in a box. The far corner
+            // from the door is also where anybody actually puts a strongbox.
+            // Derived from the room's own bounds rather than rolled, so it
+            // costs the level's random stream nothing and a stored level and a
+            // regenerated one agree about it.
+            if (isset($r['furnishing'])) {
+                $props[] = [
+                    'tile' => $y1 * $tw + $x1,
+                    'kind' => (string) $r['furnishing']['kind'],
+                    'room' => $id,
+                ];
+            }
         }
 
         $routes = self::routes($level);
@@ -2190,6 +2340,7 @@ final class DungeonGen
             'doors' => $doors,
             'walls' => self::partitions($owner, $doors, $tw),
             'stairs' => $stairs,
+            'props'  => $props,
             'spines' => $spines,
             'shared' => $shared,
         ];

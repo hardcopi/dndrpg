@@ -956,6 +956,20 @@
         act: 'board',
       });
     }
+    // The chest, above the loot rather than beside it — while it is shut the
+    // loot list is empty by construction (LocationEngine gates it), so this is
+    // the only thing in the room to press, and once it is open the things
+    // inside follow it down the list in the order you meet them.
+    if (loc.furnishing) {
+      acts.push({
+        key: 'O',
+        label: loc.furnishing.open
+          ? `Look inside ${loc.furnishing.name}`
+          : `Open ${loc.furnishing.name}`,
+        hint: loc.furnishing.blurb || '',
+        act: 'furnishing',
+      });
+    }
     (loc.items || []).forEach((it) => {
       acts.push({
         key: 'L', label: `Take ${it.name}`, hint: it.description || '',
@@ -1352,6 +1366,13 @@
         return;
       }
 
+      // And the furnishing menu's, for the same reason: it is a modal too.
+      const fact = ev.target.closest('[data-furn-act]');
+      if (fact) {
+        doFurnishingAct(fact.dataset.furnAct);
+        return;
+      }
+
       if (!ev.target.closest('#location-root')) return;
 
       const act = ev.target.closest('[data-act]');
@@ -1376,6 +1397,7 @@
     switch (act) {
       case 'search': return doSearch();
       case 'loot': return doLoot(+id);
+      case 'furnishing': return openFurnishingMenu();
       case 'rest': return doRest();
       case 'camp': return openCampScreen();
       case 'short_rest': return doShortRest();
@@ -1615,6 +1637,92 @@
         ${b.doors ? `<p class="door-tally">${b.braced} of ${b.doors} ways out braced${
           b.sealed ? ' — you could sleep here' : ''}.</p>` : ''}
       </div>`, { size: 'narrow', slot: 'door', label: menu.label || 'The door' });
+  }
+
+  /**
+   * The chest in the room, asked about rather than assumed.
+   *
+   * Same contract as the door menu and drawn by the same modal: the options
+   * come from the server exactly as they arrive. Whether the lid is fastened,
+   * whether anybody is carrying picks, and whether the party has found what is
+   * under it are three things a browser has no business deciding.
+   */
+  async function openFurnishingMenu() {
+    let menu;
+    try {
+      menu = await API.post('location/furnishing_menu', {});
+    } catch (e) {
+      showError(e.message);
+      return;
+    }
+    const rows = (menu.options || []).map((o) => `
+      <button type="button" class="door-opt${o.enabled ? '' : ' is-off'}"
+              data-furn-act="${esc(o.act)}" ${o.enabled ? '' : 'disabled'}>
+        <span class="door-opt-label">${esc(o.label)}</span>
+        <span class="door-opt-hint">${esc(o.hint || '')}</span>
+      </button>`).join('');
+    window.UI.showModal(`
+      <div class="modal-head">
+        <h2>${esc(menu.label || 'It')}</h2>
+        <button type="button" class="icon-btn modal-x" data-modal-close
+                title="Close (Esc)" aria-label="Close">×</button>
+      </div>
+      <div class="door-menu">${rows}</div>`,
+      { size: 'narrow', slot: 'door', label: menu.label || 'It' });
+  }
+
+  /** One verb on a furnishing. The menu closes first: all of these re-render. */
+  function doFurnishingAct(act) {
+    if (window.UI && window.UI.closeTopModal) window.UI.closeTopModal();
+    if (act === 'open') return doFurnishingOpen();
+    if (act === 'inspect') return doFurnishingInspect();
+    if (act === 'force' || act === 'pick') return doFurnishingCeremony(act, (r) =>
+      r.sprung ? 'danger' : (r.opened ? 'success' : 'important'));
+    if (act === 'disarm') return doFurnishingCeremony('disarm', (r) =>
+      r.sprung ? 'danger' : (r.disarmed ? 'success' : 'important'));
+    return null;
+  }
+
+  /** A look at the hinges. No ceremony — it is a look, not a feat. */
+  function doFurnishingInspect() {
+    return guarded(async () => {
+      const r = await API.post('location/furnishing_inspect', {});
+      (r.messages || []).forEach((m) => log(m, r.found ? 'important' : 'story'));
+      await refreshAll();
+    });
+  }
+
+  /**
+   * Lifting a lid that is not fastened. No die of its own — but the trap
+   * under it fires here, which is why this goes through handleEvents the same
+   * way a ceremony does.
+   */
+  function doFurnishingOpen() {
+    return guarded(async () => {
+      const r = await API.post('location/furnishing_open', {});
+      (r.messages || []).forEach((m) => log(m, r.sprung ? 'danger' : 'success'));
+      await refreshAll();
+      await handleEvents(r.events || []);
+    });
+  }
+
+  /** Forcing, picking and disarming, through the two-phase die. */
+  function doFurnishingCeremony(verb, tone) {
+    return guarded(async () => {
+      const r = await API.post(`location/furnishing_${verb}`, {});
+      let after = null;
+      const rolled = await window.Check.open(r.check, {
+        resolve: async (checkId, boosts) => {
+          after = await API.post(`location/furnishing_${verb}_resolve`,
+                                 { check_id: checkId, boosts });
+          return after.result;
+        },
+      });
+      if (!rolled || !after) return;
+      (after.messages || []).forEach((m) => log(m, tone(after)));
+      await refreshAll();
+      await handleEvents(after.events || []);
+    });
   }
 
   /** One verb at a door. The menu closes first: every one of these re-renders. */

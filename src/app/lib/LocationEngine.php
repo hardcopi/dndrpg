@@ -210,6 +210,10 @@ class LocationEngine
     private function locationPayload(array $location, int $characterId, ?int $partyId, bool $firstVisit): array
     {
         $locationId = (int) $location['id'];
+        // Read once: the loot gate below and the block shipped to the client
+        // must be two views of one answer, or the panel draws a shut chest
+        // over a list of what is in it.
+        $furnishing = (new FurnishingEngine($this->db))->report($characterId, $partyId, $locationId, (string) $location['location_key']);
         return [
             'id'           => $locationId,
             'key'          => $location['location_key'],
@@ -224,7 +228,15 @@ class LocationEngine
             'first_visit_text' => $firstVisit ? $location['first_visit_text'] : null,
             'ambience'     => json_decode($location['ambience_json'] ?? '[]', true) ?: [],
             'npcs'         => $this->npcsAt($locationId, $characterId, $partyId),
-            'items'        => $this->itemsAt($locationId, $partyId),
+            // The furnishing standing here, if this is a generated room with one
+            // in it. Null everywhere else, which is everywhere authored.
+            'furnishing'   => $furnishing,
+            // GATED BY THE LID. Ground loot in a furnished room is inside the
+            // thing, so while it is shut the party is handed nothing — the
+            // list is the answer to "what is in it", which is why opening one
+            // says nothing about the contents itself.
+            'items'        => $furnishing !== null && !$furnishing['open']
+                ? [] : $this->itemsAt($locationId, $partyId),
             'exits'        => $this->exitsFrom($locationId, $characterId, $partyId),
             // The fight waiting here, if the party has not won it yet. Carried
             // on the scene rather than only announced on arrival: a party that

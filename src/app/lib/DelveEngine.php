@@ -132,6 +132,84 @@ final class DelveEngine
     }
 
     /**
+     * The furnishing standing in a room, read out of the stored floor.
+     *
+     * THE LEVEL IS THE ONLY COPY. A chest could have been written into a
+     * column on `locations` when the floor was drawn, and then there would be
+     * two accounts of what is in the room — the one the chart and the raster
+     * are built from, and the one the verbs act on — which is the argument
+     * `level_json` itself was added for. So this parses the room number back
+     * out of the location key and asks the level, and everything about a
+     * furnishing that the generator decided stays decided in one place.
+     *
+     * What is NOT here is what the party has done to it. Opened, found,
+     * disarmed and sprung are all party facts and live in WorldState, keyed by
+     * the location, exactly as a barricade and a passage trap do — the level
+     * is what the dungeon is, not what has happened in it.
+     *
+     * @return array{location_key:string,depth:int,room:int,furnishing:array}|null
+     */
+    public function furnishingAt(?int $partyId, int $locationId, ?string $locationKey = null): ?array
+    {
+        if (!$partyId || $locationId <= 0) {
+            return null;
+        }
+        // The key if the caller already has it. Every location look goes
+        // through here and all but a handful are authored places whose key
+        // cannot possibly match — reading it back out of the table to find
+        // that out is a query per look for nothing.
+        $key = $locationKey;
+        if ($key === null) {
+            $stmt = $this->db->prepare('SELECT location_key FROM locations WHERE id = ?');
+            $stmt->execute([$locationId]);
+            $key = $stmt->fetchColumn();
+        }
+        if (!is_string($key)
+            || !preg_match('/^_dg_(\d+)_(\d+)_r(\d+)$/', $key, $m)
+            || (int) $m[1] !== $partyId) {
+            return null;
+        }
+        $delve = $this->current($partyId);
+        // The room key carries the depth, so a stale key — a location row from
+        // a floor already dropped — is refused rather than answered from the
+        // floor the party is on now.
+        if ($delve === null || (int) $delve['depth'] !== (int) $m[2]) {
+            return null;
+        }
+        $room = (int) $m[3];
+        foreach ($this->levelFor($delve)['rooms'] ?? [] as $r) {
+            if ((int) ($r['id'] ?? -1) === $room && !empty($r['furnishing'])) {
+                return [
+                    'location_key' => $key,
+                    'depth'        => (int) $m[2],
+                    'room'         => $room,
+                    'furnishing'   => $r['furnishing'],
+                ];
+            }
+        }
+        return null;
+    }
+
+    /** The flag one furnishing's lid lives under: shut until it says otherwise. */
+    public static function furnishingFlag(string $locationKey): string
+    {
+        return 'dg_furn_' . $locationKey;
+    }
+
+    /**
+     * The flag its trap lives under.
+     *
+     * Suffixed, because the ROOM may have a trap of its own in `trap_json` and
+     * that one is already keyed on the bare location key. Two mechanisms in one
+     * place needed two names, and finding the one in the lid must not mark the
+     * one in the floor as found.
+     */
+    public static function furnishingTrapFlag(string $locationKey): string
+    {
+        return self::trapFlag($locationKey . '#furn');
+    }
+
+    /**
      * Whether this party may start one from where they are standing.
      *
      * A location with a stair in it, and nowhere else. A delve begun from the
@@ -369,6 +447,26 @@ final class DelveEngine
         // the first-person view has to be able to go back. Censored from the
         // plan's OWN fog answer, so the two can never show different floors.
         $seen['tiles'] = self::fogTiles(DungeonGen::tiles($level), $seen);
+
+        // Which lids this party has had up. Stamped on both drawings from one
+        // read, so the chart glyph and the box in the corridor cannot disagree
+        // about whether the thing is open — the fault the shipped `ui` block in
+        // combat exists to prevent, in a smaller place.
+        $world = new WorldState($this->db);
+        $keyOf = array_flip($ids);   // id => location key, flipped once
+        $isOpen = static function (?int $locationId) use ($world, $partyId, $keyOf): bool {
+            return $locationId !== null
+                && isset($keyOf[$locationId])
+                && $world->isSet($partyId, self::furnishingFlag((string) $keyOf[$locationId]));
+        };
+        foreach ($seen['rooms'] as $i => $r) {
+            if (!empty($r['furnishing'])) {
+                $seen['rooms'][$i]['furnishing_open'] = $isOpen($r['location_id'] ?? null);
+            }
+        }
+        foreach ($seen['tiles']['props'] as $i => $prop) {
+            $seen['tiles']['props'][$i]['o'] = $isOpen($prop['l'] ?? null);
+        }
 
         return $seen;
     }
@@ -711,6 +809,28 @@ final class DelveEngine
             }
         }
 
+        // Furnishings, censored by the same `$lit` the floor is.
+        //
+        // A chest in a room the party has not found is not shipped, so neither
+        // renderer can draw it and neither has to know about fog — the same
+        // arrangement that makes an unfound secret door a blank wall for free.
+        $props = [];
+        foreach ($tiles['props'] ?? [] as $prop) {
+            if (!$lit((int) $prop['tile'])) {
+                continue;
+            }
+            // The LOCATION, not the room number. Whether this one has been
+            // opened is a party fact and is stamped on by map() a moment later,
+            // which has the party and this does not — and the only handle it
+            // has to stamp it with is the id every other shipped block is
+            // keyed by.
+            $props[] = [
+                't' => (int) $prop['tile'],
+                'k' => (string) $prop['kind'],
+                'l' => $show['room:' . (int) $prop['room']] ?? null,
+            ];
+        }
+
         // Where a party arriving in a place is put down, by location id.
         $spines = [];
         foreach (['room', 'corridor'] as $kind) {
@@ -731,6 +851,7 @@ final class DelveEngine
             'doors' => $doors,
             'walls' => $walls,
             'stairs' => $stairs,
+            'props' => $props,
             'spines' => $spines,
         ];
     }

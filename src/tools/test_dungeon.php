@@ -74,7 +74,17 @@ section('the main rng stream is frozen');
 // types are collapsed back to 'door' (they are dress()-time refinements OF
 // 'door'); everything else must match to the byte.
 $frozen = DungeonGen::generate(4471, 2);
-$frozenRooms = array_map(function ($r) { unset($r['description']); return $r; }, $frozen['rooms']);
+// `furnishing` is excluded for exactly the reason `description` is: dress()
+// adds it, on the dressing stream, below every draw that existed before it. The
+// layout, kinds, roles, names and edges this hash exists to freeze are
+// byte-identical with it stripped — checked, not assumed, when it was added.
+// Excluding a field is only ever right when that is true; a hash that moves
+// because the GEOMETRY moved must be paid for the way the two re-recordings
+// below were, not waved through by widening this unset().
+$frozenRooms = array_map(
+    function ($r) { unset($r['description'], $r['furnishing']); return $r; },
+    $frozen['rooms']
+);
 $frozenDoors = array_map(
     fn ($e) => [$e['a'], $e['b'], in_array($e['door'], ['open', 'arch', 'stuck'], true) ? $e['door'] : 'door'],
     $frozen['edges']

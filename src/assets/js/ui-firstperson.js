@@ -97,9 +97,11 @@
     const walls = new Set();
     const stairs = new Map();
     (tiles.doors || []).forEach((d) => doors.set(d.t * 4 + d.d, d));
+    const props = new Map();
+    (tiles.props || []).forEach((p) => props.set(p.t, p));
     (tiles.walls || []).forEach((w) => walls.add(w.t * 4 + w.d));
     (tiles.stairs || []).forEach((s) => stairs.set(s.t, s.d));
-    const fp = { doors, walls, stairs };
+    const fp = { doors, walls, stairs, props };
     try { Object.defineProperty(tiles, '_fp', { value: fp, enumerable: false }); } catch (e) { tiles._fp = fp; }
     return fp;
   }
@@ -502,6 +504,71 @@
     return out.join('');
   }
 
+  /**
+   * A furnishing, as a box standing on the floor of the cell that holds it.
+   *
+   * Six faces would be a modelling problem; three are enough for a box seen
+   * from outside, and which three depends only on which side of the cell the
+   * party is on — front and top always, plus the one side face that is turned
+   * toward them. Flat quads sorted by depth like everything else here, so a
+   * chest behind a pillar is behind it for free.
+   *
+   * A LID, NOT A HEIGHT. `top` is a fraction of the cell rather than a real
+   * measurement: a sarcophagus and a barrel are the same box at different
+   * heights, and the point of the shape is "there is a thing here to open",
+   * which reads at any size the cell allows.
+   */
+  const PROP_H = { chest: 0.34, strongbox: 0.3, barrel: 0.44, crate: 0.46,
+                   sarcophagus: 0.28, cabinet: 0.62 };
+
+  function prop(list, kind, x0, x1, z0, z1, isOpen) {
+    const a = Math.max(z0, NEAR);
+    const b = Math.max(z1, NEAR);
+    if (b <= a) return;
+
+    // Inset, so the box stands IN the cell rather than filling it wall to wall.
+    const m = 0.18;
+    const lx = x0 + m;
+    const rx = x1 - m;
+    const nz = a + (b - a) * m;
+    const fz = b - (b - a) * m;
+    const base = -H;
+    const top = -H + (2 * H) * (PROP_H[kind] || 0.34);
+
+    const cls = 'fp-prop is-' + kind + (isOpen ? ' is-open' : '');
+    const faces = [];
+    const quadOf = (pts) => '<polygon points="' + poly(pts) + '"/>';
+
+    // The near face, the lid, and whichever side is turned toward the viewer.
+    faces.push(quadOf([proj(lx, base, nz), proj(rx, base, nz),
+                       proj(rx, top, nz), proj(lx, top, nz)]));
+    if (isOpen) {
+      // The lid stood up against the back of it, and the dark of the inside
+      // where the lid used to be. Two quads rather than a hinge animation: a
+      // box you can see into is the whole of what "open" has to say from six
+      // feet away, and the mouth being darker than every wall face is what
+      // makes it read as a hole rather than as a lighter lid.
+      faces.push(quadOf([proj(lx, top, fz), proj(rx, top, fz),
+                         proj(rx, top + (top - base) * 0.9, fz),
+                         proj(lx, top + (top - base) * 0.9, fz)]));
+      list.push({ z: a - 0.002, svg: '<g class="fp-prop-mouth">'
+        + quadOf([proj(lx, top, nz), proj(rx, top, nz),
+                  proj(rx, top, fz), proj(lx, top, fz)]) + '</g>' });
+    } else {
+      faces.push(quadOf([proj(lx, top, nz), proj(rx, top, nz),
+                         proj(rx, top, fz), proj(lx, top, fz)]));
+    }
+    if (rx < 0) {
+      faces.push(quadOf([proj(rx, base, nz), proj(rx, base, fz),
+                         proj(rx, top, fz), proj(rx, top, nz)]));
+    } else if (lx > 0) {
+      faces.push(quadOf([proj(lx, base, nz), proj(lx, base, fz),
+                         proj(lx, top, fz), proj(lx, top, nz)]));
+    }
+
+    list.push({ z: a - 0.003, svg: '<g class="' + cls + '">' + faces.join('') + '</g>' });
+  }
+
   /** A stair, as receding treads on the floor of the cell that holds one. */
   function stair(list, x0, x1, z0, z1, down) {
     const treads = [];
@@ -563,6 +630,14 @@
 
         const st = index(tiles).stairs.get(tileOf(tiles, cx, cy));
         if (st) stair(list, x0, x1, z0, z1, st === 'down');
+
+        // Whatever is standing in this cell. Skipped for the cell the party is
+        // in — they are on top of it, and a box drawn round the camera is a
+        // wall across the whole picture.
+        if (du !== 0 || dv !== 0) {
+          const pr = index(tiles).props.get(tileOf(tiles, cx, cy));
+          if (pr) prop(list, pr.k, x0, x1, z0, z1, !!pr.o);
+        }
 
         // The four faces, in the party's own frame: 0 ahead, 1 right, 2
         // behind, 3 left. The face behind is skipped for the cell you are

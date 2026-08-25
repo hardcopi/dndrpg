@@ -1235,12 +1235,46 @@
       </path>`;
     }).join('');
 
+    // The furnishing, drawn in the corner it stands in.
+    //
+    // ONE GLYPH FOR ALL SIX KINDS. A chest, a strongbox, a barrel, a crate, a
+    // sarcophagus and a cabinet are six words for "there is something in here
+    // that shuts", and six silhouettes at two millimetres across would be six
+    // things to squint at to learn nothing — the name is in the title and in
+    // the room's own paragraph, which is where a name belongs. What the mark
+    // has to say is that the room has one.
+    //
+    // The far corner, matching the raster: DungeonGen::tiles() stands the prop
+    // at the room's own max-x/max-y tile, and a chart that put it anywhere
+    // else would be a second opinion about where the thing is. Inset by about
+    // a square and clamped to the room, the same way the entrance pin is.
+    const propMarks = plan.rooms.filter(lit).map((r) => {
+      if (!r.furnishing) return '';
+      const sq = ruling && ruling.dx > 0.01 ? Math.min(ruling.dx, ruling.dy) : 2.4;
+      const inset = Math.min(sq * 0.85, r.w * 0.28, r.h * 0.28);
+      const cx = r.x + r.w - inset;
+      const cy = r.y + r.h - inset;
+      const half = Math.min(sq * 0.34, r.w * 0.16, r.h * 0.16);
+      // Shut, the lid lies across the box. Open, it stands off the back of it —
+      // the same line, moved out past the edge, which is what an open lid looks
+      // like from above and needs no second glyph to say.
+      const open = !!r.furnishing_open;
+      const lid = open ? cy - half * 1.42 : cy - half * 0.34;
+      const span = open ? half * 1.1 : half;
+      return `<g class="wm-prop${open ? ' is-open' : ''}" aria-hidden="true">
+        <rect class="wm-prop-body" x="${round3(cx - half)}" y="${round3(cy - half)}"
+              width="${round3(half * 2)}" height="${round3(half * 2)}" rx="${round3(half * 0.22)}"/>
+        <path class="wm-prop-lid" d="M ${round3(cx - span)} ${round3(lid)} H ${round3(cx + span)}"/>
+        <title>${esc(String(r.furnishing))}${open ? ', open' : ''}</title>
+      </g>`;
+    }).join('');
+
     // Order matters: the rockwork goes down on the bare rock, and the floors
     // and rooms are painted over the top of it. That is what lets a hatch
     // stroke start a hair inside the wall — the overshoot is covered by the
     // floor that lands on it, so every stroke meets the edge line cleanly
     // instead of floating a gap away from it.
-    return `<g class="wm-plan">${rock}${rockwork}${walls}${floors}${rooms}${grid}${stairs}${doors}${trapMarks}</g>`;
+    return `<g class="wm-plan">${rock}${rockwork}${walls}${floors}${rooms}${grid}${stairs}${doors}${propMarks}${trapMarks}</g>`;
   }
 
   /**

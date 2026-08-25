@@ -248,6 +248,60 @@ authentication.
   it asserts against specific doors on specific floors, so it cannot depend on a
   container that is entitled to draw different ones tomorrow.
 
+### The chest in the room
+
+A treasure room's prose used to name what was in it and mean nothing by it —
+"a stack of crates leans where somebody left it" over ground loot you picked up
+by walking in. The furnishing is that sentence made into an object.
+
+`DungeonGen::FURNISHINGS` rolls one per `treasure`/`hoard`/`boss` room in
+`furnish()`, which runs **inside `dress()`, last**, on the dressing stream: a
+kind, its clause appended to the description, whether it is fastened, the lid's
+own DC, and — when it is rigged — a whole trap record taken from the same
+`TRAPS[$band]` table a passage trap comes from. The last of those is what lets
+a chest lid do damage through `LocationEngine::fireTrapOn` rather than through a
+second, nearly identical mechanism.
+
+- **It is the LID on loot that already worked.** `LocationEngine::itemsAt()`
+  hands the party nothing while the flag says shut, so there is no new inventory
+  path, no new kind of reward, and a room with no furnishing behaves exactly as
+  every delve room did before. What it adds is the four questions between a
+  party and the same pile: is it locked, is it rigged, did you look, and whose
+  hands were on it. That is also why opening one says nothing about the
+  contents — the list *is* the answer, and a sentence naming them would be a
+  second one that could disagree.
+- **What the dungeon IS lives in `level_json`; what has HAPPENED to it lives in
+  `WorldState`.** `DelveEngine::furnishingAt()` parses the room number back out
+  of the location key and asks the stored level, so nothing about a furnishing is
+  written into a column where it could drift from the floor the chart is drawn
+  from. Two flags per box, `dg_furn_<key>` and `dg_trap_<key>#furn` — the suffix
+  keeps the mechanism in the lid apart from the room's own floor trap, which is
+  already keyed on the bare location key.
+- **`FurnishingEngine` mirrors `DoorEngine` rather than sharing it.** They ask
+  the same four verbs, and it is tempting to fuse them. A door is an EXIT ROW
+  between two places whose lock travel already enforces; a furnishing is a fact
+  about ONE place whose lock gates a list of items. The parts genuinely in
+  common — `CheckService` and `fireTrapOn` — are already shared, and fusing the
+  rest would mean an engine whose every method began by asking which of the two
+  things it was holding.
+- **The payload does not say whether it is locked or trapped.** Those are the
+  questions the room is asking; `report()` ships the kind, the name and whether
+  it is open, plus only what the party has actually learned about the trap.
+- **Both maps draw it, and neither works anything out.** `DungeonGen::tiles()`
+  stands the prop in the room's far corner (derived from the bounds, so it costs
+  the random stream nothing), `plan()` ships the kind, and `DelveEngine::map()`
+  stamps `open` onto both drawings from ONE read of the flag — so the chart glyph
+  and the box in the corridor cannot disagree. `fogTiles()` censors props by the
+  same `$lit` the floor uses, so a chest in a room nobody has found is not
+  shipped and neither renderer needs to know about fog.
+- **`furnishing` is excluded from the golden hash**, checked rather than assumed:
+  the layout is byte-identical with the field stripped. `furnish()` is last in
+  `dress()`, which is why it may roll as many dice as it needs to.
+
+`tools/test_furnishing.php` drives the verbs, the gate and the seam, including
+the case that would rot quietly — that the loot really is hidden while the lid
+is down.
+
 ### The floor's errand
 
 Every service floor carries a generated quest — a name, a hook, steps pinned to

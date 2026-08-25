@@ -666,6 +666,13 @@ p { margin: 0 0 0.07in; }
 .floor-plan .wm-trap.is-found { fill: none; stroke: var(--accent); }
 .floor-plan .wm-trap.is-sprung { fill: var(--accent); stroke: none; }
 
+/* The furnishing. This skin shares nothing with style.css, so without these
+   three lines the glyph falls back to SVG's own defaults — a solid black box,
+   which is the heaviest mark on a page whose walls are hairlines. */
+.floor-plan .wm-prop-body { fill: var(--ink); fill-opacity: 0.14;
+                            stroke: var(--ink); stroke-width: 0.26; }
+.floor-plan .wm-prop-lid  { fill: none; stroke: var(--ink); stroke-width: 0.26; }
+
 /* --- the numbers --------------------------------------------------------
 
    Area numbers, not place names: these are read at a glance while somebody is

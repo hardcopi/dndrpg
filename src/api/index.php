@@ -1861,6 +1861,63 @@ function handle_location(string $action): void
         ));
     }
 
+    // --- the chest in the room ----------------------------------------------
+    // Same shape as the doors below, and for the same reason: what a party may
+    // do to a fastened, possibly rigged box depends on what they are carrying
+    // and what they have found, so the menu is asked for rather than assembled.
+    if ($action === 'furnishing_menu') {
+        require_method('POST');
+        json_response((new FurnishingEngine($db))->menu(require_character_id()));
+    }
+
+    if ($action === 'furnishing_inspect') {
+        require_method('POST');
+        json_response((new FurnishingEngine($db))->inspect(require_character_id()));
+    }
+
+    if ($action === 'furnishing_open') {
+        require_method('POST');
+        json_response((new FurnishingEngine($db))->open(require_character_id()));
+    }
+
+    // Forcing and picking are one ceremony with two first phases — a different
+    // skill and a different DC, and the same thing happens when the lid gives.
+    if ($action === 'furnishing_force' || $action === 'furnishing_pick') {
+        require_method('POST');
+        $id = require_character_id();
+        $eng = new FurnishingEngine($db);
+        json_response($action === 'furnishing_force' ? $eng->force($id) : $eng->pick($id));
+    }
+
+    if ($action === 'furnishing_force_resolve' || $action === 'furnishing_pick_resolve') {
+        require_method('POST');
+        $id = require_character_id();
+        $body = read_json_body();
+        $boosts = $body['boosts'] ?? [];
+        json_response((new FurnishingEngine($db))->openResolve(
+            $id,
+            (string) ($body['check_id'] ?? ''),
+            is_array($boosts) ? $boosts : []
+        ));
+    }
+
+    if ($action === 'furnishing_disarm') {
+        require_method('POST');
+        json_response((new FurnishingEngine($db))->disarm(require_character_id()));
+    }
+
+    if ($action === 'furnishing_disarm_resolve') {
+        require_method('POST');
+        $id = require_character_id();
+        $body = read_json_body();
+        $boosts = $body['boosts'] ?? [];
+        json_response((new FurnishingEngine($db))->disarmResolve(
+            $id,
+            (string) ($body['check_id'] ?? ''),
+            is_array($boosts) ? $boosts : []
+        ));
+    }
+
     // --- doors, as things you do something to -------------------------------
     // The menu is asked for rather than assembled by the client: what a party
     // may do at a threshold depends on what they are carrying and what they

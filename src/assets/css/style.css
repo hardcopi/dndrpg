@@ -1152,6 +1152,30 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 }
 .fp-stair polygon { fill: var(--pg-stair); fill-opacity: 0.55; stroke: var(--fp-edge); }
 
+/* A furnishing standing in a cell: three faces of a box. The lid is lighter
+   than the front and the side darker, which is the whole of the shading — the
+   same trick the walls use, and enough to read as a solid at this size. */
+.fp-prop polygon { fill: var(--fp-leaf); stroke: var(--fp-leaf-line); stroke-width: 0.6; }
+.fp-prop polygon:nth-child(2) { fill: color-mix(in srgb, var(--fp-leaf) 78%, #fff); }
+.fp-prop polygon:nth-child(3) { fill: color-mix(in srgb, var(--fp-leaf) 72%, #000); }
+/* Stone things are stone-coloured; the rest are the timber the doors are. */
+.fp-prop.is-sarcophagus polygon { fill: var(--fp-wall-1); }
+.fp-prop.is-sarcophagus polygon:nth-child(2) { fill: var(--fp-wall-0); }
+.fp-prop.is-strongbox polygon { fill: var(--fp-iron); }
+.fp-prop.is-strongbox polygon:nth-child(2) { fill: var(--fp-iron-lit); }
+
+/* An open lid is the same board seen from its inside face, standing up at the
+   back — not a lit top. Left on the `nth-child(2)` highlight it read as a pale
+   slab floating clear of the box rather than as part of it. */
+.fp-prop.is-open polygon:nth-child(2) { fill: color-mix(in srgb, var(--fp-leaf) 88%, #000); }
+.fp-prop.is-open.is-sarcophagus polygon:nth-child(2) { fill: var(--fp-wall-1); }
+.fp-prop.is-open.is-strongbox polygon:nth-child(2) { fill: var(--fp-iron); }
+
+/* The hole where the lid was. Darker than any wall band on purpose — it is the
+   one surface in the picture with nothing lighting it, and that is what makes
+   an open box read as open rather than as a box with a pale top. */
+.fp-prop-mouth polygon { fill: #05060a; stroke: #05060a; stroke-width: 0.4; }
+
 /* The corner map. Top right is the only free corner of this panel — the compass
    has the top left, the chart toggle the bottom left, the walk controls the
    bottom right — and it is small on purpose: it answers "what is behind me",
@@ -1995,6 +2019,18 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .wm-trap { pointer-events: none; }
 .wm-trap.is-found { fill: none; stroke: var(--pg-red); stroke-width: 0.3; }
 .wm-trap.is-sprung { fill: var(--pg-red); stroke: none; }
+
+/* An open lid stands off the back of the box; the outline stays the same so
+   the two states read as one thing in two conditions rather than as two marks. */
+.wm-prop.is-open .wm-prop-body { fill-opacity: 0.08; }
+
+/* A furnishing on the floor plan: a box with its lid drawn across it. In the
+   plan's own ink, not the trap's red — whether this one is trapped is the
+   question the room is asking, and answering it on the chart would spoil it. */
+.wm-prop { pointer-events: none; }
+.wm-prop-body { fill: var(--pg-ink); fill-opacity: 0.18;
+                stroke: var(--pg-ink); stroke-width: 0.22; }
+.wm-prop-lid  { fill: none; stroke: var(--pg-ink); stroke-width: 0.22; }
 
 /* A floor plan is denser than any authored region: eleven to fourteen rooms
    on a field the towns use for six or seven, every one of them named. At the
