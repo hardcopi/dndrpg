@@ -31,9 +31,13 @@
 -- leaves this alone. Authored under content/ it would be retired on the next
 -- load, which is exactly the trap this module exists to sit outside of.
 --
--- map_x/map_y are read off the plan as percentages: the common room sits at the
--- hearth and tables in the middle, the cellar node at the head of the spiral
--- stair on the left. See ui-map.js, which draws nodes over the region plate.
+-- map_x/map_y are read off the plan: the common room on the open floor between
+-- the hearth and the tables, the cellar node on the stairwell itself. They are
+-- percentages of the chart's own 100x75 field, NOT of the image — ui-map.js
+-- paints the plate with preserveAspectRatio="none", so the plate is stretched
+-- onto that field and a node's position is a fraction of the field either way.
+-- Which is also why the plate has to be 4:3 before it is committed: a 16:9 one
+-- is not letterboxed, it is squashed by a quarter, and the plan reads squat.
 --
 -- Safe to run twice.
 --
@@ -48,8 +52,8 @@ UPDATE locations SET
     inn_cost = 3,
     allow_camp = 1,
     has_delve = 0,
-    map_x = 48.00,
-    map_y = 56.00
+    map_x = 63.00,
+    map_y = 44.00
   WHERE location_key = '_freeplay_yard';
 
 -- --- the pit under it -----------------------------------------------------
@@ -62,10 +66,19 @@ SELECT '_freeplay_cellar',
        'The stair comes down into a cellar that was dug wider than a cellar needs to be. Sand on the floor, raked over and over. A ring of posts and rope, benches banked up on two sides, and a low arch in the far wall where the brick stops and cut rock begins — that one goes down further than anybody has bothered to measure.',
        'The sand has been raked since the last bout. It does not stay raked.',
        'arena',
-       32.00, 47.00,
+       43.00, 46.00,
        0, 1, 0, 1
 WHERE NOT EXISTS (SELECT 1 FROM (SELECT 1) AS x
                    WHERE EXISTS (SELECT 1 FROM locations WHERE location_key = '_freeplay_cellar'));
+
+-- Where it sits on the plan, applied separately from the INSERT above.
+--
+-- That insert is guarded `WHERE NOT EXISTS` so the migration is safe to run
+-- twice — which also means it cannot MOVE a pit that already exists. When the
+-- plate was replaced and every node had to be repositioned, the common room
+-- moved (it is written by an UPDATE) and the pit silently did not. A guarded
+-- insert creates; only an update changes.
+UPDATE locations SET map_x = 43.00, map_y = 46.00 WHERE location_key = '_freeplay_cellar';
 
 -- --- the stair, both ways -------------------------------------------------
 INSERT INTO location_exits (from_location_id, to_location_id, label, is_hidden)
