@@ -245,19 +245,78 @@ final class DelveEngine
     /**
      * Where a delve in progress began.
      *
-     * A row written before delves recorded their mouth has none, and every such
+     * THREE ANSWERS, IN THIS ORDER, AND THE ORDER IS THE FIX. It used to be two
+     * — the id, or the literal `uv_mouth` — on the argument that "every such
      * delve is in the Undervault because that is the only place one could
-     * happen — so that is what it falls back to. Without this the party climbs
-     * out of a floor that is then deleted underneath them and ends up standing
-     * nowhere at all.
+     * happen". That was true when it was written and stopped being true the day
+     * `has_delve` freed the stair from the module: `_freeplay_yard` has one too.
+     * So the fallback marched free-play parties out of a hole they never chose
+     * into an authored module, without walking. That is the `flagon_common_room`
+     * bug in a second file, and the rule it broke is the same one — anything
+     * that moves a party other than by an exit has to ask about the module.
+     *
+     *  1. The KEY, which survives a rebuild of the location table. The id does
+     *     not: `mouth_location_id` is ON DELETE SET NULL, and a content load
+     *     erases it under every party currently underground while
+     *     apply_content_safely.py — which carries player rows across exactly
+     *     that operation — does not know this table exists.
+     *  2. The id, for rows written before the key column and still valid.
+     *  3. The party's OWN module: its stair if it has one, its haven if not.
+     *     Never a constant, and never another module's anything.
+     *
+     * Null only when all three fail, and the caller refuses rather than
+     * guessing — a party that cannot be told where they came in is better
+     * stopped than teleported.
      */
-    private function mouthOf(array $delve): ?int
+    private function mouthOf(array $delve, ?int $partyId = null): ?int
     {
+        $key = $delve['mouth_location_key'] ?? null;
+        if (is_string($key) && $key !== '') {
+            $id = $this->locationIdByKey($key);
+            if ($id !== null) {
+                return $id;
+            }
+        }
         $id = $delve['mouth_location_id'] ?? null;
         if ($id !== null) {
             return (int) $id;
         }
-        return $this->locationIdByKey(self::MOUTH_KEY);
+        return $this->homeStairFor($partyId ?? (int) ($delve['party_id'] ?? 0));
+    }
+
+    /**
+     * The way out for a party whose delve has forgotten where it started.
+     *
+     * Asked of the party rather than named, so a delve begun anywhere surfaces
+     * somewhere in its own game. The stair first, because climbing out of the
+     * hole you are in is what the verb means; the module's opening room second,
+     * because a module may have lost its stair to an edit and standing in the
+     * right game beats standing in the right doorway of the wrong one.
+     */
+    private function homeStairFor(int $partyId): ?int
+    {
+        if ($partyId <= 0) {
+            return null;
+        }
+        $haven = (new CharacterGenerator($this->db))->havenFor($partyId);
+        if ($haven === null) {
+            return null;
+        }
+        // The module is read from the haven rather than from parties.module_id,
+        // which is NULL for every free-play party by design — havenFor() has
+        // already done that resolution and this must not undo it.
+        $stmt = $this->db->prepare(
+            'SELECT l.id FROM locations l
+               INNER JOIN regions r ON r.id = l.region_id
+              WHERE l.has_delve = 1
+                AND r.module_id = (SELECT r2.module_id FROM locations l2
+                                     INNER JOIN regions r2 ON r2.id = l2.region_id
+                                    WHERE l2.id = ?)
+              ORDER BY l.id LIMIT 1'
+        );
+        $stmt->execute([(int) $haven['id']]);
+        $stair = $stmt->fetchColumn();
+        return $stair === false ? (int) $haven['id'] : (int) $stair;
     }
 
     /**
@@ -889,10 +948,16 @@ final class DelveEngine
             // the party is standing on it. Everything afterwards — which module
             // the floors belong to, where climbing out puts them — is read back
             // from this row rather than from a constant.
+            // Both, and the KEY is the durable one. See mouthOf(): the id is a
+            // foreign key that a content load sets to null under a party who is
+            // already underground, and the key is what survives it.
+            $mouthKey = $this->locationKeyById($mouthId);
             $this->db->prepare(
-                'INSERT INTO dungeon_delves (party_id, seed, depth, mouth_location_id) VALUES (?, ?, ?, ?)'
-            )->execute([$partyId, $seed, $depth, $mouthId]);
-            $delve = ['mouth_location_id' => $mouthId];
+                'INSERT INTO dungeon_delves (party_id, seed, depth, mouth_location_id, mouth_location_key)
+                 VALUES (?, ?, ?, ?, ?)'
+            )->execute([$partyId, $seed, $depth, $mouthId, $mouthKey]);
+            $delve = ['mouth_location_id' => $mouthId, 'mouth_location_key' => $mouthKey,
+                      'party_id' => $partyId];
         } else {
             $seed = (int) $delve['seed'];
             $depth = (int) $delve['depth'] + 1;
@@ -901,7 +966,12 @@ final class DelveEngine
             }
         }
 
-        $mouthId = $this->mouthOf($delve);
+        $mouthId = $this->mouthOf($delve, $partyId);
+        if ($mouthId === null) {
+            throw new RuntimeException(
+                'This delve has lost the stair it began at, and there is none in this party\'s game.'
+            );
+        }
         $level = $this->draw($seed, $depth);
         if (!DungeonGen::isWalkable($level)) {
             // Cannot happen — the layout is joined by a spanning tree before
@@ -1066,7 +1136,12 @@ final class DelveEngine
             // that walked into a hole in the Proving Yard must not surface in
             // the Undervault, which is what a constant here would have done the
             // moment a second mouth existed.
-            $mouth = $this->mouthOf($delve);
+            //
+            // That comment was already here and was already right; mouthOf()
+            // was the thing that did not match it, falling back to a literal
+            // `uv_mouth` whenever the id had been nulled — which a content load
+            // does to every party underground. See mouthOf().
+            $mouth = $this->mouthOf($delve, $partyId);
             if ($mouth) {
                 $this->moveParty($partyId, $mouth);
             }
@@ -2030,6 +2105,14 @@ final class DelveEngine
     {
         return $this->locationIdByKey(self::roomKey($partyId, $depth, $room))
             ?? throw new RuntimeException("Generated room {$room} is missing from the database.");
+    }
+
+    private function locationKeyById(int $id): ?string
+    {
+        $stmt = $this->db->prepare('SELECT location_key FROM locations WHERE id = ?');
+        $stmt->execute([$id]);
+        $key = $stmt->fetchColumn();
+        return is_string($key) ? $key : null;
     }
 
     private function locationIdByKey(string $key): ?int

@@ -568,6 +568,18 @@ CREATE TABLE dungeon_delves (
     -- locations.has_delve set, so the mouth says both where to put the party
     -- when they climb out and which module the floors below belong to.
     mouth_location_id INT UNSIGNED NULL,
+    -- The same fact by KEY, and this is the one that is trusted first.
+    --
+    -- The id above is a foreign key declared ON DELETE SET NULL, which is right
+    -- for authored content and wrong for a row recording where a party is
+    -- standing: a content load rebuilds `locations` and silently erases the way
+    -- out from under everybody currently underground, and
+    -- apply_content_safely.py — which exists to carry player-side rows across
+    -- exactly that operation — did not know this table existed. mouthOf() then
+    -- fell back to a literal `uv_mouth` and surfaced free-play parties in the
+    -- Undervault. Keys are stable across a rebuild by construction; see the
+    -- "Keys, not ids" rule in docs/CONTENT.md.
+    mouth_location_key VARCHAR(64) NULL,
     -- The floor the party is actually standing on, stored rather than
     -- recomputed from the seed. That was sound while the generator was a
     -- deterministic function in this repository; it stopped being sound when a

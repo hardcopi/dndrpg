@@ -343,6 +343,70 @@ def apply_content(database: str) -> None:
         raise RuntimeError(f"content.sql failed:\n{err}")
 
 
+# Columns that a content load NULLS rather than deletes, and the key that can
+# put them back. The snapshot machinery above cannot help here: it restores rows
+# that went missing, and these rows never go missing — a foreign key declared
+# ON DELETE SET NULL quietly empties a column and leaves the row sitting there
+# looking fine.
+#
+# `dungeon_delves.mouth_location_id` is the one that mattered. It records where
+# a party currently underground went in, and every content load erased it under
+# them; DelveEngine::mouthOf() then fell back to a literal `uv_mouth` and
+# surfaced free-play parties in the Undervault. The engine now trusts the key
+# first, so this is repair rather than rescue — but a foreign key that is
+# allowed to stay broken is one nobody can trust to mean anything.
+RELINKS = [
+    {
+        # The floor the party is standing on, nulled by the same rule and with
+        # a worse consequence: descend() reads region_id to know what to DROP
+        # behind it, so a nulled one leaks the whole floor — twenty locations,
+        # its encounters and its generated quest — and nothing ever collects
+        # them. Recoverable without a stored key because a generated region's
+        # key is deterministic; see DelveEngine::regionKey().
+        "what": "dungeon_delves.region_id",
+        "sql": """
+            UPDATE dungeon_delves d
+              INNER JOIN regions r ON r.region_key = CONCAT('_dg_', d.party_id, '_', d.depth)
+                SET d.region_id = r.id
+              WHERE d.region_id IS NULL
+        """,
+        "count": """
+            SELECT COUNT(*) FROM dungeon_delves d
+             WHERE d.region_id IS NULL
+               AND EXISTS (SELECT 1 FROM regions r
+                            WHERE r.region_key = CONCAT('_dg_', d.party_id, '_', d.depth))
+        """,
+    },
+    {
+        "what": "dungeon_delves.mouth_location_id",
+        "sql": """
+            UPDATE dungeon_delves d
+              INNER JOIN locations l ON l.location_key = d.mouth_location_key
+                SET d.mouth_location_id = l.id
+              WHERE d.mouth_location_id IS NULL AND d.mouth_location_key IS NOT NULL
+        """,
+        "count": """
+            SELECT COUNT(*) FROM dungeon_delves
+             WHERE mouth_location_id IS NULL AND mouth_location_key IS NOT NULL
+        """,
+    },
+]
+
+
+def relink(database: str) -> list[str]:
+    """Put back the ids a content load nulled, resolving them through their keys."""
+    notes = []
+    for spec in RELINKS:
+        before = int(mysql(database, spec["count"]).strip() or 0)
+        if before == 0:
+            continue
+        mysql(database, spec["sql"])
+        after = int(mysql(database, spec["count"]).strip() or 0)
+        notes.append(f"  {spec['what']:34s} {before - after:3d} re-linked by key"
+                     + ("" if after == 0 else f", {after} still unresolved"))
+    return notes
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -382,6 +446,11 @@ def main() -> int:
 
     print("restoring progress by key ...")
     report = restore(args.database, before)
+
+    notes = relink(args.database)
+    if notes:
+        print("re-linking ids the load nulled ...")
+        print("\n".join(notes))
 
     print("\nresult:")
     lost = 0

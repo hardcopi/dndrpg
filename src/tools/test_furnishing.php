@@ -129,7 +129,16 @@ $roomLocId = (int) $db->lastInsertId();
 $itemId = (int) $db->query('SELECT id FROM items ORDER BY id LIMIT 1')->fetchColumn();
 $db->prepare('INSERT INTO location_items (location_id, item_id) VALUES (?, ?)')
     ->execute([$roomLocId, $itemId]);
-$db->prepare('DELETE FROM party_items_taken WHERE party_id = ?')->execute([$partyId]);
+$locItemId = (int) $db->lastInsertId();
+// SCOPED TO THIS TEST'S OWN ROW, not to the party.
+//
+// This was `DELETE ... WHERE party_id = ?` — the whole party's record of every
+// item it has ever picked up, deleted so that one fixture item would read as
+// untaken. That is player progress, on a real party borrowed as a fixture, and
+// a test that needs a clean slate must make one rather than clear somebody's.
+// The location_item_id is this test's own; nothing else can match it.
+$db->prepare('DELETE FROM party_items_taken WHERE party_id = ? AND location_item_id = ?')
+    ->execute([$partyId, $locItemId]);
 
 $db->prepare('DELETE FROM dungeon_delves WHERE party_id = ?')->execute([$partyId]);
 $db->prepare(
