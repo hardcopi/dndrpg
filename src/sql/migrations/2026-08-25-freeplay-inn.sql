@@ -92,34 +92,35 @@ SELECT l.location_key, l.name, l.location_type, l.inn_cost, l.allow_camp, l.has_
 -- An innkeeper, a shopkeeper and a regular. `is_merchant` is what puts the
 -- Trade door on somebody; the stock below is what is behind it.
 --
--- THE SPRITE KEYS ARE SHARED ARCHETYPES, on purpose. `innkeeper`, `merchant`
--- and `fighter` are existing paintings that already carry both the `_bust` and
--- `_face` the client actually requests — the same arrangement that lets
--- `farmer` dress four different people. Keys of their own would need
--- tools/gen_npc_art.py, and that reads content/npcs/*.json rather than the
--- database; these three live only here, precisely so a content load cannot
--- retire them. A missing bust is not a broken image either: the vhost answers
--- an absent file with the homepage HTML and a 200, so it would have shown as a
--- portrait that silently failed rather than as an error anybody would notice.
+-- THEY GET SPRITE KEYS OF THEIR OWN, and the reason is worth stating: they
+-- briefly shared the `innkeeper`, `merchant` and `fighter` archetypes, which
+-- works for display and is a trap the moment anything RENDERS to those names.
+-- `mara_hearthstone` already points at `innkeeper.png`, so writing a new
+-- innkeeper bust would have repainted the Golden Flagon's landlady in another
+-- module. A shared key is fine to read and never safe to write.
+--
+-- Their art comes from tools/gen_npc_portraits.php — the 3D creator, driven in
+-- a browser — because tools/gen_npc_art.py reads content/npcs/*.json and these
+-- three deliberately are not there, so that a content load cannot retire them.
 INSERT INTO npcs (npc_key, name, role, description, sprite_key, bust_count,
                   is_merchant, is_quest_giver, is_ambient, location_id, map_x, map_y)
 SELECT * FROM (
     SELECT '_fp_hessa' AS npc_key, 'Hessa Marrow' AS name, 'Innkeeper' AS role,
            'Keeps the Proving House. Broad, unhurried, and entirely uninterested in what anybody does downstairs so long as they come back up and settle the slate. Has run the place long enough to have stopped counting who does not.' AS description,
-           'innkeeper' AS sprite_key, 1 AS bust_count,
+           '_fp_hessa' AS sprite_key, 1 AS bust_count,
            0 AS is_merchant, 0 AS is_quest_giver, 0 AS is_ambient,
            (SELECT id FROM locations WHERE location_key = '_freeplay_yard') AS location_id,
            62.00 AS map_x, 52.00 AS map_y
     UNION ALL
     SELECT '_fp_odd', 'Oddvar Lint', 'Keeps the counter',
            'Runs the shelves along the back wall. Sells rope, tallow, oil and iron at a markup he will describe as fair and defend as necessary. Knows the weight of everything in the room and the price of most of it.',
-           'merchant', 1, 1, 0, 0,
+           '_fp_odd', 1, 1, 0, 0,
            (SELECT id FROM locations WHERE location_key = '_freeplay_yard'),
            33.00, 27.00
     UNION ALL
     SELECT '_fp_brenna', 'Brenna Vosk', 'Fights in the cellar',
            'Sits nearest the stair with her back to the wall, which is the seat you take if you intend to go down again. Has fought in the pit long enough to have opinions about the arch at the far end of it, and will share them without being asked twice.',
-           'fighter', 1, 0, 0, 0,
+           '_fp_brenna', 1, 0, 0, 0,
            (SELECT id FROM locations WHERE location_key = '_freeplay_yard'),
            40.00, 66.00
 ) AS want
@@ -148,3 +149,23 @@ SELECT n.npc_key, n.name, n.role, n.is_merchant,
        (SELECT COUNT(*) FROM shop_inventory s WHERE s.npc_key = n.npc_key) AS stock
   FROM npcs n INNER JOIN locations l ON l.id = n.location_id
  WHERE l.location_key IN ('_freeplay_yard', '_freeplay_cellar');
+
+-- --- what they say, and who they are -------------------------------------
+-- UPDATEs rather than folded into the INSERT above, so this block can be
+-- re-run against people who already exist.
+--
+-- The descriptions carry PRONOUNS deliberately. tools/gen_npc_portraits.php
+-- reads which pronoun a description uses to decide whether the 3D creator
+-- should put a beard on somebody; one that does not say leaves it to roll.
+-- That is the only place the fact is recorded, which is why it is written
+-- into the prose rather than into a column beside it that could disagree.
+
+UPDATE npcs SET description = 'She sits nearest the stair with her back to the wall, which is the seat you take if you intend to go down again. She has fought in the pit long enough to have opinions about the arch at the far end of it, and she will share them without being asked twice.' WHERE npc_key = '_fp_brenna';
+UPDATE npcs SET dialogue_json = '{"start": "hail", "nodes": {"hail": [{"text": "She has the seat nearest the stair, back to the wall, one boot up on the bench opposite so nobody takes it.\\n\\n\\"You''re new. You''ll either go down tonight or you''ll say you will and won''t. No shame in the second one. There''s some in the first.\\"", "choices": [{"label": "Tell me about the pit.", "next": "pit"}, {"label": "And the arch past it?", "next": "arch"}, {"label": "I''ll decide myself.", "action": "close"}]}], "pit": [{"text": "\\"Three ways to take a bout, and the house sizes it to whoever walks out onto the sand. Go alone and it''s a smaller fight, not a braver one — that''s the part people get wrong and only get wrong once.\\"", "choices": [{"label": "And the arch past it?", "next": "arch"}, {"label": "Good to know.", "next": "hail"}]}], "arch": [{"text": "\\"That''s not the pit. The pit has rules and a man with a rope who stops it.\\"\\n\\nShe turns her cup around on the table.\\n\\n\\"Down there it''s different every time you go, and it doesn''t stop. I''ve been four floors. I''ve not been five.\\"", "choices": [{"label": "Why not five?", "next": "why"}, {"label": "Noted.", "next": "hail"}]}], "why": [{"text": "\\"Because on four I put my hand on a chest that wasn''t a chest and I''ve been paying a physician since.\\"\\n\\n\\"Look at things before you open them. That''s the whole of what I''ve got to teach anybody.\\"", "choices": [{"label": "I''ll remember it.", "next": "hail"}]}]}}' WHERE npc_key = '_fp_brenna';
+
+UPDATE npcs SET description = 'She keeps the Proving House. Broad, unhurried, and entirely uninterested in what anybody does downstairs so long as they come back up and settle the slate. She has run the place long enough to have stopped counting who does not.' WHERE npc_key = '_fp_hessa';
+UPDATE npcs SET dialogue_json = '{"start": "hail", "nodes": {"hail": [{"text": "She has your measure before you reach the counter — boots first, then hands, then face, in that order.\\n\\n\\"Bed''s three. That''s the bed, the fire and whatever''s in the pot, and it''s three whether you use all of it or none of it.\\"", "choices": [{"label": "What''s downstairs?", "next": "downstairs"}, {"label": "Who else is in tonight?", "next": "who"}, {"label": "Nothing for now.", "action": "close"}]}], "downstairs": [{"text": "\\"Sand and a rope ring. People fight in it, people bet on it, and I take a cut of the second one and none of the first.\\"\\n\\nShe wipes the counter down without looking at it.\\n\\n\\"There''s an arch at the far end goes down further. That one I don''t take a cut of, and I don''t ask.\\"", "choices": [{"label": "You don''t ask?", "next": "dont_ask"}, {"label": "Right.", "next": "hail"}]}], "dont_ask": [{"text": "\\"I asked, once. Fellow told me. Then he went back down and I had a room with his kit in it for a season and nobody to give it to.\\"\\n\\n\\"Now I keep the slate and the fire. It''s a better trade.\\"", "choices": [{"label": "Fair enough.", "next": "hail"}]}], "who": [{"text": "\\"Oddvar, on the counter — he''ll sell you rope you don''t need and be right about it. Brenna, by the stair, who fights. And whoever comes up.\\"\\n\\n\\"Some nights nobody comes up. That''s the trade too.\\"", "choices": [{"label": "Understood.", "next": "hail"}]}]}}' WHERE npc_key = '_fp_hessa';
+
+UPDATE npcs SET description = 'He runs the shelves along the back wall. He sells rope, tallow, oil and iron at a markup he will describe as fair and defend as necessary, and he knows the weight of everything in the room and the price of most of it.' WHERE npc_key = '_fp_odd';
+UPDATE npcs SET dialogue_json = '{"start": "hail", "nodes": {"hail": [{"text": "The shelves behind him go from floor to beam: coiled rope, tallow blocks, oil in stoppered jars, iron in sizes.\\n\\n\\"Everything on that wall has been down the stair and come back,\\" he says. \\"Not always with the same person. Doesn''t make it worse rope.\\"", "choices": [{"label": "Let me see what you''ve got.", "action": "shop"}, {"label": "What sells fastest?", "next": "fastest"}, {"label": "Later.", "action": "close"}]}], "fastest": [{"text": "\\"Rope. Every time, rope.\\"\\n\\nHe says it like a man who has stopped finding it funny.\\n\\n\\"Second is oil. Third is a thing I keep behind me and don''t put a price on until I''ve seen who''s asking.\\"", "choices": [{"label": "Show me the shelves.", "action": "shop"}, {"label": "Another time.", "next": "hail"}]}]}}' WHERE npc_key = '_fp_odd';
+

@@ -709,19 +709,31 @@
     // is whatever sits next to their map sprite.
     const bust = G().variantUrl(npc.image_url, '_bust') || '';
 
+    // INSIDE `.dlg-panel`, exactly as renderShell() builds the modern one.
+    //
+    // That class is not decoration: it carries the theatre's whole frame — the
+    // gradient, the gold border, the radius, the shadow and the two-column
+    // grid that puts the bust beside the script. Without it this path drew the
+    // speaker and the lines straight onto `#dialogue-root` with no panel
+    // behind them, which reads as a conversation with no window around it.
+    // Every NPC on a modern dialogue tree goes through renderShell() and never
+    // saw it; anybody without one landed here and did.
     root().innerHTML = `
-      <div class="dlg-speaker">
-        <img class="dlg-bust" src="${esc(bust)}" alt=""
-             onerror="this.onerror=null;this.classList.add('is-sprite');this.src='${esc(G().bodySpriteUrl(npc.image_url || ''))}'">
-        <div class="dlg-name">${esc(npc.name)}</div>
-        ${npc.role ? `<div class="dlg-role">${esc(npc.role)}</div>` : ''}
-      </div>
-      <div class="dlg-script">
-        <p class="dlg-line">${esc(node.text)}</p>
-        ${npc.description ? `<p class="dlg-aside">${esc(npc.description)}</p>` : ''}
-        <div class="dlg-choices" id="dlg-choices"></div>
-      </div>
-      <button type="button" class="dlg-close btn btn-small" data-close aria-label="End the conversation">Esc</button>`;
+      <div class="dlg-panel" role="document">
+        <div class="dlg-speaker">
+          <img class="dlg-bust" src="${esc(bust)}" alt=""
+               onerror="this.onerror=null;this.classList.add('is-sprite');this.src='${esc(G().bodySpriteUrl(npc.image_url || ''))}'">
+          <div class="dlg-name">${esc(npc.name)}</div>
+          ${npc.role ? `<div class="dlg-role">${esc(npc.role)}</div>` : ''}
+        </div>
+        <div class="dlg-script">
+          <p class="dlg-line">${esc(node.text)}</p>
+          ${npc.description ? `<p class="dlg-aside">${esc(npc.description)}</p>` : ''}
+          <div class="dlg-choices" id="dlg-choices"></div>
+        </div>
+        <button type="button" class="dlg-close btn btn-small" data-close
+                aria-label="End the conversation">Esc</button>
+      </div>`;
 
     root().querySelector('[data-close]').onclick = () => close();
 
