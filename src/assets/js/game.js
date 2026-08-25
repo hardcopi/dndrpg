@@ -522,15 +522,16 @@
       <div class="fp-stage" id="scene-fp">${window.FirstPerson.svg(tiles, cursor,
         { label: `Looking ${way} from ${state.location ? state.location.name : 'here'}` })}</div>
       <p class="fp-compass" id="scene-compass" aria-live="polite">Facing ${esc(way)}</p>
+      <div class="fp-mini-wrap" id="scene-mini">${window.FirstPerson.minimap(tiles, cursor, {})}</div>
       <div class="fp-walk" role="group" aria-label="Walk">
         <button type="button" class="icon-btn" data-fp="left"
-                title="Turn left (←)" aria-label="Turn left">↰</button>
+                title="Turn left (← or A)" aria-label="Turn left">↰</button>
         <button type="button" class="icon-btn fp-fwd" data-fp="forward"
-                title="Step forward (↑)" aria-label="Step forward">↑</button>
+                title="Step forward (↑ or W)" aria-label="Step forward">↑</button>
         <button type="button" class="icon-btn" data-fp="about"
-                title="Turn about (↓)" aria-label="Turn about">↻</button>
+                title="Turn about (↓ or S)" aria-label="Turn about">↻</button>
         <button type="button" class="icon-btn" data-fp="right"
-                title="Turn right (→)" aria-label="Turn right">↱</button>
+                title="Turn right (→ or D)" aria-label="Turn right">↱</button>
       </div>
       ${fpToggle('Read the floor plan (V)', 'Map')}
       <button type="button" class="icon-btn map-info" id="scene-info"
@@ -550,6 +551,10 @@
     stage.innerHTML = window.FirstPerson.svg(tiles, state.fp.cursor, { label: `Looking ${way}` });
     const compass = document.getElementById('scene-compass');
     if (compass) compass.textContent = `Facing ${way}`;
+    // The corner map moves with the picture, not with the next full render —
+    // turning on the spot costs no request and the arrow has to turn with it.
+    const mini = document.getElementById('scene-mini');
+    if (mini) mini.innerHTML = window.FirstPerson.minimap(tiles, state.fp.cursor, {});
   }
 
   function fpTurn(by) {
@@ -1835,15 +1840,31 @@
       // map had to print it beside a name to be usable at all. Travel is
       // clicking a place on the chart.
 
-      // Walking a floor, the arrows are the whole of the controls — and they
-      // are bound only while the first-person view is up, so nothing else on
-      // the page loses them.
+      // Walking a floor: the arrows and WASD, bound only while the first-person
+      // view is up so nothing else on the page loses them.
+      //
+      // A and D TURN rather than strafe, because the arrows they sit beside
+      // turn and there is no sideways step in this view — a party occupies a
+      // whole location, and stepping is either forward through it or across a
+      // threshold. S turns about, which is what ArrowDown has always done.
+      //
+      // S IS SEARCH EVERYWHERE ELSE, and inside this branch it is not: the
+      // switch below never sees it while the view is up. That is a real cost
+      // and it is paid on purpose — Search is a button in the panel beside the
+      // picture, permanently visible, and hunting for the one letter that
+      // WASD needs in order to be WASD would leave the set incomplete for the
+      // sake of a shortcut to a control already on screen.
       if (fpOn()) {
-        switch (e.key) {
-          case 'ArrowUp': e.preventDefault(); fpForward(); return;
-          case 'ArrowLeft': e.preventDefault(); fpTurn(-1); return;
-          case 'ArrowRight': e.preventDefault(); fpTurn(1); return;
-          case 'ArrowDown': e.preventDefault(); fpTurn(2); return;
+        const walk = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+        switch (walk) {
+          case 'ArrowUp':
+          case 'w': e.preventDefault(); fpForward(); return;
+          case 'ArrowLeft':
+          case 'a': e.preventDefault(); fpTurn(-1); return;
+          case 'ArrowRight':
+          case 'd': e.preventDefault(); fpTurn(1); return;
+          case 'ArrowDown':
+          case 's': e.preventDefault(); fpTurn(2); return;
           default: break;
         }
       }

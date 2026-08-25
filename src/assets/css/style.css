@@ -1152,6 +1152,41 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 }
 .fp-stair polygon { fill: var(--pg-stair); fill-opacity: 0.55; stroke: var(--fp-edge); }
 
+/* The corner map. Top right is the only free corner of this panel — the compass
+   has the top left, the chart toggle the bottom left, the walk controls the
+   bottom right — and it is small on purpose: it answers "what is behind me",
+   and anything that answers more than that is the chart, which is one key
+   away. */
+.fp-mini-wrap {
+  position: absolute;
+  top: var(--sp-6);
+  right: var(--sp-6);
+  width: 5.6rem;
+  padding: 2px;
+  border: 1px solid var(--fp-edge);
+  border-radius: var(--r-sm);
+  background: var(--ornament-well);
+  pointer-events: none;
+}
+.fp-mini { display: block; width: 100%; height: auto; }
+.fp-mini .mm-void { fill: none; }
+.fp-mini .mm-floor rect { fill: var(--pg-paper-dim); fill-opacity: 0.5; }
+/* A stair is a landmark; the party is the thing you are looking for. So the
+   stair is dimmer, smaller and outlined, and only the arrow is lit gold. */
+.fp-mini .mm-stair {
+  fill: var(--pg-stair);
+  fill-opacity: 0.75;
+  stroke: var(--fp-edge);
+  stroke-width: 0.4;
+}
+.fp-mini .mm-you { fill: var(--gold-bright); stroke: var(--ink-on-gold); stroke-width: 0.4; }
+
+@media (max-width: 720px) {
+  /* On a phone the picture is already small; a map inside it would be a smudge
+     over the one thing being looked at. The chart is still one press away. */
+  .fp-mini-wrap { display: none; }
+}
+
 /* Which way you are looking, over a ceiling that is nearly black — so it is
    given its own ground rather than trusted to a text-shadow, the same way
    every other mark on this panel is. */

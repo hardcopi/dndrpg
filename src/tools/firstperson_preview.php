@@ -174,6 +174,12 @@ $js  = dirname(__DIR__) . '/assets/js/ui-firstperson.js';
         label: v.label,
         textures: '/assets/images/fp/',
       });
+      // The corner map, in the corner the game puts it in — so what is judged
+      // here is the composition the player actually gets, not the picture alone.
+      const mini = document.createElement('div');
+      mini.className = 'fp-mini-wrap';
+      mini.innerHTML = window.FirstPerson.minimap(TILES, v, {});
+      wrap.appendChild(mini);
       card.append(h, wrap);
       bench.appendChild(card);
     }

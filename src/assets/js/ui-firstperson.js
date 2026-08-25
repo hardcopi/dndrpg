@@ -607,8 +607,96 @@
       '</svg>';
   }
 
+  /**
+   * The corner map: where the party is on the floor they are walking.
+   *
+   * A WINDOW, NOT THE FLOOR. A generated level runs to 74 by 56 tiles, and all
+   * of it in a panel this size is a tile a pixel across — a picture of having a
+   * map rather than a map. Twenty-one by fifteen around the party is about two
+   * rooms in every direction, which is the question this answers: what is
+   * behind me, and did I come in that way.
+   *
+   * IT READS THE SAME RASTER THE VIEW DOES, which is the whole reason it can be
+   * trusted. `rows` is already fogged by DelveEngine before it is shipped, so a
+   * corridor the party has not walked is not in it and cannot be drawn here —
+   * the mini-map inherits the fog rather than implementing a second opinion
+   * about it. Same argument as the chart: the client paints what the engine
+   * shipped and decides nothing.
+   *
+   * NORTH IS UP, and it does not rotate with the party. The chart this view
+   * flips to and from is north-up, and a corner map that spun would make the
+   * two disagree about which way the floor lies every time somebody turned. The
+   * party's arrow carries the facing instead.
+   */
+  function minimap(tiles, cursor, opts) {
+    if (!tiles || !cursor) return '';
+    const o = opts || {};
+    const halfW = o.halfW || 10;
+    const halfH = o.halfH || 7;
+    const cell = 4;
+
+    const rows = tiles.rows || [];
+    const W = 2 * halfW + 1;
+    const H = 2 * halfH + 1;
+    const x0 = cursor.x - halfW;
+    const y0 = cursor.y - halfH;
+
+    const floor = [];
+    for (let j = 0; j < H; j++) {
+      const ty = y0 + j;
+      const row = rows[ty];
+      if (typeof row !== 'string') continue;
+      // Runs rather than one rect per tile: a corridor is a long line of the
+      // same cell and eleven rects for it is eleven nodes the browser lays out
+      // to draw one bar.
+      let run = -1;
+      for (let i = 0; i <= W; i++) {
+        const tx = x0 + i;
+        const open = i < W && tx >= 0 && tx < row.length && row[tx] !== ROCK;
+        if (open && run < 0) run = i;
+        if (!open && run >= 0) {
+          floor.push('<rect x="' + (run * cell) + '" y="' + (j * cell) +
+                     '" width="' + ((i - run) * cell) + '" height="' + cell + '"/>');
+          run = -1;
+        }
+      }
+    }
+
+    const marks = [];
+    for (const st of tiles.stairs || []) {
+      const tx = st.t % tiles.w;
+      const ty = Math.floor(st.t / tiles.w);
+      if (tx < x0 || tx > x0 + W || ty < y0 || ty > y0 + H) continue;
+      // Inset, so a stair reads as a mark ON the floor rather than as another
+      // bright blob the size of the party's own arrow. The two were the same
+      // gold and the same size, and the party is the one thing on this map
+      // that has to be findable at a glance.
+      marks.push('<rect class="mm-stair" x="' + px((tx - x0) * cell + 0.8) + '" y="' +
+                 px((ty - y0) * cell + 0.8) + '" width="' + px(cell - 1.6) +
+                 '" height="' + px(cell - 1.6) + '"/>');
+    }
+
+    // The party: a wedge pointing the way they are looking, drawn from the
+    // centre of their own cell so it sits in the corridor rather than beside it.
+    const cx = (halfW + 0.5) * cell;
+    const cy = (halfH + 0.5) * cell;
+    const r = cell * 1.15;
+    const a = (cursor.facing * Math.PI) / 2 - Math.PI / 2;
+    const pt = (ang, rad) => px(cx + Math.cos(ang) * rad) + ',' + px(cy + Math.sin(ang) * rad);
+    const arrow = '<polygon class="mm-you" points="' +
+      pt(a, r) + ' ' + pt(a + 2.5, r * 0.85) + ' ' + pt(a - 2.5, r * 0.85) + '"/>';
+
+    return '<svg class="fp-mini" viewBox="0 0 ' + (W * cell) + ' ' + (H * cell) + '" ' +
+      'role="img" aria-label="' + (o.label || 'Where you are on this floor') + '">' +
+      '<rect class="mm-void" x="0" y="0" width="' + (W * cell) + '" height="' + (H * cell) + '"/>' +
+      '<g class="mm-floor">' + floor.join('') + '</g>' +
+      marks.join('') + arrow +
+      '</svg>';
+  }
+
   window.FirstPerson = {
     svg: svg,
+    minimap: minimap,
     place: place,
     agrees: agrees,
     turn: turn,
