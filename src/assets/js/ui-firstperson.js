@@ -179,20 +179,28 @@
   const turn = (cursor, by) => ({ x: cursor.x, y: cursor.y, facing: (cursor.facing + by + 4) % 4 });
 
   /**
-   * What one step forward means.
+   * What one step means.
    *
    * Three answers and they are the whole movement model: a wall, a step inside
    * the place you are already in, or a threshold — which is a request to the
    * server and nothing this file may decide the outcome of. A locked door, a
    * trap, a wandering monster and a refusal all belong to `location/travel`,
    * exactly as they do when the chart is driving.
+   *
+   * `heading` is which way the step goes and defaults to the way the party is
+   * looking. Backing up passes the opposite, and the RESULT KEEPS `cursor.facing`
+   * — that is the whole of what makes it a step backwards rather than a turn
+   * and a walk. Everything else is identical, including the threshold: a party
+   * that reverses through a doorway has crossed it exactly as if they had
+   * walked through forwards, and the server is asked in the same words.
    */
-  function step(tiles, cursor, hereId) {
-    const face = faceOf(tiles, cursor.x, cursor.y, cursor.facing);
+  function step(tiles, cursor, hereId, heading) {
+    const dir = heading === undefined || heading === null ? cursor.facing : heading;
+    const face = faceOf(tiles, cursor.x, cursor.y, dir);
     if (face.kind === 'wall') return { blocked: true };
 
-    const nx = cursor.x + DX[cursor.facing];
-    const ny = cursor.y + DY[cursor.facing];
+    const nx = cursor.x + DX[dir];
+    const ny = cursor.y + DY[dir];
     const to = { x: nx, y: ny, facing: cursor.facing };
     const there = ownerAt(tiles, nx, ny);
 

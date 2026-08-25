@@ -528,8 +528,8 @@
                 title="Turn left (← or A)" aria-label="Turn left">↰</button>
         <button type="button" class="icon-btn fp-fwd" data-fp="forward"
                 title="Step forward (↑ or W)" aria-label="Step forward">↑</button>
-        <button type="button" class="icon-btn" data-fp="about"
-                title="Turn about (↓ or S)" aria-label="Turn about">↻</button>
+        <button type="button" class="icon-btn" data-fp="back"
+                title="Step back (↓ or S)" aria-label="Step back">↓</button>
         <button type="button" class="icon-btn" data-fp="right"
                 title="Turn right (→ or D)" aria-label="Turn right">↱</button>
       </div>
@@ -572,11 +572,20 @@
    * door and the refusal all behave exactly as they do when you click the map.
    * Into a wall it is nothing, and says so.
    */
-  async function fpForward() {
+  /**
+   * A step, forward by default and backwards when told.
+   *
+   * One function rather than two, because everything after the direction is the
+   * same: the bump when it is a wall, the redraw when it is inside this place,
+   * and the ordinary `location/travel` when it is a threshold. Backing through
+   * a doorway is crossing it, and it has to ask the server in the same words as
+   * walking through it — two copies of this would be two chances to forget that.
+   */
+  async function fpWalk(heading) {
     const tiles = fpTiles();
     if (!tiles || !state.fp.cursor || state.busy) return;
     const here = state.location ? +state.location.id : null;
-    const move = window.FirstPerson.step(tiles, state.fp.cursor, here);
+    const move = window.FirstPerson.step(tiles, state.fp.cursor, here, heading);
 
     if (move.blocked) {
       const stage = document.getElementById('scene-fp');
@@ -597,6 +606,10 @@
     state.fp.cursor = move.cursor;
     await travelTo(move.travel);
   }
+
+  const fpForward = () => fpWalk(undefined);
+  /** Backwards: the opposite way, still looking where you were. */
+  const fpBack = () => fpWalk(state.fp.cursor ? (state.fp.cursor.facing + 2) % 4 : 0);
 
   function fpFlip() {
     state.fp.on = !state.fp.on;
@@ -653,9 +666,9 @@
         b.addEventListener('click', () => {
           const verb = b.dataset.fp;
           if (verb === 'forward') fpForward();
+          else if (verb === 'back') fpBack();
           else if (verb === 'left') fpTurn(-1);
           else if (verb === 'right') fpTurn(1);
-          else if (verb === 'about') fpTurn(2);
         });
       });
       return;
@@ -1864,7 +1877,7 @@
           case 'ArrowRight':
           case 'd': e.preventDefault(); fpTurn(1); return;
           case 'ArrowDown':
-          case 's': e.preventDefault(); fpTurn(2); return;
+          case 's': e.preventDefault(); fpBack(); return;
           default: break;
         }
       }
