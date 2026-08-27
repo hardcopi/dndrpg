@@ -1,0 +1,22 @@
+{
+    "quest_key": "fp_watch_shrine",
+    "title": "The Shrine Room",
+    "description": "Something in the shrine room is keeping people from sleeping. Hessa wants it quiet.",
+    "giver": "_fp_hessa",
+    "on_job_board": false,
+    "rewards": { "xp": 0, "gold": 0 },
+    "stages": {
+        "fetch": {
+            "title": "Quiet the shrine room",
+            "objective": "Go down and find the shrine room.",
+            "journal": "Hessa wants the shrine room quiet. Something in it is keeping people from sleeping.",
+            "target": { "location": "_freeplay_cellar" }
+        },
+        "returned": {
+            "title": "The altar",
+            "journal": "I stood in the shrine room. Hessa said that would do.",
+            "resolution": "seen",
+            "terminal": true
+        }
+    }
+}

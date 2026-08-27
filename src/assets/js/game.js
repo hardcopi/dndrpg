@@ -412,16 +412,14 @@
     // the scene, and the description is a click away under the ⓘ in its
     // corner. Nothing was lost — the prose modal carries the art with it, and
     // the first-visit paragraph still opens on arrival.
+    const ways = waysPanel(loc);
+    const foot = ways ? `<div class="loc-foot">${ways}</div>` : '';
     root.innerHTML = `
       <div class="loc-inner">
         <div class="loc-text">
           <h1 class="loc-name">${esc(loc.name)}, ${esc(loc.region_name)}</h1>
           ${sceneMap()}
-          <div class="loc-foot">
-            ${pitPanel(loc)}
-            ${waysPanel(loc)}
-            ${actionsPanel(loc)}
-          </div>
+          ${foot}
         </div>
       </div>`;
 
@@ -456,6 +454,7 @@
       ${fpToggle('Walk it in first person (V)', 'Look')}
       <button type="button" class="icon-btn map-info" id="scene-info"
               title="What this place looks like (I)" aria-label="Describe this place">i</button>
+      ${actionsPanel(state.location)}
     </div>`;
   }
 
@@ -536,6 +535,7 @@
       ${fpToggle('Read the floor plan (V)', 'Map')}
       <button type="button" class="icon-btn map-info" id="scene-info"
               title="What this place looks like (I)" aria-label="Describe this place">i</button>
+      ${actionsPanel(state.location)}
     </div>`;
   }
 
@@ -585,6 +585,16 @@
     const tiles = fpTiles();
     if (!tiles || !state.fp.cursor || state.busy) return;
     const here = state.location ? +state.location.id : null;
+    const facing = state.fp.cursor.facing;
+    const dir = heading === undefined || heading === null ? facing : heading;
+    const enc = state.location && state.location.encounter;
+    const roomFig = (tiles.figs || []).find((f) => f.l === here);
+    // Walking forward into the ones standing in this room is starting the
+    // fight. Hold back already happened; a step into them is the decision.
+    if (dir === facing && roomFig && enc) {
+      await startCombat({ encounter_id: enc.id });
+      return;
+    }
     const move = window.FirstPerson.step(tiles, state.fp.cursor, here, heading);
 
     if (move.blocked) {
@@ -597,6 +607,12 @@
       return;
     }
     if (!move.travel) {
+      const destT = move.cursor.y * tiles.w + move.cursor.x;
+      const destFig = (tiles.figs || []).find((f) => f.t === destT);
+      if (destFig && destFig.l === here && enc) {
+        await startCombat({ encounter_id: enc.id });
+        return;
+      }
       state.fp.cursor = move.cursor;
       fpRedraw();
       return;
@@ -805,17 +821,24 @@
     const npcs = (state.location && state.location.npcs) || [];
     return npcs
       .filter((n) => n && n.id && !n.is_ambient)
-      .map((n) => ({
+      .map((n) => {
+        const bits = [];
+        if (n.is_merchant) bits.push('sells goods');
+        if (n.quest_mark === 'turnin') bits.push('ready to turn in');
+        else if (n.quest_mark === 'offer' || n.has_work) bits.push('has work');
+        return {
         id: n.id,
         label: n.known ? n.name : (n.role || 'A stranger'),
-        hint: n.is_merchant ? 'sells goods' : (n.has_work ? 'has work' : ''),
+        hint: bits.join(' — '),
+        mark: n.quest_mark === 'offer' || n.quest_mark === 'turnin' ? n.quest_mark : null,
         face: variantUrl(n.image_url, '_face')
           || spriteArtUrl(n.sprite_key || DEFAULT_SPRITE_KEY, '_face'),
         // Where they stand, when somebody has said. Undefined otherwise, and
         // the chart puts them with everyone else at the place marker.
         x: n.map_x == null ? undefined : +n.map_x,
         y: n.map_y == null ? undefined : +n.map_y,
-      }));
+      };
+      });
   }
 
   function personRow(n) {
@@ -827,15 +850,25 @@
     // `has_work` rather than `is_quest_giver`: the first is about this party,
     // the second is a permanent fact about the character, and a mark that never
     // goes out stops meaning anything.
+    const qMark = n.quest_mark === 'offer' || n.quest_mark === 'turnin'
+      ? n.quest_mark
+      : (n.has_work ? 'offer' : null);
+    const glyph = qMark === 'turnin' ? '?' : (qMark === 'offer' ? '!' : '');
+    const markTitle = qMark === 'turnin' ? 'Ready to turn in' : 'Has work';
     const tags = [
       n.is_merchant ? '<span class="person-tag is-shop" title="Sells goods">◈</span>' : '',
-      n.has_work ? '<span class="person-tag is-quest" title="Has work">!</span>' : '',
     ].join('');
+    const faceMark = glyph
+      ? `<span class="person-quest-mark is-${qMark}" title="${markTitle}">${glyph}</span>`
+      : '';
     return `<li>
       <button type="button" class="person" data-npc="${n.id}"
               title="${esc(n.description || '')}">
-        <img class="person-face" src="${esc(face)}" alt=""
-             onerror="this.classList.add('is-missing')">
+        <span class="person-face-wrap">
+          <img class="person-face" src="${esc(face)}" alt=""
+               onerror="this.classList.add('is-missing')">
+          ${faceMark}
+        </span>
         <span class="person-text">
           <span class="person-name">${esc(name)}${tags}</span>
         </span>
@@ -895,8 +928,11 @@
          </div>`
       : '';
 
-    return `<section class="loc-pit">
-      <h2>Take a bout</h2>
+    // The bouts are the card. The stair is an action, and loc-actions is
+    // the standard for those — a second full-width copy here is how both
+    // went missing when the overlay clipped: the bar was told not to draw
+    // it, and this one sat off the painting.
+    return `<section class="loc-pit" aria-label="Take a bout">
       <div class="pit-grid">
         ${tiers.map((t) => `
           <button type="button" class="btn loc-act pit-bout" data-act="pit" data-id="${esc(t.tier)}"
@@ -904,9 +940,24 @@
             <span class="pit-label">${esc(t.label)}</span>
             <span class="pit-sample">${esc(t.sample)}, or so</span>
           </button>`).join('')}
-        ${readout}
       </div>
+      ${readout}
     </section>`;
+  }
+
+  /**
+   * Whether anybody in the party is below full hit points.
+   *
+   * Rest at the inn always draws its price. It is only THE thing to press
+   * (gold, first in the bar) when somebody is hurt. Asked here rather than
+   * inferred from a combat flag, because walking out of a fight and into the
+   * inn is the common case and the HP numbers are already on the members.
+   */
+  function partyIsHurt() {
+    const members = (Array.isArray(state.party) && state.party.length)
+      ? state.party
+      : (state.character ? [state.character] : []);
+    return members.some((m) => m && Number(m.current_hp) < Number(m.max_hp));
   }
 
   function actionsPanel(loc) {
@@ -961,6 +1012,9 @@
     // the only thing in the room to press, and once it is open the things
     // inside follow it down the list in the order you meet them.
     if (loc.furnishing) {
+      // It names the thing in the room, same as Take and Fight. Without the
+      // words this is an unlabeled key, and a search that found loot behind
+      // the lid leaves the player with no visible way to pick it up.
       acts.push({
         key: 'O',
         label: loc.furnishing.open
@@ -968,6 +1022,7 @@
           : `Open ${loc.furnishing.name}`,
         hint: loc.furnishing.blurb || '',
         act: 'furnishing',
+        showLabel: true,
       });
     }
     (loc.items || []).forEach((it) => {
@@ -977,11 +1032,23 @@
       });
     });
     if (loc.inn_cost !== null && loc.inn_cost !== undefined) {
-      acts.push({
+      // The price is the information. An icon and a tooltip would hide the
+      // reason to press it, and hiding the words until someone is hurt is
+      // when you least need the explanation. Gold and first when they are.
+      const rest = {
         key: 'R', label: `Rest at the inn (${loc.inn_cost} gp)`,
         hint: 'A bed, a long rest, and spells back', act: 'rest',
-      });
+        showLabel: true,
+      };
+      if (partyIsHurt()) {
+        acts.unshift({ ...rest, urgent: true });
+      } else {
+        acts.push(rest);
+      }
     }
+    // Camp is the fire on open ground, not a second long rest on an
+    // innkeeper's floor. loc.allow_camp is already the engine's answer
+    // (canCampHere), which withholds camp wherever there is a room for sale.
     if (loc.allow_camp) {
       acts.push({
         key: 'R', label: 'Make camp',
@@ -989,28 +1056,39 @@
         act: 'camp',
       });
     }
-    // The stair. `delve` is null everywhere but the Undervault, so no other
+    // The stair. `delve` is null everywhere but a mouth, so no other
     // module grows a button about a hole it has not got. Which of the three
     // shows is the server's call, not a guess from the location key.
+    // Words, always: a 34px chevron is how the hole stayed hidden, and
+    // hiding this copy because the pit card also had one is how it vanished
+    // off the overlay. A hole is not Search.
     if (loc.delve && loc.delve.can_descend) {
         acts.push({
           key: 'D', label: 'Go down the stair',
-          hint: 'Into the Undervault. It is not the same twice',
-          act: 'descend', danger: true,
+          hint: 'A different floor every time',
+          act: 'descend', danger: true, showLabel: true,
+        });
+    } else if (loc.delve && loc.delve.descend_hint) {
+        // Posted but not accepted: keep the hole visible so they click it
+        // and hear why, rather than hiding the stair until they guess to talk.
+        acts.push({
+          key: 'D', label: 'Go down the stair',
+          hint: loc.delve.descend_hint,
+          act: 'descend', danger: true, showLabel: true,
         });
     }
     if (loc.delve && loc.delve.can_deeper) {
         acts.push({
           key: 'D', label: `Take the stair down (level ${loc.delve.depth + 1})`,
           hint: 'Deeper. What is down there is worse, and worth more',
-          act: 'descend', danger: true,
+          act: 'descend', danger: true, showLabel: true,
         });
     }
     if (loc.delve && loc.delve.can_leave) {
         acts.push({
           key: 'U', label: 'Climb out',
-          hint: 'Back up to the Mouth. This floor closes behind you',
-          act: 'leave_dungeon',
+          hint: 'Back up. This floor closes behind you',
+          act: 'leave_dungeon', showLabel: true,
         });
     }
     // Looser than sleeping now, and the server says which: anywhere you could
@@ -1024,11 +1102,15 @@
         act: 'short_rest',
       });
     }
-    return `<section class="loc-actions">
-      <h2>Actions</h2>
-      <div class="action-list">
-        ${acts.map(actionKey).join('')}
-      </div>
+    const pit = pitPanel(loc);
+    if (!acts.length && !pit) return '';
+    // No heading. These sit on the chart, and a label over a cluster of
+    // keys is the chrome the chart does not have room for. The pit's
+    // bouts ride here too — a well under the picture was a second panel
+    // for the thing you came to this cellar to press.
+    return `<section class="loc-actions" aria-label="${pit ? 'Take a bout' : 'Actions'}">
+      ${pit}
+      ${acts.length ? `<div class="action-list">${acts.map(actionKey).join('')}</div>` : ''}
     </section>`;
   }
 
@@ -1076,11 +1158,12 @@
    */
   function actionKey(a) {
     const icon = ACTION_ICONS[a.act] || 'i-hands';
-    const named = !!a.id;
+    const named = !!a.id || a.showLabel;
     const cls = [
       'act-slot', 'loc-act',
       named ? 'has-label' : '',
       a.danger ? 'is-danger' : '',
+      a.urgent ? 'is-urgent' : '',
       a.act === 'leave_dungeon' ? 'is-up' : '',
     ].filter(Boolean).join(' ');
     // The tooltip says the label as well as the hint on a key that draws no

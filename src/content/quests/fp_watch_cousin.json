@@ -1,0 +1,22 @@
+{
+    "quest_key": "fp_watch_cousin",
+    "title": "Someone Went Down",
+    "description": "Brenna's cousin went down the arch and has not come up. She wants him back, or she wants to know.",
+    "giver": "_fp_brenna",
+    "on_job_board": false,
+    "rewards": { "xp": 0, "gold": 0 },
+    "stages": {
+        "fetch": {
+            "title": "Find who went down",
+            "objective": "Go down the arch and look for Brenna's cousin.",
+            "journal": "Brenna's cousin went down. She wants him back, or she wants to know.",
+            "target": { "location": "_freeplay_cellar" }
+        },
+        "returned": {
+            "title": "A note, not a person",
+            "journal": "I found a scrap saying he went further. Brenna took it and was not satisfied.",
+            "resolution": "note",
+            "terminal": true
+        }
+    }
+}

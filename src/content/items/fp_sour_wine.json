@@ -1,0 +1,10 @@
+{
+  "item_key": "fp_sour_wine",
+  "name": "A Green Bottle",
+  "description": "Wine gone the colour of pondwater. The cork is still in. Nobody who has opened one has described the taste twice.",
+  "item_type": "misc",
+  "rarity": "common",
+  "weight": 1,
+  "value_gp": 2,
+  "icon": "misc"
+}

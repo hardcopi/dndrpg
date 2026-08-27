@@ -1,0 +1,25 @@
+{
+    "quest_key": "fp_watch_stayed",
+    "title": "Still Missing",
+    "description": "Brenna's cousin has still not come up. Same job. Same ask.",
+    "giver": "_fp_brenna",
+    "on_job_board": false,
+    "rewards": { "xp": 0, "gold": 0 },
+    "stages": {
+        "fetch": {
+            "title": "Find who went down",
+            "objective": "Go down the arch and look for Brenna's cousin.",
+            "journal": "Brenna's cousin has still not come up. Same job. Same ask.",
+            "target": { "location": "_freeplay_cellar" }
+        },
+        "returned": {
+            "title": "He stayed",
+            "journal": "Calder stayed. Brenna already knew, and she used the word. The house is the last watch. The hole is open now.",
+            "resolution": "stayed",
+            "terminal": true,
+            "effects": [
+                { "set_flag": "watch_sandbox" }
+            ]
+        }
+    }
+}

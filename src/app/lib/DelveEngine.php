@@ -360,7 +360,7 @@ final class DelveEngine
             return null;
         }
         $stmt = $this->db->prepare(
-            'SELECT l.location_key, l.has_delve
+            'SELECT l.id, l.location_key, l.has_delve
                FROM characters c
                INNER JOIN locations l ON l.id = c.current_location_id
               WHERE c.id = ?'
@@ -379,12 +379,16 @@ final class DelveEngine
             if (empty($here['has_delve'])) {
                 return null;
             }
+            $gate = WatchJobs::isPit((string) $here['location_key'])
+                ? WatchJobs::pitGate($this->db, $partyId)
+                : ['allow' => true, 'hint' => null];
             return [
-                'depth'       => 0,
-                'max_depth'   => self::MAX_DEPTH,
-                'can_descend' => true,
-                'can_deeper'  => false,
-                'can_leave'   => false,
+                'depth'         => 0,
+                'max_depth'     => self::MAX_DEPTH,
+                'can_descend'   => !empty($gate['allow']),
+                'can_deeper'    => false,
+                'can_leave'     => false,
+                'descend_hint'  => $gate['hint'],
             ];
         }
 
@@ -413,11 +417,28 @@ final class DelveEngine
         // The exit was always there, besides. writeExits() cuts one from the
         // entrance room back to the Mouth and from nowhere else; this button
         // was a second way out that bypassed it. Now the two agree.
+        //
+        // The mouth still offers Down if they surfaced without the verb
+        // (a teleport, a leftover row). Pressing it starts another dungeon,
+        // which is the promise on the button: a different floor every time.
+        // Walking the entrance out should already have closed this one —
+        // see closeIfSurfaced().
+        $mouthKey = (string) ($delve['mouth_location_key'] ?? '');
+        $atMouth = !empty($here['has_delve']) && (
+            ($mouthKey !== '' && $here['location_key'] === $mouthKey)
+            || ((int) ($delve['mouth_location_id'] ?? 0) > 0
+                && (int) $here['id'] === (int) $delve['mouth_location_id'])
+        );
         return [
             'depth'       => $depth,
             'max_depth'   => self::MAX_DEPTH,
-            'can_descend' => false,
-            'can_deeper'  => $here['location_key'] === $stairKey && $depth < self::MAX_DEPTH,
+            'can_descend' => $atMouth,
+            'can_deeper'  => $here['location_key'] === $stairKey
+                && $depth < self::MAX_DEPTH
+                && (
+                    !WatchJobs::isPit((string) ($delve['mouth_location_key'] ?? ''))
+                    || WatchJobs::allowDeeper($this->db, $partyId)
+                ),
             'can_leave'   => $here['location_key'] === $entranceKey,
         ];
     }
@@ -524,8 +545,37 @@ final class DelveEngine
             }
         }
         foreach ($seen['tiles']['props'] as $i => $prop) {
-            $seen['tiles']['props'][$i]['o'] = $isOpen($prop['l'] ?? null);
+            // A lid going up is a loot fact. Dressing has no lid; stamping
+            // `o` on it would be the bunks opening because the chest did —
+            // they share a room id, which is the only handle map() had.
+            if (!empty($prop['loot'])) {
+                $seen['tiles']['props'][$i]['o'] = $isOpen($prop['l'] ?? null);
+            }
         }
+
+        // Who is waiting in a room the party can already see. The generator
+        // cannot say — it has no database — so the figures are stamped here,
+        // after fog, the same way a lid going up is. A fight in the dark is
+        // not a silhouette at the end of the hall. One sprite per room (the
+        // lead foe) and a count of one to three: Gold Box never drew a full
+        // roster in the corridor.
+        $spines = $seen['tiles']['spines'] ?? [];
+        $waiting = $this->waitingFigures($partyId, array_values($seen['tiles']['locs'] ?? []));
+        $figs = [];
+        foreach ($waiting as $locId => $fig) {
+            $tile = $spines[$locId] ?? null;
+            if ($tile === null) {
+                continue;
+            }
+            $figs[] = [
+                't' => (int) $tile,
+                's' => $fig['s'],
+                'n' => $fig['n'],
+                'u' => $fig['u'],
+                'l' => (int) $locId,
+            ];
+        }
+        $seen['tiles']['figs'] = $figs;
 
         return $seen;
     }
@@ -732,6 +782,96 @@ final class DelveEngine
     private const TILE_KEYS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
     /**
+     * Uncleared ambushes in rooms this party can already see.
+     *
+     * DungeonGen is DB-free, so the raster cannot carry encounters. The
+     * first-person view still needs a fight down the corridor, fogged the
+     * same way a chest is. One sprite key per room (the lead foe) and a
+     * count of one to three.
+     *
+     * @param list<int> $locationIds
+     * @return array<int, array{s:string, n:int}>
+     */
+    private function waitingFigures(int $partyId, array $locationIds): array
+    {
+        $locationIds = array_values(array_unique(array_map('intval', $locationIds)));
+        if ($locationIds === []) {
+            return [];
+        }
+        $marks = implode(',', array_fill(0, count($locationIds), '?'));
+        $stmt = $this->db->prepare(
+            "SELECT e.location_id, e.id AS encounter_id,
+                    em.quantity, em.id AS em_id, m.sprite_key, m.image_url
+               FROM encounters e
+               INNER JOIN encounter_monsters em ON em.encounter_id = e.id
+               INNER JOIN monsters m ON m.id = em.monster_id
+              WHERE e.location_id IN ($marks)
+                AND e.is_random = 0 AND e.is_ambush = 1
+                AND NOT EXISTS (
+                    SELECT 1 FROM party_encounters_cleared pc
+                     WHERE pc.encounter_id = e.id AND pc.party_id = ?
+                )
+              ORDER BY e.location_id, e.id, em.id"
+        );
+        $stmt->execute([...$locationIds, $partyId]);
+
+        $byLoc = [];
+        foreach ($stmt->fetchAll() as $row) {
+            $loc = (int) $row['location_id'];
+            $enc = (int) $row['encounter_id'];
+            if (!isset($byLoc[$loc])) {
+                $key = trim((string) ($row['sprite_key'] ?? ''));
+                if ($key === '') {
+                    $url = (string) ($row['image_url'] ?? '');
+                    $path = parse_url($url, PHP_URL_PATH);
+                    $key = pathinfo(is_string($path) && $path !== '' ? $path : $url, PATHINFO_FILENAME);
+                    $key = is_string($key) ? $key : '';
+                }
+                $byLoc[$loc] = ['enc' => $enc, 's' => $key, 'n' => 0];
+            }
+            if ($byLoc[$loc]['enc'] !== $enc) {
+                continue;
+            }
+            $byLoc[$loc]['n'] += max(1, (int) $row['quantity']);
+        }
+
+        $out = [];
+        foreach ($byLoc as $loc => $fig) {
+            if ($fig['s'] === '') {
+                continue;
+            }
+            $out[$loc] = [
+                's' => $fig['s'],
+                'n' => min(3, max(1, $fig['n'])),
+                'u' => $this->figureArt($fig['s']),
+            ];
+        }
+        return $out;
+    }
+
+    /**
+     * The picture that stands in the corridor.
+     *
+     * Combat already knows most monsters have no battler cut and fall back
+     * to the bust. The hallway has to make the same choice or a centipede
+     * is a broken image in a room the party is standing in.
+     */
+    private function figureArt(string $key): string
+    {
+        $key = preg_replace('/[^a-z0-9_]/i', '', $key) ?? '';
+        if ($key === '') {
+            return '';
+        }
+        $root = dirname(__DIR__, 2) . '/assets/images';
+        foreach (["battlers/{$key}.png", "monsters/{$key}.png", "monsters/{$key}_bust.png"] as $rel) {
+            if (is_file($root . '/' . $rel)) {
+                return 'assets/images/' . $rel;
+            }
+        }
+        return 'assets/images/battlers/' . $key . '.png';
+    }
+
+    /**
      * The raster, censored to what this party has earned, on the wire.
      *
      * Static and PDO-free beside fog(), for fog()'s reason — it is arithmetic
@@ -883,11 +1023,18 @@ final class DelveEngine
             // which has the party and this does not — and the only handle it
             // has to stamp it with is the id every other shipped block is
             // keyed by.
-            $props[] = [
+            $row = [
                 't' => (int) $prop['tile'],
                 'k' => (string) $prop['kind'],
                 'l' => $show['room:' . (int) $prop['room']] ?? null,
             ];
+            // Loot is the lid. Dressing has none; the client uses this to
+            // refuse an open mouth on a pillar that happens to share a room
+            // with a chest the party already opened.
+            if (!empty($prop['loot'])) {
+                $row['loot'] = true;
+            }
+            $props[] = $row;
         }
 
         // Where a party arriving in a place is put down, by location id.
@@ -937,6 +1084,19 @@ final class DelveEngine
     {
         $delve = $this->current($partyId);
 
+        // At the mouth of a leftover floor: close it and start another.
+        // Climbing out is supposed to have done this already. If it did not,
+        // Down must not resume the old dungeon — the button says a different
+        // floor every time.
+        if ($delve !== null) {
+            $hereMouth = $this->mouthFor($characterId);
+            $mouthId = $this->mouthOf($delve, $partyId);
+            if ($hereMouth !== null && $mouthId !== null && $hereMouth === $mouthId) {
+                $this->end($partyId, false);
+                $delve = null;
+            }
+        }
+
         if ($delve === null) {
             $mouthId = $this->mouthFor($characterId);
             if ($mouthId === null) {
@@ -944,6 +1104,19 @@ final class DelveEngine
             }
             $seed = random_int(1, 0x7FFFFFFF);
             $depth = 1;
+            $mouthKeyNow = $this->locationKeyById($mouthId);
+            if (is_string($mouthKeyNow) && WatchJobs::isPit($mouthKeyNow)) {
+                $gate = WatchJobs::pitGate($this->db, $partyId);
+                if (empty($gate['allow'])) {
+                    throw new InvalidArgumentException(
+                        (string) ($gate['hint'] ?: 'Not without a reason.')
+                    );
+                }
+                $job = WatchJobs::activeKey($this->db, $partyId);
+                if ($job !== null && isset(WatchJobs::JOBS[$job])) {
+                    $depth = (int) WatchJobs::JOBS[$job]['danger'];
+                }
+            }
             // The mouth is recorded now, at the only moment anybody knows it:
             // the party is standing on it. Everything afterwards — which module
             // the floors belong to, where climbing out puts them — is read back
@@ -964,6 +1137,10 @@ final class DelveEngine
             if ($depth > self::MAX_DEPTH) {
                 throw new InvalidArgumentException('The stair ends here. There is nothing below.');
             }
+            $mouthKeyNow = (string) ($delve['mouth_location_key'] ?? '');
+            if (WatchJobs::isPit($mouthKeyNow) && !WatchJobs::allowDeeper($this->db, $partyId)) {
+                throw new InvalidArgumentException('The stair ends here.');
+            }
         }
 
         $mouthId = $this->mouthOf($delve, $partyId);
@@ -972,7 +1149,7 @@ final class DelveEngine
                 'This delve has lost the stair it began at, and there is none in this party\'s game.'
             );
         }
-        $level = $this->draw($seed, $depth);
+        $level = $this->drawFor($partyId, $seed, $depth, $mouthId, $delve);
         if (!DungeonGen::isWalkable($level)) {
             // Cannot happen — the layout is joined by a spanning tree before
             // anything else — but a generated thing that reaches the database
@@ -1103,6 +1280,36 @@ final class DelveEngine
     }
 
     /**
+     * A floor for this descent: canned watch jobs, stamped generate, or draw().
+     *
+     * Watch jobs at the Pit never go through MapService. The crate and the
+     * finale are authored layouts; jobs 2-5 call DungeonGen::generate at the
+     * job's danger depth and then stamp the objective onto that floor.
+     */
+    private function drawFor(int $partyId, int $seed, int $depth, ?int $mouthId, array $delve): array
+    {
+        $mouthKey = is_string($delve['mouth_location_key'] ?? null)
+            ? (string) $delve['mouth_location_key']
+            : ($mouthId ? $this->locationKeyById($mouthId) : null);
+        if (!is_string($mouthKey) || !WatchJobs::isPit($mouthKey)) {
+            return $this->draw($seed, $depth);
+        }
+        $job = WatchJobs::activeKey($this->db, $partyId);
+        if ($job === WatchJobs::CRATE) {
+            return DungeonGen::watchCrate();
+        }
+        if ($job === WatchJobs::STAYED) {
+            return DungeonGen::watchFinale();
+        }
+        if ($job !== null && isset(WatchJobs::JOBS[$job]) && empty(WatchJobs::JOBS[$job]['authored'])) {
+            $level = DungeonGen::generate($seed, $depth);
+            WatchJobs::stamp($level, $job);
+            return $level;
+        }
+        return $this->draw($seed, $depth);
+    }
+
+    /**
      * Raise the high-water mark, never lower it.
      *
      * A party who reached the fifth floor, climbed out and started a fresh
@@ -1125,6 +1332,26 @@ final class DelveEngine
      * which are the same operation: the party stands at the Mouth and the floor
      * they were on stops existing. Safe to call when there is no delve.
      */
+    /**
+     * The floor closes when the party stands on the Mouth again.
+     *
+     * The entrance has one exit back up, and taking it is climbing out —
+     * the button and the chart agree. Called from travel after the hop,
+     * with the party already there, so this does not move them. Safe
+     * when they are not on a delve, or not at its mouth.
+     */
+    public function closeIfSurfaced(int $partyId, int $arrivedId): void
+    {
+        $delve = $this->current($partyId);
+        if ($delve === null) {
+            return;
+        }
+        $mouth = $this->mouthOf($delve, $partyId);
+        if ($mouth !== null && $mouth === $arrivedId) {
+            $this->end($partyId, false);
+        }
+    }
+
     public function end(int $partyId, bool $moveParty = true): void
     {
         $delve = $this->current($partyId);
@@ -1293,7 +1520,10 @@ final class DelveEngine
 
         $this->writeExits($partyId, $level, $regionId, $mouthId);
         $this->stock($partyId, $level, $regionId);
-        $this->writeQuest($partyId, $level);
+        if (empty($level['watch_job'])) {
+            $this->writeQuest($partyId, $level);
+        }
+        $this->appoint($partyId, $level, $depth);
         $this->assertContained($regionId, $moduleId);
 
         return $regionId;
@@ -1397,6 +1627,48 @@ final class DelveEngine
     public static function questKey(int $partyId, int $depth): string
     {
         return "_dg_q_{$partyId}_{$depth}";
+    }
+
+    /**
+     * Put named NPCs in named rooms, and remember the stamped objective room.
+     *
+     * The cousin in the finale is an ordinary npcs row whose location_id is
+     * this floor's appointment. Climb-out nulls it (the location goes away);
+     * the next Down of the same canned floor puts them back.
+     */
+    private function appoint(int $partyId, array $level, int $depth): void
+    {
+        foreach ($level['appoint'] ?? [] as $npcKey => $room) {
+            $locId = $this->locationIdByKey(self::roomKey($partyId, $depth, (int) $room));
+            if ($locId) {
+                $this->db->prepare('UPDATE npcs SET location_id = ? WHERE npc_key = ?')
+                    ->execute([$locId, (string) $npcKey]);
+            }
+        }
+        $obj = $level['watch_objective_room'] ?? null;
+        $job = $level['watch_job'] ?? WatchJobs::activeKey($this->db, $partyId);
+        if ($obj !== null && is_string($job) && $job !== '') {
+            $key = self::roomKey($partyId, $depth, (int) $obj);
+            (new WorldState($this->db))->set($partyId, WatchJobs::objFlag($job), $key);
+        }
+    }
+
+    /** Item ids from authored keys, in the order they were named. */
+    private function itemsByKey(array $keys): array
+    {
+        $ids = [];
+        $stmt = $this->db->prepare('SELECT id FROM items WHERE item_key = ?');
+        foreach ($keys as $key) {
+            if (!is_string($key) || $key === '') {
+                continue;
+            }
+            $stmt->execute([$key]);
+            $id = $stmt->fetchColumn();
+            if ($id !== false) {
+                $ids[] = (int) $id;
+            }
+        }
+        return $ids;
     }
 
     /**
@@ -1731,7 +2003,11 @@ final class DelveEngine
             // A hoard is guarded, so it is worth a level more than loose
             // treasure; a boss is sitting on the best thing on the floor.
             $band = $depth + ($kind === 'treasure' ? 0 : 1) + ($kind === 'boss' ? 1 : 0);
-            $items = $this->treasureFor($band, $kind === 'boss' ? 2 : 1, $taken);
+            if (!empty($room['place_items'])) {
+                $items = $this->itemsByKey((array) $room['place_items']);
+            } else {
+                $items = $this->treasureFor($band, $kind === 'boss' ? 2 : 1, $taken);
+            }
             if (!$items) {
                 continue;
             }

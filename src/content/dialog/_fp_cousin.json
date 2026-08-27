@@ -1,0 +1,68 @@
+{
+    "start": "hail",
+    "nodes": {
+        "hail": [
+            {
+                "conditions": [
+                    { "flag": "watch_done:fp_watch_stayed" }
+                ],
+                "text": "He is still on the pallet. The lamp is still lit.\n\n\"You told her. That's more than most. I'm not coming up.\"",
+                "choices": [
+                    {
+                        "label": "I'll go.",
+                        "action": "close"
+                    }
+                ]
+            },
+            {
+                "text": "A man about Brenna's age, thinner, sitting on a pallet with his back to the wall the way she sits upstairs.\n\n\"You're from the house. Tell Brenna I'm not lost. I stayed. That's different.\"",
+                "choices": [
+                    {
+                        "label": "She asked me to find you.",
+                        "next": "notice"
+                    },
+                    {
+                        "label": "Come up.",
+                        "next": "come"
+                    }
+                ]
+            }
+        ],
+        "notice": [
+            {
+                "text": "\"I know she did. I wrote her a note the first time and she sent someone anyway.\"\n\nHe looks at the lamp.\n\n\"This used to be work, and worship, and a watch. The house is what's left of it. I'm keeping this end. Tell her that. Use the word if she needs it.\"",
+                "choices": [
+                    {
+                        "label": "I'll tell her.",
+                        "effects": [ { "set_flag": "watch_done:fp_watch_stayed" } ],
+                        "next": "told"
+                    }
+                ]
+            }
+        ],
+        "come": [
+            {
+                "text": "\"No. I stayed. That's the whole of it. She can hate it. She already does.\"\n\n\"Tell her the watch held. She'll know what that costs.\"",
+                "choices": [
+                    {
+                        "label": "I'll tell her.",
+                        "effects": [ { "set_flag": "watch_done:fp_watch_stayed" } ],
+                        "next": "told"
+                    }
+                ]
+            }
+        ],
+        "told": [
+            {
+                "text": "\"Go up. The stair's still there. I won't be.\"",
+                "choices": [
+                    {
+                        "label": "All right.",
+                        "action": "close"
+                    }
+                ]
+            }
+        ]
+    },
+    "npc_key": "_fp_cousin"
+}

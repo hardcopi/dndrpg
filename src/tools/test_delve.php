@@ -414,6 +414,16 @@ same('underground, the depth is reported', 1, (int) $here['depth']);
 ok('climbing out is always offered down there', !empty($here['can_leave']));
 ok('but the entrance room is not the stair', empty($here['can_deeper']));
 
+// Walking the entrance back to the Mouth is climbing out: the floor
+// closes, and the next Down is a different dungeon.
+$seedWas = (int) $d['seed'];
+$loc2->travel($leader, $mouthId);
+ok('walking out to the Mouth ends the delve', $delves->current($partyId) === null);
+$fresh = $delves->descend($leader, $partyId);
+ok('the next descent is a new dungeon', (int) $fresh['seed'] !== $seedWas);
+same('starting at level one again', 1, (int) $fresh['depth']);
+$d = $delves->current($partyId);
+
 $lvl = DungeonGen::generate((int) $d['seed'], 1);
 $stairId = (int) $db->query(
     "SELECT id FROM locations WHERE location_key = '"
@@ -839,6 +849,42 @@ foreach ($tiles['doors'] as $dr) {
     }
 }
 same('every doorway stands on floor and leads somewhere', 0, $strays);
+
+// Waiting fights ride the same fog. A room you have not found does not
+// silhouette a goblin at the end of a corridor you have not walked, and
+// a fight that is still uncleared in a room you can see is a figure on
+// the raster — the first-person view has nothing else to draw from.
+$figTiles = $tiles['figs'] ?? [];
+ok('the raster names who is waiting', is_array($figTiles));
+$figStrays = 0;
+$figBad = 0;
+foreach ($figTiles as $f) {
+    $ch = $tiles['rows'][intdiv((int) $f['t'], $tiles['w'])][(int) $f['t'] % $tiles['w']] ?? ' ';
+    if ($ch === ' ') {
+        $figStrays++;
+    }
+    $n = (int) ($f['n'] ?? 0);
+    if (($f['s'] ?? '') === '' || $n < 1 || $n > 3) {
+        $figBad++;
+    }
+}
+same('every waiting fight stands on floor the party can see', 0, $figStrays);
+same('and ships a sprite and a count of one to three', 0, $figBad);
+
+$litList = implode(',', array_map('intval', $onWire));
+$waiting = 0;
+if ($litList !== '') {
+    $waiting = (int) $db->query(
+        "SELECT COUNT(DISTINCT e.location_id) FROM encounters e
+          INNER JOIN encounter_monsters em ON em.encounter_id = e.id
+          INNER JOIN monsters m ON m.id = em.monster_id
+         WHERE e.location_id IN ({$litList})
+           AND e.is_random = 0 AND e.is_ambush = 1
+           AND (m.sprite_key IS NOT NULL AND m.sprite_key <> ''
+                OR m.image_url IS NOT NULL AND m.image_url <> '')"
+    )->fetchColumn();
+}
+same('a lit uncleared fight is a figure on the raster', $waiting, count($figTiles));
 
 // The stuck door, found the honest way: stand next to it and look.
 $stuckIdx = $fixture['stuck'];

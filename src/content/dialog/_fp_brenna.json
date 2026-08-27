@@ -1,0 +1,221 @@
+{
+    "start": "hail",
+    "nodes": {
+        "hail": [
+            {
+                "conditions": [
+                    { "quest": "fp_watch_stayed", "status": "active" },
+                    { "flag": "watch_done:fp_watch_stayed" }
+                ],
+                "text": "She already knows. She has known since you came up.\n\n\"He stayed.\"\n\nShe turns the cup.\n\n\"This house is the last watch. We used to work down there, and worship, and we called it that. Then we stopped calling it anything and kept the sand and the slate.\"\n\n\"You've done the work. The hole is yours now. Go down if you want gold. Don't ask me to come.\"",
+                "choices": [
+                    {
+                        "label": "I told him you'd want him up.",
+                        "effects": [
+                            { "quest_stage": { "quest": "fp_watch_stayed", "stage": "returned" } }
+                        ],
+                        "next": "stayed_done"
+                    },
+                    {
+                        "label": "He stayed.",
+                        "effects": [
+                            { "quest_stage": { "quest": "fp_watch_stayed", "stage": "returned" } }
+                        ],
+                        "next": "stayed_done"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    { "quest": "fp_watch_cousin", "status": "active" },
+                    { "has_item": "fp_cousin_note" }
+                ],
+                "text": "She takes the scrap, reads it once, and folds it into her belt.\n\n\"Went further. That's not him. That's a note.\"",
+                "choices": [
+                    {
+                        "label": "It's what was there.",
+                        "effects": [
+                            { "take_item": "fp_cousin_note" },
+                            { "quest_stage": { "quest": "fp_watch_cousin", "stage": "returned" } }
+                        ],
+                        "next": "cousin_done"
+                    },
+                    {
+                        "label": "In a moment.",
+                        "action": "close"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    { "any": [
+                        { "quest": "fp_watch_cousin", "status": "active" },
+                        { "quest": "fp_watch_stayed", "status": "active" }
+                    ] }
+                ],
+                "text": "\"Arch past the sand. That's the job. I don't want a theory. I want you to go.\"",
+                "choices": [
+                    {
+                        "label": "Tell me about the pit.",
+                        "next": "pit"
+                    },
+                    {
+                        "label": "Right.",
+                        "action": "close"
+                    }
+                ]
+            },
+            {
+                "text": "She has the seat nearest the stair, back to the wall, one boot up on the bench opposite so nobody takes it.\n\n\"You're new. You'll either go down tonight or you'll say you will and won't. No shame in the second one. There's some in the first.\"",
+                "choices": [
+                    {
+                        "label": "You have work.",
+                        "conditions": [
+                            { "quest": "fp_watch_crate", "status": "completed" },
+                            { "not": { "quest": "fp_watch_cousin" } }
+                        ],
+                        "next": "notice_cousin"
+                    },
+                    {
+                        "label": "You have work.",
+                        "conditions": [
+                            { "quest": "fp_watch_name", "status": "completed" },
+                            { "not": { "quest": "fp_watch_stayed" } }
+                        ],
+                        "next": "notice_stayed"
+                    },
+                    {
+                        "label": "Tell me about the pit.",
+                        "next": "pit"
+                    },
+                    {
+                        "label": "And the arch past it?",
+                        "next": "arch"
+                    },
+                    {
+                        "label": "I'll decide myself.",
+                        "action": "close"
+                    }
+                ]
+            }
+        ],
+        "notice_cousin": [
+            {
+                "text": "\"My cousin went down. I want him back, or I want to know. That's the job. That's all of it.\"",
+                "choices": [
+                    {
+                        "label": "I'll look.",
+                        "effects": [ { "start_quest": "fp_watch_cousin" } ],
+                        "next": "cousin_taken"
+                    },
+                    {
+                        "label": "Not tonight.",
+                        "next": "hail"
+                    }
+                ]
+            }
+        ],
+        "cousin_taken": [
+            {
+                "text": "\"Arch at the far end. Don't come up with a story you could have told from here.\"",
+                "choices": [
+                    {
+                        "label": "I won't.",
+                        "action": "close"
+                    }
+                ]
+            }
+        ],
+        "cousin_done": [
+            {
+                "text": "\"Fine. I'll have another. Don't tell me it's the same work.\"",
+                "choices": [
+                    {
+                        "label": "All right.",
+                        "action": "close"
+                    }
+                ]
+            }
+        ],
+        "notice_stayed": [
+            {
+                "text": "\"Same job. He still hasn't come up. I want him found. I have not changed my mind.\"",
+                "choices": [
+                    {
+                        "label": "I'll go again.",
+                        "effects": [ { "start_quest": "fp_watch_stayed" } ],
+                        "next": "stayed_taken"
+                    },
+                    {
+                        "label": "Not tonight.",
+                        "next": "hail"
+                    }
+                ]
+            }
+        ],
+        "stayed_taken": [
+            {
+                "text": "\"Same arch. Further than you've been. If he's there, you bring me the truth, not a kindness.\"",
+                "choices": [
+                    {
+                        "label": "I will.",
+                        "action": "close"
+                    }
+                ]
+            }
+        ],
+        "stayed_done": [
+            {
+                "text": "\"The watch held. That's the last of it. Go down for gold if you want. The house isn't going to stop you.\"",
+                "choices": [
+                    {
+                        "label": "Understood.",
+                        "action": "close"
+                    }
+                ]
+            }
+        ],
+        "pit": [
+            {
+                "text": "\"Three ways to take a bout, and the house sizes it to whoever walks out onto the sand. Go alone and it's a smaller fight, not a braver one — that's the part people get wrong and only get wrong once.\"",
+                "choices": [
+                    {
+                        "label": "And the arch past it?",
+                        "next": "arch"
+                    },
+                    {
+                        "label": "Good to know.",
+                        "next": "hail"
+                    }
+                ]
+            }
+        ],
+        "arch": [
+            {
+                "text": "\"That's not the pit. The pit has rules and a man with a rope who stops it.\"\n\nShe turns her cup around on the table.\n\n\"Down there it's different every time you go, and it doesn't stop. I've been four floors. I've not been five.\"",
+                "choices": [
+                    {
+                        "label": "Why not five?",
+                        "next": "why"
+                    },
+                    {
+                        "label": "Noted.",
+                        "next": "hail"
+                    }
+                ]
+            }
+        ],
+        "why": [
+            {
+                "text": "\"Because on four I put my hand on a chest that wasn't a chest and I've been paying a physician since.\"\n\n\"Look at things before you open them. That's the whole of what I've got to teach anybody.\"",
+                "choices": [
+                    {
+                        "label": "I'll remember it.",
+                        "next": "hail"
+                    }
+                ]
+            }
+        ]
+    },
+    "npc_key": "_fp_brenna"
+}

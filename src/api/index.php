@@ -1201,8 +1201,8 @@ function handle_session(string $action): void
             // engine rather than worked out from the location row here. It is
             // the same question `location/camp` will ask when the button is
             // pressed, through the same method, so the button cannot offer a
-            // rest the route then refuses — and "allow_camp, or an inn" stays
-            // one rule in one place.
+            // rest the route then refuses — and "open ground, or a braced
+            // room, and never an innkeeper's floor" stays one rule in one place.
             $context['can_camp'] = (new LocationEngine(db()))->canCampHere($id);
         }
 
@@ -1997,14 +1997,14 @@ function handle_location(string $action): void
         require_method('POST');
         $id = require_character_id();
         if (!$engine->canCampHere($id)) {
-            json_error('This is no place to camp. Find open ground or an inn.');
+            json_error('This is no place to camp. Find open ground, or take a room.');
         }
         json_response($engine->longRest($id, 0, 'camp'));
     }
 
     // An hour rather than a night: a hit die each and the features whose SRD
-    // text says short rest. Allowed anywhere camping is, because the thing that
-    // makes a place safe enough to sleep makes it safe enough to sit down.
+    // text says short rest. Allowed anywhere camping is, and at an inn —
+    // sitting by the fire is free; the bed is the long rest.
     if ($action === 'short_rest') {
         require_method('POST');
         $id = require_character_id();

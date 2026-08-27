@@ -74,7 +74,7 @@ section('the main rng stream is frozen');
 // types are collapsed back to 'door' (they are dress()-time refinements OF
 // 'door'); everything else must match to the byte.
 $frozen = DungeonGen::generate(4471, 2);
-// `furnishing` is excluded for exactly the reason `description` is: dress()
+// `furnishing` and `dressing` are excluded for exactly the reason `description` is: dress()
 // adds it, on the dressing stream, below every draw that existed before it. The
 // layout, kinds, roles, names and edges this hash exists to freeze are
 // byte-identical with it stripped — checked, not assumed, when it was added.
@@ -82,7 +82,7 @@ $frozen = DungeonGen::generate(4471, 2);
 // because the GEOMETRY moved must be paid for the way the two re-recordings
 // below were, not waved through by widening this unset().
 $frozenRooms = array_map(
-    function ($r) { unset($r['description'], $r['furnishing']); return $r; },
+    function ($r) { unset($r['description'], $r['furnishing'], $r['dressing']); return $r; },
     $frozen['rooms']
 );
 $frozenDoors = array_map(
@@ -483,6 +483,109 @@ foreach (DungeonGen::PROFILES as $profile => $spec) {
 }
 ok('every name table outlasts its profile\'s largest level',
     $short === [], implode('; ', $short));
+
+section('set dressing');
+// Every named chamber promises something you can see. The kind is the name,
+// so this is a table check, not a roll check — a Guard Room without bunks
+// is a name that lied. The Way In and the Way Down stay bare on purpose:
+// the spine is where a party is put down.
+
+$unnamed = [];
+foreach (DungeonGen::NAMES as $decks) {
+    foreach ($decks[0] as $name) {
+        if (!isset(DungeonGen::DRESSING_FOR[$name])) {
+            $unnamed[] = $name;
+        }
+    }
+}
+same('every room name has a dressing kind', [], $unnamed);
+
+$unknownKind = [];
+foreach (DungeonGen::DRESSING_FOR as $name => $kind) {
+    if (!isset(DungeonGen::DRESSING[$kind])) {
+        $unknownKind[] = "{$name} => {$kind}";
+    }
+}
+same('every dressing kind is in DRESSING', [], $unknownKind);
+
+$lootKinds = [];
+foreach (DungeonGen::FURNISHINGS as $spec) {
+    $lootKinds[$spec['kind']] = true;
+}
+
+$bare = [];
+$mismatch = [];
+$noClause = [];
+$sawGuard = false;
+for ($i = 1; $i <= 80; $i++) {
+    for ($d = 1; $d <= 5; $d++) {
+        $level = DungeonGen::generate($i * 7919, $d);
+        $planById = [];
+        foreach (DungeonGen::plan($level)['rooms'] as $pr) {
+            $planById[(int) $pr['id']] = $pr;
+        }
+        $byRoom = [];
+        foreach (DungeonGen::tiles($level)['props'] as $prop) {
+            $byRoom[(int) $prop['room']][] = $prop;
+        }
+        foreach ($level['rooms'] as $r) {
+            $role = (string) ($r['role'] ?? '');
+            if ($role === 'entrance' || $role === 'stair') {
+                if (!empty($r['dressing'])) {
+                    $bare[] = "{$r['name']} is a {$role} with dressing";
+                }
+                continue;
+            }
+            $want = DungeonGen::DRESSING_FOR[$r['name']] ?? 'rubble';
+            $got = $r['dressing']['kind'] ?? null;
+            if ($got !== $want) {
+                $mismatch[] = "{$r['name']}: got " . ($got ?? 'none');
+            }
+            $clause = DungeonGen::DRESSING[$want]['clause'];
+            if (!str_contains((string) ($r['description'] ?? ''), $clause)) {
+                $noClause[] = $r['name'];
+            }
+            $planKind = $planById[(int) $r['id']]['dressing'] ?? null;
+            if ($planKind !== $want) {
+                $mismatch[] = "plan {$r['name']}: " . ($planKind ?? 'none');
+            }
+            $props = $byRoom[(int) $r['id']] ?? [];
+            $kinds = array_column($props, 'kind');
+            if (!in_array($want, $kinds, true)) {
+                $hasLoot = false;
+                foreach ($props as $prop) {
+                    if (!empty($prop['loot'])) {
+                        $hasLoot = true;
+                    }
+                }
+                // One-tile room with a chest: dressing is withheld so they
+                // do not share a cell. Anything else is a missed prop.
+                if (!$hasLoot || count($props) !== 1) {
+                    $bare[] = "tiles missing {$want} in {$r['name']}";
+                }
+            }
+            if ($r['name'] === 'The Guard Room') {
+                $sawGuard = true;
+                if (!str_contains((string) $r['description'], 'Bunks line the wall')) {
+                    $noClause[] = 'The Guard Room (no bunks clause)';
+                }
+            }
+            foreach ($props as $prop) {
+                $kind = (string) $prop['kind'];
+                if (!empty($prop['loot']) && isset(DungeonGen::DRESSING[$kind])) {
+                    $bare[] = "loot flag on dressing {$kind} in {$r['name']}";
+                }
+                if (empty($prop['loot']) && isset($lootKinds[$kind])) {
+                    $bare[] = "chest without loot flag in {$r['name']}";
+                }
+            }
+        }
+    }
+}
+same('non-stair rooms carry their dressing', [], array_slice($bare, 0, 5));
+same('dressing kind matches the name table', [], array_slice($mismatch, 0, 5));
+same('the clause is on the paragraph', [], array_slice($noClause, 0, 5));
+ok('the sample saw a Guard Room', $sawGuard);
 
 section('passages are places');
 // A corridor used to be a line drawn between two rooms. It is a location now:

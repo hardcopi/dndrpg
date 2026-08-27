@@ -1,0 +1,205 @@
+{
+    "start": "hail",
+    "nodes": {
+        "hail": [
+            {
+                "conditions": [
+                    { "quest": "fp_watch_crate", "status": "active" },
+                    { "has_item": "holy_symbol" }
+                ],
+                "text": "He sees it before you have it out.\n\n\"Pewter. Figures. I'll take it off your hands.\"",
+                "choices": [
+                    {
+                        "label": "Here.",
+                        "effects": [
+                            { "take_item": "holy_symbol" },
+                            { "quest_stage": { "quest": "fp_watch_crate", "stage": "returned" } }
+                        ],
+                        "next": "crate_done"
+                    },
+                    {
+                        "label": "In a moment.",
+                        "action": "close"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    { "quest": "fp_watch_wine", "status": "active" },
+                    { "has_item": "fp_sour_wine" }
+                ],
+                "text": "He takes the bottle without asking, sniffs the cork, and sets it behind him unopened.\n\n\"That's the one. Don't drink it. I won't.\"",
+                "choices": [
+                    {
+                        "label": "Yours.",
+                        "effects": [
+                            { "take_item": "fp_sour_wine" },
+                            { "quest_stage": { "quest": "fp_watch_wine", "stage": "returned" } }
+                        ],
+                        "next": "wine_done"
+                    },
+                    {
+                        "label": "In a moment.",
+                        "action": "close"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    { "quest": "fp_watch_crate", "status": "active" }
+                ],
+                "text": "\"Stair's the arch at the far end of the sand. Crate went down it. I want what was in it, not a story about the box.\"",
+                "choices": [
+                    {
+                        "label": "Let me see what you've got.",
+                        "effects": [ { "open_shop": "_fp_odd" } ]
+                    },
+                    {
+                        "label": "Right.",
+                        "action": "close"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    { "quest": "fp_watch_wine", "status": "active" }
+                ],
+                "text": "\"Rack's down there. Green glass. Bring me a bottle if there's one left. Don't taste it on the way.\"",
+                "choices": [
+                    {
+                        "label": "Let me see what you've got.",
+                        "effects": [ { "open_shop": "_fp_odd" } ]
+                    },
+                    {
+                        "label": "Right.",
+                        "action": "close"
+                    }
+                ]
+            },
+            {
+                "text": "The shelves behind him go from floor to beam: coiled rope, tallow blocks, oil in stoppered jars, iron in sizes.\n\n\"Everything on that wall has been down the stair and come back,\" he says. \"Not always with the same person. Doesn't make it worse rope.\"",
+                "choices": [
+                    {
+                        "label": "Need anything from below?",
+                        "conditions": [
+                            { "not": { "quest": "fp_watch_crate" } }
+                        ],
+                        "next": "notice_crate"
+                    },
+                    {
+                        "label": "There's more, if you want it.",
+                        "conditions": [
+                            { "quest": "fp_watch_shrine", "status": "completed" },
+                            { "not": { "quest": "fp_watch_wine" } }
+                        ],
+                        "next": "notice_wine"
+                    },
+                    {
+                        "label": "Let me see what you've got.",
+                        "effects": [ { "open_shop": "_fp_odd" } ]
+                    },
+                    {
+                        "label": "What sells fastest?",
+                        "next": "fastest"
+                    },
+                    {
+                        "label": "Later.",
+                        "action": "close"
+                    }
+                ]
+            }
+        ],
+        "notice_crate": [
+            {
+                "text": "\"That one's mine. Crate went down the arch last night. I want whatever was in it. Not the crate. Crate I can replace.\"",
+                "choices": [
+                    {
+                        "label": "I'll bring it up.",
+                        "effects": [ { "start_quest": "fp_watch_crate" } ],
+                        "next": "crate_taken"
+                    },
+                    {
+                        "label": "Not tonight.",
+                        "next": "hail"
+                    }
+                ]
+            }
+        ],
+        "crate_taken": [
+            {
+                "text": "\"Arch at the far end of the sand. Don't come back with the box.\"",
+                "choices": [
+                    {
+                        "label": "Understood.",
+                        "action": "close"
+                    }
+                ]
+            }
+        ],
+        "crate_done": [
+            {
+                "text": "He weighs it in one hand like a thing he has priced before.\n\n\"I'll have more when I have a line for it.\"",
+                "choices": [
+                    {
+                        "label": "All right.",
+                        "action": "close"
+                    }
+                ]
+            }
+        ],
+        "notice_wine": [
+            {
+                "text": "\"Bottles came up green. Rack's still down there, last I heard. I want one of them, corked. I will know if you pulled the cork.\"",
+                "choices": [
+                    {
+                        "label": "I'll fetch one.",
+                        "effects": [ { "start_quest": "fp_watch_wine" } ],
+                        "next": "wine_taken"
+                    },
+                    {
+                        "label": "Not tonight.",
+                        "next": "hail"
+                    }
+                ]
+            }
+        ],
+        "wine_taken": [
+            {
+                "text": "\"Same arch. Deeper work than the crate. The rack doesn't like being opened.\"",
+                "choices": [
+                    {
+                        "label": "I'll watch my hands.",
+                        "action": "close"
+                    }
+                ]
+            }
+        ],
+        "wine_done": [
+            {
+                "text": "\"That'll do. I'll have more when I have a line for it.\"",
+                "choices": [
+                    {
+                        "label": "All right.",
+                        "action": "close"
+                    }
+                ]
+            }
+        ],
+        "fastest": [
+            {
+                "text": "\"Rope. Every time, rope.\"\n\nHe says it like a man who has stopped finding it funny.\n\n\"Second is oil. Third is a thing I keep behind me and don't put a price on until I've seen who's asking.\"",
+                "choices": [
+                    {
+                        "label": "Show me the shelves.",
+                        "effects": [ { "open_shop": "_fp_odd" } ]
+                    },
+                    {
+                        "label": "Another time.",
+                        "next": "hail"
+                    }
+                ]
+            }
+        ]
+    },
+    "npc_key": "_fp_odd"
+}

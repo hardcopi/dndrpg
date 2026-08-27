@@ -50,8 +50,9 @@ UPDATE locations SET
     first_visit_text = 'The door shuts behind you on a room that smells of woodsmoke and wet wool. Somebody at the hearth looks up, decides you are nobody, and looks back.',
     location_type = 'building',
     inn_cost = 3,
-    allow_camp = 1,
+    allow_camp = 0,
     has_delve = 0,
+    has_job_board = 0,
     map_x = 63.00,
     map_y = 44.00
   WHERE location_key = '_freeplay_yard';
@@ -135,7 +136,7 @@ SELECT * FROM (
            'Sits nearest the stair with her back to the wall, which is the seat you take if you intend to go down again. Has fought in the pit long enough to have opinions about the arch at the far end of it, and will share them without being asked twice.',
            '_fp_brenna', 1, 0, 0, 0,
            (SELECT id FROM locations WHERE location_key = '_freeplay_yard'),
-           40.00, 66.00
+           35.00, 42.00
 ) AS want
 WHERE NOT EXISTS (SELECT 1 FROM npcs n WHERE n.npc_key = want.npc_key);
 
@@ -180,6 +181,8 @@ SELECT n.npc_key, n.name, n.role, n.is_merchant,
 -- ignores outright, so the counter opened nothing at all. A shop that
 -- opened empty would have pointed at the stock; one that did nothing
 -- pointed at the wrong half of the file.
+
+UPDATE npcs SET map_x = 35.00, map_y = 42.00 WHERE npc_key = '_fp_brenna';
 
 UPDATE npcs SET description = 'She sits nearest the stair with her back to the wall, which is the seat you take if you intend to go down again. She has fought in the pit long enough to have opinions about the arch at the far end of it, and she will share them without being asked twice.' WHERE npc_key = '_fp_brenna';
 UPDATE npcs SET dialogue_json = '{"start": "hail", "nodes": {"hail": [{"text": "She has the seat nearest the stair, back to the wall, one boot up on the bench opposite so nobody takes it.\\n\\n\\"You''re new. You''ll either go down tonight or you''ll say you will and won''t. No shame in the second one. There''s some in the first.\\"", "choices": [{"label": "Tell me about the pit.", "next": "pit"}, {"label": "And the arch past it?", "next": "arch"}, {"label": "I''ll decide myself.", "action": "close"}]}], "pit": [{"text": "\\"Three ways to take a bout, and the house sizes it to whoever walks out onto the sand. Go alone and it''s a smaller fight, not a braver one — that''s the part people get wrong and only get wrong once.\\"", "choices": [{"label": "And the arch past it?", "next": "arch"}, {"label": "Good to know.", "next": "hail"}]}], "arch": [{"text": "\\"That''s not the pit. The pit has rules and a man with a rope who stops it.\\"\\n\\nShe turns her cup around on the table.\\n\\n\\"Down there it''s different every time you go, and it doesn''t stop. I''ve been four floors. I''ve not been five.\\"", "choices": [{"label": "Why not five?", "next": "why"}, {"label": "Noted.", "next": "hail"}]}], "why": [{"text": "\\"Because on four I put my hand on a chest that wasn''t a chest and I''ve been paying a physician since.\\"\\n\\n\\"Look at things before you open them. That''s the whole of what I''ve got to teach anybody.\\"", "choices": [{"label": "I''ll remember it.", "next": "hail"}]}]}}' WHERE npc_key = '_fp_brenna';

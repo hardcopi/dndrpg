@@ -14,8 +14,8 @@ require_signed_in_page();
 </head>
 <!--
   The creator is a wizard: every step is a panel of its own, and the page
-  scrolls as one thing. It used to be pinned to the viewport and refuse to —
-  see the note in style.css about why the 3D creator ended that.
+  still scrolls as one thing. The 3D doll that used to pin the viewport is
+  gone; a painted bust does not need the room an iframe did.
 
   It used to be one long form — name, race, class, background, alignment, six
   ability scores, a twelve-portrait grid and nine layer pickers stacked down a
@@ -88,8 +88,9 @@ require_signed_in_page();
               Which pool the dice draw from. "Either" is a real answer rather
               than a shrug — it draws from the whole culture at once — because
               the game models no gender anywhere else, and this steers a
-              suggestion rather than setting a field on the character. The 3D
-              creator has its own Frame slider for the body it builds.
+              suggestion rather than setting a field on the character. The
+              gender select now also filters the painted busts below. "Either"
+              shows all of them.
             -->
             <label for="name-gender">Gender</label>
             <select id="name-gender" aria-label="Which names to draw from">
@@ -116,12 +117,19 @@ require_signed_in_page();
         <p id="racial-preview" class="wiz-benefits"></p>
 
         <!--
-          The creator itself. An embed owns its box and fills it, so the box
-          needs a height — and here it is whatever the two lines above did not
-          take, because this page does not scroll and the character is the part
-          worth giving the room to.
+          This used to be a Unity embed; it is now a painted bust of the chosen
+          race. Reroll and the arrows walk the list. Files already live on disk
+          as `{key}_bust.png`.
         -->
-        <div id="look-model-well"></div>
+        <div id="look-model-well">
+          <img id="look-token-bust" alt="">
+          <div class="look-token-nav">
+            <button type="button" id="look-token-prev" class="btn btn-small" aria-label="Previous look">◀</button>
+            <button type="button" id="look-token-reroll" class="btn btn-small">Reroll</button>
+            <button type="button" id="look-token-next" class="btn btn-small" aria-label="Next look">▶</button>
+          </div>
+          <p id="look-token-caption" class="help-hint"></p>
+        </div>
       </section>
 
       <!-- 2. What they do -->
@@ -276,14 +284,16 @@ require_signed_in_page();
      */
     $artVer = max(array_map(
         static fn(string $m): int => @filemtime(__DIR__ . '/' . $m) ?: 0,
-        ['assets/images/npcs/busts.json', 'assets/images/paperdoll/index.json']
+        ['assets/images/npcs/busts.json', 'assets/images/paperdoll/index.json', 'assets/images/npcs/tokens.json']
     ));
+    $tokensPath = __DIR__ . '/assets/images/npcs/tokens.json';
   ?>
   <script>
     window.ART_VER = <?= json_encode((string) $artVer) ?>;
     // The races that exist and are not on offer. Defined in bootstrap.php
     // because the public races page has to agree with this picker about it.
     window.RACES_WITHHELD = <?= json_encode(array_values(RACES_WITHHELD)) ?>;
+    window.LOOK_TOKENS = <?= is_file($tokensPath) ? file_get_contents($tokensPath) : '{}' ?>;
   </script>
   <script src="assets/js/api.js?v=<?= filemtime(__DIR__ . '/assets/js/api.js') ?>"></script>
   <script src="assets/js/dice-geometry.js?v=<?= filemtime(__DIR__ . '/assets/js/dice-geometry.js') ?>"></script>

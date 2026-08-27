@@ -1,0 +1,8 @@
+{
+    "npc_key": "_fp_odd",
+    "name": "Oddvar Lint",
+    "role": "Keeps the counter",
+    "description": "He runs the shelves along the back wall. He sells rope, tallow, oil and iron at a markup he will describe as fair and defend as necessary, and he knows the weight of everything in the room and the price of most of it.",
+    "sprite_key": "_fp_odd",
+    "dialog": "_fp_odd"
+}

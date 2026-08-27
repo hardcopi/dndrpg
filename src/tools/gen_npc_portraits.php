@@ -55,7 +55,14 @@ function npc_subjects(): array
     )->fetchAll(PDO::FETCH_ASSOC);
 
     $out = [];
+    // Painted busts, not dolls. surprise() already dressed Hessa as a man
+    // once; this page must not offer them again.
+    $painted = ['_fp_hessa' => true, '_fp_odd' => true, '_fp_brenna' => true];
     foreach ($rows as $r) {
+        if (isset($painted[(string) $r['npc_key']]) || isset($painted[(string) $r['sprite_key']])) {
+            continue;
+        }
+
         $stmt = db()->prepare(
             'SELECT name FROM npcs WHERE sprite_key = ? AND npc_key <> ? ORDER BY name'
         );

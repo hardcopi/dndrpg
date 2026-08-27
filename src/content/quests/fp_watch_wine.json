@@ -1,0 +1,22 @@
+{
+    "quest_key": "fp_watch_wine",
+    "title": "The Rack",
+    "description": "Bottles came up green. Oddvar wants the rack found, and whatever is still in it.",
+    "giver": "_fp_odd",
+    "on_job_board": false,
+    "rewards": { "xp": 0, "gold": 0 },
+    "stages": {
+        "fetch": {
+            "title": "Find the wine-rack",
+            "objective": "Go down and bring back a bottle from the rack.",
+            "journal": "Oddvar wants a bottle from the rack. Bottles came up green.",
+            "target": { "location": "_freeplay_cellar" }
+        },
+        "returned": {
+            "title": "Green glass",
+            "journal": "I brought Oddvar a bottle off the rack. He sniffed it and did not drink.",
+            "resolution": "bottled",
+            "terminal": true
+        }
+    }
+}

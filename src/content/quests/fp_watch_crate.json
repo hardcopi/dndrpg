@@ -1,0 +1,22 @@
+{
+    "quest_key": "fp_watch_crate",
+    "title": "The Crate",
+    "description": "A crate went down the arch. Oddvar wants whatever was in it brought back. Not the crate. The crate he can replace.",
+    "giver": "_fp_odd",
+    "on_job_board": false,
+    "rewards": { "xp": 0, "gold": 0 },
+    "stages": {
+        "fetch": {
+            "title": "Bring back whatever is in the crate",
+            "objective": "Go down the arch, find the crate, and bring Oddvar what was in it.",
+            "journal": "Oddvar wants a crate that went down brought back. He wants whatever was in it, not the box.",
+            "target": { "location": "_freeplay_cellar" }
+        },
+        "returned": {
+            "title": "The disc",
+            "journal": "I brought Oddvar a pewter sun-disc out of the crate. He took it and said he'd have more when he had a line for it.",
+            "resolution": "returned",
+            "terminal": true
+        }
+    }
+}

@@ -280,11 +280,12 @@ body.game-page {
   height: 100dvh;
   padding: var(--sp-12);
   overflow: hidden;
-  /* Capped and centred rather than full-bleed. Left to fill a 2560px monitor
-     the middle column becomes a 600px measure of text marooned in the middle
-     of a 1600px void, which reads as a broken layout rather than a roomy one. */
-  max-width: 1400px;
-  margin: 0 auto;
+  /* Full width. The cap was for a column of prose; the middle is a chart
+     now, the same reason combat already dropped it. Padding keeps it off
+     the glass. */
+  max-width: none;
+  width: 100%;
+  margin: 0;
 }
 
 .rail {
@@ -311,16 +312,16 @@ body.game-page {
    rail ended up 90px wider than the track holding it and ran off the screen. */
 .rail-right { width: 100%; min-width: 0; }
 
-/* Left rail: party on top, people in the scene below. Each pane is half the
-   column height and scrolls inside itself, so neither list can steal the
-   other's space. */
+/* Left rail: party on top, people in the scene below. Here is usually three
+   names and Party is four cards, so an even split left the roster cramped
+   and the Here well empty. Party takes the leftover; Here sizes to its
+   list and caps so a crowded street still cannot push the roster off. */
 .rail-left {
   width: 200px;
   overflow: hidden;
   gap: var(--sp-8);
 }
 .rail-pane {
-  flex: 1 1 50%;
   min-height: 0;
   display: flex;
   flex-direction: column;
@@ -329,6 +330,13 @@ body.game-page {
   border: 1px solid var(--ornament);
   border-radius: var(--r-md);
   padding: var(--sp-6) var(--sp-8) var(--sp-8);
+}
+.rail-pane.rail-party {
+  flex: 1 1 auto;
+}
+.rail-pane.rail-people {
+  flex: 0 1 auto;
+  max-height: 38%;
 }
 .rail-pane-head {
   flex: 0 0 auto;
@@ -836,13 +844,7 @@ body.in-combat .game-shell {
      and is 16px of the thing that is short. Rows get a quarter of it; columns
      keep what they had. */
   gap: var(--sp-4) var(--sp-16);
-  /* Wider than anywhere else in the game, and only here.
-
-     The 1400px cap exists to keep a line of prose readable, and a tactical map
-     is not prose: three columns with a sixteen-by-twelve board across the
-     middle does not fit in the ~970px a 1400px shell leaves after the
-     rail. This spends screen that only exists on the monitors that have it. */
-  max-width: 1760px;
+  /* The shell is already full width; combat does not recap it. */
 }
 /* And the rail gives some back. In a fight it holds the log and nothing else —
    the party rail, the quest tracker and the action buttons are all hidden
@@ -1008,6 +1010,56 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 }
 .loc-actions h2 { margin-bottom: var(--sp-6); }
 
+/* The verbs, on the chart. Lower right so the plan keeps the middle and
+   the keys stay where a hand already is. A well under the picture was a
+   second panel for three buttons. When the pit is here the same dock
+   stretches across the bottom — the bouts are the reason you opened this
+   cellar, and they belong on the painting, not under it. */
+.loc-map .loc-actions {
+  position: absolute;
+  right: 0.35rem;
+  bottom: 0.35rem;
+  z-index: 2;
+  margin: 0;
+  padding: var(--sp-4);
+  background: color-mix(in srgb, var(--bg-panel) 88%, transparent);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  pointer-events: none;
+}
+.loc-map .loc-actions .action-list,
+.loc-map .loc-actions .loc-pit,
+.loc-map .loc-actions .loc-act {
+  pointer-events: auto;
+}
+.loc-map .loc-actions .action-list {
+  justify-content: flex-end;
+}
+.loc-map .loc-actions:has(.loc-pit) {
+  left: 0.35rem;
+}
+/* Walk already owns this corner in first person. Sit just above it. */
+.loc-map.is-fp .loc-actions {
+  left: auto;
+  bottom: 2.7rem;
+}
+
+/* The pit, docked. No heading, no well, no hairline — those were the
+   furniture of the panel under the picture. */
+.loc-map .loc-pit {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  flex: 0 0 auto;
+}
+.loc-map.is-fp .map-info {
+  top: 0.35rem;
+  right: 6.4rem;
+}
+
 /* --- The chart, in the scene -------------------------------------------
    It was a modal opened with M, and the space it now occupies held the
    establishing art and the prose. See renderLocation() for the trade: the
@@ -1036,15 +1088,22 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
    being looked at. */
 .loc-map .map-zoom {
   position: absolute;
-  top: 0.4rem;
-  right: 0.4rem;
+  top: 0.35rem;
+  right: 0.35rem;
   margin-left: 0;
-  padding: var(--sp-2);
+  padding: 1px;
+  gap: 1px;
   background: color-mix(in srgb, var(--bg-panel) 88%, transparent);
   border: 1px solid var(--border);
-  border-radius: var(--r-md);
-  opacity: 0.5;
+  border-radius: var(--r-sm);
+  opacity: 0.45;
   transition: opacity var(--dur-fast);
+}
+.loc-map .map-zoom .icon-btn {
+  min-width: 1.15rem;
+  width: 1.15rem;
+  height: 1.15rem;
+  font-size: var(--fs-xs);
 }
 /* A letter in a ring, drawn rather than typed. ⓘ is a glyph in a decorative
    role — its ink sits differently inside its em box in every face, so it
@@ -1052,20 +1111,21 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
    same lesson the selected-target bullseye records. */
 .map-info {
   position: absolute;
-  right: 0.4rem;
-  bottom: 0.4rem;
-  width: 1.5rem;
-  height: 1.5rem;
+  top: 1.7rem;
+  right: 0.35rem;
+  bottom: auto;
+  width: 1.15rem;
+  height: 1.15rem;
   font-family: var(--font-display, serif);
   font-style: italic;
-  font-size: var(--fs-md);
+  font-size: var(--fs-sm);
   font-weight: var(--fw-semibold);
   line-height: var(--lh-flush);
   color: var(--gold-dim);
   background: color-mix(in srgb, var(--bg-panel) 88%, transparent);
   border: 1px solid var(--border);
   border-radius: var(--r-circle);
-  opacity: 0.5;
+  opacity: 0.45;
   transition: opacity var(--dur-fast), color var(--dur-fast);
 }
 .loc-map:hover .map-zoom,
@@ -1082,18 +1142,19 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
    correctly the first time. */
 .map-look {
   position: absolute;
-  left: 0.4rem;
-  bottom: 0.4rem;
+  left: 0.35rem;
+  bottom: 0.35rem;
   width: auto;
-  padding: 0.1rem 0.5rem;
-  font-size: var(--fs-xs);
+  padding: 0 0.35rem;
+  height: 1.15rem;
+  font-size: var(--fs-2xs);
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--gold-dim);
   background: color-mix(in srgb, var(--bg-panel) 88%, transparent);
   border: 1px solid var(--border);
-  border-radius: var(--r-md);
-  opacity: 0.5;
+  border-radius: var(--r-sm);
+  opacity: 0.45;
   transition: opacity var(--dur-fast), color var(--dur-fast);
 }
 .map-look:hover { color: var(--gold); }
@@ -1122,6 +1183,11 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .fp-view .fp-floor,
 .fp-view .fp-roof { stroke: none; }
 .fp-leaf { fill: var(--fp-leaf); stroke: var(--fp-leaf-line); stroke-width: 1; }
+.fp-opening {
+  fill: none;
+  stroke: var(--fp-leaf-line);
+  stroke-width: 1.6;
+}
 .fp-leaf.is-stuck { stroke-dasharray: 4 3; }
 .fp-leaf.is-locked { fill: color-mix(in srgb, var(--fp-leaf) 80%, #000); }
 .fp-leaf.is-portcullis line { stroke: var(--fp-bars); stroke-width: 2.4; }
@@ -1175,6 +1241,39 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
    one surface in the picture with nothing lighting it, and that is what makes
    an open box read as open rather than as a box with a pale top. */
 .fp-prop-mouth polygon { fill: #05060a; stroke: #05060a; stroke-width: 0.4; }
+
+/* Set dressing as a Gold Box sprite: a card facing the camera. Stone by
+   default, timber for the furniture, iron for the cage. The inner well
+   and pool are the same dark as an open lid — a hole, not a highlight. */
+.fp-sprite polygon,
+.fp-sprite ellipse {
+  fill: var(--fp-wall-1);
+  stroke: var(--fp-edge);
+  stroke-width: 0.6;
+}
+.fp-sprite.is-rubble polygon:nth-child(odd) {
+  fill: var(--fp-wall-0);
+}
+.fp-sprite.is-pool ellipse:last-child,
+.fp-sprite.is-well ellipse:nth-child(2) {
+  fill: #05060a;
+  stroke: #05060a;
+}
+.fp-sprite.is-bunks polygon,
+.fp-sprite.is-table polygon,
+.fp-sprite.is-shelves polygon {
+  fill: var(--fp-leaf);
+  stroke: var(--fp-leaf-line);
+}
+.fp-sprite.is-cage polygon,
+.fp-sprite.is-winch ellipse {
+  fill: var(--fp-iron);
+  stroke: var(--fp-iron-lit);
+}
+
+/* Waiting fights as a battler card on the floor. The PNG already has
+   its own alpha; clicks fall through so a figure never steals a walk. */
+.fp-fig { pointer-events: none; }
 
 /* The corner map. Top right is the only free corner of this panel — the compass
    has the top left, the chart toggle the bottom left, the walk controls the
@@ -1414,6 +1513,11 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 
 /* Portraits survive the pivot and this is one of the two places they earn
    their keep. Square, small, and never the reason a row is tall. */
+.person-face-wrap {
+  position: relative;
+  flex: 0 0 auto;
+  display: inline-flex;
+}
 .person-face {
   width: 36px;
   height: 36px;
@@ -1423,6 +1527,25 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   object-position: 50% 15%;
   background: var(--bg-inset);
   border: 1px solid var(--ornament);
+}
+/* Gold bang / query over the face: the watch giver's offer or turn-in.
+   Own class so it is never the room-pin `.wm-quest`. */
+.person-quest-mark {
+  position: absolute;
+  left: 50%;
+  top: -0.55em;
+  transform: translateX(-50%);
+  color: var(--gold-bright);
+  font-family: var(--font-display, Georgia, serif);
+  font-weight: var(--fw-bold);
+  font-size: 1.15rem;
+  line-height: 1;
+  text-shadow:
+    0 0 2px var(--bg),
+    0 1px 2px var(--bg),
+    1px 0 2px var(--bg),
+    -1px 0 2px var(--bg);
+  pointer-events: none;
 }
 /* A missing face must not leave a broken-image glyph in the list; the row is
    still perfectly usable as text. */
@@ -1492,6 +1615,15 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
    holds "Fight" and "Go down the stair" beside "Search". */
 .loc-act.is-danger { border-color: color-mix(in srgb, var(--danger) 60%, var(--border)); }
 .loc-act.is-danger:hover:not(:disabled) { border-color: var(--danger); color: var(--danger); }
+/* A hurt party's rest at the inn: gold, so it reads as the thing to press. */
+.act-slot.is-urgent {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+.act-slot.is-urgent:hover:not(:disabled) {
+  border-color: var(--gold-bright);
+  color: var(--gold-bright);
+}
 /* Down the stair and back up it are one glyph, turned over. */
 .loc-act.is-up .act-icon { transform: rotate(180deg); }
 
@@ -1516,41 +1648,47 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 }
 .loc-act:hover kbd { color: var(--gold); }
 
-/* The pit's card. Sits above the ways out with the same hairline between, so
-   "what can I fight" and "where can I go" stay two separate reads. Each bout
-   is two lines: the tier, and roughly what it will send. */
+/* The pit's card. Each bout is two lines: the tier, and roughly what it
+   will send. The stair under them is the other door this room has, drawn
+   at the same weight as a bout — a 34px chevron in the action bar is how
+   it stayed hidden. On the chart it loses the well and the hairline; the
+   rules above (.loc-map .loc-pit) zero those out. */
 .loc-pit {
   margin-bottom: var(--sp-10);
   padding-bottom: var(--sp-10);
   border-bottom: 1px solid var(--ornament);
 }
-/* Two by two. The three tiers used to be a full-width column — three rows of a
-   scene that is mostly chart — and there are exactly three of them, so the
-   spare cell holds the readout. `minmax(0, 1fr)` rather than `1fr`: a long
-   monster sample is a grid item that would otherwise refuse to shrink and push
-   the second column off the card. */
+/* Three across. There are exactly three tiers, and a 2x2 with the readout
+   in the spare cell made the last bout share a row with a taller neighbour
+   and crowded the stair out of the card entirely. `minmax(0, 1fr)` rather
+   than `1fr`: a long monster sample is a grid item that would otherwise
+   refuse to shrink and push the third column off the card. */
 .pit-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  /* Every row the same height as the tallest.
-
-     The grid is two columns, so the last bout shares a row with the readout —
-     and the readout is a heading plus one line per tier, which is taller than
-     a two-line button. Left to itself the grid gave that row the extra height
-     and the bout in it came out visibly bigger than the two above, which read
-     as the hard match being a bigger button rather than a taller neighbour.
-
-     `1fr` on the rows spends the height evenly instead, so the three bouts are
-     one size whatever the readout has to say. */
-  grid-auto-rows: 1fr;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--sp-4);
   align-items: stretch;
 }
 
-/* One column below the fold, where two 2-line buttons side by side leave no
-   room for either to say what it is sending. */
+/* One column below the fold, where three 2-line buttons side by side leave
+   no room for any of them to say what it is sending. */
 @media (max-width: 30rem) {
   .pit-grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* The hole. Full width under the bouts, same two-line shape, danger on the
+   edge. Combat already spent the screen's width on the thing you came to
+   press; this is that lesson on a cellar that also has a stair. */
+.pit-down {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: flex-start;
+  gap: var(--sp-8);
+  width: 100%;
+  margin-top: var(--sp-4);
+  text-align: left;
+  padding: var(--sp-8) var(--sp-20) var(--sp-8) var(--sp-10);
 }
 
 /* `display: flex` said out loud, and it is a fix rather than a tidy-up.
@@ -1576,13 +1714,15 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
    drawing it with the buttons' bevel would say otherwise. */
 .pit-level {
   display: flex;
-  flex-direction: column;
-  gap: var(--sp-4);
-  justify-content: center;
-  padding: var(--sp-8) var(--sp-10);
-  background: var(--bg-inset);
-  border: 1px solid var(--border-soft);
-  border-radius: var(--r-md);
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--sp-6) var(--sp-12);
+  margin-top: var(--sp-8);
+  padding: var(--sp-6) var(--sp-2) 0;
+  background: none;
+  border: 0;
+  border-radius: 0;
 }
 .pit-level-head {
   font-size: var(--fs-2xs);
@@ -1591,6 +1731,9 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   color: var(--text-dim);
 }
 .pit-level-counts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-8);
   list-style: none;
   margin: 0;
   padding: 0;
@@ -2032,6 +2175,20 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
                 stroke: var(--pg-ink); stroke-width: 0.22; }
 .wm-prop-lid  { fill: none; stroke: var(--pg-ink); stroke-width: 0.22; }
 
+/* Set dressing: no lid, same ink, quieter fill. A second loot-box glyph
+   would say the bunks were something to open. */
+.wm-dress { pointer-events: none; }
+.wm-dress circle,
+.wm-dress rect,
+.wm-dress path {
+  fill: var(--pg-ink);
+  fill-opacity: 0.12;
+  stroke: var(--pg-ink);
+  stroke-width: 0.2;
+}
+.wm-dress.is-pool circle:last-child,
+.wm-dress.is-well circle:last-child { fill-opacity: 0.06; }
+
 /* A floor plan is denser than any authored region: eleven to fourteen rooms
    on a field the towns use for six or seven, every one of them named. At the
    chart's usual 3.1px the names overlapped into an unreadable stack, so down
@@ -2065,13 +2222,13 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   text-anchor: middle;
   transition: fill var(--dur-fast) var(--ease-out);
 }
-.wm-node[data-map-node]:hover .wm-roompin-disc,
-.wm-node[data-map-node]:focus-visible .wm-roompin-disc {
+[data-room-pin]:hover .wm-roompin-disc,
+[data-room-pin]:focus-visible .wm-roompin-disc {
   fill: var(--gold-dim);
   stroke: var(--gold);
 }
-.wm-node[data-map-node]:hover .wm-roompin-i,
-.wm-node[data-map-node]:focus-visible .wm-roompin-i {
+[data-room-pin]:hover .wm-roompin-i,
+[data-room-pin]:focus-visible .wm-roompin-i {
   fill: var(--pg-halo-dark);
 }
 /* A doorway you can step through. The glyph is a hairline box a door's width
@@ -2127,7 +2284,9 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
    above outranks the narrow one the markup asks for and has to be undone
    rather than simply not applied. A pin wants a pad its own size — at the
    label's 15 units it would answer for the room next door. */
-.worldmap.is-plan .wm-node[data-room-pin] .wm-hit { x: -3px; width: 6px; }
+.worldmap.is-plan [data-room-pin] .wm-hit { x: -3px; width: 6px; }
+/* Here is not travel — the pin still names the room. */
+.worldmap.is-plan .wm-node.is-here [data-room-pin] .wm-hit { cursor: help; }
 
 /* A passage: a run of floor with a wall down each side.
 
@@ -2188,6 +2347,11 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 /* The door glyphs — the plate's legend, learned once:
    hollow square = a door · barred = locked · crossed = known-trapped ·
    dotted = portcullis · dashed seam + s = a found secret way. */
+.wm-opening {
+  fill: var(--pg-paper);
+  stroke: none;
+  pointer-events: none;
+}
 .wm-doorbox {
   fill: var(--pg-paper);
   stroke: var(--pg-ink);
@@ -2385,6 +2549,19 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .wm-npc.is-more .wm-npc-disc { fill: var(--pg-paper-dim); }
 .wm-npc.is-more { cursor: default; pointer-events: none; }
 
+/* Gold ! / ? over a chart token. Not `.wm-quest`: that pin sits on a ROOM,
+   and mixing the two would make a giver look like a destination. */
+.wm-npc-mark {
+  fill: var(--gold-bright);
+  font-family: var(--font-display, Georgia, serif);
+  font-weight: var(--fw-bold);
+  text-anchor: middle;
+  paint-order: stroke;
+  stroke: var(--pg-halo-dark);
+  stroke-width: 0.45;
+  pointer-events: none;
+}
+
 /* On the move. The transform is driven frame by frame from ui-map.js, so
    there is no CSS transition here to fight it — this is only the look. The
    tooltips are taken away for the duration: a hover that answers "who is
@@ -2518,6 +2695,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   .rail-pane {
     flex: 1 1 50%;
     min-width: 11rem;
+    max-height: none;
   }
   .rail-right { width: auto; }
   .hud-party { flex-direction: column; }
@@ -2690,39 +2868,47 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 }
 .wiz-benefits:empty { display: none; }
 
-/* ---- The creator ------------------------------------------------------- */
+/* ---- The look ---------------------------------------------------------- */
 
 /* Sized for its contents, and the step scrolls if the window is short.
-
-   This is the one step on this page allowed to do that. It was tried the other
-   way — the creator taking whatever the two lines above did not use — and that
-   guarantees no scrollbar at the price of the thing worth looking at: on a
-   laptop it left about 340px, which is under what the creator's own tallest
-   tab needs, so the panel silently clipped its last swatches instead.
-
-   The height is measured rather than guessed. The panel's tallest tab is now
-   Dress — two outfit pickers and eight attachment slots — at about 668 units of
-   the creator's own 1440x900 reference space, ahead of Colour at 582. Its
-   scroll viewport is the panel height less 188 for the title, tabs and footer,
-   and because the canvas scales with `matchWidthOrHeight: 0.5` the viewport in
-   reference units grows as sqrt(H * 1440 * 900 / W). At the 997px this box gets
-   on a full window that puts 700px at a 766-unit viewport, which clears Dress
-   with room for another slot or two. It was 640 before the attachment pickers
-   were added, which cleared Colour and would have clipped Dress. */
+   This is a painting, not an iframe: a painted bust has a size of its own,
+   so the well sizes to the picture rather than claiming 700px for a player
+   that is no longer in it. */
 [data-step="identity"]:not([hidden]) {
   display: flex;
   flex-direction: column;
   gap: var(--sp-12);
 }
 
-/* An iframe fills its box, and an iframe in a zero-height box is a blank page
-   that looks exactly like a broken build — so this box is always given one. */
+/* A painting, not an iframe. The box used to be 700px because a Unity player
+   fills its container and a zero-height box is a blank page that looks like a
+   broken build. A painted bust has a size of its own. */
 #look-model-well {
-  height: 700px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: auto;
+  padding: var(--sp-16);
   border-radius: var(--r-md);
   overflow: hidden;
   background: #1e1a15;
   border: 1px solid var(--border);
+}
+
+#look-token-bust {
+  width: 288px;
+  height: 384px;
+  object-fit: cover;
+  border-radius: var(--r-md);
+  background: #15110e;
+}
+
+.look-token-nav {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--sp-8);
+  margin-top: var(--sp-12);
 }
 
 .wiz-nav {
@@ -2744,16 +2930,10 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 /* Re-dressing an existing character is the look step with the wizard removed. */
 .redress-mode .wiz-nav { justify-content: flex-end; }
 
-/* Re-dressing is the creator and nothing else — no rail, no identity line, no
-   other step — so it has a screen's worth of room the creation step spends on
-   fields, and the box takes it.
-
-   `max()` rather than a flex remainder now that the page scrolls: the creator
-   fills a tall window, and on a short one it stops at the 700px its own tallest
-   tab needs and lets the window scroll instead of clipping the last row of
-   swatches. The 240px is the site bar, the title, the panel padding and the
-   Save button underneath. */
-.redress-mode #look-model-well { height: max(700px, calc(100dvh - 240px)); }
+/* Re-dressing is the painted bust and nothing else — no rail, no identity
+   line, no other step. The well still sizes to the picture; there is no
+   700px iframe to fill the window with. */
+.redress-mode #look-model-well { height: auto; }
 
 @media (max-width: 720px) {
   /* The page scrolls everywhere now, so the phone no longer needs telling. */
@@ -3642,6 +3822,32 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .sheet-spells .inv-item .badge {
   margin-left: var(--sp-6);
 }
+
+/* Spell levels on the sheet. Cantrip first, then 1st, 2nd… only the rungs
+   they actually know. The open tab is gold, the rest are quiet. */
+.sheet-spell-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-4);
+  margin: 0 0 var(--sp-10);
+}
+.sheet-spell-tab {
+  background: var(--bg);
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: var(--sp-4) var(--sp-10);
+  font: inherit;
+  font-size: var(--fs-sm);
+  cursor: pointer;
+}
+.sheet-spell-tab:hover { color: var(--gold); }
+.sheet-spell-tab.is-on {
+  color: var(--gold);
+  border-color: var(--gold-dim);
+  background: var(--bg-panel);
+}
+.sheet-spells[hidden] { display: none; }
 
 .modal h2 { margin-top: 0; }
 

@@ -1,0 +1,8 @@
+{
+    "npc_key": "_fp_cousin",
+    "name": "Calder Vosk",
+    "role": "Stayed",
+    "description": "He is Brenna Vosk's cousin. Thinner than she is, and he has been below long enough that the lamp looks like his. He sits with his back to the wall the way she does upstairs.",
+    "sprite_key": "token_human_m1",
+    "dialog": "_fp_cousin"
+}

@@ -125,7 +125,7 @@ require_signed_in_page();
           ${play}
           <a class="icon-btn icon-btn-sm char-act" title="Change ${esc(c.name)}'s look"
              aria-label="Change ${esc(c.name)}'s look"
-             href="look.php?character_id=${encodeURIComponent(c.id)}">
+             href="create.php?redress=${esc(c.id)}">
             <svg aria-hidden="true"><use href="#i-face"></use></svg></a>
           <a class="icon-btn icon-btn-sm char-act" title="Print ${esc(c.name)}'s sheet"
              aria-label="Print ${esc(c.name)}'s sheet"

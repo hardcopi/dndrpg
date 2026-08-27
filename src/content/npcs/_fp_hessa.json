@@ -1,0 +1,8 @@
+{
+    "npc_key": "_fp_hessa",
+    "name": "Hessa Marrow",
+    "role": "Innkeeper",
+    "description": "She keeps the Proving House. Broad, unhurried, and entirely uninterested in what anybody does downstairs so long as they come back up and settle the slate. She has run the place long enough to have stopped counting who does not.",
+    "sprite_key": "_fp_hessa",
+    "dialog": "_fp_hessa"
+}

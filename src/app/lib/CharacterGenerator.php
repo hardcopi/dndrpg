@@ -863,9 +863,12 @@ class CharacterGenerator
     /**
      * Set a character's avatar.
      *
-     * The key reaches the client as part of an asset path, so it is checked
-     * against the avatars table rather than trusted. Passing an empty key
-     * clears the override and returns the character to its class default.
+     * The key reaches the client as part of an asset path, so it is constrained
+     * to a safe identifier and then accepted if the avatars table has the row
+     * OR the painted file exists on disk. Painted tokens are files on disk, not
+     * pack actors; the table stays the catalogue of pack actors. Passing an
+     * empty key clears the override and returns the character to its class
+     * default.
      */
     public function setAvatar(int $characterId, string $spriteKey): array
     {
@@ -875,9 +878,14 @@ class CharacterGenerator
             return $this->getCharacter($characterId);
         }
 
+        if (!preg_match('/^[a-z][a-z0-9_]*$/', $spriteKey)) {
+            throw new InvalidArgumentException('Unknown avatar.');
+        }
+
         $check = $this->db->prepare('SELECT 1 FROM avatars WHERE sprite_key = ?');
         $check->execute([$spriteKey]);
-        if (!$check->fetchColumn()) {
+        $painted = dirname(__DIR__, 2) . '/assets/images/npcs/' . $spriteKey . '_bust.png';
+        if (!$check->fetchColumn() && !is_file($painted)) {
             throw new InvalidArgumentException('Unknown avatar.');
         }
 

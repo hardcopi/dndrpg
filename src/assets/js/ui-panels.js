@@ -1092,11 +1092,12 @@
     const loc = st.location || {};
     const roomCost = loc.inn_cost === null || loc.inn_cost === undefined
       ? null : Number(loc.inn_cost);
-    // Mirrors LocationEngine::canCampHere exactly — allow_camp OR an inn.
-    // Somewhere with beds will also let you sleep on the floor for nothing,
-    // and reading only allow_camp here would have greyed out Make camp in the
-    // one building where the server allows it.
-    const canCamp = !!loc.allow_camp || roomCost !== null;
+    // Mirrors LocationEngine::canCampHere. loc.allow_camp is already the
+    // engine's answer, not the column: an innkeeper sells beds, so a room
+    // for sale withholds camp rather than granting it. OR-ing the price back
+    // in would put a free long rest on Hessa's floor next to the one she
+    // charges for, which is why nobody bought a room.
+    const canCamp = !!loc.allow_camp;
     const gold = Number(st.character?.gold ?? 0);
     const campHint = 'The road east out of Rivermark has open ground, '
       + 'and the Golden Flagon has beds.';
@@ -1422,6 +1423,57 @@
       </div>`;
   }
 
+  const SPELL_ORD = {
+    1: '1st', 2: '2nd', 3: '3rd', 4: '4th', 5: '5th',
+    6: '6th', 7: '7th', 8: '8th', 9: '9th',
+  };
+
+  function spellLevelName(level) {
+    const n = Number(level) || 0;
+    return n === 0 ? 'Cantrip' : (SPELL_ORD[n] || String(n));
+  }
+
+  /**
+   * Known spells, one tab per level, Cantrip first.
+   *
+   * The old sheet listed every spell in one stack, so a caster with a
+   * handful of cantrips and a handful of prepared spells was a scroll
+   * before you found the one you meant. Tabs are the levels they actually
+   * know — empty rungs stay off the strip.
+   */
+  function spellsHtml(spells, castRow) {
+    if (!spells.length) return '';
+    const by = new Map();
+    for (const sp of spells) {
+      const n = Number(sp.level) || 0;
+      if (!by.has(n)) by.set(n, []);
+      by.get(n).push(sp);
+    }
+    const levels = [...by.keys()].sort((a, b) => a - b);
+    const first = levels[0];
+    const tabs = levels.map((n) => {
+      const on = n === first;
+      return `<button type="button" class="sheet-spell-tab${on ? ' is-on' : ''}"
+        role="tab" id="sheet-spell-tab-${n}" data-spell-tab="${n}"
+        aria-selected="${on ? 'true' : 'false'}">${esc(spellLevelName(n))}</button>`;
+    }).join('');
+    const panes = levels.map((n) => {
+      const cards = by.get(n).map((sp) => `<div class="inv-item">
+          <strong>${esc(sp.name)}</strong>
+          <p>${esc(sp.school || '')}${sp.damage_dice ? ' · ' + esc(sp.damage_dice) + ' ' + esc(sp.damage_type || '') : ''}</p>
+          <p class="inv-desc">${esc(sp.description || '')}</p>
+          ${castRow(sp)}
+        </div>`).join('');
+      return `<div class="sheet-spells" role="tabpanel" data-spell-pane="${n}"
+        aria-labelledby="sheet-spell-tab-${n}"${n === first ? '' : ' hidden'}>${cards}</div>`;
+    }).join('');
+    return `<div class="sheet-section">
+      <h3>Spells</h3>
+      <div class="sheet-spell-tabs" role="tablist" aria-label="Spell level">${tabs}</div>
+      ${panes}
+    </div>`;
+  }
+
   function renderCharacterSheet(c, inventory, spells, spellSlots) {
     const m = c.modifiers || {};
     const fmt = window.Game.fmtMod;
@@ -1447,16 +1499,7 @@
         <button type="button" class="btn btn-small" data-cast="${esc(sp.id)}">Cast</button>
       </div>`;
     };
-    const spellHtml = spells.length ? `
-      <div class="sheet-section"><h3>Spells</h3><div class="sheet-spells">
-        ${spells.map((sp) => `<div class="inv-item">
-          <strong>${esc(sp.name)}</strong>
-          <span class="badge">${sp.level == 0 ? 'Cantrip' : 'Lvl ' + esc(sp.level)}</span>
-          <p>${esc(sp.school || '')}${sp.damage_dice ? ' · ' + esc(sp.damage_dice) + ' ' + esc(sp.damage_type || '') : ''}</p>
-          <p class="inv-desc">${esc(sp.description || '')}</p>
-          ${castRow(sp)}
-        </div>`).join('')}
-      </div></div>` : '';
+    const spellHtml = spellsHtml(spells, castRow);
 
     const el = showModal(`
       <div class="sheet-header">
@@ -1540,6 +1583,23 @@
       closeTopModal();
       await G().setActiveCharacter(c.id);
     });
+
+    const tablist = el.querySelector('.sheet-spell-tabs');
+    if (tablist) {
+      tablist.addEventListener('click', (ev) => {
+        const btn = ev.target.closest('[data-spell-tab]');
+        if (!btn) return;
+        const n = btn.getAttribute('data-spell-tab');
+        el.querySelectorAll('[data-spell-tab]').forEach((b) => {
+          const on = b === btn;
+          b.classList.toggle('is-on', on);
+          b.setAttribute('aria-selected', on ? 'true' : 'false');
+        });
+        el.querySelectorAll('[data-spell-pane]').forEach((p) => {
+          p.hidden = p.getAttribute('data-spell-pane') !== n;
+        });
+      });
+    }
 
     $$('[data-cast]', el).forEach((b) => {
       b.onclick = async () => {

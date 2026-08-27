@@ -1,0 +1,22 @@
+{
+    "quest_key": "fp_watch_name",
+    "title": "A Name Came Up",
+    "description": "A name came up from below. Hessa wants it read where it was cut, not guessed at in the common room.",
+    "giver": "_fp_hessa",
+    "on_job_board": false,
+    "rewards": { "xp": 0, "gold": 0 },
+    "stages": {
+        "fetch": {
+            "title": "Read the name",
+            "objective": "Go further down and find the inscription.",
+            "journal": "Hessa wants a name that came up from below read where it was cut.",
+            "target": { "location": "_freeplay_cellar" }
+        },
+        "returned": {
+            "title": "Calder",
+            "journal": "The wall said Calder, twice. Hessa already knew.",
+            "resolution": "read",
+            "terminal": true
+        }
+    }
+}

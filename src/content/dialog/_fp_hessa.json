@@ -1,0 +1,242 @@
+{
+    "start": "hail",
+    "nodes": {
+        "hail": [
+            {
+                "conditions": [
+                    { "quest": "fp_watch_stayed", "status": "completed" }
+                ],
+                "text": "She has already heard. She does not look surprised.\n\n\"This house is the last watch. We stopped saying it because saying it didn't keep anyone. Now you've seen why.\"\n\nShe wipes the counter. \"Bed's still three.\"",
+                "choices": [
+                    {
+                        "label": "What's downstairs?",
+                        "next": "downstairs"
+                    },
+                    {
+                        "label": "Nothing for now.",
+                        "action": "close"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    { "quest": "fp_watch_stayed", "status": "active" },
+                    { "flag": "watch_done:fp_watch_stayed" }
+                ],
+                "text": "\"You found him. Talk to Brenna. She asked. I keep the slate.\"\n\nA pause.\n\n\"Tell her the watch held. She already knows. She needs to hear it anyway.\"",
+                "choices": [
+                    {
+                        "label": "I will.",
+                        "action": "close"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    { "quest": "fp_watch_name", "status": "active" },
+                    { "flag": "watch_done:fp_watch_name" }
+                ],
+                "text": "\"You read it.\"\n\nShe does not ask what it said.\n\n\"That's all I wanted. A name that came up should be read where it was cut.\"",
+                "choices": [
+                    {
+                        "label": "It said Calder.",
+                        "effects": [
+                            { "quest_stage": { "quest": "fp_watch_name", "stage": "returned" } }
+                        ],
+                        "next": "name_done"
+                    },
+                    {
+                        "label": "In a moment.",
+                        "action": "close"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    { "quest": "fp_watch_shrine", "status": "active" },
+                    { "flag": "watch_done:fp_watch_shrine" }
+                ],
+                "text": "\"You stood in it. I can tell. The floor's been quieter since you came up.\"",
+                "choices": [
+                    {
+                        "label": "It's done.",
+                        "effects": [
+                            { "quest_stage": { "quest": "fp_watch_shrine", "stage": "returned" } }
+                        ],
+                        "next": "shrine_done"
+                    },
+                    {
+                        "label": "In a moment.",
+                        "action": "close"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    { "any": [
+                        { "quest": "fp_watch_shrine", "status": "active" },
+                        { "quest": "fp_watch_name", "status": "active" }
+                    ] }
+                ],
+                "text": "\"Arch at the far end of the sand. That's the job. I don't need a report until you've been.\"",
+                "choices": [
+                    {
+                        "label": "What's downstairs?",
+                        "next": "downstairs"
+                    },
+                    {
+                        "label": "Right.",
+                        "action": "close"
+                    }
+                ]
+            },
+            {
+                "text": "She has your measure before you reach the counter — boots first, then hands, then face, in that order.\n\n\"Bed's three. That's the bed, the fire and whatever's in the pot, and it's three whether you use all of it or none of it.\"",
+                "choices": [
+                    {
+                        "label": "Anything I can take on?",
+                        "conditions": [
+                            { "quest": "fp_watch_cousin", "status": "completed" },
+                            { "not": { "quest": "fp_watch_shrine" } }
+                        ],
+                        "next": "notice_shrine"
+                    },
+                    {
+                        "label": "Anything I can take on?",
+                        "conditions": [
+                            { "quest": "fp_watch_wine", "status": "completed" },
+                            { "not": { "quest": "fp_watch_name" } }
+                        ],
+                        "next": "notice_name"
+                    },
+                    {
+                        "label": "What's downstairs?",
+                        "next": "downstairs"
+                    },
+                    {
+                        "label": "Who else is in tonight?",
+                        "next": "who"
+                    },
+                    {
+                        "label": "Nothing for now.",
+                        "action": "close"
+                    }
+                ]
+            }
+        ],
+        "notice_shrine": [
+            {
+                "text": "\"Something in the shrine room is keeping people from sleeping. I hear it through the floor. I want it quiet. I don't care what you do to make it quiet.\"",
+                "choices": [
+                    {
+                        "label": "I'll see to it.",
+                        "effects": [ { "start_quest": "fp_watch_shrine" } ],
+                        "next": "shrine_taken"
+                    },
+                    {
+                        "label": "Not tonight.",
+                        "next": "hail"
+                    }
+                ]
+            }
+        ],
+        "shrine_taken": [
+            {
+                "text": "\"Arch past the sand. Shrine room is further in than it used to be. Rooms move.\"",
+                "choices": [
+                    {
+                        "label": "Understood.",
+                        "action": "close"
+                    }
+                ]
+            }
+        ],
+        "shrine_done": [
+            {
+                "text": "\"Good. I'll have another when I have the words.\"",
+                "choices": [
+                    {
+                        "label": "All right.",
+                        "action": "close"
+                    }
+                ]
+            }
+        ],
+        "notice_name": [
+            {
+                "text": "\"A name came up from below. I want it read where it was cut, not guessed at over a cup. Go further than last time.\"",
+                "choices": [
+                    {
+                        "label": "I'll read it.",
+                        "effects": [ { "start_quest": "fp_watch_name" } ],
+                        "next": "name_taken"
+                    },
+                    {
+                        "label": "Not tonight.",
+                        "next": "hail"
+                    }
+                ]
+            }
+        ],
+        "name_taken": [
+            {
+                "text": "\"Same arch. Further. Come back when you've seen the letters.\"",
+                "choices": [
+                    {
+                        "label": "I will.",
+                        "action": "close"
+                    }
+                ]
+            }
+        ],
+        "name_done": [
+            {
+                "text": "She nods once.\n\n\"I already knew. I needed someone else to know it too.\"",
+                "choices": [
+                    {
+                        "label": "All right.",
+                        "action": "close"
+                    }
+                ]
+            }
+        ],
+        "downstairs": [
+            {
+                "text": "\"Sand and a rope ring. People fight in it, people bet on it, and I take a cut of the second one and none of the first.\"\n\nShe wipes the counter down without looking at it.\n\n\"There's an arch at the far end goes down further. That one I don't take a cut of, and I don't ask.\"",
+                "choices": [
+                    {
+                        "label": "You don't ask?",
+                        "next": "dont_ask"
+                    },
+                    {
+                        "label": "Right.",
+                        "next": "hail"
+                    }
+                ]
+            }
+        ],
+        "dont_ask": [
+            {
+                "text": "\"I asked, once. Fellow told me. Then he went back down and I had a room with his kit in it for a season and nobody to give it to.\"\n\n\"Now I keep the slate and the fire. It's a better trade.\"",
+                "choices": [
+                    {
+                        "label": "Fair enough.",
+                        "next": "hail"
+                    }
+                ]
+            }
+        ],
+        "who": [
+            {
+                "text": "\"Oddvar, on the counter — he'll sell you rope you don't need and be right about it. Brenna, by the stair, who fights. And whoever comes up.\"\n\n\"Some nights nobody comes up. That's the trade too.\"",
+                "choices": [
+                    {
+                        "label": "Understood.",
+                        "next": "hail"
+                    }
+                ]
+            }
+        ]
+    },
+    "npc_key": "_fp_hessa"
+}

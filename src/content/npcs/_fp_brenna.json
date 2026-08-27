@@ -1,0 +1,8 @@
+{
+    "npc_key": "_fp_brenna",
+    "name": "Brenna Vosk",
+    "role": "Fights in the cellar",
+    "description": "She sits nearest the stair with her back to the wall, which is the seat you take if you intend to go down again. She has fought in the pit long enough to have opinions about the arch at the far end of it, and she will share them without being asked twice.",
+    "sprite_key": "_fp_brenna",
+    "dialog": "_fp_brenna"
+}

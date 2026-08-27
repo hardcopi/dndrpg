@@ -158,6 +158,7 @@ class LocationEngine
         // QuestService::arriveAt does nothing at all for authored quests.
         if ($partyId) {
             (new QuestService($this->db))->arriveAt($partyId, $locationId);
+            WatchJobs::onArrive($this->db, $partyId, $locationId);
         }
 
         return [
@@ -396,6 +397,12 @@ class LocationEngine
             // game after the cellar was dealt with.
             $n['has_work'] = $n['is_quest_giver'] === 1
                 && $this->hasWorkFor($n, $partyId, $ctx);
+            // Watch spine only: one gold mark on the current giver. Everyone
+            // else is null. has_work still answers "would talk start a job"
+            // for the rest of the world.
+            $n['quest_mark'] = $partyId
+                ? WatchJobs::questMark($this->db, $partyId, (string) $n['npc_key'], $ctx)
+                : null;
             $n['known'] = isset($known[$n['id']]);
             $out[] = $n;
         }
@@ -903,6 +910,9 @@ class LocationEngine
 
         if ($partyId) {
             $messages = array_merge($messages, $this->questArrivalNotes($partyId, $arrivedId));
+            // Back at the Mouth is climbing out. The floor they were on
+            // stops existing, so the next Down is a different dungeon.
+            (new DelveEngine($this->db))->closeIfSurfaced($partyId, $arrivedId);
         }
 
         return [
@@ -1681,8 +1691,21 @@ class LocationEngine
         }
 
         $items = $this->itemsAt($locationId, $partyId);
-        foreach ($items as $it) {
-            $messages[] = "There is something here worth taking: {$it['name']}.";
+        // Same gate the scene uses: loot in a furnished room is inside the
+        // thing. Naming it on a search while the lid is shut is how a player
+        // is told there is something to take and then handed no Take.
+        $furnishing = $partyId
+            ? (new FurnishingEngine($this->db))->report($characterId, $partyId, $locationId)
+            : null;
+        if ($furnishing !== null && empty($furnishing['open'])) {
+            if ($items) {
+                $messages[] = 'Something is put away in ' . $furnishing['name'] . '.';
+            }
+            $items = [];
+        } else {
+            foreach ($items as $it) {
+                $messages[] = "There is something here worth taking: {$it['name']}.";
+            }
         }
 
         // The roll line is always there now, so "nothing" is the case where
@@ -2004,20 +2027,23 @@ class LocationEngine
     }
 
     /**
-     * Whether the party may sleep where it stands.
+     * Whether the party may sleep where it stands, for nothing.
      *
-     * Three ways to earn it. A place authored as safe, a bed paid for, or a
-     * room whose every door the party has braced shut — see DoorEngine. The
-     * third is the only one a delve offers that is not simply given: the floor
-     * marks empty rooms camp-safe and nothing else, on the argument that a
-     * long rest in the room you just cleared would make the whole descent
-     * free. Barricading is what stops it being free.
+     * Two ways to earn it. A place authored as safe, or a room whose every
+     * door the party has braced shut — see DoorEngine. A bed paid for is the
+     * OTHER long rest, and it is why camp is withheld: the same night on an
+     * innkeeper's floor for free is why nobody bought a room. Barricading is
+     * the only way a delve offers that is not simply given — a long rest in
+     * the room you just cleared would make the whole descent free.
      */
     public function canCampHere(int $characterId): bool
     {
         $char = $this->getFullCharacter($characterId);
         $loc = $this->getLocation((int) $char['current_location_id']);
-        if ((bool) $loc['allow_camp'] || $loc['inn_cost'] !== null) {
+        if ($loc['inn_cost'] !== null) {
+            return false;
+        }
+        if ((bool) $loc['allow_camp']) {
             return true;
         }
         $partyId = $this->partyIdForCharacter($characterId);
@@ -2028,7 +2054,8 @@ class LocationEngine
     /**
      * Whether the party may stop for an hour where it stands.
      *
-     * Looser than sleeping, deliberately. Anywhere you could camp, plus any
+     * Looser than sleeping, deliberately. Anywhere you could camp, a common
+     * room with an innkeeper (the fire is free; the bed is not), plus any
      * ROOM on a delve floor — you can get your back to a wall and pass the
      * waterskin round in a chamber you have just fought through without that
      * being the same claim as bedding down in it. Passages are still no: this
@@ -2046,6 +2073,10 @@ class LocationEngine
         }
         $char = $this->getFullCharacter($characterId);
         $loc = $this->getLocation((int) $char['current_location_id']);
+        // Sit by the fire. The innkeeper still sells the night.
+        if ($loc['inn_cost'] !== null) {
+            return true;
+        }
         return (bool) preg_match('/^_dg_\d+_\d+_r\d+$/', (string) ($loc['location_key'] ?? ''));
     }
 

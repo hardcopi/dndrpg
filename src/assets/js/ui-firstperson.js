@@ -99,9 +99,11 @@
     (tiles.doors || []).forEach((d) => doors.set(d.t * 4 + d.d, d));
     const props = new Map();
     (tiles.props || []).forEach((p) => props.set(p.t, p));
+    const figs = new Map();
+    (tiles.figs || []).forEach((f) => figs.set(f.t, f));
     (tiles.walls || []).forEach((w) => walls.add(w.t * 4 + w.d));
     (tiles.stairs || []).forEach((s) => stairs.set(s.t, s.d));
-    const fp = { doors, walls, stairs, props };
+    const fp = { doors, walls, stairs, props, figs };
     try { Object.defineProperty(tiles, '_fp', { value: fp, enumerable: false }); } catch (e) { tiles._fp = fp; }
     return fp;
   }
@@ -405,7 +407,15 @@
    * most of the floor and so tell you nothing.
    */
   function leaf(list, kind, corners, z) {
-    if (kind === 'open' || kind === 'arch') return;
+    // A stroke around the hole, so an opening still reads when the room
+    // beyond is the same brick as the hall, or is not there yet.
+    if (kind === 'open' || kind === 'arch') {
+      list.push({
+        z: z - 0.001,
+        svg: '<polygon class="fp-opening" points="' + poly(corners) + '"/>',
+      });
+      return;
+    }
     const cls = 'fp-leaf is-' + kind;
     if (kind === 'portcullis') {
       const [a, b, c, d] = corners;
@@ -517,11 +527,170 @@
    * measurement: a sarcophagus and a barrel are the same box at different
    * heights, and the point of the shape is "there is a thing here to open",
    * which reads at any size the cell allows.
+   *
+   * Dressing is not a box. The view is always face-on, four facings, so a
+   * pile of rubble drawn as a crate is a crate. These are Gold Box sprites:
+   * a card facing the camera, standing on the floor of the cell. Chests keep
+   * the box because they open.
    */
   const PROP_H = { chest: 0.34, strongbox: 0.3, barrel: 0.44, crate: 0.46,
                    sarcophagus: 0.28, cabinet: 0.62 };
 
+  /** A rectangle facing the camera, in the party's frame. */
+  function card(xL, y0, xR, y1, z) {
+    return '<polygon points="' + poly([
+      proj(xL, y0, z), proj(xR, y0, z), proj(xR, y1, z), proj(xL, y1, z),
+    ]) + '"/>';
+  }
+
+  function oval(cx, cy, z, rx, ry) {
+    const c = proj(cx, cy, z);
+    const r = proj(cx + rx, cy + ry, z);
+    return '<ellipse cx="' + c[0] + '" cy="' + c[1] +
+           '" rx="' + px(Math.abs(r[0] - c[0])) +
+           '" ry="' + px(Math.abs(r[1] - c[1])) + '"/>';
+  }
+
+  /**
+   * Set dressing, as a sprite standing in the cell.
+   *
+   * Constant z, so the card does not recede within itself — that is the whole
+   * of the old-school method, and the reason a rubble slide reads as a pile
+   * rather than as a box you could open. Drawn in the same ink as the walls.
+   */
+  function sprite(list, kind, x0, x1, z0, z1) {
+    const z = Math.max(z0 + (z1 - z0) * 0.62, NEAR);
+    const cx = (x0 + x1) / 2;
+    const floor = -H;
+    let body = '';
+    switch (kind) {
+      case 'rubble': {
+        const bits = [
+          [-0.30, 0.22, 0.14], [-0.08, 0.36, 0.24], [0.22, 0.20, 0.13],
+          [0.04, 0.16, 0.10], [-0.18, 0.14, 0.09], [0.30, 0.12, 0.08],
+        ];
+        body = bits.map(([dx, w, h]) => {
+          const jags = [0.2, 0.7, 1, 0.85, 0.4, 0.12];
+          const xs = [-1, -0.55, -0.05, 0.5, 0.95, 0.35];
+          const pts = xs.map((u, i) => proj(cx + dx + u * (w / 2), floor + jags[i] * h, z));
+          return '<polygon points="' + poly(pts) + '"/>';
+        }).join('');
+        break;
+      }
+      case 'pool':
+        body = oval(cx, floor + 0.02, z, 0.38, 0.05)
+             + oval(cx, floor + 0.02, z, 0.26, 0.03);
+        break;
+      case 'well':
+        body = oval(cx, floor + 0.04, z, 0.28, 0.08)
+             + oval(cx, floor + 0.05, z, 0.16, 0.045)
+             + card(cx - 0.06, floor, cx + 0.06, floor + 0.12, z);
+        break;
+      case 'pillar':
+        body = card(cx - 0.12, floor, cx + 0.12, floor + 0.78, z)
+             + card(cx - 0.16, floor + 0.78, cx + 0.16, floor + 0.86, z)
+             + card(cx - 0.16, floor, cx + 0.16, floor + 0.08, z);
+        break;
+      case 'altar':
+        body = card(cx - 0.22, floor, cx + 0.22, floor + 0.16, z)
+             + card(cx - 0.18, floor + 0.16, cx + 0.18, floor + 0.28, z);
+        break;
+      case 'bunks':
+        body = card(cx - 0.38, floor + 0.04, cx + 0.38, floor + 0.14, z)
+             + card(cx - 0.38, floor + 0.18, cx + 0.38, floor + 0.28, z);
+        break;
+      case 'table':
+        body = card(cx - 0.32, floor + 0.18, cx + 0.32, floor + 0.24, z)
+             + card(cx - 0.28, floor, cx - 0.22, floor + 0.18, z)
+             + card(cx + 0.22, floor, cx + 0.28, floor + 0.18, z);
+        break;
+      case 'shelves':
+        body = card(cx - 0.30, floor, cx + 0.30, floor + 0.52, z)
+             + card(cx - 0.28, floor + 0.14, cx + 0.28, floor + 0.18, z)
+             + card(cx - 0.28, floor + 0.30, cx + 0.28, floor + 0.34, z);
+        break;
+      case 'hearth':
+        body = card(cx - 0.28, floor, cx + 0.28, floor + 0.36, z)
+             + oval(cx, floor + 0.12, z, 0.14, 0.08);
+        break;
+      case 'brazier':
+        body = card(cx - 0.04, floor, cx + 0.04, floor + 0.22, z)
+             + oval(cx, floor + 0.28, z, 0.16, 0.08)
+             + oval(cx, floor + 0.30, z, 0.10, 0.04);
+        break;
+      case 'cage': {
+        const bars = [];
+        for (let i = 0; i < 5; i++) {
+          const x = cx - 0.22 + i * 0.11;
+          bars.push(card(x - 0.012, floor, x + 0.012, floor + 0.62, z));
+        }
+        body = card(cx - 0.26, floor, cx + 0.26, floor + 0.04, z)
+             + card(cx - 0.26, floor + 0.62, cx + 0.26, floor + 0.68, z)
+             + bars.join('');
+        break;
+      }
+      case 'urns':
+        body = oval(cx - 0.16, floor + 0.16, z, 0.10, 0.16)
+             + oval(cx + 0.16, floor + 0.14, z, 0.09, 0.14)
+             + card(cx - 0.20, floor, cx - 0.12, floor + 0.06, z)
+             + card(cx + 0.12, floor, cx + 0.20, floor + 0.06, z);
+        break;
+      case 'winch':
+        body = card(cx - 0.04, floor, cx + 0.04, floor + 0.42, z)
+             + oval(cx, floor + 0.42, z, 0.16, 0.16)
+             + card(cx - 0.18, floor + 0.40, cx + 0.18, floor + 0.44, z);
+        break;
+      default:
+        return false;
+    }
+    list.push({ z: z - 0.004, svg: '<g class="fp-sprite is-' + kind + '">' + body + '</g>' });
+    return true;
+  }
+
+  /**
+   * A waiting fight, as a battler card standing on the floor.
+   *
+   * Constant z, same as the dressing sprites: a goblin is a picture facing
+   * you, not a box you could walk around. Combat already paints these PNGs
+   * on the grid; the corridor uses the same file so the thing you saw down
+   * the hall is the thing that then takes a turn. One to three, overlapping
+   * — Gold Box never drew a roster in the hallway.
+   */
+  function figure(list, fig, x0, x1, z0, z1) {
+    const key = String(fig.s || '').replace(/[^a-z0-9_]/gi, '');
+    if (!key) return;
+    // In the party's own cell, stand them toward the far edge so they are
+    // in front of the camera rather than around it.
+    const along = z0 < 0.5 ? 0.84 : 0.55;
+    const z = Math.max(z0 + (z1 - z0) * along, NEAR);
+    const n = Math.min(Math.max(fig.n || 1, 1), 3);
+    const small = /rat|spider|stirge|crawler|ooze|snake|centipede/.test(key);
+    const large = /ogre|minotaur|golem|dragon|gorgon|manticore|griffon|chimera|tentacle|rock_man|balor/.test(key);
+    const h = small ? 0.34 : large ? 0.92 : 0.70;
+    const w = h * (small ? 1.05 : 0.72);
+    const floor = -H;
+    const mid = (x0 + x1) / 2;
+    for (let i = 0; i < n; i++) {
+      const cx = mid + (i - (n - 1) / 2) * (w * 0.42);
+      const zi = z - i * 0.012;
+      const left = proj(cx - w / 2, floor, zi);
+      const right = proj(cx + w / 2, floor + h, zi);
+      const x = Math.min(left[0], right[0]);
+      const y = Math.min(left[1], right[1]);
+      const bw = Math.abs(right[0] - left[0]);
+      const bh = Math.abs(right[1] - left[1]);
+      const href = fig.u || ('assets/images/battlers/' + key + '.png');
+      list.push({
+        z: zi - 0.006,
+        svg: '<image class="fp-fig" href="' + href + '" x="' + x + '" y="' + y +
+             '" width="' + bw + '" height="' + bh +
+             '" preserveAspectRatio="xMidYMax meet"/>',
+      });
+    }
+  }
+
   function prop(list, kind, x0, x1, z0, z1, isOpen) {
+    if (!isOpen && sprite(list, kind, x0, x1, z0, z1)) return;
     const a = Math.max(z0, NEAR);
     const b = Math.max(z1, NEAR);
     if (b <= a) return;
@@ -603,6 +772,8 @@
     if (!tiles || !tiles.rows || !cursor) return '';
     const o = opts || {};
     const list = [];
+    const hereId = ownerAt(tiles, cursor.x, cursor.y);
+    const hereFig = (tiles.figs || []).find((f) => f.l === hereId) || null;
 
     const fx = DX[cursor.facing];
     const fy = DY[cursor.facing];
@@ -631,13 +802,21 @@
         const st = index(tiles).stairs.get(tileOf(tiles, cx, cy));
         if (st) stair(list, x0, x1, z0, z1, st === 'down');
 
-        // Whatever is standing in this cell. Skipped for the cell the party is
-        // in — they are on top of it, and a box drawn round the camera is a
-        // wall across the whole picture.
+        // Furnishings skip the cell the party is in — a box drawn round the
+        // camera is a wall across the whole picture. A waiting fight does
+        // not: Gold Box put the monsters in front of you in the room you
+        // just walked into, and skipping that cell hid them under your feet.
         if (du !== 0 || dv !== 0) {
           const pr = index(tiles).props.get(tileOf(tiles, cx, cy));
-          if (pr) prop(list, pr.k, x0, x1, z0, z1, !!pr.o);
+          if (pr) prop(list, pr.k, x0, x1, z0, z1, !!(pr.o && pr.loot));
         }
+        const fig = index(tiles).figs.get(tileOf(tiles, cx, cy));
+        // A fight in THIS room is always drawn on the camera cell, in front
+        // of you — the party spawns on the spine, and a sprite in a far
+        // corner is a picture of the wrong place. Fights down the hall stay
+        // on their own tiles so you can see them through a doorway.
+        if (fig && fig.l !== hereId) figure(list, fig, x0, x1, z0, z1);
+        if (du === 0 && dv === 0 && hereFig) figure(list, hereFig, x0, x1, z0, z1);
 
         // The four faces, in the party's own frame: 0 ahead, 1 right, 2
         // behind, 3 left. The face behind is skipped for the cell you are
@@ -645,7 +824,12 @@
         for (let ld = 0; ld < 4; ld++) {
           if (ld === 2 && dv === 0 && du === 0) continue;
           const face = faceOf(tiles, cx, cy, (cursor.facing + ld) % 4);
-          if (face.kind === 'open') continue;
+          // Floor continuing in the same run is not a face. An OPEN DOORWAY
+          // still is: skipping it made a hall into a room look like a dead
+          // end, because the far wall of the room filled the corridor with
+          // no jambs, or the void beyond an unvisited room sat where a
+          // wall would. A hole with a frame is the sign.
+          if (face.kind === 'open' && !face.door) continue;
 
           const shut = face.kind === 'wall';
           const gap = shut ? null : [0.32, 0.68, 0.16];

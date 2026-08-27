@@ -31,17 +31,6 @@
 
   const state = {
     method: 'standard',
-    /** The 3D recipe, when the look was built in the creator. Null otherwise. */
-    model: null,
-    /**
-     * The last stills the creator rendered, or null.
-     *
-     * Cached because two things want them — the review, to show who you made,
-     * and the submit, to save them — and a render is a second or two of the
-     * embed's time. Thrown away the moment the look changes, which is the only
-     * thing that can make them wrong.
-     */
-    portrait: null,
     /** Index into STEPS. */
     step: 0,
     /** How far Next has ever taken them, so the rail knows what is clickable. */
@@ -126,10 +115,8 @@
       id: 'identity',
       label: 'Identity',
       blurb: 'Who are they?',
-      // The 3D creator always has somebody in it — it opens on a member of the
-      // chosen race rather than on nothing — so there is no such thing as not
-      // having chosen a look yet, and this step gates on the name alone just as
-      // it did before the appearance step was folded into it.
+      // A painted bust is always showing for a race that has tokens, so this
+      // step still gates on the name alone.
       ready: () => {
         const name = $('#name').value.trim();
         if (!name) return 'A name is required.';
@@ -201,12 +188,9 @@
     $('#wiz-title').textContent = step.label;
     $('#wiz-blurb').textContent = step.blurb;
 
-    // Mounted from here rather than at load, because a WebGL player and forty
-    // megabytes of meshes is not what somebody who came back to change their
-    // class should pay for on the way past. `mountModel` is a no-op once the
-    // race it was mounted for is still the race, so calling it on every render
-    // costs a string compare.
-    if (step.id === 'identity') mountModel();
+    // The bust is cheap to paint and the well is already in the document, so
+    // coming back to this step just refreshes whose face is showing.
+    if (step.id === 'identity') paintToken();
 
     // The rail. A step you have reached is a button; one you have not is inert
     // text, because letting somebody jump to Review before choosing a class
@@ -365,7 +349,7 @@
     }
     // Re-dressing an existing character reuses this whole page rather than
     // growing a second copy of the picker inside the character sheet. Same
-    // layers, same preview, same bake — only the submit differs.
+    // bust well, same submit of a sprite key — only the wizard chrome differs.
     if (params.get('redress')) state.redressId = parseInt(params.get('redress'), 10);
 
     const [races, classes, pb, feats] = await Promise.all([
@@ -401,6 +385,7 @@
     });
     raceSel.addEventListener('change', fillSubraces);
     fillSubraces();
+    bindTokenWell();
 
     const classSel = $('#class');
     state.classes.forEach((c) => {
@@ -446,13 +431,14 @@
     renderAbilities();
 
     // Re-dressing an existing character reuses this page rather than growing a
-    // second copy of the creator inside the character sheet — same embed, same
-    // recipe, only the submit differs.
+    // second copy of the look picker inside the character sheet — same bust
+    // well, same sprite key, only the submit differs.
     if (state.redressId) {
       await enterRedressMode();
     } else {
       initWizard();
       goToStep(0);
+      paintToken();
     }
   }
 
@@ -484,233 +470,107 @@
   }
 
   // =========================================================================
-  // The 3D creator
+  // The look: a painted bust, not a doll
+  //
+  // The Unity Sidekick used to live in this box. It was a WebGL player and a
+  // set of mesh bundles, and it made every new character a low-poly toy. The
+  // rest of the game is a painting — Gold Box rooms, dialogue busts, race
+  // plates — so the creator now picks from painted busts of the same kind.
+  // Reroll and the arrows walk the list; the race select and the gender
+  // select filter it. There is no recipe and no portrait post: the files
+  // already live in assets/images/npcs/ as `{key}_bust.png` and `{key}_face.png`,
+  // and create sends the key.
   // =========================================================================
+  let tokenIndex = 0;
+  let tokenRace = '';
+  let redressRace = '';
 
-  /**
-   * The embed, and the race it was mounted for.
-   *
-   * Remounted only when the race changes, because the race is baked into the
-   * embed's URL — it is what the creator opens as — and somebody who chose
-   * Tiefling and then chose Dwarf must not still be looking at horns. The race
-   * cannot be changed over postMessage, so this is a fresh iframe and a fresh
-   * WebGL player every time, which is why the remount is debounced below.
-   *
-   * The embed does not show a race picker of its own here: it is given a race
-   * it recognises, and a fixed race is a picker it does not draw. The select on
-   * the line above is the only race control on the page, which is the point —
-   * two of them could disagree, and the sheet and the portrait would then say
-   * different things about the same character.
-   */
-  let modelEmbed = null;
-  let modelRace = null;
-  let mountTimer = null;
-
-  /**
-   * Remount, but not on every keystroke through the race list.
-   *
-   * A select fires `change` per arrow key, and each one of those is forty
-   * megabytes of meshes torn down and fetched again. The delay is short enough
-   * to feel immediate when somebody picks a race and long enough that scrolling
-   * past six of them costs one load rather than six.
-   */
-  function mountModelSoon() {
-    // Re-dressing has no race select to follow — the identity line is not on
-    // that page — and a pending remount there would land on a creator that was
-    // deliberately opened on a character and throw the character away.
-    if (state.redressId) return;
-    clearTimeout(mountTimer);
-    mountTimer = setTimeout(() => { mountModel(); }, 400);
+  function tokenCatalog() {
+    return (window.LOOK_TOKENS && typeof window.LOOK_TOKENS === 'object')
+      ? window.LOOK_TOKENS : {};
   }
 
-  /**
-   * Put the creator in its box, replacing whatever was in it.
-   *
-   * `options.character` is the re-dress case: an id makes the embed fetch the
-   * look that character is already wearing. Creation passes nothing, because
-   * there is no character yet — only a race to open as.
-   */
-  async function mountModel(options = {}) {
-    const well = $('#look-model-well');
-    if (!well) return;
+  function tokensFor(race, gender) {
+    const rows = tokenCatalog()[race] || [];
+    if (!gender) return rows.slice();
+    const hit = rows.filter((t) => t.gender === gender);
+    return hit.length ? hit : rows.slice();
+  }
 
-    // A mount asked for now supersedes one that was merely scheduled. Without
-    // this, filling the race select during startup leaves a timer armed that
-    // fires a few hundred milliseconds later and remounts over whatever was
-    // put in the box in the meantime.
-    clearTimeout(mountTimer);
+  function activeRace() {
+    return redressRace || $('#race')?.value || '';
+  }
 
-    const race = $('#race')?.value || '';
-    const key = options.character ? 'id:' + options.character : 'race:' + race;
-    if (modelEmbed && modelRace === key) return;
+  function currentToken() {
+    const list = tokensFor(activeRace(), $('#name-gender')?.value || '');
+    if (!list.length) return null;
+    if (tokenIndex < 0 || tokenIndex >= list.length) tokenIndex = 0;
+    return list[tokenIndex];
+  }
 
-    if (modelEmbed) {
-      modelEmbed.destroy();
-      modelEmbed = null;
-      state.model = null;
-      state.portrait = null;
+  function paintToken() {
+    const img = $('#look-token-bust');
+    const cap = $('#look-token-caption');
+    if (!img) return;
+    const race = activeRace();
+    const list = tokensFor(race, $('#name-gender')?.value || '');
+    if (tokenRace !== race) {
+      tokenRace = race;
+      tokenIndex = 0;
     }
-    modelRace = key;
-
-    // Dynamic import: this file is a classic script and the embed's helper is
-    // an ES module.
-    //
-    // Resolved against the document rather than written relative. A dynamic
-    // import inside a classic script resolves against the SCRIPT's URL, not the
-    // page's — so './assets/js/...' from a file that already lives in
-    // /assets/js/ asks for /assets/js/assets/js/ and 404s. Going through
-    // document.baseURI also keeps it right if the app is ever served under a
-    // subpath, which is why this is not just a leading slash.
-    const helper = new URL('assets/js/rivermark-character.js', document.baseURI).href;
-    const { mountCharacter } = await import(helper);
-
-    modelEmbed = mountCharacter(well, {
-      mode: 'create',
-      // The race is how the creator knows what to open as when there is no
-      // saved look to fetch. Save stays off in both modes: this page's own
-      // button is the only commit, and a second one inside the frame would mean
-      // something different from the one underneath it.
-      race,
-      character: options.character,
-      save: false,
-    });
-
-    modelEmbed.on('change', (d) => {
-      state.model = d.recipe || null;
-      // A picture of who they were a moment ago is worse than no picture.
-      state.portrait = null;
-    });
-    modelEmbed.on('save', (d) => { state.model = d.recipe || state.model; });
+    if (!list.length) {
+      img.removeAttribute('src');
+      img.alt = '';
+      if (cap) cap.textContent = 'No painted look for this people yet.';
+      return;
+    }
+    if (tokenIndex >= list.length) tokenIndex = 0;
+    const t = list[tokenIndex];
+    img.src = artUrl('assets/images/npcs/' + t.key + '_bust.png');
+    img.alt = race + ' look';
+    if (cap) {
+      cap.textContent = list.length > 1 ? (tokenIndex + 1) + ' of ' + list.length : '';
+    }
   }
 
-  /**
-   * The recipe the creator is showing, asked for rather than remembered.
-   *
-   * A player who likes what the race gave them and touches nothing never fires
-   * a change — the embed deliberately does not announce the character it was
-   * asked to build — so waiting for one would quietly drop the look of
-   * everybody who was happy first time. Asking answers with a `save` event, and
-   * with no character id behind it the embed replies without going near the
-   * server.
-   */
-  function askModel() {
-    if (!modelEmbed) return Promise.resolve(state.model);
-    return new Promise((resolve) => {
-      let done = false;
-      const finish = () => {
-        if (done) return;
-        done = true;
-        resolve(state.model);
-      };
-      modelEmbed.on('save', finish);
-      modelEmbed.save();
-      // It is one postMessage across an iframe on the same origin, so this is
-      // a stuck-embed timeout rather than a wait. Whatever the last change
-      // reported still goes, which is the right answer in every case except a
-      // creator that never loaded.
-      setTimeout(finish, 2000);
+  function stepToken(delta) {
+    const list = tokensFor(activeRace(), $('#name-gender')?.value || '');
+    if (!list.length) return;
+    tokenIndex = (tokenIndex + delta + list.length) % list.length;
+    paintToken();
+  }
+
+  function rerollToken() {
+    const list = tokensFor(activeRace(), $('#name-gender')?.value || '');
+    if (list.length < 2) { paintToken(); return; }
+    let next = tokenIndex;
+    while (next === tokenIndex) next = Math.floor(Math.random() * list.length);
+    tokenIndex = next;
+    paintToken();
+  }
+
+  function bindTokenWell() {
+    $('#look-token-prev')?.addEventListener('click', () => stepToken(-1));
+    $('#look-token-next')?.addEventListener('click', () => stepToken(1));
+    $('#look-token-reroll')?.addEventListener('click', rerollToken);
+    $('#name-gender')?.addEventListener('change', () => {
+      tokenIndex = 0;
+      paintToken();
     });
   }
 
   /**
-   * A bust and a face of whoever is in the creator, or null.
-   *
-   * Same shape as askModel and for the same reason: the embed answers with an
-   * event rather than a return value, and a creator that never loaded must not
-   * leave the page waiting. The timeout is longer because this one renders two
-   * frames and base64s them before it can reply, where a save only serialises a
-   * recipe it already has.
-   *
-   * Null is a perfectly good answer. A character with no portrait falls back to
-   * the class art, which is exactly where they were before this existed.
-   */
-  function askPortrait() {
-    if (state.portrait) return Promise.resolve(state.portrait);
-    if (!modelEmbed) return Promise.resolve(null);
-    return new Promise((resolve) => {
-      let done = false;
-      const finish = (shot) => {
-        if (done) return;
-        done = true;
-        state.portrait = shot && shot.bust && shot.face ? shot : null;
-        resolve(state.portrait);
-      };
-      modelEmbed.on('portrait', finish);
-      modelEmbed.portrait();
-      setTimeout(() => finish(null), 8000);
-    });
-  }
-
-  /**
-   * Crop the transparent margin off a rendered still.
-   *
-   * The embed renders into a square frame with the character somewhere in the
-   * middle of it, and the server crops that to the character before saving —
-   * so a review showing the raw frame would show them a third of the size of
-   * the portrait they are about to get. This is the same crop, done here, for
-   * the same reason the server does it: a preview that does not match what
-   * gets saved is worse than no preview.
-   *
-   * Falls back to the uncropped image on any failure. It is a picture on a
-   * review screen; nothing here is worth an exception.
-   */
-  function cropToCharacter(b64) {
-    return new Promise((resolve) => {
-      const src = 'data:image/png;base64,' + b64;
-      const img = new Image();
-      img.onload = () => {
-        try {
-          const w = img.naturalWidth;
-          const h = img.naturalHeight;
-          const cut = document.createElement('canvas');
-          cut.width = w;
-          cut.height = h;
-          const ctx = cut.getContext('2d', { willReadFrequently: true });
-          ctx.drawImage(img, 0, 0);
-          const data = ctx.getImageData(0, 0, w, h).data;
-
-          let minX = w, minY = h, maxX = -1, maxY = -1;
-          for (let y = 0; y < h; y++) {
-            for (let x = 0; x < w; x++) {
-              // 8 of 255, the same "not quite invisible" line Paperdoll::trim draws.
-              if (data[(y * w + x) * 4 + 3] > 8) {
-                if (x < minX) minX = x;
-                if (x > maxX) maxX = x;
-                if (y < minY) minY = y;
-                if (y > maxY) maxY = y;
-              }
-            }
-          }
-          if (maxX < 0) { resolve(src); return; }
-
-          const cw = maxX - minX + 1;
-          const ch = maxY - minY + 1;
-          const out = document.createElement('canvas');
-          out.width = cw;
-          out.height = ch;
-          out.getContext('2d').drawImage(img, minX, minY, cw, ch, 0, 0, cw, ch);
-          resolve(out.toDataURL('image/png'));
-        } catch (_) {
-          resolve(src);
-        }
-      };
-      img.onerror = () => resolve(src);
-      img.src = src;
-    });
-  }
-
-  /**
-   * Strip the page down to the creator.
+   * Strip the page down to the look.
    *
    * Everything else here — abilities, race, class — is decided once at creation
-   * and is not a wardrobe, so re-dressing shows the 3D creator and no wizard
+   * and is not a wardrobe, so re-dressing shows the painted bust and no wizard
    * chrome at all: no rail, no Back, no Next, just the character and Save.
    * Hiding rather than building a second page keeps one implementation of it.
    *
    * The identity line goes with the chrome. A name is not a wardrobe either, and
-   * a race select that silently remounted the creator on somebody else's body
-   * would be the one control on this page that could change a character into a
-   * different character.
+   * a race select that silently changed whose bust was showing on somebody
+   * else's body would be the one control on this page that could change a
+   * character into a different character.
    */
   async function enterRedressMode() {
     let sheet;
@@ -742,12 +602,15 @@
     $('#wiz-blurb').textContent =
       `Level ${c.level} ${c.race} ${c.class} — change how they look.`;
 
-    // By id rather than by race: the embed fetches whatever they are already
-    // wearing and opens on it, so re-dressing starts from the character rather
-    // than from a stranger of the right species. The race still travels with
-    // the fetch, which is how somebody who has never been dressed opens as
-    // themselves instead of as a human.
-    await mountModel({ character: state.redressId });
+    // Open on the bust they are already wearing, so re-dressing starts from
+    // the character rather than from a stranger of the right species.
+    redressRace = c.race || '';
+    const list = tokensFor(redressRace, '');
+    const have = c.sprite_key || '';
+    const found = list.findIndex((t) => t.key === have);
+    tokenIndex = found >= 0 ? found : 0;
+    tokenRace = redressRace;
+    paintToken();
   }
 
   function showFormError(message) {
@@ -791,10 +654,8 @@
     }
     showNameRoll(r);
 
-    // The creator opens as whoever the line above says they are, so changing
-    // the race changes the body underneath it. Debounced: the race is baked
-    // into the embed's URL and every change is a fresh WebGL player.
-    mountModelSoon();
+    // Changing the race changes whose bust is showing.
+    paintToken();
   }
 
   /**
@@ -1308,7 +1169,7 @@
       ['Starting gear', (cls?.starting_gear || []).join(', ') || 'none'],
       ['Racial traits', race?.traits || 'none'],
       ['Origin feat', state.originFeats.find((f) => f.key === state.feat)?.name || 'none taken'],
-      ['Look', 'built in 3D'],
+      ['Look', 'a painted bust'],
     ].map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('');
 
     renderReviewPortrait();
@@ -1317,48 +1178,23 @@
   /**
    * The character, as they will actually appear.
    *
-   * This used to draw the class default, and that was right: a 3D look saved no
-   * portrait, so the class art was genuinely what the party rail and the
-   * conversations were going to show, and printing the 3D character here would
-   * have promised a face nobody was going to get. The creator now renders a
-   * real portrait and the server keeps it, so the honest answer changed — and a
-   * review showing a stock barbarian for the dwarf you spent ten minutes on is
-   * the one screen that disagrees with every other one.
-   *
-   * The class art is still drawn first and left up until the render arrives. It
-   * is the fallback for a creator that never loaded, and it means the box is
-   * never empty while the embed is thinking.
+   * The painted bust they picked, falling back to the class art if this race
+   * has no tokens yet — which is the same fallback the party rail already
+   * uses, so the review cannot promise a face nobody is going to get.
    */
   function renderReviewPortrait() {
     const box = $('#review-bust');
     if (!box) return;
 
-    const key = ($('#class').value || 'fighter').toLowerCase();
+    const token = currentToken();
+    const key = token?.key || ($('#class').value || 'fighter').toLowerCase();
     box.innerHTML =
       `<img class="pd-bust-layer" src="${artUrl(`assets/images/npcs/${key}_bust.png`)}" alt="">`;
     // Not every actor was cut with a bust; the face always exists.
     box.querySelector('img').addEventListener('error', (e) => {
       e.target.src = artUrl(`assets/images/npcs/${key}_face.png`);
     });
-
-    // Whose turn at the box this is. A player who steps back to change their
-    // class before the render lands would otherwise get the old character
-    // pasted over the new class's art a second later.
-    const mine = ++reviewDraw;
-    askPortrait().then((shot) => {
-      if (!shot || mine !== reviewDraw) return;
-      return cropToCharacter(shot.bust).then((src) => {
-        if (mine !== reviewDraw) return;
-        const img = box.querySelector('img');
-        if (img) img.src = src;
-      });
-    }).catch(() => {
-      // The class art is already up, which is the right thing to be showing.
-    });
   }
-
-  /** Bumped every time the review portrait is drawn. See renderReviewPortrait. */
-  let reviewDraw = 0;
 
   /**
    * The AC the character will have once created, armour and all.
@@ -1399,26 +1235,12 @@
     if (state.redressId) {
       $('#submit-btn').disabled = true;
       try {
-        const look3d = await askModel();
-        if (!look3d) throw new Error('The creator has not finished loading.');
-        const shot = await askPortrait();
-        await API.post('character/model', {
+        const key = currentToken()?.key || '';
+        if (!key) throw new Error('No painted look is available for this people.');
+        await API.post('character/avatar', {
           character_id: state.redressId,
-          appearance: look3d,
+          sprite_key: key,
         });
-        // A re-dressed character whose portrait still showed the old outfit
-        // would be the one screen that disagreed with every other one.
-        if (shot) {
-          try {
-            await API.post('character/portrait', {
-              character_id: state.redressId,
-              bust: shot.bust,
-              face: shot.face,
-            });
-          } catch (_) {
-            // The look saved; the picture of it can be remade next time.
-          }
-        }
         window.location.href = 'game.php';
       } catch (ex) {
         showFormError(ex.message);
@@ -1442,10 +1264,9 @@
       abilities: state.abilities,
       background: $('#background').value,
       alignment: $('#alignment').value,
-      // A 3D look has no 2D sprite at all, so this is left empty and the
-      // server falls back to the class default — which is what the party rail
-      // and the conversation portraits will show.
-      sprite_key: '',
+      // The painted bust they picked. The files already live on disk as
+      // `{key}_bust.png` / `{key}_face.png`; create just sends the key.
+      sprite_key: currentToken()?.key || '',
     };
     if (state.feat) payload.feat = state.feat;
     if (state.partyId) payload.party_id = state.partyId;
@@ -1454,51 +1275,7 @@
     try {
       $('#submit-btn').disabled = true;
 
-      // Asked before the character is created rather than after, so a creator
-      // that never loaded is a look nobody gets rather than a character created
-      // and then left waiting on an iframe.
-      const look3d = await askModel();
-      // Asked before creation for the same reason the recipe is: a creator that
-      // never loaded should cost nobody a half-made character.
-      const shot = await askPortrait();
-
-      const data = await API.post('character/create', payload);
-
-      if (look3d) {
-        // Posted after creation rather than with it: the route takes a
-        // character id and there was no character until a moment ago.
-        // Same tolerance too — a character with no 3D look is a character who
-        // can build one later from their sheet, so this is worth reporting and
-        // not worth blocking on.
-        try {
-          await API.post('character/model', {
-            character_id: data.character.id,
-            appearance: look3d,
-          });
-        } catch (ex) {
-          err.textContent = 'Created, but the 3D look could not be saved: ' + ex.message;
-          err.classList.remove('hidden');
-          await new Promise((r) => setTimeout(r, 2500));
-        }
-      }
-
-      if (shot) {
-        // After the recipe, and just as tolerant. The recipe is what the
-        // character IS; the portraits are a picture of it that can be rebuilt
-        // from the recipe at any time, so failing here costs a portrait and not
-        // a character.
-        try {
-          await API.post('character/portrait', {
-            character_id: data.character.id,
-            bust: shot.bust,
-            face: shot.face,
-          });
-        } catch (ex) {
-          err.textContent = 'Created, but the portrait could not be saved: ' + ex.message;
-          err.classList.remove('hidden');
-          await new Promise((r) => setTimeout(r, 2500));
-        }
-      }
+      await API.post('character/create', payload);
 
       window.location.href = 'game.php';
     } catch (ex) {

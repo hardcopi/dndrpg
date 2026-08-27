@@ -170,6 +170,12 @@ ok('it does not say whether it is locked',
     !array_key_exists('locked', $state['location']['furnishing'] ?? []));
 ok('the loot is behind the lid', ($state['location']['items'] ?? ['x']) === []);
 
+$looked = $loc->search($charId);
+$joined = implode("\n", $looked['messages'] ?? []);
+ok('search does not name loot behind a shut lid', strpos($joined, 'worth taking') === false);
+ok('it points at the furnishing instead', strpos($joined, 'put away in ') !== false);
+ok('and does not hand the items over', ($looked['items'] ?? ['x']) === []);
+
 // --- the lock --------------------------------------------------------------
 ok('a fastened lid refuses to be simply opened', refused(fn () => $eng->open($charId)));
 $menu = $eng->menu($charId);

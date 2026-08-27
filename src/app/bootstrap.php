@@ -68,7 +68,8 @@ define('FREE_PLAY_MODULE', '_freeplay');
  * Put away rather than deleted: the rows stay in the `races` table, every
  * character who already is one keeps their sheet, their traits and their look,
  * and nothing about the API changes. The only thing that goes is the option to
- * become one. Emptying this array puts them back.
+ * become one. The race plates (assets/images/races/) and the painted tokens
+ * already exist; emptying this array is how they come back.
  *
  * IT LIVES HERE BECAUSE TWO THINGS HAVE TO AGREE ABOUT IT. It began as a
  * `const RACES_WITHHELD` inside create.js, which was the only place that needed
@@ -79,7 +80,7 @@ define('FREE_PLAY_MODULE', '_freeplay');
  * would have fixed the symptom and guaranteed the next one, so the list moved
  * here and create.php hands it to create.js as `window.RACES_WITHHELD`.
  */
-define('RACES_WITHHELD', ['Dragonborn', 'Tiefling']);
+define('RACES_WITHHELD', []);
 
 spl_autoload_register(static function (string $class): void {
     $paths = [

@@ -217,6 +217,66 @@ final class DungeonGen
      */
     public const FURNISHED_KINDS = ['treasure' => true, 'hoard' => true, 'boss' => true];
 
+    /**
+     * Scenery that is not a lid.
+     *
+     * A furnishing is loot you open. Dressing is why "The Guard Room" looks
+     * like a guard room when there is nothing to take: the paragraph names
+     * it, the chart marks it, the first-person view stands it up. The kind
+     * is a function of the room's NAME, which the main stream already froze,
+     * so this table costs the dressing rng nothing and a stored floor and a
+     * regenerated one still agree.
+     */
+    public const DRESSING = [
+        'bunks'   => ['clause' => 'Bunks line the wall, the straw gone grey.'],
+        'table'   => ['clause' => 'A heavy table sits off-centre, scored and dark with old oil.'],
+        'shelves' => ['clause' => 'Shelves are racked along one wall, most of them empty.'],
+        'well'    => ['clause' => 'A cistern is let into the floor, the water still.'],
+        'altar'   => ['clause' => 'A low altar stands against the far wall.'],
+        'pillar'  => ['clause' => 'A squat pillar takes the middle of the floor.'],
+        'rubble'  => ['clause' => 'A spill of fallen stone takes one corner.'],
+        'hearth'  => ['clause' => 'A hearth is built into the wall, cold.'],
+        'brazier' => ['clause' => 'An iron brazier stands in a ring of soot.'],
+        'cage'    => ['clause' => 'Iron bars close off a cell along the wall.'],
+        'urns'    => ['clause' => 'Urns are stacked where the wall meets the floor.'],
+        'winch'   => ['clause' => 'A winch is bolted to a timber frame.'],
+        'pool'    => ['clause' => 'A still pool fills a cut in the floor.'],
+    ];
+
+    /** Room name → dressing kind. Every name in NAMES is here. */
+    public const DRESSING_FOR = [
+        'The Guard Room' => 'bunks', 'The Storeroom' => 'shelves',
+        'The Antechamber' => 'table', 'The Stair Head' => 'brazier',
+        'The Long Gallery' => 'pillar', 'The Cistern Room' => 'well',
+        'The Barracks' => 'bunks', 'The Old Kitchen' => 'hearth',
+        'The Watch Post' => 'table', 'The Empty Cells' => 'cage',
+        'The Spoil Gallery' => 'rubble', 'The Tool Store' => 'shelves',
+        'The Props Room' => 'rubble', 'The Winch Floor' => 'winch',
+        'The Shot Face' => 'rubble', 'The Dry Sump' => 'well',
+        'The Timbered Hall' => 'pillar', 'The Counting Room' => 'table',
+        'The Rope Walk' => 'winch', 'The Lamp Room' => 'brazier',
+        'The Flooded Hall' => 'pool', 'The Fallen Gallery' => 'rubble',
+        'The Shrine' => 'altar', 'The Sump' => 'well',
+        'The Broken Stair' => 'rubble', 'The Pillared Room' => 'pillar',
+        'The Cutting' => 'rubble', 'The Ossuary' => 'urns',
+        'The Undercroft' => 'urns', 'The Dark Cistern' => 'well',
+        'The Slumped Vault' => 'rubble', 'The Wet Gallery' => 'pool',
+        'The Choked Passage' => 'rubble', 'The Lower Shrine' => 'altar',
+        'The Drowned Cells' => 'cage', 'The Cracked Floor' => 'rubble',
+        'The Old Workings' => 'winch', 'The Silted Room' => 'pool',
+        'The Leaning Arch' => 'pillar', 'The Blind Turn' => 'rubble',
+        'The Deep Hall' => 'pillar', 'The Black Water' => 'pool',
+        'The Carved Chamber' => 'altar', 'The Rift' => 'rubble',
+        'The Bone Floor' => 'urns', 'The Warm Stone' => 'hearth',
+        'The Sunken Vault' => 'pool', 'The Last Gallery' => 'pillar',
+        'The Silent Room' => 'urns', 'The Waiting Place' => 'altar',
+        'The Glass Seam' => 'rubble', 'The Long Dark' => 'brazier',
+        'The Cold Hearth' => 'hearth', 'The Root Cellar' => 'shelves',
+        'The Hollow Stair' => 'rubble', 'The Still Pool' => 'pool',
+        'The Marked Wall' => 'altar', 'The Older Cutting' => 'rubble',
+        'The Quiet Vault' => 'urns', 'The Far Chamber' => 'table',
+    ];
+
     public const CONTENTS = [
         ['kind' => 'empty',    'weight' => 24],
         ['kind' => 'monster',  'weight' => 32],
@@ -777,6 +837,161 @@ final class DungeonGen
      *
      * @param  array<int,array{name:string,description:string}> $names
      */
+    /**
+     * A layout from somewhere else, dressed by the same pipeline generate() uses.
+     *
+     * Off the main stream: no extra rolls in generate() or dress(). Authored
+     * watch floors build a tiny plan, call this, then overwrite stocking.
+     *
+     * @param  list<array{id:int,gx:int,gy:int,w:int,h:int}> $rooms
+     * @param  list<array{a:int,b:int,door:string}> $edges
+     * @param  array<int,array{name:string,description:string}> $names
+     */
+    public static function fromLayout(
+        int $seed,
+        int $depth,
+        array $rooms,
+        array $edges,
+        array $names = []
+    ): array {
+        foreach ($rooms as $i => $r) {
+            $rooms[$i] += [
+                'x' => 0.0, 'y' => 0.0, 'kind' => 'empty', 'role' => 'room',
+                'name' => '', 'description' => '',
+            ];
+            [$x, $y] = self::project($r['gx'] + $r['w'] / 2, $r['gy'] + $r['h'] / 2);
+            $rooms[$i]['x'] = $x;
+            $rooms[$i]['y'] = $y;
+            $rooms[$i]['id'] = (int) ($r['id'] ?? $i);
+        }
+        $profile = self::profileForDepth($depth);
+        $rng = ($seed ^ ($depth * 0x9E3779B1)) & 0xFFFFFFFF;
+        return self::finish($rng, $seed, $depth, $profile, $rooms, $edges, $names);
+    }
+
+    /**
+     * Oddvar's crate: a three-room tutorial with the Sun-Disc behind a shut cabinet.
+     *
+     * No fight. The cabinet is unlocked. Search / open / take is the lesson.
+     */
+    public static function watchCrate(): array
+    {
+        $rooms = [
+            ['id' => 0, 'gx' => 1, 'gy' => 2, 'w' => 2, 'h' => 2],
+            ['id' => 1, 'gx' => 4, 'gy' => 2, 'w' => 1, 'h' => 2],
+            ['id' => 2, 'gx' => 6, 'gy' => 2, 'w' => 2, 'h' => 2],
+        ];
+        $edges = [
+            ['a' => 0, 'b' => 1, 'door' => 'arch'],
+            ['a' => 1, 'b' => 2, 'door' => 'arch'],
+        ];
+        $names = [
+            0 => [
+                'name' => 'The Way In',
+                'description' => 'A landing of cut stone, the stair you came down still open behind you. Dust, and the smell of old oil.',
+            ],
+            1 => [
+                'name' => 'A Short Hall',
+                'description' => 'A passage barely longer than it is wide. Nothing here but grit and a bracket that used to hold a lamp.',
+            ],
+            2 => [
+                'name' => 'The Storeroom',
+                'description' => 'Shelves, most of them empty. Somebody lowered a crate through here and did not take it back up.',
+            ],
+        ];
+        $level = self::fromLayout(1, 1, $rooms, $edges, $names);
+        foreach ($level['rooms'] as $i => $room) {
+            $level['rooms'][$i]['kind'] = 'empty';
+            $level['rooms'][$i]['role'] = 'room';
+            unset($level['rooms'][$i]['furnishing']);
+        }
+        $level['rooms'][0]['role'] = 'entrance';
+        $level['rooms'][0]['kind'] = 'empty';
+        $level['rooms'][0]['name'] = $names[0]['name'];
+        $level['rooms'][0]['description'] = $names[0]['description'];
+        $level['rooms'][1]['name'] = $names[1]['name'];
+        $level['rooms'][1]['description'] = $names[1]['description'];
+        $level['rooms'][2]['kind'] = 'treasure';
+        $level['rooms'][2]['name'] = $names[2]['name'];
+        $level['rooms'][2]['description'] = $names[2]['description']
+            . ' A cabinet stands shut against the far wall.';
+        $level['rooms'][2]['furnishing'] = [
+            'kind'    => 'cabinet',
+            'clause'  => 'A cabinet stands shut against the far wall.',
+            'locked'  => false,
+            'dc'      => 10,
+            'trapped' => false,
+            'trap'    => null,
+        ];
+        $level['rooms'][2]['place_items'] = ['holy_symbol'];
+        $level['rooms'][2]['dressing'] = [
+            'kind'   => 'shelves',
+            'clause' => 'Shelves are racked along one wall, most of them empty.',
+        ];
+        $level['entrance'] = 0;
+        $level['stair'] = 0;
+        $level['watch_job'] = 'fp_watch_crate';
+        return $level;
+    }
+
+    /**
+     * Brenna's finale: Calder stayed. Same layout every time they go down.
+     */
+    public static function watchFinale(): array
+    {
+        $rooms = [
+            ['id' => 0, 'gx' => 1, 'gy' => 2, 'w' => 2, 'h' => 2],
+            ['id' => 1, 'gx' => 4, 'gy' => 2, 'w' => 1, 'h' => 2],
+            ['id' => 2, 'gx' => 6, 'gy' => 1, 'w' => 2, 'h' => 2],
+            ['id' => 3, 'gx' => 6, 'gy' => 4, 'w' => 2, 'h' => 2],
+        ];
+        $edges = [
+            ['a' => 0, 'b' => 1, 'door' => 'arch'],
+            ['a' => 1, 'b' => 2, 'door' => 'door'],
+            ['a' => 1, 'b' => 3, 'door' => 'door'],
+        ];
+        $names = [
+            0 => [
+                'name' => 'The Way In',
+                'description' => 'The same landing. The air is older than it was the first time.',
+            ],
+            1 => [
+                'name' => 'The Split',
+                'description' => 'The passage forks. One way smells of lamp-oil. The other of someone living here.',
+            ],
+            2 => [
+                'name' => 'The Guard Room',
+                'description' => 'Bunks, long empty, and something that has moved in since.',
+            ],
+            3 => [
+                'name' => 'The Waiting Place',
+                'description' => 'A low room with a pallet and a lamp still burning. Somebody has been here long enough to stop packing.',
+            ],
+        ];
+        $level = self::fromLayout(7, 1, $rooms, $edges, $names);
+        foreach ($level['rooms'] as $i => $room) {
+            $id = (int) $room['id'];
+            $level['rooms'][$i]['name'] = $names[$id]['name'] ?? $room['name'];
+            $level['rooms'][$i]['description'] = $names[$id]['description'] ?? $room['description'];
+            $level['rooms'][$i]['role'] = 'room';
+        }
+        $level['rooms'][0]['kind'] = 'empty';
+        $level['rooms'][0]['role'] = 'entrance';
+        $level['rooms'][1]['kind'] = 'empty';
+        $level['rooms'][2]['kind'] = 'monster';
+        $level['rooms'][3]['kind'] = 'empty';
+        $level['rooms'][3]['dressing'] = [
+            'kind'   => 'altar',
+            'clause' => 'A low altar stands against the far wall, used as a table.',
+        ];
+        $level['entrance'] = 0;
+        $level['stair'] = 0;
+        $level['watch_job'] = 'fp_watch_stayed';
+        $level['watch_objective_room'] = 3;
+        $level['appoint'] = ['_fp_cousin' => 3];
+        return $level;
+    }
+
     public static function finish(
         int &$rng,
         int $seed,
@@ -793,7 +1008,7 @@ final class DungeonGen
         // are roles that override whatever the contents table would have said.
         [$entrance, $stair] = self::endpoints($rooms, $edges);
         self::unsealEntrance($edges, $entrance);
-        self::stock($rng, $rooms, $entrance, $stair, $spec['boss']);
+        self::stock($rng, $rooms, $entrance, $stair, $spec['boss'], $depth);
         self::describe($rng, $rooms, $profile);
 
         // Borrowed prose wins, room by room. Applied after describe() rather
@@ -867,6 +1082,14 @@ final class DungeonGen
     ): array {
         $rng = (self::mul32($seed, 0x85EBCA6B) ^ self::mul32($depth, 0xC2B2AE35) ^ 0x00D4E551) & 0xFFFFFFFF;
 
+        // The first floor is a fifteen-minute loop, not a toll booth. Same
+        // number of rolls as every other floor — the thresholds are what
+        // change, so a future tweak to which doors upgrade cannot shift the
+        // stream. Depth 2 and below keep the published table.
+        $trapDoorPct = $depth <= 1 ? 4 : self::DOOR_TRAPPED_PCT;
+        $trapPassPct = $depth <= 1 ? 5 : self::PASSAGE_TRAP_PCT;
+        $trapCap     = $depth <= 1 ? 1 : self::TRAP_CAP;
+
         // --- doors -----------------------------------------------------------
         // Only the plain 'door' upgrades. open and arch stay honest gaps;
         // stuck keeps its one privilege of being hidden.
@@ -879,7 +1102,7 @@ final class DungeonGen
                 $edges[$i]['door'] = 'locked';
             } elseif ($roll <= self::DOOR_LOCKED_PCT + self::DOOR_PORTCULLIS_PCT) {
                 $edges[$i]['door'] = 'portcullis';
-            } elseif ($roll <= self::DOOR_LOCKED_PCT + self::DOOR_PORTCULLIS_PCT + self::DOOR_TRAPPED_PCT) {
+            } elseif ($roll <= self::DOOR_LOCKED_PCT + self::DOOR_PORTCULLIS_PCT + $trapDoorPct) {
                 $edges[$i]['door'] = 'trapped';
             }
         }
@@ -897,7 +1120,7 @@ final class DungeonGen
             if ($e['door'] !== 'trapped') {
                 continue;
             }
-            if ($trapped >= self::TRAP_CAP) {
+            if ($trapped >= $trapCap) {
                 $edges[$i]['door'] = 'door';
                 continue;
             }
@@ -907,7 +1130,7 @@ final class DungeonGen
         foreach ($corridors as $i => $c) {
             $roll = self::rint($rng, 1, 100);
             $pick = self::rint($rng, 0, count(self::TRAPS[$band]) - 1);
-            if (isset($c['trap']) || $roll > self::PASSAGE_TRAP_PCT || $trapped >= self::TRAP_CAP) {
+            if (isset($c['trap']) || $roll > $trapPassPct || $trapped >= $trapCap) {
                 continue;
             }
             $corridors[$i]['trap'] = self::TRAPS[$band][$pick];
@@ -977,6 +1200,10 @@ final class DungeonGen
         // the hash is there to catch. Below the atmosphere block for the same
         // reason: anything added above it shifts every roll after it.
         self::furnish($rng, $rooms, $depth, $band);
+        // No extra rolls: the kind is the name, which the main stream already
+        // chose. Sitting here so the clause lands on the paragraph the same
+        // way a chest's does, after atmosphere, after the lid.
+        self::dressSet($rooms);
 
         return $atmo;
     }
@@ -1311,7 +1538,7 @@ final class DungeonGen
      * is a bad opening, and a way down that costs nothing is not a way down
      * worth finding.
      */
-    private static function stock(int &$rng, array &$rooms, int $entrance, int $stair, bool $boss): void
+    private static function stock(int &$rng, array &$rooms, int $entrance, int $stair, bool $boss, int $depth): void
     {
         $total = 0;
         foreach (self::CONTENTS as $c) {
@@ -1336,6 +1563,39 @@ final class DungeonGen
                     $rooms[$i]['kind'] = $c['kind'];
                     break;
                 }
+            }
+        }
+
+        // A first floor with no fight and no chest is a walk to the stair.
+        // No extra draws — describe() rolls once per room regardless of kind,
+        // so this cannot shift the main stream. The frozen hash in
+        // test_dungeon.php is generate(4471, 2); depth 1 only.
+        if ($depth <= 1) {
+            $fight = false;
+            $chest = false;
+            $empty = [];
+            foreach ($rooms as $i => $room) {
+                if ($i === $entrance || $i === $stair) {
+                    continue;
+                }
+                $kind = $room['kind'] ?? '';
+                if ($kind === 'monster' || $kind === 'hoard') {
+                    $fight = true;
+                }
+                if ($kind === 'treasure' || $kind === 'hoard') {
+                    $chest = true;
+                }
+                if ($kind === 'empty') {
+                    $empty[] = $i;
+                }
+            }
+            if (!$fight && $empty) {
+                $i = array_shift($empty);
+                $rooms[$i]['kind'] = 'monster';
+            }
+            if (!$chest && $empty) {
+                $i = array_shift($empty);
+                $rooms[$i]['kind'] = 'treasure';
             }
         }
     }
@@ -1408,6 +1668,34 @@ final class DungeonGen
             // thing a player is about to act on.
             $rooms[$i]['description'] = rtrim((string) ($rooms[$i]['description'] ?? ''))
                 . ' ' . $pick['clause'];
+        }
+    }
+
+    /**
+     * Stand something in the room that the name already promised.
+     *
+     * The Way In and the Way Down stay clear: the spine is where a party is
+     * put down, and a brazier in the entrance tile is a picture of a party
+     * in the fire. Every other name in NAMES has a kind in DRESSING_FOR;
+     * a borrowed name the table does not know falls back to rubble, which
+     * is honest about a room the generator did not author.
+     */
+    private static function dressSet(array &$rooms): void
+    {
+        foreach ($rooms as $i => $room) {
+            $role = (string) ($room['role'] ?? '');
+            if ($role === 'entrance' || $role === 'stair') {
+                continue;
+            }
+            $name = (string) ($room['name'] ?? '');
+            $kind = self::DRESSING_FOR[$name] ?? 'rubble';
+            $spec = self::DRESSING[$kind];
+            $rooms[$i]['dressing'] = [
+                'kind'   => $kind,
+                'clause' => $spec['clause'],
+            ];
+            $rooms[$i]['description'] = rtrim((string) ($rooms[$i]['description'] ?? ''))
+                . ' ' . $spec['clause'];
         }
     }
 
@@ -1591,6 +1879,11 @@ final class DungeonGen
                 // answering a question the room is asking.
                 'furnishing' => isset($r['furnishing'])
                     ? (string) $r['furnishing']['kind'] : null,
+                // Same contract as furnishing: the kind only, so the chart
+                // can draw the same object the paragraph named without
+                // spoiling a lock it does not have.
+                'dressing' => isset($r['dressing'])
+                    ? (string) $r['dressing']['kind'] : null,
             ];
         }
         $rect = array_column($rooms, null, 'id');
@@ -2264,12 +2557,35 @@ final class DungeonGen
             // Derived from the room's own bounds rather than rolled, so it
             // costs the level's random stream nothing and a stored level and a
             // regenerated one agree about it.
+            $lootTile = $y1 * $tw + $x1;
             if (isset($r['furnishing'])) {
                 $props[] = [
-                    'tile' => $y1 * $tw + $x1,
+                    'tile' => $lootTile,
                     'kind' => (string) $r['furnishing']['kind'],
                     'room' => $id,
+                    'loot' => true,
                 ];
+            }
+            // The other far corner, so a chest and the bunks cannot occupy
+            // the same tile — standing them together would be a party in a
+            // box that is also a bed. Derived from the bounds, rng-free,
+            // same as the lid.
+            if (isset($r['dressing'])) {
+                $dressTile = $y1 * $tw + $x0;
+                $occupied = isset($r['furnishing']) ? $lootTile : null;
+                if ($occupied !== null && $dressTile === $occupied) {
+                    $dressTile = $y0 * $tw + $x1;
+                }
+                // A one-tile room with a chest has nowhere else to stand the
+                // bunks; skip rather than stack them. A one-tile room without
+                // a chest still gets its well — the party stands on it.
+                if ($occupied === null || $dressTile !== $occupied) {
+                    $props[] = [
+                        'tile' => $dressTile,
+                        'kind' => (string) $r['dressing']['kind'],
+                        'room' => $id,
+                    ];
+                }
             }
         }
 

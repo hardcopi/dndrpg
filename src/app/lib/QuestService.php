@@ -322,6 +322,7 @@ class QuestService
         if ($failed || $alreadyEnded) {
             return $r;
         }
+        WatchJobs::onComplete($this->db, (string) $quest['quest_key']);
         return Effects::merge($r, $this->payRewards($partyId, $quest));
     }
 
@@ -568,6 +569,23 @@ class QuestService
         $stmt = $this->db->prepare('SELECT module_id FROM parties WHERE id = ?');
         $stmt->execute([$partyId]);
         $id = $stmt->fetchColumn();
+        if ($id !== false && $id !== null) {
+            return (int) $id;
+        }
+        // A party that predates the column: believe where they are standing
+        // before falling back to the first active module. Free-play parties
+        // land in a module that is not the first active one, and without this
+        // they read Rivermark's board from the Proving House.
+        $fromWhere = $this->db->prepare(
+            'SELECT r.module_id
+               FROM parties p
+               INNER JOIN characters c ON c.id = p.leader_character_id
+               INNER JOIN locations l ON l.id = c.current_location_id
+               INNER JOIN regions r ON r.id = l.region_id
+              WHERE p.id = ?'
+        );
+        $fromWhere->execute([$partyId]);
+        $id = $fromWhere->fetchColumn();
         if ($id !== false && $id !== null) {
             return (int) $id;
         }
