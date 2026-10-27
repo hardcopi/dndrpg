@@ -39,6 +39,8 @@ import time
 import urllib.error
 import urllib.request
 
+from amiga_art import AMIGA_PORTRAIT_STYLE, SPIKE_ART
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ART = os.path.join(ROOT, "assets", "images", "npcs")
 BASE = os.environ.get("QWEN_URL", "http://127.0.0.1:7860")
@@ -334,7 +336,9 @@ def keys_with_busts() -> list[str]:
     )
 
 
-def build_prompt(key: str, wearers: list[dict], expression: int = 1) -> str:
+def build_prompt(
+    key: str, wearers: list[dict], expression: int = 1, amiga: bool = False
+) -> str:
     """
     One wearer means the bust may be that person. More than one means it may
     not be anybody in particular — it has to sit on all of them.
@@ -361,12 +365,14 @@ def build_prompt(key: str, wearers: list[dict], expression: int = 1) -> str:
         sex = GENDER.get(key)
         who_is = f"{who}, a {sex}," if sex else f"{who},"
         wardrobe = WARDROBE.get(key, "")
-        bits = [PERIOD, wardrobe, FRAMING, who_is,
+        bits = [AMIGA_PORTRAIT_STYLE if amiga else "", PERIOD, wardrobe, FRAMING, who_is,
                 f"{role}." if role else "",
                 f"{race}." if race else "", desc, wardrobe]
     else:
-        bits = [PERIOD, FRAMING, ARCHETYPE.get(key, key.replace("_", " ")) + "."]
-    bits.append(STYLE)
+        bits = [AMIGA_PORTRAIT_STYLE if amiga else "", PERIOD, FRAMING,
+                ARCHETYPE.get(key, key.replace("_", " ")) + "."]
+    if not amiga:
+        bits.append(STYLE)
     prompt = " ".join(b for b in bits if b)
     if expression and expression != 1:
         # Swap the expression clause rather than appending a second one, or the
@@ -415,7 +421,7 @@ def generate(prompt: str, seed: int, timeout: int = 300) -> str | None:
     return None
 
 
-def place(src: str, key: str, suffix: str = "_bust") -> None:
+def place(src: str, key: str, suffix: str = "_bust", output_dir: str = ART) -> None:
     """Trim any bars the sampler baked in, then fit the shipped bust size."""
     from PIL import Image
     im = Image.open(src).convert("RGB")
@@ -438,7 +444,10 @@ def place(src: str, key: str, suffix: str = "_bust") -> None:
     # Centred horizontally, anchored to the TOP: a portrait loses its chin more
     # gracefully than its forehead, and cut_face.py takes its square from the top.
     left = (rw - BUST_W) // 2
-    im.crop((left, 0, left + BUST_W, BUST_H)).save(os.path.join(ART, f"{key}{suffix}.png"))
+    os.makedirs(output_dir, exist_ok=True)
+    im.crop((left, 0, left + BUST_W, BUST_H)).save(
+        os.path.join(output_dir, f"{key}{suffix}.png")
+    )
 
 
 def main() -> int:
@@ -449,10 +458,13 @@ def main() -> int:
     ap.add_argument("--list", action="store_true")
     ap.add_argument("--faces", action="store_true", help="re-cut faces afterwards")
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--amiga", action="store_true",
+                    help="use Amiga pixel-art style and write to assets/images/amiga-spike/npcs/")
     ap.add_argument("--seed", type=int, default=11)
     ap.add_argument("--expressions", action="store_true",
                     help="generate _bust_N variants up to the highest index the content uses")
     args = ap.parse_args()
+    output_dir = os.path.join(SPIKE_ART, "npcs") if args.amiga else ART
 
     if args.expressions:
         usage = sprite_usage()
@@ -469,7 +481,8 @@ def main() -> int:
             # person is not.
             seed = (args.seed + sum(ord(c) for c in key) * 7919) % (2 ** 31)
             for n in range(2, top + 1):
-                prompt = build_prompt(key, usage.get(key, []), expression=n)
+                prompt = build_prompt(key, usage.get(key, []), expression=n,
+                                      amiga=args.amiga)
                 if args.dry_run:
                     print(f"--- {key}_bust_{n} ---\n{prompt}\n")
                     continue
@@ -484,10 +497,10 @@ def main() -> int:
                     print("FAILED (no image)")
                     fell += 1
                     continue
-                place(path, key, f"_bust_{n}")
+                place(path, key, f"_bust_{n}", output_dir)
                 print("ok")
                 made += 1
-        if not args.dry_run:
+        if not args.dry_run and not args.amiga:
             # busts.json is what DialogEngine clamps against. Told the truth
             # about what exists, so a node asking for an expression nobody drew
             # falls back to one that is there instead of a broken image.
@@ -517,7 +530,7 @@ def main() -> int:
 
     done = failed = 0
     for i, key in enumerate(keys, 1):
-        prompt = build_prompt(key, usage.get(key, []))
+        prompt = build_prompt(key, usage.get(key, []), amiga=args.amiga)
         if args.dry_run:
             print(f"\n--- {key} ---\n{prompt}")
             continue
@@ -533,7 +546,7 @@ def main() -> int:
             print(f"FAILED (no image: {path!r})")
             failed += 1
             continue
-        place(path, key)
+        place(path, key, output_dir=output_dir)
         print("ok")
         done += 1
 
@@ -543,8 +556,14 @@ def main() -> int:
     if args.faces:
         print("\nre-cutting faces:")
         for key in keys:
+            command = [
+                sys.executable, os.path.join(ROOT, "tools", "cut_face.py"),
+                key, "--apply",
+            ]
+            if args.amiga:
+                command.extend(["--art-dir", output_dir])
             subprocess.run(
-                [sys.executable, os.path.join(ROOT, "tools", "cut_face.py"), key, "--apply"],
+                command,
                 cwd=ROOT, check=False,
             )
 
