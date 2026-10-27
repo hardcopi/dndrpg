@@ -100,17 +100,17 @@ def face_from_bust(bust: Image.Image) -> Image.Image:
     return square.resize((FACE_PX, FACE_PX), Image.LANCZOS)
 
 
-def art_dir_for(key: str) -> str | None:
+def art_dir_for(key: str, search_dirs: tuple[str, ...] = ART_DIRS) -> str | None:
     """The folder holding `<key>_bust.png`, or None if no folder does."""
-    for d in ART_DIRS:
+    for d in search_dirs:
         if os.path.exists(os.path.join(d, f"{key}_bust.png")):
             return d
     return None
 
 
-def keys_missing_faces() -> list[str]:
+def keys_missing_faces(search_dirs: tuple[str, ...] = ART_DIRS) -> list[str]:
     out = []
-    for d in ART_DIRS:
+    for d in search_dirs:
         for name in sorted(os.listdir(d)):
             if not name.endswith("_bust.png"):
                 continue
@@ -126,10 +126,12 @@ def main() -> int:
     ap.add_argument("--all", action="store_true",
                     help="every bust that has no face beside it")
     ap.add_argument("--apply", action="store_true", help="write the file")
+    ap.add_argument("--art-dir", help="read and write files in this art directory")
     args = ap.parse_args()
+    search_dirs = (args.art_dir,) if args.art_dir else ART_DIRS
 
     if args.all:
-        keys = keys_missing_faces()
+        keys = keys_missing_faces(search_dirs)
         if not keys:
             print("Every bust already has a face beside it.")
             return 0
@@ -140,7 +142,7 @@ def main() -> int:
 
     wrote = 0
     for key in keys:
-        art = art_dir_for(key)
+        art = art_dir_for(key, search_dirs)
         if art is None:
             print(f"{key:<14} no {key}_bust.png — nothing to cut from")
             continue

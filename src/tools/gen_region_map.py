@@ -45,6 +45,8 @@ import time
 import urllib.error
 import urllib.request
 
+from amiga_art import AMIGA_MAP_STYLE, SPIKE_ART
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CONTENT = os.path.join(ROOT, "content", "locations")
 ART = os.path.join(ROOT, "assets", "images", "maps")
@@ -189,7 +191,7 @@ def load_regions() -> list[dict]:
     return [r for r in out if r["region_key"]]
 
 
-def prompt_for(region: dict) -> str:
+def prompt_for(region: dict, amiga: bool = False) -> str:
     """
     The region's own description leads, then the shape of its graph.
 
@@ -208,7 +210,7 @@ def prompt_for(region: dict) -> str:
     outdoor = [l for l in locs if l.get("type") in OUTDOOR_TYPES]
     places = [l.get("name", "") for l in (outdoor or locs)][:6]
 
-    bits = [region["name"] + "."]
+    bits = [AMIGA_MAP_STYLE if amiga else "", region["name"] + "."]
     if body:
         bits.append(body)
     if places:
@@ -216,7 +218,8 @@ def prompt_for(region: dict) -> str:
     hint = BY_KEY.get(region["region_key"]) or BY_TYPE.get(region["region_type"])
     if hint:
         bits.append(hint + ".")
-    bits.append(STYLE)
+    if not amiga:
+        bits.append(STYLE)
     return " ".join(bits)
 
 
@@ -324,15 +327,20 @@ def main() -> int:
     ap.add_argument("--force", action="store_true")
     ap.add_argument("--list", action="store_true")
     ap.add_argument("--seed", type=int, default=7)
+    ap.add_argument("--dry-run", action="store_true",
+                    help="print prompts, generate nothing")
+    ap.add_argument("--amiga", action="store_true",
+                    help="use Amiga bitmap cartography and write to assets/images/amiga-spike/maps/")
     ap.add_argument("--candidates", type=int, default=1,
                     help="draw N seeds and keep them all as <key>_cN.png to "
                          "choose between; the plain <key>.png is left alone")
     args = ap.parse_args()
+    art_dir = os.path.join(SPIKE_ART, "maps") if args.amiga else ART
 
     regions = load_regions()
     if args.list:
         for r in regions:
-            have = os.path.isfile(os.path.join(ART, r["region_key"] + ".png"))
+            have = os.path.isfile(os.path.join(art_dir, r["region_key"] + ".png"))
             print(f"{'[art]' if have else '[   ]'} {r['region_key']:16} "
                   f"{r['region_type']:11} {r['name']}")
         return 0
@@ -343,21 +351,25 @@ def main() -> int:
         ap.error("nothing to do — pass --only <region_key>, --all, or --list")
 
     for r in wanted:
-        dest = os.path.join(ART, r["region_key"] + ".png")
+        dest = os.path.join(art_dir, r["region_key"] + ".png")
         if args.missing_only and os.path.isfile(dest):
             print(f"skip {r['region_key']} (has art)")
             continue
-        if os.path.isfile(dest) and not args.force and args.candidates == 1:
+        if os.path.isfile(dest) and not args.force and args.candidates == 1 \
+                and not args.dry_run:
             print(f"skip {r['region_key']} (exists; --force to replace)")
             continue
 
-        prompt = prompt_for(r)
+        prompt = prompt_for(r, amiga=args.amiga)
         print(f"\n{r['region_key']}  ({r['region_type']})")
         print(f"  {prompt[:150]}...")
+        if args.dry_run:
+            print(prompt)
+            continue
         for i in range(args.candidates):
             seed = args.seed + i * 1000
             out = dest if args.candidates == 1 \
-                else os.path.join(ART, f"{r['region_key']}_c{i + 1}.png")
+                else os.path.join(art_dir, f"{r['region_key']}_c{i + 1}.png")
             t0 = time.time()
             path = generate(prompt, seed)
             if not path:
