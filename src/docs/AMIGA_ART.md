@@ -44,6 +44,17 @@ model output from `--amiga`.
 - `assets/images/amiga-spike/npcs/aldric_bust.png` — 384×512
 - `assets/images/amiga-spike/maps/rivermark.png` — 1536×1152
 
+Seventeen more hand-generated portraits sit beside those Aldric proofs, same
+contracts (144×144 face, 384×512 bust), still under
+`assets/images/amiga-spike/npcs/` and still not wired into the game.
+Production `assets/images/npcs` is unchanged. Each key has `<key>_face.png`
+and `<key>_bust.png`:
+
+aggie_slate, alder_pyke, bael_rourke, bram_ockley, brother_teodor,
+corrin_dale, cully_tench, dessa_kell, dorn_ackley, foreman_dessel,
+jimmy_able, kessa, mara_hearthstone, mott_wenn, orrin_bly, sella_carrow,
+serjeant_ballow.
+
 `tools/amiga_art.py --samples` still paints smaller AGA previews into those
 same paths (64×64 face, 160×212 bust, 320×240 plate). Running it replaces
 the proofs. It does not read production art and it does not call the model.
