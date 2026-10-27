@@ -35,36 +35,18 @@ checked-in samples, and the default painterly prompts are unchanged.
 
 The local SANA-Sprint service (`QWEN_URL`, default
 `http://127.0.0.1:7860`) is not part of the host stack and may be absent.
-The checked-in samples do not need it, and they are not a resize of the
-shipped PNGs. Filtering those kept the smooth painting; the busts were
-rejected for looking like that. `tools/amiga_art.py` paints new ones with
-Pillow: a limited ramp per material, Floyd–Steinberg inside that ramp (so the
-cobalt stone cannot freckle the face), and locked pixels for the eyes, the
-mouth and the disc, which a dither would otherwise sand off at 64px.
 
-```bash
-cd src
-python3 tools/amiga_art.py --samples
-```
+The PNGs checked in under `assets/images/amiga-spike/` are hand-generated
+Amiga-style proofs. They are not Pillow filters of production art and not
+model output from `--amiga`.
 
-This writes:
+- `assets/images/amiga-spike/npcs/aldric_face.png` — 144×144
+- `assets/images/amiga-spike/npcs/aldric_bust.png` — 384×512
+- `assets/images/amiga-spike/maps/rivermark.png` — 1536×1152
 
-- `assets/images/amiga-spike/npcs/aldric_face.png` — 64×64
-- `assets/images/amiga-spike/npcs/aldric_bust.png` — 160×212
-- `assets/images/amiga-spike/maps/rivermark.png` — 320×240
-
-Aldric here is a new drawing for the spike: short hair, a close beard, linen
-at the throat, wool robe, a borrowed sun-disc with one cobalt stone. It is not
-traced off `assets/images/npcs/aldric_bust.png`. The face is the same drawing
-sampled through a tighter window, not a second portrait and not a Lanczos
-shrink of the bust — a filtered shrink is what melted the last attempt back
-into a smooth painting. The map is warm parchment, a river bank, and the
-public roads from `content/locations/rivermark.json`. No names, no location
-discs, no cobalt marker; those are the chart's.
-
-The painter is deterministic. Two runs write the same pixels, on a machine
-with no model and no network. Pillow is the only dependency, as it is for the
-other art tools.
+`tools/amiga_art.py --samples` still paints smaller AGA previews into those
+same paths (64×64 face, 160×212 bust, 320×240 plate). Running it replaces
+the proofs. It does not read production art and it does not call the model.
 
 To inspect the opt-in model prompts without calling the service:
 
