@@ -1,9 +1,9 @@
 # Amiga PRO art spike
 
-This is an opt-in art direction for the Rivermark host, not a UI reskin or a
-replacement of shipped production art. The Amiga client can continue to load the
-host's existing PNG paths; this spike keeps candidates parallel until Rich
-approves a later deploy.
+This is an opt-in art direction for the Rivermark host, not a UI reskin.
+AmiDungeon loads the host's existing PNG paths. Rich approved promoting the
+face and bust set onto those paths on 27 Oct 2026 (below). The spike copies
+remain beside them.
 
 ## Brief
 
@@ -23,8 +23,9 @@ approves a later deploy.
   plate, at most 32 colours. These are conservative pixel-friendly preview
   targets, not a claim that every AGA mode has the same display limits.
 - **Names:** use the established sprite key: `<key>_face.png` and
-  `<key>_bust.png`; region plates use `<region_key>.png`. Candidate files stay
-  under `assets/images/amiga-spike/{npcs,maps}/`, never in the live folders.
+  `<key>_bust.png`; region plates use `<region_key>.png`. Faces and busts
+  live at `assets/images/npcs/`. The Rivermark plate is still only a
+  candidate under `assets/images/amiga-spike/maps/`.
 
 `tools/gen_npc_art.py --amiga` and `tools/gen_region_map.py --amiga` only
 switch the prompt and the output folder. They are the opt-in model path, for a
@@ -40,7 +41,9 @@ The PNGs checked in under `assets/images/amiga-spike/` are Amiga-style
 proofs. They are not Pillow filters of production art and not model output
 from `--amiga`. The Aldric pair, the Rivermark plate, and the seventeen
 portraits below were drawn by hand. Later batches, listed after those, were
-made with GenerateImage to match the AmiDungeon PRO mockups.
+made with GenerateImage to match the AmiDungeon PRO mockups. The "production
+unchanged" lines in those batches describe the spike at check-in. The live
+copies are the promotion below.
 
 - `assets/images/amiga-spike/npcs/aldric_face.png` — 144×144
 - `assets/images/amiga-spike/npcs/aldric_bust.png` — 384×512
@@ -114,26 +117,42 @@ python3 tools/gen_npc_art.py --only aldric --amiga --dry-run
 python3 tools/gen_region_map.py --only rivermark --amiga --dry-run
 ```
 
-Neither the samples nor the opt-in generator outputs are wired into the game.
-Production folders are not written.
+## Live NPC paths
+
+Rich approved this on 27 Oct 2026. Every `*_face.png` and `*_bust.png` under
+`assets/images/amiga-spike/npcs/` is copied onto the path AmiDungeon already
+loads, `assets/images/npcs/<same basename>`, byte for byte (164 files, 82
+keys). The spike copies stay. Sheets, tokens, `busts.json`, and NPC keys
+with no Amiga pair were left alone. `child_1_bust.png` and
+`child_2_bust.png` were new files; every other pair overwrote the face or
+bust already at that name.
+
+The Rivermark plate was not promoted. The brief names region plates
+`<region_key>.png` and keeps the candidate at
+`assets/images/amiga-spike/maps/rivermark.png`. It does not name a live map
+folder, so `assets/images/maps/rivermark.png` is unchanged.
+
+`tools/amiga_art.py --samples` and the `--amiga` painters still write the
+spike folder. They do not write the live NPC paths. This note is the
+in-repo promotion. It is not a Hermes deploy.
 
 ## AmiDungeon verification after an approved deploy
 
-First fetch the candidate over HTTPS and verify both status and content, not
-status alone:
+AmiDungeon loads `assets/images/npcs/<key>_face.png` and `_bust.png`. After
+a deploy, fetch that path and verify both status and content, not status
+alone:
 
 ```bash
 curl -fsS -D /tmp/aldric.headers \
   -o /tmp/aldric.png \
-  https://rpg.five-star.com/assets/images/amiga-spike/npcs/aldric_face.png
+  https://rpg.five-star.com/assets/images/npcs/aldric_face.png
 grep -i '^content-type: image/png' /tmp/aldric.headers
 file /tmp/aldric.png
 ```
 
-Then configure AmiDungeon's test build to load that URL and confirm the same
-sprite in the **party rail**, **PEOPLE HERE**, and the **dialogue theatre bust**.
-The first two use the face crop; the theatre uses the bust. Repeat against the
-region plate URL to check its parchment remains legible beneath the client-drawn
-chart. Only after visual sign-off should the approved candidate be promoted to
-the established asset path and deployed to Hermes. Do not run
-`deploy.sh --apply` as part of this spike.
+The spike copy at `assets/images/amiga-spike/npcs/aldric_face.png` is the
+same bytes. Confirm the sprite in the **party rail**, **PEOPLE HERE**, and
+the **dialogue theatre bust**. The first two use the face crop; the theatre
+uses the bust. The region plate was not promoted, so the chart still uses
+`assets/images/maps/rivermark.png`. Deploy to Hermes is still a separate
+step. Do not run `deploy.sh --apply` as part of this spike.
