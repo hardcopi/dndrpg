@@ -338,9 +338,10 @@ function public_foot(bool $withCta = true): void
   <section class="lp-close">
     <div class="lp-wrap">
       <p class="lp-eyebrow">Free, and in your browser</p>
-      <h2>Make somebody and go down the stair</h2>
+      <h2>Make somebody and pick a campaign</h2>
       <p class="lp-lead" style="margin:0 auto">
-        No download, no client, no card. An account, a character, and the Proving Yard.
+        No download, no client, no card. An account, a character, and a game that
+        stays the one you chose.
       </p>
       <?php public_cta(); ?>
     </div>
