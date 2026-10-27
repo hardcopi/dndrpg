@@ -68,6 +68,16 @@ fessick, gest_pyle, gillian_petch, gubb_wrayne, joss_frayle, ludo_corse,
 marda_scole, nell_carrow, nesh_gray, odger_vance, osgar_tull, pol_reddick,
 quartermaster_oyle, sib_marrell, sten_harrow, tibald_ashe.
 
+Ten more GenerateImage proofs sit beside those, matching the AmiDungeon
+PRO mockups. They are not Pillow or filter samples of production art, and
+not model output from `--amiga`. Same contracts (144×144 face, 384×512
+bust), still under `assets/images/amiga-spike/npcs/` and still not wired
+into the game. Production `assets/images/npcs` is unchanged. Each key has
+`<key>_face.png` and `<key>_bust.png`:
+
+baker, innkeeper, merchant, penned_boys, smith, tull_barrow, wat_fenner,
+wenna_coyle, wick_lorrimer, wren_tallow.
+
 `tools/amiga_art.py --samples` still paints smaller AGA previews into those
 same paths (64×64 face, 160×212 bust, 320×240 plate). Running it replaces
 the proofs. It does not read production art and it does not call the model.
