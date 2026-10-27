@@ -39,7 +39,7 @@ The local SANA-Sprint service (`QWEN_URL`, default
 The PNGs checked in under `assets/images/amiga-spike/` are Amiga-style
 proofs. They are not Pillow filters of production art and not model output
 from `--amiga`. The Aldric pair, the Rivermark plate, and the seventeen
-portraits below were drawn by hand. A later batch, listed after those, was
+portraits below were drawn by hand. Later batches, listed after those, were
 made with GenerateImage to match the AmiDungeon PRO mockups.
 
 - `assets/images/amiga-spike/npcs/aldric_face.png` — 144×144
@@ -77,6 +77,16 @@ into the game. Production `assets/images/npcs` is unchanged. Each key has
 
 baker, innkeeper, merchant, penned_boys, smith, tull_barrow, wat_fenner,
 wenna_coyle, wick_lorrimer, wren_tallow.
+
+Sixteen more GenerateImage proofs sit beside those, matching the AmiDungeon
+PRO mockups. They are not Pillow or filter samples of production art, and
+not model output from `--amiga`. Same contracts (144×144 face, 384×512
+bust), still under `assets/images/amiga-spike/npcs/` and still not wired
+into the game. Production `assets/images/npcs` is unchanged. Each key has
+`<key>_face.png` and `<key>_bust.png`:
+
+barbarian, bard, beggar, cleric, druid, elowen, farmer, fighter, miner,
+monk, paladin, ranger, rogue, sorcerer, warlock, wizard.
 
 `tools/amiga_art.py --samples` still paints smaller AGA previews into those
 same paths (64×64 face, 160×212 bust, 320×240 plate). Running it replaces
