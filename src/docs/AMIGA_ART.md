@@ -36,9 +36,11 @@ checked-in samples, and the default painterly prompts are unchanged.
 The local SANA-Sprint service (`QWEN_URL`, default
 `http://127.0.0.1:7860`) is not part of the host stack and may be absent.
 
-The PNGs checked in under `assets/images/amiga-spike/` are hand-generated
-Amiga-style proofs. They are not Pillow filters of production art and not
-model output from `--amiga`.
+The PNGs checked in under `assets/images/amiga-spike/` are Amiga-style
+proofs. They are not Pillow filters of production art and not model output
+from `--amiga`. The Aldric pair, the Rivermark plate, and the seventeen
+portraits below were drawn by hand. A later batch, listed after those, was
+made with GenerateImage to match the AmiDungeon PRO mockups.
 
 - `assets/images/amiga-spike/npcs/aldric_face.png` — 144×144
 - `assets/images/amiga-spike/npcs/aldric_bust.png` — 384×512
@@ -54,6 +56,17 @@ aggie_slate, alder_pyke, bael_rourke, bram_ockley, brother_teodor,
 corrin_dale, cully_tench, dessa_kell, dorn_ackley, foreman_dessel,
 jimmy_able, kessa, mara_hearthstone, mott_wenn, orrin_bly, sella_carrow,
 serjeant_ballow.
+
+Sixteen more GenerateImage proofs sit beside those, matching the AmiDungeon
+PRO mockups. They are not Pillow or filter samples of production art, and
+not model output from `--amiga`. Same contracts (144×144 face, 384×512
+bust), still under `assets/images/amiga-spike/npcs/` and still not wired
+into the game. Production `assets/images/npcs` is unchanged. Each key has
+`<key>_face.png` and `<key>_bust.png`:
+
+fessick, gest_pyle, gillian_petch, gubb_wrayne, joss_frayle, ludo_corse,
+marda_scole, nell_carrow, nesh_gray, odger_vance, osgar_tull, pol_reddick,
+quartermaster_oyle, sib_marrell, sten_harrow, tibald_ashe.
 
 `tools/amiga_art.py --samples` still paints smaller AGA previews into those
 same paths (64×64 face, 160×212 bust, 320×240 plate). Running it replaces
