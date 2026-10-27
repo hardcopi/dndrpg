@@ -88,6 +88,21 @@ into the game. Production `assets/images/npcs` is unchanged. Each key has
 barbarian, bard, beggar, cleric, druid, elowen, farmer, fighter, miner,
 monk, paladin, ranger, rogue, sorcerer, warlock, wizard.
 
+Twenty-two more GenerateImage proofs sit beside those, matching the
+AmiDungeon PRO mockups. They are not Pillow or filter samples of production
+art, and not model output from `--amiga`. Same contracts (144×144 face,
+384×512 bust), still under `assets/images/amiga-spike/npcs/` and still not
+wired into the game. Production `assets/images/npcs` is unchanged. Each key
+has `<key>_face.png` and `<key>_bust.png`:
+
+captain, child_1, child_2, corbin_waite, dagen_wyke, dov_kelt,
+goblin_warlord, ilsa_ferrow, jester, nell_quist, orrin_pike, ottilie_hale,
+prisoner_1, prisoner_2, prisoner_3, rilk, sabine_locke, saurial, scribe,
+sera_vance, skulker, sweeper.
+
+All 82 story face keys now have an Amiga spike face and bust pair under
+`assets/images/amiga-spike/npcs/`.
+
 `tools/amiga_art.py --samples` still paints smaller AGA previews into those
 same paths (64×64 face, 160×212 bust, 320×240 plate). Running it replaces
 the proofs. It does not read production art and it does not call the model.
