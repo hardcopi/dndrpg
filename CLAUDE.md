@@ -581,29 +581,39 @@ says which way is out. Three windows are hand-set (`the_boom`, `the_slipways`,
 `tarrow`) for reasons recorded in `docs/WAERHAVEN.md` — fitting them to their
 buildings crops off the water that is the whole point of them.
 
-## Free play — the adventures, put away
+## Free play — the yard, with the adventures back on
 
-`ADVENTURES_ENABLED` in `app/bootstrap.php` is **false** locally. Off means the
-game is characters and random encounters and nothing else: the shelf is not
+`ADVENTURES_ENABLED` in `app/bootstrap.php` is **true**. On means the shelf is
+drawn, New asks which campaign, creation honours `?module=`, and
+`session/modules` lists every active module. Off still means the shelf is not
 drawn, Play does not open a module, creation does not ask which world, and
 `session/modules` answers with an empty list so a stale page cannot start a game
-in a hidden module either.
+in a hidden module either. The landing page names the campaigns from those rows
+and is a rewrite, not a conditional — see the header of `app/inc/landing.php`.
 
-- **The Proving Yard** (`_freeplay_yard`) is where everyone stands. It is an
-  `arena`, so it offers the pit's three tiers, and it has `has_delve = 1`, so it
-  offers the stair. One place, two doors.
+- **The Proving Yard** (`_freeplay_yard`) is where a party with `module_id` NULL
+  stands. It is an `arena`, so it offers the pit's three tiers, and it has
+  `has_delve = 1`, so it offers the stair. One place, two doors. A new party
+  made from the shelf does not open here.
 - It hangs off a module `_freeplay`, which exists only because
   `regions.module_id` is NOT NULL and a place has to hang off something.
   `is_active = 0` keeps it off the shelf permanently. It is not a game to choose.
-- `CharacterGenerator::resolveModule()` checks the flag **after the party and
+- `CharacterGenerator::resolveModule()` checks the party **before the flag and
   before the request**, and the order matters. A party already inside a module
   lives there — that is also how a defeated party finds the right haven, and put
   ahead of the party lookup it marched everybody who lost a fight in the
-  Undervault out to the Proving Yard. A request that NAMES a module is
-  overruled, so an old bookmark cannot put a new character into a hidden game.
-- Turning the adventures back on is that one constant. **What it cannot undo is
-  the parties' module links**, wiped deliberately on the dev database (see
-  `backups/rpg_5e-before-module-wipe-*.sql`). **Production's were not touched.**
+  Undervault out to the Proving Yard. A party whose `module_id` is NULL resolves
+  to `FREE_PLAY_MODULE` even while the adventures are on, so defeat and a lost
+  stair wake them in the yard. A request that NAMES a module is overruled while
+  the flag is off, so an old bookmark cannot put a new character into a hidden
+  game. While the flag is on, a new party (no `party_id` yet) takes the named
+  module and is inserted with that id.
+- Turning the adventures off again is that one constant, plus the landing page.
+  **Turning them on does not assign `parties.module_id`.** As of the 2026-10-27
+  readiness check, every Hermes party is `module_id` NULL and standing in the
+  yard. They stay there until a new party is created from the shelf, or until
+  somebody sets the column on purpose. The dev wipe is
+  `backups/rpg_5e-before-module-wipe-*.sql`. This change ships no party SQL.
 
 The Random Encounter row that used to sit on the front-page sheet is gone; the
 yard's own TAKE A BOUT panel asks the same question where the fight happens.

@@ -45,19 +45,23 @@ define('APP_PATH', __DIR__);
 /**
  * Whether the authored adventures are on offer.
  *
+ * On: the shelf is drawn, New asks which campaign, creation honours `?module=`,
+ * and `session/modules` lists every active module. A party made from that shelf
+ * is inserted with that module's id and wakes in its opening room.
+ *
  * Off means the game is characters and random encounters and nothing else: the
  * shelf is not drawn, Play does not open a module, creation does not ask which
  * world, and every new character starts in the Proving Yard — the arena in the
  * `_freeplay` module, which is a module only because `regions.module_id` is NOT
- * NULL and a place has to hang off something.
+ * NULL and a place has to hang off something. `_freeplay` stays `is_active = 0`
+ * either way, so it is never a card on the shelf.
  *
- * One constant rather than a scatter of conditions, because "for now" is the
- * whole point: the adventures are still in the database, their locations and
- * quests untouched, and turning this back on is this line. What it cannot undo
- * is the parties' module links, which were wiped deliberately and separately —
- * see backups/ for the dump taken first.
+ * One constant rather than a scatter of conditions. Turning this on does not
+ * write `parties.module_id`. A party that already has NULL stays NULL and stays
+ * in the Proving Yard until a new party is created from the shelf, or until
+ * somebody sets the column on purpose. This file ships no SQL for that.
  */
-define('ADVENTURES_ENABLED', false);
+define('ADVENTURES_ENABLED', true);
 
 /** The world a character stands in when there is no adventure. */
 define('FREE_PLAY_MODULE', '_freeplay');

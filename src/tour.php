@@ -9,7 +9,10 @@
  * the rest of this project is written in anyway.
  *
  * Same constraint as the landing page: only what a new account can reach today.
- * No authored campaigns are named here.
+ * The landing names the campaigns from the module catalogue. This page is how
+ * the fights, the sheet and the generated floors work. A new party opens in
+ * the campaign it was made for. The Proving Yard is where a party with no
+ * campaign stands.
  */
 
 require_once __DIR__ . '/app/inc/public_page.php';
@@ -25,7 +28,7 @@ $nItems    = (int) db()->query('SELECT COUNT(*) FROM items')->fetchColumn();
 
 public_head(
     'The game',
-    'How Rivermark Chronicles works: the five-foot grid, the fighting pit, the '
+    'How Rivermark Chronicles works: the five-foot grid, the campaigns, the '
     . 'generated delve, and what the engine actually implements.'
 );
 ?>
@@ -36,8 +39,8 @@ public_head(
     <h1>What you are actually playing</h1>
     <p class="lp-lead">
       A single-player role-playing game that runs in a browser tab, on the open 5e rules,
-      with a tactical fight, a dungeon that is different every time, and a character sheet
-      whose numbers are the ones the engine uses.
+      with a tactical fight, a campaign you choose once, a dungeon that is different
+      every time, and a character sheet whose numbers are the ones the engine uses.
     </p>
   </div>
 </header>
@@ -136,8 +139,9 @@ public_head(
     <p class="lp-eyebrow">Three</p>
     <h2>The Proving Yard</h2>
     <p class="lp-lead">
-      Where every character starts, and where you can always get a fight. Three
-      difficulties, and you choose who walks out.
+      A ring of trodden earth for a party that has no campaign. Three difficulties,
+      and you choose who walks out. A new party opens in the campaign it was made
+      for, in that campaign's first room.
     </p>
     <div class="lp-grid lp-grid-3">
       <?php foreach (PitEngine::TIERS as $tier) { ?>
@@ -164,9 +168,10 @@ public_head(
     <p class="lp-eyebrow">Four</p>
     <h2>The delve</h2>
     <p class="lp-lead">
-      A stair goes down out of the yard. What is under it is generated when you walk into
-      it, in the manner of the old random-dungeon tables — and dropped again behind you,
-      so the way back is not the way you came.
+      The Undervault is generated when you walk into it, in the manner of the old
+      random-dungeon tables — and dropped again behind you, so the way back is the
+      stair you came down, and the floor behind you is gone. The yard has the same
+      kind of stair.
     </p>
 
     <div class="lp-feature" style="margin-top:var(--sp-32)">

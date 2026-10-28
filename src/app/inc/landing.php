@@ -9,14 +9,17 @@
  * two designs that are hard to change.
  *
  * WHAT THIS PAGE MAY CLAIM. Only what somebody who signs up today can reach.
- * The authored campaigns are behind ADVENTURES_ENABLED and that constant is off
- * in this deployment, so Rivermark, the Old City, the Undervault and Waerhaven
- * are not mentioned anywhere here — a visitor who read about a city and then
- * could not find it would be right to feel misled. What is on offer is
- * character creation, the fighting pit and the delve, and that is what is sold.
- * Turning the adventures back on is one constant and a rewrite of this file;
- * it is deliberately not a conditional, because half a pitch assembled at
- * runtime reads like neither.
+ * ADVENTURES_ENABLED is on, so the shelf is the offer: the active modules,
+ * named here from the same rows the shelf draws. The sentences around them are
+ * written by hand. The names and blurbs are not — a second copy of a module's
+ * blurb is one that can quietly stop matching the card.
+ *
+ * The Proving Yard is where a party with no module still stands. It is not a
+ * campaign (`_freeplay` is inactive), and a new account does not open there,
+ * so this page does not sell it as the front door. Turning the adventures off
+ * again is the constant in bootstrap.php and a rewrite of this file; the pitch
+ * is deliberately not a conditional, because half a pitch assembled at runtime
+ * reads like neither.
  */
 
 require_once __DIR__ . '/public_page.php';
@@ -25,11 +28,19 @@ $nClasses  = (int) db()->query('SELECT COUNT(*) FROM classes')->fetchColumn();
 $nRaces    = public_race_count();
 $nSpells   = (int) db()->query('SELECT COUNT(*) FROM spells')->fetchColumn();
 $nMonsters = (int) db()->query('SELECT COUNT(*) FROM monsters')->fetchColumn();
+// The shelf, in the shelf's order. Inactive modules — the yard — stay off.
+$campaigns = db()->query(
+    'SELECT name, blurb, level_min, level_max
+       FROM modules
+      WHERE is_active = 1
+      ORDER BY sort_order, id'
+)->fetchAll();
+$nCampaigns = count($campaigns);
 
 public_head(
     'A browser RPG on the open 5e rules',
-    'Roll up a character, fight on a five-foot grid, and go down a stair that '
-    . 'is different every time. Free, in your browser, on the 5e SRD.'
+    $nCampaigns . ' campaigns on the open 5e rules. Roll a character, fight on '
+    . 'a five-foot grid, and walk into a world that stays the one you chose.'
 );
 ?>
 
@@ -38,9 +49,9 @@ public_head(
     <p class="lp-eyebrow">Open 5e SRD · single player · no download</p>
     <h1>Rivermark Chronicles</h1>
     <p class="lp-lead">
-      Roll somebody up, take them out to the Proving Yard, and find out what they are.
-      Then go down the stair, where the floors are made the night you walk them and
-      nobody has drawn a map of what is down there — because nobody has been.
+      <?= (int) $nCampaigns ?> campaigns. Roll somebody up, choose which one they walk
+      into, and the party stays there — its own map, its own people, and its own
+      opening room.
     </p>
     <?php public_cta(); ?>
     <p class="lp-note">Runs in the browser you already have. Nothing to install.</p>
@@ -53,6 +64,28 @@ public_head(
     </div>
   </div>
 </header>
+
+<section class="lp-band lp-band-inset">
+  <div class="lp-wrap">
+    <p class="lp-eyebrow">Pick one</p>
+    <h2>A party is made in one campaign and stays in it</h2>
+    <p class="lp-lead">
+      There is no road from one into another. You choose when you make the party,
+      and the Play button after that names the game you are already in.
+    </p>
+    <div class="lp-grid">
+      <?php foreach ($campaigns as $campaign) { ?>
+        <article class="lp-card">
+          <p class="lp-card-sub">Levels <?= (int) $campaign['level_min'] ?>–<?= (int) $campaign['level_max'] ?></p>
+          <h3><?= e((string) $campaign['name']) ?></h3>
+          <?php if ((string) $campaign['blurb'] !== '') { ?>
+            <p><?= e((string) $campaign['blurb']) ?></p>
+          <?php } ?>
+        </article>
+      <?php } ?>
+    </div>
+  </div>
+</section>
 
 <section class="lp-band">
   <div class="lp-wrap">
@@ -85,7 +118,7 @@ public_head(
                   and two gremlins on a five-foot grid with threatened squares hatched
                   in red, and an action list on the right showing which actions are
                   available and why the others are not.">
-        <figcaption>A fair match in the Proving Yard, with a gremlin selected.</figcaption>
+        <figcaption>A fight on the five-foot grid, with a gremlin selected.</figcaption>
       </figure>
     </div>
 
@@ -127,7 +160,7 @@ public_head(
         <p class="lp-eyebrow">A dungeon nobody has drawn</p>
         <h2>The stair goes down as far as you do</h2>
         <p>
-          Below the yard is a dungeon generated the moment you walk into it, in the manner
+          The Undervault is a dungeon generated the moment you walk into it, in the manner
           of the old random-dungeon tables: rooms rolled from a size table, joined by
           corridors, stocked with what happens to be down there, and described in words
           that have never been written in that order before.
@@ -148,7 +181,7 @@ public_head(
              alt="A generated dungeon floor drawn on graph paper: one lit room with the
                   party token inside it, rubble hatching around the walls, two doors
                   marked, and the rest of the level still dark.">
-        <figcaption>Level 1, below the Proving Yard. Everything else is still dark.</figcaption>
+        <figcaption>A generated floor. One room is lit. Everything else is still dark.</figcaption>
       </figure>
     </div>
 
@@ -183,30 +216,6 @@ public_head(
 </section>
 
 <section class="lp-band lp-band-inset">
-  <div class="lp-wrap">
-    <p class="lp-eyebrow">Three ways to get hit</p>
-    <h2>The Proving Yard takes all comers</h2>
-    <p class="lp-lead">
-      A ring of trodden earth inside a fence of lashed poles. Pick a difficulty, pick who
-      walks out, and the yard finds you an opponent worth the trouble. Nobody has to
-      travel anywhere; the fight is where you are standing.
-    </p>
-    <div class="lp-grid lp-grid-3">
-      <?php foreach (PitEngine::TIERS as $tier) { ?>
-        <article class="lp-card">
-          <h3><?= e((string) $tier['label']) ?></h3>
-          <p><?= e((string) $tier['blurb']) ?></p>
-        </article>
-      <?php } ?>
-    </div>
-    <p class="lp-note" style="margin-top:var(--sp-16)">
-      The party is sized against who is actually coming, so going in alone is a
-      different fight rather than the same one four times over.
-    </p>
-  </div>
-</section>
-
-<section class="lp-band">
   <div class="lp-wrap">
     <h2>What else is in it</h2>
     <div class="lp-grid">

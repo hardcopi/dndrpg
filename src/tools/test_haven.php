@@ -51,11 +51,21 @@ foreach ([
     ok("$mod log names the place", ($h['name'] ?? '') !== '', json_encode($h));
 }
 
-// A party from before modules existed still gets somewhere sane.
+// A party with no module stays in the yard, including while the adventures
+// are on offer. havenFor() answering with the first active module would wake
+// every wiped party in the Golden Flagon the first time they lost a fight.
 $db->prepare("INSERT INTO parties (user_id, module_id, name) VALUES (NULL, NULL, 'legacy probe')")->execute();
 $pid = (int) $db->lastInsertId(); $made[] = $pid;
 $h = $gen->havenFor($pid);
-ok('a module-less party still gets a haven', ($h['id'] ?? 0) > 0, json_encode($h));
+$key = $db->query('SELECT location_key FROM locations WHERE id = ' . (int) ($h['id'] ?? 0))->fetchColumn();
+ok('a module-less party wakes in the yard', $key === '_freeplay_yard', 'woke at ' . var_export($key, true));
+$mod = $db->query(
+    'SELECT m.module_key FROM locations l
+       JOIN regions r ON r.id = l.region_id
+       JOIN modules m ON m.id = r.module_id
+      WHERE l.id = ' . (int) ($h['id'] ?? 0)
+)->fetchColumn();
+ok('and the haven is the free-play module', $mod === FREE_PLAY_MODULE, 'module ' . var_export($mod, true));
 
 foreach ($made as $p) { $db->prepare('DELETE FROM parties WHERE id=?')->execute([$p]); }
 echo "\n$pass passed, $fail failed\n";

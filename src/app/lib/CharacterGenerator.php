@@ -415,9 +415,22 @@ class CharacterGenerator
             if ($row) {
                 return $row;
             }
-            // A party from before modules existed, or one whose module was
-            // retired. Fall through to the default rather than refuse to add a
-            // character to a save that is otherwise perfectly playable.
+            // NULL module_id is the yard, on purpose. The adventures being on
+            // offer does not assign one: a new party from the shelf is inserted
+            // with a module id, and an UPDATE is the other way. Defeat and a
+            // lost stair both ask here. Answering with the first active module
+            // would walk every wiped party into the Golden Flagon the first
+            // time they lost a fight — the flagon_common_room bug, for the
+            // whole of the yard.
+            //
+            // A module id that points at a row which is gone still falls
+            // through. That party had a campaign; this one never did.
+            $owned = $this->db->prepare('SELECT module_id FROM parties WHERE id = ?');
+            $owned->execute([$partyId]);
+            $moduleId = $owned->fetchColumn();
+            if ($moduleId === null) {
+                return $this->freePlayModule();
+            }
         }
 
         // With the adventures hidden there is one world and nobody chooses it.
@@ -430,16 +443,7 @@ class CharacterGenerator
         // is a different matter: a stale link or an old bookmark must not put a
         // new character into a game nobody can see, so it is overruled.
         if (!ADVENTURES_ENABLED) {
-            $stmt = $this->db->prepare('SELECT * FROM modules WHERE module_key = ?');
-            $stmt->execute([FREE_PLAY_MODULE]);
-            $row = $stmt->fetch();
-            if (!$row) {
-                throw new RuntimeException(
-                    'The ' . FREE_PLAY_MODULE . ' module is missing. '
-                    . 'Run sql/migrations/2026-08-21-free-play.sql.'
-                );
-            }
-            return $row;
+            return $this->freePlayModule();
         }
 
         $key = trim((string) ($data['module'] ?? ''));
@@ -460,6 +464,27 @@ class CharacterGenerator
         )->fetch();
         if (!$row) {
             throw new RuntimeException('No modules exist; load the content first.');
+        }
+        return $row;
+    }
+
+    /**
+     * The module a party stands in when it has no campaign.
+     *
+     * `_freeplay` is not on the shelf (`is_active = 0`). It exists so the yard
+     * has a world to hang off, and so a NULL `module_id` has somewhere to wake
+     * that is not Rivermark.
+     */
+    private function freePlayModule(): array
+    {
+        $stmt = $this->db->prepare('SELECT * FROM modules WHERE module_key = ?');
+        $stmt->execute([FREE_PLAY_MODULE]);
+        $row = $stmt->fetch();
+        if (!$row) {
+            throw new RuntimeException(
+                'The ' . FREE_PLAY_MODULE . ' module is missing. '
+                . 'Run sql/migrations/2026-08-21-free-play.sql.'
+            );
         }
         return $row;
     }
