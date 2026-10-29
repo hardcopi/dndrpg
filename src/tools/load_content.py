@@ -2579,7 +2579,8 @@ def emit_locations(lines, index):
     # the module, not silently reach through it and delete a world that some
     # region file still names.
     if modules:
-        RETIRE.append(f"DELETE FROM modules WHERE module_key NOT IN "
+        RETIRE.append(f"DELETE FROM modules WHERE LEFT(module_key, 1) <> '_' "
+                      f"AND module_key NOT IN "
                       f"({key_list(modules)});")
 
     rows(lines, "regions",
@@ -2618,8 +2619,12 @@ def emit_locations(lines, index):
 
     lines.append("-- The exit graph, rebuilt whole; see the loader for why the")
     lines.append("-- party_exits_found rows go with it.")
-    lines.append("DELETE FROM party_exits_found;")
-    lines.append("DELETE FROM location_exits;")
+    # Only the authored graph. An exit with an `_` end belongs to a migration
+    # (free play's front door and stair) or to a live delve, and nothing in
+    # content/ would put it back; wiping it walled the Proving House in.
+    ends = "JOIN locations f ON f.id = e.from_location_id JOIN locations t ON t.id = e.to_location_id WHERE LEFT(f.location_key, 1) <> '_' AND LEFT(t.location_key, 1) <> '_'"
+    lines.append("DELETE pef FROM party_exits_found pef JOIN location_exits e ON e.id = pef.exit_id " + ends + ";")
+    lines.append("DELETE e FROM location_exits e " + ends + ";")
     exit_rows = []
     for r in regions.values():
         for lk, loc in (r.get("locations") or {}).items():

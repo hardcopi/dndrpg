@@ -909,6 +909,10 @@ class LocationEngine
         }
 
         if ($partyId) {
+            // Walking out of free play into an adventure joins it; see
+            // adoptArrivalModule(). Before the quest notes, so they read the
+            // module the party is now in.
+            $this->adoptArrivalModule($partyId, $arrivedId);
             $messages = array_merge($messages, $this->questArrivalNotes($partyId, $arrivedId));
             // Back at the Mouth is climbing out. The floor they were on
             // stops existing, so the next Down is a different dungeon.
@@ -924,6 +928,38 @@ class LocationEngine
             'messages'    => $messages,
             'character'   => $this->getCharacterPosition($characterId),
         ];
+    }
+
+    /**
+     * Walking out of free play into an adventure joins it.
+     *
+     * A free-play party (module `_freeplay`) or one with no module at all
+     * that arrives in a region belonging to a real module takes that module
+     * on, so the job board, quests and havenFor() follow it. Walking from one
+     * real module into another changes nothing, and walking back into the
+     * Proving House never moves a party back into free play.
+     */
+    private function adoptArrivalModule(int $partyId, int $locationId): void
+    {
+        $stmt = $this->db->prepare(
+            'SELECT m.id, m.module_key
+               FROM locations l
+               INNER JOIN regions r ON r.id = l.region_id
+               INNER JOIN modules m ON m.id = r.module_id
+              WHERE l.id = ?'
+        );
+        $stmt->execute([$locationId]);
+        $arrival = $stmt->fetch();
+        if (!$arrival || str_starts_with((string) $arrival['module_key'], '_')) {
+            return;
+        }
+        $this->db->prepare(
+            'UPDATE parties p
+               LEFT JOIN modules pm ON pm.id = p.module_id
+                SET p.module_id = ?
+              WHERE p.id = ?
+                AND (p.module_id IS NULL OR pm.module_key = ?)'
+        )->execute([(int) $arrival['id'], $partyId, FREE_PLAY_MODULE]);
     }
 
     /**
