@@ -665,7 +665,7 @@ class LocationEngine
         $visited = $this->visitedIds($partyId);
 
         $locs = $this->db->prepare(
-            'SELECT id, location_key, name, location_type, map_x, map_y, hidden_until_visited
+            'SELECT id, location_key, name, location_type, map_x, map_y, hidden_until_visited, inn_cost
                FROM locations WHERE region_id = ? ORDER BY sort_order, id'
         );
         $locs->execute([$regionId]);
@@ -685,6 +685,14 @@ class LocationEngine
                 'key'     => $l['location_key'],
                 'name'    => $l['name'],
                 'type'    => $l['location_type'],
+                // What to draw it as (inn, shop, smithy, ...): `type` says
+                // "building" for most of a town. Additive; see RegionMapArt.
+                'icon'    => RegionMapArt::iconFor(
+                    (string) $l['location_key'],
+                    (string) $l['location_type'],
+                    (string) $l['name'],
+                    $l['inn_cost'] === null ? null : (int) $l['inn_cost']
+                ),
                 'x'       => (float) $l['map_x'],
                 'y'       => (float) $l['map_y'],
                 'visited' => $isVisited,
@@ -698,6 +706,7 @@ class LocationEngine
         $exits = $this->db->prepare(
             'SELECT e.from_location_id, e.to_location_id, e.label, e.is_hidden,
                     l2.region_id AS to_region_id, r2.name AS to_region_name,
+                    r2.region_key AS to_region_key, r2.region_type AS to_region_type,
                     l2.name AS to_name
                FROM location_exits e
                INNER JOIN locations l1 ON l1.id = e.from_location_id
@@ -722,6 +731,8 @@ class LocationEngine
                 $neighbors[] = [
                     'from'        => $from,
                     'region_name' => $e['to_region_name'],
+                    'region_key'  => $e['to_region_key'],
+                    'region_type' => $e['to_region_type'],
                     'to_name'     => $e['to_name'],
                     'label'       => $e['label'],
                     'to_location_id' => $to,
@@ -748,6 +759,9 @@ class LocationEngine
             'nodes'       => $nodes,
             'edges'       => $edges,
             'neighbors'   => $neighbors,
+            // A painted backdrop for clients that draw one (art name + a
+            // pixel spot per place and road out), or null. Additive.
+            'painting'    => RegionMapArt::paintingFor((string) $r['region_key'], $nodes, $neighbors),
             // The drawn shape of a generated dungeon floor, or null for an
             // authored region — which is every region with a painted plate.
             // The chart draws one or the other, never both: a plan under a
