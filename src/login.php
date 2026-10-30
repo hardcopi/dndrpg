@@ -9,6 +9,9 @@
  * Anyone already signed in is sent on rather than shown a login form they do
  * not need — reaching this page with a session is what happens when somebody
  * bookmarks it, not a request to sign out.
+ *
+ * The painted skin (river, wordmark, oak plank) lives in assets/css/login.css
+ * and is this page only. The posts, the session and the redirect are unchanged.
  */
 
 require_once __DIR__ . '/app/bootstrap.php';
@@ -37,60 +40,81 @@ $mode = ($_GET['mode'] ?? '') === 'register' && $registrationOpen ? 'register' :
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Sign in — Rivermark Chronicles</title>
+  <title><?= $mode === 'register' ? 'Create an account' : 'Sign in' ?> — Rivermark Chronicles</title>
   <link rel="stylesheet" href="<?= asset('assets/css/style.css') ?>">
+  <link rel="stylesheet" href="<?= asset('assets/css/login.css') ?>">
 </head>
-<body class="auth-page">
+<body class="auth-page login-screen" data-auth-mode="<?= htmlspecialchars($mode, ENT_QUOTES, 'UTF-8') ?>">
   <?php require APP_PATH . '/inc/site_bar.php'; ?>
-  <main class="auth-card">
-    <header class="auth-head">
-      <p class="auth-eyebrow">Rivermark Chronicles</p>
-      <h1 id="auth-title"><?= $mode === 'register' ? 'Create an account' : 'Sign in' ?></h1>
-      <p class="auth-sub" id="auth-sub">
-        <?= $mode === 'register'
-            ? 'Your characters and their world are yours alone.'
-            : 'Your characters are waiting.' ?>
-      </p>
-    </header>
+  <div class="login-stage">
+    <div class="login-cluster">
+      <img class="login-logo"
+           src="<?= asset('assets/images/login/logo.webp') ?>"
+           srcset="<?= asset('assets/images/login/logo-1x.webp') ?> 577w, <?= asset('assets/images/login/logo.webp') ?> 1154w"
+           sizes="(max-width: 40rem) 92vw, 36rem"
+           width="1154" height="456"
+           alt="Rivermark Chronicles">
 
-    <form id="auth-form" autocomplete="on" novalidate>
-      <label class="auth-field">
-        <span>Username</span>
-        <input type="text" name="username" id="username" required
-               autocomplete="username" autocapitalize="none" spellcheck="false" autofocus>
-      </label>
+      <main class="auth-card login-panel">
+        <span class="login-bracket login-bracket-nw" aria-hidden="true"></span>
+        <span class="login-bracket login-bracket-ne" aria-hidden="true"></span>
+        <span class="login-bracket login-bracket-sw" aria-hidden="true"></span>
+        <span class="login-bracket login-bracket-se" aria-hidden="true"></span>
 
-      <label class="auth-field" id="email-field" hidden>
-        <span>Email <em>(optional)</em></span>
-        <input type="email" name="email" id="email" autocomplete="email" spellcheck="false">
-      </label>
+        <header class="auth-head">
+          <h1 id="auth-title"><?= $mode === 'register' ? 'Create an account' : 'Sign in' ?></h1>
+          <p class="auth-sub" id="auth-sub">
+            <?= $mode === 'register'
+                ? 'Your characters and their world are yours alone.'
+                : 'Your characters are waiting.' ?>
+          </p>
+        </header>
 
-      <label class="auth-field">
-        <span>Password</span>
-        <input type="password" name="password" id="password" required
-               autocomplete="current-password">
-      </label>
+        <form id="auth-form" autocomplete="on" novalidate>
+          <label class="auth-field">
+            <span>Account</span>
+            <input type="text" name="username" id="username" required
+                   autocomplete="username" autocapitalize="none" spellcheck="false" autofocus>
+          </label>
 
-      <p class="auth-error" id="auth-error" role="alert" aria-live="polite"></p>
+          <label class="auth-field" id="email-field" hidden>
+            <span>Email <em>(optional)</em></span>
+            <input type="email" name="email" id="email" autocomplete="email" spellcheck="false">
+          </label>
 
-      <button type="submit" class="btn btn-primary auth-submit" id="auth-submit">
-        <?= $mode === 'register' ? 'Create account' : 'Sign in' ?>
-      </button>
-    </form>
+          <label class="auth-field">
+            <span>Password</span>
+            <input type="password" name="password" id="password" required
+                   autocomplete="<?= $mode === 'register' ? 'new-password' : 'current-password' ?>">
+          </label>
 
-    <?php if ($registrationOpen): ?>
-      <p class="auth-switch">
-        <span id="switch-prompt"><?= $mode === 'register' ? 'Already have an account?' : 'No account yet?' ?></span>
-        <a href="#" id="switch-link"><?= $mode === 'register' ? 'Sign in' : 'Create one' ?></a>
-      </p>
-    <?php else: ?>
-      <p class="auth-switch auth-closed">
-        Registration is closed on this server. Ask an administrator for an account.
-      </p>
-    <?php endif; ?>
+          <p class="auth-error" id="auth-error" role="alert" aria-live="polite"></p>
 
-    <p class="auth-foot"><a href="about.php">About &amp; licence</a></p>
-  </main>
+          <div class="login-actions">
+            <button type="submit" class="btn login-btn auth-submit" id="auth-submit">
+              <?= $mode === 'register' ? 'Create account' : 'Enter Realm' ?>
+            </button>
+            <?php if ($registrationOpen): ?>
+              <a href="#" id="switch-link" class="btn login-btn"><?= $mode === 'register' ? 'Sign in' : 'New Account' ?></a>
+            <?php endif; ?>
+            <a class="btn login-btn" href="index.php">Quit</a>
+          </div>
+        </form>
+
+        <?php if ($registrationOpen): ?>
+          <p class="auth-switch login-sr">
+            <span id="switch-prompt"><?= $mode === 'register' ? 'Already have an account?' : 'No account yet?' ?></span>
+          </p>
+        <?php else: ?>
+          <p class="auth-switch auth-closed">
+            Registration is closed on this server. Ask an administrator for an account.
+          </p>
+        <?php endif; ?>
+
+        <p class="auth-foot"><a href="about.php">About &amp; licence</a></p>
+      </main>
+    </div>
+  </div>
 
   <script src="assets/js/api.js"></script>
   <script>
@@ -107,11 +131,13 @@ $mode = ($_GET['mode'] ?? '') === 'register' && $registrationOpen ? 'register' :
 
       function paint() {
         const registering = mode === 'register';
+        document.body.dataset.authMode = registering ? 'register' : 'login';
+        document.title = (registering ? 'Create an account' : 'Sign in') + ' — Rivermark Chronicles';
         document.getElementById('auth-title').textContent = registering ? 'Create an account' : 'Sign in';
         document.getElementById('auth-sub').textContent = registering
           ? 'Your characters and their world are yours alone.'
           : 'Your characters are waiting.';
-        submit.textContent = registering ? 'Create account' : 'Sign in';
+        submit.textContent = registering ? 'Create account' : 'Enter Realm';
         emailField.hidden = !registering;
         // Tells a password manager whether to offer a stored password or a
         // generated one. Without it, registering prompts to autofill the
@@ -121,7 +147,7 @@ $mode = ($_GET['mode'] ?? '') === 'register' && $registrationOpen ? 'register' :
         const link = document.getElementById('switch-link');
         if (prompt && link) {
           prompt.textContent = registering ? 'Already have an account?' : 'No account yet?';
-          link.textContent = registering ? 'Sign in' : 'Create one';
+          link.textContent = registering ? 'Sign in' : 'New Account';
         }
         err.textContent = '';
         // So a reload, or a shared link, opens the same half of the form.
