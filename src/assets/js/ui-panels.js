@@ -799,12 +799,14 @@
       { label: 'Journal', hint: 'Quests taken and quests done', run: openJournal },
     ];
 
+    const icons = { Talk: 'i-parley', Search: 'i-sense', Camp: 'i-camp', Journal: 'i-journal' };
     bar.innerHTML = '';
     buttons.forEach((b) => {
       const el = document.createElement('button');
       el.type = 'button';
       el.className = 'btn action-btn';
-      el.textContent = b.label;
+      const icon = icons[b.label] || 'i-hands';
+      el.innerHTML = `<svg class="act-icon" aria-hidden="true"><use href="#${icon}"></use></svg><span>${esc(b.label)}</span>`;
       el.title = b.hint;
       el.disabled = !!b.disabled;
       el.addEventListener('click', () => b.run());

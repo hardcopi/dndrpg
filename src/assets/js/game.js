@@ -8,10 +8,11 @@
  * conversation (ui-dialog.js), the d20 ceremony (ui-check.js), levelling
  * (ui-levelup.js) and the panels (ui-panels.js).
  *
- * Ways out live on the region chart, not as a second list under the scene:
- * the places you can walk to from here are highlighted on the map, with the
- * same number keys the old exit list used. That keeps a crowded street's
- * people on screen instead of buried under five exit buttons.
+ * Ways out are highlighted on the region chart and listed under it. The chart
+ * is the picture; the numbered rows are the same exits, so a way can be read
+ * without working out which painted name is lit. Both of them travel. There
+ * is no number key for it any more — the digit meant a different door in
+ * every room.
  *
  * It replaces a 3,200-line tile renderer. Almost none of that was doing work
  * this game needs: a location has no camera, no pathfinder, no chunked terrain
@@ -363,9 +364,13 @@
     // draw an empty bar. It is only ever written, never cleared: the region is
     // true while the fight is on, and blanking it per mode would flicker.
     const where = $('#topbar-where');
-    if (where && state.location && state.location.region_name) {
+    const statusWhere = $('#gw-status-where');
+    if (state.location && state.location.region_name) {
       const region = state.location.region_name;
-      if (where.textContent !== region) where.textContent = region;
+      // Written, never cleared: the region is still true while a fight is on,
+      // and blanking either line per mode would flicker the window.
+      if (where && where.textContent !== region) where.textContent = region;
+      if (statusWhere && statusWhere.textContent !== region) statusWhere.textContent = region;
     }
 
     if (inCombat && window.Combat) {
@@ -414,11 +419,20 @@
     // the first-visit paragraph still opens on arrival.
     const ways = waysPanel(loc);
     const foot = ways ? `<div class="loc-foot">${ways}</div>` : '';
+    // The region stays in the heading and is clipped by the skin: the region
+    // bar above the chart is aria-hidden, so a screen reader that heard only
+    // the place name would not be told which map it was on.
     root.innerHTML = `
       <div class="loc-inner">
         <div class="loc-text">
-          <h1 class="loc-name">${esc(loc.name)}, ${esc(loc.region_name)}</h1>
-          ${sceneMap()}
+          <section class="loc-sheet">
+            <h1 class="loc-name"><span class="loc-name-place">${esc(loc.name)}</span><span class="loc-name-region">, ${esc(loc.region_name)}</span></h1>
+            <div class="loc-read">${prosePanel(loc)}</div>
+          </section>
+          <div class="loc-stage">
+            ${sceneMap()}
+            ${mapLegend()}
+          </div>
           ${foot}
         </div>
       </div>`;
@@ -1139,43 +1153,29 @@
   };
 
   /**
-   * One action, as a key on a bar.
+   * One action, as an iron plate: the glyph, the word, and the key hint.
    *
-   * IT WAS A COLUMN OF FULL-WIDTH BUTTONS, one line each, and a scene with a
-   * fight in it, a job board, two things on the floor, a bed and a fire ran to
-   * eight rows — a screen of furniture under the prose the screen is for. The
-   * verbs are a bar now, the same icon keys combat uses, so the common scene is
-   * one row.
-   *
-   * WHAT KEEPS ITS WORDS IS WHAT NAMES SOMETHING. "Take Rusted Key" and
-   * "Fight: Cellar Rats" are not verbs with a label attached, they are the only
-   * place the game says there is a key on the floor or what is waiting in the
-   * room; an icon and a tooltip would hide the content behind a hover. So an
-   * action carrying an id — loot, a fight, a forced door, a bout — keeps its
-   * text beside the glyph, and the fixed verbs do not.
-   *
-   * The key hint stays drawn, in the corner. A menu-driven game where nobody
-   * discovers the letter keys is a page of buttons, which is the note the old
-   * `<kbd>` carried and it survives the change.
+   * The word is always drawn. A verb with no label was a tooltip, and a plate
+   * you have to hover to name is not a menu. The hint stays in the corner —
+   * a menu-driven game where nobody discovers the letter keys is a page of
+   * buttons.
    */
   function actionKey(a) {
     const icon = ACTION_ICONS[a.act] || 'i-hands';
-    const named = !!a.id || a.showLabel;
     const cls = [
-      'act-slot', 'loc-act',
-      named ? 'has-label' : '',
+      'act-slot', 'loc-act', 'has-label',
       a.danger ? 'is-danger' : '',
       a.urgent ? 'is-urgent' : '',
       a.act === 'leave_dungeon' ? 'is-up' : '',
     ].filter(Boolean).join(' ');
-    // The tooltip says the label as well as the hint on a key that draws no
-    // label — otherwise "Read the job board" exists nowhere but the icon.
-    const tip = [named ? '' : a.label, a.hint].filter(Boolean).join(' — ');
+    // The word is on the plate. The tooltip is the longer hint, and falls
+    // back to the label only when a verb has nothing else to say.
+    const tip = a.hint || a.label;
     return `<button type="button" class="${cls}"
         data-act="${esc(a.act)}"${a.id ? ` data-id="${a.id}"` : ''}
         title="${esc(tip)}" aria-label="${esc(a.label)}">
       <svg class="act-icon" aria-hidden="true"><use href="#${icon}"></use></svg>
-      ${named ? `<span class="loc-act-label">${esc(a.label)}</span>` : ''}
+      <span class="loc-act-label">${esc(a.label)}</span>
       ${a.key ? `<kbd>${esc(a.key)}</kbd>` : ''}
     </button>`;
   }
@@ -1183,9 +1183,8 @@
   /**
    * Direct exits from the current scene, shaped for the chart.
    *
-   * The map draws these as highlighted place-names (with their number keys
-   * in the text). The scene does not list them again — the chart already is
-   * that list, except for the ways the chart cannot draw; see waysPanel.
+   * The map draws these as highlighted place-names. waysPanel() lists the
+   * same exits under the chart; this is the set the drawing lights up.
    */
   function currentWays() {
     const loc = state.location;
@@ -1198,53 +1197,23 @@
   }
 
   /**
-   * Every destination the chart can actually be clicked through to.
+   * The ways out, as a numbered menu under the chart.
    *
-   * Two kinds: a node in this region, and the stub arrow for a place in a
-   * neighbouring one. The stub is only drawn when the location it leaves from
-   * is itself on the chart, which is the same test ui-map.js makes.
-   *
-   * The chart also withholds unvisited places it cannot name — an in-region
-   * node it does not draw at all, a border stub it draws without a click. Both
-   * of those are safe to count as charted here, because the exemption is for
-   * places that are NOT a step from this scene, and this set exists only to
-   * decide whether a step from this scene has somewhere to be clicked. A
-   * direct exit is always drawn and always clickable; see ui-map.js `node`.
-   */
-  function chartedDestinations() {
-    const map = state.regionMap;
-    if (!map || !map.nodes || !map.nodes.length) return new Set();
-    const nodeIds = new Set(map.nodes.map((n) => +n.id));
-    const reachable = new Set(nodeIds);
-    (map.neighbors || []).forEach((nb) => {
-      if (nodeIds.has(+nb.from)) reachable.add(+nb.to_location_id);
-    });
-    return reachable;
-  }
-
-  /**
-   * The ways out the chart cannot show.
-   *
-   * A place marked hidden_until_visited is left off the region map until the
-   * party has been there, and the edge to it goes with it. When the exit
-   * itself is open that leaves a way out that exists in the payload, is legal
-   * to walk, and appears nowhere a player can click — you would have to
-   * already have been through the door to be shown the door. The Flagon
-   * cellar was exactly this.
-   *
-   * So: anything unreachable on the drawing gets listed here instead, keeping
-   * the promise that an unlocked exit is always takeable. Usually this renders
-   * nothing at all, which is the intended state — the chart is still the way
-   * you travel.
+   * The chart still draws every one of them and is still clicked through.
+   * The rows are the same exits, in the same order, so a door can be read
+   * without working out which painted name is the lit one. A locked exit
+   * stays in the list and stays disabled. Travel is the ordinary
+   * `data-act="travel"` a stranded door already used — including a way the
+   * chart withholds until the party has been through it, which is why the
+   * list is the whole of `loc.exits` and not only the names the drawing shows.
    */
   function waysPanel(loc) {
-    const charted = chartedDestinations();
-    const stranded = (loc.exits || []).filter((e) => !charted.has(+e.to_location_id));
-    if (!stranded.length) return '';
+    const exits = loc.exits || [];
+    if (!exits.length) return '';
     return `<section class="loc-ways">
       <h2>Ways out</h2>
       <div class="action-list">
-        ${stranded.map((exit) => `
+        ${exits.map((exit) => `
           <button type="button" class="btn loc-act" data-act="travel"
                   data-id="${exit.to_location_id}"${exit.locked ? ' disabled' : ''}
                   title="${esc(exit.locked ? 'Shut to you for now' : (exit.to_name || ''))}">
@@ -1252,6 +1221,21 @@
           </button>`).join('')}
       </div>
     </section>`;
+  }
+
+  /**
+   * What the chart's marks mean. Drawn here, not by the map, so the renderer
+   * stays a picture: gold is where you are, blue is a way out, grey is shut,
+   * red is an errand. The same four facts the chart already encodes.
+   */
+  function mapLegend() {
+    if (!state.regionMap) return '';
+    return `<ul class="loc-legend" aria-label="Map legend">
+      <li><i class="lg-you" aria-hidden="true"></i> You</li>
+      <li><i class="lg-way" aria-hidden="true"></i> Way out</li>
+      <li><i class="lg-lock" aria-hidden="true"></i> Shut</li>
+      <li><i class="lg-quest" aria-hidden="true"></i> Errand</li>
+    </ul>`;
   }
 
   /**

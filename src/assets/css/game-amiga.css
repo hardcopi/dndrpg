@@ -1,0 +1,1051 @@
+/*
+ * The play screen, in the same materials as the sign-in and the character
+ * select: a dark iron window, corner plates, a carved title, oak and
+ * parchment panels, gold for the thing you have selected, iron plates for
+ * the buttons.
+ *
+ * Scoped to body.game-page. login.css and picker.css are not touched, and
+ * nothing here is loaded by any other page. The combat board and the region
+ * chart keep their own geometry; this file only frames them.
+ *
+ * The colours are declared on the page, as they are on the sign-in and the
+ * select, rather than in tokens.css — that file is the cold chrome, and this
+ * skin is deliberately the warm one.
+ */
+
+body.game-page {
+  --gw-oak: #24160d;
+  --gw-cream: #f4e6c4;
+  --gw-cream-dim: #e4d0a4;
+  --gw-ink: #24160d;
+  --gw-parchment-0: #f8ebcd;
+  --gw-parchment-1: #e4cda0;
+  --gw-iron-0: #f2f4f7;
+  --gw-iron-1: #c5ccd4;
+  --gw-iron-2: #8d97a3;
+  --gw-brass-0: #f3d898;
+  --gw-brass-1: #c9a45c;
+  --gw-brass-2: #a07e3a;
+  --gw-focus: #ffe08a;
+  --gw-hp: #c4281c;
+  --gw-frame: #121820;
+  --dlg-panel-top: #1a2433;
+  --dlg-panel-bottom: #121820;
+
+  background: #07090d;
+  color: var(--gw-cream);
+  font-family: var(--font-display);
+}
+
+/* ------------------------------------------------------------------ *
+   The window
+ * ------------------------------------------------------------------ */
+
+.gw-window {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  padding: 0.35rem 0.45rem 0.4rem;
+  background: linear-gradient(180deg, #243044 0%, #1a2433 16%, #121820 100%);
+  border: 3px solid #07090d;
+  border-radius: 4px;
+  box-shadow:
+    inset 0 0 0 2px #5c6b7c,
+    inset 0 0 0 5px #1a222c,
+    0 0 0 1px #8b97a6;
+}
+
+/* The shell was the viewport. It now sits under the title plate and above
+   the status line, so it fills whatever the window has left. */
+.gw-window .game-shell {
+  flex: 1 1 auto;
+  height: auto;
+  min-height: 0;
+  padding: 0.15rem 0.2rem 0.2rem;
+  gap: 0.45rem;
+}
+
+.gw-bracket {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  z-index: 4;
+  pointer-events: none;
+  background: linear-gradient(155deg, #f4f6f8 0%, #c5ccd4 40%, #7e8792 62%, #e4e8ec 100%);
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.7));
+}
+
+.gw-bracket::after {
+  content: "";
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #fff 0 1.5px, #8b949e 2px, #3c444d 3.2px);
+}
+
+.gw-bracket-nw { top: 6px; left: 6px; clip-path: polygon(0 0, 100% 0, 100% 34%, 34% 34%, 34% 100%, 0 100%); }
+.gw-bracket-ne { top: 6px; right: 6px; clip-path: polygon(0 0, 100% 0, 100% 100%, 66% 100%, 66% 34%, 0 34%); }
+.gw-bracket-sw { bottom: 6px; left: 6px; clip-path: polygon(0 0, 34% 0, 34% 66%, 100% 66%, 100% 100%, 0 100%); }
+.gw-bracket-se { right: 6px; bottom: 6px; clip-path: polygon(66% 0, 100% 0, 100% 100%, 0 100%, 0 66%, 66% 66%); }
+.gw-bracket-nw::after { top: 4px; left: 4px; }
+.gw-bracket-ne::after { top: 4px; right: 4px; }
+.gw-bracket-sw::after { bottom: 4px; left: 4px; }
+.gw-bracket-se::after { right: 4px; bottom: 4px; }
+
+.gw-plate {
+  align-self: center;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  margin: 0.15rem 0 0.28rem;
+  padding: 0.16rem 0.9rem 0.18rem;
+  background: linear-gradient(180deg, #3d3428 0%, #1c1814 42%, #2a241c 100%);
+  border: 2px solid #8a7044;
+  border-radius: 2px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 224, 170, 0.35),
+    0 2px 0 #07090d;
+}
+
+.gw-plate-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 750;
+  letter-spacing: 0.42em;
+  text-indent: 0.42em;
+  text-transform: uppercase;
+  color: var(--gw-brass-0);
+  text-shadow:
+    0 1px 0 #6a4e22,
+    0 -1px 0 #fff1c4,
+    0 2px 2px #120c06;
+}
+
+.gw-diamond {
+  width: 0.38rem;
+  height: 0.38rem;
+  background: var(--gw-brass-1);
+  transform: rotate(45deg);
+  box-shadow: 0 0 0 1px #6a5424, inset 0 0 0 1px rgba(255, 236, 190, 0.7);
+}
+
+.gw-status {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 1.55rem;
+  margin-top: 0.28rem;
+  padding: 0.1rem 0.55rem;
+  background: linear-gradient(180deg, #2a241c, #14110e);
+  border: 1px solid #6e5a34;
+  border-radius: 2px;
+  color: var(--gw-cream);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+}
+
+.gw-status-where:empty { display: none; }
+
+.gw-status-conn::before {
+  content: "· ";
+  color: var(--gw-brass-1);
+}
+
+.gw-status-where:empty + .gw-status-conn::before { content: none; }
+
+/* ------------------------------------------------------------------ *
+   Group frames and their header bars
+ * ------------------------------------------------------------------ */
+
+body.game-page .rail-left { width: 232px; }
+
+/* The party list is as tall as its cards. Growing the pane left a blank well
+   under the last portrait and pushed People here to the floor. */
+body.game-page .rail-pane.rail-party { flex: 0 0 auto; }
+
+body.game-page .rail-pane,
+body.game-page .hud-quest,
+body.game-page .hud-log,
+body.game-page .gw-actions,
+body.game-page .loc-sheet,
+body.game-page .loc-stage,
+body.game-page .loc-ways {
+  background: linear-gradient(180deg, #1a2433 0%, #121820 100%);
+  border: 2px solid #6e5a34;
+  border-radius: 3px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 2px 0 #07090d;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+body.game-page .hud-quest::before,
+body.game-page .hud-log::before,
+body.game-page .hud-icons::before { content: none; }
+
+body.game-page .rail-pane,
+body.game-page .hud-quest,
+body.game-page .hud-log,
+body.game-page .gw-actions { padding: 0; overflow: hidden; }
+
+body.game-page .rail-pane-head,
+body.game-page .hud-quest > h2,
+body.game-page .loc-ways > h2,
+body.game-page .loc-map .loc-actions::before {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0.22rem 0.55rem;
+  background: linear-gradient(180deg, #3d3428 0%, #1c1814 55%, #2a241c 100%);
+  border-bottom: 1px solid #8a7044;
+  color: var(--gw-brass-0);
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-shadow: 0 1px 0 #120c06;
+}
+
+body.game-page .rail-pane .hud-party,
+body.game-page .rail-pane .hud-people,
+body.game-page .hud-quest .track-body,
+body.game-page .hud-log-head,
+body.game-page .hud-log .log {
+  padding-left: 0.4rem;
+  padding-right: 0.4rem;
+}
+
+body.game-page .rail-pane .hud-party,
+body.game-page .rail-pane .hud-people { padding-top: 0.35rem; padding-bottom: 0.4rem; }
+
+body.game-page .hud-quest .track-body { padding-top: 0.4rem; padding-bottom: 0.45rem; }
+body.game-page .hud-log-head { padding-top: 0.35rem; }
+body.game-page .hud-log .log { padding-bottom: 0.4rem; }
+
+body.game-page .loc-count {
+  border-color: #8a7044;
+  color: var(--gw-brass-0);
+}
+
+/* Region bar: the menu stays on the right, the region names the column. */
+body.game-page .scene .topbar {
+  min-height: 2rem;
+  padding: 0.12rem 0.3rem 0.12rem 0.15rem;
+  background: linear-gradient(180deg, #3d3428 0%, #1c1814 55%, #2a241c 100%);
+  border: 2px solid #6e5a34;
+  border-radius: 3px;
+  box-shadow: 0 2px 0 #07090d;
+}
+
+body.game-page .topbar-where {
+  color: var(--gw-brass-0);
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+}
+
+body.game-page .topbar-where::before { content: "Region: "; }
+
+body.game-page .scene .topbar .hud-icons {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  padding: 0;
+}
+
+body.game-page .icon-btn {
+  background: linear-gradient(180deg, var(--gw-iron-0) 0%, var(--gw-iron-1) 48%, var(--gw-iron-2) 100%);
+  color: var(--gw-ink);
+  border: 1px solid #4a525b;
+  border-radius: 3px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 1px 0 #1a120c;
+}
+
+body.game-page .icon-btn:hover,
+body.game-page .icon-btn:focus-visible {
+  color: var(--gw-ink);
+  background: linear-gradient(180deg, #fff 0%, #e4e8ec 50%, #c5ccd4 100%);
+  border-color: var(--gw-brass-0);
+}
+
+body.game-page .loc-map .map-zoom,
+body.game-page .loc-map .map-info,
+body.game-page .loc-map .map-look { opacity: 1; }
+
+body.game-page button:focus-visible,
+body.game-page a:focus-visible,
+body.game-page .person:focus-visible,
+body.game-page .party-card:focus-visible {
+  outline: 2px solid var(--gw-focus);
+  outline-offset: 2px;
+}
+
+/* ------------------------------------------------------------------ *
+   Party — portrait, name, hit-point track
+ * ------------------------------------------------------------------ */
+
+body.game-page .hud-party .party-card {
+  --portrait: 52px;
+  background: linear-gradient(180deg, #243044 0%, #17202e 100%);
+  border: 2px solid #6e5a34;
+  border-radius: 3px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 2px 0 #07090d;
+}
+
+body.game-page .hud-party .party-card:hover {
+  border-color: var(--gw-brass-1);
+  background: linear-gradient(180deg, #2c3a50 0%, #1a2434 100%);
+}
+
+body.game-page .hud-party .party-card.is-active {
+  border-color: var(--gw-brass-0);
+  background: linear-gradient(180deg, #4a3c22 0%, #2a2216 100%);
+  box-shadow:
+    inset 0 0 0 1px #f3d898,
+    0 0 0 1px #6a5420,
+    0 0 12px rgba(240, 207, 122, 0.28);
+}
+
+body.game-page .hud-party .party-face,
+body.game-page .person-face,
+body.game-page .person-talk,
+body.game-page .dlg-bust,
+body.game-page .check-bust,
+body.game-page .camp-face,
+body.game-page .worldmap.is-pixel .wm-art {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+body.game-page .hud-party .party-face {
+  border: 1px solid #8a7044;
+  border-radius: 2px;
+  background: #0e1218;
+}
+
+body.game-page .hud-party .party-name {
+  color: var(--gw-brass-0);
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+body.game-page .hud-party .party-card .hp-bar {
+  height: 0.62rem;
+  margin: 0.12rem 0;
+  background: #1a120c;
+  border: 1px solid #5a3c22;
+  border-radius: 1px;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.55);
+}
+
+body.game-page .hud-party .party-card .hp-bar > span.ok {
+  background: linear-gradient(180deg, #e24a38 0%, var(--gw-hp) 55%, #7e140e 100%);
+}
+
+body.game-page .hud-party .party-stats {
+  color: var(--gw-cream-dim);
+  font-family: var(--font-display);
+}
+
+body.game-page .hud-party .party-hp { color: var(--gw-cream); }
+
+body.game-page .hud-party .party-add {
+  border: 2px dashed #6e5a34;
+  border-radius: 3px;
+  color: var(--gw-cream-dim);
+  background: transparent;
+}
+
+body.game-page .hud-party .party-add:hover {
+  color: var(--gw-brass-0);
+  border-color: var(--gw-brass-0);
+}
+
+/* ------------------------------------------------------------------ *
+   People here — framed face tiles
+ * ------------------------------------------------------------------ */
+
+/* Two columns, not auto-fill. auto-fill with a 1fr max sizes itself from an
+   indefinite parent and the tiles ran out to ~720px, which is a sideways
+   scroll on a phone. minmax(0, 1fr) is what lets the pane actually shrink. */
+body.game-page .hud-people,
+body.game-page .hud-people .people-list {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+
+body.game-page .hud-people .people-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.35rem;
+}
+
+body.game-page .hud-people .person {
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.28rem;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  padding: 0.35rem 0.25rem 0.4rem;
+  text-align: center;
+  background: linear-gradient(180deg, #243044 0%, #17202e 100%);
+  border: 2px solid #6e5a34;
+  border-radius: 3px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 2px 0 #07090d;
+  transform: none;
+}
+
+body.game-page .hud-people .person:hover,
+body.game-page .hud-people .person:focus-visible {
+  border-color: var(--gw-brass-0);
+  background: linear-gradient(180deg, #2c3a50 0%, #1a2434 100%);
+  transform: none;
+}
+
+body.game-page .hud-people .person-face {
+  width: 58px;
+  height: 58px;
+  border: 1px solid #8a7044;
+  border-radius: 2px;
+  background: #0e1218;
+}
+
+body.game-page .hud-people .person-text { align-items: center; width: 100%; }
+body.game-page .hud-people .person-name {
+  justify-content: center;
+  flex-wrap: wrap;
+  color: var(--gw-brass-0);
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  line-height: 1.2;
+}
+body.game-page .hud-people .person-role {
+  color: var(--gw-cream-dim);
+  font-size: 0.75rem;
+}
+
+body.game-page .hud-people .people-crowd h3 {
+  color: var(--gw-brass-1);
+  font-family: var(--font-display);
+}
+
+body.game-page .people-list.is-crowd .person-face {
+  width: 42px;
+  height: 42px;
+}
+
+/* ------------------------------------------------------------------ *
+   The place: name, prose, chart, legend, ways out
+ * ------------------------------------------------------------------ */
+
+body.game-page .loc-text { gap: 0.4rem; }
+
+/* The heading was kept for assistive tech and clipped to a pixel. It is the
+   place's nameplate now. The region stays in the heading for the same
+   reason it was put there — the region bar is aria-hidden — and is clipped
+   on its own so the plate does not say Rivermark twice. */
+body.game-page .loc-name {
+  position: relative;
+  display: block;
+  width: auto;
+  height: auto;
+  min-width: 0;
+  margin: 0;
+  padding: 0.22rem 0.55rem;
+  overflow: hidden;
+  clip-path: none;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  border: 0;
+  border-radius: 0;
+  background: linear-gradient(180deg, #3d3428 0%, #1c1814 55%, #2a241c 100%);
+  border-bottom: 1px solid #8a7044;
+  color: var(--gw-brass-0);
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-shadow: 0 1px 0 #120c06;
+}
+
+body.game-page .loc-name-region {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+body.game-page .loc-sheet { overflow: hidden; }
+
+body.game-page .loc-read {
+  max-height: 9.25rem;
+  overflow: auto;
+  padding: 0.55rem 0.7rem 0.65rem;
+  background: #0c1016;
+  scrollbar-width: thin;
+}
+
+body.game-page .loc-read .loc-prose p,
+body.game-page .loc-read .loc-first {
+  color: var(--gw-cream);
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+body.game-page .loc-read .loc-first {
+  border-left-color: var(--gw-brass-1);
+}
+
+body.game-page .loc-read .loc-ambience { color: var(--gw-cream-dim); }
+
+body.game-page .loc-stage {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  background: #1a140e;
+}
+
+body.game-page .loc-stage .loc-map {
+  flex: 1 1 auto;
+  min-height: 8rem;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background: #c4a574;
+}
+
+@media (min-width: 1180px) {
+  body.game-page .loc-text > .loc-stage {
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+}
+
+body.game-page .loc-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.2rem 0.75rem;
+  margin: 0;
+  padding: 0.28rem 0.55rem;
+  list-style: none;
+  background: #f3e2bc;
+  background-image:
+    url("../images/login/oak-noise.webp"),
+    linear-gradient(180deg, var(--gw-parchment-0), var(--gw-parchment-1));
+  background-size: 180px, auto;
+  background-blend-mode: multiply, normal;
+  color: var(--gw-ink);
+  border-top: 1px solid #8a6840;
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+body.game-page .loc-legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.28rem;
+}
+
+body.game-page .lg-you,
+body.game-page .lg-way,
+body.game-page .lg-lock,
+body.game-page .lg-quest {
+  display: inline-block;
+  width: 0.7rem;
+  height: 0.7rem;
+  border: 1px solid #24160d;
+}
+
+body.game-page .lg-you { background: var(--gw-brass-0); }
+body.game-page .lg-way { background: #2a62c8; }
+body.game-page .lg-lock { background: #8d97a3; }
+body.game-page .lg-quest { background: var(--gw-hp); }
+
+body.game-page .loc-foot {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  padding: 0;
+  gap: 0;
+}
+
+body.game-page .loc-ways { overflow: hidden; }
+body.game-page .loc-ways > h2 { margin: 0; }
+
+body.game-page .loc-ways .action-list {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.28rem;
+  max-height: 8.6rem;
+  overflow: auto;
+  margin: 0;
+  padding: 0.35rem;
+  counter-reset: gw-way;
+  scrollbar-width: thin;
+}
+
+body.game-page .loc-ways .loc-act {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  width: 100%;
+  min-height: 2.15rem;
+  height: auto;
+  margin: 0;
+  padding: 0.28rem 0.55rem;
+  text-align: left;
+  font-family: var(--font-display);
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--gw-cream);
+  background: linear-gradient(180deg, #243044 0%, #17202e 100%);
+  border: 2px solid #6e5a34;
+  border-radius: 3px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 1px 0 #07090d;
+}
+
+body.game-page .loc-ways .loc-act::before {
+  counter-increment: gw-way;
+  content: counter(gw-way);
+  flex: 0 0 auto;
+  width: 1.15rem;
+  color: var(--gw-brass-0);
+  font-weight: 700;
+}
+
+body.game-page .loc-ways .loc-act:hover:not(:disabled) {
+  border-color: var(--gw-brass-0);
+  color: var(--gw-brass-0);
+  background: linear-gradient(180deg, #2c3a50 0%, #1a2434 100%);
+}
+
+body.game-page .loc-ways .loc-act:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Contextual verbs on the chart: square iron plates, icon over the word.
+   Combat's own .act-slot keeps its size — this only matches .loc-act. */
+body.game-page .loc-map .loc-actions {
+  gap: 0.2rem;
+  padding: 0;
+  background: linear-gradient(180deg, #1a2433, #121820);
+  border: 2px solid #6e5a34;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+body.game-page .loc-map .loc-actions::before { content: "Actions"; }
+
+body.game-page .loc-map .loc-actions .action-list {
+  justify-content: flex-end;
+  padding: 0.28rem;
+  gap: 0.28rem;
+}
+
+body.game-page .act-slot.loc-act {
+  flex-direction: column;
+  justify-content: center;
+  width: 4.5rem;
+  height: auto;
+  min-height: 3.7rem;
+  gap: 0.12rem;
+  padding: 0.28rem 0.25rem 0.7rem;
+  color: var(--gw-ink);
+  background: linear-gradient(180deg, var(--gw-iron-0) 0%, var(--gw-iron-1) 46%, #d8dee5 54%, var(--gw-iron-2) 100%);
+  border: 1px solid #4a525b;
+  border-radius: 3px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85), 0 1px 0 #1a120c;
+}
+
+body.game-page .act-slot.loc-act .act-icon { width: 1.15rem; height: 1.15rem; }
+
+body.game-page .act-slot.loc-act .loc-act-label {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.1;
+  text-align: center;
+  white-space: normal;
+  color: var(--gw-ink);
+}
+
+body.game-page .act-slot.loc-act.has-label {
+  width: auto;
+  min-width: 4.5rem;
+  max-width: 7.5rem;
+}
+
+body.game-page .act-slot.loc-act:hover:not(:disabled),
+body.game-page .act-slot.loc-act:focus-visible {
+  color: var(--gw-ink);
+  border-color: var(--gw-brass-2);
+  background: linear-gradient(180deg, #fff 0%, #e7edf2 50%, #c5ccd4 100%);
+  transform: translateY(-1px);
+}
+
+body.game-page .act-slot.loc-act.is-danger {
+  border-color: #8a3830;
+}
+
+body.game-page .act-slot.loc-act kbd {
+  color: #5c5144;
+  text-shadow: none;
+}
+
+/* The standing menu, under the log: the same plates. */
+body.game-page .gw-actions .action-bar {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.3rem;
+  padding: 0.35rem;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+body.game-page .action-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+  min-width: 0;
+  min-height: 3.7rem;
+  padding: 0.3rem 0.2rem;
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--gw-ink);
+  background: linear-gradient(180deg, var(--gw-iron-0) 0%, var(--gw-iron-1) 46%, #d8dee5 54%, var(--gw-iron-2) 100%);
+  border: 1px solid #4a525b;
+  border-radius: 3px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85), 0 1px 0 #1a120c;
+}
+
+body.game-page .action-btn .act-icon {
+  width: 1.15rem;
+  height: 1.15rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+body.game-page .action-btn:hover:not(:disabled) {
+  color: var(--gw-ink);
+  border-color: var(--gw-brass-2);
+  background: linear-gradient(180deg, #fff 0%, #e7edf2 50%, #c5ccd4 100%);
+}
+
+body.game-page .action-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+body.game-page .chip {
+  background: #17202e;
+  border: 1px solid #6e5a34;
+  color: var(--gw-cream-dim);
+  font-family: var(--font-display);
+  border-radius: 2px;
+}
+
+body.game-page .chip.on {
+  color: var(--gw-ink);
+  background: linear-gradient(180deg, var(--gw-brass-0), var(--gw-brass-1));
+  border-color: var(--gw-brass-0);
+}
+
+body.game-page .track-title { color: var(--gw-brass-0); font-family: var(--font-display); }
+body.game-page .track-objective,
+body.game-page .log { color: var(--gw-cream); }
+body.game-page .help-hint { color: var(--gw-cream-dim); }
+
+/* Iron and gold plates for the menus a modal draws. */
+body.game-page .btn {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--gw-ink);
+  background: linear-gradient(180deg, var(--gw-iron-0) 0%, var(--gw-iron-1) 46%, #d8dee5 54%, var(--gw-iron-2) 100%);
+  border: 1px solid #4a525b;
+  border-radius: 3px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85), 0 1px 0 #1a120c;
+}
+
+body.game-page .btn:hover {
+  color: var(--gw-ink);
+  background: linear-gradient(180deg, #fff 0%, #e7edf2 50%, #c5ccd4 100%);
+  border-color: var(--gw-brass-2);
+}
+
+body.game-page .btn-primary {
+  color: var(--gw-ink);
+  background: linear-gradient(180deg, var(--gw-brass-0), var(--gw-brass-1) 55%, var(--gw-brass-2));
+  border-color: #6a5424;
+}
+
+/* ------------------------------------------------------------------ *
+   Dialogue, and the popups
+ * ------------------------------------------------------------------ */
+
+body.game-page .dialogue-theatre {
+  background: rgba(7, 9, 13, 0.78);
+}
+
+body.game-page .dlg-panel {
+  color: var(--gw-cream);
+  background: linear-gradient(180deg, #243044 0%, #121820 100%);
+  border: 3px solid #07090d;
+  border-radius: 4px;
+  box-shadow:
+    inset 0 0 0 2px #5c6b7c,
+    inset 0 0 0 5px #1a222c,
+    0 0 0 1px #8b97a6,
+    0 18px 40px rgba(0, 0, 0, 0.55);
+}
+
+body.game-page .dlg-bust {
+  border: 2px solid #8a7044;
+  border-radius: 2px;
+  background: #0e1218;
+}
+
+body.game-page .dlg-name {
+  color: var(--gw-brass-0);
+  font-family: var(--font-display);
+}
+
+body.game-page .dlg-role { color: var(--gw-cream-dim); }
+
+body.game-page .dlg-script {
+  color: var(--gw-ink);
+  padding: 0.85rem 0.95rem 0.75rem;
+  background-color: #f3e2bc;
+  background-image:
+    url("../images/login/oak-noise.webp"),
+    linear-gradient(180deg, var(--gw-parchment-0) 0%, #f4e4c2 40%, var(--gw-parchment-1) 100%);
+  background-size: 180px, auto;
+  background-blend-mode: multiply, normal;
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 1px rgba(90, 58, 24, 0.28);
+}
+
+body.game-page .dlg-line,
+body.game-page .dlg-aside { color: var(--gw-ink); }
+
+body.game-page .dlg-line.is-aside { color: #3a2a18; }
+
+body.game-page .dlg-choice {
+  color: var(--gw-ink);
+  background: linear-gradient(180deg, var(--gw-iron-0) 0%, var(--gw-iron-1) 46%, #d8dee5 54%, var(--gw-iron-2) 100%);
+  border: 1px solid #4a525b;
+  border-radius: 3px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85), 0 1px 0 #1a120c;
+}
+
+body.game-page .dlg-choice:hover:not(:disabled) {
+  border-color: var(--gw-brass-2);
+  background: linear-gradient(180deg, #fff 0%, #e7edf2 50%, #c5ccd4 100%);
+}
+
+body.game-page .dlg-key {
+  background: #2a2216;
+  border-color: #8a7044;
+  color: var(--gw-brass-0);
+  font-family: var(--font-display);
+  font-weight: 700;
+}
+
+body.game-page .dlg-close {
+  color: var(--gw-ink);
+}
+
+body.game-page .modal-backdrop { background: rgba(7, 9, 13, 0.78); }
+
+body.game-page .modal {
+  color: var(--gw-cream);
+  background-color: #3a2416;
+  background-image:
+    url("../images/login/oak-noise.webp"),
+    linear-gradient(180deg, #5e3c24 0%, #3a2414 40%, #2a180e 100%);
+  background-size: 192px, auto;
+  background-blend-mode: multiply, normal;
+  border: 3px solid var(--gw-oak);
+  border-radius: 5px;
+  box-shadow:
+    0 22px 48px rgba(0, 0, 0, 0.58),
+    inset 0 1px 0 rgba(255, 224, 180, 0.32),
+    inset 0 0 0 1px rgba(120, 74, 38, 0.85);
+}
+
+body.game-page .modal-head {
+  background: linear-gradient(180deg, #3d3428 0%, #1c1814 55%, #2a241c 100%);
+  border-bottom: 1px solid #8a7044;
+}
+
+body.game-page .modal-head h2 {
+  color: var(--gw-brass-0);
+  letter-spacing: 0.06em;
+}
+
+body.game-page .modal .quest-title { color: var(--gw-brass-0); }
+body.game-page .modal .quest-meta,
+body.game-page .modal .help-hint { color: var(--gw-cream-dim); }
+
+/* The description popup is the painting plus the prose, on a scroll. */
+body.game-page .loc-desc-body .loc-prose {
+  padding: 0.75rem 0.9rem;
+  color: var(--gw-ink);
+  background-color: #f3e2bc;
+  background-image:
+    url("../images/login/oak-noise.webp"),
+    linear-gradient(180deg, var(--gw-parchment-0), var(--gw-parchment-1));
+  background-size: 180px, auto;
+  background-blend-mode: multiply, normal;
+  border-radius: 2px;
+}
+
+body.game-page .loc-desc-body .loc-prose p,
+body.game-page .loc-desc-body .loc-first { color: var(--gw-ink); }
+
+body.game-page .loc-art {
+  border: 2px solid #8a7044;
+  border-radius: 2px;
+}
+
+body.game-page .check-root { background: rgba(7, 9, 13, 0.78); }
+
+body.game-page .check-panel {
+  color: var(--gw-cream);
+  background-color: #3a2416;
+  background-image:
+    url("../images/login/oak-noise.webp"),
+    linear-gradient(180deg, #5e3c24 0%, #3a2414 40%, #2a180e 100%);
+  background-size: 192px, auto;
+  background-blend-mode: multiply, normal;
+  border: 3px solid var(--gw-oak);
+  border-radius: 5px;
+  box-shadow:
+    0 22px 48px rgba(0, 0, 0, 0.58),
+    inset 0 1px 0 rgba(255, 224, 180, 0.32);
+}
+
+body.game-page .check-head { border-bottom-color: #8a7044; }
+body.game-page .check-title h2,
+body.game-page .check-dc strong { color: var(--gw-brass-0); }
+body.game-page .check-bust { border: 2px solid #8a7044; border-radius: 2px; }
+
+/* The fight's top line wears the same header bar. The board under it is
+   untouched. */
+body.game-page.in-combat .cbt-top {
+  background: linear-gradient(180deg, #3d3428 0%, #1c1814 55%, #2a241c 100%);
+  border: 2px solid #6e5a34;
+  color: var(--gw-cream);
+}
+
+body.in-combat .gw-actions,
+body.in-dialogue .gw-actions { display: none; }
+
+/* ------------------------------------------------------------------ *
+   Phone: the same panels, stacked, and still thumbable
+ * ------------------------------------------------------------------ */
+
+@media (max-width: 1000px) {
+  body.game-page .rail-left { width: 200px; }
+}
+
+@media (max-width: 1179px) {
+  body.game-page .loc-stage .loc-map { min-height: 16rem; }
+  body.game-page .loc-read { max-height: 12rem; }
+}
+
+@media (max-width: 760px) {
+  body.game-page { padding: 0; }
+
+  .gw-window {
+    height: auto;
+    min-height: 100dvh;
+    margin: 0;
+    border-radius: 0;
+    border-left: 0;
+    border-right: 0;
+  }
+
+  .gw-window .game-shell {
+    flex: none;
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+  }
+
+  .gw-bracket { display: none; }
+
+  body.game-page .rail-left {
+    width: auto;
+    flex-direction: column;
+    overflow: visible;
+  }
+
+  /* Side by side, the party row sized itself to every card in one line and
+     the page scrolled sideways. Full-width stacks fit the phone. */
+  body.game-page .rail-pane.rail-party,
+  body.game-page .rail-pane.rail-people {
+    flex: 0 0 auto;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    max-height: none;
+  }
+
+  body.game-page .hud-party { flex-direction: column; }
+
+  /* The region name and the window buttons share one row on a desk and do
+     not on a phone: six 44px plates eat the name down to "REGIO…". */
+  body.game-page .scene .topbar { flex-wrap: wrap; row-gap: 0.2rem; }
+  body.game-page .topbar-where { flex: 1 0 100%; }
+
+  body.game-page .rail-bottom .gw-actions { order: -1; }
+
+  body.game-page .gw-actions .action-bar {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  body.game-page .action-btn,
+  body.game-page .act-slot.loc-act,
+  body.game-page .loc-ways .loc-act,
+  body.game-page .hud-people .person {
+    min-height: var(--tap-min);
+  }
+
+  /* The speaker row is sticky and was painted with the old panel colour.
+     Keep it opaque so the parchment does not show through the name. */
+  body.game-page .dlg-speaker { background: var(--dlg-panel-top); }
+}
