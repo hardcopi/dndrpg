@@ -1550,6 +1550,19 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 /* A missing face must not leave a broken-image glyph in the list; the row is
    still perfectly usable as text. */
 .person-face.is-missing { visibility: hidden; }
+/* Talk balloon: the Amiga client's word-balloon badge. Decoration only; the
+   whole row is already the talk button. Bottom-right, away from the quest mark
+   (top centre) and the shop tag (beside the name). */
+.person-talk {
+  position: absolute;
+  right: -6px;
+  bottom: -6px;
+  width: 20px;
+  height: 20px;
+  image-rendering: pixelated;
+  pointer-events: none;
+}
+.people-list.is-crowd .person-talk { width: 16px; height: 16px; right: -5px; bottom: -5px; }
 
 .person-text { display: flex; flex-direction: column; min-width: 0; }
 .person-name {

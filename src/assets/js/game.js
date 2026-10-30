@@ -868,6 +868,8 @@
           <img class="person-face" src="${esc(face)}" alt=""
                onerror="this.classList.add('is-missing')">
           ${faceMark}
+          <img class="person-talk" src="/assets/images/ui/talk_balloon.png"
+               alt="Talk" title="Talk">
         </span>
         <span class="person-text">
           <span class="person-name">${esc(name)}${tags}</span>
