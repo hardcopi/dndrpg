@@ -1335,6 +1335,35 @@ same('a sarsen is medium', 'medium', CombatEngine::pcSize('Sarsen'));
 same('an unnamed race is medium', 'medium', CombatEngine::pcSize(''));
 
 // ---------------------------------------------------------------------------
+section('Footprints');
+
+same('large is 2 squares a side', 2, BattleGrid::sizeCells('Large'));
+same('huge is 3', 3, BattleGrid::sizeCells('huge'));
+same('gargantuan is 4', 4, BattleGrid::sizeCells('Gargantuan'));
+same('medium and unknown are 1', [1, 1], [BattleGrid::sizeCells('medium'), BattleGrid::sizeCells(null)]);
+same('a large body from 5,5 covers four squares', ['5,5', '6,5', '5,6', '6,6'], BattleGrid::footprint(5, 5, 'large'));
+
+$ogre = at('ogre', 'foe', 8, 5, ['size' => 'large']);
+$pc = at('pc', 'party', 3, 5);
+$reach = BattleGrid::reachable($open, [$pc, $ogre], $pc, 60);
+ok('no square of a large foe can be entered', !isset($reach['8,5']) && !isset($reach['9,5']) && !isset($reach['8,6']) && !isset($reach['9,6']));
+ok('the square beside the footprint can be entered', isset($reach['7,5']) && $reach['7,5']['end']);
+
+$ally = at('ally', 'party', 8, 5, ['size' => 'large']);
+$reach = BattleGrid::reachable($open, [$pc, $ally], $pc, 60);
+ok('an ally may be walked through but not stopped on, in any of its squares',
+    isset($reach['9,6']) && !$reach['9,6']['end'] && !$reach['8,5']['end']);
+
+$big = at('big', 'party', 3, 5, ['size' => 'large']);
+$goblin = at('gob', 'foe', 8, 5);
+$reach = BattleGrid::reachable($open, [$big, $goblin], $big, 60);
+ok('a large mover cannot end with its body on another creature', !isset($reach['7,5']) && !isset($reach['8,4']) && !isset($reach['8,5']));
+$edge = at('edge', 'party', 3, 5, ['size' => 'large']);
+$reach = BattleGrid::reachable($open, [$edge], $edge, 200);
+$maxX = BattleGrid::W - 2;
+ok('a large mover cannot leave the board', isset($reach[$maxX . ',5']) && !isset($reach[($maxX + 1) . ',5']) && !isset($reach['3,' . (BattleGrid::H - 1)]));
+
+// ---------------------------------------------------------------------------
 echo PHP_EOL . str_repeat('-', 52) . PHP_EOL;
 printf("%d passed, %d failed%s", $RESULTS['pass'], $RESULTS['fail'], PHP_EOL);
 
