@@ -416,7 +416,7 @@
       ))
       .filter(Boolean)
       .join('');
-    const marks = partyMarks(opts && opts.party, scale);
+    const marks = partyMarks(opts && opts.party, scale, pixel);
     // Somebody with a spot of their own is drawn on the chart rather than on
     // the place marker, so a shopkeeper can stand in his shop.
     const people = (opts && opts.people) || [];
@@ -525,6 +525,23 @@
   const PC_Y = 0;
 
   /**
+   * A player's chosen look is a `token_*` key, and its `_face.png` is cut
+   * tight: forehead and chin off the edge. Every other face (class art, NPC
+   * keys used by companions) is head and shoulders. So a token face is drawn
+   * from its `_bust.png` (384x512) through this window instead, which frames
+   * it the way an NPC face is framed. The face stays underneath as the
+   * fallback when there is no bust.
+   */
+  const TOKEN_FACE = /^(.*\/npcs\/token_[^/?#]+)_face\.png(\?.*)?$/;
+  const BUST_W = 384;
+  const BUST_H = 512;
+  const BUST_VIEW = '54 10 276 276';
+  function tokenBust(url) {
+    const m = TOKEN_FACE.exec(String(url || ''));
+    return m ? `${m[1]}_bust.png${m[2] || ''}` : null;
+  }
+
+  /**
    * Where the people who live here stand.
    *
    * Above the place, where the party is below it: the two never collide, and
@@ -557,12 +574,14 @@
    * a missing static file on this host serves the homepage HTML with a 200,
    * so `onerror` is the only thing that ever finds out.
    */
-  function partyMarks(party, scale) {
+  function partyMarks(party, scale, pixel) {
     const all = (party || []).filter((p) => p && p.name);
     if (!all.length) return '';
 
-    const r = PC_R * scale;
-    const step = PC_STEP * scale;
+    // On the pixel town the party is the same size as the locals: the
+    // painting is drawn small, and a bigger disc there covered the street.
+    const r = (pixel ? NPC_R : PC_R) * scale;
+    const step = (pixel ? NPC_STEP : PC_STEP) * scale;
     const y = PC_Y * scale;
 
     // The clip id carries the radius. Ids are document-wide, and a bench that
@@ -594,6 +613,13 @@
           width="${(r * 2).toFixed(2)}" height="${(r * 2).toFixed(2)}"
           clip-path="url(#${clipId})" preserveAspectRatio="xMidYMid slice"
           onerror="this.remove()"/>` : ''}
+        ${tokenBust(pc.face) ? `<g clip-path="url(#${clipId})"><svg
+          x="${(-r).toFixed(2)}" y="${(-r).toFixed(2)}"
+          width="${(r * 2).toFixed(2)}" height="${(r * 2).toFixed(2)}"
+          viewBox="${BUST_VIEW}" preserveAspectRatio="xMidYMid slice"><image
+          class="wm-pc-face" href="${esc(tokenBust(pc.face))}"
+          width="${BUST_W}" height="${BUST_H}"
+          onerror="this.closest('g').remove()"/></svg></g>` : ''}
         <circle class="wm-pc-ring" r="${r.toFixed(2)}"/>
       </g>`;
     // Reversed, so the pile stacks left-over-right: the faces are laid out by
