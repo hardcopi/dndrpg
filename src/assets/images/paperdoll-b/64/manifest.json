@@ -1,0 +1,483 @@
+{
+ "canvas": [
+  192,
+  320
+ ],
+ "depth": 64,
+ "order": [
+  "back",
+  "base",
+  "armour",
+  "hair",
+  "off",
+  "main"
+ ],
+ "ramps": {
+  "ink": {
+   "swap": false,
+   "default": [
+    "#110000"
+   ]
+  },
+  "skin": {
+   "swap": true,
+   "default": [
+    "#552211",
+    "#6c3120",
+    "#82402f",
+    "#995544",
+    "#b06c5b",
+    "#c38271",
+    "#d29988",
+    "#e1b09d",
+    "#f0c6ac",
+    "#ffddbb"
+   ]
+  },
+  "hair": {
+   "swap": true,
+   "default": [
+    "#221111",
+    "#2a1911",
+    "#312011",
+    "#3e2817",
+    "#4d2f1e",
+    "#5d3726",
+    "#6c3e2d",
+    "#7b4837",
+    "#8a5746",
+    "#996655"
+   ]
+  },
+  "cloth": {
+   "swap": true,
+   "default": [
+    "#330011",
+    "#4a0019",
+    "#600020",
+    "#770b28",
+    "#8e1a2f",
+    "#a42a37",
+    "#bb393e",
+    "#d04a48",
+    "#df6057",
+    "#ee7766"
+   ]
+  },
+  "metal": {
+   "swap": true,
+   "default": [
+    "#222233",
+    "#313142",
+    "#404051",
+    "#555566",
+    "#6c6c7d",
+    "#828293",
+    "#9999aa",
+    "#b0b0c1",
+    "#c6c6d7",
+    "#ddddee"
+   ]
+  },
+  "leather": {
+   "swap": false,
+   "default": [
+    "#2d1508",
+    "#381d0d",
+    "#432412",
+    "#4d2b17",
+    "#59331d",
+    "#6d3c1c",
+    "#65442f",
+    "#7e5537",
+    "#8c6546",
+    "#bd683e",
+    "#a48f80",
+    "#c9c8b7"
+   ]
+  },
+  "linen": {
+   "swap": false,
+   "default": [
+    "#9d714f",
+    "#ab805d",
+    "#b98e6c",
+    "#c59b79",
+    "#d0a684",
+    "#ddb593"
+   ]
+  },
+  "brass": {
+   "swap": false,
+   "default": [
+    "#7b5926",
+    "#92693d",
+    "#b78960"
+   ]
+  },
+  "magic": {
+   "swap": false,
+   "default": [
+    "#6385bf",
+    "#3ac5fd"
+   ]
+  }
+ },
+ "variants": {
+  "skin": {
+   "fair": [
+    "#552211",
+    "#6c3120",
+    "#82402f",
+    "#995544",
+    "#b06c5b",
+    "#c38271",
+    "#d29988",
+    "#e1b09d",
+    "#f0c6ac",
+    "#ffddbb"
+   ],
+   "pale": [
+    "#663344",
+    "#7d4a53",
+    "#936062",
+    "#aa7777",
+    "#c18e8e",
+    "#d4a1a1",
+    "#e3b0b0",
+    "#f0c1bf",
+    "#f7d7ce",
+    "#ffeedd"
+   ],
+   "tan": [
+    "#441100",
+    "#5b2008",
+    "#712f0f",
+    "#883e1c",
+    "#9f4d2b",
+    "#b2603e",
+    "#c17755",
+    "#d08c6c",
+    "#df9b82",
+    "#eeaa99"
+   ],
+   "brown": [
+    "#220000",
+    "#310f08",
+    "#401e0f",
+    "#552d1c",
+    "#6c3c2b",
+    "#7f4c3b",
+    "#8e5b4a",
+    "#9d6a59",
+    "#ac7968",
+    "#bb8877"
+   ],
+   "deep": [
+    "#110000",
+    "#200800",
+    "#2f0f00",
+    "#3e1706",
+    "#4d1e0d",
+    "#5d2a19",
+    "#6c3928",
+    "#7b4837",
+    "#8a5746",
+    "#996655"
+   ],
+   "orc": [
+    "#223300",
+    "#2a4200",
+    "#315100",
+    "#3e600b",
+    "#4d6f1a",
+    "#60822a",
+    "#779939",
+    "#8eae4a",
+    "#a4bd60",
+    "#bbcc77"
+   ]
+  },
+  "hair": {
+   "brown": [
+    "#221111",
+    "#2a1911",
+    "#312011",
+    "#3e2817",
+    "#4d2f1e",
+    "#5d3726",
+    "#6c3e2d",
+    "#7b4837",
+    "#8a5746",
+    "#996655"
+   ],
+   "black": [
+    "#000000",
+    "#08080f",
+    "#0f0f1e",
+    "#171728",
+    "#1e1e2f",
+    "#262637",
+    "#2d2d3e",
+    "#373748",
+    "#464657",
+    "#555566"
+   ],
+   "blond": [
+    "#554411",
+    "#6c5319",
+    "#826220",
+    "#99772d",
+    "#b08e3c",
+    "#c3a44c",
+    "#d2bb5b",
+    "#e1d06c",
+    "#f0df82",
+    "#ffee99"
+   ],
+   "red": [
+    "#330000",
+    "#420800",
+    "#510f00",
+    "#661c06",
+    "#7d2b0d",
+    "#933b15",
+    "#aa4a1c",
+    "#bf5b26",
+    "#ce7135",
+    "#dd8844"
+   ],
+   "grey": [
+    "#333333",
+    "#424242",
+    "#515151",
+    "#666666",
+    "#7d7d7d",
+    "#909090",
+    "#9f9f9f",
+    "#b0b0b0",
+    "#c6c6c6",
+    "#dddddd"
+   ],
+   "blue": [
+    "#001122",
+    "#081931",
+    "#0f2040",
+    "#17284f",
+    "#1e2f5e",
+    "#263b6e",
+    "#2d4a7d",
+    "#37598e",
+    "#4668a4",
+    "#5577bb"
+   ]
+  },
+  "cloth": {
+   "red": [
+    "#330011",
+    "#4a0019",
+    "#600020",
+    "#770b28",
+    "#8e1a2f",
+    "#a42a37",
+    "#bb393e",
+    "#d04a48",
+    "#df6057",
+    "#ee7766"
+   ],
+   "blue": [
+    "#001122",
+    "#081931",
+    "#0f2040",
+    "#172d55",
+    "#1e3c6c",
+    "#2a4f86",
+    "#3966a4",
+    "#4a7dc1",
+    "#6093d7",
+    "#77aaee"
+   ],
+   "green": [
+    "#002200",
+    "#083108",
+    "#0f400f",
+    "#1c4f1c",
+    "#2b5e2b",
+    "#3b6e3b",
+    "#4a7d4a",
+    "#5b8e59",
+    "#71a468",
+    "#88bb77"
+   ],
+   "purple": [
+    "#220033",
+    "#310842",
+    "#400f51",
+    "#4f1c60",
+    "#5e2b6f",
+    "#6e3b7f",
+    "#7d4a8e",
+    "#8e5b9f",
+    "#a471b5",
+    "#bb88cc"
+   ],
+   "black": [
+    "#111111",
+    "#191919",
+    "#202020",
+    "#282828",
+    "#2f2f2f",
+    "#37373b",
+    "#3e3e4a",
+    "#484859",
+    "#575768",
+    "#666677"
+   ],
+   "gold": [
+    "#332200",
+    "#4a3900",
+    "#604f00",
+    "#77660b",
+    "#8e7d1a",
+    "#a49326",
+    "#bbaa2d",
+    "#d0c139",
+    "#dfd74f",
+    "#eeee66"
+   ]
+  },
+  "metal": {
+   "steel": [
+    "#222233",
+    "#313142",
+    "#404051",
+    "#555566",
+    "#6c6c7d",
+    "#828293",
+    "#9999aa",
+    "#b0b0c1",
+    "#c6c6d7",
+    "#ddddee"
+   ],
+   "iron": [
+    "#111111",
+    "#191920",
+    "#20202f",
+    "#2d2d3e",
+    "#3c3c4d",
+    "#4c4c5d",
+    "#5b5b6c",
+    "#6c6c7d",
+    "#828293",
+    "#9999aa"
+   ],
+   "gold": [
+    "#331100",
+    "#4a2800",
+    "#603e00",
+    "#7d550b",
+    "#9b6c1a",
+    "#b5862a",
+    "#cca439",
+    "#e1c14c",
+    "#f0d76a",
+    "#ffee88"
+   ],
+   "bronze": [
+    "#331100",
+    "#421908",
+    "#51200f",
+    "#662d1c",
+    "#7d3c2b",
+    "#934f3b",
+    "#aa664a",
+    "#bf7d5d",
+    "#ce937b",
+    "#ddaa99"
+   ],
+   "mithril": [
+    "#334466",
+    "#4a6284",
+    "#6080a2",
+    "#7799bb",
+    "#8eb0d2",
+    "#a4c3e5",
+    "#bbd2f4",
+    "#d2e1ff",
+    "#e8f0ff",
+    "#ffffff"
+   ]
+  }
+ },
+ "slots": {
+  "base": [
+   {
+    "id": "base",
+    "label": "Human (male)",
+    "file": "base.png"
+   }
+  ],
+  "hair": [
+   {
+    "id": "hair_long",
+    "label": "Shoulder-length",
+    "file": "hair_long.png"
+   },
+   {
+    "id": "hair_crop",
+    "label": "Soldier crop",
+    "file": "hair_crop.png"
+   },
+   {
+    "id": "hair_braid",
+    "label": "Warrior braid",
+    "file": "hair_braid.png"
+   }
+  ],
+  "armour": [
+   {
+    "id": "armour_leather",
+    "label": "Boiled leather",
+    "file": "armour_leather.png"
+   },
+   {
+    "id": "armour_chain",
+    "label": "Mail and tabard",
+    "file": "armour_chain.png"
+   },
+   {
+    "id": "armour_plate",
+    "label": "Full plate",
+    "file": "armour_plate.png"
+   }
+  ],
+  "main": [
+   {
+    "id": "sword",
+    "label": "Longsword",
+    "file": "main_sword.png",
+    "cuts": {
+     "base": "cut_hand_r.png",
+     "armour": "cut_hand_r.png"
+    }
+   },
+   {
+    "id": "staff",
+    "label": "Crystal staff",
+    "file": "main_staff.png",
+    "cuts": {
+     "base": "cut_hand_r.png",
+     "armour": "cut_hand_r.png"
+    }
+   }
+  ],
+  "off": [
+   {
+    "id": "shield",
+    "label": "Round shield",
+    "file": "off_shield.png"
+   }
+  ]
+ },
+ "note": "Every layer is 192x320 in the base body coordinate space; never trim. Every pixel is one palette entry (all unique), so a recolour is an exact RGB -> (ramp, level) lookup and a swap to the same level of the chosen variant."
+}

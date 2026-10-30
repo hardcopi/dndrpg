@@ -1,10 +1,14 @@
-"""Stage 2: raw-res layers -> 192x320 ramp-indexed style-b layers + manifest.json.
-Every layer shares one transform, one Bayer grid and one set of colour ramps, so they stack."""
-import cv2, json, numpy as np
+"""Stage 3: raw-res layers -> 192x320 style-b layers at a chosen palette depth (32/64/128/256).
+Swappable ramps (skin, hair, cloth, metal) are luminance ramps interpolated from 5 anchors to N steps;
+fixed groups (leather, linen, brass, magic) get a k-means palette of their own pixels. Every layer shares
+one transform, one Bayer grid and one palette, so they stack and recolour by exact RGB lookup.
+    python3 stage3.py 128"""
+import cv2, json, sys, numpy as np
 from pathlib import Path
 from PIL import Image, ImageEnhance
 from scipy import ndimage
-D = Path('/workspace/cc/paperdoll'); S = D/'stage1'; O = D/'out'; O.mkdir(exist_ok=True)
+D = Path('/workspace/cc/paperdoll'); S = D/'stage1'; DEPTH = int(sys.argv[1]) if len(sys.argv) > 1 else 128
+O = D/'out3'/str(DEPTH); O.mkdir(parents=True, exist_ok=True)
 CW, CH, FOOT = 192, 320, 4
 s = (CH - FOOT - 10) / (1227 - 44)
 SW, SH = round(720 * s), round(1280 * s)
@@ -85,6 +89,8 @@ def build(name, rgba, allowed, extra=None, keep_mask=None, minc=4):
     op = opaque(al, minc)
     if keep_mask is not None: op &= keep_mask
     ramp, L = classify(rgb, op, allowed, extra)
+    if name == 'armour_plate':   # was reading near-white: pull the steel down a stop
+        m = ramp == 'metal'; L = np.where(m, L * 0.78, L); rgb = np.where(m[..., None], rgb * 0.8, rgb)
     return dict(name=name, rgb=rgb, op=op, ramp=ramp, L=L)
 
 def layer_raw(n): return np.array(Image.open(S/f'{n}.png').convert('RGBA'))
@@ -133,49 +139,91 @@ layers.append(('main', 'w_sword', build('w_sword', layer_raw('w_sword'), {'metal
 layers.append(('main', 'w_staff', build('w_staff', layer_raw('w_staff'), {'leather', 'magic', 'metal', 'skin'}, fist_only_skin(*fist_box))))
 layers.append(('off', 'w_shield', build('w_shield', layer_raw('w_shield'), {'metal', 'cloth', 'leather'}, minc=200)))
 
-# per-ramp luminance thresholds from the pooled pixels of every layer -> same skin tone in base and fist
-pool = {}
-for _, _, Ly in layers:
-    for rn in RAMPS:
-        sel = Ly['op'] & (Ly['ramp'] == rn)
-        if sel.any(): pool.setdefault(rn, []).append(Ly['L'][sel])
-TH = {}
-for rn, parts in pool.items():
-    v = np.concatenate(parts); k = len(RAMPS[rn]['colors'])
-    qs = np.percentile(v, np.linspace(0, 100, k + 1)[1:-1]) if k > 1 else np.array([])
-    step = float(np.median(np.diff(np.percentile(v, [5] + list(np.linspace(0, 100, k + 1)[1:-1]) + [95])))) if k > 1 else 0
-    TH[rn] = (qs, step)
+BUDGET = {32:  dict(swap=5,  ink=1, leather=5,  linen=3,  brass=2,  magic=1, dither=0.9),
+          64:  dict(swap=10, ink=1, leather=12, linen=6,  brass=3,  magic=2, dither=0.55),
+          128: dict(swap=20, ink=1, leather=26, linen=11, brass=6,  magic=4, dither=0.35),
+          256: dict(swap=40, ink=1, leather=52, linen=23, brass=12, magic=8, dither=0.12)}[DEPTH]
+SWAP = ['skin', 'hair', 'cloth', 'metal']; FIXED = ['leather', 'linen', 'brass', 'magic']
+N = BUDGET['swap']
+def expand(anchors, n):
+    a = np.array([hx(c) for c in anchors], float); t = np.linspace(0, len(a) - 1, n)
+    i = np.clip(np.floor(t).astype(int), 0, len(a) - 2); f = (t - i)[:, None]
+    return np.round(a[i] * (1 - f) + a[i + 1] * f).astype(int)
+def h6(c): return '#%02x%02x%02x' % tuple(int(v) for v in c)
 
-def render(Ly):
-    h, w = Ly['op'].shape
-    out = np.zeros((h, w, 4), np.uint8); lvl = np.zeros((h, w), int)
-    for rn, spec in RAMPS.items():
+pal = {'ink': np.array([hx('#100')])}
+for rn in SWAP: pal[rn] = expand(RAMPS[rn]['colors'], N)
+pools = {}
+for _, _, Ly in layers:
+    for rn in SWAP + FIXED:
+        sel = Ly['op'] & (Ly['ramp'] == rn)
+        if sel.any(): pools.setdefault(rn, {'L': [], 'rgb': []}); pools[rn]['L'].append(Ly['L'][sel]); pools[rn]['rgb'].append(Ly['rgb'][sel])
+LOHI = {rn: tuple(np.percentile(np.concatenate(p['L']), [1, 99])) for rn, p in pools.items()}
+CDF = {rn: np.percentile(np.concatenate(p['L']), np.linspace(0, 100, 101)) for rn, p in pools.items()}
+def tone(rn, L):
+    # half linear, half equalised: keeps dark hair brown and bright steel steel, without flattening either
+    lo, hi = LOHI[rn]; lin = np.clip((L - lo) / max(hi - lo, 1), 0, 1)
+    eq = np.interp(L, CDF[rn], np.linspace(0, 1, 101))
+    return 0.5 * lin + 0.5 * eq
+for rn in FIXED:
+    k = BUDGET[rn]; px = np.concatenate(pools[rn]['rgb']).astype(np.float32)
+    if len(px) > 60000: px = px[np.random.default_rng(1).choice(len(px), 60000, replace=False)]
+    _, _, cen = cv2.kmeans(px, k, None, (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_MAX_ITER, 60, 0.2), 4, cv2.KMEANS_PP_CENTERS)
+    cen = np.clip(np.round(cen), 0, 255).astype(int)
+    pal[rn] = cen[np.argsort(cen @ np.array([0.299, 0.587, 0.114]))]
+# every palette entry must be a unique RGB, or the recolour lookup would be ambiguous
+seen = set()
+for rn in pal:
+    for j in range(len(pal[rn])):
+        c = tuple(pal[rn][j])
+        while c in seen: c = (c[0], c[1], (c[2] + 1) % 256)
+        seen.add(c); pal[rn][j] = c
+assert len(seen) == DEPTH, (len(seen), DEPTH)
+
+base_op = next(Ly for sl, _, Ly in layers if sl == 'base')['op']
+def render(Ly, slot):
+    h, w = Ly['op'].shape; out = np.zeros((h, w, 4), np.uint8); amp = BUDGET['dither']
+    for rn in SWAP + FIXED:
         sel = Ly['op'] & (Ly['ramp'] == rn)
         if not sel.any(): continue
-        qs, step = TH.get(rn, (np.array([]), 0))
-        v = Ly['L'] + BT * step * 0.9
-        li = np.searchsorted(qs, v) if len(qs) else np.zeros_like(v, int)
-        cols = np.array([hx(c) for c in spec['colors']])
-        out[sel, :3] = cols[li[sel]]; out[sel, 3] = 255
+        if rn in SWAP:
+            t = tone(rn, Ly['L']) * (N - 1) + BT * amp
+            li = np.clip(np.round(t), 0, N - 1).astype(int); out[sel, :3] = pal[rn][li[sel]]
+        else:
+            P = pal[rn].astype(float)
+            if len(P) > 1:
+                dd = np.sqrt(((P[:, None] - P[None]) ** 2).sum(-1)); np.fill_diagonal(dd, 1e9); spacing = np.median(dd.min(1))
+            else: spacing = 0
+            v = Ly['rgb'][sel] + (BT[sel] * amp * spacing)[:, None]
+            idx = ((v[:, None, :] - P[None]) ** 2).sum(-1).argmin(1); out[sel, :3] = pal[rn][idx]
+        out[sel, 3] = 255
     op = Ly['op']
     edge = op & ~ndimage.binary_erosion(op, structure=[[0, 1, 0], [1, 1, 1], [0, 1, 0]])
-    out[edge, :3] = hx(RAMPS['ink']['colors'][0])
+    ink = edge
+    if slot == 'hair':   # soft hairline: where hair meets the face, use dark hair instead of black ink
+        outside = ndimage.binary_dilation(~op, structure=[[0, 1, 0], [1, 1, 1], [0, 1, 0]])
+        over_body = edge & ndimage.binary_erosion(base_op, iterations=1)
+        soft = over_body & (Ly['ramp'] == 'hair')
+        out[soft, :3] = pal['hair'][max(1, round(0.15 * (N - 1)))]
+        ink = edge & ~soft
+    out[ink, :3] = pal['ink'][0]
     return out
 
-manifest = {'canvas': [CW, CH], 'order': ['back', 'base', 'armour', 'hair', 'off', 'main'],
-            'ramps': {k: {'swap': v['swap'], 'default': v['colors']} for k, v in RAMPS.items()},
-            'variants': VARIANTS, 'slots': {}, 'note': 'Every layer is 192x320 in the base body coordinate space; never trim. Pixels use only the default ramp colours, so a recolour is an exact RGB -> (ramp, level) lookup.'}
+manifest = {'canvas': [CW, CH], 'depth': DEPTH, 'order': ['back', 'base', 'armour', 'hair', 'off', 'main'],
+            'ramps': {rn: {'swap': rn in SWAP, 'default': [h6(c) for c in pal[rn]]} for rn in pal},
+            'variants': {rn: {name: [h6(c) for c in expand(anc, N)] for name, anc in VARIANTS[rn].items()} for rn in SWAP},
+            'slots': {}, 'note': 'Every layer is 192x320 in the base body coordinate space; never trim. Every pixel is one palette entry (all unique), so a recolour is an exact RGB -> (ramp, level) lookup and a swap to the same level of the chosen variant.'}
 labels = {'base': 'Human (male)', 'hair_long': 'Shoulder-length', 'hair_crop': 'Soldier crop', 'hair_braid': 'Warrior braid',
           'armour_leather': 'Boiled leather', 'armour_chain': 'Mail and tabard', 'armour_plate': 'Full plate',
           'w_sword': 'Longsword', 'w_staff': 'Crystal staff', 'w_shield': 'Round shield'}
 Image.fromarray(np.where(cut_r[..., None], np.array([0, 0, 0, 255], np.uint8), np.zeros(4, np.uint8))).save(O/'cut_hand_r.png')
+allc = set()
 for slot, n, Ly in layers:
-    img = render(Ly); fn = n.replace('w_', 'main_' if slot == 'main' else 'off_') + '.png'
+    img = render(Ly, slot); fn = n.replace('w_', 'main_' if slot == 'main' else 'off_') + '.png'
     Image.fromarray(img, 'RGBA').save(O/fn, optimize=True)
-    used = {rn: int(((Ly['ramp'] == rn) & Ly['op']).sum()) for rn in RAMPS if ((Ly['ramp'] == rn) & Ly['op']).any()}
-    item = {'id': n.replace('w_', ''), 'label': labels[n], 'file': fn, 'ramps': used}
+    allc |= set(map(tuple, img[img[..., 3] > 0][:, :3].tolist()))
+    item = {'id': n.replace('w_', ''), 'label': labels[n], 'file': fn}
     if n in ('w_sword', 'w_staff'): item['cuts'] = {'base': 'cut_hand_r.png', 'armour': 'cut_hand_r.png'}
     manifest['slots'].setdefault(slot, []).append(item)
-    print(fn, used)
 json.dump(manifest, open(O/'manifest.json', 'w'), indent=1)
-print('scale', s, 'offset', OX, OY, 'fist', fist_box)
+print(DEPTH, 'colours used across all layers:', len(allc), 'palette', len(seen))

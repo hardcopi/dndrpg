@@ -109,9 +109,11 @@ h2 {
   display: flex; padding: 2px; cursor: pointer; background: #1a120c;
   border: 2px solid #5e3c24; border-radius: 2px;
 }
-.sw span { width: 7px; height: 16px; display: block; }
+.sw span { height: 16px; display: block; }
 .sw.on { border-color: var(--pd-focus); box-shadow: 0 0 0 1px #000; }
 .sw:focus-visible { outline: 2px solid var(--pd-focus); }
+.pd-depth { display: inline-flex; align-items: center; gap: 0.35rem; color: var(--pd-cream-dim); font-size: 0.85rem; }
+.pd-depth select { padding: 0.26rem 0.4rem; }
 .pd-note { font-size: 0.78rem; color: var(--pd-cream-dim); line-height: 1.35; margin: 0.6rem 0 0; }
 .pd-note code { font-family: var(--mono, monospace); font-size: 0.72rem; color: var(--pd-brass-0); }
 </style>
@@ -127,13 +129,21 @@ h2 {
         <button class="btn on" data-zoom="2" type="button">2×</button>
         <button class="btn btn-primary" id="rand" type="button">Randomize</button>
         <button class="btn" id="export" type="button">Export PNG</button>
+        <label class="pd-depth">Colours
+          <select id="depth" class="btn">
+            <option value="32">32 · OCS</option>
+            <option value="64">64 · EHB</option>
+            <option value="128" selected>128</option>
+            <option value="256">256 · AGA</option>
+          </select>
+        </label>
       </div>
     </section>
     <aside class="pd-oak">
       <div class="pd-panel"><h2>Wear</h2><div id="slots"></div></div>
       <div class="pd-panel"><h2>Colours</h2><div id="ramps"></div></div>
       <p class="pd-note">Layers: <code>back · base · armour · hair · off hand · main hand</code>.
-        Each part is a 192×320 style-b layer on one shared body; colours are swapped by ramp, never blended.
+        Each part is a 192×320 style-b layer on one shared body; colours are swapped by ramp, never blended. The colour menu switches between 32, 64, 128 and 256-colour builds of the same paintings.
         State lives in the URL hash, e.g. <code>#hair=hair_long&amp;col-cloth=blue</code>.</p>
     </aside>
   </div>
@@ -141,7 +151,8 @@ h2 {
 <script>
 (() => {
   'use strict';
-  const ROOT = '../assets/images/paperdoll-b/';
+  const BASE = '../assets/images/paperdoll-b/';
+  const DEPTHS = [32, 64, 128, 256]; let depth = 128; let ROOT = BASE + depth + '/';
   const SLOT_LABEL = { base: 'Body', armour: 'Armour', hair: 'Hair', off: 'Off hand', main: 'Main hand', back: 'Back' };
   const UI_ORDER = ['base', 'hair', 'armour', 'main', 'off', 'back'];
   const canvas = document.getElementById('doll');
@@ -149,10 +160,10 @@ h2 {
   const work = document.createElement('canvas');
   const wctx = work.getContext('2d', { willReadFrequently: true });
   let M, W, H, zoom = 2;
-  const pixels = {};          // file -> Uint8ClampedArray (RGBA, W*H)
+  let pixels = {};            // file -> Uint8ClampedArray (RGBA, W*H)
   const pick = {};            // slot -> item id or '' (none)
   const variant = {};         // ramp -> variant name
-  const lookup = new Map();   // 0xRRGGBB -> [ramp, level]
+  let lookup = new Map();     // 0xRRGGBB -> [ramp, level]
 
   const hex = (c) => { c = c.replace('#', ''); if (c.length === 3) c = c.split('').map((h) => h + h).join(''); return [0, 2, 4].map((i) => parseInt(c.slice(i, i + 2), 16)); };
   const key = (r, g, b) => (r << 16) | (g << 8) | b;
@@ -234,7 +245,7 @@ h2 {
       for (const [name, cols] of Object.entries(M.variants[r])) {
         const b = document.createElement('button'); b.type = 'button'; b.className = 'sw' + (variant[r] === name ? ' on' : '');
         b.title = r + ': ' + name; b.dataset.ramp = r; b.dataset.variant = name;
-        for (const c of cols) { const s = document.createElement('span'); s.style.background = '#' + hex(c).map((v) => v.toString(16).padStart(2, '0')).join(''); b.append(s); }
+        for (const c of cols) { const s = document.createElement('span'); s.style.width = (70 / cols.length).toFixed(2) + 'px'; s.style.background = '#' + hex(c).map((v) => v.toString(16).padStart(2, '0')).join(''); b.append(s); }
         b.onclick = () => { variant[r] = name; render(); };
         sws.append(b);
       }
@@ -247,7 +258,7 @@ h2 {
     const p = new URLSearchParams();
     for (const s of Object.keys(M.slots)) p.set(s, pick[s] || 'none');
     for (const r of Object.keys(variant)) p.set('col-' + r, variant[r]);
-    p.set('zoom', zoom);
+    p.set('zoom', zoom); p.set('depth', depth);
     history.replaceState(null, '', '#' + p.toString());
   }
   function readHash() {
@@ -273,25 +284,38 @@ h2 {
   function exportPng() {
     canvas.toBlob((blob) => {
       const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
-      a.download = 'rivermark-doll-' + Object.values(pick).filter(Boolean).join('-') + '-' + zoom + 'x.png';
+      a.download = 'rivermark-doll-' + Object.values(pick).filter(Boolean).join('-') + '-' + depth + 'c-' + zoom + 'x.png';
       document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
     }, 'image/png');
   }
 
-  async function boot() {
+  async function loadDepth(d) {
+    depth = d; ROOT = BASE + depth + '/';
     M = await (await fetch(ROOT + 'manifest.json', { cache: 'no-cache' })).json();
     [W, H] = M.canvas; work.width = W; work.height = H;
+    pixels = {}; lookup = new Map();
     for (const [r, spec] of Object.entries(M.ramps)) spec.default.forEach((c, lvl) => { const [x, y, z] = hex(c); lookup.set(key(x, y, z), [r, lvl]); });
-    for (const [r, spec] of Object.entries(M.ramps)) if (spec.swap) variant[r] = Object.keys(M.variants[r])[0];
+    for (const [r, spec] of Object.entries(M.ramps)) if (spec.swap && !(M.variants[r] || {})[variant[r]]) variant[r] = Object.keys(M.variants[r])[0];
     const files = new Set();
     for (const list of Object.values(M.slots)) for (const it of list) { files.add(it.file); for (const f of Object.values(it.cuts || {})) files.add(f); }
     await Promise.all([...files].map(loadImage));
-    for (const s of Object.keys(M.slots)) pick[s] = s === 'base' ? items(s)[0].id : '';
+    for (const s of Object.keys(M.slots)) if (pick[s] === undefined) pick[s] = s === 'base' ? items(s)[0].id : '';
+    document.getElementById('depth').value = String(depth);
+  }
+
+  async function boot() {
+    const want = +new URLSearchParams(location.hash.slice(1)).get('depth');
+    await loadDepth(DEPTHS.includes(want) ? want : depth);
     readHash();
     document.querySelectorAll('[data-zoom]').forEach((b) => { b.onclick = () => { zoom = +b.dataset.zoom; render(); }; });
     document.getElementById('rand').onclick = randomize;
     document.getElementById('export').onclick = exportPng;
-    window.addEventListener('hashchange', () => { readHash(); render(); });
+    document.getElementById('depth').onchange = async (e) => { await loadDepth(+e.target.value); render(); };
+    window.addEventListener('hashchange', async () => {
+      const d = +new URLSearchParams(location.hash.slice(1)).get('depth');
+      if (DEPTHS.includes(d) && d !== depth) await loadDepth(d);
+      readHash(); render();
+    });
     render();
     document.body.dataset.ready = '1';
   }

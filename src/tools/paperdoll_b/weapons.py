@@ -54,9 +54,14 @@ widths = sm.sum(1)
 gap = [y for y in range(400, 640) if widths[y] < 8]
 if gap:
     g0, g1 = min(gap), max(gap)
-    src = g1 + 6
-    for y in range(g0 - 2, g1 + 4):
-        filled[y] = st[src + (y % 24)]; fm[y] = sm[src + (y % 24)]
+    # one contiguous piece of shaft from just below the gap (no repeating tile), cross-faded at both ends
+    off = (g1 - g0) + 12
+    for y in range(g0 - 6, g1 + 7):
+        filled[y] = st[y + off]; fm[y] = sm[y + off] | sm[y]
+    for j in range(6):
+        t = (j + 1) / 7.0
+        for y, w in ((g0 - 6 + j, t), (g1 + 6 - j, t)):
+            filled[y, :, :3] = (st[y, :, :3] * (1 - w) + st[y + off, :, :3] * w).astype(np.uint8)
 fm = keep_big(fm)
 dx = int(round(np.nanmedian(np.where(fist)[1]) - core))
 filled = np.roll(filled, dx, 1); fm = np.roll(fm, dx, 1)
