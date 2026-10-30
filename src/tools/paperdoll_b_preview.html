@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rivermark — paper doll (style b) proof of concept</title>
+<link rel="stylesheet" href="../assets/css/tokens.css">
+<style>
+/*
+ * Paper-doll proof of concept. Stands alone: no build step, no game code.
+ * Layers live in ../assets/images/paperdoll-b/ and are described by its
+ * manifest.json. Every layer is 192x320 in the base body's coordinate space
+ * and is drawn untrimmed, so they stack by drawing them in order.
+ *
+ * Recolouring is a palette swap: every pixel in every layer is one of the
+ * manifest's default ramp colours, so it maps back to exactly one
+ * (ramp, level) and can be replaced by the same level of another ramp.
+ * Nothing is ever smoothed.
+ */
+:root {
+  --pd-oak: #24160d;
+  --pd-cream: #f4e6c4;
+  --pd-cream-dim: #e4d0a4;
+  --pd-ink: #24160d;
+  --pd-parchment-0: #f8ebcd;
+  --pd-parchment-1: #e4cda0;
+  --pd-iron-0: #f2f4f7;
+  --pd-iron-1: #c5ccd4;
+  --pd-iron-2: #8d97a3;
+  --pd-brass-0: #f3d898;
+  --pd-brass-1: #c9a45c;
+  --pd-brass-2: #a07e3a;
+  --pd-focus: #ffe08a;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; min-height: 100vh; padding: 1.25rem;
+  background: #07090d; color: var(--pd-cream);
+  font-family: var(--font-display, "Palatino Linotype", Georgia, serif);
+}
+.pd-window {
+  max-width: 1040px; margin: 0 auto; padding: 0.5rem 0.6rem 0.7rem;
+  background: linear-gradient(180deg, #243044 0%, #1a2433 16%, #121820 100%);
+  border: 3px solid #07090d; border-radius: 4px;
+  box-shadow: inset 0 0 0 2px #5c6b7c, inset 0 0 0 5px #1a222c, 0 0 0 1px #8b97a6;
+}
+.pd-title {
+  margin: 0.2rem auto 0.7rem; width: fit-content; padding: 0.3rem 1.6rem;
+  color: var(--pd-brass-0); letter-spacing: 0.08em; font-size: 1.15rem; font-weight: 700;
+  background: linear-gradient(180deg, #3d3428 0%, #1c1814 55%, #2a241c 100%);
+  border: 2px solid #8a7044; border-radius: 3px;
+  box-shadow: inset 0 1px 0 rgba(255, 224, 180, 0.25), 0 2px 0 #000;
+  text-shadow: 0 1px 0 #000;
+}
+.pd-body { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 0.8rem; }
+@media (max-width: 820px) { .pd-body { grid-template-columns: 1fr; } }
+.pd-oak {
+  padding: 0.7rem; color: var(--pd-cream);
+  background-color: #3a2416;
+  background-image: url("../assets/images/login/oak-noise.webp"),
+    linear-gradient(180deg, #5e3c24 0%, #3a2414 40%, #2a180e 100%);
+  background-size: 192px, auto; background-blend-mode: multiply, normal;
+  border: 3px solid var(--pd-oak); border-radius: 5px;
+  box-shadow: inset 0 1px 0 rgba(255, 224, 180, 0.32), inset 0 0 0 1px rgba(120, 74, 38, 0.85);
+}
+.pd-stage {
+  display: flex; align-items: center; justify-content: center; min-height: 680px;
+  background: radial-gradient(ellipse at 50% 40%, var(--pd-parchment-0) 0%, #efdcb2 55%, var(--pd-parchment-1) 100%);
+  border: 2px solid #8a7044; border-radius: 2px;
+  box-shadow: inset 0 0 0 1px #5e3c24, inset 0 0 24px rgba(90, 56, 26, 0.35);
+}
+#doll { image-rendering: pixelated; image-rendering: crisp-edges; display: block; }
+.pd-stagebar { display: flex; gap: 0.4rem; justify-content: center; margin-top: 0.6rem; flex-wrap: wrap; }
+h2 {
+  margin: 0.15rem 0 0.45rem; font-size: 0.85rem; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--pd-brass-0); text-shadow: 0 1px 0 #000;
+}
+.pd-panel + .pd-panel { margin-top: 0.75rem; }
+.pd-slot {
+  display: grid; grid-template-columns: 5.2rem 2rem minmax(0, 1fr) 2rem; gap: 0.3rem;
+  align-items: center; margin-bottom: 0.35rem;
+}
+.pd-slot .lbl { color: var(--pd-cream-dim); font-size: 0.85rem; }
+.pd-slot .val {
+  text-align: center; padding: 0.28rem 0.3rem; font-weight: 700; color: var(--pd-ink);
+  background: linear-gradient(180deg, var(--pd-parchment-0), var(--pd-parchment-1));
+  border: 1px solid #5e3c24; border-radius: 2px; font-size: 0.9rem;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.btn {
+  font-family: inherit; font-weight: 700; font-size: 0.88rem; cursor: pointer;
+  padding: 0.3rem 0.75rem; color: var(--pd-ink);
+  background: linear-gradient(180deg, var(--pd-iron-0) 0%, var(--pd-iron-1) 46%, #d8dee5 54%, var(--pd-iron-2) 100%);
+  border: 1px solid #4a525b; border-radius: 3px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85), 0 1px 0 #1a120c;
+}
+.btn:hover { background: linear-gradient(180deg, #fff 0%, #e7edf2 50%, #c5ccd4 100%); border-color: var(--pd-brass-2); }
+.btn:active { transform: translateY(1px); box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.35); }
+.btn:focus-visible { outline: 2px solid var(--pd-focus); outline-offset: 1px; }
+.btn.arrow { padding: 0.28rem 0; }
+.btn.on, .btn-primary {
+  background: linear-gradient(180deg, var(--pd-brass-0), var(--pd-brass-1) 55%, var(--pd-brass-2));
+  border-color: #6a5424;
+}
+.pd-ramp { margin-bottom: 0.45rem; }
+.pd-ramp .lbl { color: var(--pd-cream-dim); font-size: 0.8rem; margin-bottom: 0.15rem; text-transform: capitalize; }
+.pd-swatches { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+.sw {
+  display: flex; padding: 2px; cursor: pointer; background: #1a120c;
+  border: 2px solid #5e3c24; border-radius: 2px;
+}
+.sw span { width: 7px; height: 16px; display: block; }
+.sw.on { border-color: var(--pd-focus); box-shadow: 0 0 0 1px #000; }
+.sw:focus-visible { outline: 2px solid var(--pd-focus); }
+.pd-note { font-size: 0.78rem; color: var(--pd-cream-dim); line-height: 1.35; margin: 0.6rem 0 0; }
+.pd-note code { font-family: var(--mono, monospace); font-size: 0.72rem; color: var(--pd-brass-0); }
+</style>
+</head>
+<body>
+<div class="pd-window">
+  <div class="pd-title">Paper Doll · Proof of Concept</div>
+  <div class="pd-body">
+    <section class="pd-oak">
+      <div class="pd-stage"><canvas id="doll" width="192" height="320" aria-label="Composited character"></canvas></div>
+      <div class="pd-stagebar">
+        <button class="btn" data-zoom="1" type="button">1×</button>
+        <button class="btn on" data-zoom="2" type="button">2×</button>
+        <button class="btn btn-primary" id="rand" type="button">Randomize</button>
+        <button class="btn" id="export" type="button">Export PNG</button>
+      </div>
+    </section>
+    <aside class="pd-oak">
+      <div class="pd-panel"><h2>Wear</h2><div id="slots"></div></div>
+      <div class="pd-panel"><h2>Colours</h2><div id="ramps"></div></div>
+      <p class="pd-note">Layers: <code>back · base · armour · hair · off hand · main hand</code>.
+        Each part is a 192×320 style-b layer on one shared body; colours are swapped by ramp, never blended.
+        State lives in the URL hash, e.g. <code>#hair=hair_long&amp;col-cloth=blue</code>.</p>
+    </aside>
+  </div>
+</div>
+<script>
+(() => {
+  'use strict';
+  const ROOT = '../assets/images/paperdoll-b/';
+  const SLOT_LABEL = { base: 'Body', armour: 'Armour', hair: 'Hair', off: 'Off hand', main: 'Main hand', back: 'Back' };
+  const UI_ORDER = ['base', 'hair', 'armour', 'main', 'off', 'back'];
+  const canvas = document.getElementById('doll');
+  const ctx = canvas.getContext('2d');
+  const work = document.createElement('canvas');
+  const wctx = work.getContext('2d', { willReadFrequently: true });
+  let M, W, H, zoom = 2;
+  const pixels = {};          // file -> Uint8ClampedArray (RGBA, W*H)
+  const pick = {};            // slot -> item id or '' (none)
+  const variant = {};         // ramp -> variant name
+  const lookup = new Map();   // 0xRRGGBB -> [ramp, level]
+
+  const hex = (c) => { c = c.replace('#', ''); if (c.length === 3) c = c.split('').map((h) => h + h).join(''); return [0, 2, 4].map((i) => parseInt(c.slice(i, i + 2), 16)); };
+  const key = (r, g, b) => (r << 16) | (g << 8) | b;
+
+  function loadImage(file) {
+    return new Promise((res, rej) => {
+      const img = new Image();
+      img.onload = () => { wctx.clearRect(0, 0, W, H); wctx.drawImage(img, 0, 0); pixels[file] = wctx.getImageData(0, 0, W, H).data.slice(); res(); };
+      img.onerror = () => rej(new Error('missing ' + file));
+      img.src = ROOT + file;
+    });
+  }
+
+  function items(slot) { return M.slots[slot] || []; }
+  function current(slot) { return items(slot).find((i) => i.id === pick[slot]); }
+
+  function compose() {
+    const out = new ImageData(W, H); const o = out.data;
+    const cuts = {};
+    for (const s of Object.keys(pick)) {
+      const it = current(s); if (!it || !it.cuts) continue;
+      for (const [tgt, f] of Object.entries(it.cuts)) (cuts[tgt] = cuts[tgt] || []).push(pixels[f]);
+    }
+    // swap tables, built once per render: level colours of the chosen variant per ramp
+    const swap = {};
+    for (const [r, spec] of Object.entries(M.ramps)) {
+      if (!spec.swap) continue;
+      const v = M.variants[r][variant[r]]; if (v) swap[r] = v.map(hex);
+    }
+    for (const slot of M.order) {
+      const it = current(slot); if (!it) continue;
+      const src = pixels[it.file]; const cl = cuts[slot] || [];
+      for (let i = 0; i < src.length; i += 4) {
+        if (src[i + 3] < 128) continue;
+        let cut = false; for (const c of cl) if (c[i + 3] > 0) { cut = true; break; }
+        if (cut) continue;
+        let r = src[i], g = src[i + 1], b = src[i + 2];
+        const hit = lookup.get(key(r, g, b));
+        if (hit && swap[hit[0]]) { const c = swap[hit[0]][hit[1]]; r = c[0]; g = c[1]; b = c[2]; }
+        o[i] = r; o[i + 1] = g; o[i + 2] = b; o[i + 3] = 255;
+      }
+    }
+    return out;
+  }
+
+  function render() {
+    const img = compose();
+    wctx.clearRect(0, 0, W, H); wctx.putImageData(img, 0, 0);
+    canvas.width = W * zoom; canvas.height = H * zoom;
+    ctx.imageSmoothingEnabled = false;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(work, 0, 0, W * zoom, H * zoom);
+    drawUI(); writeHash();
+  }
+
+  function cycle(slot, dir) {
+    const ids = items(slot).map((i) => i.id); if (slot !== 'base') ids.unshift('');
+    const n = ids.length; const at = Math.max(0, ids.indexOf(pick[slot] || ''));
+    pick[slot] = ids[(at + dir + n) % n]; render();
+  }
+
+  function drawUI() {
+    const slots = document.getElementById('slots'); slots.textContent = '';
+    for (const slot of UI_ORDER) {
+      if (!M.slots[slot]) continue;
+      const row = document.createElement('div'); row.className = 'pd-slot';
+      const lbl = document.createElement('span'); lbl.className = 'lbl'; lbl.textContent = SLOT_LABEL[slot] || slot;
+      const prev = document.createElement('button'); prev.className = 'btn arrow'; prev.type = 'button'; prev.textContent = '◀'; prev.setAttribute('aria-label', 'Previous ' + slot); prev.onclick = () => cycle(slot, -1);
+      const val = document.createElement('span'); val.className = 'val'; val.dataset.slot = slot; val.textContent = current(slot) ? current(slot).label : '— none —';
+      const next = document.createElement('button'); next.className = 'btn arrow'; next.type = 'button'; next.textContent = '▶'; next.setAttribute('aria-label', 'Next ' + slot); next.onclick = () => cycle(slot, 1);
+      row.append(lbl, prev, val, next); slots.append(row);
+    }
+    const ramps = document.getElementById('ramps'); ramps.textContent = '';
+    for (const [r, spec] of Object.entries(M.ramps)) {
+      if (!spec.swap) continue;
+      const box = document.createElement('div'); box.className = 'pd-ramp';
+      const lbl = document.createElement('div'); lbl.className = 'lbl'; lbl.textContent = r + ' · ' + variant[r];
+      const sws = document.createElement('div'); sws.className = 'pd-swatches';
+      for (const [name, cols] of Object.entries(M.variants[r])) {
+        const b = document.createElement('button'); b.type = 'button'; b.className = 'sw' + (variant[r] === name ? ' on' : '');
+        b.title = r + ': ' + name; b.dataset.ramp = r; b.dataset.variant = name;
+        for (const c of cols) { const s = document.createElement('span'); s.style.background = '#' + hex(c).map((v) => v.toString(16).padStart(2, '0')).join(''); b.append(s); }
+        b.onclick = () => { variant[r] = name; render(); };
+        sws.append(b);
+      }
+      box.append(lbl, sws); ramps.append(box);
+    }
+    document.querySelectorAll('[data-zoom]').forEach((b) => b.classList.toggle('on', +b.dataset.zoom === zoom));
+  }
+
+  function writeHash() {
+    const p = new URLSearchParams();
+    for (const s of Object.keys(M.slots)) p.set(s, pick[s] || 'none');
+    for (const r of Object.keys(variant)) p.set('col-' + r, variant[r]);
+    p.set('zoom', zoom);
+    history.replaceState(null, '', '#' + p.toString());
+  }
+  function readHash() {
+    const p = new URLSearchParams(location.hash.slice(1));
+    for (const s of Object.keys(M.slots)) {
+      if (!p.has(s)) continue;
+      const v = p.get(s); pick[s] = v === 'none' ? '' : (items(s).some((i) => i.id === v) ? v : pick[s]);
+    }
+    for (const r of Object.keys(variant)) { const v = p.get('col-' + r); if (v && M.variants[r][v]) variant[r] = v; }
+    if (p.has('zoom')) zoom = p.get('zoom') === '1' ? 1 : 2;
+  }
+
+  const rnd = (a) => a[Math.floor(Math.random() * a.length)];
+  function randomize() {
+    for (const s of Object.keys(M.slots)) {
+      const ids = items(s).map((i) => i.id);
+      pick[s] = s === 'base' ? rnd(ids) : (Math.random() < 0.2 ? '' : rnd(ids));
+    }
+    for (const r of Object.keys(variant)) variant[r] = rnd(Object.keys(M.variants[r]));
+    render();
+  }
+
+  function exportPng() {
+    canvas.toBlob((blob) => {
+      const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+      a.download = 'rivermark-doll-' + Object.values(pick).filter(Boolean).join('-') + '-' + zoom + 'x.png';
+      document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+    }, 'image/png');
+  }
+
+  async function boot() {
+    M = await (await fetch(ROOT + 'manifest.json', { cache: 'no-cache' })).json();
+    [W, H] = M.canvas; work.width = W; work.height = H;
+    for (const [r, spec] of Object.entries(M.ramps)) spec.default.forEach((c, lvl) => { const [x, y, z] = hex(c); lookup.set(key(x, y, z), [r, lvl]); });
+    for (const [r, spec] of Object.entries(M.ramps)) if (spec.swap) variant[r] = Object.keys(M.variants[r])[0];
+    const files = new Set();
+    for (const list of Object.values(M.slots)) for (const it of list) { files.add(it.file); for (const f of Object.values(it.cuts || {})) files.add(f); }
+    await Promise.all([...files].map(loadImage));
+    for (const s of Object.keys(M.slots)) pick[s] = s === 'base' ? items(s)[0].id : '';
+    readHash();
+    document.querySelectorAll('[data-zoom]').forEach((b) => { b.onclick = () => { zoom = +b.dataset.zoom; render(); }; });
+    document.getElementById('rand').onclick = randomize;
+    document.getElementById('export').onclick = exportPng;
+    window.addEventListener('hashchange', () => { readHash(); render(); });
+    render();
+    document.body.dataset.ready = '1';
+  }
+  boot().catch((e) => { document.getElementById('slots').textContent = 'Could not load the paper doll: ' + e.message; });
+})();
+</script>
+</body>
+</html>
