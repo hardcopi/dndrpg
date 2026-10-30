@@ -17,9 +17,13 @@
  *
  * The shelf is not gone; it has become the other thing the detail pane can
  * show. Starting a NEW game is the one time "which adventure?" is a real
- * question, so that is when it is asked — behind "New character" — and the
+ * question, so that is when it is asked — behind "New Character" — and the
  * module cards are the same cards, with the same cover art and the same two
  * doors, drawn into the left-hand pane instead of across the top of the page.
+ *
+ * The painted skin (stone frame, parchment scroll, hall, iron plates) lives
+ * in assets/css/picker.css and is this page only. The routes, the sheet
+ * payload and the buttons are unchanged.
  */
 require_once __DIR__ . '/app/page_guard.php';
 
@@ -50,44 +54,36 @@ require_signed_in_page();
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Rivermark Chronicles — Open 5e RPG</title>
   <link rel="stylesheet" href="<?= asset('assets/css/style.css') ?>">
+  <link rel="stylesheet" href="<?= asset('assets/css/picker.css') ?>">
 </head>
 <body class="home-page picker-page">
   <?php require APP_PATH . '/inc/site_bar.php'; ?>
 
   <!--
-    Identity, not an entrance. The eyebrow — "Open 5e SRD · single player · in
-    the browser" — was a pitch, and everyone who reaches this page has already
-    signed in and bought it; what it cost was two lines of vertical space above
-    the only thing on the page anybody came for.
+    The Amiga character-select board. The list stays first in the source so a
+    shelf or a bag still opens under it on a phone; the sheet view reorders
+    itself in picker.css (scroll, figure, list, buttons) because that screen
+    is a picture of one person and the list is the index beside them.
   -->
-  <header class="hero hero-slim">
-    <h1>Rivermark Chronicles</h1>
-    <div class="rule-orn" aria-hidden="true"></div>
-  </header>
+  <main class="cs-stage">
+    <header class="cs-plate">
+      <span class="cs-diamond" aria-hidden="true"></span>
+      <h1>Rivermark</h1>
+      <span class="cs-diamond" aria-hidden="true"></span>
+    </header>
 
-  <main class="container">
     <div id="error-banner" class="error-banner hidden"></div>
 
-    <!--
-      Two panes, and the rail comes first in the source on purpose.
-
-      On a wide screen CSS puts it in the second column, which is where the
-      list belongs — you read the sheet, and the list is the index down the
-      edge of it. On a narrow one there are no columns and source order is the
-      order, so the list is what you land on and the sheet unfolds underneath
-      whoever you tapped. A sheet-first stack would open on somebody you had
-      not chosen yet and bury the choosing below it.
-    -->
     <div class="picker">
-      <aside class="picker-rail">
-        <div class="rail-head">
-          <h2>Your characters</h2>
-          <button type="button" class="btn btn-small" id="btn-new"
-                  title="<?= ADVENTURES_ENABLED
-                      ? 'Start a new party, in whichever adventure you like'
-                      : 'Make a new character' ?>">New</button>
-        </div>
+      <aside class="picker-rail" aria-label="Your characters">
         <div id="char-list" class="rail-list"><p class="help-hint">Loading…</p></div>
+        <button type="button" class="cs-new" id="btn-new"
+                title="<?= ADVENTURES_ENABLED
+                    ? 'Start a new party, in whichever adventure you like'
+                    : 'Make a new character' ?>">
+          <span class="cs-new-box" aria-hidden="true"></span>
+          New Character
+        </button>
       </aside>
 
       <!--
@@ -98,11 +94,18 @@ require_signed_in_page();
         sheet is the next thing after the list in source order, so tabbing on
         from the name you chose walks into it.
       -->
-      <section class="picker-detail" id="detail">
+      <section class="picker-detail" id="detail" aria-label="Selected character">
         <p class="help-hint">Loading…</p>
       </section>
     </div>
+
+    <span class="cs-bracket cs-bracket-nw" aria-hidden="true"></span>
+    <span class="cs-bracket cs-bracket-ne" aria-hidden="true"></span>
+    <span class="cs-bracket cs-bracket-sw" aria-hidden="true"></span>
+    <span class="cs-bracket cs-bracket-se" aria-hidden="true"></span>
   </main>
+
+  <div id="cs-dossier" class="cs-dossier"></div>
 
   <footer class="footer-legal">
     Uses only content from the 5e System Reference Document under OGL 1.0a / CC-BY 4.0.
@@ -195,18 +198,16 @@ require_signed_in_page();
     function railCard(c) {
       const face = c.sprite_key
         ? `<img class="char-face" alt="" loading="lazy"
-                src="assets/images/npcs/${encodeURIComponent(c.sprite_key)}_face.png"
+                src="/assets/images/npcs/${encodeURIComponent(c.sprite_key)}_face.png"
                 onerror="this.remove()">`
         : '';
       const hurt = c.max_hp > 0 && c.current_hp / c.max_hp <= 0.34 ? ' is-hurt' : '';
-      return `<button type="button" class="char-card rail-pick${state.selected == c.id ? ' is-active' : ''}"
+      return `<button type="button" class="char-card rail-pick${state.selected == c.id ? ' is-active' : ''}${hurt}"
               data-pick="${esc(c.id)}"${state.selected == c.id ? ' aria-current="true"' : ''}>
         ${face}
         <span class="char-body">
           <span class="name">${esc(c.name)}</span>
-          <span class="sub">${esc(c.race)}${c.subrace ? ' / ' + esc(c.subrace) : ''}
-            · ${esc(c.class)} ${esc(c.level)}
-            · <span class="char-hp${hurt}">HP ${esc(c.current_hp)}/${esc(c.max_hp)}</span></span>
+          <span class="sub">Lvl ${esc(c.level)} ${esc(c.class)}</span>
           ${c.party_name ? `<span class="sub rail-party">${esc(c.party_name)}</span>` : ''}
         </span>
       </button>`;
@@ -249,6 +250,7 @@ require_signed_in_page();
     function renderShelf(heading) {
       state.selected = null;
       renderRail();
+      setDossier('');
       const host = document.getElementById('detail');
 
       // No adventures: no shelf, and a how-to about a different game. What is
@@ -374,7 +376,7 @@ require_signed_in_page();
                       : esc(m.name)}">
               ${m.sprite_key
                 ? `<img class="tab-face" alt="" loading="lazy"
-                       src="assets/images/npcs/${encodeURIComponent(m.sprite_key)}_face.png"
+                       src="/assets/images/npcs/${encodeURIComponent(m.sprite_key)}_face.png"
                        onerror="this.remove()">`
                 : ''}
               <span class="tab-body">
@@ -415,7 +417,7 @@ require_signed_in_page();
       const c = s.character;
       const host = document.getElementById('detail');
 
-      const where = [ctx.party_name, ctx.location_name].filter(Boolean).join(' · ');
+      const place = [ctx.location_name, ctx.region_name].filter(Boolean).join(', ');
       // The Play button says which game it opens. That is the whole reason the
       // module is looked up: on the old shelf you chose the adventure and then
       // the character, so the button did not have to say — here you have chosen
@@ -471,33 +473,34 @@ require_signed_in_page();
       const tabs = partyTabs(party, c.id, ctx.party_id);
 
       const play = ctx.party_id
-        ? `<div class="play-doors">
-             <button type="button" class="btn btn-primary btn-lg play-btn"
-                     data-party="${esc(ctx.party_id)}">
-               <svg aria-hidden="true"><use href="#i-play"></use></svg>
-               ${state.adventures ? 'Play ' + esc(ctx.module_name || 'this adventure') : 'Enter the yard'}
-             </button>
-           </div>
-           ${where ? `<p class="play-where">${esc(where)}</p>` : ''}`
-        : `<p class="help-hint">This one never joined a party, so there is no
+        ? `<button type="button" class="btn btn-primary play-btn"
+                   data-party="${esc(ctx.party_id)}">${
+            state.adventures ? 'Play ' + esc(ctx.module_name || 'this adventure') : 'Enter the yard'
+          }</button>`
+        : '';
+      const idle = ctx.party_id
+        ? ''
+        : `<p class="help-hint cs-idle">This one never joined a party, so there is no
              game to resume.</p>`;
 
       /*
        * How far off the next level is.
        *
        * `xp_progress` is Rules::xpProgress, computed on the server and carried
-       * on every character — the ladder is never restated here.
+       * on every character — the ladder is never restated here. The bar on the
+       * scroll is that percent; the numbers beside it are the same earned/needed
+       * the old bar printed.
        */
       const xp = c.xp_progress;
-      const xpBar = xp ? `
-        <div class="bar-row pick-xp">
-          <span class="bar-label">${xp.next_level === null
-            ? 'Experience' : 'To level ' + esc(xp.next_level)}</span>
-          <div class="xp-bar"><span style="width:${esc(xp.percent)}%"></span></div>
-          <span class="bar-value">${xp.next_level === null
-            ? esc(xp.xp) + ' XP · max level'
-            : esc(xp.earned) + ' / ' + esc(xp.needed)}</span>
-        </div>` : '';
+      const xpPct = xp ? Math.max(0, Math.min(100, Number(xp.percent) || 0)) : 0;
+      const xpText = !xp ? '' : (xp.next_level === null
+        ? esc(xp.xp) + ' XP'
+        : esc(xp.earned) + ' / ' + esc(xp.needed));
+      const hpPct = c.max_hp > 0
+        ? Math.max(0, Math.min(100, (Number(c.current_hp) / Number(c.max_hp)) * 100))
+        : 0;
+      const statLines = (s.abilities || []).map((a) => `
+        <div class="cs-stat"><span>${esc(a.abbr)}</span><strong>${esc(a.score)}</strong></div>`).join('');
 
       const abilities = s.abilities.map((a) => `
         <div class="ability-box sheet-ab">
@@ -539,10 +542,56 @@ require_signed_in_page();
 
       host.innerHTML = `
         <article class="pick-sheet">
+          <div class="cs-scroll">
+            <div class="cs-roll" aria-hidden="true"></div>
+            <div class="cs-scroll-in">
+              ${place ? `<p class="cs-place">${esc(place)}</p>` : ''}
+              <div class="cs-meter cs-hp">
+                <span class="cs-meter-label">HP</span>
+                <span class="cs-track"><span style="width:${hpPct}%"></span></span>
+                <span class="cs-meter-val">${esc(c.current_hp)} / ${esc(c.max_hp)}</span>
+              </div>
+              ${xp ? `<div class="cs-meter cs-xp">
+                <span class="cs-meter-label">XP</span>
+                <span class="cs-track"><span style="width:${xpPct}%"></span></span>
+                <span class="cs-meter-val">${xpText}</span>
+              </div>` : ''}
+              <div class="cs-stats">${statLines}</div>
+            </div>
+            <div class="cs-roll cs-roll-bot" aria-hidden="true"></div>
+          </div>
+          <div class="cs-figure">
+            <div class="cs-hall" aria-hidden="true">
+              <span class="cs-beam"></span>
+              <span class="cs-banner cs-banner-l"></span>
+              <span class="cs-banner cs-banner-r"></span>
+              <span class="cs-torch cs-torch-l"></span>
+              <span class="cs-torch cs-torch-r"></span>
+              <span class="cs-floor"></span>
+              <span class="cs-dais"></span>
+            </div>
+            ${standingMarkup(c.sprite_key)}
+          </div>
+          <div class="cs-actions">
+            ${tabs}
+            ${idle}
+            <div class="cs-buttons">
+              ${play}
+              <a class="btn" target="_blank" rel="noopener"
+                 href="sheet_print.php?character_id=${esc(c.id)}&amp;print=1&amp;from=picker"
+                 title="A paper sheet for the table, in the standard 5e layout. Opens in a new tab.">Print</a>
+              <button type="button" class="btn" data-open="bag" data-id="${esc(c.id)}"
+                      title="What ${esc(c.name)} is carrying, and what they are wearing">Bag</button>
+              <button type="button" class="btn" data-open="store" data-id="${esc(c.id)}"
+                      title="Buy supplies and sell what you do not want. Nothing enchanted beyond +1.">Store</button>
+              ${retire}
+            </div>
+          </div>
+        </article>`;
+
+      setDossier(`
+        <div class="cs-sheet">
           <div class="sheet-header">
-            <img class="sheet-bust" alt=""
-                 src="assets/images/npcs/${encodeURIComponent(c.sprite_key || 'fighter')}_bust.png"
-                 onerror="this.remove()">
             <div class="sheet-ident">
               <h2 class="sheet-title">${esc(c.name)}</h2>
               <p class="sheet-subtitle">
@@ -551,24 +600,7 @@ require_signed_in_page();
               </p>
               <p class="sheet-subtitle">${esc(c.background || '')}${c.alignment ? ' · ' + esc(c.alignment) : ''}</p>
             </div>
-            <div class="sheet-header-actions">
-              <a class="btn btn-small" target="_blank" rel="noopener"
-                 href="sheet_print.php?character_id=${esc(c.id)}&amp;print=1&amp;from=picker"
-                 title="A paper sheet for the table, in the standard 5e layout. Opens in a new tab.">Print</a>
-              <button type="button" class="btn btn-small" data-open="bag"
-                      data-id="${esc(c.id)}"
-                      title="What ${esc(c.name)} is carrying, and what they are wearing">Bag</button>
-              <button type="button" class="btn btn-small" data-open="store"
-                      data-id="${esc(c.id)}"
-                      title="Buy supplies and sell what you do not want. Nothing enchanted beyond +1.">Store</button>
-              ${retire}
-            </div>
           </div>
-
-          ${tabs}
-
-          <div class="pick-play${ctx.party_id ? '' : ' is-idle'}">${play}</div>
-
           <div class="sheet-combat-row">
             <div class="sheet-stat-pill"><span>HP</span><strong>${esc(c.current_hp)}/${esc(c.max_hp)}</strong></div>
             <div class="sheet-stat-pill"><span>AC</span><strong>${esc(c.armor_class)}</strong></div>
@@ -579,13 +611,10 @@ require_signed_in_page();
             <div class="sheet-stat-pill"><span>Hit dice</span><strong>${esc(s.hit_dice)}</strong></div>
             <div class="sheet-stat-pill"><span>Gold</span><strong>${esc(c.gold ?? 0)} gp</strong></div>
           </div>
-          ${xpBar}
-
           <div class="sheet-section">
             <h3>Ability scores</h3>
             <div class="ability-grid sheet-abilities">${abilities}</div>
           </div>
-
           <div class="sheet-cols">
             <div class="sheet-section">
               <h3>Saving throws</h3>
@@ -601,7 +630,6 @@ require_signed_in_page();
               </ul>
             </div>
           </div>
-
           <div class="sheet-section">
             <h3>Attacks</h3>
             <table class="sheet-table">
@@ -609,9 +637,7 @@ require_signed_in_page();
               <tbody>${attacks}</tbody>
             </table>
           </div>
-
           ${spells}
-
           <div class="sheet-cols">
             <div class="sheet-section">
               <h3>Features &amp; traits</h3>
@@ -627,7 +653,77 @@ require_signed_in_page();
               <p class="inv-desc">${esc(s.inventory.length)} things, ${esc(s.carried_weight)} lb.</p>
             </div>
           </div>
-        </article>`;
+        </div>`);
+    }
+
+    /**
+     * The rest of the sheet, under the board.
+     *
+     * The scroll shows the place, the two bars and the six scores — what the
+     * select screen is for. Saves, skills, attacks and the rest are the same
+     * payload they always were, and they stay on the page so nothing the sheet
+     * used to answer has to be opened somewhere else. Empty when the pane is a
+     * shelf, a bag or a store.
+     */
+    function setDossier(html) {
+      const slot = document.getElementById('cs-dossier');
+      if (slot) slot.innerHTML = html || '';
+    }
+
+    /**
+     * Which full-body sheet, by the same key the combat board uses.
+     *
+     * `ui-combat.js` `artKey` is the character's sprite_key — the painted look
+     * chosen in the creator, `token_<race>_<gender><n>`, or a class key for an
+     * older row. `ui-battlemap.js` `figureFor` resolves that key through
+     * `figures/monsters.json` (heroes and aliases) onto a file. A key the
+     * catalogue does not know draws the portrait instead, which is also what a
+     * sheet that fails to decode falls back to.
+     */
+    let figureCatalog = null;
+    let figureCatalogWait = null;
+
+    function indexFigures(data) {
+      const by = Object.create(null);
+      if (!data) return by;
+      const rows = [].concat(data.monsters || [], data.heroes || []);
+      for (const row of rows) {
+        if (!row) continue;
+        if (row.key) by[row.key] = row;
+        if (row.monster_key) by[row.monster_key] = row;
+      }
+      const aliases = data.aliases || {};
+      Object.keys(aliases).forEach((from) => {
+        const row = by[aliases[from]];
+        if (row) by[from] = row;
+      });
+      return by;
+    }
+
+    function loadFigureCatalog() {
+      if (figureCatalogWait) return figureCatalogWait;
+      figureCatalogWait = fetch('/assets/images/figures/monsters.json')
+        .then((res) => (res.ok ? res.json() : null))
+        .then((data) => { figureCatalog = indexFigures(data); })
+        .catch(() => { figureCatalog = Object.create(null); });
+      return figureCatalogWait;
+    }
+
+    function figureFile(spriteKey) {
+      if (!spriteKey || !figureCatalog) return '';
+      const row = figureCatalog[spriteKey];
+      return (row && row.file) ? ('/assets/images/figures/' + row.file) : '';
+    }
+
+    function standingMarkup(spriteKey) {
+      const key = spriteKey || '';
+      const bust = '/assets/images/npcs/' + encodeURIComponent(key || 'fighter') + '_bust.png';
+      const face = '/assets/images/npcs/' + encodeURIComponent(key || 'fighter') + '_face.png';
+      const file = figureFile(key);
+      if (!file) {
+        return `<img class="cs-body is-portrait" alt="" data-step="bust" data-face="${esc(face)}" src="${esc(bust)}">`;
+      }
+      return `<img class="cs-body" alt="" data-step="figure" data-bust="${esc(bust)}" data-face="${esc(face)}" src="${esc(file)}">`;
     }
 
     /**
@@ -717,33 +813,32 @@ require_signed_in_page();
       renderRail();
       const host = document.getElementById('detail');
       /*
-       * Stacked, the sheet is below the whole list and a click looks like it
-       * did nothing. Only when somebody pressed a name — doing it on the sheet
-       * the page opens by itself would scroll the list off the top of a phone
-       * before the player had read it.
+       * On a phone the board stacks scroll, figure, list, buttons, so the
+       * parchment is above the name you just pressed. Bring it up. Doing it
+       * on the sheet the page opens by itself would scroll the list off the
+       * top before the player had read it.
        */
-      const stacked = window.matchMedia('(max-width: 62rem)').matches;
-      if (pressed && stacked) host.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      if (state.sheets.has(id)) {
-        const payload = state.sheets.get(id);
-        renderSheet(payload);
-        // Even from cache: the party this one belongs to may not have been
-        // seen yet, and the tabs it just drew are only fast if the sheets
-        // behind them are already coming.
-        prefetchParty(payload);
-        return;
+      const stacked = window.matchMedia('(max-width: 54rem)').matches;
+      if (!state.sheets.has(id)) {
+        setDossier('');
+        host.innerHTML = '<p class="help-hint">Reading the sheet…</p>';
       }
-      host.innerHTML = '<p class="help-hint">Reading the sheet…</p>';
       try {
-        const payload = await sheetFor(id);
+        const payload = state.sheets.has(id) ? state.sheets.get(id) : await sheetFor(id);
+        await loadFigureCatalog();
         // Null means somebody else's request is already in the air for this
         // id; it will land in the cache, and the click that started it is the
         // one that draws.
-        if (payload && state.selected === id) {
+        if (payload && state.selected === id && state.view === 'sheet') {
           renderSheet(payload);
           prefetchParty(payload);
+          if (pressed && stacked) {
+            const into = host.querySelector('.cs-scroll') || host;
+            into.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
         }
       } catch (e) {
+        setDossier('');
         host.innerHTML = `<p class="help-hint">Could not read that sheet.</p>`;
         showError(e.message);
       }
@@ -844,6 +939,7 @@ require_signed_in_page();
      */
     async function renderBag(id) {
       const host = document.getElementById('detail');
+      setDossier('');
       host.innerHTML = '<p class="help-hint">Reading the pack…</p>';
 
       // The sheet's payload as well as the pack, for the two things a bag needs
@@ -931,6 +1027,7 @@ require_signed_in_page();
      */
     async function renderStore(id) {
       const host = document.getElementById('detail');
+      setDossier('');
       const who = state.sheets.get(id)?.sheet?.character?.name || 'This character';
       host.innerHTML = panelHead(who, 'The general store') + '<p class="help-hint">Opening up…</p>';
       let shop;
@@ -1039,6 +1136,26 @@ require_signed_in_page();
         showError(err.message || 'They could not be retired.');
       }
     }
+
+    // A figure that fails to decode reveals the bust, then the face. The
+    // error event does not bubble, so this listens in the capture phase and
+    // survives the pane being redrawn.
+    document.getElementById('detail').addEventListener('error', (e) => {
+      const img = e.target;
+      if (!img || !img.classList || !img.classList.contains('cs-body')) return;
+      const step = img.dataset.step;
+      if (step === 'figure' && img.dataset.bust) {
+        img.dataset.step = 'bust';
+        img.classList.add('is-portrait');
+        img.src = img.dataset.bust;
+        return;
+      }
+      if (step !== 'face' && img.dataset.face) {
+        img.dataset.step = 'face';
+        img.classList.add('is-portrait');
+        img.src = img.dataset.face;
+      }
+    }, true);
 
     document.getElementById('detail').addEventListener('click', async (e) => {
       // The bag, the store, and the way back to the sheet.

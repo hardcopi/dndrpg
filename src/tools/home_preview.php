@@ -70,6 +70,15 @@ $body = substr($src, strpos($src, '<!DOCTYPE'));
    to its argument. Nothing else here executes PHP and this does not either. */
 $body = preg_replace("/<\\?=\\s*asset\\(\\s*'([^']+)'\\s*\\)\\s*\\?>/", '$1', $body);
 
+/* The picker reads ADVENTURES_ENABLED into its script. Stripping that echo
+   leaves `adventures: ,`, which is a syntax error, and the bench draws
+   nothing. The shelf cases are the adventures-on page, so the flag is on. */
+$body = str_replace(
+    "<?= ADVENTURES_ENABLED ? 'true' : 'false' ?>",
+    'true',
+    $body
+);
+
 $body = preg_replace('/<\?(?:php\b|=).*?\?>/s', '', $body);
 
 /* Nothing may survive that. A page that grows a third opening form, or a
@@ -468,6 +477,15 @@ $banner = '
               color:#e8c979;font:600 12px/1.9 monospace;text-align:center;
               border-bottom:1px solid #6b5426">' . $note . '</div>
   <div style="height:26px"></div>';
+/* `?shot=1` is a drawing of the page itself, with the bench label left off. */
+if (($_GET['shot'] ?? '') === '1') {
+    $banner = '';
+    if (($_GET['at'] ?? '') === 'list') {
+        $banner = '<script>window.addEventListener("load",()=>{'
+            . 'setTimeout(()=>document.querySelector(".picker-rail")?.scrollIntoView({block:"start"}),200);'
+            . '});</script>';
+    }
+}
 $body = preg_replace('/(<body\b[^>]*>)/i', '$1' . $banner, $body, 1, $hit);
 if (!$hit) {
     http_response_code(500);

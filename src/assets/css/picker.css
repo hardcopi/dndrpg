@@ -1,0 +1,827 @@
+/*
+ * The character select, matching the Amiga client's screen and the sign-in
+ * we just painted: a dark iron frame, a carved title plate, a parchment
+ * scroll, a figure on a dais, and iron button plates.
+ *
+ * Scoped to body.picker-page. The sheet, the bag and the store still use the
+ * shared classes; only this page's chrome is restated here. The colours are
+ * the same materials as login.css — parchment, iron, brass — declared on the
+ * page rather than in tokens.css, which is the cold chrome and is deliberately
+ * not this warm.
+ */
+
+.picker-page {
+  --cs-oak: #24160d;
+  --cs-cream: #f4e6c4;
+  --cs-cream-dim: #e4d0a4;
+  --cs-ink: #24160d;
+  --cs-parchment-0: #f8ebcd;
+  --cs-parchment-1: #e4cda0;
+  --cs-iron-0: #f2f4f7;
+  --cs-iron-1: #c5ccd4;
+  --cs-iron-2: #8d97a3;
+  --cs-brass-0: #f3d898;
+  --cs-brass-1: #c9a45c;
+  --cs-brass-2: #a07e3a;
+  --cs-focus: #ffe08a;
+  --cs-hp: #c4281c;
+  --cs-xp: #2a62c8;
+  --cs-frame: #121820;
+  --cs-bar: 2.35rem;
+  --cs-plate: 2.7rem;
+  --cs-foot: 1.8rem;
+
+  background: #07090d;
+  color: var(--cs-cream);
+}
+
+.picker-page .site-bar {
+  background: rgba(12, 14, 18, 0.94);
+  border-bottom: 1px solid rgba(240, 207, 122, 0.32);
+}
+
+.picker-page .site-bar a:focus-visible,
+.picker-page .cs-new:focus-visible,
+.picker-page .rail-pick:focus-visible,
+.picker-page .cs-buttons .btn:focus-visible {
+  outline: 2px solid var(--cs-focus);
+  outline-offset: 3px;
+}
+
+/* The board fills the first screen. The full sheet (saves, skills, attacks)
+   sits after it, so the select screen is the picture and the numbers are one
+   scroll further down. */
+.picker-page > .cs-stage {
+  position: relative;
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  /* A definite height, not only a min-height. The grid's 1fr row does not
+     resolve against a min-height, and the figure — every child absolutely
+     positioned — then collapses to nothing and the hall never paints. */
+  height: calc(100dvh - 2.55rem);
+  min-height: 36rem;
+  margin: 0.45rem 0.7rem 0.35rem;
+  padding: 0.15rem 0.55rem 0.45rem;
+  background:
+    linear-gradient(180deg, #243044 0%, #1a2433 18%, #121820 100%);
+  border: 3px solid #07090d;
+  border-radius: 4px;
+  box-shadow:
+    inset 0 0 0 2px #5c6b7c,
+    inset 0 0 0 5px #1a222c,
+    0 0 0 1px #8b97a6,
+    0 18px 40px rgba(0, 0, 0, 0.55);
+}
+
+body.picker-page > main { padding-top: 0; }
+
+/* Carved plate sitting on the top rail, the way the client's title does. */
+.cs-plate {
+  align-self: center;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  margin: 0.35rem 0 0.25rem;
+  padding: 0.28rem 1.15rem 0.32rem;
+  background: linear-gradient(180deg, #3d3428 0%, #1c1814 42%, #2a241c 100%);
+  border: 2px solid #8a7044;
+  border-radius: 2px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 224, 170, 0.35),
+    0 2px 0 #07090d;
+}
+
+.cs-plate h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 750;
+  letter-spacing: 0.42em;
+  text-indent: 0.42em;
+  text-transform: uppercase;
+  color: var(--cs-brass-0);
+  text-shadow:
+    0 1px 0 #6a4e22,
+    0 -1px 0 #fff1c4,
+    0 2px 2px #120c06;
+}
+
+.cs-diamond {
+  width: 0.45rem;
+  height: 0.45rem;
+  background: var(--cs-brass-1);
+  transform: rotate(45deg);
+  box-shadow: 0 0 0 1px #6a5424, inset 0 0 0 1px rgba(255, 236, 190, 0.7);
+}
+
+/* Iron corner caps. Same L as the sign-in plank, on a larger frame. */
+.cs-bracket {
+  position: absolute;
+  width: 36px;
+  height: 36px;
+  z-index: 4;
+  pointer-events: none;
+  background: linear-gradient(155deg, #f4f6f8 0%, #c5ccd4 40%, #7e8792 62%, #e4e8ec 100%);
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.7));
+}
+
+.cs-bracket::after {
+  content: "";
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #fff 0 1.5px, #8b949e 2px, #3c444d 3.4px);
+}
+
+.cs-bracket-nw { top: 7px; left: 7px; clip-path: polygon(0 0, 100% 0, 100% 34%, 34% 34%, 34% 100%, 0 100%); }
+.cs-bracket-ne { top: 7px; right: 7px; clip-path: polygon(0 0, 100% 0, 100% 100%, 66% 100%, 66% 34%, 0 34%); }
+.cs-bracket-sw { bottom: 7px; left: 7px; clip-path: polygon(0 0, 34% 0, 34% 66%, 100% 66%, 100% 100%, 0 100%); }
+.cs-bracket-se { right: 7px; bottom: 7px; clip-path: polygon(66% 0, 100% 0, 100% 100%, 0 100%, 0 66%, 66% 66%); }
+.cs-bracket-nw::after { top: 5px; left: 5px; }
+.cs-bracket-ne::after { top: 5px; right: 5px; }
+.cs-bracket-sw::after { bottom: 5px; left: 5px; }
+.cs-bracket-se::after { right: 5px; bottom: 5px; }
+
+.picker-page .error-banner { margin: 0.25rem 0.35rem 0; }
+
+.picker-page .picker {
+  flex: 1 1 auto;
+  display: grid;
+  grid-template-columns: minmax(16rem, 22rem) minmax(0, 1fr) minmax(15.5rem, 22rem);
+  grid-template-rows: minmax(16rem, 1fr) auto;
+  gap: 0.35rem 0.45rem;
+  min-height: 0;
+  margin-top: 0.15rem;
+}
+
+/* Shelf, bag and store occupy the left and the centre. The sheet promotes
+   its own children into this grid — see display: contents below — so the
+   scroll, the figure and the plates can sit in three columns with the list. */
+.picker-page .picker-detail {
+  grid-column: 1 / 3;
+  grid-row: 1 / -1;
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+  padding: 0.35rem 0.2rem 0.2rem;
+}
+
+.picker-page .picker-rail {
+  grid-column: 3;
+  grid-row: 1 / -1;
+  position: static;
+  top: auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+  padding: 0.15rem 0.15rem 0.15rem 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.picker-page .picker-detail:has(> .pick-sheet),
+.picker-page .pick-sheet {
+  display: contents;
+}
+
+.picker-page .cs-scroll { grid-column: 1; grid-row: 1; }
+.picker-page .cs-figure { grid-column: 2; grid-row: 1; }
+.picker-page .cs-actions { grid-column: 1 / -1; grid-row: 2; }
+
+.picker-page .picker:has(.pick-sheet) .picker-rail {
+  grid-row: 1;
+}
+
+/* ------------------------------------------------------------------ *
+   The scroll
+ * ------------------------------------------------------------------ */
+
+.cs-scroll {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+  margin: 0.55rem 0.15rem 0.15rem 0.35rem;
+}
+
+.cs-scroll-in {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0.85rem 0;
+  padding: 0.85rem 1.25rem 1rem;
+  color: var(--cs-ink);
+  background-color: #f3e2bc;
+  background-image:
+    url("../images/login/oak-noise.webp"),
+    linear-gradient(180deg, var(--cs-parchment-0) 0%, #f4e4c2 38%, var(--cs-parchment-1) 100%);
+  background-size: 180px, auto;
+  background-blend-mode: multiply, normal;
+  box-shadow:
+    inset 0 0 0 1px rgba(90, 58, 24, 0.28),
+    inset 8px 0 14px rgba(90, 50, 20, 0.08),
+    inset -8px 0 14px rgba(90, 50, 20, 0.08);
+}
+
+.cs-roll {
+  position: absolute;
+  left: -0.4rem;
+  right: -0.4rem;
+  height: 1.25rem;
+  top: 0;
+  z-index: 2;
+  pointer-events: none;
+  border-radius: 0.7rem;
+  background: linear-gradient(
+    180deg,
+    #fbf3df 0%,
+    #e7cf9a 36%,
+    #8a6230 50%,
+    #d9be8c 64%,
+    #f6e7c4 100%
+  );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.75),
+    0 3px 4px rgba(0, 0, 0, 0.35);
+}
+
+.cs-roll-bot { top: auto; bottom: 0; }
+
+.cs-place {
+  margin: 0.1rem 0 0.85rem;
+  font-family: var(--font-display);
+  font-size: 1.18rem;
+  font-weight: 650;
+  line-height: 1.3;
+  color: var(--cs-ink);
+}
+
+.cs-meter {
+  display: grid;
+  grid-template-columns: 2.3rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0.32rem 0;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--cs-ink);
+}
+
+.cs-track {
+  display: block;
+  height: 0.85rem;
+  background: #1a120c;
+  border: 1px solid #5a3c22;
+  border-radius: 1px;
+  overflow: hidden;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.55);
+}
+
+.cs-track > span {
+  display: block;
+  height: 100%;
+  width: 0;
+}
+
+.cs-hp .cs-track > span {
+  background: linear-gradient(180deg, #e24a38 0%, var(--cs-hp) 55%, #7e140e 100%);
+}
+
+.cs-xp .cs-track > span {
+  background: linear-gradient(180deg, #5b92ea 0%, var(--cs-xp) 55%, #16367a 100%);
+}
+
+.cs-meter-val {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+.cs-stats { margin-top: 0.95rem; }
+
+.cs-stat {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 0.16rem 0.1rem;
+  font-family: var(--font-display);
+  font-size: 1.28rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--cs-ink);
+}
+
+.cs-stat strong {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+/* ------------------------------------------------------------------ *
+   The hall
+ * ------------------------------------------------------------------ */
+
+.cs-figure {
+  position: relative;
+  min-height: 16rem;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 2px;
+  background:
+    radial-gradient(ellipse 10rem 18rem at 7% 40%, rgba(255, 150, 50, 0.42), transparent 70%),
+    radial-gradient(ellipse 10rem 18rem at 93% 40%, rgba(255, 140, 40, 0.38), transparent 70%),
+    linear-gradient(180deg, #100e0c 0%, #1c1914 22%, #2c261e 52%, #161310 100%);
+  box-shadow: inset 0 0 70px rgba(0, 0, 0, 0.45);
+}
+
+.cs-hall { position: absolute; inset: 0; pointer-events: none; }
+
+.cs-beam {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1.15rem;
+  background: repeating-linear-gradient(
+    90deg,
+    #4a3420 0 4.2rem,
+    #2a1c10 4.2rem 4.45rem,
+    #3a2818 4.45rem 8.4rem
+  );
+  box-shadow: 0 3px 0 #120c08;
+  z-index: 2;
+}
+
+.cs-figure::before {
+  content: "";
+  position: absolute;
+  inset: 1.15rem 0 34% 0;
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.45) 0 1px, transparent 1px),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0 1px, transparent 1px),
+    linear-gradient(180deg, #3a342c, #241f1a);
+  background-size: 4.8rem 2.5rem, 4.8rem 2.5rem, auto;
+  opacity: 0.55;
+  mask-image: linear-gradient(180deg, #000 55%, transparent);
+}
+
+.cs-banner {
+  position: absolute;
+  top: 1.15rem;
+  width: 3.4rem;
+  height: 38%;
+  z-index: 1;
+  background: linear-gradient(180deg, #24509a 0%, #163672 72%, #0e2858 100%);
+  box-shadow:
+    inset 0 0 0 3px #c9a45c,
+    0 10px 14px rgba(0, 0, 0, 0.4);
+  clip-path: polygon(0 0, 100% 0, 100% 82%, 50% 100%, 0 82%);
+}
+
+.cs-banner::before {
+  content: "";
+  position: absolute;
+  left: 3px;
+  right: 3px;
+  top: 0;
+  height: 3px;
+  background: #c9a45c;
+}
+
+.cs-banner::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 18%;
+  width: 1.15rem;
+  height: 1.45rem;
+  transform: translateX(-50%);
+  background:
+    linear-gradient(#f0d48a, #f0d48a) center / 2px 100% no-repeat,
+    linear-gradient(#f0d48a, #f0d48a) center top / 100% 2px no-repeat,
+    linear-gradient(#f0d48a, #f0d48a) left 28% / 2px 58% no-repeat,
+    linear-gradient(#f0d48a, #f0d48a) right 28% / 2px 58% no-repeat;
+}
+
+.cs-banner-l { left: 16%; }
+.cs-banner-r { right: 16%; }
+
+.cs-torch {
+  position: absolute;
+  top: 30%;
+  width: 0.4rem;
+  height: 1.5rem;
+  z-index: 1;
+  background: linear-gradient(#6a5040, #2a1a10);
+}
+
+.cs-torch::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 88%;
+  width: 1.35rem;
+  height: 1.7rem;
+  transform: translateX(-50%);
+  background: radial-gradient(ellipse at 50% 72%, #fff6d0 0%, #ffb03a 30%, #e05010 56%, transparent 74%);
+}
+
+.cs-torch-l { left: 5.5%; }
+.cs-torch-r { right: 5.5%; }
+
+.cs-floor {
+  position: absolute;
+  left: -8%;
+  right: -8%;
+  bottom: -18%;
+  height: 46%;
+  background:
+    repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.38) 0 2px, transparent 2px 3.1rem),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 1.5rem),
+    linear-gradient(180deg, #5c5348, #2a241c 40%, #12100e);
+  transform: perspective(14rem) rotateX(46deg);
+  transform-origin: center bottom;
+}
+
+.cs-dais {
+  position: absolute;
+  z-index: 1;
+  left: 50%;
+  bottom: 6%;
+  width: min(78%, 26rem);
+  height: 4.4rem;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 50% 42%, #7c756a 0%, #564f48 40%, #322e2a 66%, #161310 80%);
+  box-shadow:
+    0 0 0 0.5rem #4a443c,
+    0 0 0 0.78rem #2c2824,
+    0 0 0 0.95rem #161310,
+    0 1.1rem 1.2rem rgba(0, 0, 0, 0.55);
+}
+
+.cs-body {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  bottom: 10%;
+  height: 80%;
+  width: auto;
+  max-width: none;
+  transform: translateX(-50%);
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  filter: drop-shadow(0 14px 8px rgba(0, 0, 0, 0.55));
+  pointer-events: none;
+}
+
+.cs-body.is-portrait {
+  image-rendering: auto;
+  height: 72%;
+  bottom: 14%;
+  object-fit: contain;
+}
+
+/* ------------------------------------------------------------------ *
+   The list
+ * ------------------------------------------------------------------ */
+
+.picker-page .rail-list {
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: none;
+  overflow: auto;
+  padding-right: 0.15rem;
+}
+
+.picker-page .rail-group + .rail-group { margin-top: 0.7rem; }
+
+.picker-page .rail-group-head {
+  margin: 0 0 0.35rem;
+  padding: 0 0.15rem;
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--cs-brass-1);
+}
+
+.picker-page .rail-pick {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  margin: 0 0 0.4rem;
+  padding: 0.38rem 0.5rem;
+  text-align: left;
+  font-family: var(--font-display);
+  color: var(--cs-cream);
+  cursor: pointer;
+  background: linear-gradient(180deg, #243044 0%, #17202e 100%);
+  border: 2px solid #6e5a34;
+  border-radius: 3px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 2px 0 #07090d;
+}
+
+.picker-page .rail-pick:hover {
+  border-color: var(--cs-brass-1);
+  background: linear-gradient(180deg, #2c3a50 0%, #1a2434 100%);
+}
+
+.picker-page .rail-pick.is-active {
+  border-color: var(--cs-brass-0);
+  background: linear-gradient(180deg, #4a3c22 0%, #2a2216 100%);
+  box-shadow:
+    inset 0 0 0 1px #f3d898,
+    0 0 0 1px #6a5420,
+    0 0 14px rgba(240, 207, 122, 0.28);
+}
+
+.picker-page .rail-pick.is-hurt:not(.is-active) { border-color: #8a3830; }
+
+.picker-page .rail-pick .name {
+  display: block;
+  color: var(--cs-brass-0);
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.picker-page .rail-pick .sub {
+  display: block;
+  margin-top: 0.08rem;
+  color: var(--cs-cream);
+  font-size: 0.92rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.picker-page .rail-party {
+  color: var(--cs-cream-dim);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 0.78rem;
+}
+
+.picker-page .char-face,
+.picker-page .tab-face {
+  width: 2.7rem;
+  height: 2.7rem;
+  flex: 0 0 auto;
+  object-fit: cover;
+  object-position: center 15%;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  border: 2px solid #8a7040;
+  border-radius: 2px;
+  background: #12161c;
+}
+
+.cs-new {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  width: 100%;
+  margin-top: auto;
+  flex: 0 0 auto;
+  padding: 0.55rem 0.65rem;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 650;
+  text-align: left;
+  color: var(--cs-cream);
+  cursor: pointer;
+  background: linear-gradient(180deg, #1c2838 0%, #121a26 100%);
+  border: 2px solid #8a7040;
+  border-radius: 3px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 2px 0 #07090d;
+}
+
+.cs-new:hover { border-color: var(--cs-brass-0); }
+
+.cs-new-box {
+  width: 1.15rem;
+  height: 1.15rem;
+  flex: 0 0 auto;
+  border: 2px solid var(--cs-iron-1);
+  border-radius: 1px;
+  background: #0c1018;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.65);
+}
+
+/* ------------------------------------------------------------------ *
+   The plates
+ * ------------------------------------------------------------------ */
+
+.cs-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  min-width: 0;
+  padding: 0.15rem 0.1rem 0.05rem;
+}
+
+.picker-page .cs-actions .party-tabs { margin-top: 0; }
+
+.picker-page .cs-actions .party-tab {
+  background: rgba(0, 0, 0, 0.28);
+  border-color: #6e5a34;
+}
+
+.picker-page .cs-actions .help-hint,
+.picker-page .cs-idle {
+  margin: 0;
+  color: var(--cs-cream-dim);
+  font-family: var(--font-display);
+}
+
+.cs-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.picker-page .cs-buttons .btn {
+  flex: 1 1 6.4rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.7rem;
+  margin: 0;
+  padding: 0.45rem 0.55rem;
+  border: 1px solid #4a525b;
+  border-radius: 3px;
+  background: linear-gradient(
+    180deg,
+    var(--cs-iron-0) 0%,
+    var(--cs-iron-1) 46%,
+    #d8dee5 54%,
+    var(--cs-iron-2) 100%
+  );
+  color: var(--cs-ink);
+  font-family: var(--font-display);
+  font-size: 1.02rem;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: 0.01em;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    0 2px 0 #1a120c;
+}
+
+.picker-page .cs-buttons .play-btn {
+  flex: 1.35 1 9rem;
+  border-color: #6d5422;
+  background: linear-gradient(
+    180deg,
+    var(--cs-brass-0) 0%,
+    var(--cs-brass-1) 46%,
+    #e4c57a 54%,
+    var(--cs-brass-2) 100%
+  );
+  color: var(--cs-ink);
+}
+
+.picker-page .cs-buttons .btn:hover { text-decoration: none; filter: brightness(1.06); }
+
+.picker-page .cs-buttons .btn:active {
+  transform: translateY(1px);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.28), 0 1px 0 #1a120c;
+}
+
+.picker-page .cs-buttons .btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+  filter: none;
+}
+
+.picker-page .cs-buttons .retire-btn.is-armed {
+  border-color: #4a100c;
+  background: linear-gradient(180deg, #a8483c 0%, #6e1c14 55%, #4a100c 100%);
+  color: #f8ebcd;
+}
+
+/* The full sheet, under the board. Shared sheet classes, on a dark panel,
+   so the select screen can be the picture without throwing the numbers away. */
+.cs-dossier:empty { display: none; }
+
+.picker-page .cs-dossier {
+  margin: 0.2rem 0.7rem 0.8rem;
+}
+
+.picker-page .cs-sheet {
+  border: 1px solid rgba(240, 207, 122, 0.22);
+  border-radius: 4px;
+  background: #161a22;
+  padding: 1.1rem 1.2rem 1.3rem;
+}
+
+.picker-page .footer-legal {
+  padding: 0.35rem 0.8rem 0.55rem;
+  border-top: 0;
+  color: #8a8070;
+  font-size: 0.72rem;
+}
+
+.picker-page .footer-legal a { color: var(--cs-cream-dim); }
+
+/* Shelf, bag and store, still inside the frame. */
+.picker-page .picker-detail .section-head h2,
+.picker-page .picker-detail .panel-head h2,
+.picker-page .picker-detail .home-howto h2 {
+  color: var(--cs-cream);
+}
+
+.picker-page .picker-detail .section-hint,
+.picker-page .picker-detail .help-hint,
+.picker-page .panel-who { color: var(--cs-cream-dim); }
+
+@media (max-width: 54rem) {
+  .picker-page {
+    --cs-plate: 2.3rem;
+  }
+
+  .picker-page .site-bar-in {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
+
+  .picker-page > .cs-stage {
+    height: auto;
+    min-height: 0;
+    margin: 0.3rem;
+    padding: 0.1rem 0.4rem 0.4rem;
+  }
+
+  .picker-page .picker {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    min-height: 0;
+    gap: 0.55rem;
+  }
+
+  .picker-page .picker-detail:has(> .pick-sheet) { display: contents; }
+  .picker-page .pick-sheet { display: contents; }
+
+  .picker-page .cs-scroll,
+  .picker-page .cs-figure,
+  .picker-page .picker-rail,
+  .picker-page .cs-actions {
+    align-self: stretch;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .picker-page .cs-scroll { order: 1; height: auto; min-height: 0; margin: 0.35rem 0 0; }
+  .picker-page .cs-figure { order: 2; height: 22rem; min-height: 22rem; flex: 0 0 auto; }
+  .picker-page .picker-rail { order: 3; max-height: none; }
+  .picker-page .cs-actions { order: 4; }
+  .picker-page .picker-detail { order: 5; padding: 0; }
+
+  .picker-page .rail-list { max-height: none; overflow: visible; }
+  .cs-new { margin-top: 0.45rem; }
+
+  .cs-plate h1 {
+    font-size: 0.95rem;
+    letter-spacing: 0.28em;
+    text-indent: 0.28em;
+  }
+
+  .picker-page .cs-buttons .btn { font-size: 0.92rem; min-height: 2.5rem; }
+}
+
+@media (forced-colors: active) {
+  .picker-page,
+  .picker-page > .cs-stage,
+  .cs-scroll-in,
+  .cs-figure,
+  .picker-page .rail-pick,
+  .picker-page .cs-buttons .btn,
+  .cs-new {
+    background: Canvas;
+    color: CanvasText;
+    border-color: ButtonText;
+    box-shadow: none;
+  }
+
+  .cs-body { filter: none; }
+}
