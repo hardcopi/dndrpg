@@ -1,0 +1,407 @@
+/*
+ * The painted sign-in, matching the Amiga client's screen: the river town
+ * full-bleed, the carved wordmark above, and the form on an oak plank with
+ * parchment fields and iron plates.
+ *
+ * Scoped to body.login-screen. page_guard, sheet_print and adventure_print
+ * reuse .auth-page / .auth-card for a one-line refusal, and those stay on the
+ * cold-iron card. The colours below are this painting's materials — oak,
+ * parchment, iron — declared on the page rather than in tokens.css, which is
+ * the chrome and is deliberately not this warm.
+ */
+
+.login-screen {
+  --login-oak-deep: #24160d;
+  --login-cream: #f4e6c4;
+  --login-cream-dim: #e4d0a4;
+  --login-ink: #24160d;
+  --login-parchment-0: #f8ebcd;
+  --login-parchment-1: #e4cda0;
+  --login-iron-0: #f2f4f7;
+  --login-iron-1: #c5ccd4;
+  --login-iron-2: #8d97a3;
+  --login-brass-0: #f3d898;
+  --login-brass-1: #c9a45c;
+  --login-brass-2: #a07e3a;
+  --login-error: #6e1c14;
+  --login-error-bg: #f6e4c4;
+  --login-focus: #ffe08a;
+
+  min-height: 100vh;
+  min-height: 100dvh;
+  background-color: #140e0c;
+  background-image: url("../images/login/login-bg.webp");
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+/* Fixed backgrounds repaint badly while scrolling on touch devices. The
+   painting still covers the page; it just scrolls with it. */
+@media (hover: none) {
+  .login-screen { background-attachment: scroll; }
+}
+
+/* A quiet vignette so the plank sits in the lit middle of the painting
+   without dimming the town itself into a frame. */
+.login-screen::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 50% 42%, transparent 42%, rgba(0, 0, 0, 0.38) 100%);
+}
+
+.login-screen .site-bar,
+.login-screen .login-stage { position: relative; z-index: 1; }
+
+/* The bar has to stay readable over the sky. The top of the painting is
+   dark purple, and a near-opaque strip keeps the links at the same contrast
+   they have on every other page. */
+.login-screen .site-bar {
+  background: rgba(12, 14, 18, 0.92);
+  border-bottom: 1px solid rgba(240, 207, 122, 0.32);
+  backdrop-filter: blur(8px);
+}
+
+.login-screen .site-bar a:focus-visible {
+  outline: 2px solid var(--login-focus);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.login-stage {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 1.25rem 0.75rem 2rem;
+}
+
+/* auto margins centre the cluster when the viewport is taller than it, and
+   collapse to nothing when it is not — so a short phone can still scroll to
+   the top of the logo rather than having it clipped above the fold. */
+.login-cluster {
+  margin-top: auto;
+  margin-bottom: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: min(38rem, 100%);
+  gap: 0.85rem;
+}
+
+.login-logo {
+  display: block;
+  width: min(36rem, 100%);
+  height: auto;
+  filter: drop-shadow(0 12px 18px rgba(0, 0, 0, 0.6));
+}
+
+.login-screen .auth-card {
+  position: relative;
+  width: min(30rem, 100%);
+  margin: 0;
+  padding: 1.5rem 1.4rem 1.05rem;
+  border: 3px solid var(--login-oak-deep);
+  border-radius: 5px;
+  color: var(--login-cream);
+  background-color: #3a2416;
+  /* Noise multiplies a hand-set stain. Two crossing repeats read as graph
+     paper, which is why the grain is one image and not a second gradient. */
+  background-image:
+    url("../images/login/oak-noise.webp"),
+    linear-gradient(
+      180deg,
+      #5e3c24 0%,
+      #4a301c 18%,
+      #3a2414 36%,
+      #583820 52%,
+      #342014 70%,
+      #4a2e1c 84%,
+      #2a180e 100%
+    );
+  background-size: 192px, auto;
+  background-blend-mode: multiply, normal;
+  box-shadow:
+    0 22px 48px rgba(0, 0, 0, 0.58),
+    inset 0 1px 0 rgba(255, 224, 180, 0.32),
+    inset 0 0 0 1px rgba(120, 74, 38, 0.85),
+    inset 0 0 48px rgba(0, 0, 0, 0.32);
+}
+
+/* Iron corner caps. An L, not a box: a full border plus a shadow draws a
+   square, and clip-path is what keeps the rivet's shadow on the cap alone. */
+.login-bracket {
+  position: absolute;
+  width: 44px;
+  height: 44px;
+  pointer-events: none;
+  background: linear-gradient(155deg, #f4f6f8 0%, #c5ccd4 40%, #7e8792 62%, #e4e8ec 100%);
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.7));
+}
+
+.login-bracket::after {
+  content: "";
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #fff 0 1.5px, #8b949e 2px, #3c444d 3.6px);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.35);
+}
+
+.login-bracket-nw {
+  top: 6px;
+  left: 6px;
+  clip-path: polygon(0 0, 100% 0, 100% 36%, 36% 36%, 36% 100%, 0 100%);
+}
+.login-bracket-ne {
+  top: 6px;
+  right: 6px;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 64% 100%, 64% 36%, 0 36%);
+}
+.login-bracket-sw {
+  bottom: 6px;
+  left: 6px;
+  clip-path: polygon(0 0, 36% 0, 36% 64%, 100% 64%, 100% 100%, 0 100%);
+}
+.login-bracket-se {
+  right: 6px;
+  bottom: 6px;
+  clip-path: polygon(64% 0, 100% 0, 100% 100%, 0 100%, 0 64%, 64% 64%);
+}
+
+.login-bracket-nw::after { top: 6px; left: 6px; }
+.login-bracket-ne::after { top: 6px; right: 6px; }
+.login-bracket-sw::after { bottom: 6px; left: 6px; }
+.login-bracket-se::after { right: 6px; bottom: 6px; }
+
+.login-screen .auth-head {
+  margin: 0 0 0.9rem;
+  text-align: center;
+}
+
+.login-screen .auth-card h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  color: var(--login-cream);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.45);
+}
+
+.login-screen .auth-sub {
+  margin: 0.2rem 0 0;
+  color: var(--login-cream-dim);
+  font-family: var(--font-display);
+  font-size: 1rem;
+  line-height: 1.35;
+}
+
+.login-screen .auth-field {
+  margin: 0 0 0.8rem;
+  color: var(--login-cream);
+}
+
+.login-screen .auth-field > span {
+  display: block;
+  margin: 0 0 0.28rem;
+  color: var(--login-cream);
+  font-family: var(--font-display);
+  font-size: 1.08rem;
+  font-weight: 600;
+}
+
+.login-screen .auth-field em {
+  color: var(--login-cream-dim);
+  font-style: italic;
+  font-weight: 500;
+}
+
+.login-screen .auth-field input {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0.55rem 0.7rem;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  line-height: 1.3;
+  color: var(--login-ink);
+  background: linear-gradient(180deg, var(--login-parchment-0), var(--login-parchment-1));
+  border: 1px solid #8a6840;
+  border-radius: 2px;
+  box-shadow: inset 0 2px 4px rgba(58, 32, 10, 0.38);
+  caret-color: var(--login-ink);
+}
+
+.login-screen .auth-field input:focus {
+  outline: 3px solid var(--login-focus);
+  outline-offset: 2px;
+}
+
+.login-screen .auth-error {
+  min-height: 1.35em;
+  margin: 0 0 0.75rem;
+  font-family: var(--font-display);
+  font-size: 0.98rem;
+  line-height: 1.35;
+  color: var(--login-error);
+}
+
+.login-screen .auth-error:not(:empty) {
+  padding: 0.4rem 0.6rem;
+  background: var(--login-error-bg);
+  border-radius: 2px;
+}
+
+.login-screen .login-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.login-screen .login-btn {
+  flex: 1 1 6.5rem;
+  min-height: 2.75rem;
+  width: auto;
+  margin: 0;
+  padding: 0.5rem 0.55rem;
+  border: 1px solid #4a525b;
+  border-radius: 3px;
+  background: linear-gradient(
+    180deg,
+    var(--login-iron-0) 0%,
+    var(--login-iron-1) 46%,
+    #d8dee5 54%,
+    var(--login-iron-2) 100%
+  );
+  color: var(--login-ink);
+  font-family: var(--font-display);
+  font-size: 1.02rem;
+  font-weight: 650;
+  line-height: 1.15;
+  letter-spacing: 0.01em;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    0 2px 0 #1a120c;
+}
+
+.login-screen .auth-submit {
+  width: auto;
+  border-color: #6d5422;
+  background: linear-gradient(
+    180deg,
+    var(--login-brass-0) 0%,
+    var(--login-brass-1) 46%,
+    #e4c57a 54%,
+    var(--login-brass-2) 100%
+  );
+  color: var(--login-ink);
+}
+
+.login-screen .login-btn:hover {
+  text-decoration: none;
+  filter: brightness(1.06);
+}
+
+.login-screen .login-btn:active {
+  transform: translateY(1px);
+  box-shadow:
+    inset 0 1px 2px rgba(0, 0, 0, 0.28),
+    0 1px 0 #1a120c;
+}
+
+.login-screen .login-btn:focus-visible {
+  outline: 3px solid var(--login-focus);
+  outline-offset: 3px;
+}
+
+.login-screen .login-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+  filter: none;
+}
+
+.login-screen .auth-switch {
+  margin: 0.75rem 0 0;
+  text-align: center;
+  color: var(--login-cream);
+  font-family: var(--font-display);
+  font-size: 0.98rem;
+}
+
+.login-screen .auth-closed { color: var(--login-cream); }
+
+.login-screen .auth-foot {
+  margin: 0.7rem 0 0;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.login-screen .auth-foot a {
+  color: var(--login-cream);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.login-screen .auth-foot a:hover { color: var(--login-focus); }
+
+.login-screen .auth-foot a:focus-visible {
+  outline: 3px solid var(--login-focus);
+  outline-offset: 3px;
+}
+
+/* The prompt the script still updates. The button itself says the action. */
+.login-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 420px) {
+  .login-stage { padding: 0.7rem 0.55rem 1.2rem; }
+  .login-cluster { gap: 0.55rem; }
+  .login-screen .auth-card { padding: 1.2rem 0.85rem 0.85rem; }
+  .login-screen .auth-card h1 { font-size: 1.28rem; }
+  .login-screen .login-btn {
+    font-size: 0.86rem;
+    padding: 0.5rem 0.28rem;
+    white-space: nowrap;
+  }
+  .login-bracket { width: 32px; height: 32px; }
+  .login-screen .site-bar-in {
+    padding: 0.4rem 0.7rem;
+    gap: 0.2rem 0.7rem;
+  }
+}
+
+@media (forced-colors: active) {
+  .login-screen { background-image: none; }
+  .login-screen .login-btn,
+  .login-screen .auth-field input,
+  .login-screen .auth-card {
+    border: 1px solid ButtonText;
+    background: Canvas;
+    color: CanvasText;
+    box-shadow: none;
+  }
+  .login-screen .auth-error:not(:empty) {
+    background: Canvas;
+    color: CanvasText;
+  }
+}
