@@ -1870,6 +1870,11 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
    painting keeps the ink roads at full weight and nothing has to know which
    regions have art. */
 .worldmap .wm-art { pointer-events: none; }
+/* The pixel town is indexed art. Smooth resampling turns the roofs into mud
+   the moment the chart is zoomed, which is how the chart opens. */
+.worldmap.is-pixel .wm-art {
+  image-rendering: pixelated;
+}
 .worldmap:not(.is-bare) .wm-edge { opacity: 0.22; }
 .worldmap:not(.is-bare) .wm-edge.is-way { opacity: 0.55; }
 .worldmap:not(.is-bare) .wm-label { stroke-width: 1.1; }
@@ -2664,6 +2669,63 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   opacity: 0.55;
   font-weight: var(--fw-medium);
   fill: var(--pg-ink-soft);
+}
+
+/* The pixel town. Names sit on dark plates — the parchment halo is a light
+   stroke, and a light stroke disappears into a roof. Light type on the same
+   ink the quest pin already uses, gold where the place is the one you can
+   walk to or the one you are standing in. The ring for a place not yet
+   walked is filled, because an empty ring on cobbles does not read. */
+.worldmap.is-pixel .wm-plate { pointer-events: none; }
+.worldmap.is-pixel .wm-plate-box {
+  fill: var(--pg-halo-dark);
+  stroke: var(--pg-paper-dim);
+  stroke-width: 0.16;
+}
+.worldmap.is-pixel .wm-node.is-here .wm-plate-box,
+.worldmap.is-pixel .wm-neighbor.is-way .wm-plate-box {
+  stroke: var(--gold-bright);
+  stroke-width: 0.28;
+}
+.worldmap.is-pixel .wm-node.is-way .wm-plate-box {
+  stroke: var(--gold-dim);
+}
+.worldmap.is-pixel .wm-node.is-way.is-locked .wm-plate-box,
+.worldmap.is-pixel .wm-neighbor.is-way.is-locked .wm-plate-box {
+  stroke: var(--pg-paper-out);
+}
+.worldmap.is-pixel .wm-label {
+  font-size: 2.6px;
+  font-weight: var(--fw-semibold);
+  fill: var(--pg-paper-hi);
+  stroke: none;
+}
+.worldmap.is-pixel .wm-node.is-here .wm-label,
+.worldmap.is-pixel .wm-node.is-way .wm-label,
+.worldmap.is-pixel .wm-neighbor.is-way .wm-label {
+  fill: var(--gold-bright);
+  font-size: 2.6px;
+  font-style: normal;
+  font-weight: var(--fw-bold);
+  opacity: 1;
+  stroke: none;
+}
+.worldmap.is-pixel .wm-node.is-way.is-locked .wm-label,
+.worldmap.is-pixel .wm-neighbor.is-way.is-locked .wm-label {
+  fill: var(--pg-paper-dim);
+  font-weight: var(--fw-medium);
+  opacity: 0.8;
+}
+.worldmap.is-pixel .wm-node[data-map-node]:hover .wm-label,
+.worldmap.is-pixel .wm-node[data-map-node]:focus-visible .wm-label,
+.worldmap.is-pixel .wm-neighbor[data-map-node]:hover .wm-label,
+.worldmap.is-pixel .wm-neighbor[data-map-node]:focus-visible .wm-label {
+  fill: var(--pg-paper);
+}
+.worldmap.is-pixel .wm-unwalked {
+  fill: var(--pg-halo-dark);
+  stroke: var(--gold-bright);
+  stroke-width: 0.45;
 }
 
 /* --- The tracker's "set off this way" button -------------------------- */

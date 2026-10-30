@@ -1378,12 +1378,16 @@
     const map = state.regionMap;
     if (!el || !map || !window.WorldMap || !window.WorldMap.walk) return;
 
-    const here = (map.nodes || []).find((n) => n.current);
+    // The same spots the chart was drawn at. On the pixel town those are the
+    // painting's, not map_x/map_y; everywhere else layout() is the payload.
+    const laid = window.WorldMap.layout ? window.WorldMap.layout(map) : null;
+    const nodes = (laid && laid.map && laid.map.nodes) || map.nodes || [];
+    const here = nodes.find((n) => n.current);
     if (!here) return;
 
     const points = [{ x: here.x, y: here.y }];
     for (const step of steps || []) {
-      const n = (map.nodes || []).find((m) => +m.id === +step.to_id);
+      const n = nodes.find((m) => +m.id === +step.to_id);
       if (!n) break;
       points.push({ x: n.x, y: n.y });
     }

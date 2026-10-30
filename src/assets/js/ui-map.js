@@ -31,6 +31,13 @@
  * The drawing space is a fixed 100x75 viewBox and locations carry their
  * position as percentages, so the chart scales to any width without the
  * client needing to know a single pixel dimension.
+ *
+ * Rivermark is the one region that does not use that painting. When the
+ * server sends `painting` — pixel spots on the town picture's own grid —
+ * the backdrop is the pixel town, the ink roads are left out (the roads are
+ * in the picture) and each place, face, quest mark and road-out caption
+ * sits on its spot, scaled onto this same field. No painting, and every
+ * other region including a delve floor, is the chart described above.
  */
 (function () {
   'use strict';
@@ -97,6 +104,178 @@
     return idx;
   }
 
+  /**
+   * The pixel town. Only Rivermark, and only when the server sent spots.
+   *
+   * `painting` is a 640×480 grid (the art's own pixels). This chart's field
+   * is 0–100 by 0–75, and the image is stretched into exactly that box, so a
+   * spot is that fraction of the field. The payload's map_x/map_y are left
+   * alone — layout() returns a copy — because the content editor and the
+   * walk both still need to ask, and the walk asks here so it follows the
+   * spots the chart drew.
+   *
+   * A painting on any other region is ignored. Those plates stay the
+   * generated paintings, and a delve stays a floor plan. A Rivermark payload
+   * with no painting, or with spots that match nothing on the chart, is
+   * today's chart: authored positions, ink roads, the painted plate.
+   */
+  const PIXEL_TOWN = 'rivermark';
+  const PIXEL_ART = 'assets/images/maps/rivermark_town_pixel.png';
+  /** Plate type size, in chart units. The CSS rule for `.is-pixel` matches. */
+  const PLATE_FS = 2.6;
+
+  function paintingOf(map) {
+    if (!map || map.region_key !== PIXEL_TOWN || map.floorplan) return null;
+    const p = map.painting;
+    if (!p || !(+p.width > 0) || !(+p.height > 0)) return null;
+    if (!Array.isArray(p.nodes) || !p.nodes.length) return null;
+    return p;
+  }
+
+  function projectSpot(p, x, y) {
+    return { x: (+x / +p.width) * VIEW_W, y: (+y / +p.height) * VIEW_H };
+  }
+
+  function layout(map) {
+    const p = paintingOf(map);
+    if (!p || !map.nodes) return { map, pixel: false, neighborSpots: null };
+    const byId = new Map();
+    const byKey = new Map();
+    p.nodes.forEach((s) => {
+      if (!s) return;
+      const spot = projectSpot(p, s.x, s.y);
+      if (!Number.isFinite(spot.x) || !Number.isFinite(spot.y)) return;
+      if (s.id != null && s.id !== '') byId.set(+s.id, spot);
+      if (s.key) byKey.set(String(s.key), spot);
+    });
+    let moved = false;
+    const nodes = map.nodes.map((n) => {
+      const spot = byId.get(+n.id) || (n.key ? byKey.get(String(n.key)) : null);
+      if (!spot) return n;
+      moved = true;
+      return Object.assign({}, n, { x: spot.x, y: spot.y });
+    });
+    if (!moved) return { map, pixel: false, neighborSpots: null };
+    const neighborSpots = new Map();
+    (p.neighbors || []).forEach((s) => {
+      if (!s || !s.region_key) return;
+      const spot = projectSpot(p, s.x, s.y);
+      if (Number.isFinite(spot.x) && Number.isFinite(spot.y)) {
+        neighborSpots.set(String(s.region_key), spot);
+      }
+    });
+    return { map: Object.assign({}, map, { nodes }), pixel: true, neighborSpots };
+  }
+
+  /** The next caption for a road out, fanned if two exits share one spot. */
+  function neighborSpot(spots, nb, used) {
+    if (!spots || !nb || nb.region_key == null || nb.region_key === '') return null;
+    const key = String(nb.region_key);
+    const base = spots.get(key);
+    if (!base) return null;
+    const n = used.get(key) || 0;
+    used.set(key, n + 1);
+    if (!n) return base;
+    return { x: base.x, y: base.y - n * 3.6 };
+  }
+
+  /**
+   * Width of a plate label before the font has been measured. Generous on
+   * purpose: fitPlates() tightens the box to the real glyphs, and a plate
+   * that starts too narrow clips the name for the frame before that runs.
+   */
+  function textWidth(text, fs) {
+    let w = 0;
+    const s = String(text);
+    for (let i = 0; i < s.length; i++) {
+      const c = s[i];
+      if (c === ' ') w += 0.33;
+      else if ('iljt.,\'!:;|'.includes(c)) w += 0.34;
+      else if (c === '&') w += 0.72;
+      else if ('mwMW'.includes(c)) w += 0.96;
+      else if (c === c.toUpperCase() && c !== c.toLowerCase()) w += 0.72;
+      else w += 0.54;
+    }
+    return w * fs;
+  }
+
+  /**
+   * A dark plate under a place name, hung just under the spot so the building
+   * stays visible and the words stay readable on the pixel town.
+   *
+   * Coordinates are local to a group already translated to (`worldX`,
+   * `worldY`). A plate that would leave the padded field is slid back in —
+   * the West Gate sits on the frame, and a centred name would be clipped.
+   */
+  function namePlate(name, worldX, worldY, localY) {
+    const fs = PLATE_FS;
+    const w = textWidth(name, fs) + 1.8;
+    const h = fs * 1.45;
+    let x = -w / 2;
+    const minX = -PAD_X + 0.4 - worldX;
+    const maxX = VIEW_W + PAD_X - 0.4 - worldX;
+    if (x < minX) x = minX;
+    if (x + w > maxX) x = Math.max(minX, maxX - w);
+    let y = localY;
+    const minY = -PAD_TOP + 0.3 - worldY;
+    const maxY = VIEW_H + PAD_BOTTOM - 0.3 - worldY;
+    if (y < minY) y = minY;
+    if (y + h > maxY) y = Math.max(minY, maxY - h);
+    const tx = x + w / 2;
+    const ty = y + h * 0.70;
+    return {
+      markup: `<g class="wm-plate">
+        <rect class="wm-plate-box" x="${round3(x)}" y="${round3(y)}"
+              width="${round3(w)}" height="${round3(h)}" rx="0.45"/>
+        <text class="wm-label" font-size="${fs}" x="${round3(tx)}" y="${round3(ty)}">${esc(name)}</text>
+      </g>`,
+      hit: `x="${round3(x - 0.15)}" y="${round3(y - 0.1)}" width="${round3(w + 0.3)}" height="${round3(h + 0.2)}"`,
+    };
+  }
+
+  /**
+   * Tighten each plate to the glyphs actually drawn. The estimate above is
+   * only wide enough to not clip; the font is what knows how wide "The
+   * Counting House" is. Called again when the webfont arrives, because the
+   * first measurement can be the fallback serif.
+   */
+  function fitPlates(svgEl) {
+    if (!svgEl || !svgEl.classList.contains('is-pixel')) return;
+    svgEl.querySelectorAll('.wm-plate').forEach((plate) => {
+      const text = plate.querySelector('text');
+      const box = plate.querySelector('.wm-plate-box');
+      if (!text || !box || typeof text.getBBox !== 'function') return;
+      let b;
+      try { b = text.getBBox(); } catch (e) { return; }
+      if (!(b.width > 0.2) || !(b.height > 0.2)) return;
+      const px = 0.7;
+      const py = 0.34;
+      const x = b.x - px;
+      const y = b.y - py;
+      const w = b.width + px * 2;
+      const h = b.height + py * 2;
+      box.setAttribute('x', round3(x));
+      box.setAttribute('y', round3(y));
+      box.setAttribute('width', round3(w));
+      box.setAttribute('height', round3(h));
+      const hit = plate.parentElement && plate.parentElement.querySelector('.wm-hit');
+      if (!hit) return;
+      hit.setAttribute('x', round3(x - 0.25));
+      hit.setAttribute('y', round3(y - 0.15));
+      hit.setAttribute('width', round3(w + 0.5));
+      hit.setAttribute('height', round3(h + 0.3));
+    });
+  }
+
+  function watchPlates(svgEl) {
+    fitPlates(svgEl);
+    if (typeof document !== 'undefined' && document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(() => {
+        if (svgEl.isConnected) fitPlates(svgEl);
+      });
+    }
+  }
+
   function wayIndex(ways) {
     const idx = new Map();
     (ways || []).forEach((w) => {
@@ -133,6 +312,12 @@
     if (!map || !map.nodes || !map.nodes.length) {
       return '<p class="help-hint">Nowhere charted yet.</p>';
     }
+    // A copy when Rivermark is on the pixel town. Everything below — edges,
+    // nodes, the party, the roads out — reads positions off this, so a spot
+    // moves the name, the faces and the quest mark together.
+    const laid = layout(map);
+    map = laid.map;
+    const pixel = laid.pixel;
     const byId = new Map(map.nodes.map((n) => [n.id, n]));
     const ways = wayIndex(opts && opts.ways);
     const quests = questIndex(opts && opts.quests);
@@ -186,7 +371,9 @@
     // run in floorplan(), and it is a location in its own right, so a line from
     // the room to it would be a second drawing of the same join. Everywhere
     // else an edge is a line between two names, as it always was.
-    const edges = map.floorplan ? '' : (map.edges || []).map((e) => {
+    // On the pixel town the roads are painted. Drawing the ink as well would
+    // be a second map of the same streets.
+    const edges = (map.floorplan || pixel) ? '' : (map.edges || []).map((e) => {
       const a = byId.get(e.from);
       const b = byId.get(e.to);
       if (!a || !b) return '';
@@ -221,11 +408,15 @@
         `wm-edge-head is-way${way && way.locked ? ' is-locked' : ''}`);
     }).join('');
 
+    const spotUses = new Map();
     const arrows = (map.neighbors || [])
-      .map((n) => neighborArrow(n, byId, ways, hereId, !!map.floorplan, pinScale, headLen, headHalf))
+      .map((n) => neighborArrow(
+        n, byId, ways, hereId, !!map.floorplan, pinScale, headLen, headHalf,
+        pixel ? { pixel: true, spot: neighborSpot(laid.neighborSpots, n, spotUses) } : null
+      ))
       .filter(Boolean)
       .join('');
-    const marks = partyMarks(opts && opts.party, scale);
+    const marks = partyMarks(opts && opts.party, scale, pixel);
     // Somebody with a spot of their own is drawn on the chart rather than on
     // the place marker, so a shopkeeper can stand in his shop.
     const people = (opts && opts.people) || [];
@@ -240,7 +431,7 @@
     // party has seen, and a name over an unvisited room would be the one thing
     // on the chart that still knew the whole floor.
     const nodes = map.nodes
-      .map((n) => node(n, ways, quests, marks, folk, !!map.floorplan, pinScale))
+      .map((n) => node(n, ways, quests, marks, folk, !!map.floorplan, pinScale, pixel))
       .filter(Boolean).join('');
 
     // A painted map for this region, if one has been drawn. Optional by
@@ -256,7 +447,17 @@
     // region that exists only while a party is standing in it, and asking for
     // one would fetch the homepage HTML and get a 200 for it — the vhost's
     // try_files trap, which is why nothing here verifies art by status code.
-    const art = (map.region_key && !map.floorplan)
+    // The pixel town is a different file from the generated plate, which stays
+    // on disk for the fallback and for anything that still asks for it by the
+    // region key. `pixelated` is set here as well as in CSS: the property has
+    // to ride on the image itself or a scaled SVG resamples it smooth.
+    const art = pixel
+      ? `<image class="wm-art" href="${PIXEL_ART}"
+                x="0" y="0" width="${VIEW_W}" height="${VIEW_H}"
+                preserveAspectRatio="none"
+                style="image-rendering:pixelated"
+                onerror="this.closest('svg').classList.add('is-bare');this.remove()"/>`
+      : (map.region_key && !map.floorplan)
       ? `<image class="wm-art" href="assets/images/maps/${encodeURIComponent(map.region_key)}.png"
                 x="0" y="0" width="${VIEW_W}" height="${VIEW_H}"
                 preserveAspectRatio="none"
@@ -272,7 +473,8 @@
     // no image at all, would have had its corridors dimmed to the 0.22 that is
     // meant for lines lying over a painting. Set here too, from the same fact
     // stated up front rather than discovered by a failed fetch.
-    const cls = ['worldmap', art ? '' : 'is-bare', map.floorplan ? 'is-plan' : '']
+    const cls = ['worldmap', art ? '' : 'is-bare', map.floorplan ? 'is-plan' : '',
+      pixel ? 'is-pixel' : '']
       .filter(Boolean).join(' ');
 
     // The square's size, carried on the element so the zoom can find it.
@@ -323,6 +525,23 @@
   const PC_Y = 0;
 
   /**
+   * A player's chosen look is a `token_*` key, and its `_face.png` is cut
+   * tight: forehead and chin off the edge. Every other face (class art, NPC
+   * keys used by companions) is head and shoulders. So a token face is drawn
+   * from its `_bust.png` (384x512) through this window instead, which frames
+   * it the way an NPC face is framed. The face stays underneath as the
+   * fallback when there is no bust.
+   */
+  const TOKEN_FACE = /^(.*\/npcs\/token_[^/?#]+)_face\.png(\?.*)?$/;
+  const BUST_W = 384;
+  const BUST_H = 512;
+  const BUST_VIEW = '54 10 276 276';
+  function tokenBust(url) {
+    const m = TOKEN_FACE.exec(String(url || ''));
+    return m ? `${m[1]}_bust.png${m[2] || ''}` : null;
+  }
+
+  /**
    * Where the people who live here stand.
    *
    * Above the place, where the party is below it: the two never collide, and
@@ -355,12 +574,14 @@
    * a missing static file on this host serves the homepage HTML with a 200,
    * so `onerror` is the only thing that ever finds out.
    */
-  function partyMarks(party, scale) {
+  function partyMarks(party, scale, pixel) {
     const all = (party || []).filter((p) => p && p.name);
     if (!all.length) return '';
 
-    const r = PC_R * scale;
-    const step = PC_STEP * scale;
+    // On the pixel town the party is the same size as the locals: the
+    // painting is drawn small, and a bigger disc there covered the street.
+    const r = (pixel ? NPC_R : PC_R) * scale;
+    const step = (pixel ? NPC_STEP : PC_STEP) * scale;
     const y = PC_Y * scale;
 
     // The clip id carries the radius. Ids are document-wide, and a bench that
@@ -392,6 +613,13 @@
           width="${(r * 2).toFixed(2)}" height="${(r * 2).toFixed(2)}"
           clip-path="url(#${clipId})" preserveAspectRatio="xMidYMid slice"
           onerror="this.remove()"/>` : ''}
+        ${tokenBust(pc.face) ? `<g clip-path="url(#${clipId})"><svg
+          x="${(-r).toFixed(2)}" y="${(-r).toFixed(2)}"
+          width="${(r * 2).toFixed(2)}" height="${(r * 2).toFixed(2)}"
+          viewBox="${BUST_VIEW}" preserveAspectRatio="xMidYMid slice"><image
+          class="wm-pc-face" href="${esc(tokenBust(pc.face))}"
+          width="${BUST_W}" height="${BUST_H}"
+          onerror="this.closest('g').remove()"/></svg></g>` : ''}
         <circle class="wm-pc-ring" r="${r.toFixed(2)}"/>
       </g>`;
     // Reversed, so the pile stacks left-over-right: the faces are laid out by
@@ -1419,7 +1647,7 @@
    * Genuinely hidden places are not on the chart at all until found — see
    * `hidden_until_visited`, which is a stronger thing than being unvisited.
    */
-  function node(n, ways, quests, marks, folk, floorplan, pinScale) {
+  function node(n, ways, quests, marks, folk, floorplan, pinScale, pixel) {
     // A passage has no label — the chart draws its RUN, in floorplan(), and
     // that run is the click target. Naming it would put "A Low Way" across the
     // rooms either side of it, twelve times a level, for a place whose whole
@@ -1522,6 +1750,14 @@
     // stands on the room's origin; the pin sits one square north of them so
     // the faces do not cover it. Other rooms keep the pin on the origin.
     const pin = floorplan && !unknown;
+    // On the pixel town the current place is named too. The parchment chart
+    // leaves it unnamed because the faces and the heading already say it, and
+    // a caption across a one-place painting is most of the picture. Here the
+    // town is twelve buildings and the one without a plate is the one you
+    // cannot read. The plate hangs below the faces, which stay the marker.
+    const plate = pixel && !unknown && !pin
+      ? namePlate(n.name, n.x, n.y, n.current ? 2.2 : 0.55)
+      : null;
     const mark = unknown
       ? '<circle class="wm-unwalked" cx="0" cy="0" r="1.5"/>'
       : pin
@@ -1529,16 +1765,20 @@
                <circle class="wm-roompin-disc" cx="0" cy="0" r="2"/>
                <text class="wm-roompin-i" dy="0.72" aria-hidden="true">i</text>
              </g>`
-          : n.current
-            ? ''
-            : `<text class="wm-label" dy="0.85">${esc(n.name)}</text>`;
+          : plate
+            ? plate.markup
+            : n.current
+              ? ''
+              : `<text class="wm-label" dy="0.85">${esc(n.name)}</text>`;
 
     // The hit pad is the width of what is drawn: a name is wide, a pin is not,
     // and a 20-unit pad around a 4-unit marker would swallow the room next door
-    // on a plan where the rooms are small.
-    const pad = unknown ? 'x="-3.2" width="6.4"'
-      : pin ? 'x="-3" width="6"'
-      : 'x="-10" width="20"';
+    // on a plan where the rooms are small. A pixel plate brings its own, sized
+    // to the plate, and fitPlates() tightens it to the glyphs.
+    const pad = plate ? plate.hit
+      : unknown ? 'x="-3.2" y="-4" width="6.4" height="8"'
+      : pin ? 'x="-3" y="-4" width="6" height="8"'
+      : 'x="-10" y="-4" width="20" height="8"';
 
     // The tooltip hook goes on the pin cluster, not on the drawn glyph: the
     // glyph is `pointer-events: none` and the hit rect is its sibling, so a
@@ -1561,7 +1801,7 @@
       ${n.current ? (folk || '') : ''}
       ${n.current ? (marks || '') : ''}
       <g${asks}${pinAt}>
-      <rect class="wm-hit" ${pad} y="-4" height="8" rx="1"/>
+      <rect class="wm-hit" ${pad} rx="1"/>
       ${mark}
       </g>
       ${quest ? `<g data-quest-pin transform="scale(${round3(pinScale || 1)})"
@@ -1590,16 +1830,24 @@
    * stub is its number key; from anywhere else it is a bare road out, drawn
    * but not captioned and not clickable. `visited` here is of the location on
    * the far side, which is what "we have been through there" means.
+   *
+   * On the pixel town `paint.spot` is where that road leaves the picture, and
+   * the stub is not drawn — the road is already painted. A caption with no
+   * spot still sits at the guessed edge, still without ink. An unvisited road
+   * that is not a step from here draws nothing: there is no stub left to say
+   * a way goes on, and the picture says it.
    */
-  function neighborArrow(nb, byId, ways, hereId, floorplan, pinScale, headLen, headHalf) {
+  function neighborArrow(nb, byId, ways, hereId, floorplan, pinScale, headLen, headHalf, paint) {
     const from = byId.get(nb.from);
     if (!from) return '';
+    const pixel = !!(paint && paint.pixel);
+    const spot = paint && paint.spot;
     // Push toward whichever border the source location is already nearest, so
     // the stub leaves the chart the way the road actually goes.
     const dx = from.x > VIEW_W / 2 ? 1 : -1;
     const dy = from.y > VIEW_H / 2 ? 0.35 : -0.35;
-    const tx = Math.max(4, Math.min(VIEW_W - 4, from.x + dx * 11));
-    const ty = Math.max(5, Math.min(VIEW_H - 5, from.y + dy * 11));
+    const tx = spot ? spot.x : Math.max(4, Math.min(VIEW_W - 4, from.x + dx * 11));
+    const ty = spot ? spot.y : Math.max(5, Math.min(VIEW_H - 5, from.y + dy * 11));
     const anchor = dx > 0 ? 'start' : 'end';
 
     const way = ways.get(nb.to_location_id);
@@ -1631,6 +1879,9 @@
     // Clicking a caption you cannot read is not travel, it is a guess.
     const clickable = !unknown || isWayFromHere;
 
+    // Nothing to draw: the ink is withheld and there is no caption either.
+    if (pixel && !caption) return '';
+
     // On a floor plan the caption becomes a pin, for the reason the room
     // names did — but with a sharper one behind it. A region chart is mostly
     // empty parchment and a road out has room to be captioned; a floor plan is
@@ -1643,14 +1894,24 @@
     // So down here it is an arrow in a disc at the end of the stub, named on
     // hover through the same tip the rooms use. The stub still runs to the
     // border, so the direction is still drawn — only the words move.
-    const pinned = floorplan && !!caption;
+    const pinned = floorplan && !!caption && !pixel;
+    // A road out on the left of the town shares a row with the buildings.
+    // Hung under the spot, "The Proving Grounds" lands on Tobin's Goods.
+    // Above the spot it sits in the grass the road comes out of.
+    const hang = (pixel && tx < 24 && ty < 55) ? -5.2 : 0.45;
+    const plate = pixel && caption ? namePlate(caption, tx, ty, hang) : null;
     const label = pinned
       ? `<g class="wm-exitpin" transform="translate(${tx + dx * 2.4} ${ty}) scale(${round3(pinScale || 1)})">
            <circle class="wm-exitpin-hit" cx="0" cy="0" r="3.2"/>
            <circle class="wm-exitpin-disc" cx="0" cy="0" r="2"/>
            <text class="wm-exitpin-mark" dy="0.78" aria-hidden="true">↑</text>
          </g>`
-      : `<text class="wm-out-label" x="${tx + dx * 2.4}" y="${ty + 0.9}"
+      : plate
+        ? `<g transform="translate(${round3(tx)} ${round3(ty)})">
+             <rect class="wm-hit" ${plate.hit} rx="1"/>
+             ${plate.markup}
+           </g>`
+        : `<text class="wm-out-label" x="${tx + dx * 2.4}" y="${ty + 0.9}"
             text-anchor="${anchor}">${esc(caption)}</text>`;
 
     // A pinned exit takes its name from the tip rather than from <title>, so
@@ -1662,12 +1923,12 @@
         ? ` data-map-node="${nb.to_location_id}" role="button" tabindex="0"`
         : ' aria-hidden="true"'}${tip}${pinned ? ` aria-label="${esc(title)}"` : ''}>
       ${pinned ? '' : `<title>${esc(title)}</title>`}
-      <line class="wm-edge is-out${isWayFromHere ? ' is-way' : ''}${way && way.locked ? ' is-locked' : ''}"
+      ${pixel ? '' : `<line class="wm-edge is-out${isWayFromHere ? ' is-way' : ''}${way && way.locked ? ' is-locked' : ''}"
             x1="${from.x}" y1="${from.y}" x2="${tx}" y2="${ty}"/>
       ${isWayFromHere
         ? arrowHead(from.x, from.y, tx, ty, headLen, headHalf,
             `wm-edge-head is-way${way && way.locked ? ' is-locked' : ''}`)
-        : ''}
+        : ''}`}
       ${label}
     </g>`;
   }
@@ -1753,6 +2014,10 @@
   function controls(root, saved, openZoom) {
     const svgEl = root.querySelector('.worldmap');
     if (!svgEl || !window.SvgView) return null;
+
+    // Plates before the first view, so the opening zoom frames names that are
+    // the width they will actually be. The webfont arriving refits them.
+    watchPlates(svgEl);
 
     const here = herePoint(svgEl);
     // A floor plan opens to its own grid rather than to the caller's guess.
@@ -1930,5 +2195,5 @@
     return { x: a.x + (b.x - a.x) * k, y: a.y + (b.y - a.y) * k };
   }
 
-  window.WorldMap = { svg, controls, walk };
+  window.WorldMap = { svg, controls, walk, layout };
 })();
