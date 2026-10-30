@@ -15,7 +15,12 @@
     "wererat": "ratman",
     "fire_giant": "ogre",
     "frost_giant": "ogre",
-    "storm_giant": "ogre"
+    "storm_giant": "ogre",
+    "young_red_dragon": "dragon",
+    "adult_black_dragon": "dragon",
+    "ancient_white_dragon": "dragon",
+    "archmage": "boss_wizard",
+    "iron_golem": "golem"
   },
   "monsters": [
     {
@@ -737,6 +742,126 @@
         160
       ],
       "portrait": "https://rpg.five-star.com/assets/images/monsters/boss_worm_bust.png"
+    },
+    {
+      "key": "dragon",
+      "monster_key": "adult_red_dragon",
+      "name": "Adult Red Dragon",
+      "size": "Huge",
+      "footprint": 3,
+      "height_cells": 3.0,
+      "canvas": [
+        320,
+        320
+      ],
+      "wide": true,
+      "file": "dragon.png",
+      "aga_file": "dragon_s.png",
+      "aga_canvas": [
+        160,
+        160
+      ],
+      "portrait": "https://rpg.five-star.com/assets/images/monsters/dragon_bust.png"
+    },
+    {
+      "key": "boss_wizard",
+      "monster_key": "lich",
+      "name": "Lich",
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "wide": false,
+      "file": "boss_wizard.png",
+      "aga_file": "boss_wizard_s.png",
+      "aga_canvas": [
+        96,
+        160
+      ],
+      "portrait": "https://rpg.five-star.com/assets/images/monsters/boss_wizard_bust.png"
+    },
+    {
+      "key": "balor",
+      "monster_key": "balor",
+      "name": "Balor",
+      "size": "Huge",
+      "footprint": 3,
+      "height_cells": 3.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "wide": false,
+      "file": "balor.png",
+      "aga_file": "balor_s.png",
+      "aga_canvas": [
+        96,
+        160
+      ],
+      "portrait": "https://rpg.five-star.com/assets/images/monsters/balor_bust.png"
+    },
+    {
+      "key": "chimera",
+      "monster_key": "chimera",
+      "name": "Chimera",
+      "size": "Large",
+      "footprint": 2,
+      "height_cells": 2.0,
+      "canvas": [
+        320,
+        320
+      ],
+      "wide": true,
+      "file": "chimera.png",
+      "aga_file": "chimera_s.png",
+      "aga_canvas": [
+        160,
+        160
+      ],
+      "portrait": "https://rpg.five-star.com/assets/images/monsters/chimera_bust.png"
+    },
+    {
+      "key": "golem",
+      "monster_key": "stone_golem",
+      "name": "Stone Golem",
+      "size": "Large",
+      "footprint": 2,
+      "height_cells": 2.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "wide": false,
+      "file": "golem.png",
+      "aga_file": "golem_s.png",
+      "aga_canvas": [
+        96,
+        160
+      ],
+      "portrait": "https://rpg.five-star.com/assets/images/monsters/golem_bust.png"
+    },
+    {
+      "key": "griffon",
+      "monster_key": "roc",
+      "name": "Roc",
+      "size": "Huge",
+      "footprint": 3,
+      "height_cells": 3.0,
+      "canvas": [
+        320,
+        320
+      ],
+      "wide": true,
+      "file": "griffon.png",
+      "aga_file": "griffon_s.png",
+      "aga_canvas": [
+        160,
+        160
+      ],
+      "portrait": "https://rpg.five-star.com/assets/images/monsters/griffon_bust.png"
     }
   ],
   "heroes": [
