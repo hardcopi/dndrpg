@@ -78,6 +78,97 @@
   }
 
   /**
+   * The figure sheets, once, from the static catalogue.
+   *
+   * Null until the fetch settles, then a map of art key and bestiary alias
+   * onto the row. A missing file is not asked for twice: once this is loaded,
+   * a key it does not know draws the face instead of a request that would
+   * come back as the homepage.
+   */
+  let figureIndex = null;
+  let figureWait = null;
+
+  function indexFigures(data) {
+    const by = Object.create(null);
+    if (!data) return by;
+    for (const row of [...(data.monsters || []), ...(data.heroes || [])]) {
+      if (!row) continue;
+      if (row.key) by[row.key] = row;
+      if (row.monster_key) by[row.monster_key] = row;
+    }
+    const aliases = data.aliases || {};
+    for (const from of Object.keys(aliases)) {
+      const row = by[aliases[from]];
+      if (row) by[from] = row;
+    }
+    return by;
+  }
+
+  function loadFigures() {
+    if (figureWait) return figureWait;
+    figureWait = fetch('/assets/images/figures/monsters.json')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => { figureIndex = indexFigures(data); })
+      .catch(() => { figureIndex = Object.create(null); });
+    return figureWait;
+  }
+
+  /** Run once the catalogue is in, so a board drawn early can redraw at the real sizes. */
+  function whenFigures(cb) {
+    const run = () => { if (figureIndex) cb(); };
+    if (figureIndex) { setTimeout(run, 0); return; }
+    loadFigures().then(run);
+  }
+
+  loadFigures();
+
+  /** Heights in cells. Large and Huge are the picture's footprint; the cell is still one. */
+  const FIGURE_H = { tiny: 0.5, small: 0.75, medium: 1, large: 2, huge: 3 };
+  /** Feet on the ring: 6px up a 40px cell, so a Medium body overhangs the top. */
+  const FEET_Y = 0.5 - 6 / 40;
+  /** The stirge hovers. Another 14/40 of a cell above the ring. */
+  const TINY_LIFT = 14 / 40;
+  /** Soles sit 4px above the bottom of a 320-tall sheet. */
+  const SOLE = 4 / 320;
+
+  function knownSize(word) {
+    const s = String(word || '').trim().toLowerCase();
+    return FIGURE_H[s] ? s : '';
+  }
+
+  /**
+   * Which sheet, and how tall.
+   *
+   * Payload `size` wins when it is one of the five words the sheets are drawn
+   * at. Otherwise the catalogue, and otherwise Small when the key or the race
+   * says dwarf, gnome or halfling. Gargantuan is not a picture size — the
+   * catalogue's own word is used, and nothing is drawn 4×4.
+   */
+  function figureFor(c, key) {
+    if (!key) return null;
+    const row = figureIndex ? figureIndex[key] : null;
+    if (figureIndex && !row) return null;
+    const payload = knownSize(c.size);
+    const fromRow = row ? knownSize(row.size) : '';
+    let size = payload || fromRow;
+    if (!size) {
+      const blob = `${key} ${c.race || ''} ${c.sprite_key || ''}`.toLowerCase();
+      size = (blob.includes('dwarf') || blob.includes('gnome') || blob.includes('halfling'))
+        ? 'small' : 'medium';
+    }
+    const height = FIGURE_H[size];
+    const wide = !!(row && (row.wide || (row.canvas && row.canvas[0] >= 320)));
+    const aspect = wide ? 1 : 192 / 320;
+    return {
+      size,
+      height,
+      footprint: height >= 2 ? height : 1,
+      aspect,
+      file: (row && row.file) || `${key}.png`,
+    };
+  }
+
+  /**
    * A hand-drawn board carries its own picture — see FixedBattleMaps.php.
    *
    * Two things follow from `grid.image` being set. The picture is laid over the
@@ -306,6 +397,55 @@
     return out;
   }
 
+  function faceImage(c, href) {
+    if (c.token) {
+      return `<image class="bm-face is-token" href="${href}" x="-0.46" y="-0.46"
+           width="0.92" height="0.92" preserveAspectRatio="xMidYMid meet"
+           onerror="this.remove()"/>`;
+    }
+    return `<image class="bm-face" href="${href}" x="-0.34" y="-0.34"
+         width="0.68" height="0.68" clip-path="url(#bm-round)"
+         preserveAspectRatio="xMidYMid slice"
+         onerror="this.remove()"/>`;
+  }
+
+  /**
+   * The full figure, feet on the ring, or the face when there is no sheet.
+   *
+   * The picture is centred on the server's one cell. Large and Huge are a
+   * 2×2 and a 3×3 drawn around that cell; they do not occupy the cells they
+   * cover, and the hit target stays the ring so a Growth does not swallow
+   * the squares beside it. The face is in the markup already and hidden —
+   * a sheet that fails to decode reveals it, which is also what a token-pack
+   * stamp falls back through.
+   */
+  function figureHtml(c, o) {
+    const href = esc(o.faceUrl(c));
+    const face = faceImage(c, href);
+    const key = String((o.artKey ? o.artKey(c) : '') || c.sprite_key || '');
+    const spec = figureFor(c, key);
+    if (!spec) return { art: face, figure: false };
+
+    const feetY = spec.size === 'tiny' ? FEET_Y - TINY_LIFT : FEET_Y;
+    const imgH = spec.height;
+    const imgW = spec.height * spec.aspect;
+    const imgY = feetY - imgH * (1 - SOLE);
+    const imgX = -imgW / 2;
+    const n = (v) => Number(v).toFixed(3);
+    // No outline until the catalogue has named the sheet. A guess would
+    // put a 2×2 around a face that is about to fall back.
+    const foot = figureIndex && spec.footprint > 1
+      ? `<rect class="bm-foot" x="${n(-spec.footprint / 2)}" y="${n(feetY - spec.footprint)}"
+           width="${n(spec.footprint)}" height="${n(spec.footprint)}"/>`
+      : '';
+    const held = face.replace('class="bm-face', 'class="bm-face is-held');
+    const sheet = `<image class="bm-figure" href="${esc(artUrl('figures/' + spec.file))}"
+         x="${n(imgX)}" y="${n(imgY)}" width="${n(imgW)}" height="${n(imgH)}"
+         preserveAspectRatio="xMidYMax meet" image-rendering="pixelated"
+         onerror="var g=this.parentNode;var f=g&amp;&amp;g.querySelector('.is-held');if(f)f.classList.remove('is-held');this.remove()"/>`;
+    return { art: `${foot}${held}${sheet}`, figure: true };
+  }
+
   function tokensHtml(state, o) {
     const ui = state.ui || null;
     const targets = (ui && ui.targets && !Array.isArray(ui.targets)) ? ui.targets : {};
@@ -337,24 +477,18 @@
         ? ` — ${shot.dist} ft${shot.why ? ', ' + shot.why : ''}`
         : '';
 
-      const face = esc(o.faceUrl(c));
-      const stamped = !!c.token;
-      const art = stamped
-        ? `<image class="bm-face is-token" href="${face}" x="-0.46" y="-0.46"
-             width="0.92" height="0.92" preserveAspectRatio="xMidYMid meet"
-             onerror="this.remove()"/>`
-        : `<image class="bm-face" href="${face}" x="-0.34" y="-0.34"
-             width="0.68" height="0.68" clip-path="url(#bm-round)"
-             preserveAspectRatio="xMidYMid slice"
-             onerror="this.remove()"/>`;
+      const drawn = figureHtml(c, o);
+      const ringR = drawn.figure ? '0.40' : (c.token ? '0.47' : '0.40');
+      const ringFill = (drawn.figure || c.token) ? ' fill="none"' : '';
 
-      return `<g class="${cls}${stamped ? ' has-token' : ''}" transform="translate(${c.x + 0.5} ${c.y + 0.5})"
+      return `<g class="${cls}${c.token ? ' has-token' : ''}${drawn.figure ? ' has-figure' : ''}"
+          transform="translate(${c.x + 0.5} ${c.y + 0.5})"
           data-cid="${esc(c.cid)}" ${dead ? '' : 'role="button" tabindex="0"'}>
         <title>${esc(c.name)} — HP ${esc(c.hp)}/${esc(c.max_hp)}, AC ${esc(c.ac)}${esc(note)}</title>
         <circle class="bm-hit-token" r="0.48"/>
         <circle class="bm-turn" r="0.46"/>
-        <circle class="bm-ring" r="${stamped ? '0.47' : '0.40'}" ${stamped ? 'fill="none"' : ''}/>
-        ${art}
+        <circle class="bm-ring" r="${ringR}"${ringFill}/>
+        ${drawn.art}
         <rect class="bm-hp-back" x="-0.36" y="0.38" width="0.72" height="0.12" rx="0.06"/>
         <rect class="bm-hp ${pct > 0.5 ? 'ok' : pct > 0.25 ? 'mid' : 'low'}"
               x="-0.36" y="0.38" width="${(0.72 * pct).toFixed(3)}" height="0.12" rx="0.06"/>
@@ -613,23 +747,22 @@
       zoomMax: ZOOM_MAX,
       zoomStep: ZOOM_STEP,
       start: boardView,
-      // Drag with any button. A bare left-click is still a move order and
-      // still only a move order — what separates the two is distance, not which
-      // finger you used: SvgView ignores movement under its few pixels of slop,
-      // and the click handler below asks `consumePan()` so a drag that ends over
-      // a cell never also counts as having clicked it.
+      // Drag the ground with any button and the camera follows. A bare
+      // left-click is still a move order — SvgView ignores movement under its
+      // few pixels of slop, and the click handler asks `consumePan()` so a pan
+      // that ends over a cell never also counts as having clicked it.
       //
-      // This used to demand Space or the middle button, on the reasoning that a
-      // board where clicking the ground sometimes walks you and sometimes
-      // slides the camera is a board you cannot trust. The reasoning was right
-      // and the remedy was wrong: the slop already tells a click from a drag,
-      // and what it actually bought was a zoomed-in board you could not move at
-      // all unless you knew about a keypress nothing on screen mentions. The
-      // scene chart has worked this way the whole time.
-      //
-      // Space still pans, and still swallows the click while it is held, for
-      // anyone who wants to look around with no chance of ordering anything.
-      canPan: (e) => e.button === 0 || e.button === 1,
+      // Dragging your own figure is the other gesture, and it must not be this
+      // one. canPan refuses the acting party token so the handler below can
+      // draw the server's path instead of sliding the board. Space or the
+      // middle button still pans, including off that token, for anyone who
+      // wants to look around with no chance of ordering a step.
+      canPan: (e) => {
+        if (e.button === 1 || spaceHeld) return true;
+        if (e.button !== 0) return false;
+        if (actorTokenEl(e.target) && moveDragAllowed()) return false;
+        return true;
+      },
       onApply: (v) => {
         boardView = { z: v.z, cx: v.cx, cy: v.cy };
         root.classList.toggle('is-zoomed', v.z > ZOOM_MIN * 1.001);
@@ -649,14 +782,44 @@
     boardCam = null;
   }
 
+  /**
+   * The acting party token under the pointer, if the press is on one.
+   *
+   * The figure itself does not take the hit — a 3×3 sheet would cover the
+   * cells beside it — so this is the ring, which is the click target the
+   * board already had.
+   */
+  function actorTokenEl(node) {
+    if (!node || typeof node.closest !== 'function') return null;
+    return node.closest('.bm-token.is-actor.is-party:not(.is-dead)');
+  }
+
+  /** Whether a drag on that token is a move. Spell placement leaves the camera in charge. */
+  let moveDragAllowed = () => true;
+
+  /** A drag-move swallows the click it ends on, across the redraw that follows. */
+  let suppressClick = false;
+
   function bind(root, handlers) {
     const svg = root.querySelector('.battlemap');
     if (!svg) return;
     const h = handlers || {};
+    moveDragAllowed = () => !h.canDrag || h.canDrag();
 
     const cellOf = (ev) => {
       const el = ev.target.closest('[data-bm-cell]');
       return el ? parseKey(el.dataset.bmCell) : null;
+    };
+    // The cell under the pointer, including when a token is what the hit test
+    // names. elementsFromPoint walks through the ring to the square beneath.
+    const cellAt = (ev) => {
+      const stack = document.elementsFromPoint(ev.clientX, ev.clientY);
+      for (const el of stack) {
+        if (!el || typeof el.closest !== 'function') continue;
+        const hit = el.closest('[data-bm-cell]');
+        if (hit && svg.contains(hit)) return parseKey(hit.dataset.bmCell);
+      }
+      return null;
     };
     // The dead are not tokens as far as a click is concerned. The handler
     // below asks this before it asks cellOf() and returns on the first answer,
@@ -669,10 +832,54 @@
       return el ? el.dataset.cid : null;
     };
 
+    // A press on your own figure, dragged, previews the walk and posts it on
+    // release. The route is paintPath — ui.reach, not a pathfinder. Under the
+    // slop it is still a click, and a click on a cell is still a move.
+    let drag = null;
+    svg.addEventListener('pointerdown', (ev) => {
+      if (ev.button !== 0 || spaceHeld || !moveDragAllowed()) return;
+      if (!actorTokenEl(ev.target)) return;
+      drag = { pointerId: ev.pointerId, x: ev.clientX, y: ev.clientY, moved: false };
+    });
+    svg.addEventListener('pointermove', (ev) => {
+      if (!drag || ev.pointerId !== drag.pointerId) return;
+      if (!drag.moved) {
+        if (Math.hypot(ev.clientX - drag.x, ev.clientY - drag.y) < 4) return;
+        drag.moved = true;
+        try { svg.setPointerCapture(ev.pointerId); } catch (_) { /* not ours */ }
+      }
+      ev.preventDefault();
+      if (h.onHover) h.onHover(null, cellAt(ev));
+    });
+    const endDrag = (ev) => {
+      if (!drag || !ev || ev.pointerId !== drag.pointerId) return;
+      const was = drag;
+      drag = null;
+      if (!was.moved) return;
+      suppressClick = true;
+      setTimeout(() => { suppressClick = false; }, 0);
+      try { svg.releasePointerCapture(was.pointerId); } catch (_) { /* already gone */ }
+      const cell = cellAt(ev);
+      if (cell && h.onCell && moveDragAllowed()) h.onCell(cell[0], cell[1]);
+      if (h.onHover) h.onHover(null, null);
+    };
+    svg.addEventListener('pointerup', endDrag);
+    svg.addEventListener('pointercancel', (ev) => {
+      if (!drag || ev.pointerId !== drag.pointerId) return;
+      const was = drag.moved;
+      drag = null;
+      if (was) {
+        suppressClick = true;
+        setTimeout(() => { suppressClick = false; }, 0);
+      }
+      if (h.onHover) h.onHover(null, null);
+    });
+
     svg.addEventListener('click', (ev) => {
       // A drag that happened to end over a cell is not a click on it. The view
       // is asked rather than told, and asking clears the flag, so one pan
-      // swallows exactly one click.
+      // swallows exactly one click. A figure-drag does the same with its own flag.
+      if (suppressClick) { suppressClick = false; return; }
       if ((boardCam && boardCam.consumePan()) || spaceHeld) return;
       const cid = tokenOf(ev);
       if (cid) {
@@ -702,6 +909,7 @@
       if (h.onHover) h.onHover(cid, cell);
     });
     svg.addEventListener('mouseleave', () => {
+      if (drag && drag.moved) return;
       if (h.onHover) h.onHover(null, null);
     });
     svg.addEventListener('focusin', (ev) => {
@@ -710,7 +918,7 @@
   }
 
   window.BattleMap = {
-    html, bind, controls, camera, forget,
+    html, bind, controls, camera, forget, whenFigures,
     paintPath, paintAoe, paintAim, moveToken, floatText, shoot,
     W, H, SHOT_MS,
   };

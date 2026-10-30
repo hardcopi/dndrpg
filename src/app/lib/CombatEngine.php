@@ -68,6 +68,20 @@ class CombatEngine
     /** Big things reach further. Anything this size or larger gets ten feet. */
     private const LARGE_SIZES = ['large', 'huge', 'gargantuan'];
 
+    /**
+     * How tall a player character is drawn.
+     *
+     * A stamp for the board. It is not a reach and it is not a footprint:
+     * LARGE_SIZES is still read only for a monster's melee, and BattleGrid
+     * still stands every combatant in one cell.
+     */
+    public static function pcSize(string $race): string
+    {
+        // Sarsen size is a pending design decision.
+        return in_array(strtolower(trim($race)), ['dwarf', 'gnome', 'halfling'], true)
+            ? 'small' : 'medium';
+    }
+
     // -----------------------------------------------------------------------
     // Monster AI weights.
     //
@@ -1495,6 +1509,10 @@ class CombatEngine
                 'background'   => $pc['background'] ?? '',
                 'sprite_key'   => $pc['sprite_key'] ?? 'fighter',
                 'image_url'    => null,
+                // Crossing with the rest of the row. The board scales the
+                // figure from these and never asks the database again.
+                'race'         => (string) ($pc['race'] ?? ''),
+                'size'         => self::pcSize((string) ($pc['race'] ?? '')),
                 'is_caster'    => $profile['caster'],
                 'is_healer'    => $profile['healer'],
                 'has_ranged'   => true,

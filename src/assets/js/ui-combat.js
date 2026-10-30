@@ -404,6 +404,13 @@
     // Settle what we need to know about this fight while it is still here.
     noteFight();
 
+    // The figure catalogue arrives once. A board drawn before it did is
+    // redrawn so the sizes and the aliases are the catalogue's, not a guess.
+    if (!ui.figuresHooked && window.BattleMap && window.BattleMap.whenFigures) {
+      ui.figuresHooked = true;
+      window.BattleMap.whenFigures(() => { if (st()) render(); });
+    }
+
     const actor = currentActor();
     const combatants = s.combatants || [];
 
@@ -423,7 +430,7 @@
       <div class="cbt-field">
         ${initHtml(combatants, actor, legal)}
         <div class="cbt-map" id="cbt-map">
-          ${window.BattleMap ? window.BattleMap.html(s, { selected: ui.selected, faceUrl }) : ''}
+          ${window.BattleMap ? window.BattleMap.html(s, { selected: ui.selected, faceUrl, artKey }) : ''}
           <div class="map-zoom bm-zoom" role="group" aria-label="Zoom">
             <button type="button" class="icon-btn icon-btn-sm" data-zoom="out"
                     title="Zoom out (−)" aria-label="Zoom out">−</button>
@@ -900,6 +907,7 @@
     });
 
     window.BattleMap.bind(box, {
+      canDrag: () => !ui.placing && !!actor && actor.type === 'pc' && s.status === 'active' && !ui.busy,
       onToken: (cid) => {
         if (ui.placing) return placeAt(cellOfCid(cid));
         ui.selected = cid;
