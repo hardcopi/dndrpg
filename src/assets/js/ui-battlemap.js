@@ -168,6 +168,12 @@
     };
   }
 
+  /** The full-body "style b" sheet for a combatant, or '' when the catalogue has none. */
+  function figureUrl(c, key) {
+    const row = figureIndex && key ? figureIndex[key] : null;
+    return row && row.file ? '/assets/images/figures/' + row.file : '';
+  }
+
   /**
    * A hand-drawn board carries its own picture — see FixedBattleMaps.php.
    *
@@ -918,7 +924,7 @@
   }
 
   window.BattleMap = {
-    html, bind, controls, camera, forget, whenFigures,
+    html, bind, controls, camera, forget, whenFigures, figureUrl,
     paintPath, paintAoe, paintAim, moveToken, floatText, shoot,
     W, H, SHOT_MS,
   };

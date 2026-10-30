@@ -679,7 +679,7 @@
       const y = Math.min(left[1], right[1]);
       const bw = Math.abs(right[0] - left[0]);
       const bh = Math.abs(right[1] - left[1]);
-      const href = fig.u || ('assets/images/battlers/' + key + '.png');
+      const href = fig.u || ('assets/images/figures/' + key + '.png');
       list.push({
         z: zi - 0.006,
         svg: '<image class="fp-fig" href="' + href + '" x="' + x + '" y="' + y +

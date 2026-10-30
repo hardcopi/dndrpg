@@ -863,12 +863,47 @@ final class DelveEngine
             return '';
         }
         $root = dirname(__DIR__, 2) . '/assets/images';
+        $fig = $this->figureFile($root, $key);
+        if ($fig !== '') {
+            return 'assets/images/figures/' . $fig;
+        }
         foreach (["battlers/{$key}.png", "monsters/{$key}.png", "monsters/{$key}_bust.png"] as $rel) {
             if (is_file($root . '/' . $rel)) {
                 return 'assets/images/' . $rel;
             }
         }
         return 'assets/images/battlers/' . $key . '.png';
+    }
+
+    /**
+     * The current full-body sheet for a key, from `figures/monsters.json`
+     * (rows by key or monster_key, then the alias table), or '' when the
+     * catalogue has none on disk.
+     */
+    private function figureFile(string $root, string $key): string
+    {
+        static $cat = null;
+        if ($cat === null) {
+            $raw = is_file($root . '/figures/monsters.json')
+                ? json_decode((string) file_get_contents($root . '/figures/monsters.json'), true)
+                : null;
+            $cat = ['files' => [], 'aliases' => []];
+            if (is_array($raw)) {
+                foreach (array_merge($raw['monsters'] ?? [], $raw['heroes'] ?? []) as $row) {
+                    if (!is_array($row) || empty($row['file'])) {
+                        continue;
+                    }
+                    foreach (['key', 'monster_key'] as $k) {
+                        if (!empty($row[$k])) {
+                            $cat['files'][(string) $row[$k]] = (string) $row['file'];
+                        }
+                    }
+                }
+                $cat['aliases'] = is_array($raw['aliases'] ?? null) ? $raw['aliases'] : [];
+            }
+        }
+        $file = $cat['files'][$key] ?? ($cat['files'][$cat['aliases'][$key] ?? ''] ?? '');
+        return ($file !== '' && is_file($root . '/figures/' . $file)) ? $file : '';
     }
 
     /**

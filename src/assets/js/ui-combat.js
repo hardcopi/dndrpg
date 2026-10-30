@@ -243,13 +243,16 @@
   /**
    * Full-height battle art for the inspector.
    *
-   * Only nine monsters have a battler cut — the bandit is a Townfolk sprite and
-   * the pack ships no battle art for it — so the bust is the fallback rather
-   * than a broken image.
+   * The figures catalogue (`figures/monsters.json`, 32-colour "style b") is the
+   * source: it covers every monster the book has art for and every player look.
+   * A creature it does not name falls back to the older `battlers/` cut, and
+   * that to the bust through `onerror` below.
    */
   function battlerUrl(c) {
-    if (c.token) return `/assets/images/${c.token}?v=${G().TILE_CACHE_VER}`;
     const key = artKey(c);
+    const fig = window.BattleMap && window.BattleMap.figureUrl ? window.BattleMap.figureUrl(c, key) : '';
+    if (fig) return `${fig}?v=${G().TILE_CACHE_VER}`;
+    if (c.token) return `/assets/images/${c.token}?v=${G().TILE_CACHE_VER}`;
     if (c.type === 'pc') return `/assets/images/npcs/${key}_bust.png?v=${G().TILE_CACHE_VER}`;
     return `/assets/images/battlers/${key}.png?v=${G().TILE_CACHE_VER}`;
   }
