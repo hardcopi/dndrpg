@@ -1,0 +1,1212 @@
+{
+  "notes": "Figures fill their canvas; scale at draw time by height_cells (Tiny .5, Small .75, Medium 1, Large 2 = 2x2, Huge 3 = 3x3). Feet/base 4px above canvas bottom. Wide creatures use 320x320, others 192x320. key = server art key (sprite_key, else monster_key). aliases maps a bestiary key onto that figure key when the names differ (the_growth -> boss_worm, worg -> black_wolf, and the other shared sheets).",
+  "aliases": {
+    "the_growth": "boss_worm",
+    "purple_worm": "boss_worm",
+    "worg": "black_wolf",
+    "carrion_crawler": "crawler",
+    "crust": "rock_man",
+    "stone_giant": "rock_man",
+    "deep_gremlin": "gremlin",
+    "drowned_clerk": "boss_drowned",
+    "fen_horror": "tentacled",
+    "fen_howler": "howler",
+    "grey_ooze": "ooze",
+    "wererat": "ratman",
+    "fire_giant": "ogre",
+    "frost_giant": "ogre",
+    "storm_giant": "ogre"
+  },
+  "monsters": [
+    {
+      "key": "city_engineer",
+      "monster_key": "city_engineer",
+      "name": "City Engineer",
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "wide": false,
+      "file": "city_engineer.png",
+      "aga_file": "city_engineer_s.png",
+      "aga_canvas": [
+        96,
+        160
+      ],
+      "portrait": "https://rpg.five-star.com/assets/images/monsters/city_engineer_bust.png"
+    },
+    {
+      "key": "bandit",
+      "monster_key": "bandit",
+      "name": "Bandit",
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "wide": false,
+      "file": "bandit.png",
+      "aga_file": "bandit_s.png",
+      "aga_canvas": [
+        96,
+        160
+      ],
+      "portrait": "https://rpg.five-star.com/assets/images/monsters/bandit_bust.png"
+    },
+    {
+      "key": "city_guard",
+      "monster_key": "city_guard",
+      "name": "City Guard",
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "wide": false,
+      "file": "city_guard.png",
+      "aga_file": "city_guard_s.png",
+      "aga_canvas": [
+        96,
+        160
+      ],
+      "portrait": "https://rpg.five-star.com/assets/images/monsters/city_guard_bust.png"
+    },
+    {
+      "key": "giant_rat",
+      "monster_key": "giant_rat",
+      "name": "Giant Rat",
+      "size": "Small",
+      "footprint": 1,
+      "height_cells": 0.75,
+      "canvas": [
+        320,
+        320
+      ],
+      "wide": true,
+      "file": "giant_rat.png",
+      "aga_file": "giant_rat_s.png",
+      "aga_canvas": [
+        160,
+        160
+      ],
+      "portrait": "https://rpg.five-star.com/assets/images/monsters/giant_rat_bust.png"
+    },
+    {
+      "key": "kobold",
+      "monster_key": "kobold",
+      "name": "Kobold",
+      "size": "Small",
+      "footprint": 1,
+      "height_cells": 0.75,
+      "canvas": [
+        192,
+        320
+      ],
+      "wide": false,
+      "file": "kobold.png",
+      "aga_file": "kobold_s.png",
+      "aga_canvas": [
+        96,
+        160
+      ],
+      "portrait": "https://rpg.five-star.com/assets/images/monsters/kobold_bust.png"
+    },
+    {
+      "key": "stirge",
+      "monster_key": "stirge",
+      "name": "Stirge",
+      "size": "Tiny",
+      "footprint": 1,
+      "height_cells": 0.5,
+      "canvas": [
+        320,
+        320
+      ],
+      "wide": true,
+      "file": "stirge.png",
+      "aga_file": "stirge_s.png",
+      "aga_canvas": [
+        160,
+        160
+      ],
+      "portrait": "https://rpg.five-star.com/assets/images/monsters/stirge_bust.png"
+    },
+    {
+      "key": "giant_centipede",
+      "monster_key": "giant_centipede",
+      "name": "Giant Centipede",
+      "size": "Small",
+      "footprint": 1,
+      "height_cells": 0.75,
+      "canvas": [
+        320,
+        320
+      ],
+      "wide": true,
+      "file": "giant_centipede.png",
+      "aga_file": "giant_centipede_s.png",
+      "aga_canvas": [
+        160,
+        160
+      ],
+      "portrait": "https://rpg.five-star.com/assets/images/monsters/giant_centipede_bust.png"
+    },
+    {
+      "key": "goblin",
+      "monster_key": "goblin",
+      "name": "Goblin",
+      "size": "Small",
+      "footprint": 1,
+      "height_cells": 0.75,
+      "canvas": [
+        192,
+        320
+      ],
+      "wide": false,
+      "file": "goblin.png",
+      "aga_file": "goblin_s.png",
+      "aga_canvas": [
+        96,
+        160
+      ],
+      "portrait": "https://rpg.five-star.com/assets/images/monsters/goblin_bust.png"
+    },
+    {
+      "key": "sump_gremlin",
+      "monster_key": "sump_gremlin",
+      "name": "Sump Gremlin",
+      "size": "Small",
+      "footprint": 1,
+      "height_cells": 0.75,
+      "canvas": [
+        192,
+        320
+      ],
+      "wide": false,
+      "file": "sump_gremlin.png",
+      "aga_file": "sump_gremlin_s.png",
+      "aga_canvas": [
+        96,
+        160
+      ],
+      "portrait": "https://rpg.five-star.com/assets/images/monsters/sump_gremlin_bust.png"
+    },
+    {
+      "key": "wolf",
+      "monster_key": "wolf",
+      "name": "Wolf",
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        320,
+        320
+      ],
+      "wide": true,
+      "file": "wolf.png",
+      "aga_file": "wolf_s.png",
+      "aga_canvas": [
+        160,
+        160
+      ],
+      "portrait": "https://rpg.five-star.com/assets/images/monsters/wolf_bust.png"
+    },
+    {
+      "key": "gremlin",
+      "monster_key": "deep_gremlin",
+      "name": "Deep Gremlin",
+      "size": "Small",
+      "footprint": 1,
+      "height_cells": 0.75,
+      "canvas": [
+        192,
+        320
+      ],
+      "wide": false,
+      "file": "gremlin.png",
+      "aga_file": "gremlin_s.png",
+      "aga_canvas": [
+        96,
+        160
+      ],
+      "portrait": "https://rpg.five-star.com/assets/images/monsters/gremlin_bust.png"
+    },
+    {
+      "key": "gnoll",
+      "monster_key": "gnoll",
+      "name": "Gnoll",
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "wide": false,
+      "file": "gnoll.png",
+      "aga_file": "gnoll_s.png",
+      "aga_canvas": [
+        96,
+        160
+      ],
+      "portrait": "https://rpg.five-star.com/assets/images/monsters/gnoll_bust.png"
+    },
+    {
+      "key": "ooze",
+      "monster_key": "grey_ooze",
+      "name": "Grey Ooze",
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "wide": false,
+      "file": "ooze.png",
+      "aga_file": "ooze_s.png",
+      "aga_canvas": [
+        96,
+        160
+      ],
+      "portrait": "https://rpg.five-star.com/assets/images/monsters/ooze_bust.png"
+    },
+    {
+      "key": "peat_ooze",
+      "monster_key": "peat_ooze",
+      "name": "Peat Ooze",
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        320,
+        320
+      ],
+      "wide": true,
+      "file": "peat_ooze.png",
+      "aga_file": "peat_ooze_s.png",
+      "aga_canvas": [
+        160,
+        160
+      ],
+      "portrait": "https://rpg.five-star.com/assets/images/monsters/peat_ooze_bust.png"
+    },
+    {
+      "key": "black_wolf",
+      "monster_key": "worg",
+      "name": "Worg",
+      "size": "Large",
+      "footprint": 2,
+      "height_cells": 2.0,
+      "canvas": [
+        320,
+        320
+      ],
+      "wide": true,
+      "file": "black_wolf.png",
+      "aga_file": "black_wolf_s.png",
+      "aga_canvas": [
+        160,
+        160
+      ],
+      "portrait": "https://rpg.five-star.com/assets/images/monsters/black_wolf_bust.png"
+    },
+    {
+      "key": "bog_crawler",
+      "monster_key": "bog_crawler",
+      "name": "Bog Crawler",
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        320,
+        320
+      ],
+      "wide": true,
+      "file": "bog_crawler.png",
+      "aga_file": "bog_crawler_s.png",
+      "aga_canvas": [
+        160,
+        160
+      ],
+      "portrait": "https://rpg.five-star.com/assets/images/monsters/bog_crawler_bust.png"
+    },
+    {
+      "key": "bugbear",
+      "monster_key": "bugbear",
+      "name": "Bugbear",
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "wide": false,
+      "file": "bugbear.png",
+      "aga_file": "bugbear_s.png",
+      "aga_canvas": [
+        96,
+        160
+      ],
+      "portrait": "https://rpg.five-star.com/assets/images/monsters/bugbear_bust.png"
+    },
+    {
+      "key": "dire_wolf",
+      "monster_key": "dire_wolf",
+      "name": "Dire Wolf",
+      "size": "Large",
+      "footprint": 2,
+      "height_cells": 2.0,
+      "canvas": [
+        320,
+        320
+      ],
+      "wide": true,
+      "file": "dire_wolf.png",
+      "aga_file": "dire_wolf_s.png",
+      "aga_canvas": [
+        160,
+        160
+      ],
+      "portrait": "https://rpg.five-star.com/assets/images/monsters/dire_wolf_bust.png"
+    },
+    {
+      "key": "giant_spider",
+      "monster_key": "giant_spider",
+      "name": "Giant Spider",
+      "size": "Large",
+      "footprint": 2,
+      "height_cells": 2.0,
+      "canvas": [
+        320,
+        320
+      ],
+      "wide": true,
+      "file": "giant_spider.png",
+      "aga_file": "giant_spider_s.png",
+      "aga_canvas": [
+        160,
+        160
+      ],
+      "portrait": "https://rpg.five-star.com/assets/images/monsters/giant_spider_bust.png"
+    },
+    {
+      "key": "giant_toad",
+      "monster_key": "giant_toad",
+      "name": "Giant Toad",
+      "size": "Large",
+      "footprint": 2,
+      "height_cells": 2.0,
+      "canvas": [
+        320,
+        320
+      ],
+      "wide": true,
+      "file": "giant_toad.png",
+      "aga_file": "giant_toad_s.png",
+      "aga_canvas": [
+        160,
+        160
+      ],
+      "portrait": "https://rpg.five-star.com/assets/images/monsters/giant_toad_bust.png"
+    },
+    {
+      "key": "pale_crawler",
+      "monster_key": "pale_crawler",
+      "name": "Launder Crawler",
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        320,
+        320
+      ],
+      "wide": true,
+      "file": "pale_crawler.png",
+      "aga_file": "pale_crawler_s.png",
+      "aga_canvas": [
+        160,
+        160
+      ],
+      "portrait": "https://rpg.five-star.com/assets/images/monsters/pale_crawler_bust.png"
+    },
+    {
+      "key": "concern_warden",
+      "monster_key": "concern_warden",
+      "name": "Pit Warden",
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "wide": false,
+      "file": "concern_warden.png",
+      "aga_file": "concern_warden_s.png",
+      "aga_canvas": [
+        96,
+        160
+      ],
+      "portrait": "https://rpg.five-star.com/assets/images/monsters/concern_warden_bust.png"
+    },
+    {
+      "key": "thief_captain",
+      "monster_key": "thief_captain",
+      "name": "Thief Captain",
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "wide": false,
+      "file": "thief_captain.png",
+      "aga_file": "thief_captain_s.png",
+      "aga_canvas": [
+        96,
+        160
+      ],
+      "portrait": "https://rpg.five-star.com/assets/images/monsters/thief_captain_bust.png"
+    },
+    {
+      "key": "crawler",
+      "monster_key": "carrion_crawler",
+      "name": "Carrion Crawler",
+      "size": "Large",
+      "footprint": 2,
+      "height_cells": 2.0,
+      "canvas": [
+        320,
+        320
+      ],
+      "wide": true,
+      "file": "crawler.png",
+      "aga_file": "crawler_s.png",
+      "aga_canvas": [
+        160,
+        160
+      ],
+      "portrait": "https://rpg.five-star.com/assets/images/monsters/crawler_bust.png"
+    },
+    {
+      "key": "rock_man",
+      "monster_key": "crust",
+      "name": "Crust",
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "wide": false,
+      "file": "rock_man.png",
+      "aga_file": "rock_man_s.png",
+      "aga_canvas": [
+        96,
+        160
+      ],
+      "portrait": "https://rpg.five-star.com/assets/images/monsters/rock_man_bust.png"
+    },
+    {
+      "key": "howler",
+      "monster_key": "fen_howler",
+      "name": "Fen Howler",
+      "size": "Large",
+      "footprint": 2,
+      "height_cells": 2.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "wide": false,
+      "file": "howler.png",
+      "aga_file": "howler_s.png",
+      "aga_canvas": [
+        96,
+        160
+      ],
+      "portrait": "https://rpg.five-star.com/assets/images/monsters/howler_bust.png"
+    },
+    {
+      "key": "ogre",
+      "monster_key": "ogre",
+      "name": "Ogre",
+      "size": "Large",
+      "footprint": 2,
+      "height_cells": 2.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "wide": false,
+      "file": "ogre.png",
+      "aga_file": "ogre_s.png",
+      "aga_canvas": [
+        96,
+        160
+      ],
+      "portrait": "https://rpg.five-star.com/assets/images/monsters/ogre_bust.png"
+    },
+    {
+      "key": "boss_drowned",
+      "monster_key": "drowned_clerk",
+      "name": "The Drowned Clerk",
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "wide": false,
+      "file": "boss_drowned.png",
+      "aga_file": "boss_drowned_s.png",
+      "aga_canvas": [
+        96,
+        160
+      ],
+      "portrait": "https://rpg.five-star.com/assets/images/monsters/boss_drowned_bust.png"
+    },
+    {
+      "key": "ratman",
+      "monster_key": "wererat",
+      "name": "Wererat",
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "wide": false,
+      "file": "ratman.png",
+      "aga_file": "ratman_s.png",
+      "aga_canvas": [
+        96,
+        160
+      ],
+      "portrait": "https://rpg.five-star.com/assets/images/monsters/ratman_bust.png"
+    },
+    {
+      "key": "broodmother_spider",
+      "monster_key": "broodmother_spider",
+      "name": "Broodmother",
+      "size": "Large",
+      "footprint": 2,
+      "height_cells": 2.0,
+      "canvas": [
+        320,
+        320
+      ],
+      "wide": true,
+      "file": "broodmother_spider.png",
+      "aga_file": "broodmother_spider_s.png",
+      "aga_canvas": [
+        160,
+        160
+      ],
+      "portrait": "https://rpg.five-star.com/assets/images/monsters/broodmother_spider_bust.png"
+    },
+    {
+      "key": "tentacled",
+      "monster_key": "fen_horror",
+      "name": "Fen Horror",
+      "size": "Large",
+      "footprint": 2,
+      "height_cells": 2.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "wide": false,
+      "file": "tentacled.png",
+      "aga_file": "tentacled_s.png",
+      "aga_canvas": [
+        96,
+        160
+      ],
+      "portrait": "https://rpg.five-star.com/assets/images/monsters/tentacled_bust.png"
+    },
+    {
+      "key": "drowned_man",
+      "monster_key": "drowned_man",
+      "name": "One of the Drowned",
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "wide": false,
+      "file": "drowned_man.png",
+      "aga_file": "drowned_man_s.png",
+      "aga_canvas": [
+        96,
+        160
+      ],
+      "portrait": "https://rpg.five-star.com/assets/images/monsters/drowned_man_bust.png"
+    },
+    {
+      "key": "warden_serjeant",
+      "monster_key": "warden_serjeant",
+      "name": "Serjeant of the Works",
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "wide": false,
+      "file": "warden_serjeant.png",
+      "aga_file": "warden_serjeant_s.png",
+      "aga_canvas": [
+        96,
+        160
+      ],
+      "portrait": "https://rpg.five-star.com/assets/images/monsters/warden_serjeant_bust.png"
+    },
+    {
+      "key": "pit_champion",
+      "monster_key": "pit_champion",
+      "name": "The Pit's Man",
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "wide": false,
+      "file": "pit_champion.png",
+      "aga_file": "pit_champion_s.png",
+      "aga_canvas": [
+        96,
+        160
+      ],
+      "portrait": "https://rpg.five-star.com/assets/images/monsters/pit_champion_bust.png"
+    },
+    {
+      "key": "wight",
+      "monster_key": "wight",
+      "name": "Wight",
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "wide": false,
+      "file": "wight.png",
+      "aga_file": "wight_s.png",
+      "aga_canvas": [
+        96,
+        160
+      ],
+      "portrait": "https://rpg.five-star.com/assets/images/monsters/wight_bust.png"
+    },
+    {
+      "key": "boss_worm",
+      "monster_key": "the_growth",
+      "name": "The Growth",
+      "size": "Huge",
+      "footprint": 3,
+      "height_cells": 3.0,
+      "canvas": [
+        320,
+        320
+      ],
+      "wide": true,
+      "file": "boss_worm.png",
+      "aga_file": "boss_worm_s.png",
+      "aga_canvas": [
+        160,
+        160
+      ],
+      "portrait": "https://rpg.five-star.com/assets/images/monsters/boss_worm_bust.png"
+    }
+  ],
+  "heroes": [
+    {
+      "key": "barbarian",
+      "race": null,
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "barbarian.png",
+      "aga_file": "barbarian_s.png"
+    },
+    {
+      "key": "bard",
+      "race": null,
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "bard.png",
+      "aga_file": "bard_s.png"
+    },
+    {
+      "key": "cleric",
+      "race": null,
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "cleric.png",
+      "aga_file": "cleric_s.png"
+    },
+    {
+      "key": "druid",
+      "race": null,
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "druid.png",
+      "aga_file": "druid_s.png"
+    },
+    {
+      "key": "fighter",
+      "race": null,
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "fighter.png",
+      "aga_file": "fighter_s.png"
+    },
+    {
+      "key": "monk",
+      "race": null,
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "monk.png",
+      "aga_file": "monk_s.png"
+    },
+    {
+      "key": "paladin",
+      "race": null,
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "paladin.png",
+      "aga_file": "paladin_s.png"
+    },
+    {
+      "key": "ranger",
+      "race": null,
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "ranger.png",
+      "aga_file": "ranger_s.png"
+    },
+    {
+      "key": "rogue",
+      "race": null,
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "rogue.png",
+      "aga_file": "rogue_s.png"
+    },
+    {
+      "key": "sorcerer",
+      "race": null,
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "sorcerer.png",
+      "aga_file": "sorcerer_s.png"
+    },
+    {
+      "key": "token_dragonborn_f1",
+      "race": "dragonborn",
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "token_dragonborn_f1.png",
+      "aga_file": "token_dragonborn_f1_s.png"
+    },
+    {
+      "key": "token_dragonborn_f2",
+      "race": "dragonborn",
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "token_dragonborn_f2.png",
+      "aga_file": "token_dragonborn_f2_s.png"
+    },
+    {
+      "key": "token_dragonborn_m1",
+      "race": "dragonborn",
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "token_dragonborn_m1.png",
+      "aga_file": "token_dragonborn_m1_s.png"
+    },
+    {
+      "key": "token_dragonborn_m2",
+      "race": "dragonborn",
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "token_dragonborn_m2.png",
+      "aga_file": "token_dragonborn_m2_s.png"
+    },
+    {
+      "key": "token_dwarf_f1",
+      "race": "dwarf",
+      "size": "Small",
+      "footprint": 1,
+      "height_cells": 0.75,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "token_dwarf_f1.png",
+      "aga_file": "token_dwarf_f1_s.png"
+    },
+    {
+      "key": "token_dwarf_m1",
+      "race": "dwarf",
+      "size": "Small",
+      "footprint": 1,
+      "height_cells": 0.75,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "token_dwarf_m1.png",
+      "aga_file": "token_dwarf_m1_s.png"
+    },
+    {
+      "key": "token_elf_f1",
+      "race": "elf",
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "token_elf_f1.png",
+      "aga_file": "token_elf_f1_s.png"
+    },
+    {
+      "key": "token_elf_m1",
+      "race": "elf",
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "token_elf_m1.png",
+      "aga_file": "token_elf_m1_s.png"
+    },
+    {
+      "key": "token_gnome_f1",
+      "race": "gnome",
+      "size": "Small",
+      "footprint": 1,
+      "height_cells": 0.75,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "token_gnome_f1.png",
+      "aga_file": "token_gnome_f1_s.png"
+    },
+    {
+      "key": "token_gnome_m1",
+      "race": "gnome",
+      "size": "Small",
+      "footprint": 1,
+      "height_cells": 0.75,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "token_gnome_m1.png",
+      "aga_file": "token_gnome_m1_s.png"
+    },
+    {
+      "key": "token_halfelf_f1",
+      "race": "halfelf",
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "token_halfelf_f1.png",
+      "aga_file": "token_halfelf_f1_s.png"
+    },
+    {
+      "key": "token_halfelf_m1",
+      "race": "halfelf",
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "token_halfelf_m1.png",
+      "aga_file": "token_halfelf_m1_s.png"
+    },
+    {
+      "key": "token_halfling_f1",
+      "race": "halfling",
+      "size": "Small",
+      "footprint": 1,
+      "height_cells": 0.75,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "token_halfling_f1.png",
+      "aga_file": "token_halfling_f1_s.png"
+    },
+    {
+      "key": "token_halfling_m1",
+      "race": "halfling",
+      "size": "Small",
+      "footprint": 1,
+      "height_cells": 0.75,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "token_halfling_m1.png",
+      "aga_file": "token_halfling_m1_s.png"
+    },
+    {
+      "key": "token_halforc_f1",
+      "race": "halforc",
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "token_halforc_f1.png",
+      "aga_file": "token_halforc_f1_s.png"
+    },
+    {
+      "key": "token_halforc_m1",
+      "race": "halforc",
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "token_halforc_m1.png",
+      "aga_file": "token_halforc_m1_s.png"
+    },
+    {
+      "key": "token_human_f1",
+      "race": "human",
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "token_human_f1.png",
+      "aga_file": "token_human_f1_s.png"
+    },
+    {
+      "key": "token_human_m1",
+      "race": "human",
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "token_human_m1.png",
+      "aga_file": "token_human_m1_s.png"
+    },
+    {
+      "key": "token_sarsen_f1",
+      "race": "sarsen",
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "token_sarsen_f1.png",
+      "aga_file": "token_sarsen_f1_s.png"
+    },
+    {
+      "key": "token_sarsen_m1",
+      "race": "sarsen",
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "token_sarsen_m1.png",
+      "aga_file": "token_sarsen_m1_s.png"
+    },
+    {
+      "key": "token_tiefling_f1",
+      "race": "tiefling",
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "token_tiefling_f1.png",
+      "aga_file": "token_tiefling_f1_s.png"
+    },
+    {
+      "key": "token_tiefling_f2",
+      "race": "tiefling",
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "token_tiefling_f2.png",
+      "aga_file": "token_tiefling_f2_s.png"
+    },
+    {
+      "key": "token_tiefling_m1",
+      "race": "tiefling",
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "token_tiefling_m1.png",
+      "aga_file": "token_tiefling_m1_s.png"
+    },
+    {
+      "key": "token_tiefling_m2",
+      "race": "tiefling",
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "token_tiefling_m2.png",
+      "aga_file": "token_tiefling_m2_s.png"
+    },
+    {
+      "key": "warlock",
+      "race": null,
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "warlock.png",
+      "aga_file": "warlock_s.png"
+    },
+    {
+      "key": "wizard",
+      "race": null,
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "wizard.png",
+      "aga_file": "wizard_s.png"
+    }
+  ]
+}
