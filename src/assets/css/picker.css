@@ -15,8 +15,8 @@
   --cs-cream: #f4e6c4;
   --cs-cream-dim: #e4d0a4;
   --cs-ink: #24160d;
-  --cs-parchment-0: #f8ebcd;
-  --cs-parchment-1: #e4cda0;
+  --cs-parchment-0: #f0dfb2;
+  --cs-parchment-1: #d9c18a;
   --cs-iron-0: #f2f4f7;
   --cs-iron-1: #c5ccd4;
   --cs-iron-2: #8d97a3;
@@ -221,10 +221,10 @@ body.picker-page > main { padding-top: 0; }
   margin: 0.85rem 0;
   padding: 0.85rem 1.25rem 1rem;
   color: var(--cs-ink);
-  background-color: #f3e2bc;
+  background-color: #e8d6a8;
   background-image:
     url("../images/login/oak-noise.webp"),
-    linear-gradient(180deg, var(--cs-parchment-0) 0%, #f4e4c2 38%, var(--cs-parchment-1) 100%);
+    linear-gradient(180deg, var(--cs-parchment-0) 0%, #e8d6a8 38%, var(--cs-parchment-1) 100%);
   background-size: 180px, auto;
   background-blend-mode: multiply, normal;
   box-shadow:
@@ -662,16 +662,16 @@ body.picker-page > main { padding-top: 0; }
   min-height: 2.7rem;
   margin: 0;
   padding: 0.45rem 0.55rem;
-  border: 1px solid #4a525b;
+  border: 2px solid #3c2d1d;
   border-radius: 3px;
   background: linear-gradient(
     180deg,
-    var(--cs-iron-0) 0%,
-    var(--cs-iron-1) 46%,
-    #d8dee5 54%,
-    var(--cs-iron-2) 100%
+    #725b3b 0%,
+    #625038 46%,
+    #59462f 54%,
+    #433321 100%
   );
-  color: var(--cs-ink);
+  color: var(--cs-cream);
   font-family: var(--font-display);
   font-size: 1.02rem;
   font-weight: 700;
@@ -681,8 +681,10 @@ body.picker-page > main { padding-top: 0; }
   text-decoration: none;
   cursor: pointer;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    inset 0 1px 0 rgba(255, 239, 199, 0.35),
+    inset 0 -2px 0 rgba(20, 12, 5, 0.45),
     0 2px 0 #1a120c;
+  text-shadow: 0 1px 1px #24160d;
 }
 
 .picker-page .cs-buttons .play-btn {
@@ -698,7 +700,11 @@ body.picker-page > main { padding-top: 0; }
   color: var(--cs-ink);
 }
 
-.picker-page .cs-buttons .btn:hover { text-decoration: none; filter: brightness(1.06); }
+.picker-page .cs-buttons .btn:hover {
+  text-decoration: none;
+  filter: brightness(1.12);
+  border-color: var(--cs-brass-1);
+}
 
 .picker-page .cs-buttons .btn:active {
   transform: translateY(1px);

@@ -1118,15 +1118,16 @@
         act: 'short_rest',
       });
     }
+    const mapActs = acts.filter((a) => a.act !== 'search');
     const pit = pitPanel(loc);
-    if (!acts.length && !pit) return '';
+    if (!mapActs.length && !pit) return '';
     // No heading. These sit on the chart, and a label over a cluster of
     // keys is the chrome the chart does not have room for. The pit's
     // bouts ride here too — a well under the picture was a second panel
     // for the thing you came to this cellar to press.
     return `<section class="loc-actions" aria-label="${pit ? 'Take a bout' : 'Actions'}">
       ${pit}
-      ${acts.length ? `<div class="action-list">${acts.map(actionKey).join('')}</div>` : ''}
+      ${mapActs.length ? `<div class="action-list">${mapActs.map(actionKey).join('')}</div>` : ''}
     </section>`;
   }
 

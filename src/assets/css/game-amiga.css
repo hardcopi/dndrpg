@@ -348,8 +348,16 @@ body.game-page .hud-party .party-card .hp-bar {
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.55);
 }
 
-body.game-page .hud-party .party-card .hp-bar > span.ok {
-  background: linear-gradient(180deg, #e24a38 0%, var(--gw-hp) 55%, #7e140e 100%);
+body.game-page .hp-bar > span.ok {
+  background: linear-gradient(180deg, #91aa7b 0%, #617b4e 55%, #394c2d 100%);
+}
+
+body.game-page .hp-bar > span.mid {
+  background: linear-gradient(180deg, #d2b96e 0%, #a88b43 55%, #705923 100%);
+}
+
+body.game-page .hp-bar > span.low {
+  background: linear-gradient(180deg, #c97763 0%, #a44334 55%, #68251c 100%);
 }
 
 body.game-page .hud-party .party-stats {
