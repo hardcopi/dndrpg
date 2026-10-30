@@ -5506,6 +5506,15 @@ body.bm-pan-ready .battlemap { cursor: grab; }
    to be a real element — the one place the card technique does not port. */
 .bm-token { cursor: pointer; transition: transform var(--dur-tap) var(--ease-linear); }
 .bm-hit-token { fill: transparent; }
+/* The acting figure is dragged to walk. The rest of the board stays pan-y,
+   so a finger on empty ground still scrolls and the camera still pans. */
+.bm-token.is-actor.is-party .bm-hit-token { touch-action: none; }
+.bm-figure { pointer-events: none; image-rendering: pixelated; }
+.bm-face.is-held { visibility: hidden; }
+.bm-foot { fill: none; stroke-width: 0.045; pointer-events: none; }
+.bm-token.is-party .bm-foot { stroke: var(--accent); }
+.bm-token.is-foe .bm-foot { stroke: var(--danger); }
+.bm-token.is-selected .bm-foot { stroke: var(--gold); }
 .bm-ring { fill: var(--bg); stroke-width: 0.07; }
 .bm-token.is-party .bm-ring { stroke: var(--accent); }
 .bm-token.is-foe .bm-ring { stroke: var(--danger); }
