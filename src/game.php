@@ -13,6 +13,8 @@ if (!session_character_id()) {
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Adventure — Rivermark Chronicles</title>
   <link rel="stylesheet" href="<?= asset('assets/css/style.css') ?>">
+  <!-- The Amiga window skin. Scoped to this page; see the file header. -->
+  <link rel="stylesheet" href="<?= asset('assets/css/game-amiga.css') ?>">
   <!-- Generated dice geometry; see tools/gen_dice_css.py. -->
   <link rel="stylesheet" href="<?= asset('assets/css/dice.css') ?>">
 </head>
@@ -27,6 +29,23 @@ if (!session_character_id()) {
     without one, and a tool that scraped it got the login form.
   -->
 <?= file_get_contents(__DIR__ . '/assets/icons.svg') ?>
+
+  <!--
+    The iron window. The three columns stay the game's; the plate, the corner
+    caps and the status line are the frame around them, the same furniture as
+    the character select. The plate is not a heading — the place's own name
+    is the page's h1, written into the scene when a location loads.
+  -->
+  <div class="gw-window">
+    <span class="gw-bracket gw-bracket-nw" aria-hidden="true"></span>
+    <span class="gw-bracket gw-bracket-ne" aria-hidden="true"></span>
+    <span class="gw-bracket gw-bracket-sw" aria-hidden="true"></span>
+    <span class="gw-bracket gw-bracket-se" aria-hidden="true"></span>
+    <div class="gw-plate" aria-hidden="true">
+      <span class="gw-diamond"></span>
+      <p class="gw-plate-title">Rivermark</p>
+      <span class="gw-diamond"></span>
+    </div>
 
   <!--
     Three columns: the party and the people in the scene down the left, the
@@ -65,7 +84,7 @@ if (!session_character_id()) {
         <div class="hud-party" id="party-rail" aria-label="Party"></div>
       </section>
       <section class="rail-pane rail-people">
-        <h2 class="rail-pane-head">Here <span class="loc-count hidden" id="people-count"></span></h2>
+        <h2 class="rail-pane-head">People here <span class="loc-count hidden" id="people-count"></span></h2>
         <div class="hud-people" id="people-rail" aria-label="People here"></div>
       </section>
     </aside>
@@ -147,6 +166,7 @@ if (!session_character_id()) {
 
       <div class="rail-bottom">
         <div class="hud-log" id="hud-log">
+          <h2 class="rail-pane-head">Log</h2>
           <div class="hud-log-head">
             <div class="log-filters" role="group" aria-label="Filter the log">
               <button type="button" class="chip on" data-filter="all">All</button>
@@ -171,9 +191,18 @@ if (!session_character_id()) {
         -->
         <section class="cbt-inspector" id="cbt-inspector" aria-live="polite"></section>
 
-        <div class="hud-actions action-bar" id="action-bar" role="toolbar" aria-label="Actions"></div>
+        <section class="gw-actions">
+          <h2 class="rail-pane-head">Actions</h2>
+          <div class="hud-actions action-bar" id="action-bar" role="toolbar" aria-label="Actions"></div>
+        </section>
       </div>
     </aside>
+  </div>
+
+    <footer class="gw-status">
+      <span class="gw-status-where" id="gw-status-where"></span>
+      <span class="gw-status-conn">connected</span>
+    </footer>
   </div>
 
   <div id="modal-root" class="modal-backdrop hidden"></div>

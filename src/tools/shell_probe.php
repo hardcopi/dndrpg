@@ -77,7 +77,7 @@ if ($one !== null) {
     /* The stylesheets, which the strip took with the asset() calls. Versioned
        here too — this bench is refreshed harder than the game is. */
     $css = '';
-    foreach (['assets/css/style.css', 'assets/css/dice.css'] as $p) {
+    foreach (['assets/css/style.css', 'assets/css/game-amiga.css', 'assets/css/dice.css'] as $p) {
         $css .= '<link rel="stylesheet" href="/' . $p . '?v=' . filemtime($root . '/' . $p) . '">' . "\n";
     }
     $body = preg_replace('#</head>#i', $css . '</head>', $body, 1);
@@ -142,31 +142,40 @@ if ($one !== null) {
         . '<button type="button" class="person"><span class="person-text">'
         . '<span class="person-name">A carter, waiting</span></span></button></div></div>';
 
-    /* The scene: a heading, the chart's box, and the action row. The chart is a
+    /* The scene, in the shape renderLocation() writes: the place's nameplate
+       and its prose, the chart, the legend, the ways out. The chart is a
        plain SVG of the right aspect rather than a real region — WorldMap.svg
-       needs a map payload, and what is being measured is the space it is given. */
+       needs a map payload, and what is being measured is the space it is given.
+       The action plates sit on the chart, which is where game.js puts them. */
     $scene = '<div class="loc-inner"><div class="loc-text">'
-        /* The <h1> is unpainted now — the drawn heading moved to .topbar-where
-           and the name it used to carry is on the chart. It stays in the
-           fixture because it is still in the DOM game.js writes, and a probe
-           that measures a box the game does not have is the failure mode this
-           file exists to avoid. It measures 1px by design. */
-        . '<h1 class="loc-name">The Golden Flagon, Rivermark</h1>'
-        . '<div class="loc-map"><svg class="worldmap is-bare" viewBox="0 0 100 75" '
-        . 'preserveAspectRatio="xMidYMid meet" style="width:100%;height:auto">'
+        . '<section class="loc-sheet">'
+        . '<h1 class="loc-name"><span class="loc-name-place">The Golden Flagon</span>'
+        . '<span class="loc-name-region">, Rivermark</span></h1>'
+        . '<div class="loc-read"><div class="loc-prose"><p>The warm heart of Rivermark: '
+        . 'hearth-light on scrubbed tables, the job board by the door, and rooms upstairs.</p></div></div>'
+        . '</section>'
+        . '<div class="loc-stage"><div class="loc-map" id="scene-map">'
+        . '<svg class="worldmap is-bare" viewBox="0 0 100 75" '
+        . 'preserveAspectRatio="xMidYMid meet">'
         . '<rect x="0" y="0" width="100" height="75" fill="#1a1d22"></rect>'
         . '<line class="wm-edge" x1="24" y1="30" x2="66" y2="46"></line>'
-        . '<circle cx="24" cy="30" r="2.4" fill="#6f5a34"></circle>'
-        . '<circle cx="66" cy="46" r="2.4" fill="#6f5a34"></circle>'
-        . '</svg></div>'
-        . '<div class="loc-foot"><div class="loc-actions">';
-    foreach ([['i-journal', 'Search'], ['i-camp', 'Rest'], ['i-dice', 'Take an hour'],
-              ['i-refresh', 'Look again'], ['i-home', 'Board']] as [$ic, $lab]) {
+        . '</svg>'
+        . '<section class="loc-actions" aria-label="Actions"><div class="action-list">';
+    foreach ([['i-sense', 'Search'], ['i-heart', 'Rest'], ['i-journal', 'Board']] as [$ic, $lab]) {
         $scene .= '<button type="button" class="act-slot loc-act has-label">'
             . '<svg class="act-icon" aria-hidden="true"><use href="#' . $ic . '"></use></svg>'
-            . '<span>' . $lab . '</span></button>';
+            . '<span class="loc-act-label">' . $lab . '</span></button>';
     }
-    $scene .= '</div></div></div></div>';
+    $scene .= '</div></section></div>'
+        . '<ul class="loc-legend" aria-label="Map legend">'
+        . '<li><i class="lg-you"></i> You</li><li><i class="lg-way"></i> Way out</li>'
+        . '<li><i class="lg-lock"></i> Shut</li><li><i class="lg-quest"></i> Errand</li></ul>'
+        . '</div>'
+        . '<div class="loc-foot"><section class="loc-ways"><h2>Ways out</h2><div class="action-list">'
+        . '<button type="button" class="btn loc-act"><span>Out to the High Street</span></button>'
+        . '<button type="button" class="btn loc-act"><span>Down to the cellar</span></button>'
+        . '</div></section></div>'
+        . '</div></div>';
 
     $quest = '<h2 class="rail-pane-head">Tracking</h2>'
         . '<div class="track-current"><div class="track-title">The Quarry Stops Paying</div>'
