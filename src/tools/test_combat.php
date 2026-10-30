@@ -1321,6 +1321,20 @@ same('nor does a class that does not exist', 0, CombatEngine::sneakAttackDice('A
 same('a level below 1 is still a rogue', 1, CombatEngine::sneakAttackDice('Rogue', 0));
 
 // ---------------------------------------------------------------------------
+echo PHP_EOL . '== a player character\'s drawn size ==' . PHP_EOL;
+
+// The stamp startEncounter writes onto a PC. Dwarf, gnome and halfling are
+// Small; everyone else is Medium, Sarsen included. Reach and occupancy do
+// not read this — LARGE_SIZES is still monster melee only.
+same('a dwarf is small', 'small', CombatEngine::pcSize('Dwarf'));
+same('a gnome is small', 'small', CombatEngine::pcSize('gnome'));
+same('a halfling is small', 'small', CombatEngine::pcSize('  Halfling '));
+same('a human is medium', 'medium', CombatEngine::pcSize('Human'));
+same('a half-elf is medium', 'medium', CombatEngine::pcSize('Half-Elf'));
+same('a sarsen is medium', 'medium', CombatEngine::pcSize('Sarsen'));
+same('an unnamed race is medium', 'medium', CombatEngine::pcSize(''));
+
+// ---------------------------------------------------------------------------
 echo PHP_EOL . str_repeat('-', 52) . PHP_EOL;
 printf("%d passed, %d failed%s", $RESULTS['pass'], $RESULTS['fail'], PHP_EOL);
 
