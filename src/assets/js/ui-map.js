@@ -124,37 +124,6 @@
   /** Plate type size, in chart units. The CSS rule for `.is-pixel` matches. */
   const PLATE_FS = 2.6;
 
-  /**
-   * On the pixel town a face comes from the 24-pixel, 32-colour copy under
-   * assets/images/npcs/px/, so it sits on the painting's own grid. Any URL
-   * that is not an npcs face keeps the portrait it has.
-   */
-  function pixelFace(url) {
-    const m = /^(.*assets\/images\/npcs\/)([^/?#]+_face\.png)(\?.*)?$/.exec(String(url || ''));
-    return m ? `${m[1]}px/${m[2]}${m[3] || ''}` : null;
-  }
-
-  /**
-   * One token face. With `pixel` set and a pixel copy to ask for, it is drawn
-   * nearest-neighbour, and a missing copy swaps back to the portrait before
-   * it gives up and leaves the lettered disc.
-   */
-  function faceImage(cls, url, r, clipId, pixel) {
-    if (!url) return '';
-    const box = `x="${(-r).toFixed(2)}" y="${(-r).toFixed(2)}"
-          width="${(r * 2).toFixed(2)}" height="${(r * 2).toFixed(2)}"
-          clip-path="url(#${clipId})" preserveAspectRatio="xMidYMid slice"`;
-    const px = pixel ? pixelFace(url) : null;
-    if (!px) {
-      return `<image class="${cls}" href="${esc(url)}"
-          ${box}
-          onerror="this.remove()"/>`;
-    }
-    return `<image class="${cls} is-px" href="${esc(px)}" data-full="${esc(url)}"
-          ${box} style="image-rendering:pixelated"
-          onerror="var f=this.getAttribute('data-full');if(f){this.removeAttribute('data-full');this.classList.remove('is-px');this.style.imageRendering='';this.setAttribute('href',f);}else{this.remove();}"/>`;
-  }
-
   function paintingOf(map) {
     if (!map || map.region_key !== PIXEL_TOWN || map.floorplan) return null;
     const p = map.painting;
@@ -447,14 +416,14 @@
       ))
       .filter(Boolean)
       .join('');
-    const marks = partyMarks(opts && opts.party, scale, pixel);
+    const marks = partyMarks(opts && opts.party, scale);
     // Somebody with a spot of their own is drawn on the chart rather than on
     // the place marker, so a shopkeeper can stand in his shop.
     const people = (opts && opts.people) || [];
     const atNode = people.filter((p) => !(Number.isFinite(+p.x) && Number.isFinite(+p.y)));
     const atSpot = people.filter((p) => Number.isFinite(+p.x) && Number.isFinite(+p.y));
-    const folk = npcMarks(atNode, scale, { pixel });
-    const standing = npcMarks(atSpot, scale, { placed: true, pixel });
+    const folk = npcMarks(atNode, scale);
+    const standing = npcMarks(atSpot, scale, { placed: true });
     // Nothing names a place nobody has walked into, on a floor plan as much as
     // on a region. A generated floor used to name every room, on the argument
     // that the plan already drew the whole level so there was nothing left to
@@ -588,7 +557,7 @@
    * a missing static file on this host serves the homepage HTML with a 200,
    * so `onerror` is the only thing that ever finds out.
    */
-  function partyMarks(party, scale, pixel) {
+  function partyMarks(party, scale) {
     const all = (party || []).filter((p) => p && p.name);
     if (!all.length) return '';
 
@@ -620,7 +589,11 @@
         <circle class="wm-pc-disc" r="${r.toFixed(2)}"/>
         <text class="wm-pc-initial" dy="${(r * 0.36).toFixed(2)}"
               font-size="${(r * 1.15).toFixed(2)}">${esc(initial)}</text>
-        ${faceImage('wm-pc-face', pc.face, r, clipId, pixel)}
+        ${pc.face ? `<image class="wm-pc-face" href="${esc(pc.face)}"
+          x="${(-r).toFixed(2)}" y="${(-r).toFixed(2)}"
+          width="${(r * 2).toFixed(2)}" height="${(r * 2).toFixed(2)}"
+          clip-path="url(#${clipId})" preserveAspectRatio="xMidYMid slice"
+          onerror="this.remove()"/>` : ''}
         <circle class="wm-pc-ring" r="${r.toFixed(2)}"/>
       </g>`;
     // Reversed, so the pile stacks left-over-right: the faces are laid out by
@@ -669,7 +642,6 @@
     // everyone else is stacked at the place marker. Two passes over one
     // function so both kinds get the identical token.
     const placed = !!(opts && opts.placed);
-    const pixel = !!(opts && opts.pixel);
 
     const r = NPC_R * scale;
     const step = NPC_STEP * scale;
@@ -693,7 +665,11 @@
         <circle class="wm-npc-disc" r="${r.toFixed(2)}"/>
         <text class="wm-npc-initial" dy="${(r * 0.36).toFixed(2)}"
               font-size="${(r * 1.15).toFixed(2)}">${esc(initial)}</text>
-        ${faceImage('wm-npc-face', n.face, r, clipId, pixel)}
+        ${n.face ? `<image class="wm-npc-face" href="${esc(n.face)}"
+          x="${(-r).toFixed(2)}" y="${(-r).toFixed(2)}"
+          width="${(r * 2).toFixed(2)}" height="${(r * 2).toFixed(2)}"
+          clip-path="url(#${clipId})" preserveAspectRatio="xMidYMid slice"
+          onerror="this.remove()"/>` : ''}
         <circle class="wm-npc-ring" r="${r.toFixed(2)}"/>
         ${n.mark === 'offer' || n.mark === 'turnin' ? `<text class="wm-npc-mark"
           y="${(-r - 0.12).toFixed(2)}" dy="0"

@@ -1862,11 +1862,6 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .worldmap.is-pixel .wm-art {
   image-rendering: pixelated;
 }
-/* Token faces on the pixel town are the 24-pixel copies; keep them blocky. */
-.worldmap.is-pixel .is-px {
-  image-rendering: crisp-edges;
-  image-rendering: pixelated;
-}
 .worldmap:not(.is-bare) .wm-edge { opacity: 0.22; }
 .worldmap:not(.is-bare) .wm-edge.is-way { opacity: 0.55; }
 .worldmap:not(.is-bare) .wm-label { stroke-width: 1.1; }
