@@ -156,3 +156,15 @@ the **dialogue theatre bust**. The first two use the face crop; the theatre
 uses the bust. The region plate was not promoted, so the chart still uses
 `assets/images/maps/rivermark.png`. Deploy to Hermes is still a separate
 step. Do not run `deploy.sh --apply` as part of this spike.
+
+## Pixel token faces on the town map
+
+The Rivermark town chart draws the pixel painting
+(`assets/images/maps/rivermark_town_pixel.png`, 640x480, 32 colours). Its
+NPC and party tokens use `assets/images/npcs/px/<key>_face.png`: each live
+`<key>_face.png` centre-cropped, box-reduced to 24x24 and quantised to 32
+colours, drawn with `image-rendering: pixelated`. A token is about 19-22
+town pixels across, so the faces sit on the painting's own grid.
+`tools/px_faces.py` regenerates them. Other regions, delve plans and the
+combat board keep the portraits, and a missing pixel copy falls back to the
+portrait.
