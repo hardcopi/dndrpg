@@ -7,7 +7,7 @@ still opens the region chart.
 
 ## Adding a scene
 
-1. Drop a **16:9** painting here as `<location_key>.jpg` (1600×900 or so, JPEG ~q85).
+1. Drop a **16:9** painting here as `<location_key>.jpg` (1280×720, progressive JPEG, ~150-250 KB).
    It is shown whole, never cropped, so every position below lines up.
 2. Add one record to `assets/js/scenes-data.js`, keyed by the location's `location_key`
    (`src/content/locations/*.json`):
@@ -43,3 +43,13 @@ the_anvil: {
 - Labels with x > 80% hang to the left of their pin and x < 20% to the right, so they stay inside the picture.
 - Suggested effect types for all 148 locations: `location-effects.json` in the art
   hand-off (smoke, fire, hearth, torch, candle, glow, birds, water, fog, dust, drip, rain, fireflies, sway).
+
+## What is here
+
+The Act I path, 51 scenes: Rivermark (12), Greyhythe (8), Quarry Wilds (9),
+Goblin Warren (6), the Deepworks (8) and the Ford Road (8). The art hand-off
+(`scenes-<region>.json`, hotspot `{key, kind, x, y, label, painted}`) converts
+one-to-one: exits by `to`, NPCs by `npc_key`, objects become Search labels
+(a "Job board" object runs the board verb where the place has one).
+Every other place still shows the region chart, with its Ways out laid out in
+columns so a nine-exit hub fits at 1440×900.
