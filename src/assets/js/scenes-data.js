@@ -134,7 +134,7 @@ window.RIVERMARK_SCENES = {
       west_gate: {x: 97, y: 90, icon: "→"}
     },
     npcs: {
-      street_minstrel: {x: 51, y: 70},
+      street_minstrel: {x: 51, y: 76},
       street_drover: {x: 62, y: 72},
       street_seer: {x: 78, y: 80},
       street_scholar: {x: 43, y: 68},
