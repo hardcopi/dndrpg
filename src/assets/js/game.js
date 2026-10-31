@@ -441,14 +441,23 @@
     // corner. Nothing was lost — the prose modal carries the art with it, and
     // the first-visit paragraph still opens on arrival.
     const ways = painted ? '' : waysPanel(loc);
-    const foot = ways ? `<div class="loc-foot">${ways}</div>` : '';
+    // The verbs of this place (the pit's bouts, the stair, a fight, a rest)
+    // are a strip of their own UNDER the picture. They used to be docked on
+    // the chart, which hid half of it in the cellar — and on a painted scene
+    // they sat inside the Map overlay, so they could not be seen at all
+    // unless the chart was open. Nothing is drawn over the picture now.
+    const acts = actionsPanel(loc);
+    const dock = acts ? `<div class="loc-dock">${acts}</div>` : '';
+    const foot = (ways || dock) && !painted
+      ? `<div class="loc-foot">${ways}${dock}</div>` : '';
     // The region stays in the heading and is clipped by the skin: the region
     // bar above the chart is aria-hidden, so a screen reader that heard only
     // the place name would not be told which map it was on.
     root.innerHTML = painted ? `
-      <div class="loc-inner scene-storybook">
+      <div class="loc-inner scene-storybook${dock ? ' has-dock' : ''}">
         <div class="loc-text">
           <div class="painted-host" id="painted-host"></div>
+          ${dock}
           <section class="loc-sheet scene-narration">
             <h1 class="loc-name"><span class="loc-name-place">${esc(loc.name)}</span><span class="loc-name-region">, ${esc(loc.region_name)}</span></h1>
             ${painted.config.subtitle ? `<small class="scene-subtitle">${esc(painted.config.subtitle)}</small>` : ''}
@@ -458,7 +467,7 @@
           ${foot}
         </div>
       </div>` : `
-      <div class="loc-inner">
+      <div class="loc-inner is-chart${dock ? ' has-dock' : ''}${ways ? ' has-ways' : ''}">
         <div class="loc-text">
           <section class="loc-sheet">
             <h1 class="loc-name"><span class="loc-name-place">${esc(loc.name)}</span><span class="loc-name-region">, ${esc(loc.region_name)}</span></h1>
@@ -687,7 +696,6 @@
       </div>
       ${fpToggle('Walk it in first person (V)', 'Look')}
       ${info}
-      ${actionsPanel(state.location)}
     </div>`;
   }
 
@@ -768,7 +776,6 @@
       ${fpToggle('Read the floor plan (V)', 'Map')}
       <button type="button" class="icon-btn map-info" id="scene-info"
               title="What this place looks like (I)" aria-label="Describe this place">i</button>
-      ${actionsPanel(state.location)}
     </div>`;
   }
 
@@ -1130,13 +1137,9 @@
    * it says "or so" and why the bout is built server-side when you commit.
    */
   /**
-   * The pit's card: three bouts and a readout, two by two.
-   *
-   * The three tiers were a full-width column of two-line buttons, which is
-   * three rows of a scene that is mostly chart. There are exactly three of
-   * them — PitEngine::TIERS — so a 2x2 has one cell spare, and what goes in it
-   * is the question the buttons cannot answer: how many more of these until
-   * somebody levels.
+   * The pit's card: three bouts in a row. The readout that answers how many
+   * more of these until somebody levels is pitReadout(), which the actions
+   * strip shows in its heading line.
    *
    * The counts are the ENGINE's. PitEngine::toLevel divides the remaining XP
    * by what a win at each tier pays one character, which is CombatEngine's own
@@ -1146,24 +1149,6 @@
   function pitPanel(loc) {
     const tiers = loc.pit && loc.pit.tiers;
     if (!tiers || !tiers.length) return '';
-
-    // A tier's short name, for the readout: the labels read "A fair match" and
-    // a column of them would be three sentences where three nouns will do.
-    const shortName = (label) => label.replace(/^(a|an)\s+/i, '');
-
-    const toLevel = loc.pit.to_level;
-    const readout = toLevel
-      ? `<div class="pit-level" title="${esc(toLevel.who)} is ${
-            toLevel.remaining.toLocaleString()} XP short">
-           <span class="pit-level-head">To level ${toLevel.level}</span>
-           <ul class="pit-level-counts">
-             ${tiers.map((t) => {
-               const n = toLevel.bouts && toLevel.bouts[t.tier];
-               return n ? `<li>${esc(shortName(t.label))} <b>&times;${n}</b></li>` : '';
-             }).join('')}
-           </ul>
-         </div>`
-      : '';
 
     // The bouts are the card. The stair is an action, and loc-actions is
     // the standard for those — a second full-width copy here is how both
@@ -1178,8 +1163,28 @@
             <span class="pit-sample">${esc(t.sample)}, or so</span>
           </button>`).join('')}
       </div>
-      ${readout}
     </section>`;
+  }
+
+  /**
+   * The pit's "to level" readout, on its own so the actions strip can carry
+   * it in its heading line rather than spend a row of the screen on it.
+   */
+  function pitReadout(loc) {
+    const tiers = loc.pit && loc.pit.tiers;
+    const toLevel = loc.pit && loc.pit.to_level;
+    if (!tiers || !tiers.length || !toLevel) return '';
+    const shortName = (label) => label.replace(/^(a|an)\s+/i, '');
+    return `<div class="pit-level" title="${esc(toLevel.who)} is ${
+          toLevel.remaining.toLocaleString()} XP short">
+        <span class="pit-level-head">To level ${toLevel.level}</span>
+        <ul class="pit-level-counts">
+          ${tiers.map((t) => {
+            const n = toLevel.bouts && toLevel.bouts[t.tier];
+            return n ? `<li>${esc(shortName(t.label))} <b>&times;${n}</b></li>` : '';
+          }).join('')}
+        </ul>
+      </div>`;
   }
 
   /**
@@ -1342,11 +1347,12 @@
     const mapActs = acts.filter((a) => a.act !== 'search');
     const pit = pitPanel(loc);
     if (!mapActs.length && !pit) return '';
-    // No heading. These sit on the chart, and a label over a cluster of
-    // keys is the chrome the chart does not have room for. The pit's
-    // bouts ride here too — a well under the picture was a second panel
-    // for the thing you came to this cellar to press.
-    return `<section class="loc-actions" aria-label="${pit ? 'Take a bout' : 'Actions'}">
+    // A strip under the picture (renderLocation puts it there), with a
+    // heading plate like Ways out beside it. It used to sit ON the chart, so
+    // in the cellar the bouts covered half the map. The pit's bouts ride
+    // here too, with the "to level" readout in the heading line.
+    return `<section class="loc-actions${pit ? ' has-pit' : ''}" aria-label="${pit ? 'Take a bout' : 'Actions'}">
+      <div class="loc-dock-head"><h2>${pit ? 'Take a bout' : 'Actions'}</h2>${pit ? pitReadout(loc) : ''}</div>
       ${pit}
       ${mapActs.length ? `<div class="action-list">${mapActs.map(actionKey).join('')}</div>` : ''}
     </section>`;
