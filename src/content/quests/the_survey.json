@@ -11,23 +11,23 @@
     "stages": {
         "the_rack": {
             "title": "Not in the strongbox",
-            "objective": "The strongbox holds the wages. The rack holds the working paper. Look in the rack: go back to Rourke in his office and ask him what is in it.",
-            "journal": "Rourke's strongbox is bolted through the floor and through the joist and there are eleven pounds in it. The rolled paper in the rack beside it is not locked up at all, because nobody at the works has ever thought of it as worth anything. It is only the survey.",
+            "objective": "The strongbox holds the wages; the rack holds the working paper. To inspect it, return to Rourke in his office and ask what's in the rack.",
+            "journal": "Rourke's strongbox is bolted through the floor and joist, with eleven pounds inside. The rolled paper beside it is unlocked. Nobody at the works thinks it's worth anything. It's only the survey.",
             "target": {
                 "location": "overseers_office"
             }
         },
         "in_hand": {
             "title": "In hand",
-            "objective": "You have it. Now decide what it is for: take it to Ludo Corse at the Factor's House in Greyhythe, or to Alder Pyke on Granary Row.",
-            "journal": "Every field, road, weir, seam and roof between the ford and Greyhythe, measured and valued and totalled in one hand. Rivermark is on sheet six. It is not drawn as a town. It is entered in the margin under the head 'clearance', as a cost, and the figure beside it has been revised downward twice — which means somebody sat down twice and worked out that we would come cheaper than that.",
+            "objective": "You have it. Decide what to do with it: take it to Ludo Corse at the Factor's House in Greyhythe, or to Alder Pyke on Granary Row.",
+            "journal": "The survey covers every field, road, weir, seam and roof between the ford and Greyhythe, measured and valued in one hand. Rivermark is on sheet six. It isn't drawn as a town, but entered in the margin under \"clearance\", as a cost. The figure has been revised downward twice. Someone sat down twice and decided we'd cost less than that.",
             "target": {
                 "location": "factors_house"
             }
         },
         "took_the_survey": {
             "title": "Kept",
-            "journal": "I have it. Rolled, tied and under my arm, nine sheets, with Rivermark on the sixth entered as a cost. Nobody has tried to take it off me. A document is only worth what the man holding it can do with it, and I am still working out what that is. I am not certain I was right to keep it.",
+            "journal": "I have the survey: nine sheets, rolled and tied under my arm, with Rivermark entered as a cost on sheet six. Nobody has tried to take it. A document is worth what its holder can do with it. I'm still working that out, and I'm not sure I was right to keep it.",
             "resolution": "took_the_survey",
             "terminal": true,
             "effects": [
@@ -53,7 +53,7 @@
         },
         "burned_the_survey": {
             "title": "Burned",
-            "journal": "Three years of chain-work, nine sheets, and about four hundred days of somebody's wages, gone in the time it takes paper to go. It will all be done again. It will take them three years to do it again, and for three years nobody will know what this valley is worth, including us. Somebody is going to start asking who was standing next to the fire.",
+            "journal": "Three years of chain-work, nine sheets, and about four hundred days' wages, gone as quickly as paper burns. They'll survey it again; that will take three years. For that long, nobody will know this valley's worth, including us. Someone will start asking who stood by the fire.",
             "resolution": "burned_the_survey",
             "terminal": true,
             "effects": [
@@ -82,7 +82,7 @@
         },
         "sold_it_back": {
             "title": "Sold back",
-            "journal": "Five hundred gold, counted out without a word of argument, and articles of retainer at forty a quarter for services not further described. He had them written before I came. Not for me — for whoever came. That is the part I keep going back to: the chair was worn through at the arms and the paper was already drawn.",
+            "journal": "Five hundred gold, counted out without argument, and retainer articles at forty a quarter for services left unspecified. He had them ready before I came. Not for me, but for whoever came. I keep thinking of the chair, worn through at the arms, and the paper, already drawn.",
             "resolution": "sold_it_back",
             "terminal": true,
             "effects": [
@@ -121,7 +121,7 @@
         },
         "warned_the_town": {
             "title": "Read out on Granary Row",
-            "journal": "Pyke read it out, because Pyke can read a survey and I cannot, and because it was his chain that made half of it. Forty people stood in the rain on Granary Row and listened to a man tell them what their roofs had been valued at. Reed wrote it all down. There is no law it breaks. There is nobody to arrest. The town knows exactly what is coming now, and knowing is the whole of what it can do, and Pyke is out of work.",
+            "journal": "Pyke read the survey aloud; he can read one, and I can't. His chain measured half of it. Forty people stood in the rain on Granary Row as he told them what their roofs were valued at. Reed wrote it all down. No law is broken, and nobody can be arrested. The town knows what's coming. That's all knowing can do, and Pyke is out of work.",
             "resolution": "warned_the_town",
             "terminal": true,
             "effects": [

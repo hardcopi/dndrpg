@@ -11,23 +11,23 @@
     "stages": {
         "two_places": {
             "title": "Two places",
-            "objective": "You have seen the mark in two places now. Go and ask Alder Pyke, the chainman on Granary Row, what it is.",
-            "journal": "A plumb-bob hanging inside a square, cut or stamped or painted. I have seen it twice now, in two places that have no business sharing anything. It is probably a maker's mark. Most things are.",
+            "objective": "You've seen the mark in two places now. Ask Alder Pyke, the chainman on Granary Row, what it means.",
+            "journal": "A plumb-bob inside a square, cut, stamped, or painted. I've seen it twice now, in places with no reason to have anything in common. Probably a maker's mark. Most things are.",
             "target": {
                 "location": "granary_row"
             }
         },
         "asked_the_chainman": {
             "title": "Ask the man who paints them",
-            "objective": "Alder Pyke walks lines for whoever is paying. Ask him what the mark is, and tell him whether you mean to keep count.",
-            "journal": "There is an old chainman on Granary Row with a hundred feet of chain over his shoulder and a plumb-bob in his pocket, and the plumb-bob has the mark stamped on the flat. He paints them. He has painted a great many.",
+            "objective": "Alder Pyke walks lines for whoever pays. Ask what the mark is, and tell him whether you'll keep count.",
+            "journal": "An old chainman on Granary Row carries a hundred feet of chain over his shoulder and a plumb-bob in his pocket. The mark is stamped on its flat face. He paints these marks, and he's painted a great many.",
             "target": {
                 "location": "granary_row"
             }
         },
         "started_counting": {
             "title": "Counting them",
-            "journal": "It is a survey mark. Pyke was quite clear and quite bored: a chain is dragged, a line is walked, a mark is painted, and a man is paid one and threepence a day for it. There is nothing to it. I have started writing down where I see them anyway, and I could not tell you why.",
+            "journal": "It's a survey mark. Pyke explained it, sounding bored: he drags a chain, walks a line, paints a mark, and gets one and threepence a day. There's nothing to it. I've started writing down where I see them anyway. Couldn't say why.",
             "resolution": "started_counting",
             "terminal": true,
             "effects": [
@@ -53,7 +53,7 @@
         },
         "let_it_alone": {
             "title": "A maker's mark",
-            "journal": "It is a survey mark. Somebody is measuring something, which is what people with money do before they buy it, and it is no more sinister than a milestone. I asked, I was answered, and I have let it alone.",
+            "journal": "It's a survey mark. Somebody's measuring something, as people with money do before they buy it. No more sinister than a milestone. I asked, got an answer, and let it alone.",
             "resolution": "let_it_alone",
             "terminal": true,
             "outcome": "neutral",

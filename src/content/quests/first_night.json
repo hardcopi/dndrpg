@@ -11,40 +11,40 @@
     "stages": {
         "talk": {
             "title": "Hear Mara out",
-            "objective": "Talk to Mara at the bar and hear her job. Pick a reply from the list under her words; the ones with a die beside them are rolled for you. If she offers a coin more than she said, ask for it.",
-            "journal": "Mara says I have the look of somebody who has never worked a job board. She has a rat problem and an hour to spare.",
+            "objective": "Talk to Mara at the bar and hear her offer. Choose a reply from the list beneath her words. Replies with a die beside them are rolled automatically. If you want more coin, ask for it.",
+            "journal": "Mara says I look like I've never worked a job board. She's got a rat problem and an hour to spare.",
             "target": {
                 "location": "flagon_common_room"
             }
         },
         "journal": {
             "title": "Write it down",
-            "objective": "Open the journal (press J, or use the Journal button) and find this quest in it. Then speak to Mara again.",
-            "journal": "Mara says to write it down if I am the forgetting kind. The journal does the writing for me.",
+            "objective": "Open the journal by pressing J or using the Journal button. Find this quest, then speak to Mara again.",
+            "journal": "Mara says to write it down if I'm the forgetting kind. The journal keeps track for me.",
             "target": {
                 "location": "flagon_common_room"
             }
         },
         "errand": {
             "title": "Tobin's lantern",
-            "objective": "Fetch Mara's lantern from Tobin at Tobin's Goods. Use the exits listed on the location screen, or click the places on the map: out of the Flagon to the High Street, up to the Market Square, then into Tobin's Goods. Talk to Tobin.",
-            "journal": "Tobin keeps a lantern of Mara's, against a debt he has not forgotten. Out to the High Street, up to the Market Square, and into his shop.",
+            "objective": "Fetch Mara's lantern from Tobin at Tobin's Goods. Follow the exits on the location screen, or click the places on the map: leave the Flagon for the High Street, go up to Market Square, then enter Tobin's Goods. Talk to Tobin.",
+            "journal": "Tobin's holding Mara's lantern against a debt he hasn't forgotten. Out to the High Street, up to Market Square, then into his shop.",
             "target": {
                 "location": "tobins_goods"
             }
         },
         "the_rats": {
             "title": "Mind the third step",
-            "objective": "Back down the High Street to the Flagon, then take the Down to the cellar exit. The rats will be waiting, and the fight begins the moment you arrive. When it is quiet, come back up and tell Mara.",
-            "journal": "I have the lantern. The rats are in the cellar, and the third step is loose.",
+            "objective": "Return along the High Street to the Flagon, then take the Down exit to the cellar. The rats will be waiting, and the fight starts as soon as you arrive. When it's quiet, come back up and tell Mara.",
+            "journal": "I've got the lantern. The rats are in the cellar, and the third step is loose.",
             "target": {
                 "location": "flagon_cellar"
             }
         },
         "loot": {
             "title": "Something on the floor",
-            "objective": "Go back down to the cellar and press Search, then Take what lies on the floor. Bring it up to Mara.",
-            "journal": "The rats are dead. Mara says there is something of hers lying in the cellar, and that Search is how you find what is lying about.",
+            "objective": "Go back down to the cellar. Press Search, then Take the item on the floor and bring it up to Mara.",
+            "journal": "The rats are dead. Mara says she left something in the cellar. Use Search to find it.",
             "target": {
                 "location": "flagon_cellar"
             },
@@ -56,23 +56,23 @@
         },
         "search": {
             "title": "The draught",
-            "objective": "Mara says there is a draught in the cellar she cannot find. Go down and press Search again. A way you had not noticed will appear among the exits.",
-            "journal": "There is a draught in that cellar and Mara cannot find where it comes from. Searching is how I find things that do not want to be found.",
+            "objective": "Mara says she can't find the draught in the cellar. Go down and press Search again. A new way out will appear among the exits.",
+            "journal": "There's a draught in the cellar, and Mara can't find its source. Search again to reveal what was hidden.",
             "target": {
                 "location": "flagon_cellar"
             }
         },
         "rest": {
             "title": "Room's on the house",
-            "objective": "Talk to Mara and take the room she is offering. Out on the road, the Camp button does the same job where there is no inn.",
-            "journal": "I have been bleeding on Mara's floor. She is giving me a bed for the night.",
+            "objective": "Talk to Mara and take the room she's offering. On the road, use the Camp button to rest where there's no inn.",
+            "journal": "I've been bleeding on Mara's floor. She's giving me a bed for the night.",
             "target": {
                 "location": "flagon_common_room"
             }
         },
         "done": {
             "title": "That's the Flagon",
-            "journal": "Mara showed me how the Flagon works: the board, the journal, the road to Tobin's, the cellar, the Search button, a bed. The rest of Rivermark is less forgiving.",
+            "journal": "Mara showed me the Flagon's job board, the journal, the way to Tobin's, the cellar, the Search button, and the beds. The rest of Rivermark is less forgiving.",
             "resolution": "done",
             "outcome": "neutral",
             "terminal": true,
@@ -85,7 +85,7 @@
         },
         "skipped": {
             "title": "Got it from here",
-            "journal": "Mara asked if I wanted the tour. I said I had it from here. She went back to her cloth.",
+            "journal": "Mara offered to show me around. I said I've got it from here. She went back to her cloth.",
             "resolution": "skipped",
             "outcome": "neutral",
             "terminal": true,

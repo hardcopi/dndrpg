@@ -11,16 +11,16 @@
     "stages": {
         "into_the_cellar": {
             "title": "Go down to the cellar",
-            "objective": "Deal with whatever is eating the Flagon's stores. Go down to the cellar, and when it is quiet, come back up and tell Mara.",
-            "journal": "Mara Hearthstone is losing grain to something in her cellar. She wants it dead more than she wants it explained.",
+            "objective": "Deal with whatever is eating the Flagon's stores. Go down to the cellar, then come back up and tell Mara when it's quiet.",
+            "journal": "Something in Mara Hearthstone's cellar is eating her grain. She'd rather see it dead than hear an explanation.",
             "target": {
                 "location": "flagon_common_room"
             }
         },
         "the_grain": {
             "title": "Find out what drew them",
-            "objective": "The rats came for something. Find out what. Look at the four sacks along the cellar's north wall, then bring what you find up to Mara.",
-            "journal": "The rats are not nesting in the cellar. They are commuting to it. Four sacks of spoiled grain are stacked against the north wall, and none of them are Mara's. Four of the sacks carry a second mark under the granary stamp, burnt into the hessian: a plumb-bob hanging inside a square. It is not the granary's.",
+            "objective": "The rats came for something. Find out what by examining the four sacks along the cellar's north wall, then bring your findings to Mara.",
+            "journal": "The rats aren't nesting in the cellar. They're commuting to it. Four sacks of spoiled grain are stacked against the north wall, and none belong to Mara. Each bears a second mark under the granary stamp, burnt into the hessian: a plumb-bob hanging inside a square. That mark isn't the granary's.",
             "effects": [
                 {
                     "set_flag": "grain_stamp_seen"
@@ -32,7 +32,7 @@
         },
         "exterminated": {
             "title": "Cellar cleared",
-            "journal": "I killed the rats. Mara paid me and swept up. She will lose the stores again in a month and neither of us said so.",
+            "journal": "I killed the rats. Mara paid me and swept up. She'll lose the stores again in a month. Neither of us said so.",
             "resolution": "exterminated",
             "terminal": true,
             "effects": [
@@ -50,7 +50,7 @@
         },
         "source_found": {
             "title": "The spoiled grain",
-            "journal": "The rats were coming for four sacks of rotted grain nobody in the Flagon ordered. The tally stick with them carries the granary reeve's stamp. Hollis Marrow is dumping grain he was paid for and never delivered.",
+            "journal": "The rats came for four sacks of rotted grain nobody at the Flagon ordered. The tally stick with them bears the granary reeve's stamp. Hollis Marrow is dumping grain he was paid for but never delivered.",
             "resolution": "source_found",
             "terminal": true,
             "effects": [

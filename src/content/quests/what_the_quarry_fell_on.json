@@ -13,23 +13,23 @@
     "stages": {
         "the_floor_of_the_warren": {
             "title": "Down what replaced the floor",
-            "objective": "The warren's floor did not fall in. Go down the spoil stair and see what took it out; the stair ends at the headings, where Coyle keeps the hut.",
-            "journal": "Ilse has been saying for two years that something is taking the bottom of the warren floor by floor. She was right about the fact and wrong about the verb. Nothing is taking it. Somebody is buying it out, a course at a time, and paying men to carry it away.",
+            "objective": "The warren floor did not fall in. Go down the spoil stair to see what took it out. It ends at the headings, where Coyle keeps the hut.",
+            "journal": "For two years, Ilse has said something was taking the bottom of the warren, floor by floor. She was right about what was happening, but not the verb. Nothing is taking it. Someone is buying it out, one course at a time, and paying men to carry it away.",
             "target": {
                 "location": "spoil_stair"
             }
         },
         "the_works": {
             "title": "Walk the works",
-            "objective": "Nobody has stopped you yet. Walk it, and count what you see; then go back to Coyle's hut and tell her what you counted.",
-            "journal": "Sawn treads. A handrail. A bucket of sand on every landing in case of fire. Below that, a plank floor the size of the market square, a bell, a board of numbered pegs, a canteen and two hundred people working in shifts. There is nothing hidden about any of it. It is simply eleven miles from anybody who would object.",
+            "objective": "Nobody has stopped you yet. Walk the works and count what you see. Then return to Coyle's hut and tell her the number.",
+            "journal": "Sawn steps. A handrail. A bucket of sand on each landing for fires. Below, a plank floor the size of the market square, a bell, a board of numbered pegs, a canteen, and two hundred people working in shifts. None of it is hidden. It's simply eleven miles from anyone who would object.",
             "target": {
                 "location": "the_headings"
             }
         },
         "walked_the_works": {
             "title": "Two hundred people",
-            "journal": "I walked the whole of it and was stopped once, politely, by a woman with a water clock who wanted to know my peg number. Six faces being cut at a costed rate toward one point under the old quarry. Nobody down there knows what is at the point. Nobody down there has asked. They are paid by the day, and the day is the only unit anybody in that hole thinks in.",
+            "journal": "I walked the whole works. A woman with a water clock stopped me politely to ask my peg number. Six faces are being cut at a costed rate toward one point beneath the old quarry. No one down there knows what's at the point, or has asked. They're paid by the day; down there, that's the only unit that matters.",
             "resolution": "walked_the_works",
             "terminal": true,
             "effects": [
@@ -55,7 +55,7 @@
         },
         "turned_back": {
             "title": "Back up the stair",
-            "journal": "I got as far as the muster floor, watched a bell ring and forty people change direction, and went back up the stair. I have not told Ilse what is under her warren. I am not sure which part of it I am afraid of.",
+            "journal": "I reached the muster floor, watched a bell ring and forty people change direction, then went back up the stair. I haven't told Ilse what lies under her warren. I'm not sure which part frightens me.",
             "resolution": "turned_back",
             "terminal": true,
             "outcome": "neutral",
