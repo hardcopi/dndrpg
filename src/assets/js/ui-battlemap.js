@@ -418,9 +418,9 @@
   /**
    * The full figure, feet on the ring, or the face when there is no sheet.
    *
-   * The picture is centred on the server's one cell. Large and Huge are a
-   * 2×2 and a 3×3 drawn around that cell; they do not occupy the cells they
-   * cover, and the hit target stays the ring so a Growth does not swallow
+   * The picture is seated on the server's anchor cell. Large and Huge are a
+   * 2×2 and a 3×3 drawn around that cell; the server's footprint box is the cells
+   * they occupy, and the hit target stays the ring so a Growth does not swallow
    * the squares beside it. The face is in the markup already and hidden —
    * a sheet that fails to decode reveals it, which is also what a token-pack
    * stamp falls back through.
@@ -441,7 +441,7 @@
     // No outline until the catalogue has named the sheet. A guess would
     // put a 2×2 around a face that is about to fall back.
     const foot = figureIndex && spec.footprint > 1
-      ? `<rect class="bm-foot" x="${n(-spec.footprint / 2)}" y="${n(feetY - spec.footprint)}"
+      ? `<rect class="bm-foot" x="-0.5" y="-0.5"
            width="${n(spec.footprint)}" height="${n(spec.footprint)}"/>`
       : '';
     const held = face.replace('class="bm-face', 'class="bm-face is-held');
@@ -449,7 +449,11 @@
          x="${n(imgX)}" y="${n(imgY)}" width="${n(imgW)}" height="${n(imgH)}"
          preserveAspectRatio="xMidYMax meet" image-rendering="pixelated"
          onerror="var g=this.parentNode;var f=g&amp;&amp;g.querySelector('.is-held');if(f)f.classList.remove('is-held');this.remove()"/>`;
-    return { art: `${foot}${held}${sheet}`, figure: true };
+    // The server's footprint is the anchor cell and the cells east and south
+    // of it, so the picture is seated on that box rather than on the anchor.
+    const seat = spec.footprint > 1
+      ? ` transform="translate(${n((spec.footprint - 1) / 2)} ${n(spec.footprint - 1)})"` : '';
+    return { art: `${foot}<g${seat}>${held}${sheet}</g>`, figure: true };
   }
 
   function tokensHtml(state, o) {

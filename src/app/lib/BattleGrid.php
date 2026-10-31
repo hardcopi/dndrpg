@@ -84,6 +84,43 @@ final class BattleGrid
     private const UNKNOWN = ['cost' => null, 'opaque' => true, 'cover' => 5, 'label' => 'solid rock'];
 
     /**
+     * Squares on a side for a size word: Large 2, Huge 3, Gargantuan 4, anything
+     * else (including no size at all) 1.
+     */
+    public static function sizeCells(?string $size): int
+    {
+        switch (strtolower(trim((string) $size))) {
+            case 'large':
+                return 2;
+            case 'huge':
+                return 3;
+            case 'gargantuan':
+                return 4;
+        }
+        return 1;
+    }
+
+    /**
+     * Every square a creature stands on, as cell keys. The anchor (x,y) is the
+     * footprint's top-left square and the body extends east and south of it.
+     * The one definition of "occupied by a creature"; ui-battlemap.js draws
+     * the same square.
+     *
+     * @return string[]
+     */
+    public static function footprint(int $x, int $y, ?string $size): array
+    {
+        $n = self::sizeCells($size);
+        $out = [];
+        for ($dy = 0; $dy < $n; $dy++) {
+            for ($dx = 0; $dx < $n; $dx++) {
+                $out[] = self::keyOf($x + $dx, $y + $dy);
+            }
+        }
+        return $out;
+    }
+
+    /**
      * Ray results memoised per terrain.
      *
      * Terrain is generated once at startEncounter() and never changes during a
@@ -593,13 +630,18 @@ final class BattleGrid
             if ($cid === $selfCid) {
                 continue;
             }
-            $key = self::keyOf((int) ($c['x'] ?? -1), (int) ($c['y'] ?? -1));
-            $occupied[$key] = true;
-            if ((string) ($c['side'] ?? '') !== $side && self::upright($c)) {
-                $blocked[$key] = true;
+            $isHostile = (string) ($c['side'] ?? '') !== $side && self::upright($c);
+            foreach (self::footprint((int) ($c['x'] ?? -1), (int) ($c['y'] ?? -1), (string) ($c['size'] ?? '')) as $key) {
+                $occupied[$key] = true;
+                if ($isHostile) {
+                    $blocked[$key] = true;
+                }
+            }
+            if ($isHostile) {
                 $hostiles[] = $c;
             }
         }
+        $selfSize = (string) ($actor['size'] ?? '');
 
         // Whose reach the walk would have to cross. See the tie-break below:
         // this does not change WHERE you can go, only which of the equally
@@ -654,6 +696,23 @@ final class BattleGrid
                     }
                     $nkey = self::keyOf($nx, $ny);
                     if (isset($blocked[$nkey])) {
+                        continue;
+                    }
+                    // A big mover's whole body has to fit where it steps.
+                    $fits = true;
+                    $body = self::footprint($nx, $ny, $selfSize);
+                    if (count($body) > 1) {
+                        foreach ($body as $bk) {
+                            [$bx, $by] = self::parseKey($bk);
+                            if (!self::inBounds($terrain, $bx, $by)
+                                || self::enterCost($terrain, $bx, $by) === null
+                                || isset($blocked[$bk])) {
+                                $fits = false;
+                                break;
+                            }
+                        }
+                    }
+                    if (!$fits) {
                         continue;
                     }
                     if ($dx !== 0 && $dy !== 0
@@ -716,7 +775,7 @@ final class BattleGrid
                     $out[$nkey] = [
                         'cost'  => $cost,
                         'from'  => $key,
-                        'end'   => !isset($occupied[$nkey]),
+                        'end'   => !array_intersect_key(array_flip($body), $occupied),
                         'turns' => $turns,
                         'diags' => $diags,
                         'risk'  => $risk,
