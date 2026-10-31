@@ -543,6 +543,263 @@
             {
                 "conditions": [
                     {
+                        "quest": "first_night",
+                        "stage": "talk"
+                    },
+                    {
+                        "quest": "cellar_rats"
+                    }
+                ],
+                "text": "Mara has the slate out by the tap. \"Twenty and the stew, then. Write it down if you're the forgetting kind. There's a journal for that, and it keeps better than I do.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "first_night",
+                            "stage": "journal"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "I'll write it down.",
+                        "end": true
+                    },
+                    {
+                        "label": "Something else.",
+                        "next": "greeting"
+                    },
+                    {
+                        "label": "I've got it from here.",
+                        "effects": [
+                            {
+                                "give_item": "tutorial_lantern"
+                            },
+                            {
+                                "quest_stage": {
+                                    "quest": "first_night",
+                                    "stage": "skipped"
+                                }
+                            }
+                        ],
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "first_night",
+                        "stage": "journal"
+                    }
+                ],
+                "text": "\"Written it down? Good.\" Mara does not wait for the answer. \"Tobin's on the market square. He owes me a lantern. You'll want light down there.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "first_night",
+                            "stage": "errand"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "I'll fetch it.",
+                        "end": true
+                    },
+                    {
+                        "label": "Something else.",
+                        "next": "greeting"
+                    },
+                    {
+                        "label": "I've got it from here.",
+                        "effects": [
+                            {
+                                "give_item": "tutorial_lantern"
+                            },
+                            {
+                                "quest_stage": {
+                                    "quest": "first_night",
+                                    "stage": "skipped"
+                                }
+                            }
+                        ],
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "first_night",
+                        "stage": "the_rats"
+                    },
+                    {
+                        "flag": "cellar_rats_beaten"
+                    }
+                ],
+                "text": "\"Quiet.\" Mara listens to the floorboards a moment, to be sure. \"Good. There's a tally stick of mine down there that went missing in the spring. If the rats left it, it'll be on the floor. Look properly, with the Search button, and Take what you find.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "first_night",
+                            "stage": "loot"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "I'll look.",
+                        "end": true
+                    },
+                    {
+                        "label": "About the rats.",
+                        "next": "greeting"
+                    },
+                    {
+                        "label": "I've got it from here.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "first_night",
+                                    "stage": "skipped"
+                                }
+                            }
+                        ],
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "first_night",
+                        "stage": "loot"
+                    },
+                    {
+                        "flag": "tutorial_loot_open"
+                    },
+                    {
+                        "has_item": "tutorial_tally"
+                    }
+                ],
+                "text": "Mara takes the stick and counts the notches with her thumb. \"Mine. Spring, I said. Nobody listens.\" She puts it under the bar. \"While you're at it, there's a draught in that cellar I can't find. Cold on the ankle, every night. Go down and search again, properly.\"",
+                "on_enter": [
+                    {
+                        "take_item": "tutorial_tally"
+                    },
+                    {
+                        "quest_stage": {
+                            "quest": "first_night",
+                            "stage": "search"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "I'll look again.",
+                        "end": true
+                    },
+                    {
+                        "label": "Something else.",
+                        "next": "greeting"
+                    },
+                    {
+                        "label": "I've got it from here.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "first_night",
+                                    "stage": "skipped"
+                                }
+                            }
+                        ],
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "first_night",
+                        "stage": "search"
+                    },
+                    {
+                        "flag": "found_exit_sump_drain"
+                    }
+                ],
+                "text": "\"A gap behind the north wall. Of course there is.\" Mara does not go to look. \"That's for later, not tonight. Leave it be.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "first_night",
+                            "stage": "rest"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Later, then.",
+                        "end": true
+                    },
+                    {
+                        "label": "Something else.",
+                        "next": "greeting"
+                    },
+                    {
+                        "label": "I've got it from here.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "first_night",
+                                    "stage": "skipped"
+                                }
+                            }
+                        ],
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "first_night",
+                        "stage": "rest"
+                    }
+                ],
+                "text": "\"You're bleeding on my floor.\" Mara points at it, in case you had not noticed. \"Room's on the house tonight. Sleep it off. Out on the road, where there's no roof to be had, the Camp button does the same job.\"",
+                "choices": [
+                    {
+                        "label": "Thank you. I'll take the room.",
+                        "effects": [
+                            {
+                                "rest": "inn"
+                            },
+                            {
+                                "quest_stage": {
+                                    "quest": "first_night",
+                                    "stage": "done"
+                                }
+                            }
+                        ],
+                        "next": "fn_done"
+                    },
+                    {
+                        "label": "I've got it from here.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "first_night",
+                                    "stage": "skipped"
+                                }
+                            }
+                        ],
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "quest": "cellar_rats",
                         "status": "active"
                     },
@@ -738,6 +995,52 @@
                     {
                         "label": "Go down.",
                         "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "not": {
+                            "flag": "tutorial_fate"
+                        }
+                    },
+                    {
+                        "not": {
+                            "quest": "cellar_rats"
+                        }
+                    },
+                    {
+                        "not": {
+                            "quest": "first_night"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "Mara looks you over the way she looks over a keg she has not seen before. \"First time in Rivermark? You've the look of it.\"",
+                "choices": [
+                    {
+                        "label": "Show me how things go here.",
+                        "effects": [
+                            {
+                                "start_quest": "first_night"
+                            },
+                            {
+                                "set_flag": "tutorial_fate",
+                                "value": "taken"
+                            }
+                        ],
+                        "next": "fn_rats_offer"
+                    },
+                    {
+                        "label": "I know my way around.",
+                        "effects": [
+                            {
+                                "set_flag": "tutorial_fate",
+                                "value": "skipped"
+                            }
+                        ],
+                        "next": "greeting"
                     }
                 ]
             },
@@ -1742,6 +2045,174 @@
                     {
                         "label": "Goodbye.",
                         "end": true
+                    }
+                ]
+            }
+        ],
+        "fn_rats_offer": [
+            {
+                "text": "Mara wipes the same patch of bar twice. \"Rats. Big ones, and too many for the time of year. They've been through four sacks of barley and a side of bacon. Twenty to clear them out, and the stew's yours while you're in town.\"",
+                "choices": [
+                    {
+                        "label": "Twenty-five, and the stew.",
+                        "check": {
+                            "skill": "persuasion",
+                            "dc": 8,
+                            "on_success": "fn_haggle_won",
+                            "on_failure": "fn_haggle_lost"
+                        }
+                    },
+                    {
+                        "label": "Twenty is fine.",
+                        "next": "fn_took_it"
+                    },
+                    {
+                        "label": "I've got it from here.",
+                        "effects": [
+                            {
+                                "give_item": "tutorial_lantern"
+                            },
+                            {
+                                "quest_stage": {
+                                    "quest": "first_night",
+                                    "stage": "skipped"
+                                }
+                            }
+                        ],
+                        "next": "cellar_terms"
+                    },
+                    {
+                        "label": "Not yet.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "fn_haggle_won": [
+            {
+                "text": "Mara considers you the way she considers a short pour. \"Twenty-five, then. And the stew.\" She says it like a woman reading a price off a slate. \"Don't tell the regulars. Write it down if you're the forgetting kind. There's a journal for that, and it keeps better than I do.\"",
+                "on_enter": [
+                    {
+                        "start_quest": "cellar_rats"
+                    },
+                    {
+                        "give_gold": 5
+                    },
+                    {
+                        "quest_stage": {
+                            "quest": "first_night",
+                            "stage": "journal"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "I'll write it down.",
+                        "end": true
+                    },
+                    {
+                        "label": "I've got it from here.",
+                        "effects": [
+                            {
+                                "give_item": "tutorial_lantern"
+                            },
+                            {
+                                "quest_stage": {
+                                    "quest": "first_night",
+                                    "stage": "skipped"
+                                }
+                            }
+                        ],
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "fn_haggle_lost": [
+            {
+                "text": "\"Twenty.\" Flat as a plank. \"And the stew. Write it down if you're the forgetting kind. There's a journal for that, and it keeps better than I do.\"",
+                "on_enter": [
+                    {
+                        "start_quest": "cellar_rats"
+                    },
+                    {
+                        "quest_stage": {
+                            "quest": "first_night",
+                            "stage": "journal"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "I'll write it down.",
+                        "end": true
+                    },
+                    {
+                        "label": "I've got it from here.",
+                        "effects": [
+                            {
+                                "give_item": "tutorial_lantern"
+                            },
+                            {
+                                "quest_stage": {
+                                    "quest": "first_night",
+                                    "stage": "skipped"
+                                }
+                            }
+                        ],
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "fn_took_it": [
+            {
+                "text": "\"Twenty, and the stew. Good.\" She nods at the slate by the tap. \"Write it down if you're the forgetting kind. There's a journal for that, and it keeps better than I do.\"",
+                "on_enter": [
+                    {
+                        "start_quest": "cellar_rats"
+                    },
+                    {
+                        "quest_stage": {
+                            "quest": "first_night",
+                            "stage": "journal"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "I'll write it down.",
+                        "end": true
+                    },
+                    {
+                        "label": "I've got it from here.",
+                        "effects": [
+                            {
+                                "give_item": "tutorial_lantern"
+                            },
+                            {
+                                "quest_stage": {
+                                    "quest": "first_night",
+                                    "stage": "skipped"
+                                }
+                            }
+                        ],
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "fn_done": [
+            {
+                "text": "\"That's the Flagon.\" Mara picks the cloth back up. \"The rest of Rivermark is less forgiving.\"",
+                "choices": [
+                    {
+                        "label": "Thanks, Mara.",
+                        "end": true
+                    },
+                    {
+                        "label": "Something else.",
+                        "next": "greeting"
                     }
                 ]
             }

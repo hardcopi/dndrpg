@@ -84,6 +84,7 @@ class DialogueLint
         DelveEngine::DEPTH_FLAG,
         ConcernPressure::FLAG,
         ...ConcernPressure::THRESHOLDS,
+        ...LocationEngine::FOUND_EXIT_FLAGS,
     ];
 
     /** load_content.py:45 */

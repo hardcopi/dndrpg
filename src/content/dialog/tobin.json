@@ -25,6 +25,53 @@
             {
                 "conditions": [
                     {
+                        "quest": "first_night",
+                        "stage": "errand"
+                    }
+                ],
+                "text": "\"Mara's lantern.\" Tobin lifts it from under the counter before you have finished the sentence. \"She sent you. She always sends somebody. Tell her it was never lost, only kept somewhere dry.\" He sets it in front of you, shutter dented, brand up.",
+                "on_enter": [
+                    {
+                        "give_item": "tutorial_lantern"
+                    },
+                    {
+                        "quest_stage": {
+                            "quest": "first_night",
+                            "stage": "the_rats"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Open shop.",
+                        "effects": [
+                            {
+                                "open_shop": "tobin"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "Thanks.",
+                        "end": true
+                    },
+                    {
+                        "label": "I've got it from here.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "first_night",
+                                    "stage": "skipped"
+                                }
+                            }
+                        ],
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "consignment_fate",
                         "equals": "kept"
                     }

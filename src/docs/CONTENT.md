@@ -502,6 +502,45 @@ a distinct `resolution`. That string is what Acts 2 and 3 branch on:
 Rewards are paid once, when the first terminal stage is entered — unless the
 stage's `outcome` is `failure`, in which case they are not.
 
+### The First Night tutorial, and the flags you must never gate on
+
+`first_night` is an optional walk-through that Mara offers a new party in the
+Golden Flagon (`content/quests/first_night.json`; Mara's variants and `fn_*`
+nodes in `content/dialog/mara_hearthstone.json`; Tobin's lantern variant in
+`tobin.json`). It runs alongside `cellar_rats`, and **a party that declines it
+plays exactly the game it always did.** That only stays true while nothing real
+depends on the tutorial, so:
+
+> **Never gate Act I (or anything else) on a tutorial flag, quest stage or item.**
+> Nothing outside the tutorial's own variants may read `tutorial_fate`,
+> `tutorial_loot_open`, the `first_night` quest, or the `tutorial_lantern` /
+> `tutorial_tally` items. A scene that needs them is a scene the skipper can
+> never reach.
+
+| Flag | Set by | Means |
+|---|---|---|
+| `tutorial_fate` | the offer (`taken`), the `done` and `skipped` endings | unset: never offered. `taken`: under way. `done` / `skipped`: over, one way or the other |
+| `tutorial_loot_open` | the `loot` stage | the tutorial tally is lying in `flagon_cellar` |
+| `found_exit_<location_key>` | `LocationEngine::search()` | this party has found the hidden way to that location. Written by code for any authored hidden exit; content may read the names listed in `LocationEngine::FOUND_EXIT_FLAGS` (today `found_exit_sump_drain`) |
+
+Three mechanisms the tutorial introduced, all generic:
+
+- **Tutorial variants do not shadow Mara.** Each one is gated on a `first_night`
+  stage and either advances the stage when it is *shown* (`on_enter`) or sits
+  behind something the player has done, so it appears once and falls away. The
+  one exception is the final `rest` offer, whose every reply leaves the stage.
+  The opening offer is `once` *and* guarded on `tutorial_fate` and `cellar_rats`.
+- **Every tutorial reply set ends with "I've got it from here."**, which moves
+  the quest to the `skipped` ending. It pays what `done` pays, and the
+  lantern is handed over by whichever node the party skips from.
+- **An item may be ground loot only while a flag is set**:
+  `"properties": {"ground_requires_flag": "tutorial_loot_open"}`. Without the
+  flag it is not listed on the floor and cannot be looted.
+
+While `first_night` is on its `search` stage and the party is in the Flagon
+cellar, a Search cannot miss the hidden drain. Search is as hard as ever
+everywhere else and for everybody else.
+
 ---
 
 ## Add a companion
