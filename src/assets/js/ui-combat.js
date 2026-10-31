@@ -454,7 +454,7 @@
           </div>
           ${ui.placing ? `<div class="cbt-placing">Placing <strong>${esc(ui.placing.name)}</strong>
             — click the ground. <button type="button" class="btn btn-small" data-cancel-place>Cancel</button></div>` : ''}
-          ${ui.aiming ? aimBannerHtml(ui.aiming) : ''}
+          ${ui.aiming ? (ui.aiming.mode === 'area' ? areaBannerHtml(ui.aiming) : aimBannerHtml(ui.aiming)) : ''}
         </div>
         <aside class="cbt-panel" aria-label="Actions">
           <div class="cbt-bar" id="cbt-bar"></div>
@@ -908,7 +908,9 @@
     const cancelAim = $('[data-cancel-aim]', box);
     if (cancelAim) cancelAim.onclick = () => stopAiming();
     const aimList = $('[data-aim-list]', box);
-    if (aimList) aimList.onclick = () => openAimList();
+    if (aimList) aimList.onclick = () => (ui.aiming?.mode === 'area' ? openAreaList() : openAimList());
+    const areaGo = $('[data-area-go]', box);
+    if (areaGo) areaGo.onclick = () => castArea();
     // A right-click is the other way out of a targeting or placing mode — it
     // is what people try first on a map, and the board has no menu of its own.
     box.addEventListener('contextmenu', (ev) => {
@@ -940,12 +942,14 @@
       onReflow: () => { if (st()) render(); },
       canDrag: () => !ui.placing && !ui.aiming && !!actor && actor.type === 'pc' && s.status === 'active' && !ui.busy,
       onToken: (cid) => {
+        if (ui.aiming?.mode === 'area') return areaClick(cellOfCid(cid));
         if (ui.aiming) return aimAt(cid);
         if (ui.placing) return placeAt(cellOfCid(cid));
         ui.selected = cid;
         render();
       },
       onCell: (x, y) => {
+        if (ui.aiming?.mode === 'area') return areaClick([x, y]);
         if (ui.aiming) {
           // A click on the floor under somebody is a click on them; on bare
           // floor it is nothing, rather than a walk the player did not mean.
@@ -960,10 +964,15 @@
         act('move', { x, y });
       },
       onHover: (cid, cell) => {
+        hoverSquare(s, actor, cid, cell);
         const changed = cid !== ui.hovered;
         ui.hovered = cid;
         if (changed) renderInspector();
 
+        if (ui.aiming?.mode === 'area') {
+          areaHover(cell || cellOfCid(cid));
+          return;
+        }
         if (ui.aiming) {
           aimHint(cid);
           return;
@@ -976,6 +985,56 @@
         window.BattleMap.paintPath(box, s, cid || !cell ? null : `${cell[0]},${cell[1]}`);
       },
     });
+    // A redraw (a state poll, a resize) wipes the footprint and the glows;
+    // the placement survives in ui.aiming, so put them back.
+    if (ui.aiming?.mode === 'area' && ui.aiming.at) paintArea();
+    // And the lit square, which a redraw under a still mouse would otherwise drop.
+    if (ui.hoverAt) hoverSquare(s, actor, ui.hoverAt.cid, ui.hoverAt.cell);
+  }
+
+  /**
+   * Light the square under the mouse (see BattleMap.paintHover), coloured by
+   * what a click there would do. A figure stands on a square, so pointing at
+   * one lights the square it stands on — in the diorama its picture is what
+   * the eye aims at, not the floor behind it.
+   */
+  function hoverSquare(s, actor, cid, cell) {
+    const box = $('#cbt-map', root());
+    if (!box || !window.BattleMap?.paintHover) return;
+    const at = cell || (cid ? cellOfCid(cid) : null);
+    if (!at || coarsePointer()) {
+      ui.hoverAt = null;
+      window.BattleMap.paintHover(box, null);
+      return;
+    }
+    ui.hoverAt = { cid, cell: at };
+    window.BattleMap.paintHover(box, at, hoverKind(s, actor, cid, at));
+  }
+
+  /**
+   * What a click on this square would do, read off the same lists the click
+   * handlers obey — the server's reach and targets, or the spell being aimed —
+   * so the colour cannot promise a move or a hit the click will not make.
+   */
+  function hoverKind(s, actor, cid, cell) {
+    const who = cid
+      ? combatant(cid)
+      : (s.combatants || []).find((c) => c.alive && c.x === cell[0] && c.y === cell[1]);
+    const a = ui.aiming;
+    if (a?.mode === 'area') {
+      const p = areaPlace(a, cell);
+      return p && !p.clamped && areaHits(a, p.key).length ? 'target' : 'bad';
+    }
+    if (a) return who && a.targets[who.cid] ? 'target' : 'bad';
+    if (ui.placing) return 'target';
+    if (!actor || actor.type !== 'pc' || s.status !== 'active' || ui.busy) return 'idle';
+    const u = uiFor(actor);
+    if (who && who.alive) {
+      if (who.cid === actor.cid || who.side === actor.side) return 'idle';
+      return map(u?.targets)[who.cid] ? 'target' : 'bad';
+    }
+    const r = map(u?.reach)[`${cell[0]},${cell[1]}`];
+    return r && r.end && r.cost ? 'move' : 'bad';
   }
 
   /** What each board view is called, and the glyph its button shows. */
@@ -1014,7 +1073,9 @@
   function spellAimFor(actor, spellId) {
     const all = map(uiFor(actor)?.spell_aim);
     const a = all[String(spellId)];
-    return a ? { mode: a.mode, targets: map(a.targets) } : null;
+    if (!a) return null;
+    return { ...a, mode: a.mode, targets: map(a.targets),
+             spots: a.spots ? map(a.spots) : null, dirs: a.dirs ? map(a.dirs) : null };
   }
 
   function startAiming(actor, spellId, name, castLevel, aim) {
@@ -1143,6 +1204,289 @@
     el.querySelector('[data-aim-cancel]').onclick = () => { window.UI.closeTopModal(); stopAiming(); };
     $$('[data-aim-cid]', el).forEach((b) => {
       b.onclick = () => { window.UI.closeTopModal(); aimAt(b.dataset.aimCid); };
+    });
+  }
+
+  // =========================================================================
+  // Targeting: a spell that needs somewhere — a fireball, a cone
+  //
+  // The server sends every way the spell could be placed from here and who
+  // each one catches (CombatEngine::areaAim): `spots` for a blast centred on
+  // a point in range, `dirs` for a cone, line or cube pushed out from the
+  // caster. The board only ever previews an answer from that list and sends
+  // its key back, so what glows is what gets hit — friends included.
+  // =========================================================================
+
+  const SHAPE_WORD = { sphere: 'sphere', radius: 'radius', cube: 'cube', cone: 'cone', line: 'line' };
+
+  function areaNote(aim) {
+    const size = `${aim.ft}-ft ${SHAPE_WORD[aim.shape] || aim.shape}`;
+    if (aim.origin === 'point') return `pick a spot · ${size}, ${aim.range_ft} ft`;
+    if (aim.shape === 'radius' || aim.shape === 'sphere') return `around you · ${size}`;
+    return `pick a direction · ${size}`;
+  }
+
+  /** A Self radius has nowhere to choose; everything else asks. */
+  function startAreaAim(actor, spellId, name, castLevel, aim) {
+    ui.placing = null;
+    if (aim.origin !== 'point' && aim.dirs && Object.keys(aim.dirs).length === 1 && aim.dirs['0,0']) {
+      act('cast', { spell_id: spellId, target_cid: '', target_x: actor.x, target_y: actor.y,
+                    ...(castLevel ? { cast_level: castLevel } : {}) });
+      return;
+    }
+    ui.aiming = { spell_id: spellId, name, cast_level: castLevel, mode: 'area', targets: {},
+                  actor: actor.cid, origin: aim.origin, shape: aim.shape, ft: aim.ft,
+                  range_ft: aim.range_ft, spots: aim.spots || {}, dirs: aim.dirs || {},
+                  at: null, cursor: null, clamped: false };
+    render();
+    if (coarsePointer()) openAreaList();
+  }
+
+  function coarsePointer() {
+    return !!(window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
+  }
+
+  /**
+   * The compass direction from the caster to a cell — the same snap as
+   * BattleGrid::direction, used only to pick which of the server's eight
+   * answers to show; the cell then sent is that answer's own `aim`.
+   */
+  function compass(from, to) {
+    const dx = to[0] - from[0];
+    const dy = to[1] - from[1];
+    if (!dx && !dy) return null;
+    const sx = Math.sign(dx);
+    const sy = Math.sign(dy);
+    if (Math.abs(dx) > Math.abs(dy) * 2) return `${sx},0`;
+    if (Math.abs(dy) > Math.abs(dx) * 2) return `0,${sy}`;
+    return `${sx},${sy}`;
+  }
+
+  /**
+   * Where the spell would go for the pointer at `cell`. A point outside the
+   * spell's reach — too far, or out of sight — is held at the nearest spot
+   * that is in it, so the template stops at the edge rather than vanishing.
+   */
+  function areaPlace(a, cell) {
+    if (!cell) return null;
+    if (a.origin === 'point') {
+      const k = `${cell[0]},${cell[1]}`;
+      if (a.spots[k]) return { key: k, clamped: false };
+      let best = null;
+      let bestD = Infinity;
+      for (const key of Object.keys(a.spots)) {
+        const [x, y] = key.split(',').map(Number);
+        const d = (x - cell[0]) ** 2 + (y - cell[1]) ** 2;
+        if (d < bestD) { bestD = d; best = key; }
+      }
+      return best ? { key: best, clamped: true } : null;
+    }
+    const actor = combatant(a.actor);
+    const k = actor ? compass([actor.x, actor.y], cell) : null;
+    return k && a.dirs[k] ? { key: k, clamped: false } : null;
+  }
+
+  function areaHits(a, key) {
+    if (!key) return [];
+    return (a.origin === 'point' ? a.spots[key] : a.dirs[key]?.hits) || [];
+  }
+
+  function areaHover(cell) {
+    const a = ui.aiming;
+    if (!a || !cell) return;
+    // A finger has no hover; on a touch screen the pinned spot stays put.
+    if (coarsePointer() && a.at) return;
+    const p = areaPlace(a, cell);
+    if (!p) return;
+    a.at = p.key;
+    a.clamped = p.clamped;
+    a.cursor = cell;
+    paintArea();
+  }
+
+  /**
+   * A click on the board. With a mouse it casts where the preview stands;
+   * with a finger the first tap places and the second (or Cast here) casts.
+   */
+  function areaClick(cell) {
+    const a = ui.aiming;
+    if (!a || !cell) return;
+    const p = areaPlace(a, cell);
+    if (!p) return;
+    if (coarsePointer() && a.at !== p.key) {
+      a.at = p.key; a.clamped = p.clamped; a.cursor = cell;
+      paintArea();
+      return;
+    }
+    a.at = p.key; a.clamped = p.clamped; a.cursor = cell;
+    castArea();
+  }
+
+  function castArea() {
+    const a = ui.aiming;
+    if (!a || !a.at) return;
+    if (!areaHits(a, a.at).length) {
+      paintArea();
+      const hint = $('[data-aim-hint]', $('#cbt-map', root()));
+      if (hint) { hint.classList.remove('aim-refused'); void hint.offsetWidth; hint.classList.add('aim-refused'); }
+      return;
+    }
+    const cell = a.origin === 'point' ? a.at.split(',').map(Number) : a.dirs[a.at].aim;
+    ui.aiming = null;
+    act('cast', { spell_id: a.spell_id, target_cid: '', target_x: cell[0], target_y: cell[1],
+                  ...(a.cast_level ? { cast_level: a.cast_level } : {}) });
+  }
+
+  /** Footprint, glows and the banner's account of who is caught. */
+  function paintArea() {
+    const a = ui.aiming;
+    const box = $('#cbt-map', root());
+    if (!a || !box || !window.BattleMap) return;
+    const actor = combatant(a.actor);
+    const hits = new Set(areaHits(a, a.at));
+    if (a.at) {
+      const opts = { from: actor ? [actor.x, actor.y] : null, clamped: a.clamped ? a.cursor : null };
+      if (a.origin === 'point') {
+        const [x, y] = a.at.split(',').map(Number);
+        Object.assign(opts, { shape: a.shape, ft: a.ft, at: [x, y], range_ft: a.range_ft });
+      } else {
+        opts.cells = a.dirs[a.at].cells;
+      }
+      window.BattleMap.paintArea(box, opts);
+    }
+    for (const el of box.querySelectorAll('.bm-card[data-cid], .bm-token[data-cid]')) {
+      const c = combatant(el.dataset.cid);
+      const hit = hits.has(el.dataset.cid);
+      el.classList.toggle('aim-hit', hit);
+      el.classList.toggle('aim-hit-ally', hit && !!c && !!actor && c.side === actor.side);
+      el.classList.toggle('aim-spared', !hit && !!a.at);
+    }
+    const hint = $('[data-aim-hint]', box);
+    const go = $('[data-area-go]', box);
+    if (go) go.disabled = !hits.size;
+    if (!hint) return;
+    hint.classList.remove('is-ok', 'is-bad', 'is-warn');
+    if (!a.at) { hint.textContent = areaPlaceholder(a); return; }
+    const names = [...hits].map((cid) => combatant(cid)).filter(Boolean);
+    const foes = names.filter((c) => !actor || c.side !== actor.side);
+    const friends = names.filter((c) => actor && c.side === actor.side);
+    const held = a.clamped ? `Held at the edge of its ${a.range_ft} ft — ` : '';
+    if (!names.length) {
+      hint.classList.add('is-bad');
+      hint.textContent = `${held}catches nobody there`;
+      return;
+    }
+    // The friend in the blast first — it is the part that must not be cut
+    // off — then the count, then the names as far as there is room.
+    hint.classList.add(friends.length ? 'is-warn' : 'is-ok');
+    const enemies = foes.length ? `${foes.length} ${foes.length === 1 ? 'enemy' : 'enemies'}` : 'no enemies';
+    const yours = friends.map((c) => (c.cid === a.actor ? 'you' : c.name)).join(', ');
+    hint.textContent = held + (friends.length
+      ? (foes.length ? `⚠ hits ${yours} too · ${enemies}` : `⚠ hits ${yours} — and no enemies`)
+      : `catches ${enemies}: ${foes.map((c) => c.name).join(', ')}`);
+    hint.title = hint.textContent;
+  }
+
+  function areaPlaceholder(a) {
+    return a.origin === 'point' ? 'Move over the board to place it' : 'Point the way it should go';
+  }
+
+  function areaBannerHtml(a) {
+    const size = `${a.ft}-ft ${SHAPE_WORD[a.shape] || a.shape}`;
+    const what = a.origin === 'point' ? `pick a spot <span class="cbt-aim-count">(${esc(size)} · range ${esc(a.range_ft)} ft)</span>`
+      : `pick a direction <span class="cbt-aim-count">(${esc(size)})</span>`;
+    return `<div class="cbt-placing cbt-aiming is-area" role="status">
+      <span class="cbt-aim-text">Cast <strong>${esc(a.name)}</strong> — ${what}</span>
+      <span class="cbt-aim-hint" data-aim-hint>${esc(areaPlaceholder(a))}</span>
+      <button type="button" class="btn btn-small btn-primary" data-area-go disabled
+              title="Cast where the template stands">Cast here</button>
+      <button type="button" class="btn btn-small" data-aim-list>List</button>
+      <button type="button" class="btn btn-small" data-cancel-aim title="Cancel (Esc or right-click)">Cancel</button>
+    </div>`;
+  }
+
+  const DIR_WORD = { '0,-1': 'North', '1,-1': 'North-east', '1,0': 'East', '1,1': 'South-east',
+                     '0,1': 'South', '-1,1': 'South-west', '-1,0': 'West', '-1,-1': 'North-west' };
+
+  /**
+   * The same choice as a list, for a phone or the flat view: centre it on
+   * somebody (a blast) or point it a way (a cone), with who each catches and
+   * any friend in it called out. Choosing one places it on the board for a
+   * look; Cast here then sends it.
+   */
+  function openAreaList() {
+    const a = ui.aiming;
+    const actor = currentActor();
+    if (!a || !actor) return;
+    const name = (cid) => {
+      const c = combatant(cid);
+      return c ? (cid === actor.cid ? 'you' : c.name) : '?';
+    };
+    const options = [];
+    if (a.origin === 'point') {
+      for (const c of (st()?.combatants || [])) {
+        if (!c.alive || c.x == null) continue;
+        const key = `${c.x},${c.y}`;
+        if (!a.spots[key]) continue;
+        options.push({ key, label: `Centred on ${c.cid === actor.cid ? 'yourself' : c.name}`, hits: a.spots[key] });
+      }
+    } else {
+      for (const key of Object.keys(a.dirs)) {
+        options.push({ key, label: DIR_WORD[key] || key, hits: a.dirs[key].hits || [] });
+      }
+    }
+    const side = (cid) => (combatant(cid)?.side === actor.side ? 'ally' : 'foe');
+    const foesIn = (o) => o.hits.filter((c) => side(c) === 'foe').length;
+    const friendsIn = (o) => o.hits.filter((c) => side(c) === 'ally').length;
+    // For a blast, the spot that takes the most enemies and none of your own
+    // side, wherever it is — often a bare square beside the crowd, which no
+    // "centred on somebody" row would offer.
+    if (a.origin === 'point') {
+      let best = null;
+      for (const [key, hits] of Object.entries(a.spots)) {
+        const o = { key, hits };
+        if (friendsIn(o) || !foesIn(o)) continue;
+        if (!best || foesIn(o) > foesIn(best)) best = o;
+      }
+      if (best && !options.some((o) => o.key === best.key)) {
+        options.push({ ...best, label: 'Most enemies, none of yours', best: true });
+      }
+    }
+    const score = (o) => foesIn(o) * 10 - friendsIn(o) * 11 + (o.best ? 1 : 0);
+    options.sort((p, q) => score(q) - score(p));
+    // A placement that takes nobody on the other side is not one to offer.
+    const useful = options.filter((o) => foesIn(o) > 0);
+    const rows = useful.map((o) => {
+      const foes = o.hits.filter((c) => side(c) === 'foe');
+      const friends = o.hits.filter((c) => side(c) === 'ally');
+      return `<button type="button" class="spell-row aim-row area-row ${friends.length ? 'has-friends' : ''}" data-area-key="${esc(o.key)}">
+        <span class="spell-name">${esc(o.label)}</span>
+        <span class="spell-note">${foes.length ? `catches ${esc(foes.map(name).join(', '))}` : 'no enemies'}
+          ${friends.length ? `<strong class="area-ff">⚠ also ${esc(friends.map(name).join(', '))}</strong>` : ''}</span>
+      </button>`;
+    }).join('');
+    const el = window.UI.showModal(`
+      <h2>${esc(a.name)}: ${a.origin === 'point' ? 'where should it burst?' : 'which way?'}</h2>
+      <p class="help-hint">${a.origin === 'point'
+        ? `A ${esc(a.ft)}-ft ${esc(SHAPE_WORD[a.shape] || a.shape)} anywhere within ${esc(a.range_ft)} ft that you can see. It catches everybody inside — your own side too.`
+        : `A ${esc(a.ft)}-ft ${esc(SHAPE_WORD[a.shape] || a.shape)} from where you stand. It catches everybody inside — your own side too.`}
+        Pick one to see it on the board, then press Cast here.</p>
+      <div class="spell-list aim-list">${rows || '<p class="help-hint">Nowhere it could go catches anybody.</p>'}</div>
+      <div class="modal-actions">
+        <button type="button" class="btn" data-aim-back>Back to the board</button>
+        <button type="button" class="btn" data-aim-cancel>Cancel the spell</button>
+      </div>
+    `, { size: 'wide', label: `Place ${a.name}` });
+    el.querySelector('[data-aim-back]').onclick = window.UI.closeTopModal;
+    el.querySelector('[data-aim-cancel]').onclick = () => { window.UI.closeTopModal(); stopAiming(); };
+    $$('[data-area-key]', el).forEach((b) => {
+      b.onclick = () => {
+        window.UI.closeTopModal();
+        a.at = b.dataset.areaKey;
+        a.clamped = false;
+        a.cursor = null;
+        paintArea();
+      };
     });
   }
 
@@ -1768,6 +2112,7 @@
       // The server's answer on who this spell could take from here. Without
       // it (a state from before spell_aim) the old guess stands.
       const aim = spellAimFor(actor, sp.id);
+      const areaAim = aim && aim.mode === 'area' ? aim : null;
       const choose = aim && (aim.mode === 'enemy' || aim.mode === 'ally' || aim.mode === 'any');
       const inReach = aim ? Object.keys(aim.targets).length : 0;
       const nobody = choose && inReach === 0;
@@ -1794,7 +2139,8 @@
         ${lvl > 0 ? `<span class="spell-cost ${affordable ? '' : 'gone'}">${esc(left(lvl))} left</span>` : ''}
         ${sp.range_text ? `<span class="spell-range">${esc(sp.range_text)}</span>` : ''}
         ${sp.damage_dice ? `<span class="spell-dice">${esc(sp.damage_dice)} ${esc(sp.damage_type || '')}</span>` : ''}
-        ${area ? '<span class="spell-note">pick a spot on the ground</span>'
+        ${areaAim ? `<span class="spell-note">${esc(areaNote(areaAim))}</span>`
+          : area ? '<span class="spell-note">pick a spot on the ground</span>'
           : nobody ? `<span class="spell-note">nobody in reach — walk closer</span>`
           : choose ? `<span class="spell-note">choose ${AIM_WORD[aim.mode]} · ${inReach} in reach</span>`
           : aim && aim.mode === 'self' ? '<span class="spell-note">on yourself</span>'
@@ -1817,6 +2163,13 @@
         window.UI.closeTopModal();
         const area = b.dataset.area ? JSON.parse(b.dataset.area) : null;
         const castLevel = b.dataset.castLevel ? +b.dataset.castLevel : null;
+        const areaAim = spellAimFor(actor, +b.dataset.spell);
+        if (areaAim && areaAim.mode === 'area') {
+          const row = b.closest('.spell-upcast') ? b.closest('.spell-upcast').previousElementSibling : b;
+          const name = row?.querySelector('.spell-name')?.textContent || 'the spell';
+          startAreaAim(actor, +b.dataset.spell, name, castLevel, areaAim);
+          return;
+        }
         if (area) {
           // A cone or a blast wants somewhere to go rather than somebody, so
           // the board asks for a cell. Which cells it then covers is the

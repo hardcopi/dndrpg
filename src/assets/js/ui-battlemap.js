@@ -349,6 +349,7 @@
       <g class="bm-cover-marks">${coverMarksHtml(terrain)}</g>
       <g class="bm-grid">${gridHtml()}
         <rect class="bm-edge" x="0" y="0" width="${W}" height="${H}"/></g>
+      <g class="bm-hover" pointer-events="none"></g>
       <g class="bm-tokens">${tokensHtml(state, o, deck)}</g>
       <g class="bm-motes" pointer-events="none">${motesHtml(grid)}</g>
       <g class="bm-shots"></g>
@@ -760,6 +761,9 @@
    */
   function aimClass(o, c) {
     if (!o.aim || !c.alive) return '';
+    // An area spell lights whoever its template is over, which changes as the
+    // pointer moves — ui-combat toggles aim-hit on the elements directly.
+    if (o.aim.mode === 'area') return '';
     return o.aim.targets && o.aim.targets[c.cid] ? 'aim-ok' : 'aim-no';
   }
 
@@ -1512,6 +1516,38 @@
       <text class="bm-route-cost" x="${dx + 0.5}" y="${dy + 0.5}" dy="0.12">${entry.cost}</text>`;
   }
 
+  /**
+   * The square under the mouse, so it is plain what a click will land on.
+   *
+   * The caller has already turned the pointer into a cell: off the square's
+   * own hit rect, which the browser tests under the diorama's tilt and turn,
+   * or off the figure the pointer is on, which stands on one. `kind` is what
+   * a click there would do — 'idle' (nothing much, so barely drawn), 'move',
+   * 'target', or 'bad' (refused) — and is the caller's call, from the
+   * server's reach and target lists. A finger has no hover, so the last
+   * pointer being touch or a pen clears it rather than leaving a square lit
+   * where a tap happened to land.
+   */
+  let lastPointer = 'mouse';
+  if (typeof document !== 'undefined') {
+    const note = (ev) => { lastPointer = ev.pointerType || 'mouse'; };
+    document.addEventListener('pointerdown', note, { capture: true, passive: true });
+    document.addEventListener('pointermove', note, { capture: true, passive: true });
+  }
+  function paintHover(root, cell, kind) {
+    const layer = root && root.querySelector('.bm-hover');
+    if (!layer) return;
+    if (!cell || lastPointer !== 'mouse') {
+      if (layer.firstChild) layer.innerHTML = '';
+      return;
+    }
+    const k = `${cell[0]},${cell[1]}:${kind || 'idle'}`;
+    if (layer.dataset.at === k && layer.firstChild) return;
+    layer.dataset.at = k;
+    layer.innerHTML = `<rect class="bm-hover-cell is-${kind || 'idle'}" x="${cell[0]}" y="${cell[1]}"
+      width="1" height="1"/>`;
+  }
+
   /** The footprint of a spell, painted from the server's own `aoe` event. */
   function paintAoe(root, cells) {
     const layer = root && root.querySelector('.bm-aoe');
@@ -1543,14 +1579,66 @@
     const cells = Math.max(1, Math.ceil((ft || 5) / 5));
 
     if (shape === 'radius' || shape === 'sphere' || shape === 'cube') {
-      const r = shape === 'cube' ? Math.floor((cells - 1) / 2) : cells;
-      layer.innerHTML = `<rect class="bm-aim" x="${x - r}" y="${y - r}"
-        width="${r * 2 + 1}" height="${r * 2 + 1}"/>`;
+      layer.innerHTML = squareRect(shape, cells, x, y, 'bm-aim');
       return;
     }
     layer.innerHTML = `<line class="bm-aim-line" x1="${from[0] + 0.5}" y1="${from[1] + 0.5}"
       x2="${x + 0.5}" y2="${y + 0.5}"/>
       <rect class="bm-aim" x="${x}" y="${y}" width="1" height="1"/>`;
+  }
+
+  /**
+   * The square a blast of this size covers on a Chebyshev board: a radius of
+   * n cells is (2n+1) across; a cube of n cells sits on its aim point with
+   * BattleGrid::template's (n-1)/2 offset, so an even cube leans down-right.
+   */
+  function squareRect(shape, n, x, y, cls) {
+    const r = shape === 'cube' ? Math.floor((n - 1) / 2) : n;
+    const w = shape === 'cube' ? n : r * 2 + 1;
+    return `<rect class="${cls}" x="${x - r}" y="${y - r}" width="${w}" height="${w}"/>`;
+  }
+
+  /**
+   * An area spell being placed (see ui-combat's area aiming).
+   *
+   * `cells` is a footprint the server already worked out (a cone, a line, a
+   * cube pushed out from the caster) and is drawn as it is. A blast at a
+   * point is drawn as its square, which is the template before walls are
+   * taken out of it — who it actually catches is lit on the figures, from the
+   * server's own list, so a goblin behind a pillar inside the square stays
+   * dark. `range_ft` draws the edge of where it may be centred, and
+   * `clamped` marks the pointer when the blast is being held at that edge.
+   */
+  function paintArea(root, opts) {
+    const layer = root && root.querySelector('.bm-aoe');
+    if (!layer) return;
+    const o = opts || {};
+    let out = '';
+    if (o.from && o.range_ft) {
+      const r = Math.floor(o.range_ft / 5);
+      out += `<rect class="bm-aim-range" x="${o.from[0] - r}" y="${o.from[1] - r}"
+        width="${r * 2 + 1}" height="${r * 2 + 1}"/>`;
+    }
+    if (o.cells) {
+      out += o.cells.map((k) => {
+        const [x, y] = parseKey(k);
+        return `<rect class="bm-aim-cell" x="${x}" y="${y}" width="1" height="1"/>`;
+      }).join('');
+    }
+    if (o.at) {
+      const n = Math.max(1, Math.ceil((o.ft || 5) / 5));
+      out += squareRect(o.shape, n, o.at[0], o.at[1], 'bm-aim bm-aim-blast');
+      out += `<circle class="bm-aim-centre" cx="${o.at[0] + 0.5}" cy="${o.at[1] + 0.5}" r="0.18"/>`;
+      if (o.from) {
+        out += `<line class="bm-aim-line" x1="${o.from[0] + 0.5}" y1="${o.from[1] + 0.5}"
+          x2="${o.at[0] + 0.5}" y2="${o.at[1] + 0.5}"/>`;
+      }
+    }
+    if (o.clamped) {
+      const [x, y] = o.clamped;
+      out += `<path class="bm-aim-cursor" d="M${x + 0.25} ${y + 0.25}L${x + 0.75} ${y + 0.75}M${x + 0.75} ${y + 0.25}L${x + 0.25} ${y + 0.75}"/>`;
+    }
+    layer.innerHTML = out;
   }
 
   // =========================================================================
@@ -2058,7 +2146,7 @@
 
   window.BattleMap = {
     html, bind, controls, camera, forget, whenFigures, figureUrl,
-    paintPath, paintAoe, paintAim, moveToken, floatText, shoot, hitToken, walking,
+    paintPath, paintAoe, paintAim, paintArea, paintHover, moveToken, floatText, shoot, hitToken, walking,
     viewMode, setViewMode, nextViewMode, fit, cardSized, cardFail,
     W, H, SHOT_MS,
   };
