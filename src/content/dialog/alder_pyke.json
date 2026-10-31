@@ -170,6 +170,164 @@
                     {
                         "label": "Leave.",
                         "end": true
+                    },
+                    {
+                        "label": "I've seen your mark in two places now.",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "quest": "the_same_mark"
+                                }
+                            },
+                            {
+                                "any": [
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "grain_stamp_seen"
+                                            },
+                                            {
+                                                "flag": "mark_seen_paper"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "grain_stamp_seen"
+                                            },
+                                            {
+                                                "flag": "mark_seen_book"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "grain_stamp_seen"
+                                            },
+                                            {
+                                                "flag": "mark_seen_plate"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "grain_stamp_seen"
+                                            },
+                                            {
+                                                "flag": "mark_seen_stone"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "mark_seen_paper"
+                                            },
+                                            {
+                                                "flag": "mark_seen_book"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "mark_seen_paper"
+                                            },
+                                            {
+                                                "flag": "mark_seen_plate"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "mark_seen_paper"
+                                            },
+                                            {
+                                                "flag": "mark_seen_stone"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "mark_seen_book"
+                                            },
+                                            {
+                                                "flag": "mark_seen_plate"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "mark_seen_book"
+                                            },
+                                            {
+                                                "flag": "mark_seen_stone"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "mark_seen_plate"
+                                            },
+                                            {
+                                                "flag": "mark_seen_stone"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "start_quest": "the_same_mark"
+                            },
+                            {
+                                "quest_stage": {
+                                    "quest": "the_same_mark",
+                                    "stage": "asked_the_chainman"
+                                }
+                            }
+                        ],
+                        "next": "the_mark"
+                    },
+                    {
+                        "label": "Who pays you, Pyke?",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "quest": "paper_town"
+                                }
+                            },
+                            {
+                                "any": [
+                                    {
+                                        "flag": "same_mark_fate",
+                                        "equals": "counting"
+                                    },
+                                    {
+                                        "flag": "same_mark_fate",
+                                        "equals": "let_alone"
+                                    },
+                                    {
+                                        "quest": "the_same_mark",
+                                        "status": "completed"
+                                    }
+                                ]
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "start_quest": "paper_town"
+                            }
+                        ],
+                        "next": "whose_wages"
                     }
                 ]
             },
@@ -426,6 +584,164 @@
                     {
                         "label": "Leave.",
                         "end": true
+                    },
+                    {
+                        "label": "I've seen your mark in two places now.",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "quest": "the_same_mark"
+                                }
+                            },
+                            {
+                                "any": [
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "grain_stamp_seen"
+                                            },
+                                            {
+                                                "flag": "mark_seen_paper"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "grain_stamp_seen"
+                                            },
+                                            {
+                                                "flag": "mark_seen_book"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "grain_stamp_seen"
+                                            },
+                                            {
+                                                "flag": "mark_seen_plate"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "grain_stamp_seen"
+                                            },
+                                            {
+                                                "flag": "mark_seen_stone"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "mark_seen_paper"
+                                            },
+                                            {
+                                                "flag": "mark_seen_book"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "mark_seen_paper"
+                                            },
+                                            {
+                                                "flag": "mark_seen_plate"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "mark_seen_paper"
+                                            },
+                                            {
+                                                "flag": "mark_seen_stone"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "mark_seen_book"
+                                            },
+                                            {
+                                                "flag": "mark_seen_plate"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "mark_seen_book"
+                                            },
+                                            {
+                                                "flag": "mark_seen_stone"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "mark_seen_plate"
+                                            },
+                                            {
+                                                "flag": "mark_seen_stone"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "start_quest": "the_same_mark"
+                            },
+                            {
+                                "quest_stage": {
+                                    "quest": "the_same_mark",
+                                    "stage": "asked_the_chainman"
+                                }
+                            }
+                        ],
+                        "next": "the_mark"
+                    },
+                    {
+                        "label": "Who pays you, Pyke?",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "quest": "paper_town"
+                                }
+                            },
+                            {
+                                "any": [
+                                    {
+                                        "flag": "same_mark_fate",
+                                        "equals": "counting"
+                                    },
+                                    {
+                                        "flag": "same_mark_fate",
+                                        "equals": "let_alone"
+                                    },
+                                    {
+                                        "quest": "the_same_mark",
+                                        "status": "completed"
+                                    }
+                                ]
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "start_quest": "paper_town"
+                            }
+                        ],
+                        "next": "whose_wages"
                     }
                 ]
             },
@@ -446,6 +762,164 @@
                     {
                         "label": "Leave.",
                         "end": true
+                    },
+                    {
+                        "label": "I've seen your mark in two places now.",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "quest": "the_same_mark"
+                                }
+                            },
+                            {
+                                "any": [
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "grain_stamp_seen"
+                                            },
+                                            {
+                                                "flag": "mark_seen_paper"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "grain_stamp_seen"
+                                            },
+                                            {
+                                                "flag": "mark_seen_book"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "grain_stamp_seen"
+                                            },
+                                            {
+                                                "flag": "mark_seen_plate"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "grain_stamp_seen"
+                                            },
+                                            {
+                                                "flag": "mark_seen_stone"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "mark_seen_paper"
+                                            },
+                                            {
+                                                "flag": "mark_seen_book"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "mark_seen_paper"
+                                            },
+                                            {
+                                                "flag": "mark_seen_plate"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "mark_seen_paper"
+                                            },
+                                            {
+                                                "flag": "mark_seen_stone"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "mark_seen_book"
+                                            },
+                                            {
+                                                "flag": "mark_seen_plate"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "mark_seen_book"
+                                            },
+                                            {
+                                                "flag": "mark_seen_stone"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "mark_seen_plate"
+                                            },
+                                            {
+                                                "flag": "mark_seen_stone"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "start_quest": "the_same_mark"
+                            },
+                            {
+                                "quest_stage": {
+                                    "quest": "the_same_mark",
+                                    "stage": "asked_the_chainman"
+                                }
+                            }
+                        ],
+                        "next": "the_mark"
+                    },
+                    {
+                        "label": "Who pays you, Pyke?",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "quest": "paper_town"
+                                }
+                            },
+                            {
+                                "any": [
+                                    {
+                                        "flag": "same_mark_fate",
+                                        "equals": "counting"
+                                    },
+                                    {
+                                        "flag": "same_mark_fate",
+                                        "equals": "let_alone"
+                                    },
+                                    {
+                                        "quest": "the_same_mark",
+                                        "status": "completed"
+                                    }
+                                ]
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "start_quest": "paper_town"
+                            }
+                        ],
+                        "next": "whose_wages"
                     }
                 ]
             },
@@ -464,6 +938,164 @@
                     {
                         "label": "Leave.",
                         "end": true
+                    },
+                    {
+                        "label": "I've seen your mark in two places now.",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "quest": "the_same_mark"
+                                }
+                            },
+                            {
+                                "any": [
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "grain_stamp_seen"
+                                            },
+                                            {
+                                                "flag": "mark_seen_paper"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "grain_stamp_seen"
+                                            },
+                                            {
+                                                "flag": "mark_seen_book"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "grain_stamp_seen"
+                                            },
+                                            {
+                                                "flag": "mark_seen_plate"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "grain_stamp_seen"
+                                            },
+                                            {
+                                                "flag": "mark_seen_stone"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "mark_seen_paper"
+                                            },
+                                            {
+                                                "flag": "mark_seen_book"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "mark_seen_paper"
+                                            },
+                                            {
+                                                "flag": "mark_seen_plate"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "mark_seen_paper"
+                                            },
+                                            {
+                                                "flag": "mark_seen_stone"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "mark_seen_book"
+                                            },
+                                            {
+                                                "flag": "mark_seen_plate"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "mark_seen_book"
+                                            },
+                                            {
+                                                "flag": "mark_seen_stone"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "mark_seen_plate"
+                                            },
+                                            {
+                                                "flag": "mark_seen_stone"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "start_quest": "the_same_mark"
+                            },
+                            {
+                                "quest_stage": {
+                                    "quest": "the_same_mark",
+                                    "stage": "asked_the_chainman"
+                                }
+                            }
+                        ],
+                        "next": "the_mark"
+                    },
+                    {
+                        "label": "Who pays you, Pyke?",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "quest": "paper_town"
+                                }
+                            },
+                            {
+                                "any": [
+                                    {
+                                        "flag": "same_mark_fate",
+                                        "equals": "counting"
+                                    },
+                                    {
+                                        "flag": "same_mark_fate",
+                                        "equals": "let_alone"
+                                    },
+                                    {
+                                        "quest": "the_same_mark",
+                                        "status": "completed"
+                                    }
+                                ]
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "start_quest": "paper_town"
+                            }
+                        ],
+                        "next": "whose_wages"
                     }
                 ]
             },

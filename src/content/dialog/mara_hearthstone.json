@@ -361,6 +361,74 @@
                     {
                         "label": "Goodbye.",
                         "end": true
+                    },
+                    {
+                        "label": "The rats were commuting. Something else was feeding them.",
+                        "next": "the_sump",
+                        "conditions": [
+                            {
+                                "quest": "cellar_rats",
+                                "status": "active"
+                            },
+                            {
+                                "flag": "cellar_stirges_beaten"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Dead. All of them.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "cellar_rats",
+                                    "stage": "exterminated"
+                                }
+                            }
+                        ],
+                        "next": "she_pays_up",
+                        "conditions": [
+                            {
+                                "quest": "cellar_rats",
+                                "status": "active"
+                            },
+                            {
+                                "flag": "cellar_rats_beaten"
+                            },
+                            {
+                                "not": {
+                                    "flag": "cellar_stirges_beaten"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Dead. But there's a drain behind the north wall and something's using it.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "cellar_rats",
+                                    "stage": "the_grain"
+                                }
+                            },
+                            {
+                                "start_combat": "cellar_stirges"
+                            }
+                        ],
+                        "end": true,
+                        "conditions": [
+                            {
+                                "quest": "cellar_rats",
+                                "status": "active"
+                            },
+                            {
+                                "flag": "cellar_rats_beaten"
+                            },
+                            {
+                                "not": {
+                                    "flag": "cellar_stirges_beaten"
+                                }
+                            }
+                        ]
                     }
                 ]
             },
@@ -401,6 +469,74 @@
                             }
                         ],
                         "next": "the_north_wall"
+                    },
+                    {
+                        "label": "The rats were commuting. Something else was feeding them.",
+                        "next": "the_sump",
+                        "conditions": [
+                            {
+                                "quest": "cellar_rats",
+                                "status": "active"
+                            },
+                            {
+                                "flag": "cellar_stirges_beaten"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Dead. All of them.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "cellar_rats",
+                                    "stage": "exterminated"
+                                }
+                            }
+                        ],
+                        "next": "she_pays_up",
+                        "conditions": [
+                            {
+                                "quest": "cellar_rats",
+                                "status": "active"
+                            },
+                            {
+                                "flag": "cellar_rats_beaten"
+                            },
+                            {
+                                "not": {
+                                    "flag": "cellar_stirges_beaten"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Dead. But there's a drain behind the north wall and something's using it.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "cellar_rats",
+                                    "stage": "the_grain"
+                                }
+                            },
+                            {
+                                "start_combat": "cellar_stirges"
+                            }
+                        ],
+                        "end": true,
+                        "conditions": [
+                            {
+                                "quest": "cellar_rats",
+                                "status": "active"
+                            },
+                            {
+                                "flag": "cellar_rats_beaten"
+                            },
+                            {
+                                "not": {
+                                    "flag": "cellar_stirges_beaten"
+                                }
+                            }
+                        ]
                     }
                 ]
             },

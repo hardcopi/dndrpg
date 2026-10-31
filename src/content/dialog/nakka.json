@@ -54,6 +54,20 @@
                     {
                         "label": "Go down the cut.",
                         "end": true
+                    },
+                    {
+                        "label": "What's underneath the warren?",
+                        "conditions": [
+                            {
+                                "level_at_least": 4
+                            },
+                            {
+                                "not": {
+                                    "flag": "warren_floor_fate"
+                                }
+                            }
+                        ],
+                        "next": "the_floor_asked_after"
                     }
                 ]
             },
@@ -73,6 +87,20 @@
                     {
                         "label": "Goodbye.",
                         "end": true
+                    },
+                    {
+                        "label": "What's underneath the warren?",
+                        "conditions": [
+                            {
+                                "level_at_least": 4
+                            },
+                            {
+                                "not": {
+                                    "flag": "warren_floor_fate"
+                                }
+                            }
+                        ],
+                        "next": "the_floor_asked_after"
                     }
                 ]
             },
@@ -1637,6 +1665,26 @@
             },
             {
                 "text": "Nakka does not answer straight away, which she has not done once in any conversation you have had with her.\n\n\"There is a gallery below this hall,\" she says, \"and it has a hole in it, and the hole was not made by the hill. I have lost four floors in four years and each one has gone the same way and each one has gone from underneath.\"\n\nShe stands.\n\n\"You have asked. I am going to show you, and after that you will not be able to stop knowing it, and I want that on your account and not mine.\"",
+                "on_enter": [
+                    {
+                        "start_quest": "the_bottom_of_the_warren"
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Show me.",
+                        "next": "the_floor"
+                    },
+                    {
+                        "label": "Not yet.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_floor_asked_after": [
+            {
+                "text": "Nakka looks at you for a moment, and then at the slate, and then she puts the chalk down.\n\n\"Four floors in four years,\" she says. \"Each one went from underneath. I have not told anybody who could do anything about it, because there has not been anybody. Come down to the lowest gallery and I will show you the edge of it, and after that you will not be able to stop knowing it. I want that on your account and not mine.\"",
                 "on_enter": [
                     {
                         "start_quest": "the_bottom_of_the_warren"
