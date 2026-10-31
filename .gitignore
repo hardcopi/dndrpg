@@ -12,27 +12,93 @@ __pycache__/
 *.pyc
 .DS_Store
 
-# The tile renderer's art, kept on disk and versioned by nothing.
+# The tile renderer's art: four directories (~36MB), most of it dead weight,
+# and the slice of it the battle map draws, which is not.
 #
-# CLAUDE.md records these as dead weight: the world became a location graph on
-# 2026-08-01, the DOM tile renderer went with it, and these four directories
-# (~36MB) are referenced by no page, no stylesheet and no route. `anim` is named
-# only by tools/slice_assets.py, which is the tool that CUT them — it is the
-# producer, not a consumer.
+# The world became a location graph on 2026-08-01 and the DOM tile renderer
+# went with it. What it left behind in tiles/, decor/, buildings/ and anim/ is
+# ignored rather than deleted: it is somebody's art, keeping it on disk costs a
+# directory listing, and putting all of it in every clone would cost 36MB.
+# buildings/ and anim/ are named by nothing the game runs (`anim` only by
+# tools/slice_assets.py, which is the tool that CUT them — the producer, not a
+# consumer), so they stay ignored whole.
 #
-# Ignored rather than deleted. They are somebody's art and the cost of keeping
-# them on disk is a directory listing; the cost of putting them in every clone
-# of the repo forever is 36MB and a first push that looks like a mistake. If
-# they are ever wanted, they are exactly where they were left.
-src/assets/images/tiles/
-src/assets/images/decor/
+# The combat grid then came back to the leftovers. app/lib/BattleMapGen.php
+# names a floor and a wall per palette (FLOORS, WALLS) and every prop in its
+# PROPS table by path, and assets/js/ui-battlemap.js names tiles/water.png for
+# shallow water. Those 51 files (~2.6 MiB) are what a fight draws, so they are
+# versioned, byte-identical to the live site's copies: without them a fresh clone
+# draws untextured boards and tools/test_combat.php fails on the missing paths.
+# PNG only — the client loads the paths the server ships, and those all end
+# .png; the tiles/*.svg beside them are the old renderer's and stay ignored.
+#
+# The list below is the literal paths in those two files, nothing derived
+# (tools/combat_field_preview.html names only files already on it). A
+# prop added to BattleMapGen needs its file un-ignored here too, or
+# test_combat.php's "props sit on the cover they depict" check will name it.
+# Directory contents (`dir/*`), not the directory, so the `!` lines can
+# re-include: git cannot re-include a file whose parent directory is excluded.
 src/assets/images/buildings/
 src/assets/images/anim/
+src/assets/images/tiles/*
+!src/assets/images/tiles/floor_dungeon.png
+!src/assets/images/tiles/floor_stone.png
+!src/assets/images/tiles/floor_wood.png
+!src/assets/images/tiles/grass.png
+!src/assets/images/tiles/road.png
+!src/assets/images/tiles/wall_dungeon.png
+!src/assets/images/tiles/wall_inn.png
+!src/assets/images/tiles/wall_stone.png
+!src/assets/images/tiles/water.png
+src/assets/images/decor/*
+!src/assets/images/decor/altar.png
+!src/assets/images/decor/barrel_pile.png
+!src/assets/images/decor/barrel.png
+!src/assets/images/decor/barrel_rack.png
+!src/assets/images/decor/bones.png
+!src/assets/images/decor/bookshelf_tall.png
+!src/assets/images/decor/bookshelf_wide.png
+!src/assets/images/decor/boulder.png
+!src/assets/images/decor/bush.png
+!src/assets/images/decor/cabinet_tall.png
+!src/assets/images/decor/cartwheel.png
+!src/assets/images/decor/chair.png
+!src/assets/images/decor/chest.png
+!src/assets/images/decor/column.png
+!src/assets/images/decor/crate_pile.png
+!src/assets/images/decor/crate.png
+!src/assets/images/decor/crate_stack.png
+!src/assets/images/decor/dining_set.png
+!src/assets/images/decor/fountain.png
+!src/assets/images/decor/grass_tuft.png
+!src/assets/images/decor/keg.png
+!src/assets/images/decor/lamppost.png
+!src/assets/images/decor/market_stall.png
+!src/assets/images/decor/pew_long.png
+!src/assets/images/decor/pew.png
+!src/assets/images/decor/plant_reeds.png
+!src/assets/images/decor/rocks.png
+!src/assets/images/decor/sacks.png
+!src/assets/images/decor/shrub.png
+!src/assets/images/decor/signpost.png
+!src/assets/images/decor/statue.png
+!src/assets/images/decor/stump.png
+!src/assets/images/decor/table_long.png
+!src/assets/images/decor/table_plain.png
+!src/assets/images/decor/table_round.png
+!src/assets/images/decor/table_tavern.png
+!src/assets/images/decor/tree_birch.png
+!src/assets/images/decor/tree_oak.png
+!src/assets/images/decor/tree_pine.png
+!src/assets/images/decor/wardrobe.png
+!src/assets/images/decor/well.png
+!src/assets/images/decor/woodpile.png
 
 # The manifest of those four, and nothing else: every one of its 193 entries is
-# under decor/, tiles/ or buildings/. It follows what it describes — a list of
-# the intrinsic sizes of files no clone will contain is not a list of anything.
-# tools/make_art_manifest.py rebuilds it from the disk if they ever come back.
+# under decor/, tiles/ or buildings/. Nothing the game runs reads it — the
+# battle map takes a prop's footprint from BattleMapGen's own table, not from
+# intrinsic sizes — so it stays ignored even though part of what it describes
+# is now versioned. tools/make_art_manifest.py rebuilds it from the disk.
 src/assets/images/art.json
 
 # One line read aloud by each of the speech model's non-English voices, for
