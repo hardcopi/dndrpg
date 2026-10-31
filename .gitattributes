@@ -1,0 +1,8 @@
+# The SQL migrations are checksummed into schema_migrations when they run (see
+# src/sql/migrate.sh). The runner ignores carriage returns when it hashes, but
+# a checkout that rewrote these files would still be a different file from the
+# one production ran, so keep them byte-for-byte LF everywhere.
+src/sql/**/*.sql            text eol=lf
+src/sql/migrations/BASELINE text eol=lf
+# Shell scripts run inside Linux containers; a CR breaks the shebang line.
+*.sh                        text eol=lf
