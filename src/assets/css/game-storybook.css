@@ -291,7 +291,7 @@ body.game-page .rail-tab-panel .hud-people .people-crowd h3 { margin: 8px 2px 4p
   body.game-page:not(.in-combat) .loc-inner.scene-storybook .loc-text {
     height: 100%; margin: 0 auto;
     width: min(100%, calc((100dvh - 320px) * 16 / 9));
-    width: min(100%, calc((100cqh - 165px) * 16 / 9));
+    width: min(100%, calc((100cqh - 215px) * 16 / 9));
   }
   body.game-page:not(.in-combat) .loc-inner.scene-storybook .painted-host { flex: 0 0 auto; }
   body.game-page:not(.in-combat) .loc-inner.scene-storybook .scene-narration {
@@ -330,3 +330,12 @@ body.in-combat .rail-tab-panel[data-panel="tasks"],
 body.in-combat .rail-tab-panel[data-panel="people"] { display: none; }
 body.in-combat .rail-tabs,
 body.in-combat .rail-tab-panel[data-panel="log"] { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
+
+/* Review: on desktop the narration band is short, so set the prose a touch
+   tighter so the "You notice / Ways out" lines are in view without scrolling. */
+@media (min-width: 900px) {
+  body.game-page:not(.in-combat) .loc-inner.scene-storybook .loc-sheet.scene-narration { padding: 8px 18px 10px; }
+  body.game-page:not(.in-combat) .loc-inner.scene-storybook .loc-prose p,
+  body.game-page:not(.in-combat) .loc-inner.scene-storybook .loc-read .loc-prose p { font-size: 16.5px; line-height: 1.3; margin-bottom: 4px; }
+  body.game-page:not(.in-combat) .loc-inner.scene-storybook .scene-narration .loc-name { margin-bottom: 2px; font-size: 16px; }
+}
