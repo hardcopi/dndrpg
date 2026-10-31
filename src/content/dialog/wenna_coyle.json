@@ -27,7 +27,7 @@
                         }
                     }
                 ],
-                "text": "The hut window is shuttered and Coyle has the ledgers off the rack and stacked. \"Four wardens and an overseer,\" she says, without looking up from what she is writing. \"I have them down as an incident. Incidents go in the day book and the day book goes downriver on the fifth.\" She blots it. \"I am not frightened of you. I am a great deal more use to this works than Rourke was and everybody including Rourke knew it.\"",
+                "text": "The hut window is shuttered. Coyle has taken the ledgers from the rack and stacked them. \"Four wardens and an overseer,\" she says, still writing. \"I've entered it as an incident. Incidents go in the day book, and the book goes downriver on the fifth.\" She blots the page. \"I'm not frightened of you. This works needs me more than it needed Rourke. He knew it too.\"",
                 "choices": [
                     {
                         "label": "Will they replace him?",
@@ -46,7 +46,7 @@
                         "stage": "the_arithmetic"
                     }
                 ],
-                "text": "\"Dale's account,\" Coyle says, and has it out of the rack before you have finished the sentence, because she has it out of the rack twice a week for somebody. \"Here is his indenture. Here is the reckoning of days. You will notice they are two sheets.\" She sets them side by side, squarely. \"He has been given the first one. He has never asked for the second. I would give it to him. Nobody has ever asked.\"",
+                "text": "\"Dale's account,\" Coyle says, already taking it from the rack. She fetches it twice a week for someone. \"Here's his indenture. Here's the reckoning of days. They're two sheets.\" She aligns them on the desk. \"He was given the first. He's never asked for the second. I'd give it to him. Nobody's asked.\"",
                 "choices": [
                     {
                         "label": "Show me the second sheet.",
@@ -65,7 +65,7 @@
                         "stage": "the_board"
                     }
                 ],
-                "text": "The hut is warm and dry and better lit than anywhere else down here, and the window faces the muster line, and the window was positioned. Coyle looks up from the water clock. \"You have been on my floor for an hour and forty minutes and you have not got a peg,\" she says. \"That is not an accusation. It is a column I cannot fill.\"",
+                "text": "The hut is warm, dry, and better lit than anywhere else down here. Its window faces the muster line, placed just so. Coyle looks up from the water clock. \"You've been on my floor an hour and forty minutes without a peg,\" she says. \"That's not an accusation. It's a column I can't fill.\"",
                 "choices": [
                     {
                         "label": "Then give me a peg.",
@@ -112,7 +112,7 @@
                         "stage": "the_works"
                     }
                 ],
-                "text": "\"You have walked the muster floor, the canteen, four of the six faces and the wet way,\" Coyle says, \"which I know because there is a boy on each of them whose job is to know.\" She is not threatening you. She is telling you about her system, of which she is quietly and completely proud. \"What is it you are counting? I will save you the walk. I count everything here and I am better at it than you are.\"",
+                "text": "\"You've walked the muster floor, the canteen, four of the six faces and the wet way,\" Coyle says. \"I know because there's a boy on each, paid to know.\" She takes quiet pride in her system. \"What are you counting? Save yourself the walk. I count everything here, and better than you do.\"",
                 "choices": [
                     {
                         "label": "Two hundred people and nobody guarding the door.",
@@ -147,7 +147,7 @@
                     }
                 ],
                 "once": true,
-                "text": "\"I'm to send word if you come through the yard,\" Coyle says, before you have opened your mouth. \"There's a form for it. There's a space on it for the hour.\" She puts the form face down under the ledger, which is not the same as tearing it up, and she does not pretend that it is. \"Word goes at the end of the shift, with the tallies, because that's when word goes.\" She turns the water clock a quarter and sets it down. \"You have until the end of the shift.\"",
+                "text": "\"I'm to send word if you come through the yard,\" Coyle says before you can speak. \"There's a form, with a space for the hour.\" She slides it face down under the ledger. She hasn't torn it up, and doesn't pretend otherwise. \"Word goes with the tallies at shift's end. That's when it goes.\" She turns the water clock a quarter and sets it down. \"You have until then.\"",
                 "choices": [
                     {
                         "label": "Why tell me at all?",
@@ -170,7 +170,7 @@
                     }
                 ],
                 "once": true,
-                "text": "Coyle has a sheet out that is not a time sheet. \"You're on this one,\" she says, and does not turn it round. \"It came up on the wages cart with the pegs. It isn't signed and it doesn't say what it's for, and I've put it in the box with the ones that are signed, because there's nowhere else in this hut to put a thing like that.\" She writes the date in the corner of it. \"I write down what I see. I've written that you were here, and when, and how long, which is what I do for a hundred and four other people, and I'm not going to start doing it differently for you.\"",
+                "text": "Coyle has a sheet out that isn't a time sheet. \"You're on this one,\" she says, without turning it round. \"It came up on the wages cart with the pegs. It isn't signed or marked with a purpose. I put it in the box with the signed ones because there's nowhere else for it.\" She dates the corner. \"I write down what I see. I've written when you came, and how long you stayed, as I do for a hundred and four others. I won't make an exception for you.\"",
                 "choices": [
                     {
                         "label": "Whose hand is it?",
@@ -189,7 +189,7 @@
                         "equals": "signed"
                     }
                 ],
-                "text": "\"One hundred and four,\" Coyle says, without looking up, because she knew which peg came through the door by the sound of the boots. \"Lamp back at the end of shift. If you break the gauze you say so; a man who hides a broken gauze kills eleven people and himself.\"",
+                "text": "\"One hundred and four,\" Coyle says without looking up. She knew your peg by the sound of your boots. \"Bring the lamp back at shift's end. If you break the gauze, tell me. A man who hides a broken gauze kills eleven people and himself.\"",
                 "choices": [
                     {
                         "label": "What's at the bottom of it all?",
@@ -212,7 +212,7 @@
                         "equals": "unasked"
                     }
                 ],
-                "text": "Coyle glances up, notes the time, and writes it on the second sheet without comment, the way she has every time since. \"You are on my other list,\" she says, \"and you are the only name on it that keeps coming back, which I have found interesting enough to mention to nobody.\"",
+                "text": "Coyle glances up, notes the time and writes it on the second sheet. \"You're on my other list,\" she says. \"You're the only name that keeps coming back. I found that interesting enough to mention to nobody.\"",
                 "choices": [
                     {
                         "label": "What's at the bottom of it all?",
@@ -235,7 +235,7 @@
                         "equals": "never"
                     }
                 ],
-                "text": "\"You went back up the stair,\" Coyle says, \"and now you are down it again, and both are written down, and I shall write this one down as well.\" She dips the pen. \"I am not making a point. It is simply what I do with everything that happens on this floor.\"",
+                "text": "\"You went up the stair, and now you're back down. I wrote down both, and I'll write this down too.\" Coyle dips her pen. \"I'm not making a point. I write down everything that happens on this floor.\"",
                 "choices": [
                     {
                         "label": "Give me a peg after all.",
@@ -258,7 +258,7 @@
                         "equals": "walked"
                     }
                 ],
-                "text": "\"You have had the whole of it now,\" Coyle says. \"Muster, canteen, six faces, the wet way and the office ladder.\" She turns a peg on the board and does not look at you while she does it. \"There is nothing else to see. That is what people never believe and it is why they keep coming back down.\"",
+                "text": "\"You've seen all of it now,\" Coyle says. \"Muster, canteen, six faces, the wet way and the office ladder.\" She turns a peg on the board without looking at you. \"There's nothing else to see. People never believe that, so they keep coming back down.\"",
                 "choices": [
                     {
                         "label": "What's at the bottom of it all?",
@@ -281,7 +281,7 @@
                         "equals": "back"
                     }
                 ],
-                "text": "\"You were on the muster floor for eleven minutes on the ninth and you left,\" Coyle says, \"and here you are.\" She is not gloating. She is doing what she does. \"People come back. In three years I have had four who came down, went up, and did not return, and two of those were dead within the year of ordinary things.\"",
+                "text": "\"You were on the muster floor for eleven minutes on the ninth, then left,\" Coyle says. \"Now here you are again.\" She isn't gloating; she's stating a fact. \"People come back. In three years, four went up and didn't return. Two were dead within the year, from ordinary things.\"",
                 "choices": [
                     {
                         "label": "What's at the bottom of it all?",
@@ -320,7 +320,7 @@
                 ]
             },
             {
-                "text": "A plank hut with a window in it, warm and dry, with a water clock, a bell rope, a rack of tallies and four ledgers. The woman inside is writing, and goes on writing for exactly as long as it takes her to finish the line. \"Coyle,\" she says. \"Timekeeper. Peg number.\"",
+                "text": "A plank hut, warm and dry, with a window, a water clock, a bell rope, a rack of tallies and four ledgers. The woman inside writes until she finishes the line. \"Coyle,\" she says. \"Timekeeper. Peg number.\"",
                 "on_enter": [
                     {
                         "set_flag": "met_coyle"
@@ -350,11 +350,11 @@
         ],
         "then_we_shall_see": [
             {
-                "text": "Coyle puts the pen down and looks at you properly, and it is the most attention anyone has paid you since you came down the stair. \"Then you are one of four things,\" she says. \"New, lost, a thief, or from downriver. Three of those I have a form for.\" She waits. She is not going to call anybody. She is going to wait.",
+                "text": "Coyle sets down her pen and gives you her full attention. \"Then you're one of four things: new, lost, a thief, or from downriver. I have a form for three.\" She waits. She won't call anyone; she'll wait.",
                 "interjections": [
                     {
                         "companion": "sera",
-                        "text": "Sera: \"She has not asked who we are. She has asked which box we go in. Those are different questions and the second one is much harder to lie to.\""
+                        "text": "Sera: \"She hasn't asked who we are. She asked which box we go in. Those are different questions, and the second is harder to lie about.\""
                     }
                 ],
                 "choices": [
@@ -391,7 +391,7 @@
                         }
                     }
                 ],
-                "text": "\"The works,\" Coyle says. \"Six faces, two hundred and eleven on the books, a hundred and ninety on today. Three shifts, two bells, one canteen. Timber is brought down the stair and spoil is carried up it and both are counted.\" She indicates the board through the window without turning round. \"You are asking me what it is. That is what it is. There is not a second answer underneath the first one and people are always disappointed by that.\"",
+                "text": "\"The works,\" Coyle says. \"Six faces, two hundred and eleven on the books, a hundred and ninety working today. Three shifts, two bells, one canteen. Timber comes down the stair; spoil goes up, and both are counted.\" She gestures toward the board without turning. \"That's what it is. There's no second answer underneath, though people are always disappointed by that.\"",
                 "choices": [
                     {
                         "label": "What are you digging for?",
@@ -418,11 +418,11 @@
         ],
         "the_board": [
             {
-                "text": "She turns the ledger round so you can see it, which nobody down here has ever done for you. Two hundred and eleven names, a peg number against each, and a column of hours going back three years without a single gap in it. \"That is the works,\" she says. \"Not the stone. This. Anybody can dig a hole. Keeping two hundred people in one for three years without a riot is the trade.\"",
+                "text": "She turns the ledger so you can see it, the first person down here to do so. Two hundred and eleven names, each with a peg number, and a column of hours going back three years without a gap. \"That's the works,\" she says. \"Not the stone. This. Anyone can dig a hole. Keeping two hundred people in one for three years without a riot is the trade.\"",
                 "interjections": [
                     {
                         "companion": "ilse",
-                        "text": "Ilse: \"Three years. You have been under my warren for three years.\" Coyle, mildly: \"Two years and nine months. I would not want you to say three in front of Rourke; he is sensitive about the first winter.\""
+                        "text": "Ilse: \"Three years. You've been under my warren for three years.\" Coyle, mildly: \"Two years and nine months. Don't say three in front of Rourke; he's sensitive about the first winter.\""
                     }
                 ],
                 "choices": [
@@ -459,7 +459,7 @@
         ],
         "peg_one_oh_four": [
             {
-                "text": "\"One hundred and four,\" she says, writing it. She does not ask for a second name. She hands you a caged lamp and a tally with the number scratched on it and turns a peg on the board, and that is the whole of it: you are now a fact about this place, and nobody down here will look at you again for as long as the peg is turned.",
+                "text": "\"One hundred and four,\" she says, writing it down. She doesn't ask for another name. She hands you a caged lamp and a tally with the number scratched on it, then turns a peg on the board. Now you're a fact about this place, and nobody down here will look at you again while it's turned.",
                 "on_enter": [
                     {
                         "set_flag": "counted_in"
@@ -468,7 +468,7 @@
                 "interjections": [
                     {
                         "companion": "kessa",
-                        "text": "Kessa: \"That's it? That's the security?\" Coyle: \"That is the security. It has held for three years and your friend the warden's fence has not.\""
+                        "text": "Kessa: \"That's it? That's the security?\" Coyle: \"That's the security. It's held for three years. Your friend's warden fence hasn't.\""
                     }
                 ],
                 "choices": [
@@ -481,7 +481,7 @@
         ],
         "the_other_sheet": [
             {
-                "text": "\"Then you go on the other sheet,\" Coyle says, and gets out another sheet, and writes on it in exactly the same hand at exactly the same speed. \"Persons on the works not on the books. It is a short list and I have kept it since the first winter and nobody has ever asked to see it.\" She blots it. \"I am not annoyed. The works have a column for everything and it is better for everybody if the thing is in the right column.\"",
+                "text": "\"Then you go on the other sheet,\" Coyle says. She fetches another and writes in the same hand, at the same speed. \"People on the works who aren't on the books. It's a short list. I've kept it since the first winter, and nobody's asked to see it.\" She blots the page. \"I'm not annoyed. There's a column for everything, and it's better if each thing is in the right one.\"",
                 "on_enter": [
                     {
                         "set_flag": "coyle_noted_us"
@@ -501,7 +501,7 @@
         ],
         "she_writes_that_too": [
             {
-                "text": "She writes down the time you left, because she writes down the time everybody leaves, and goes back to the water clock. Halfway up the stair you realise that in the whole exchange she never once asked your business, and that this is because she has never needed to know anybody's business in her life.",
+                "text": "She records the time you left, as she does for everyone, then returns to the water clock. Halfway up the stair, you realise she never asked your business. She's never needed to know anyone's business.",
                 "choices": [
                     {
                         "label": "Keep climbing.",
@@ -512,7 +512,7 @@
         ],
         "no_door_to_guard": [
             {
-                "text": "\"There is no door,\" Coyle agrees, pleased that you have got there. \"A door needs a man and a man needs paying and a man can be got round. A peg cannot be got round. If you are not on the board you are not fed, not lamped, not paid and not carried out if the roof goes.\" She dips the pen. \"Everybody down here could walk up that stair this afternoon. Not one of them will, and I have not spent a penny on stopping them.\"",
+                "text": "\"There's no door,\" Coyle agrees. \"A door needs a man, a man needs pay, and a man can be got round. A peg can't. If you're not on the board, you're not fed, lit, paid, or carried out if the roof comes down.\" She dips her pen. \"Anyone here could walk up the stair this afternoon. Not one will, and I haven't spent a penny stopping them.\"",
                 "on_enter": [
                     {
                         "set_flag": "deepworks_known"
@@ -521,11 +521,11 @@
                 "interjections": [
                     {
                         "companion": "aldric",
-                        "text": "Aldric: \"You have made a prison out of a ledger.\" Coyle, without heat: \"I have made a payroll, brother. You are the one who said prison.\""
+                        "text": "Aldric: \"You've made a prison out of a ledger.\" Coyle, evenly: \"I made a payroll, brother. You called it a prison.\""
                     },
                     {
                         "companion": "sera",
-                        "text": "Sera has gone white. \"I could have written this,\" she says. \"That is what I keep thinking. I could have written every page of this.\""
+                        "text": "Sera has gone pale. \"I could have written this,\" she says. \"That's what I keep thinking. I could have written every page.\""
                     }
                 ],
                 "choices": [
@@ -546,7 +546,7 @@
         ],
         "not_my_column": [
             {
-                "text": "\"Not my column,\" Coyle says. \"I have hours, heads, timber, oil, spoil and the bell. Where the spoil comes from is Rourke's book and what it is for is downriver's book, and I have never opened either and I would be very poor at it.\" She goes back to the clock. \"You will find that everybody here can tell you their own column exactly. That is not stupidity. It is how a thing this size is done at all.\"",
+                "text": "\"Not my column,\" Coyle says. \"I track hours, heads, timber, oil, spoil and the bell. Where the spoil comes from is in Rourke's book; what it's for is in downriver's. I've never opened either, and I'd be poor at it.\" She returns to the clock. \"Everyone here knows their own column. That isn't stupidity. It's how a thing this size gets done.\"",
                 "choices": [
                     {
                         "label": "Who is Rourke?",
@@ -561,7 +561,7 @@
         ],
         "rourke": [
             {
-                "text": "\"Overseer. Up the ladder above the headings, with the shutter open, which is where he is meant to be and where he likes to be.\" A small, dry pause. \"He came up through the faces and he will tell you so within four minutes. He keeps the working paper. If you want to know what is being cut and why the six faces point where they point, that is his rack and not mine.\"",
+                "text": "\"Overseer. Up the ladder, above the headings, with the shutter open. That's where he belongs, and where he likes to be.\" She pauses. \"He came up through the faces; he'll tell you in four minutes. He keeps the working paper. Ask him what they're cutting, or why the six faces point where they do. That's his rack, not mine.\"",
                 "on_enter": [
                     {
                         "start_quest": "the_overseers_office"
@@ -581,7 +581,7 @@
         ],
         "the_second_sheet": [
             {
-                "text": "It is the reckoning of days, and it is entirely correct, and it does not balance in his favour anywhere. Days lost to water. Days lost to a bad face. Lamp against wages. Bread against wages at a halfpenny over. Carriage of the cow, entered once and then entered again as keep. Every line of it is honest and the sum of it is that Corrin Dale signed for three years and has bought himself about eight months.",
+                "text": "It's the reckoning of days, and it's correct. None of it favours Dale: days lost to water, days lost to a bad face, lamp and bread charged against wages, bread at a halfpenny over. The cow's carriage is entered twice, once as keep. Every line is honest. The sum is that Corrin Dale signed for three years and has bought himself about eight months.",
                 "on_enter": [
                     {
                         "set_flag": "saw_the_arithmetic"
@@ -590,7 +590,7 @@
                 "interjections": [
                     {
                         "companion": "kessa",
-                        "text": "Kessa: \"There's no cheating on this.\" Coyle: \"None. I would not keep a crooked book. It would be worse for me and it is not necessary.\""
+                        "text": "Kessa: \"There's no cheating here.\" Coyle: \"None. I wouldn't keep a crooked book. It would be worse for me, and there's no need.\""
                     }
                 ],
                 "choices": [
@@ -607,7 +607,7 @@
         ],
         "she_lets_you": [
             {
-                "text": "She turns the sheet round for you and finds you a pen and does not watch while you copy it, and at the end she blots it for you out of habit. \"Tell him it is not a trick,\" she says. \"That is the thing they never believe, and it is the only part of this that has ever kept me awake. There is no trick in it. It is just the arithmetic, done properly, by somebody who was paid to do it properly.\"",
+                "text": "She turns the sheet round, finds you a pen, and looks away while you copy it. At the end, she blots it out of habit. \"Tell him it's not a trick,\" she says. \"That's what they never believe, and the only thing that's kept me awake. There's no trick. It's just the arithmetic, done properly by someone paid to do it properly.\"",
                 "choices": [
                     {
                         "label": "Take it to him.",
@@ -618,7 +618,7 @@
         ],
         "by_the_fifteenth": [
             {
-                "text": "\"By the fifteenth,\" Coyle says. \"There is a man at Greyhythe who does nothing else. The works will lose four days and the four days will come off everybody's reckoning, which is the part you did not think about and which I shall now have to explain a hundred and ninety times.\"",
+                "text": "\"By the fifteenth,\" Coyle says. \"There's a man at Greyhythe who does nothing else. The works will lose four days, and those days come off everyone's reckoning. I'll have to explain that a hundred and ninety times.\"",
                 "choices": [
                     {
                         "label": "Leave.",
@@ -629,7 +629,7 @@
         ],
         "the_end_of_the_shift": [
             {
-                "text": "\"Because a hundred and ninety people work under me and every one of them knows exactly what I write down about them,\" Coyle says. \"That is the arrangement. It is the only thing I have that makes the day book worth anything, and I am not spending it on you.\" She looks at the shuttered window and then back at the clock. \"The bell is at the end of the shift. I am not going to ring it early and I am not going to ring it late.\"",
+                "text": "\"Because a hundred and ninety people work under me, and every one knows exactly what I write about them,\" Coyle says. \"That's the arrangement. It's what makes the day book worth anything, and I won't spend that trust on you.\" She glances at the shuttered window, then at the clock. \"The bell rings at shift's end. I won't ring it early or late.\"",
                 "choices": [
                     {
                         "label": "Go.",

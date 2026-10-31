@@ -10,7 +10,7 @@
                         "equals": "warned"
                     }
                 ],
-                "text": "Pyke is sitting on the granary steps with the chain coiled beside him and nothing to do with it. \"Forty-one people,\" he says. \"I counted. I count things.\" He turns the plumb-bob over in his fingers. \"Nobody's sent word from downriver. I keep expecting a letter and there isn't one, and I've worked out why — there's nothing to say. I stopped being paid and that's the whole of the punishment there is.\"",
+                "text": "Pyke sits on the granary steps, the chain coiled beside him. \"Forty-one people,\" he says. \"I counted. I count things.\" He turns the plumb-bob in his fingers. \"Nobody's sent word from downriver. I keep expecting a letter, but there isn't one. I've worked out why: there's nothing to say. I stopped being paid. That's the whole punishment.\"",
                 "choices": [
                     {
                         "label": "You did the right thing.",
@@ -34,7 +34,7 @@
                     }
                 ],
                 "once": true,
-                "text": "\"Started again,\" Pyke says, dragging the chain out straight along the lane. \"Whole valley. From the ford.\" He is not upset. He is a man with three years of guaranteed work. \"Somebody down there lost a great deal of paper. I'm sorry for whoever's answering for it, but I'm not going to pretend I'm sorry about the rest.\"",
+                "text": "\"Started again,\" Pyke says, drawing the chain straight along the lane. \"Whole valley. From the ford.\" He doesn't look upset. He's got three years of guaranteed work. \"Somebody down there lost a lot of paper. I feel for whoever's answering for it, but I won't pretend I'm sorry about the rest.\"",
                 "choices": [
                     {
                         "label": "Do they know who did it?",
@@ -54,7 +54,7 @@
                     }
                 ],
                 "once": true,
-                "text": "Pyke looks at you the way a man looks at somebody who has moved up a floor. \"Coyle's had word you're on the books,\" he says. \"Not from me. It came down with the wages.\" He winds the chain. \"I'll tell you what I'd tell anybody, which is that they pay on the day and they've never once short-changed me. Whatever else. They pay on the day.\"",
+                "text": "Pyke gives you a look as if you've moved up a floor. \"Coyle's had word you're on the books,\" he says. \"Not from me. It came with the wages.\" He winds the chain. \"I'll tell you what I'd tell anybody: they pay on the day, and they've never short-changed me. Whatever else happens, they pay on the day.\"",
                 "choices": [
                     {
                         "label": "That's all it takes, is it.",
@@ -73,7 +73,7 @@
                         "stage": "in_hand"
                     }
                 ],
-                "text": "Pyke sees what is under your arm before he sees you. He does not say anything for a moment, and then he says, \"That's not a working copy. That's the fair one. That's got the totals in.\" He wipes his hands on his coat, twice, which is not something you have seen him do. \"I've dragged chain for about a third of that. I've never seen the sheet.\"",
+                "text": "Pyke spots what you're carrying before he sees your face. For a moment he says nothing. Then: \"That's not a working copy. That's the fair one. It's got the totals in.\" He wipes his hands on his coat twice, something you've never seen him do. \"I've dragged chain for about a third of that. I've never seen the sheet.\"",
                 "choices": [
                     {
                         "label": "Read it to me. All of it.",
@@ -92,7 +92,7 @@
                     }
                 ],
                 "once": true,
-                "text": "Pyke has no chain. The coil-hook on the granary wall is empty and he is sitting on the steps beside it with his hands on his knees. \"They have taken the work off me,\" he says, flatly, as a fact about a Tuesday. \"No reason given and there will not be one. There is a young man come up from Greyhythe who has been given the ground, and my instrument with it.\" He looks at the hook. \"I am not blaming you. I have thought about it and I cannot get the blame to sit on you and stay there. But I have had to work at that, and I would rather you knew I had.\"",
+                "text": "Pyke's chain is gone. The coil-hook on the granary wall is empty. He sits on the steps beside it, hands on his knees. \"They've taken the work off me,\" he says, as flatly as if he were talking about the weather. \"No reason given. There won't be one. A young man has come up from Greyhythe. He's got the ground, and my instrument with it.\" He looks at the hook. \"I'm not blaming you. I've tried, and I can't make the blame stay put. But it took some work to get there, and I'd rather you knew that.\"",
                 "choices": [
                     {
                         "label": "I'll get it back for you.",
@@ -115,7 +115,7 @@
                     }
                 ],
                 "once": true,
-                "text": "Pyke sees you coming and puts the plumb-bob away in his pocket, which is not a thing he does. \"You'll want to hear about the man,\" he says.",
+                "text": "Pyke sees you coming and slips the plumb-bob into his pocket, which he doesn't usually do. \"You'll want to hear about the man,\" he says.",
                 "choices": [
                     {
                         "label": "What man?",
@@ -134,7 +134,7 @@
                     }
                 ],
                 "once": true,
-                "text": "Pyke has the chain out along the lane and is not measuring anything with it. \"There's a line on my docket that isn't about my wages,\" he says. \"Different hand from the counting house. It's a question — whether the chainman at Rivermark has been keeping company.\" He straightens up, slowly, the way he does everything. \"Three years I've been paid on the day and nobody's wanted anything off me but chain. I've not answered it. There's a space and I've left the space.\"",
+                "text": "Pyke has the chain stretched along the lane, though he isn't measuring anything. \"There's a line on my docket that isn't about my wages,\" he says. \"Different hand from the counting house. It's a question: whether the chainman at Rivermark has been keeping company.\" He straightens slowly. \"I've been paid on the day for three years. Nobody's wanted anything from me but chain. I haven't answered it. There's a space, and I've left it blank.\"",
                 "choices": [
                     {
                         "label": "Answer it honestly.",
@@ -157,7 +157,7 @@
                         "status": "completed"
                     }
                 ],
-                "text": "\"You went, then,\" Pyke says, pleased in a small way. \"How was he? He's always been very decent with me. Asked after my knee. He'd have no reason to know about my knee.\"",
+                "text": "\"So you went,\" Pyke says, quietly pleased. \"How was he? He's always been decent to me. Asked after my knee. No reason he'd know about my knee.\"",
                 "choices": [
                     {
                         "label": "He answered everything I asked him.",
@@ -346,7 +346,7 @@
                         "equals": "followed"
                     }
                 ],
-                "text": "\"Corse,\" Pyke says, when you say it. \"Ludo Corse. That'll be him. Never met a man less worth the trouble of finding out about.\" He straightens the chain over his shoulder. \"He's been up twice in three years. Perfectly civil both times. Paid on the day.\"",
+                "text": "\"Corse,\" Pyke says when you give him the name. \"Ludo Corse. That'll be him. Never met a man less worth the trouble of finding out about.\" He settles the chain over his shoulder. \"He's been up twice in three years. Perfectly civil both times. Paid on the day.\"",
                 "choices": [
                     {
                         "label": "Where would I find him?",
@@ -384,7 +384,7 @@
                         "has_item": "wages_note"
                     }
                 ],
-                "text": "You put the note on the step beside him. Pyke reads it at arm's length, the way men his age do, and hands it back. \"That's mine,\" he says. \"Fourteen days at one and threepence. What about it?\"",
+                "text": "You set the note on the step beside him. Pyke reads it at arm's length and hands it back. \"That's mine,\" he says. \"Fourteen days at one and threepence. What about it?\"",
                 "choices": [
                     {
                         "label": "There's no name on it. There's a mark.",
@@ -403,7 +403,7 @@
                         "stage": "the_note"
                     }
                 ],
-                "text": "\"Still at it,\" Pyke observes. \"The counting house keeps every note it honours for a year before it burns them, in the tray under the long desk. Mine'll be in there with everybody's. I don't know why you want it. It's a receipt.\"",
+                "text": "\"Still at it,\" Pyke says. \"The counting house keeps every honoured note for a year before burning them. They're in the tray under the long desk. Mine'll be there with the rest. I don't know why you want it. It's a receipt.\"",
                 "choices": [
                     {
                         "label": "I'll go and look.",
@@ -422,7 +422,7 @@
                         "status": "active"
                     }
                 ],
-                "text": "\"Wages,\" Pyke says, when you ask again, and sighs, and sits down on the step to do it properly. \"Right. I'm paid at the counting house. The counting house is not paying me — it's honouring a note for somebody who is. That's how everybody in this town is paid who isn't paid in bread.\"",
+                "text": "\"Wages,\" Pyke says when you ask again. He sighs and sits on the step. \"Right. I'm paid at the counting house. The counting house isn't paying me; it's honouring a note for somebody who is. That's how everyone in town gets paid, unless they're paid in bread.\"",
                 "choices": [
                     {
                         "label": "Then I want to see the note.",
@@ -450,7 +450,7 @@
                     }
                 ],
                 "once": true,
-                "text": "\"You put it back, then,\" Pyke says, and is neither pleased nor otherwise about it. \"Good. There's four hundred of those notes in that tray and every one of them's somebody's fortnight, and none of them are anybody's business.\" He drags the chain out straight. \"Mine'll be burnt by the spring like all the rest.\"",
+                "text": "\"You put it back, then,\" Pyke says, neither pleased nor displeased. \"Good. There's four hundred notes in that tray. Each one is somebody's fortnight, and none of them are anybody's business.\" He draws the chain straight. \"Mine'll be burnt by spring with the rest.\"",
                 "choices": [
                     {
                         "label": "How many marks have you painted this year?",
@@ -474,7 +474,7 @@
                         }
                     }
                 ],
-                "text": "Pyke sees the bob in your hand before he sees your face and laughs at you, comfortably, the way an old man laughs at somebody young enough to still be interested in something. \"Still collecting,\" he says. \"How many's that now? Go on. I want to hear the number said out loud by somebody who isn't me.\"",
+                "text": "Pyke spots the bob in your hand and laughs, at ease with you. \"Still collecting,\" he says. \"How many's that now? Go on. I want to hear the number from somebody who isn't me.\"",
                 "choices": [
                     {
                         "label": "Who pays you, Pyke?",
@@ -507,7 +507,7 @@
                         }
                     }
                 ],
-                "text": "Pyke has the chain half out along the lane and one end of it under his boot. \"You're back,\" he says, mildly surprised. \"Nobody comes back. They ask about the mark, I tell them what it is, and that's the last I see of them.\" He straightens up. \"So either you've thought of a better question or you're at a loose end.\"",
+                "text": "Pyke has the chain half stretched along the lane, one end under his boot. \"You're back,\" he says, mildly surprised. \"Nobody comes back. They ask about the mark, I tell them what it is, and that's the last I see of them.\" He straightens. \"So you've either thought of a better question or you're at a loose end.\"",
                 "choices": [
                     {
                         "label": "Who pays you, Pyke?",
@@ -536,7 +536,7 @@
                         }
                     }
                 ],
-                "text": "Pyke has the chain half out along the lane and one end of it under his boot. \"Come to watch a man drag a chain,\" he says. \"It's the most interesting thing on this street and that is a poor look-out for the street.\"",
+                "text": "Pyke has the chain half stretched along the lane, one end under his boot. \"Come to watch a man drag a chain,\" he says. \"It's the most interesting thing on this street. That's a poor look-out for the street.\"",
                 "choices": [
                     {
                         "label": "Who pays you, Pyke?",
@@ -560,7 +560,7 @@
                         "status": "active"
                     }
                 ],
-                "text": "The chain is a hundred feet of flat iron links, and he has it over one shoulder like a man who has carried it a very long way. The plumb-bob is out of his pocket and turning slowly on its line, and the flat of the brass has the mark stamped into it: a bob hanging inside a square.",
+                "text": "A hundred feet of flat iron chain hangs over one of his shoulders. The plumb-bob turns slowly on its line, its brass face stamped with the mark: a bob hanging inside a square.",
                 "choices": [
                     {
                         "label": "That mark. What is it?",
@@ -579,7 +579,7 @@
                         "equals": "walked"
                     }
                 ],
-                "text": "\"You went down it,\" Pyke says, and stops coiling, which is a thing he does not do. \"Two hundred, you say. Under my ground. I chained the top of that two summers ago and there were six of them stood about with a theodolite and I took them for a road party.\" He shakes his head slowly. \"Two hundred men. There isn't two hundred men in Rivermark.\"",
+                "text": "\"You went down it,\" Pyke says, stopping his coiling. \"Two hundred, you say. Under my ground. I chained the top two summers ago. Six of them stood there with a theodolite, and I took them for a road party.\" He shakes his head. \"Two hundred men. There aren't two hundred men in Rivermark.\"",
                 "choices": [
                     {
                         "label": "There is now. They're just not above ground.",
@@ -769,7 +769,7 @@
                     }
                 ],
                 "once": true,
-                "text": "\"You got as far as the stair and came up again,\" Pyke says, and does not think any the less of you, because he has spent forty-three years not going down holes. \"Sensible. There's nothing at the bottom of a hole that wants finding by somebody who isn't paid to find it.\" He coils. \"That is the single most useful sentence my father ever said to me and I have never once tested it.\"",
+                "text": "\"You got as far as the stair and came back up,\" Pyke says. He doesn't think less of you; he's spent forty-three years avoiding holes himself. \"Sensible. There's nothing at the bottom of a hole that needs finding by anyone who isn't paid to find it.\" He coils the chain. \"That's the most useful thing my father ever told me. I've never tested it.\"",
                 "choices": [
                     {
                         "label": "Somebody's paying two hundred men to find it.",
@@ -953,7 +953,7 @@
                         "flag": "deepworks_known"
                     }
                 ],
-                "text": "\"Down at the head of the valley,\" Pyke says, when you mention it, and nods, and does not stop coiling. \"That's the works. I chained the ground over it two summers ago. Took a week. I've never been down and I don't want to be — I'm sixty-one and I like a sky.\"",
+                "text": "\"Down at the head of the valley,\" Pyke says when you mention it. He nods and keeps coiling. \"That's the works. I chained the ground over it two summers ago. Took a week. I've never been down, and I don't want to. I'm sixty-one and I like a sky.\"",
                 "choices": [
                     {
                         "label": "You knew it was there.",
@@ -1132,7 +1132,7 @@
                 ]
             },
             {
-                "text": "An old man on the granary steps with a hundred feet of chain over one shoulder, eating bread out of a cloth. He nods at you the way tradesmen nod at anybody who might be about to become work. \"Chainman,\" he says, around the bread. \"Pyke. If you want a boundary walked it's a shilling and I'll want a boy.\"",
+                "text": "An old man sits on the granary steps, a hundred feet of chain over one shoulder and bread in a cloth. He nods, sizing you up as possible work. \"Chainman,\" he says around a mouthful. \"Pyke. If you want a boundary walked, it's a shilling, and I'll want a boy.\"",
                 "on_enter": [
                     {
                         "set_flag": "met_pyke"
@@ -1286,7 +1286,7 @@
         ],
         "what_a_chainman_does": [
             {
-                "text": "\"Drags a chain,\" Pyke says. \"Hundred feet, that's a chain. Somebody sights a line, I walk it, I call the count, somebody writes it down. Then I paint a mark on whatever's at the end so the next man knows where I stopped.\" He finishes the bread. \"Forty-three years. My father did it. It is not interesting and I am not going to pretend it is.\"",
+                "text": "\"Drags a chain,\" Pyke says. \"A hundred feet makes a chain. Somebody sights a line; I walk it and call the count. Somebody writes it down. Then I paint a mark at the end so the next man knows where I stopped.\" He finishes his bread. \"Forty-three years. My father did it too. It's not interesting, and I'm not going to pretend it is.\"",
                 "choices": [
                     {
                         "label": "Who wants lines walked in Rivermark?",
@@ -1301,11 +1301,11 @@
         ],
         "the_mark": [
             {
-                "text": "He holds the bob still so you can see the flat of it. \"That's a survey mark,\" he says. \"Bob in a square. Means a line was measured from here and the measurement's good.\" He lets it swing again. \"I paint about forty a season. There'll be one on the granary corner behind you now if you look, and I put it there in the spring, and nobody has looked at it since including me.\"",
+                "text": "He holds the bob still so you can see its flat face. \"That's a survey mark,\" he says. \"Bob in a square. Means a line was measured from here, and the measurement's good.\" He lets it swing again. \"I paint about forty a season. There's one on the granary corner behind you, if you look. I put it there in spring. Nobody's looked at it since, me included.\"",
                 "interjections": [
                     {
                         "companion": "sera",
-                        "text": "Sera has gone very still. \"Forty a season,\" she says. \"For how many seasons?\""
+                        "text": "Sera goes still. \"Forty a season,\" she says. \"For how many seasons?\""
                     },
                     {
                         "companion": "ilse",
@@ -1317,7 +1317,7 @@
                                 }
                             }
                         ],
-                        "text": "Ilse: \"There is one cut into stone forty feet under the warren. Did you paint that one?\" Pyke, comfortably: \"Not me. I don't go down holes.\""
+                        "text": "Ilse: \"There's one cut into stone forty feet under the warren. Did you paint that one?\" Pyke, at ease: \"Not me. I don't go down holes.\""
                     }
                 ],
                 "choices": [
@@ -1354,7 +1354,7 @@
         ],
         "he_does_not_know": [
             {
-                "text": "\"A boy brings a paper on a Monday with the lines on it,\" Pyke says. \"I walk them. I hand the count in at the counting house on a Friday and I'm paid at the counting house on a Friday.\" He shrugs, entirely untroubled. \"I've never asked. In forty-three years no man has ever told a chainman anything and no chainman has ever wanted to be told. You'd be surprised how restful it is.\"",
+                "text": "\"A boy brings me a paper on Monday with the lines on it,\" Pyke says. \"I walk them, then hand the count in at the counting house on Friday. That's where I'm paid, too.\" He shrugs. \"I've never asked. In forty-three years, nobody's told a chainman anything, and no chainman has wanted to know. You'd be surprised how restful it is.\"",
                 "choices": [
                     {
                         "label": "Doesn't it bother you?",
@@ -1369,7 +1369,7 @@
         ],
         "it_does_not": [
             {
-                "text": "\"I'm sixty-one,\" Pyke says, \"and I'm paid on the day, in coin, by people who have never once argued about a count. Do you know how rare that is? Marrow argues. The council argues. The priory argued for two years about a hedge.\" He picks up the chain. \"Whoever it is, they pay on the day. That's the only fact about them I have ever needed.\"",
+                "text": "\"I'm sixty-one,\" Pyke says, \"and I'm paid in coin on the day by people who've never argued over a count. Do you know how rare that is? Marrow argues. The council argues. The priory spent two years arguing over a hedge.\" He picks up the chain. \"Whoever they are, they pay on the day. That's all I've ever needed to know.\"",
                 "choices": [
                     {
                         "label": "One day it might not be.",
@@ -1384,7 +1384,7 @@
         ],
         "he_gives_you_the_bob": [
             {
-                "text": "Pyke thinks that is the funniest thing he has heard all week, and then, because he is a generous man and it costs him nothing, he takes a spare bob out of his coat and puts it in your hand. \"There. Now you've got the mark and I don't have to lend you mine every time you want to compare one.\" He is still smiling when you leave. He goes on painting them.",
+                "text": "Pyke laughs as if you've made his week. Then he pulls a spare bob from his coat and puts it in your hand. \"There. Now you've got the mark, and I don't have to lend you mine every time you want to compare one.\" He's still smiling when you leave. He goes on painting them.",
                 "choices": [
                     {
                         "label": "Thank you.",
@@ -1395,7 +1395,7 @@
         ],
         "no_harm_done": [
             {
-                "text": "\"No harm in it,\" Pyke says. \"Everybody notices the marks eventually. Nobody's ever come back twice.\" He shoulders the chain and goes off up the lane to walk somebody's line, and you stand there for a moment with the perfectly reasonable answer you asked for.",
+                "text": "\"No harm in it,\" Pyke says. \"Everybody notices the marks eventually. Nobody's ever come back twice.\" He shoulders the chain and heads up the lane to walk someone's line. You stand there a moment with the answer you'd asked for.",
                 "choices": [
                     {
                         "label": "Let him go.",
@@ -1406,7 +1406,7 @@
         ],
         "whose_wages": [
             {
-                "text": "\"Counting house,\" he says. \"Friday. One and threepence a day and the boy's tuppence out of that.\" He sees that you are waiting for more and is puzzled that there would be more. \"That's it. That's the whole of it. I'm not on anybody's household — I'd have to eat at their table if I were, and I'd rather not.\"",
+                "text": "\"Counting house,\" he says. \"Friday. One and threepence a day, with the boy's tuppence coming out of that.\" You wait for more. He looks puzzled. \"That's it. The whole of it. I'm not on anybody's household. I'd have to eat at their table, and I'd rather not.\"",
                 "choices": [
                     {
                         "label": "The counting house doesn't pay you. It honours a note. Whose?",
@@ -1429,7 +1429,7 @@
         ],
         "the_tray": [
             {
-                "text": "\"Under the long desk,\" Pyke says. \"They keep every note they've honoured for a year and then they burn them, and nobody minds you looking because there's nothing in them. It's a receipt for a chainman's fortnight.\" He goes back to the chain. \"You'll want the one with my name spelt wrong. They all spell it wrong.\"",
+                "text": "\"Under the long desk,\" Pyke says. \"They keep each honoured note for a year, then burn it. Nobody minds you looking. There's nothing in them, just a receipt for a chainman's fortnight.\" He returns to the chain. \"You'll want the one with my name spelt wrong. They all spell it wrong.\"",
                 "choices": [
                     {
                         "label": "I'll go and look.",
@@ -1440,7 +1440,7 @@
         ],
         "read_the_note": [
             {
-                "text": "Pyke turns it over again, and this time he actually reads it, and something goes out of his face and does not entirely come back. \"Huh,\" he says. \"No. There's initials and there's the bob-and-square. That's not — a house signs. A house always signs.\" He hands it back. \"I've had a hundred of these. I've never once turned one over.\"",
+                "text": "Pyke turns it over and reads it properly this time. His face changes, and doesn't quite settle back. \"Huh,\" he says. \"No. There's initials, and there's the bob-and-square. That's not... A house signs. A house always signs.\" He hands it back. \"I've had a hundred of these. Never once turned one over.\"",
                 "on_enter": [
                     {
                         "set_flag": "pyke_turned_it_over"
@@ -1449,7 +1449,7 @@
                 "interjections": [
                     {
                         "companion": "sera",
-                        "text": "Sera: \"A note that isn't signed is honoured because the counting house knows the mark. Which means they've seen it enough times to know it.\""
+                        "text": "Sera: \"The counting house honours an unsigned note because they know the mark. They've seen it often enough to recognise it.\""
                     },
                     {
                         "companion": "aldric",
@@ -1461,7 +1461,7 @@
                                 }
                             }
                         ],
-                        "text": "Aldric: \"Forty-three years, and the first time you look at the back of one, there is no name on it.\""
+                        "text": "Aldric: \"Forty-three years, and the first time you look at the back of one, there's no name.\""
                     }
                 ],
                 "choices": [
@@ -1494,7 +1494,7 @@
         ],
         "the_name": [
             {
-                "text": "The clerk does not have to look it up. \"Corse,\" he says, the way a man says a word he has written four hundred times and never once said aloud. \"Ludo Corse, factor, at Greyhythe. It's a good mark. We honour it same-day.\" He goes back to what he was doing. Outside, Pyke is dragging the chain up the lane and calling the count to nobody.",
+                "text": "The clerk doesn't need to look it up. \"Corse,\" he says, like a word he's written four hundred times without saying aloud. \"Ludo Corse, factor, at Greyhythe. It's a good mark. We honour it same-day.\" He returns to his work. Outside, Pyke drags the chain up the lane, calling the count to nobody.",
                 "on_enter": [
                     {
                         "set_flag": "knows_corse_name"
@@ -1503,7 +1503,7 @@
                 "interjections": [
                     {
                         "companion": "kessa",
-                        "text": "Kessa: \"Have you heard of him?\" The clerk, without looking up: \"No. Why would I? He pays.\""
+                        "text": "Kessa: \"Have you heard of him?\" The clerk doesn't look up. \"No. Why would I? He pays.\""
                     }
                 ],
                 "choices": [
@@ -1516,7 +1516,7 @@
         ],
         "put_it_back": [
             {
-                "text": "You put the note back in the tray with the rest, and in eleven months a clerk will burn it along with four hundred others, and Pyke will be paid on the Friday, and that will be that.",
+                "text": "You return the note to the tray. In eleven months, a clerk will burn it with four hundred others. Pyke will be paid on Friday. That will be that.",
                 "choices": [
                     {
                         "label": "Leave.",
@@ -1527,7 +1527,7 @@
         ],
         "the_address": [
             {
-                "text": "\"Down the river stair and eleven miles of towpath,\" Pyke says. \"Greyhythe. Ask for the factor's house — there's only the one and it's above the new landing.\" He considers. \"Take him something. He'll not want it and he'll be pleased you thought of it. That's the only advice I've got about the man and I've had three years to come up with better.\"",
+                "text": "\"Down the river stair, then eleven miles along the towpath,\" Pyke says. \"Greyhythe. Ask for the factor's house. There's only one, above the new landing.\" He thinks a moment. \"Take him something. He won't want it, but he'll be pleased you thought of it. That's the only advice I've got. I've had three years to come up with better.\"",
                 "choices": [
                     {
                         "label": "Thank you.",
@@ -1538,7 +1538,7 @@
         ],
         "how_many": [
             {
-                "text": "Pyke does the sum, honestly, standing there, because he has never had cause to do it before. \"Forty a season. Three years.\" His lips move. \"Call it three hundred and some.\" He looks up the lane, where there is a mark on the granary corner that he put there in the spring. \"That's a lot of line for a valley this size. I'll grant you that's a lot of line.\"",
+                "text": "Pyke works it out there on the spot. \"Forty a season. Three years.\" His lips move. \"Call it three hundred and some.\" He looks up the lane at the mark he painted on the granary corner in spring. \"That's a lot of line for a valley this size. I'll grant you that.\"",
                 "on_enter": [
                     {
                         "set_flag": "pyke_did_the_sum"
@@ -1558,7 +1558,7 @@
         ],
         "of_course_i_knew": [
             {
-                "text": "\"Ground somebody's buying,\" Pyke says, without hesitating, because it is the ordinary answer and he has given it before. \"You measure what you're buying. You measure it again before you pay. That's all a survey is — it's a man not wanting to be cheated.\" He coils the chain. \"They've measured this valley about as thoroughly as I've ever measured anything.\"",
+                "text": "\"Ground somebody's buying,\" Pyke says. It's the ordinary answer, and he's given it before. \"You measure what you're buying, then measure it again before you pay. That's all a survey is: a man making sure he isn't cheated.\" He coils the chain. \"They've measured this valley as thoroughly as I've ever measured anything.\"",
                 "choices": [
                     {
                         "label": "Who has?",
@@ -1573,7 +1573,7 @@
         ],
         "that_is_him": [
             {
-                "text": "\"That's him,\" Pyke agrees. \"He'll answer anything. My boy asked him once what he did and he sat down on a crate and told him for a quarter of an hour, and the boy came away none the wiser and very pleased.\" He winds the chain. \"I've thought about that since. I couldn't tell you why.\"",
+                "text": "\"That's him,\" Pyke says. \"He'll answer anything. My boy once asked what he did. Corse sat on a crate and told him for a quarter of an hour. The boy came away none the wiser and very pleased.\" He winds the chain. \"I've thought about that since. Couldn't tell you why.\"",
                 "choices": [
                     {
                         "label": "How many marks have you painted for him?",
@@ -1588,7 +1588,7 @@
         ],
         "he_reads_it": [
             {
-                "text": "He reads it standing up in the lane, in the rain, out loud, because he can read a survey and you cannot. Weirs. Seams. Roofs. He gets to sheet six and stops, and goes back a line, and reads that line again, and then says, quite steadily: \"That's not how you enter a town. You enter a town as a place. That's entered as a cost.\" Then, after a while: \"Under clearance.\"",
+                "text": "He reads it aloud in the lane, standing in the rain. He can read a survey and you can't. Weirs. Seams. Roofs. At sheet six, he stops, goes back a line, and reads it again. Then he says, steady as ever, \"That's not how you enter a town. You enter a town as a place. That's entered as a cost.\" After a while, he adds, \"Under clearance.\"",
                 "on_enter": [
                     {
                         "set_flag": "pyke_read_it_out"
@@ -1597,15 +1597,15 @@
                 "interjections": [
                     {
                         "companion": "aldric",
-                        "text": "Aldric has taken his hat off, which is a thing he does at gravesides and has not done anywhere else since you met him."
+                        "text": "Aldric takes off his hat. You've only seen him do that at gravesides."
                     },
                     {
                         "companion": "ilse",
-                        "text": "Ilse: \"Say the figure.\" Pyke says the figure. Nobody says anything for a while after that."
+                        "text": "Ilse: \"Say the figure.\" Pyke does. Nobody speaks for a while."
                     },
                     {
                         "companion": "kessa",
-                        "text": "Kessa: \"Who do we hit.\" Pyke, still looking at the sheet: \"Nobody. That's the trouble with it. There's nobody in it at all.\""
+                        "text": "Kessa: \"Who do we hit?\" Pyke keeps looking at the sheet. \"Nobody. That's the trouble with it. There's nobody in it at all.\""
                     }
                 ],
                 "choices": [
@@ -1650,7 +1650,7 @@
         ],
         "the_reading": [
             {
-                "text": "It takes an hour. People stop because a man is shouting on the granary steps and stay because of what he is shouting. Reed comes, and listens, and writes. Marrow's people come out onto the weighing floor and stand there. At the end a woman asks what the town is supposed to do about it, and Pyke says he does not know, he is a chainman, and gets down off the steps and coils his chain, and that is the end of his employment in this valley.",
+                "text": "It takes an hour. People stop at the shouting on the granary steps, then stay to hear what Pyke is saying. Reed comes to listen and write. Marrow's people come out onto the weighing floor and stand there. At the end, a woman asks what the town should do. Pyke says he doesn't know; he's a chainman. He climbs down and coils his chain. His employment in the valley is over.",
                 "choices": [
                     {
                         "label": "Stay with him.",
@@ -1661,7 +1661,7 @@
         ],
         "the_burning": [
             {
-                "text": "He does not argue. He holds the sheets while you get the tinder going, which is the part you did not expect, and he stands and watches nine sheets and three years and about four hundred days of somebody's wages go up in the rain. \"They'll do it again,\" he says. \"They'll want a chainman.\" A pause. \"I'll take the work. I want you to know that now, so it isn't a thing you find out later.\"",
+                "text": "He doesn't argue. He holds the sheets while you light the tinder, which you hadn't expected. In the rain, he watches nine sheets, three years, and about four hundred days of somebody's wages burn. \"They'll do it again,\" he says. \"They'll want a chainman.\" He pauses. \"I'll take the work. I want you to know now, so you don't hear it from someone else later.\"",
                 "choices": [
                     {
                         "label": "I know.",
@@ -1672,7 +1672,7 @@
         ],
         "he_lets_you_keep_it": [
             {
-                "text": "\"Right,\" Pyke says, and helps you roll it, and ties it, and hands it back. \"Then you've got a thing that eleven hundred people are in and none of them know it.\" He shoulders the chain. \"Mind how you carry that. Paper's the only part of this anybody's ever taken seriously.\"",
+                "text": "\"Right,\" Pyke says. He helps you roll it, ties it, then hands it back. \"Then you've got a thing that eleven hundred people are in, and none of them know it.\" He shoulders the chain. \"Mind how you carry that. Paper's the only part of this anybody's ever taken seriously.\"",
                 "choices": [
                     {
                         "label": "Leave.",
@@ -1683,7 +1683,7 @@
         ],
         "no_such_thing": [
             {
-                "text": "\"There isn't a right thing,\" Pyke says. \"There's a chain and a line and a count, and after that it's all somebody else's arithmetic.\" He looks at the coil in his lap. \"I've been forty-three years being the man who doesn't ask. Turns out that was a job as well and I was very good at it.\"",
+                "text": "\"There isn't a right thing,\" Pyke says. \"There's a chain, a line, and a count. After that, it's somebody else's arithmetic.\" He looks at the coil in his lap. \"For forty-three years I've been the man who doesn't ask. Turns out that was a job too, and I was good at it.\"",
                 "choices": [
                     {
                         "label": "Leave him to it.",
@@ -1694,7 +1694,7 @@
         ],
         "they_are_asking": [
             {
-                "text": "\"There's a man been up from downriver asking who was on the works that week,\" Pyke says. \"Polite. Bought me a drink. Wrote down what I told him, which was nothing, and thanked me for it and paid for the drink.\" He drags the chain out straight. \"He'll be back. That sort always comes back on a Tuesday.\"",
+                "text": "\"A man came up from downriver asking who was at the works that week,\" Pyke says. \"Polite. Bought me a drink. Wrote down what I told him, which was nothing, then thanked me and paid for the drink.\" He draws the chain straight. \"He'll be back. That sort always comes back on a Tuesday.\"",
                 "choices": [
                     {
                         "label": "What did you tell him?",

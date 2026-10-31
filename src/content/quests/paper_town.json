@@ -12,23 +12,23 @@
     "stages": {
         "whose_wages": {
             "title": "Who pays the chainman",
-            "objective": "Ask Alder Pyke on Granary Row who actually pays him.",
-            "journal": "Pyke draws one and threepence a day at the Rivermark counting house. The counting house is not paying it. It is honouring a note for somebody who is.",
+            "objective": "Ask Alder Pyke on Granary Row who pays him.",
+            "journal": "Pyke draws one and threepence a day at the Rivermark counting house. The counting house isn't paying him; it's honouring a note for somebody else.",
             "target": {
                 "location": "granary_row"
             }
         },
         "the_note": {
             "title": "The note of hand",
-            "objective": "The wages are drawn at the counting house. Go and read what they are drawn on: search the Counting House for the note, then bring it back to Pyke.",
-            "journal": "The counting house keeps the notes it has honoured for a year before it burns them. Pyke's are in the tray with the rest, and there will be one with a mark on it instead of a name.",
+            "objective": "Pyke draws his wages at the counting house. Search the Counting House for the note, read it, then bring it back to him.",
+            "journal": "The counting house keeps honoured notes for a year before burning them. Pyke's note is in the tray with the rest. One bears a mark instead of a name.",
             "target": {
                 "location": "counting_house"
             }
         },
         "followed_it": {
             "title": "A name, and a river",
-            "journal": "The note is drawn on a house downriver at Greyhythe and signed by its factor, and the factor's name is Ludo Corse. I have asked eleven people in Rivermark whether they have heard of him. None of them has. Six of them are, one way or another, working for him.",
+            "journal": "The note is drawn on a house downriver in Greyhythe, signed by its factor, Ludo Corse. I've asked eleven people in Rivermark if they've heard of him. None has. Six are working for him, one way or another.",
             "resolution": "followed_it",
             "terminal": true,
             "effects": [
@@ -54,7 +54,7 @@
         },
         "let_it_lie": {
             "title": "Somebody's money",
-            "journal": "Somebody downriver is paying a chainman one and threepence a day to walk lines in a valley they do not live in. That is not a crime, it is not my business, and I have put the tray back where I found it.",
+            "journal": "Somebody downriver is paying a chainman one and threepence a day to walk lines in a valley they don't live in. It's no crime and no business of mine. I've put the tray back where I found it.",
             "resolution": "let_it_lie",
             "terminal": true,
             "outcome": "neutral",

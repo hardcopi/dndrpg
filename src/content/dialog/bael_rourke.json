@@ -14,7 +14,7 @@
                         }
                     }
                 ],
-                "text": "The office is empty and the shutter is still open. Down on the muster floor somebody is shouting for a stretcher and somebody else is shouting about a barrow, and the second man is louder. Rourke's good coat is still on the nail. He never wore it underground once.",
+                "text": "The office is empty, its shutter still open. On the muster floor, someone shouts for a stretcher; someone else shouts about a barrow, louder. Rourke's good coat still hangs on the nail. He never wore it underground.",
                 "choices": [
                     {
                         "label": "Take the room.",
@@ -46,7 +46,7 @@
                         }
                     }
                 ],
-                "text": "Rourke is not in the office. Rourke is on the muster floor with his arm strapped, arguing about a barrow, because there is a barrow that has not come up and that is a real problem and the rest of it is not.",
+                "text": "Rourke is on the muster floor, not in the office, his arm strapped as he argues about a barrow that has not come up. That is a real problem. The rest can wait.",
                 "choices": [
                     {
                         "label": "Leave him to it.",
@@ -61,7 +61,7 @@
                         "stage": "the_rack"
                     }
                 ],
-                "text": "\"The rack,\" Rourke says, following your eye, and takes the whole roll out and drops it on the desk without ceremony. \"Field books, sections, and the fair sheets. That is what the chainmen give me and what I cost the faces off.\" He is already turning back to the shutter. \"Have a look if you like. Don't take it out on the floor; the damp gets in the paper and then nobody can read the sections and I am the one who is shouted at.\"",
+                "text": "\"The rack,\" Rourke says, following your gaze. He lifts the whole roll and drops it on the desk. \"Field books, sections, fair sheets. The chainmen give me those, and I cost the faces from them.\" He turns back to the shutter. \"Have a look, if you like. Keep it off the floor; damp ruins the paper, then nobody can read the sections and I get shouted at.\"",
                 "choices": [
                     {
                         "label": "Take the fair sheets.",
@@ -96,7 +96,7 @@
                         "equals": "talked"
                     }
                 ],
-                "text": "Rourke has the shutter open and a stool out for you, which is a thing that has apparently now been decided. \"Number four's better,\" he says, before anything else. \"Moved the man. Told you.\" He is so pleased about it that it takes a moment to remember what you came for.",
+                "text": "Rourke has the shutter open and a stool set out for you. Apparently that is settled. \"Number four's better,\" he says before you can speak. \"Moved the man. Told you.\" He looks so pleased that you almost forget why you came.",
                 "choices": [
                     {
                         "label": "Where do the six faces point?",
@@ -120,7 +120,7 @@
                     }
                 ],
                 "once": true,
-                "text": "The office has a boarded pane and somebody else's tally on the desk, and the shutter is still open on the works, because the works do not stop for a shutter. Below, the barrows go past, full, and come back empty, and go past again.",
+                "text": "The office has a boarded pane and someone else's tally on the desk. The shutter still opens onto the works; they do not stop for a shutter. Below, full barrows roll past, come back empty, then roll past again.",
                 "choices": [
                     {
                         "label": "What's in the rack?",
@@ -139,7 +139,7 @@
                         "equals": "out"
                     }
                 ],
-                "text": "Rourke watches you come up the ladder a second time and says nothing at all until your head is through the hatch. \"Twice,\" he says. \"Everyone saw it twice. You want to make your mind up about my office, because a man who keeps looking at a door is a man who is going to open it eventually and I would rather know which day.\"",
+                "text": "Rourke watches you climb the ladder again. He says nothing until your head clears the hatch. \"Twice,\" he says. \"Everyone saw you twice. Make up your mind about my office. A man who keeps looking at a door will open it eventually, and I'd rather know which day.\"",
                 "choices": [
                     {
                         "label": "It's about the works, not the office.",
@@ -161,7 +161,7 @@
                         "flag": "office_open"
                     }
                 ],
-                "text": "Rourke has the shutter open and one boot on the sill, watching a barrow run. \"Number four's slow,\" he says, to you, as though you had been standing there all morning discussing it. \"Been slow since Tuesday. It's the man, not the face. I'll move him tomorrow and he'll be quicker and he'll never know why.\"",
+                "text": "Rourke has the shutter open, one boot on the sill, watching a barrow run. \"Number four's slow,\" he says, as if you've been discussing it all morning. \"Been slow since Tuesday. It's the man, not the face. I'll move him tomorrow. He'll be quicker and never know why.\"",
                 "choices": [
                     {
                         "label": "Where do the six faces point?",
@@ -184,7 +184,7 @@
                         "stage": "the_strongbox"
                     }
                 ],
-                "text": "\"That,\" says Rourke, seeing where you are looking, \"is bolted through the floor and through the joist under it, and there is eleven pound in it, and it is the wages for Friday.\" He is amused. \"You are the fourth person to look at it that way this year and the other three worked here.\"",
+                "text": "\"That,\" Rourke says, following your gaze, \"is bolted through the floor and the joist beneath it. There are eleven pounds in it, Friday's wages.\" He smiles. \"You're the fourth person to look at it that way this year. The other three worked here.\"",
                 "choices": [
                     {
                         "label": "Ask him to show you the whole office.",
@@ -225,7 +225,7 @@
                         "status": "active"
                     }
                 ],
-                "text": "The ladder comes up through the platform and the office is one plank room with a shutter open on the whole works. The man at the desk is big, bearded and grey with rock dust in the beard, and he is already talking before you are properly through the hatch. \"If it's about the pump gallery the answer is Thursday. If it's about the canteen the answer is not me.\"",
+                "text": "The ladder opens onto the platform. The office is a plank room with a shutter over the whole works. The man at the desk is big, bearded and grey with rock dust. He starts talking before you're through the hatch. \"If it's about the pump gallery, Thursday. If it's about the canteen, ask someone else.\"",
                 "on_enter": [
                     {
                         "set_flag": "met_rourke"
@@ -249,7 +249,7 @@
                 ]
             },
             {
-                "text": "A plank room above the headings with the shutter thrown open and the whole works laid out below it. The overseer is leaning on the sill with a tally in his hand and does not turn round. \"Number four's slow,\" he says, to nobody. Then he does turn round. \"You're not mine. I know all of mine.\"",
+                "text": "The shutter opens onto the whole works. The overseer leans on the sill with a tally in hand, not looking round. \"Number four's slow,\" he says to no one. Then he turns. \"You're not mine. I know all of mine.\"",
                 "on_enter": [
                     {
                         "set_flag": "met_rourke"
@@ -272,15 +272,15 @@
         ],
         "he_is_delighted": [
             {
-                "text": "It turns out that nobody has ever asked Bael Rourke about the works with any interest whatever, and that he has been waiting eleven years for it. He shows you the prop pattern. He shows you the pump schedule and the reason the launder is on the left. He explains the cost of a bucket of sand and why there is one on every landing and why the man who moves one gets docked. He came up through the faces and he will tell you that within four minutes, and he does.",
+                "text": "Nobody has ever asked Bael Rourke about the works with any real interest. He's been waiting eleven years for someone to. He shows you the prop pattern and pump schedule, explains why the launder is on the left, what a bucket of sand costs, why there's one on every landing, and why the man who moves one gets docked. He came up through the faces, and tells you so within four minutes.",
                 "interjections": [
                     {
                         "companion": "kessa",
-                        "text": "Kessa, after twenty minutes: \"He's still going.\" Rourke, not stopping: \"There's another sixty foot of it, love.\""
+                        "text": "Kessa, after twenty minutes: \"He's still going.\" Rourke, without stopping: \"There's another sixty foot of it, love.\""
                     },
                     {
                         "companion": "sera",
-                        "text": "Sera: \"He is not hiding anything. He is showing off. Those look identical from outside and they are not the same at all.\""
+                        "text": "Sera: \"He's showing off, not hiding anything. Those look identical from outside, but they're not the same at all.\""
                     }
                 ],
                 "choices": [
@@ -315,7 +315,7 @@
         ],
         "the_aim_point": [
             {
-                "text": "He unrolls a section on the desk and puts a thumb on it. \"All six converge. There. Under the old quarry floor, where it came down.\" He taps it twice. \"That is a hundred and ten foot of cutting to reach a point about the size of this room, and I have costed it four times and it does not pay and I have said so on paper.\" He rolls it up again. \"And here I am, cutting it, on time, and I shall go on cutting it, because that is the instruction.\"",
+                "text": "He unrolls a section and plants his thumb on it. \"All six converge here, under the old quarry floor where it came down.\" He taps the spot twice. \"That's a hundred and ten foot of cutting to reach a point about the size of this room. I've costed it four times. It doesn't pay, and I've said so on paper.\" He rolls it up. \"Still, I'm cutting it on time, because that's the instruction.\"",
                 "on_enter": [
                     {
                         "set_flag": "rourke_named_the_point"
@@ -327,11 +327,11 @@
                 "interjections": [
                     {
                         "companion": "ilse",
-                        "text": "Ilse: \"That is directly under the deep warren. You have taken the floor out from under three thousand people.\" Rourke: \"Two thousand eight hundred. I had it counted. I'm not proud of it and I had it counted.\""
+                        "text": "Ilse: \"That's directly under the deep warren. You've taken the floor out from under three thousand people.\" Rourke: \"Two thousand eight hundred. I had them counted. I'm not proud of it, but I had them counted.\""
                     },
                     {
                         "companion": "aldric",
-                        "text": "Aldric: \"What is at the point?\" Rourke, honestly: \"Rock, brother. Until it isn't.\""
+                        "text": "Aldric: \"What's at the point?\" Rourke, plainly: \"Rock, brother. Until it isn't.\""
                     }
                 ],
                 "choices": [
@@ -348,7 +348,7 @@
         ],
         "the_hand_crew": [
             {
-                "text": "\"Old workings,\" Rourke says, and something goes out of him for the first time. \"Past the pumps. There's a crew of four down there on hand tools — no picks, no powder, no barrows. They take about an inch a week and they're told to take an inch a week.\" He puts the tally down. \"I've been down twice. I don't go now. It's not a thing I could put on a return and I'd not know how to word it.\"",
+                "text": "\"Old workings,\" Rourke says. For the first time, his face falls. \"Past the pumps. There's a crew of four down there with hand tools. No picks, powder or barrows. They take about an inch a week, and that's what they're told to do.\" He sets down the tally. \"I've been twice. I don't go now. I couldn't put it on a return, and I wouldn't know how to word it.\"",
                 "choices": [
                     {
                         "label": "Word it badly.",
@@ -363,7 +363,7 @@
         ],
         "the_wrong_sound": [
             {
-                "text": "\"The stone gives back the wrong sound,\" Rourke says. \"That's all. Any face-man will tell you a face has a note and you learn it in a week. That one hasn't got a note.\" He picks the tally back up because his hands want something. \"Fessick's on it. He's the oldest man I've got and the best hands and he asked for it, which I have never once understood.\"",
+                "text": "\"The stone gives back the wrong sound,\" Rourke says. \"That's all. Any face-man will tell you a face has a note. You learn it in a week. That one has no note.\" He picks up the tally, needing something for his hands. \"Fessick's on it. Oldest man I've got, best hands. He asked for the job. I've never understood why.\"",
                 "choices": [
                     {
                         "label": "Back.",
@@ -381,7 +381,7 @@
                         }
                     }
                 ],
-                "text": "\"Working paper,\" Rourke says, and then looks at you properly, which he has not done yet. He takes in the boots, the way you stand, how many of you there are and how few of you there have been down a heading. \"I'll tell you what I tell the clerks. Whoever walks out of here with that roll is going to be asked by somebody important where they got it, and what they mean to do with it, and they had better have an answer that does not fall over.\" He turns back to the shutter. \"You haven't got that answer yet. Come back when you've been somewhere that has made you harder to argue with, and ask me again.\"",
+                "text": "\"Working paper,\" Rourke says, then looks at you properly. He takes in your boots, your stance, how many of you there are, and how few have been down a heading. \"I tell the clerks this: whoever walks out with that roll will be asked by someone important where they got it and what they mean to do with it. They'd better have an answer that holds up.\" He turns to the shutter. \"You haven't got one yet. Come back after you've been somewhere that makes you harder to argue with, and ask me again.\"",
                 "choices": [
                     {
                         "label": "Ask to see the fair sheets anyway.",
@@ -403,7 +403,7 @@
                 ]
             },
             {
-                "text": "\"Working paper,\" Rourke says. \"Field books from the chainmen, sections, and the fair sheets they're drawn up into.\" He is entirely indifferent to it. \"The strongbox has the wages and the strongbox is bolted down. That lot's just paper. If somebody wanted it they'd be welcome and they'd be carrying about nine pound of damp paper up two hundred stairs for nothing.\"",
+                "text": "\"Working paper,\" Rourke says. \"Field books from the chainmen, sections, and the fair sheets drawn from them.\" He barely glances at it. \"The strongbox has the wages, and it's bolted down. That lot's just paper. Anyone who wanted it could carry nine pound of damp paper up two hundred stairs for nothing.\"",
                 "on_enter": [
                     {
                         "start_quest": "the_survey"
@@ -412,7 +412,7 @@
                 "interjections": [
                     {
                         "companion": "sera",
-                        "text": "Sera does not move and does not look at the rack again for the rest of the conversation, which is how you know."
+                        "text": "Sera doesn't move or look at the rack again for the rest of the conversation."
                     }
                 ],
                 "choices": [
@@ -451,7 +451,7 @@
         ],
         "he_leaves_you_in_it": [
             {
-                "text": "In the end it is a barrow that saves you the trouble. Number four stops, somebody shouts, and Rourke swears and goes down the ladder two rungs at a time, and you are alone in the overseer's office of the Deepworks for four minutes with the shutter open and the whole works too busy to look up.",
+                "text": "A barrow saves you the trouble. Number four stops; someone shouts. Rourke swears and takes the ladder two rungs at a time. You're alone in the overseer's office for four minutes, the shutter open and the whole works too busy to look up.",
                 "on_enter": [
                     {
                         "set_flag": "office_open"
@@ -474,7 +474,7 @@
         ],
         "he_gets_wary": [
             {
-                "text": "Rourke stops mid-sentence and looks at you for slightly too long. \"You've asked me three things about the paper and nothing about the props,\" he says. \"Everybody asks about the props. They're the interesting bit.\" He shuts the section on the desk, unhurried, and does not send for anybody, and does not need to: he is standing between you and the only ladder, and he came up through the faces.",
+                "text": "Rourke stops mid-sentence and studies you. \"You've asked me three things about the paper and nothing about the props,\" he says. \"Everybody asks about the props. They're the interesting bit.\" He closes the section on the desk. He doesn't call for anyone; he doesn't need to. He stands between you and the only ladder, and he came up through the faces.",
                 "choices": [
                     {
                         "label": "Take the office off him.",
@@ -506,7 +506,7 @@
         ],
         "he_says_a_number": [
             {
-                "text": "He does not shout. He leans out of the shutter and says a number, in a voice pitched to carry over three shifts and a chain-pump, and the number is how many wardens come up the ladder behind you. Then he steps back from the hatch and takes his coat off the nail, because it is a good coat and this is going to be untidy.",
+                "text": "He doesn't shout. He leans out of the shutter and calls a number, loud enough to carry over three shifts and a chain-pump. The number brings wardens up the ladder behind you. Then he steps back from the hatch and takes his coat from the nail. It's a good coat, and this is going to get untidy.",
                 "choices": [
                     {
                         "label": "Draw.",
@@ -517,7 +517,7 @@
         ],
         "everybody_saw": [
             {
-                "text": "You go back down the ladder. The platform is where it is and the shutter faces the works for exactly this reason: a hundred and ninety people saw you go up and a hundred and ninety saw you come down, and by the second bell there will be a version of it in the canteen with your face in it.",
+                "text": "You go back down. The platform is where it is, and the shutter faces the works for a reason: a hundred and ninety people saw you go up and come down. By the second bell, there'll be a version of it in the canteen with your face in it.",
                 "choices": [
                     {
                         "label": "Get off the ladder.",
@@ -528,7 +528,7 @@
         ],
         "he_does_not_notice": [
             {
-                "text": "He does not notice. He is at the shutter with his back to you, counting a barrow run, and you walk out of the overseer's office of the Deepworks with three years of somebody's work under your coat, past a hundred and ninety people who are being paid by the day and have no reason on earth to look up.",
+                "text": "He doesn't notice. He has his back to you at the shutter, counting a barrow run. You leave the overseer's office with three years of someone's work under your coat, past a hundred and ninety people paid by the day who have no reason to look up.",
                 "choices": [
                     {
                         "label": "Down the ladder.",
@@ -539,7 +539,7 @@
         ],
         "the_room_is_yours": [
             {
-                "text": "It is his office in the sense that his name is chalked on the hatch and it is yours in the sense that you are standing in it and he is not. The shutter faces the works. A hundred and ninety people are still working, because the bell has not gone, because the bell is Coyle's and Coyle is in her hut writing all of this down in the day book, in the same hand, at the same speed.",
+                "text": "It's his office because his name is chalked on the hatch; it's yours because you're standing in it and he isn't. The shutter faces the works. A hundred and ninety people keep working; the bell hasn't gone. The bell is Coyle's, and she's in her hut writing it all in the day book, in the same hand and at the same speed.",
                 "on_enter": [
                     {
                         "set_flag": "office_open"
@@ -562,7 +562,7 @@
         ],
         "sheet_six_here": [
             {
-                "text": "You get as far as sheet six and Rourke says, without turning round, \"That's the valuation. That's not mine, that's downriver's — they send it up so I can cost the haulage against it.\" He is still watching number four. \"There's a town on that sheet somewhere. Rivermark. I've never been.\"",
+                "text": "You reach sheet six. Without turning, Rourke says, \"That's the valuation. It isn't mine; it comes from downriver so I can cost the haulage against it.\" He keeps watching number four. \"There's a town on that sheet somewhere. Rivermark. I've never been.\"",
                 "choices": [
                     {
                         "label": "Take it.",
