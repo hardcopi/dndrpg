@@ -61,7 +61,7 @@ class LocationEngine
         $stmt->execute([$characterId]);
         $c = $stmt->fetch();
         if (!$c) {
-            throw new RuntimeException('Character not found.');
+            throw new InvalidArgumentException('Character not found.');
         }
         return $c;
     }
@@ -72,7 +72,7 @@ class LocationEngine
         $stmt->execute([$id]);
         $c = $stmt->fetch();
         if (!$c) {
-            throw new RuntimeException('Character not found.');
+            throw new InvalidArgumentException('Character not found.');
         }
         return $c;
     }

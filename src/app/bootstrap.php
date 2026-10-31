@@ -5,6 +5,116 @@
 
 declare(strict_types=1);
 
+/*
+ * Errors reach the log, never the page.
+ *
+ * Nothing in the app set display_errors, so a web request got whatever php.ini
+ * said — and the php:8.4-fpm image ships no php.ini, whose built-in default is
+ * ON: a warning or an uncaught PDOException printed SQL, paths and a stack trace
+ * into the HTML. CLI keeps its own settings, because the tools are read by
+ * whoever ran them.
+ */
+if (PHP_SAPI !== 'cli') {
+    ini_set('display_errors', '0');
+    ini_set('display_startup_errors', '0');
+    ini_set('log_errors', '1');
+    set_exception_handler('page_exception_handler');
+}
+
+/**
+ * Whether an exception's message was written for the player to read.
+ *
+ * THE RULE: only the classes the app throws on purpose as refusals keep their
+ * text — InvalidArgumentException ("Not without a reason…", 350-odd of them)
+ * and the two auth exceptions. Everything else is generic in the browser:
+ * PDOException (SQL, table and column names), Error/TypeError (file paths),
+ * and RuntimeException, which is ALSO what PDOException extends and what the
+ * engines throw for "this should not happen" faults naming keys, directories
+ * and migrations. An allow-list, so a new kind of failure is quiet by default.
+ */
+function exception_is_player_facing(Throwable $e): bool
+{
+    // Exact classes only: library code can subclass these exceptions while
+    // carrying implementation details in its message.
+    return get_class($e) === InvalidArgumentException::class
+        || get_class($e) === AuthRequiredException::class
+        || get_class($e) === AuthForbiddenException::class;
+}
+
+/**
+ * Write an unexpected failure to the PHP error log and return its reference.
+ *
+ * The reference goes to the browser too, so a report of "it said ref a1b2c3d4"
+ * finds its log line with one grep. The trace is rebuilt WITHOUT arguments:
+ * PHP's own getTraceAsString() includes them unless zend.exception_ignore_args
+ * is set, and the arguments are where passwords (Auth::login, new PDO) live.
+ * Nothing from the request is logged — no body, cookie, token or session id.
+ */
+function log_exception(Throwable $e, string $where = 'api'): string
+{
+    $id = bin2hex(random_bytes(4));
+    $route = $where === 'api' ? (string) ($_GET['r'] ?? '') : (string) ($_SERVER['SCRIPT_NAME'] ?? '');
+    $lines = [];
+    for ($x = $e, $depth = 0; $x !== null && $depth < 5; $x = $x->getPrevious(), $depth++) {
+        $lines[] = ($depth ? 'caused by ' : '') . get_class($x) . ': ' . $x->getMessage()
+            . ' at ' . $x->getFile() . ':' . $x->getLine();
+        foreach ($x->getTrace() as $i => $f) {
+            $lines[] = sprintf(
+                '  #%d %s%s%s()',
+                $i,
+                isset($f['file']) ? $f['file'] . ':' . ($f['line'] ?? '?') . ' ' : '',
+                isset($f['class']) ? $f['class'] . ($f['type'] ?? '::') : '',
+                $f['function'] ?? '?'
+            );
+        }
+    }
+    error_log("rpg {$where} [{$id}] " . ($route !== '' ? "{$route} " : '') . implode("\n", $lines));
+    return $id;
+}
+
+/** The one sentence a browser gets for a failure it was not meant to see. */
+function generic_error_message(string $id): string
+{
+    return "Something went wrong on our side. If it keeps happening, mention ref {$id}.";
+}
+
+/**
+ * Answer an API request with a generic 500, having logged the real cause.
+ *
+ * Same JSON shape as every other error (`ok`, `error`) — api.js shows
+ * `data.error` and reads nothing else — plus `error_id`.
+ */
+function json_internal_error(Throwable $e): void
+{
+    $id = log_exception($e, 'api');
+    json_error(generic_error_message($id), 500, ['error_id' => $id]);
+}
+
+/** Last resort for a page (not the API, which catches its own): log it, say little. */
+function page_exception_handler(Throwable $e): void
+{
+    $id = log_exception($e, 'page');
+    $message = htmlspecialchars(generic_error_message($id), ENT_QUOTES);
+    if (headers_sent()) {
+        // Replace any not-yet-sent buffered page. If headers/body already went
+        // to the client, a short inline notice is safer than a second document.
+        if (ob_get_level() > 0) {
+            while (ob_get_level() > 0) {
+                ob_end_clean();
+            }
+            echo '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Error</title></head><body><p>' . $message . '</p></body></html>';
+        } else {
+            echo '<p>' . $message . '</p>';
+        }
+        return;
+    }
+    http_response_code(500);
+    header('Content-Type: text/html; charset=utf-8');
+    echo '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Error — Rivermark Chronicles</title></head>'
+        . '<body><p>' . $message . '</p>'
+        . '<p><a href="/">Back to the front page</a></p></body></html>';
+}
+
 /**
  * True when this request presented an API token rather than a cookie.
  *

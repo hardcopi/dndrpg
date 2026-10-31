@@ -266,7 +266,7 @@ class PitEngine
         // was told about.
         $group = $this->pick($this->budget($partyId, $tier, $only));
         if (!$group) {
-            throw new RuntimeException('There is nothing to send out.');
+            throw new InvalidArgumentException('There is nothing to send out.');
         }
 
         [$name, $description] = $prose($this->describe($group), self::TIERS[$tier]['blurb']);

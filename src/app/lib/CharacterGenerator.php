@@ -858,7 +858,7 @@ class CharacterGenerator
         $stmt->execute([$id]);
         $char = $stmt->fetch();
         if (!$char) {
-            throw new RuntimeException('Character not found.');
+            throw new InvalidArgumentException('Character not found.');
         }
         return $this->decorate($char);
     }

@@ -8,6 +8,9 @@ declare(strict_types=1);
 
 require_once dirname(__DIR__) . '/app/bootstrap.php';
 
+// Anything thrown outside the try below (CORS, CSRF) still answers in JSON.
+set_exception_handler('json_internal_error');
+
 cors_apply();
 
 if (strtoupper((string) ($_SERVER['REQUEST_METHOD'] ?? 'GET')) === 'OPTIONS') {
@@ -103,9 +106,10 @@ try {
 } catch (InvalidArgumentException $e) {
     json_error($e->getMessage(), 400);
 } catch (Throwable $e) {
-    json_error($e->getMessage(), 500, [
-        'type' => get_class($e),
-    ]);
+    // Not a refusal written for the player — see exception_is_player_facing().
+    // The browser gets a generic sentence and a reference; the log gets the
+    // class, message, file:line and trace under the same reference.
+    json_internal_error($e);
 }
 
 /**
@@ -1682,6 +1686,11 @@ function handle_character(string $action): void
                 $fallback
             );
         } catch (RuntimeException $e) {
+            // ModelPortrait's refusals ("not a readable PNG") are the player's
+            // to read; a database fault is not, and is a RuntimeException too.
+            if ($e instanceof PDOException) {
+                throw $e;
+            }
             json_error($e->getMessage(), 422);
         }
 
@@ -1835,8 +1844,9 @@ function handle_character(string $action): void
         } catch (InvalidArgumentException $e) {
             json_error($e->getMessage(), 422);
         } catch (RuntimeException $e) {
-            // The migration has not been run. Say which one.
-            json_error($e->getMessage(), 500);
+            // The migration has not been run, or the database failed. Either
+            // way a server fault: which migration is in the log, not the page.
+            json_internal_error($e);
         }
     }
 
