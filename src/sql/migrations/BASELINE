@@ -1,0 +1,35 @@
+# Migrations a FRESH build records as 'baseline' instead of running.
+#
+# Read by docker/initdb/00-load.sh and nothing else. It is not a list for
+# production: production had every file here applied by hand and baselines
+# them all with `migrate.sh --baseline-all` (see CLAUDE.md, "Migrations").
+#
+# A file belongs here when everything it does is already done by schema.sql,
+# seed_data.sql or content.sql, so running it after them would at best do
+# nothing. One filename per line; the rest of the line is the reason. A file
+# NOT listed is applied by a fresh build, after content.sql — so before adding
+# a new migration's name here, check that every row it writes really is in
+# those three files, or a fresh build quietly goes without it.
+#
+# Applied on a fresh build, and why (kept here so the two lists are read
+# together):
+#
+#   2026-08-21-delve-anywhere.sql  the columns are in schema.sql, but its
+#       UPDATE is the only thing that sets has_delve on uv_mouth — content.sql
+#       never names the column — so without it the Undervault has no stair.
+#   2026-08-21-free-play.sql       the _freeplay module, region and yard.
+#       load_content.py skips `_`-prefixed keys, so content.sql has none of it.
+#   2026-08-25-freeplay-inn.sql    the Proving House, the Pit, the stair and
+#       Oddvar's shelf, none of which is in content.sql for the same reason.
+#       Its _fp_* dialogue UPDATEs are OLDER than content/dialog/_fp_*.json,
+#       which is why 00-load.sh loads content.sql a second time after the
+#       migrations: content wins every row the two both write.
+#   2026-10-29-freeplay-road.sql   the West Gate <-> Proving House road, again
+#       `_`-ended exits that content.sql leaves alone.
+
+2026-08-20-sidekick-appearance.sql  characters.sidekick_json is in schema.sql
+2026-08-21-delve-level.sql          dungeon_delves.level_json is in schema.sql
+2026-08-24-api-tokens.sql           api_tokens is in schema.sql
+2026-08-24-delve-mouth-key.sql      dungeon_delves.mouth_location_key is in schema.sql; its backfill has no delves to fill on a fresh build
+2026-08-24-npc-map-pos.sql          npcs.map_x / map_y are in schema.sql
+2026-08-24-region-plan.sql          regions.plan_json is in schema.sql

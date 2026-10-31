@@ -834,14 +834,65 @@ after generating. A map that competes with its own labels is worse than none —
 
 The schema is **not** dumped from production — it is built from the project's own
 files in `src/sql/`, loaded by `docker/initdb/00-load.sh` in an explicit
-dependency order (currently `schema.sql` → `seed_data.sql` → `content.sql`).
+dependency order (currently `schema.sql` → `seed_data.sql` → `content.sql`,
+then the migrations, then `content.sql` again).
 MySQL's entrypoint would otherwise run them alphabetically and every file would
 execute before the tables it depends on exist. **If you add a `.sql` file, add
 it to that list** — a file not named there is silently skipped.
 
-There are no `migrate_*.sql` files any more: they were folded into `schema.sql`
-when the world became a location graph, and a schema that drops every table has
-no use for migrations that add columns to tables it has just created.
+The old `migrate_*.sql` files were folded into `schema.sql` when the world
+became a location graph. Their successors live in `src/sql/migrations/` and are
+run by one runner, `src/sql/migrate.sh` — see **Migrations** below. A fresh
+build runs it too, after `content.sql`, and then loads `content.sql` a second
+time; the reason is in `00-load.sh`.
+
+### Migrations
+
+`src/sql/migrate.sh` applies `src/sql/migrations/*.sql` in filename order and
+records each one in `schema_migrations` (filename, sha256, when, and `how`:
+`applied`, or `baseline` for a file whose effect a database already had). A
+recorded file is never run again; one edited after recording is flagged by
+`--status` and still not re-run. It is bash and the mysql client only, because
+the `mysql:8.0` initdb container has no python, so the same script serves a
+fresh build, this machine and hermes.
+
+```bash
+src/sql/migrate.sh --database rpg_5e --status        # applied / baseline / pending
+src/sql/migrate.sh --database rpg_5e                 # dry run (the default)
+src/sql/migrate.sh --database rpg_5e --apply         # run what is pending
+src/sql/migrate.sh --database rpg_5e --baseline FILE...   # record, do not run
+src/sql/migrate.sh --database rpg_5e --baseline-all       # record every pending file
+# --mysql "<client command>" picks the client (default `mysql`); SQL goes on
+# stdin and the database is the last argument, so a wrapper works.
+```
+
+**Against production**, through richard's wrapper (it is `ssh root@hermes mysql
+"$@"`, so run it as richard — `~` is `/root` for an agent):
+
+```bash
+M=/home/richard/rivermark/bin/hermes-mysql
+src/sql/migrate.sh --mysql $M --database rpg_5e --status
+# back up first:
+ssh root@hermes mysqldump --single-transaction --default-character-set=utf8mb4 \
+    rpg_5e > rpg_5e-before-migrate-$(date +%F).sql
+src/sql/migrate.sh --mysql $M --database rpg_5e --apply
+```
+
+Hermes had all ten of the original migrations applied **by hand**, before this
+table existed. Its first run is therefore `--baseline-all` (after `--status`
+shows exactly those ten pending and nothing newer), not `--apply`. The same is
+true of a long-lived dev volume: check, then baseline what it already has.
+
+**Adding a migration**: a new `src/sql/migrations/YYYY-MM-DD-what.sql`, safe to
+run twice (guard with `information_schema` / `NOT EXISTS`), terminated with
+`;`, and with no `USE` — the runner refuses one, because the database is named
+on its command line and nowhere else. Make the same change in `schema.sql` (or
+the content files) so a fresh build has it, then add the filename to
+`src/sql/migrations/BASELINE` **only if** a fresh build already gets everything
+it does; anything not listed there is applied on a fresh build after
+`content.sql`. Never edit a migration that has been run anywhere: the recorded
+checksum will stop matching and the edit will not be applied — write another.
+`src/tools/test_migrate.sh` drives all of this against throwaway containers.
 
 `content.sql` is generated from `src/content/*.json` by `src/tools/load_content.py`,
 so regenerate it before rebuilding if you changed the JSON.
@@ -1319,8 +1370,10 @@ database somebody is playing on.
 - **Migrations are never run by a deploy.** `deploy.sh` copies files; it does
   not apply them. Anything with a new column must be migrated on hermes first or
   the live site 500s — `LocationEngine::getState()` asks for the delve status on
-  every look, so a missing `locations.has_delve` breaks every game screen. Every
-  migration in `src/sql/migrations/` is written to be safe to run twice.
+  every look, so a missing `locations.has_delve` breaks every game screen. Run
+  `src/sql/migrate.sh --mysql /home/richard/rivermark/bin/hermes-mysql
+  --database rpg_5e --status` before a deploy, and `--apply` (after a backup)
+  if anything is pending; see **Migrations**.
 - **`asset()` is not a legal ES module specifier.** It returns a bare relative
   path, which is fine for `<link>` and `<script src>` and refused by
   `import`. A dynamic `import()` inside a classic script also resolves against

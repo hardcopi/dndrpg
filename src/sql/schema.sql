@@ -51,6 +51,9 @@ DROP TABLE IF EXISTS characters;
 DROP TABLE IF EXISTS app_settings;
 DROP TABLE IF EXISTS api_tokens;
 DROP TABLE IF EXISTS users;
+-- Dropped with everything else: a database rebuilt from this file has had
+-- none of the migrations, whatever an older copy of the table said.
+DROP TABLE IF EXISTS schema_migrations;
 
 CREATE TABLE users (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -1136,5 +1139,22 @@ ALTER TABLE npcs
 ALTER TABLE encounters
     ADD CONSTRAINT fk_enc_location FOREIGN KEY (location_id) REFERENCES locations(id) ON DELETE SET NULL,
     ADD CONSTRAINT fk_enc_region FOREIGN KEY (region_id) REFERENCES regions(id) ON DELETE SET NULL;
+
+-- Which files in sql/migrations/ this database has had. Written only by
+-- sql/migrate.sh, which also creates it (IF NOT EXISTS, same definition) so
+-- a database built before this table existed gets it on its first run.
+--
+-- `checksum` is the sha256 of the file as it was run, so a migration edited
+-- after the fact shows up in --status instead of passing for the one that
+-- ran. `how` says whether the SQL actually executed here ('applied') or was
+-- only recorded because its effect was already present ('baseline') — a fresh
+-- build baselines the ones folded into this file, and production baselined
+-- all ten it had been given by hand before the table existed.
+CREATE TABLE schema_migrations (
+    filename VARCHAR(191) NOT NULL PRIMARY KEY,
+    checksum CHAR(64) NOT NULL,
+    applied_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    how ENUM('applied','baseline') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 SET FOREIGN_KEY_CHECKS = 1;
