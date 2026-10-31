@@ -135,9 +135,14 @@ and spells are deliberately *not* scoped — a goblin is a goblin.
 `app/lib/LocationEngine.php` is the engine (it replaced `MapEngine.php`);
 `assets/js/game.js` is a ~900-line driver that replaced a 3,200-line tile
 renderer. **Portraits survive** — `_face.png` and `_bust.png` are used by the
-party rail, the people list, the dialogue theatre and the combat cards — but
-`assets/images/{tiles,decor,buildings,anim}` (~36 MB) is dead weight, left on
-disk and referenced by nothing. The `*_sheet.png` walk sheets are still baked
+party rail, the people list, the dialogue theatre and the combat cards. Of
+`assets/images/{tiles,decor,buildings,anim}` (~36 MB), `buildings/`, `anim/`
+and most of `tiles/` and `decor/` are dead weight, left on disk and ignored by
+git — **except the 51 PNGs the battle map draws**: the floors, walls and props
+named in `BattleMapGen.php` (FLOORS, WALLS, PROPS) plus `tiles/water.png` from
+`ui-battlemap.js`. Those are versioned through an allowlist in `.gitignore`; a
+new battle-map prop needs its own `!` line there, or `test_combat.php` reports
+it missing on a fresh clone. The `*_sheet.png` walk sheets are still baked
 by `Paperdoll.php` and previewed in the creator, so they stay.
 
 They are no longer **required**, and that mattered more than it sounds.
