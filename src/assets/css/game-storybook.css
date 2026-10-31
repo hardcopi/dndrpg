@@ -54,3 +54,42 @@ body.game-page .scene-narration .loc-prose p { color: #2a1a10; font: 400 18px/1.
 body.game-page .scene-narration .loc-prose p:first-child:first-letter { float: left; margin: 2px 6px 0 0; color: #6e2230; font: 700 34px/.9 'Cinzel Decorative',serif; }
 @media (max-width: 1179px) { body.game-page .loc-inner.scene-storybook { height: auto; padding: 12px; } body.game-page .painted-host { flex: none; } }
 @media (max-width: 720px) { .scene-tools { right: 4px; top: 4px; gap: 2px; } .scene-chip { padding: 3px 5px; font-size: 9px; } .paint-label { font-size: 8px; padding: 2px 4px; } }
+
+/* Painted locations flow as one scrollable column; the legacy Amiga skin fixes
+   and clips these elements to the map's former viewport height. */
+body.game-page .loc-inner.scene-storybook { display: block; height: auto; min-height: 0; max-height: none; overflow: visible; }
+body.game-page .loc-inner.scene-storybook .loc-text { display: flex; flex-direction: column; height: auto; min-height: 0; max-height: none; overflow: visible; }
+body.game-page .loc-inner.scene-storybook .painted-host { flex: none; min-height: 0; height: auto; }
+body.game-page .loc-inner.scene-storybook .scene-paint { display: block; }
+body.game-page .loc-inner.scene-storybook .scene-narration { flex: none; height: auto; min-height: 0; max-height: none; overflow: visible; margin: 10px 0 0; }
+body.game-page .loc-inner.scene-storybook .loc-read { max-height: none; overflow: visible; padding: 0; background: transparent; }
+body.game-page .loc-inner.scene-storybook .loc-prose p,
+body.game-page .loc-inner.scene-storybook .loc-read .loc-prose p { color: #2a1a10; font: 400 18px/1.35 'Alegreya',serif; margin: 0 0 7px; }
+body.game-page .loc-inner.scene-storybook .loc-prose p:first-child:first-letter,
+body.game-page .loc-inner.scene-storybook .loc-read .loc-prose p:first-child:first-letter { float: left; margin: 2px 6px 0 0; color: #6e2230; font: 700 34px/.9 'Cinzel Decorative',serif; }
+body.game-page .loc-inner.scene-storybook .loc-name { display: inline-block; color: #6e2230; }
+body.game-page .loc-inner.scene-storybook .scene-subtitle { float: right; display: inline; margin: 2px 0 0; }
+body.game-page .loc-inner.scene-storybook .scene-narration-links { clear: both; display: flex; flex-wrap: wrap; gap: 3px 16px; padding-top: 3px; color: #6b4a2a; font: 15px 'Alegreya',serif; }
+.scene-notice, .scene-way { padding: 0; border: 0; border-bottom: 1px dotted currentColor; background: transparent; color: #6e2230; font: 700 14px 'Alegreya',serif; cursor: pointer; }
+.paint-object { padding: 1px 4px; border: 0; border-bottom: 1px dotted #f5e6c4; border-radius: 0; background: #1a122099; color: #fff1ce; font-size: clamp(8px,.78vw,11px); }
+.scene-way { color: #8a5d1f; margin-right: 8px; }
+.scene-notice-line, .scene-ways-line { display: inline; }
+.scene-way.is-locked { color: #81776b; cursor: not-allowed; }
+.paint-hotspot.edge-right { transform: translate(-100%,-100%); align-items: flex-end; }
+.paint-hotspot.edge-left { transform: translate(0,-100%); align-items: flex-start; }
+.paint-hotspot .scene-work-mark { color: #e8b44a; margin-right: 4px; }
+.scene-more { position: absolute; left: 50%; top: 94%; transform: translate(-50%,-100%); z-index: 3; padding: 3px 8px; border: 1px solid #9fd6c8; border-radius: 3px; background: #1a1220e8; color: #cfeee4; font: 700 11px 'Cinzel',serif; cursor: pointer; }
+body.game-page .rail-pane, body.game-page .hud-quest, body.game-page .hud-log, body.game-page .gw-actions {
+  background: linear-gradient(145deg,#2e2034,#21172a); border-color: #5a3e22; color: #f5e6c4;
+}
+body.game-page .rail-pane-head, body.game-page .hud-quest > h2, body.game-page .hud-log > h2, body.game-page .gw-actions > h2 {
+  color: #e8b44a; font: 700 12px 'Cinzel',serif; letter-spacing: 2px;
+}
+body.game-page .hud-party .party-card { background: linear-gradient(#34243a,#251a2d); border-color: #a8742a; color: #f5e6c4; }
+body.game-page .hud-party .party-card:hover { background: linear-gradient(#402c45,#2b1d33); border-color: #e8b44a; }
+body.game-page .hud-party .party-card.is-active { background: linear-gradient(#4a3c22,#2a2216); border-color: #e8b44a; }
+body.game-page .hud-party .party-face { border-color: #a8742a; border-radius: 3px; }
+body.game-page .hud-party .party-name, body.game-page .person-name { color: #e8b44a; font-family: 'Cinzel',serif; }
+body.game-page .hud-log, body.game-page .hud-quest { color: #f5e6c4; }
+body.game-page .scene-chip:disabled { opacity: .75; cursor: not-allowed; }
+@media (min-width:1180px) { body.game-page .loc-inner.scene-storybook { max-height: none; overflow: visible; } }

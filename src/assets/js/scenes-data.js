@@ -10,12 +10,14 @@ window.RIVERMARK_SCENES = {
       the_anvil: { x: 92.373, y: 54.237, icon: '⚒' }
     },
     npcs: {
-      captain_elowen: { x: 11.864, y: 53.860 },
-      watch_square: { x: 57.839, y: 60.640 }
+      captain_elowen: { x: 57.8, y: 60.6 },
+      market_farmer: { x: 11.9, y: 53.9 },
+      sera: { x: 30, y: 58 },
+      market_baker: { x: 44, y: 50 }
     },
     objects: [
-      { label: 'the well', x: 58, y: 62, act: 'search' },
-      { label: "Tobin's notice", x: 10.6, y: 38, act: 'search' }
+      { label: 'the well', x: 58, y: 70, act: 'search' },
+      { label: "Tobin's notice", x: 12, y: 30, act: 'search' }
     ],
     fx: [
       { type: 'smoke', x: 85.7, y: -8, w: 13, h: 17.5, intensity: 1, wind: 0.6 },

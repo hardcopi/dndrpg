@@ -51,7 +51,6 @@
     const scenes = window.RIVERMARK_SCENES || {};
     const key = loc && (loc.location_key || loc.key || loc.slug);
     if (key && scenes[key]) return { key, config: scenes[key] };
-    if (loc && loc.name === 'Market Square' && scenes.market_square) return { key: 'market_square', config: scenes.market_square };
     return null;
   }
 
@@ -441,7 +440,7 @@
     // the scene, and the description is a click away under the ⓘ in its
     // corner. Nothing was lost — the prose modal carries the art with it, and
     // the first-visit paragraph still opens on arrival.
-    const ways = waysPanel(loc);
+    const ways = painted ? '' : waysPanel(loc);
     const foot = ways ? `<div class="loc-foot">${ways}</div>` : '';
     // The region stays in the heading and is clipped by the skin: the region
     // bar above the chart is aria-hidden, so a screen reader that heard only
@@ -454,6 +453,7 @@
             <h1 class="loc-name"><span class="loc-name-place">${esc(loc.name)}</span><span class="loc-name-region">, ${esc(loc.region_name)}</span></h1>
             ${painted.config.subtitle ? `<small class="scene-subtitle">${esc(painted.config.subtitle)}</small>` : ''}
             <div class="loc-read">${prosePanel(loc)}</div>
+            ${paintedNarrationLinks(loc, painted.config)}
           </section>
           ${foot}
         </div>
@@ -498,22 +498,36 @@
       const key = e.to_key || e.to_location_key || e.location_key || (cfg.exits && Object.keys(cfg.exits)[i]);
       const spot = (cfg.exits || {})[key];
       if (!spot) return '';
-      return `<button type="button" class="paint-hotspot exit${e.locked ? ' is-locked' : ''}" style="left:${spot.x}%;top:${spot.y}%" data-act="travel" data-id="${+e.to_location_id}" ${e.locked ? 'disabled' : ''} aria-label="${esc(e.label || e.to_name || 'Travel')}"><span class="paint-label"><b>${esc(spot.icon || '⌂')}</b>${esc(e.label || e.to_name || '')}</span><i class="paint-pin"></i><i class="paint-dot"></i></button>`;
+      const anchor = spot.x > 80 ? 'edge-right' : (spot.x < 20 ? 'edge-left' : '');
+      return `<button type="button" class="paint-hotspot exit ${anchor}${e.locked ? ' is-locked' : ''}" style="left:${spot.x}%;top:${spot.y}%" data-act="travel" data-id="${+e.to_location_id}" ${e.locked ? 'disabled' : ''} aria-label="${esc(e.label || e.to_name || 'Travel')}"><span class="paint-label"><b>${esc(spot.icon || '⌂')}</b>${esc(e.label || e.to_name || '')}</span><i class="paint-pin"></i><i class="paint-dot"></i></button>`;
     }).join('');
-    const npcMarkup = npcs.map((n, i) => {
+    const configured = [];
+    const unconfigured = [];
+    npcs.forEach((n) => {
       const key = n.npc_key || n.key || n.slug;
-      let spot = (cfg.npcs || {})[key];
-      if (!spot && i === 0) spot = { x: 11.864, y: 53.86 };
-      else if (!spot && i === 1) spot = { x: 57.839, y: 60.64 };
-      else if (!spot) spot = { x: 8 + ((i * 13) % 84), y: 94 };
-      return `<button type="button" class="paint-hotspot npc" style="left:${spot.x}%;top:${spot.y}%" data-npc="${+n.id}" aria-label="Talk to ${esc(n.known ? n.name : (n.role || 'a stranger'))}"><span class="paint-label"><b>💬</b>${esc(n.known ? n.name : (n.role || 'A stranger'))}</span><i class="paint-pin"></i><i class="paint-dot"></i></button>`;
-    }).join('');
+      const spot = (cfg.npcs || {})[key];
+      if (spot) configured.push({ n, spot });
+      else if (!n.is_ambient) unconfigured.push(n);
+    });
+    const npcButton = (n, spot) => {
+      const name = n.known ? n.name : (n.role || 'A stranger');
+      const mark = n.has_work || n.quest_mark ? '<b class="scene-work-mark">!</b>' : '';
+      const anchor = spot.x > 80 ? 'edge-right' : (spot.x < 20 ? 'edge-left' : '');
+      return `<button type="button" class="paint-hotspot npc ${anchor}" style="left:${spot.x}%;top:${spot.y}%" data-npc="${+n.id}" aria-label="Talk to ${esc(name)}"><span class="paint-label">${mark}${esc(name)}</span><i class="paint-pin"></i><i class="paint-dot"></i></button>`;
+    };
+    const row = unconfigured.slice(0, 5).map((n, i, list) => npcButton(n, { x: (i + 1) * 100 / (list.length + 1), y: 94 })).join('');
+    const more = unconfigured.length > 5 ? `<button type="button" class="scene-more" data-focus-people>+${unconfigured.length - 5} more</button>` : '';
+    const npcMarkup = configured.map(({ n, spot }) => npcButton(n, spot)).join('') + row + more;
     const objectMarkup = (cfg.objects || []).map((o) => `<button type="button" class="paint-object" style="left:${o.x}%;top:${o.y}%" data-act="${esc(o.act || 'search')}" aria-label="Search ${esc(o.label)}">${esc(o.label)}</button>`).join('');
     layer.innerHTML = exitMarkup + npcMarkup + objectMarkup;
+    const moreButton = paintedSceneNode.querySelector('[data-focus-people]');
+    if (moreButton) moreButton.onclick = () => { const rail = $('#people-rail'); if (rail) { rail.tabIndex = -1; rail.scrollIntoView({ behavior: 'smooth', block: 'center' }); rail.focus({ preventScroll: true }); } };
     const fxButton = paintedSceneNode.querySelector('[data-scene-fx]');
     if (fxButton) {
-      fxButton.querySelector('span').textContent = localStorage.getItem('rm-fx') === 'off' ? 'off' : 'on';
-      fxButton.onclick = () => { const on = localStorage.getItem('rm-fx') === 'off'; window.RivermarkFX && window.RivermarkFX.setEnabled(on); fxButton.querySelector('span').textContent = on ? 'on' : 'off'; };
+      const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      fxButton.disabled = !!reduced;
+      fxButton.querySelector('span').textContent = reduced ? 'off (reduced motion)' : (localStorage.getItem('rm-fx') === 'off' ? 'off' : 'on');
+      fxButton.onclick = () => { if (reduced) return; const on = localStorage.getItem('rm-fx') === 'off'; window.RivermarkFX && window.RivermarkFX.setEnabled(on); fxButton.querySelector('span').textContent = on ? 'on' : 'off'; };
     }
     const mapButton = paintedSceneNode.querySelector('[data-scene-map]');
     if (mapButton) mapButton.onclick = () => { paintedMapOpen = !paintedMapOpen; syncPaintedMap(); };
@@ -521,6 +535,14 @@
     if (info) info.onclick = openDescription;
     host.appendChild(paintedSceneNode);
     syncPaintedMap();
+  }
+
+  function paintedNarrationLinks(loc, cfg) {
+    const objects = cfg.objects || [];
+    const exits = loc.exits || [];
+    const objectLine = objects.length ? `<div class="scene-notice-line"><b>You notice:</b> ${objects.map((o, i) => `<button type="button" data-act="${esc(o.act || 'search')}" class="scene-notice" aria-label="Search ${esc(o.label)}">${esc(o.label)}</button>${i < objects.length - 1 ? '<span aria-hidden="true"> · </span>' : ''}`).join('')}</div>` : '';
+    const exitLine = exits.length ? `<div class="scene-ways-line"><b>Ways out:</b> ${exits.map((e) => `<button type="button" class="scene-way${e.locked ? ' is-locked' : ''}" data-act="travel" data-id="${+e.to_location_id}"${e.locked ? ' disabled' : ''}>${esc(e.label || e.to_name || '')}</button>`).join('')}</div>` : '';
+    return `<div class="scene-narration-links">${objectLine}${exitLine}</div>`;
   }
 
   function syncPaintedMap() {
