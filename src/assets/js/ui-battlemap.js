@@ -753,9 +753,20 @@
     return { art: `${foot}<g${seat}>${held}${sheet}</g>`, figure: true };
   }
 
+  /**
+   * A spell waiting for somebody to land on (`o.aim`, from ui-combat): the
+   * bodies it may take are `aim-ok`, every other living one `aim-no`, and the
+   * reach/cover marks follow the spell rather than the weapon in hand.
+   */
+  function aimClass(o, c) {
+    if (!o.aim || !c.alive) return '';
+    return o.aim.targets && o.aim.targets[c.cid] ? 'aim-ok' : 'aim-no';
+  }
+
   function tokensHtml(state, o, deck) {
     const ui = state.ui || null;
-    const targets = (ui && ui.targets && !Array.isArray(ui.targets)) ? ui.targets : {};
+    const targets = o.aim ? (o.aim.targets || {})
+      : (ui && ui.targets && !Array.isArray(ui.targets)) ? ui.targets : {};
     const actorCid = state.order ? state.order[state.turn_index] : null;
 
     return (state.combatants || []).map((c) => {
@@ -778,6 +789,7 @@
         dead ? 'is-dead' : '',
         downed ? 'is-downed' : '',
         shot ? 'in-reach' : '',
+        aimClass(o, c),
       ].filter(Boolean).join(' ');
 
       const note = shot
@@ -1030,7 +1042,8 @@
       return `;--lit:${(0.72 + 0.38 * Math.min(1, sum)).toFixed(2)}`;
     };
     const ui = state.ui || null;
-    const targets = (ui && ui.targets && !Array.isArray(ui.targets)) ? ui.targets : {};
+    const targets = o.aim ? (o.aim.targets || {})
+      : (ui && ui.targets && !Array.isArray(ui.targets)) ? ui.targets : {};
     const list = [];
     let seq = 0;
 
@@ -1087,7 +1100,7 @@
                draggable="false" onerror="window.BattleMap.cardFail(this)">`
         : `<img class="bm-card-art is-pixel" src="${esc(artUrl('figures/' + spec.file))}" alt=""
                draggable="false" onerror="window.BattleMap.cardFail(this)">`;
-      list.push({ fx, fy, html: `<div class="bm-card is-figure${face ? ' is-standee' : ''} ${c.side === 'party' ? 'is-party' : 'is-foe'}"
+      list.push({ fx, fy, html: `<div class="bm-card is-figure${face ? ' is-standee' : ''} ${c.side === 'party' ? 'is-party' : 'is-foe'} ${aimClass(o, c)}"
           data-card="${tag}" data-cid="${esc(c.cid)}" data-cx="${n(fx)}" data-cy="${n(fy)}"
           data-dx="${n(dx)}" data-dy="${n(dy)}" data-fp="${fp}"
           style="--cx:${n(fx)};--cy:${n(fy)};--w:${n(w)};--h:${n(h)};--lift:${n(lift)}${litAt(fx, fy)}">

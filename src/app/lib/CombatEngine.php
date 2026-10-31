@@ -2130,6 +2130,15 @@ class CombatEngine
             'actions' => self::actionOffers($actor),
             'spells'  => $this->castableSpells($actor),
         ];
+        // Who each spell could be pointed at from here, by spell id, so the
+        // board's targeting mode lights what doCast() will accept.
+        $aims = [];
+        foreach ($state['ui']['spells'] as $sp) {
+            $aims[(string) $sp['id']] = $this->spellAim($state, $actor, $sp + [
+                'range_text' => $sp['range'],
+            ]);
+        }
+        $state['ui']['spell_aim'] = $aims;
         return $state;
     }
 
@@ -2153,7 +2162,8 @@ class CombatEngine
 
         $stmt = $this->db->prepare(
             'SELECT s.id, s.name, s.level, s.school, s.damage_dice, s.damage_type,
-                    s.casting_time, s.range_text, s.target_kind, s.concentration
+                    s.casting_time, s.range_text, s.target_kind, s.concentration,
+                    s.reaches_back_rank
                FROM spells s
                INNER JOIN character_spells cs ON cs.spell_id = s.id
               WHERE cs.character_id = ?
@@ -2181,6 +2191,7 @@ class CombatEngine
                 // whether to ask for a combatant, a cell, or nothing at all.
                 'target_kind' => (string) ($spell['target_kind'] ?? ''),
                 'concentration' => (bool) ($spell['concentration'] ?? false),
+                'reaches_back_rank' => (int) ($spell['reaches_back_rank'] ?? 1),
                 // Cantrips cost nothing; everything else needs a slot at least
                 // its own level, which is what the picker offers.
                 'needs_slot'  => ((int) $spell['level']) > 0,
@@ -5446,10 +5457,7 @@ class CombatEngine
         // The range prose on the spell card is now also the rule. Where only a
         // target was named — the client sending target_cid and no cell, or the
         // AI — the aim point is that target's own square.
-        $range = Rules::spellRange(
-            (string) ($spell['range_text'] ?? ''),
-            (int) ($spell['reaches_back_rank'] ?? 1)
-        );
+        $range = self::castRange($spell);
         $aim = $this->aimPoint($state, $actor, $targetCid, $targetX, $targetY);
 
         $area = null;
@@ -5612,15 +5620,26 @@ class CombatEngine
 
         $target = $targetCid === '' ? null : $this->getCombatant($state, $targetCid);
 
-        if ($kind === 'ally') {
-            if (!$target || ($target['side'] ?? '') !== ($actor['side'] ?? '') || empty($target['alive'])) {
+        if ($kind === 'ally' || ($kind === 'any' && $target && ($target['side'] ?? '') === ($actor['side'] ?? ''))) {
+            // Nobody named is the caster themselves — the SRD lets a Cure
+            // Wounds land on the hand that casts it, and an old client or a
+            // macro that sends no target meant exactly that. Anybody named is
+            // checked rather than quietly swapped for the caster: a heal that
+            // lands on the wrong person is worse than one that is refused.
+            if ($targetCid === '' || $targetCid === (string) $actor['cid']) {
                 return [$actor];
             }
+            if (!$target || ($target['side'] ?? '') !== ($actor['side'] ?? '')) {
+                throw new InvalidArgumentException("{$spell['name']} is for your own side.");
+            }
+            if (empty($target['alive'])) {
+                throw new InvalidArgumentException("{$target['name']} is past the help of {$spell['name']}.");
+            }
+            $near = self::alliesInReach($state['combatants'], $actor, $reach);
+            if (!isset($near[(string) $target['cid']])) {
+                throw new InvalidArgumentException(self::outOfReach($actor, $target, $reach));
+            }
             return [$target];
-        }
-
-        if ($kind === 'any' && $target && ($target['side'] ?? '') === ($actor['side'] ?? '')) {
-            return empty($target['alive']) ? [] : [$target];
         }
 
         if (!$target || !self::isTargetable($target)) {
@@ -5630,18 +5649,107 @@ class CombatEngine
             throw new InvalidArgumentException('Cannot target an ally with that spell.');
         }
         if (!self::canReach($state['grid'], $state['combatants'], $actor, (string) $target['cid'], $reach)) {
-            $dist = BattleGrid::feet(
-                (int) $actor['x'],
-                (int) $actor['y'],
-                (int) $target['x'],
-                (int) $target['y']
-            );
-            $carries = $reach['normal'] ?? $reach['reach'] ?? 0;
-            throw new InvalidArgumentException(
-                "{$target['name']} is {$dist} feet away, and that spell carries {$carries}."
-            );
+            throw new InvalidArgumentException(self::outOfReach($actor, $target, $reach));
         }
         return [$target];
+    }
+
+    /** Why a named target is not one a spell can reach, in the words the board prints. */
+    private static function outOfReach(array $actor, array $target, array $reach): string
+    {
+        $dist = BattleGrid::feet((int) $actor['x'], (int) $actor['y'], (int) $target['x'], (int) $target['y']);
+        if (($reach['reach'] ?? null) !== null) {
+            return "{$target['name']} is {$dist} feet away — that spell needs a touch, so walk up beside them.";
+        }
+        $carries = $reach['normal'] ?? 0;
+        return "{$target['name']} is {$dist} feet away, and that spell carries {$carries}.";
+    }
+
+    /**
+     * A spell's range as the rule reads it.
+     *
+     * Rules::spellRange() parses the card. One correction on top: a spell
+     * that names a single creature but whose card says "Self" — Vampiric
+     * Touch — is a touch, because the SRD has it make a melee spell attack
+     * against a creature within reach. Read literally it carried zero feet
+     * and could never be cast at anybody.
+     */
+    public static function castRange(array $spell): array
+    {
+        $range = Rules::spellRange(
+            (string) ($spell['range_text'] ?? ''),
+            (int) ($spell['reaches_back_rank'] ?? 1)
+        );
+        $kind = (string) ($spell['target_kind'] ?? 'enemy');
+        if (($range['kind'] ?? '') === 'self' && $range['aoe'] === null
+            && in_array($kind, ['enemy', 'ally', 'any'], true)) {
+            $range = ['kind' => 'touch', 'ft' => 5, 'aoe' => null];
+        }
+        return $range;
+    }
+
+    /**
+     * Allies a helpful spell can reach from where the caster stands, by cid,
+     * with the distance. The fallen are included (Spare the Dying is for
+     * them); the dead are not. Touch is the cells around the caster and the
+     * caster's own; anything else is its distance. Line of sight is not asked
+     * — a friend behind a pillar can still be reached round it, and the board
+     * has no way to show the difference that a player would believe.
+     *
+     * @return array<string, array{dist:int}>
+     */
+    public static function alliesInReach(array $combatants, array $actor, array $reach): array
+    {
+        $limit = $reach['reach'] ?? $reach['normal'] ?? 0;
+        $out = [];
+        foreach (self::allyTargets($combatants, $actor) as $c) {
+            if (!isset($c['x'], $c['y'])) {
+                continue;
+            }
+            $dist = BattleGrid::feet((int) $actor['x'], (int) $actor['y'], (int) $c['x'], (int) $c['y']);
+            if ($dist <= $limit) {
+                $out[(string) $c['cid']] = ['dist' => $dist];
+            }
+        }
+        return $out;
+    }
+
+    /**
+     * How a spell is pointed, and at whom it could be pointed right now.
+     *
+     * The board asks this for every castable spell so it can light up exactly
+     * the bodies doCast() would accept and nobody else. `mode`:
+     *   enemy / ally / any — the player chooses one of `targets`;
+     *   area  — the player chooses a spot (the cone/line/cube templates);
+     *   self  — no choice, it lands on the caster;
+     *   auto  — no choice, it takes everybody it can (`all_enemies`/`all_allies`).
+     *
+     * @return array{mode:string, targets:array<string, array>}
+     */
+    public function spellAim(array $state, array $actor, array $spell): array
+    {
+        $range = self::castRange($spell);
+        $kind = (string) ($spell['target_kind'] ?? 'enemy');
+        if (is_array($range['aoe'] ?? null)) {
+            return ['mode' => 'area', 'targets' => []];
+        }
+        if ($kind === 'self' || ($range['kind'] ?? '') === 'self') {
+            return ['mode' => 'self', 'targets' => [(string) $actor['cid'] => ['dist' => 0]]];
+        }
+        $reach = self::spellReach($range);
+        if ($kind === 'all_allies' || $kind === 'all_enemies') {
+            return ['mode' => 'auto', 'targets' => []];
+        }
+        $targets = [];
+        if ($kind === 'ally' || $kind === 'any') {
+            $targets = self::alliesInReach($state['combatants'], $actor, $reach);
+        }
+        if ($kind !== 'ally') {
+            foreach (self::shotsFrom($state['grid'], $state['combatants'], $actor, $reach) as $cid => $shot) {
+                $targets[(string) $cid] = ['dist' => (int) $shot['dist'], 'cover' => (int) $shot['cover']];
+            }
+        }
+        return ['mode' => $kind === 'ally' || $kind === 'any' ? $kind : 'enemy', 'targets' => $targets];
     }
 
     /**
@@ -5863,10 +5971,9 @@ class CombatEngine
 
         // --- an attack roll, or one that simply lands ----------------------
         if ($resolution === 'attack') {
-            $range = Rules::spellRange(
-                (string) ($spell['range_text'] ?? ''),
-                (int) ($spell['reaches_back_rank'] ?? 1)
-            );
+            // castRange and not spellRange: Vampiric Touch says "Self" and
+            // is a melee spell attack.
+            $range = self::castRange($spell);
             $reach = ($range['kind'] ?? '') === 'touch' ? 'melee' : 'ranged';
             $weapon = [
                 'name'        => (string) $spell['name'],

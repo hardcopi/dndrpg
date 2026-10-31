@@ -1553,11 +1553,12 @@
     const party = G().state.party || [];
     const castRow = (sp) => {
       if (!castable || sp.resolution !== 'heal') return '';
-      const options = (party.length ? party : [c]).map((p) =>
-        `<option value="${esc(p.id)}">${esc(p.name)} (${esc(p.current_hp)}/${esc(p.max_hp)})</option>`).join('');
+      // One button. A spell that can only be its caster's casts straight
+      // away; anything else asks who, in castTargetPicker below.
+      const self = sp.target_kind === 'self';
       return `<div class="sheet-cast-row">
-        <select data-cast-target="${esc(sp.id)}" aria-label="Who to heal">${options}</select>
-        <button type="button" class="btn btn-small" data-cast="${esc(sp.id)}">Cast</button>
+        <button type="button" class="btn btn-small" data-cast="${esc(sp.id)}"
+          data-cast-self="${self ? 1 : 0}" data-cast-name="${esc(sp.name)}">${self ? 'Cast' : 'Cast…'}</button>
       </div>`;
     };
     const spellHtml = spellsHtml(spells, castRow);
@@ -1662,29 +1663,66 @@
       });
     }
 
-    $$('[data-cast]', el).forEach((b) => {
-      b.onclick = async () => {
-        const spellId = Number(b.dataset.cast);
-        const sel = el.querySelector(`[data-cast-target="${spellId}"]`);
-        b.disabled = true;
-        try {
-          const r = await API.post('character/cast', {
-            character_id: c.id,
-            spell_id: spellId,
-            target_character_id: sel ? Number(sel.value) : c.id,
-          });
-          G().log(r.message);
-          G().mergeCharacter(r.character);
-          if (r.caster) G().mergeCharacter(r.caster);
-          renderPartyRail();
-          // Reopen so the slot dots and HP bars tell the truth about what the
-          // cast just spent.
+    const cast = async (b, spellId, targetId) => {
+      b.disabled = true;
+      try {
+        const r = await API.post('character/cast', {
+          character_id: c.id,
+          spell_id: spellId,
+          target_character_id: targetId,
+        });
+        G().log(r.message);
+        G().mergeCharacter(r.character);
+        if (r.caster) G().mergeCharacter(r.caster);
+        renderPartyRail();
+        // Reopen so the slot dots and HP bars tell the truth about what the
+        // cast just spent.
+        closeTopModal();
+        openCharacterSheet(c.id);
+      } catch (ex) {
+        G().showError(ex.message);
+        b.disabled = false;
+      }
+    };
+
+    /**
+     * Who to mend. Everybody travelling with the caster, with their hit
+     * points; the unhurt are shown and greyed rather than left out, because
+     * "why is Kessa not on the list" is a worse question than "oh, she's fine".
+     * The server checks all of it again — same party, hurt, not a Self spell.
+     */
+    const castTargetPicker = (b, spellId, name) => {
+      const members = party.length ? party : [c];
+      const rows = members.map((p) => {
+        const hurt = Number(p.current_hp) < Number(p.max_hp);
+        const pct = p.max_hp ? Math.round(100 * Math.max(0, p.current_hp) / p.max_hp) : 0;
+        return `<button type="button" class="spell-row aim-row is-party" data-cast-to="${esc(p.id)}" ${hurt ? '' : 'disabled'}>
+          <img class="aim-face" src="${esc(G().classArtUrl(p, '_face'))}" alt="" onerror="this.style.visibility='hidden'">
+          <span class="spell-name">${esc(p.name)}${p.id == c.id ? ' (you)' : ''}</span>
+          <span class="aim-hp"><i style="width:${pct}%"></i></span>
+          <span class="pill">${esc(p.current_hp)}/${esc(p.max_hp)} HP</span>
+          <span class="spell-note">${hurt ? `missing ${esc(p.max_hp - p.current_hp)}` : 'unhurt'}</span>
+        </button>`;
+      }).join('');
+      const pick = showModal(`
+        ${modalHead(`${name}: who needs it?`)}
+        <div class="spell-list aim-list cast-pick-list">${rows}</div>
+        <div class="modal-actions"><button type="button" class="btn" data-pick-back>Cancel</button></div>
+      `, { label: `Choose who ${name} is for` });
+      pick.querySelector('[data-pick-back]').onclick = closeTopModal;
+      $$('[data-cast-to]', pick).forEach((row) => {
+        row.onclick = () => {
           closeTopModal();
-          openCharacterSheet(c.id);
-        } catch (ex) {
-          G().showError(ex.message);
-          b.disabled = false;
-        }
+          cast(b, spellId, Number(row.dataset.castTo));
+        };
+      });
+    };
+
+    $$('[data-cast]', el).forEach((b) => {
+      b.onclick = () => {
+        const spellId = Number(b.dataset.cast);
+        if (b.dataset.castSelf === '1') return cast(b, spellId, c.id);
+        castTargetPicker(b, spellId, b.dataset.castName || 'Cast');
       };
     });
 

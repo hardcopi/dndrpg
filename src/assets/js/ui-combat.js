@@ -107,6 +107,11 @@
     // A spell with an area, waiting for the cell to put it on:
     // {spell_id, shape, ft, name}. Cleared on cast or on Escape.
     placing: null,
+    // A spell waiting for somebody to land on:
+    // {spell_id, name, cast_level, mode, targets, actor}. `targets` is the
+    // server's `ui.spell_aim[id].targets` — exactly who doCast() will accept.
+    // Cleared on cast, on Cancel, Escape or a right-click, and when the turn moves.
+    aiming: null,
     // The session whose owed levels have already been offered, so the ceremony
     // opens once on the victory bar and not on every redraw behind it.
     claimed: null,
@@ -427,13 +432,16 @@
       s.status === 'active' ? Object.keys(map(uiFor(actor)?.targets)) : []
     );
 
+    if (ui.aiming && (!actor || actor.cid !== ui.aiming.actor || s.status !== 'active')) ui.aiming = null;
+
     renderTop(s, actor);
 
     el.innerHTML = `
       <div class="cbt-field">
         ${initHtml(combatants, actor, legal)}
-        <div class="cbt-map" id="cbt-map">
-          ${window.BattleMap ? window.BattleMap.html(s, { selected: ui.selected, faceUrl, artKey }) : ''}
+        <div class="cbt-map${ui.aiming ? ' is-aiming aim-' + esc(ui.aiming.mode) : ''}" id="cbt-map">
+          ${window.BattleMap ? window.BattleMap.html(s, { selected: ui.selected, faceUrl, artKey,
+            aim: ui.aiming ? { targets: ui.aiming.targets, mode: ui.aiming.mode } : null }) : ''}
           <div class="map-zoom bm-zoom" role="group" aria-label="Zoom">
             <button type="button" class="icon-btn icon-btn-sm" data-zoom="out"
                     title="Zoom out (−)" aria-label="Zoom out">−</button>
@@ -446,6 +454,7 @@
           </div>
           ${ui.placing ? `<div class="cbt-placing">Placing <strong>${esc(ui.placing.name)}</strong>
             — click the ground. <button type="button" class="btn btn-small" data-cancel-place>Cancel</button></div>` : ''}
+          ${ui.aiming ? aimBannerHtml(ui.aiming) : ''}
         </div>
         <aside class="cbt-panel" aria-label="Actions">
           <div class="cbt-bar" id="cbt-bar"></div>
@@ -896,6 +905,18 @@
 
     const cancel = $('[data-cancel-place]', box);
     if (cancel) cancel.onclick = () => { ui.placing = null; render(); };
+    const cancelAim = $('[data-cancel-aim]', box);
+    if (cancelAim) cancelAim.onclick = () => stopAiming();
+    const aimList = $('[data-aim-list]', box);
+    if (aimList) aimList.onclick = () => openAimList();
+    // A right-click is the other way out of a targeting or placing mode — it
+    // is what people try first on a map, and the board has no menu of its own.
+    box.addEventListener('contextmenu', (ev) => {
+      if (!ui.aiming && !ui.placing) return;
+      ev.preventDefault();
+      if (ui.aiming) stopAiming();
+      else { ui.placing = null; render(); }
+    });
 
     // The camera, re-attached to the SVG this render just drew and handed back
     // the view the last one had. Before bind(), because bind()'s click handler
@@ -917,13 +938,21 @@
     window.BattleMap.bind(box, {
       // The board's box now wants it turned the other way (see fit()).
       onReflow: () => { if (st()) render(); },
-      canDrag: () => !ui.placing && !!actor && actor.type === 'pc' && s.status === 'active' && !ui.busy,
+      canDrag: () => !ui.placing && !ui.aiming && !!actor && actor.type === 'pc' && s.status === 'active' && !ui.busy,
       onToken: (cid) => {
+        if (ui.aiming) return aimAt(cid);
         if (ui.placing) return placeAt(cellOfCid(cid));
         ui.selected = cid;
         render();
       },
       onCell: (x, y) => {
+        if (ui.aiming) {
+          // A click on the floor under somebody is a click on them; on bare
+          // floor it is nothing, rather than a walk the player did not mean.
+          const who = (s.combatants || []).find((c) => c.alive && c.x === x && c.y === y);
+          if (who) aimAt(who.cid);
+          return;
+        }
         if (ui.placing) return placeAt([x, y]);
         if (!actor || actor.type !== 'pc' || s.status !== 'active' || ui.busy) return;
         const reach = map(uiFor(actor)?.reach)[`${x},${y}`];
@@ -935,6 +964,10 @@
         ui.hovered = cid;
         if (changed) renderInspector();
 
+        if (ui.aiming) {
+          aimHint(cid);
+          return;
+        }
         if (ui.placing) {
           const from = actor ? [actor.x, actor.y] : [0, 0];
           window.BattleMap.paintAim(box, ui.placing.shape, ui.placing.ft, from, cell);
@@ -969,6 +1002,148 @@
   function cellOfCid(cid) {
     const c = combatant(cid);
     return c && c.x != null ? [c.x, c.y] : null;
+  }
+
+  // =========================================================================
+  // Targeting: a spell that needs somebody
+  // =========================================================================
+
+  const AIM_WORD = { enemy: 'an enemy', ally: 'an ally', any: 'a target' };
+
+  /** The server's word on how this spell is pointed, or null on an old state. */
+  function spellAimFor(actor, spellId) {
+    const all = map(uiFor(actor)?.spell_aim);
+    const a = all[String(spellId)];
+    return a ? { mode: a.mode, targets: map(a.targets) } : null;
+  }
+
+  function startAiming(actor, spellId, name, castLevel, aim) {
+    ui.placing = null;
+    ui.aiming = { spell_id: spellId, name, cast_level: castLevel, mode: aim.mode,
+                  targets: aim.targets, actor: actor.cid };
+    render();
+    // A finger cannot hover, and on a phone the figures are small: the list
+    // is the better first offer there. The board stays live behind it.
+    if (window.matchMedia && window.matchMedia('(pointer: coarse)').matches) openAimList();
+  }
+
+  function stopAiming() {
+    if (!ui.aiming) return;
+    ui.aiming = null;
+    render();
+  }
+
+  function aimBannerHtml(a) {
+    const n = Object.keys(a.targets).length;
+    // Two fixed rows, so the buttons never move under the pointer as the
+    // hint below the title changes length.
+    return `<div class="cbt-placing cbt-aiming" role="status">
+      <span class="cbt-aim-text">Cast <strong>${esc(a.name)}</strong> — choose ${AIM_WORD[a.mode] || 'a target'}
+        <span class="cbt-aim-count">(${n} in reach)</span></span>
+      <span class="cbt-aim-hint" data-aim-hint>${n ? 'Point at a glowing figure' : 'Nobody in reach'}</span>
+      <button type="button" class="btn btn-small" data-aim-list>List</button>
+      <button type="button" class="btn btn-small" data-cancel-aim title="Cancel (Esc or right-click)">Cancel</button>
+    </div>`;
+  }
+
+  /** Why somebody is not a target for the spell in hand, in a few words. */
+  function aimRefusal(a, c) {
+    const actor = currentActor();
+    if (!c || !c.alive) return 'not a target';
+    const friend = actor && c.side === actor.side;
+    if (a.mode === 'ally' && !friend) return `${c.name} is not on your side`;
+    if (a.mode === 'enemy' && friend) return `${c.name} is on your side`;
+    if (a.mode === 'enemy' && !isTargetable(c)) return `${c.name} is already down`;
+    const ft = actor && c.x != null ? Math.max(Math.abs(actor.x - c.x), Math.abs(actor.y - c.y)) * 5 : null;
+    return ft != null ? `${c.name} is ${ft} ft away — out of reach` : `${c.name} is out of reach`;
+  }
+
+  /** Hover feedback in the banner: who the spell would land on, or why not. */
+  function aimHint(cid) {
+    const box = $('#cbt-map', root());
+    const hint = box && $('[data-aim-hint]', box);
+    if (!hint || !ui.aiming) return;
+    const c = cid ? combatant(cid) : null;
+    hint.classList.remove('is-ok', 'is-bad');
+    if (!c) { hint.textContent = 'Point at a glowing figure'; return; }
+    const t = ui.aiming.targets[cid];
+    if (t) {
+      hint.classList.add('is-ok');
+      hint.textContent = `→ ${c.name}${t.dist ? ` · ${t.dist} ft` : (cid === ui.aiming.actor ? ' (yourself)' : '')}`;
+    } else {
+      hint.classList.add('is-bad');
+      hint.textContent = aimRefusal(ui.aiming, c);
+    }
+  }
+
+  /** A click on somebody while a spell is waiting. */
+  function aimAt(cid) {
+    const a = ui.aiming;
+    if (!a) return;
+    if (!a.targets[cid]) {
+      // Said, not silently ignored: the banner names the reason, and the
+      // card shakes so the eye goes back to it.
+      aimHint(cid);
+      const box = $('#cbt-map', root());
+      if (box) {
+        for (const el of box.querySelectorAll(`[data-cid="${cssEscape(cid)}"]`)) {
+          el.classList.remove('aim-refused');
+          void el.getBoundingClientRect();
+          el.classList.add('aim-refused');
+        }
+      }
+      return;
+    }
+    ui.aiming = null;
+    if (a.mode !== 'ally') ui.selected = cid;
+    act('cast', { spell_id: a.spell_id, target_cid: cid, ...(a.cast_level ? { cast_level: a.cast_level } : {}) });
+  }
+
+  /**
+   * The same choice as a list: for a phone, the flat view, a crowded square,
+   * or anybody who would rather read names than find figures.
+   */
+  function openAimList() {
+    const a = ui.aiming;
+    const actor = currentActor();
+    if (!a || !actor) return;
+    const living = (st()?.combatants || []).filter((c) => c.alive && c.x != null);
+    const ok = living.filter((c) => a.targets[c.cid]);
+    // Who the spell is for first, nearest first; the rest after, greyed, so
+    // "why can I not pick the goblin" is answered on the same screen.
+    ok.sort((p, q) => (a.targets[p.cid].dist || 0) - (a.targets[q.cid].dist || 0));
+    const wanted = (c) => (a.mode === 'ally' ? c.side === actor.side : a.mode === 'enemy' ? c.side !== actor.side : true);
+    const no = living.filter((c) => !a.targets[c.cid] && wanted(c));
+    const row = (c, good) => {
+      const t = a.targets[c.cid];
+      const pct = c.max_hp ? Math.round(100 * Math.max(0, c.hp) / c.max_hp) : 0;
+      const downed = (c.conditions || []).some((k) => (typeof k === 'string' ? k : k.key) === 'unconscious');
+      return `<button type="button" class="spell-row aim-row ${c.side === 'party' ? 'is-party' : 'is-foe'}"
+          data-aim-cid="${esc(c.cid)}" ${good ? '' : 'disabled'}>
+        <img class="aim-face" src="${esc(faceUrl(c))}" alt="" onerror="this.style.visibility='hidden'">
+        <span class="spell-name">${esc(c.name)}${c.cid === actor.cid ? ' (you)' : ''}</span>
+        <span class="pill">${esc(c.hp)}/${esc(c.max_hp)} HP${downed ? ' · down' : ''}</span>
+        <span class="aim-hp"><i style="width:${pct}%"></i></span>
+        <span class="spell-note">${good ? (t.dist ? `${esc(t.dist)} ft` : 'in reach')
+          + (t.cover ? ` · cover +${esc(t.cover)}` : '') : esc(aimRefusal(a, c))}</span>
+      </button>`;
+    };
+    const el = window.UI.showModal(`
+      <h2>${esc(a.name)}: choose ${AIM_WORD[a.mode] || 'a target'}</h2>
+      <div class="spell-list aim-list">
+        ${ok.map((c) => row(c, true)).join('') || '<p class="help-hint">Nobody is in reach — walk closer, or cancel.</p>'}
+        ${no.length ? `<p class="help-hint aim-out">Out of reach</p>${no.map((c) => row(c, false)).join('')}` : ''}
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn" data-aim-back>Back to the board</button>
+        <button type="button" class="btn" data-aim-cancel>Cancel the spell</button>
+      </div>
+    `, { size: 'wide', label: `Choose a target for ${a.name}` });
+    el.querySelector('[data-aim-back]').onclick = window.UI.closeTopModal;
+    el.querySelector('[data-aim-cancel]').onclick = () => { window.UI.closeTopModal(); stopAiming(); };
+    $$('[data-aim-cid]', el).forEach((b) => {
+      b.onclick = () => { window.UI.closeTopModal(); aimAt(b.dataset.aimCid); };
+    });
   }
 
   /** Finish a spell that was waiting for somewhere to land. */
@@ -1589,8 +1764,14 @@
       // Cantrips cost nothing, which CombatEngine::slotsAvailable answers by
       // always reporting a slot available rather than special-casing them.
       const affordable = lvl === 0 || left(lvl) > 0;
-      const needsTarget = (sp.target_kind || 'enemy') !== 'self' && (sp.target_kind || 'enemy') !== 'all_allies';
       const area = spellArea(sp);
+      // The server's answer on who this spell could take from here. Without
+      // it (a state from before spell_aim) the old guess stands.
+      const aim = spellAimFor(actor, sp.id);
+      const choose = aim && (aim.mode === 'enemy' || aim.mode === 'ally' || aim.mode === 'any');
+      const inReach = aim ? Object.keys(aim.targets).length : 0;
+      const nobody = choose && inReach === 0;
+      const needsTarget = !aim && (sp.target_kind || 'enemy') !== 'self' && (sp.target_kind || 'enemy') !== 'all_allies';
       // "At Higher Levels" — a chip per bigger slot still standing. Only for
       // spells whose row carries upcast data; the server clamps and re-checks
       // whatever is sent, these are an offer rather than the rule.
@@ -1606,7 +1787,7 @@
         }
         if (chips.length) upcast = `<div class="spell-upcast">${chips.join('')}</div>`;
       }
-      return `<button type="button" class="spell-row" data-spell="${esc(sp.id)}" ${affordable ? '' : 'disabled'}
+      return `<button type="button" class="spell-row" data-spell="${esc(sp.id)}" ${affordable && !nobody ? '' : 'disabled'}
           ${area ? `data-area="${esc(JSON.stringify(area))}"` : ''}>
         <span class="spell-name">${esc(sp.name)}</span>
         <span class="pill">${lvl === 0 ? 'Cantrip' : 'Level ' + lvl}</span>
@@ -1614,6 +1795,10 @@
         ${sp.range_text ? `<span class="spell-range">${esc(sp.range_text)}</span>` : ''}
         ${sp.damage_dice ? `<span class="spell-dice">${esc(sp.damage_dice)} ${esc(sp.damage_type || '')}</span>` : ''}
         ${area ? '<span class="spell-note">pick a spot on the ground</span>'
+          : nobody ? `<span class="spell-note">nobody in reach — walk closer</span>`
+          : choose ? `<span class="spell-note">choose ${AIM_WORD[aim.mode]} · ${inReach} in reach</span>`
+          : aim && aim.mode === 'self' ? '<span class="spell-note">on yourself</span>'
+          : aim && aim.mode === 'auto' ? '<span class="spell-note">takes everyone it reaches</span>'
           : (needsTarget && !ui.selected ? '<span class="spell-note">no target selected</span>' : '')}
       </button>${upcast}`;
     }).join('');
@@ -1645,7 +1830,17 @@
           render();
           return;
         }
-        act('cast', { spell_id: +b.dataset.spell, target_cid: ui.selected || actor.cid,
+        const spellId = +b.dataset.spell;
+        const aim = spellAimFor(actor, spellId);
+        if (aim && (aim.mode === 'enemy' || aim.mode === 'ally' || aim.mode === 'any')) {
+          const row = b.closest('.spell-upcast') ? b.closest('.spell-upcast').previousElementSibling : b;
+          const name = row?.querySelector('.spell-name')?.textContent || 'the spell';
+          startAiming(actor, spellId, name, castLevel, aim);
+          return;
+        }
+        // Self and everybody-in-reach spells have nobody to choose.
+        act('cast', { spell_id: spellId,
+                      target_cid: aim ? actor.cid : (ui.selected || actor.cid),
                       ...(castLevel ? { cast_level: castLevel } : {}) });
       };
     });
@@ -2223,6 +2418,12 @@
       if (!st() || root()?.classList.contains('hidden')) return;
       if (document.querySelector('#check-root:not(.hidden)')) return;
       if (document.querySelector('#modal-root:not(.hidden)')) return;
+      if (e.key === 'Escape' && (ui.aiming || ui.placing)) {
+        e.preventDefault();
+        if (ui.aiming) stopAiming();
+        else { ui.placing = null; render(); }
+        return;
+      }
       const cam = window.BattleMap ? window.BattleMap.camera() : null;
       if (!cam) return;
       if (e.key === '+' || e.key === '=') { e.preventDefault(); cam.zoomIn(); }

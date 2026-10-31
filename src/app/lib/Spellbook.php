@@ -130,6 +130,13 @@ class Spellbook
             );
         }
 
+        // Who it may land on, checked here rather than trusted from the picker:
+        // a spell whose card says Self is the caster's alone.
+        $kind = (string) ($spell['target_kind'] ?? 'ally');
+        if ($kind === 'self' && (int) $target['id'] !== $casterId) {
+            throw new InvalidArgumentException("{$spell['name']} only works on the one who casts it.");
+        }
+
         $class = (string) $caster['class'];
         $casterLevel = max(1, (int) ($caster['level'] ?? 1));
         $spellLevel = (int) $spell['level'];
