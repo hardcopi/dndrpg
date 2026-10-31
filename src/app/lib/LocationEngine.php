@@ -25,6 +25,22 @@ class LocationEngine
     private const GATES_LOCKED = 2;
     private const GATES_ALL    = self::GATES_HIDDEN | self::GATES_LOCKED;
 
+    /**
+     * The party flag search() writes when it turns up a hidden way:
+     * FOUND_EXIT_PREFIX plus the destination's location key, so content can ask
+     * "has this party found the way to sump_drain" with
+     * `{"flag": "found_exit_sump_drain"}`. Written by code, read by content, so
+     * the names content may read are listed here for the loaders to find — see
+     * ENGINE_FLAG_CONSTANTS in tools/load_content.py and
+     * DialogueLint::ENGINE_FLAGS. Generated floors (keys starting `_`) are not
+     * recorded: their doors are the delve's business, and a flag row per secret
+     * door per floor would only pile up.
+     */
+    public const FOUND_EXIT_PREFIX = 'found_exit_';
+    public const FOUND_EXIT_FLAGS = [
+        'found_exit_sump_drain',
+    ];
+
     private PDO $db;
 
     public function __construct(PDO $db)
@@ -561,7 +577,7 @@ class LocationEngine
     {
         $stmt = $this->db->prepare(
             'SELECT li.id AS location_item_id, i.id AS item_id, i.name, i.description,
-                    i.item_type, i.icon
+                    i.item_type, i.icon, i.properties
                FROM location_items li
                INNER JOIN items i ON i.id = li.item_id
               WHERE li.location_id = ?
@@ -572,11 +588,62 @@ class LocationEngine
               ORDER BY li.id'
         );
         $stmt->execute([$locationId, $partyId ?? 0]);
-        return array_map(static function (array $row): array {
+        $rows = [];
+        foreach ($stmt->fetchAll() as $row) {
+            if (!$this->groundGateOpen($row['properties'] ?? null, $partyId)) {
+                continue;
+            }
+            unset($row['properties']);
             $row['location_item_id'] = (int) $row['location_item_id'];
             $row['item_id'] = (int) $row['item_id'];
-            return $row;
-        }, $stmt->fetchAll());
+            $rows[] = $row;
+        }
+        return $rows;
+    }
+
+    /**
+     * Whether ground loot is lying there for this party yet.
+     *
+     * An item whose `properties.ground_requires_flag` names a party flag is
+     * only on the floor while that flag is set. That is what lets the First
+     * Night tutorial leave a tally stick in the cellar for the party that is
+     * taking the tour and nothing at all for the party that is not. Items with
+     * no such property are unaffected.
+     *
+     * @param mixed $properties the items.properties column, JSON text or null
+     */
+    private function groundGateOpen($properties, ?int $partyId): bool
+    {
+        $props = is_array($properties) ? $properties : json_decode((string) $properties, true);
+        $flag = is_array($props) ? ($props['ground_requires_flag'] ?? null) : null;
+        if (!is_string($flag) || $flag === '') {
+            return true;
+        }
+        return $partyId !== null && $partyId > 0
+            && (new WorldState($this->db))->isSet($partyId, $flag);
+    }
+
+    /**
+     * Is this party on the Search lesson of the First Night tutorial, standing
+     * in the room it is taught in? If so the hidden way there cannot be
+     * missed: a lesson about pressing Search must not be failed by the dice.
+     * Anywhere else, and for everybody not on that stage, search is as hard as
+     * it ever was.
+     */
+    private function tutorialSearchAssist(int $partyId, int $locationId): bool
+    {
+        $stmt = $this->db->prepare(
+            "SELECT 1
+               FROM party_quests pq
+               INNER JOIN quests q ON q.id = pq.quest_id
+               INNER JOIN quest_stages s ON s.id = pq.current_stage_id
+               INNER JOIN locations l ON l.id = ?
+              WHERE pq.party_id = ? AND pq.status = 'active'
+                AND q.quest_key = 'first_night' AND s.stage_key = 'search'
+                AND l.location_key = 'flagon_cellar'"
+        );
+        $stmt->execute([$locationId, $partyId]);
+        return (bool) $stmt->fetchColumn();
     }
 
     /** @return array<int,true> exit ids this party has found by searching. */
@@ -1680,7 +1747,9 @@ class LocationEngine
 
         // Reveal hidden exits the roll is good enough for.
         $hidden = $this->db->prepare(
-            'SELECT e.id, e.label, e.conditions_json FROM location_exits e
+            'SELECT e.id, e.label, e.conditions_json, tl.location_key AS to_key
+               FROM location_exits e
+               INNER JOIN locations tl ON tl.id = e.to_location_id
               WHERE e.from_location_id = ? AND e.is_hidden = 1'
         );
         $hidden->execute([$locationId]);
@@ -1690,10 +1759,19 @@ class LocationEngine
             $mark = $this->db->prepare(
                 'INSERT IGNORE INTO party_exits_found (party_id, exit_id) VALUES (?, ?)'
             );
+            $assist = $this->tutorialSearchAssist($partyId, $locationId);
+            $world = new WorldState($this->db);
             foreach ($hidden->fetchAll() as $e) {
                 if ($total < self::hiddenExitDc($e)) {
-                    $missed++;
-                    continue;
+                    if (!$assist) {
+                        $missed++;
+                        continue;
+                    }
+                    $messages[] = 'The draught gives it away.';
+                }
+                $toKey = (string) $e['to_key'];
+                if ($toKey !== '' && $toKey[0] !== '_') {
+                    $world->set($partyId, self::FOUND_EXIT_PREFIX . $toKey);
                 }
                 $mark->execute([$partyId, (int) $e['id']]);
                 if ($mark->rowCount() > 0) {
@@ -1791,6 +1869,9 @@ class LocationEngine
         }
         if ((int) $row['location_id'] !== (int) $char['current_location_id']) {
             throw new InvalidArgumentException('You are not where that lies.');
+        }
+        if (!$this->groundGateOpen($row['properties'] ?? null, $partyId)) {
+            throw new InvalidArgumentException('Nothing to loot.');
         }
         if ($partyId) {
             $taken = $this->db->prepare(

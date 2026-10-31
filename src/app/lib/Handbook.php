@@ -366,7 +366,7 @@ class Handbook
         // `dex_bonus` and `dex_bonus_max` are already said in words by the AC
         // clause above; repeating them raw would print the same rule twice.
         $skip = [
-            'quest_item' => true, 'readable' => true,
+            'quest_item' => true, 'readable' => true, 'ground_requires_flag' => true,
             'dex_bonus' => true, 'dex_bonus_max' => true,
         ];
 

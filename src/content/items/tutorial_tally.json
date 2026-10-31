@@ -1,0 +1,15 @@
+{
+  "item_key": "tutorial_tally",
+  "name": "Mara's Cellar Tally",
+  "description": "A split hazel stick notched in Mara's own hand, one notch a keg. It went missing in the spring and has been under the rat droppings since.",
+  "item_type": "misc",
+  "rarity": "common",
+  "weight": 1,
+  "value_gp": 0,
+  "properties": {
+    "quest_item": true,
+    "ground_requires_flag": "tutorial_loot_open"
+  },
+  "icon": "scroll",
+  "place": { "location": "flagon_cellar" }
+}

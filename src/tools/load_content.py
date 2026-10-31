@@ -54,6 +54,7 @@ ENGINE_FLAG_CONSTANTS = (
     ("app/lib/DelveEngine.php", "DEPTH_FLAG"),
     ("app/lib/ConcernPressure.php", "FLAG"),
     ("app/lib/ConcernPressure.php", "THRESHOLDS"),
+    ("app/lib/LocationEngine.php", "FOUND_EXIT_FLAGS"),
 )
 
 # The subset of those that the engine keeps for itself: written by PHP and read

@@ -1,0 +1,13 @@
+{
+  "item_key": "tutorial_lantern",
+  "name": "Mara's Hooded Lantern",
+  "description": "A tin-and-horn hooded lantern with a dented shutter and a Golden Flagon brand burnt into the handle. Mara lent it to Tobin in the spring and has been counting the days.",
+  "item_type": "misc",
+  "rarity": "common",
+  "weight": 2,
+  "value_gp": 5,
+  "properties": {
+    "light": true
+  },
+  "icon": "lantern"
+}
