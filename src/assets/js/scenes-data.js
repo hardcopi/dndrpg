@@ -135,7 +135,7 @@ window.RIVERMARK_SCENES = {
     },
     npcs: {
       street_minstrel: {x: 51, y: 76},
-      street_drover: {x: 62, y: 72},
+      street_drover: {x: 63, y: 72},
       street_seer: {x: 78, y: 80},
       street_scholar: {x: 39, y: 69},
       watch_street: {x: 68, y: 66},
@@ -644,7 +644,7 @@ window.RIVERMARK_SCENES = {
     exits: {
       warren_approach: {x: 17, y: 60, icon: "←"},
       deep_shaft: {x: 47, y: 62, icon: "↓"},
-      warren_nests: {x: 80, y: 38, icon: "↑"}
+      warren_nests: {x: 81, y: 38, icon: "↑"}
     },
     npcs: {},
     objects: [
