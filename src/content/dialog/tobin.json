@@ -10,7 +10,7 @@
                         "equals": "fallen"
                     }
                 ],
-                "text": "There is no stall. There is a dragonborn with dull brass scales sitting on a crate at the west milestone with everything he still owns in two panniers. \"Buying,\" says Tobin. \"Not selling. Not for a while.\"",
+                "text": "There is no stall. Tobin, a dragonborn with dull brass scales, sits on a crate at the west milestone. Everything he owns is packed into two panniers. \"Buying,\" he says. \"Not selling. Not for a while.\"",
                 "choices": [
                     {
                         "label": "I'm sorry.",
@@ -29,7 +29,7 @@
                         "stage": "errand"
                     }
                 ],
-                "text": "\"Mara's lantern.\" Tobin lifts it from under the counter before you have finished the sentence. \"She sent you. She always sends somebody. Tell her it was never lost, only kept somewhere dry.\" He sets it in front of you, shutter dented, brand up.",
+                "text": "\"Mara's lantern.\" Tobin lifts it from under the counter before you finish. \"She sent you. She always sends somebody. Tell her it wasn't lost, just kept somewhere dry.\" He sets it in front of you, shutter dented and brand up.",
                 "on_enter": [
                     {
                         "give_item": "tutorial_lantern"
@@ -77,7 +77,7 @@
                     }
                 ],
                 "once": true,
-                "text": "\"Forty gold clear,\" Tobin says, \"and a history.\" He lays out the mace-heads with more care than they need. \"My name is in the quay book now, in my own hand, one line under eleven consignments I have nothing whatever to do with. Anybody who reads that book from the top will find a pattern and then find me at the bottom of it, sitting in it, having signed.\"",
+                "text": "\"Forty gold clear,\" Tobin says. \"And a history.\" He lays out the mace-heads carefully. \"My name's in the quay book now, one line under eleven consignments I had nothing to do with. Anyone who reads from the top will see a pattern, then find me at the bottom, having signed for it.\"",
                 "choices": [
                     {
                         "label": "Open shop.",
@@ -106,7 +106,7 @@
                     }
                 ],
                 "once": true,
-                "text": "\"Nineteen days,\" says Tobin, \"for Reed to write to Greyhythe and be told that the man is real, of a real address, and has been dead two years.\" He sets down what he is holding. \"I have been in trade thirty-one years. A dead man's name on a live consignment is not a mistake and it is not a fraud either, because nothing was taken from anybody. It is a *convenience*. Somebody wanted goods to arrive in a town and belong to nobody in it.\"",
+                "text": "\"Nineteen days for Reed to write to Greyhythe and learn the man was real, lived at a real address, and has been dead two years,\" Tobin says. He sets down what he's holding. \"I've been in trade thirty-one years. A dead man's name on a live consignment isn't a mistake or a fraud. Nobody's lost anything. It's a *convenience*. Someone wanted goods brought to town that belonged to nobody here.\"",
                 "choices": [
                     {
                         "label": "Open shop.",
@@ -135,7 +135,7 @@
                     }
                 ],
                 "once": true,
-                "text": "\"They came for it on the fifth night,\" Tobin says. \"Two men, a handcart, no paper, no hurry.\" He weighs a mace-head and does not look at it. \"Which means it was never mine, and it was never a trick, and somebody simply needed twelve hundredweight of salt to sit on a public quay for four days under a name that was not theirs. I have been trying to think of an innocent reason for that for a fortnight.\"",
+                "text": "\"They came for it on the fifth night,\" Tobin says. \"Two men, a handcart. No papers, no hurry.\" He weighs a mace-head without looking at it. \"So it was never mine, and it wasn't a trick. Someone needed twelve hundredweight of salt to sit on a public quay for four days under another name. I've spent a fortnight trying to think of an innocent reason.\"",
                 "choices": [
                     {
                         "label": "Open shop.",
@@ -163,7 +163,7 @@
                         "stage": "the_quay_book"
                     }
                 ],
-                "text": "Tobin reads the bill of lading twice and the copied page of the quay book three times, and then puts both down on the crate and sits on the crate, which is not a thing you have seen him do.\n\n\"Eleven,\" he says. \"Eleven consignments to a man nobody has met. And the twelfth has my name on the invoice.\" He looks up. \"So. Three doors. I pay it and sell the salt and I am a man who received that consignment. I refuse it and we find out who actually comes for it. Or I take this to Reed and it becomes the town's problem, slowly, in writing, over about a month.\"",
+                "text": "Tobin reads the bill of lading twice and the copied page of the quay book three times. He sets both on the crate, then sits down beside them. You've never seen him do that.\n\n\"Eleven,\" he says. \"Eleven consignments to a man nobody's met. The twelfth has my name on the invoice.\" He looks up. \"Three choices. I pay and sell the salt, and I'm the man who received it. I refuse it, and we see who comes to collect. Or I take it to Reed, and it becomes the town's problem, slowly and in writing, over about a month.\"",
                 "choices": [
                     {
                         "label": "Pay it. Sell the salt.",
@@ -186,7 +186,7 @@
                         "status": "active"
                     }
                 ],
-                "text": "\"River stair,\" says Tobin, jabbing a claw at the door. \"Four crates under a tarpaulin, and a porter called Wenn who has been sitting next to them for three days out of what I can only call professional discomfort. Go and look at the paper. I have looked at the paper and I would like a second person to look at the paper.\"",
+                "text": "\"River stair,\" Tobin says, pointing a claw at the door. \"Four crates under a tarpaulin. A porter called Wenn has been sitting beside them for three days, looking professionally uncomfortable. Go look at the paper. I've looked at it, and I'd like a second opinion.\"",
                 "choices": [
                     {
                         "label": "I'll go and look.",
@@ -210,7 +210,7 @@
                     }
                 ],
                 "once": true,
-                "text": "Tobin is in front of the crate rather than behind it, and he has the door half open at your back before you have said anything. \"I cannot,\" he says. \"Before you ask. My carriage comes up from Greyhythe and this morning it came up with a line on the manifest about who I may sell to, and there is no law in it anywhere, and there does not need to be.\" The brass along his jaw has gone dull. \"Thirty-one years in trade. I have never once been told who my customers are, and I am being told now, politely, by a clerk, in writing.\"",
+                "text": "Tobin stands in front of the crate, not behind it. The door is half open behind you before you speak. \"I can't,\" he says. \"Before you ask. My carriage came up from Greyhythe this morning with a line on the manifest about who I may sell to. There's no law behind it, and there doesn't need to be.\" The brass along his jaw has dulled. \"Thirty-one years in trade, and nobody's ever told me who my customers can be. Now a clerk is telling me politely, in writing.\"",
                 "choices": [
                     {
                         "label": "Sell to me anyway.",
@@ -232,7 +232,7 @@
                         "flag": "warlord_dead"
                     }
                 ],
-                "text": "\"Best month I have had in four years and I feel wretched about every coin of it,\" Tobin says, laying out mace-heads. \"Carters are through in numbers, the road's clear, and half of them want to see the quarry on the way past. I have started selling them lanterns.\"",
+                "text": "\"Best month I've had in four years, and I feel wretched about every coin of it,\" Tobin says as he lays out mace-heads. \"Carters are coming through in numbers. The road's clear, and half of them want to see the quarry on the way past. I've started selling them lanterns.\"",
                 "choices": [
                     {
                         "label": "Open shop.",
@@ -259,7 +259,7 @@
                         "flag": "warren_truce"
                     }
                 ],
-                "text": "Tobin has a new line of goods and is extremely pleased about it. \"Quarry stone,\" he says. \"Dressed. Cheap. Delivered to the east gate on market day by a goblin with a slate who corrects my arithmetic.\" He shrugs, enormously. \"Half my regulars won't come to the stall now. The other half have doubled their orders. Net, I am up.\"",
+                "text": "Tobin's added a new line of goods and looks pleased. \"Quarry stone. Dressed, cheap, delivered to the east gate on market day by a goblin with a slate who corrects my arithmetic.\" He gives a great shrug. \"Half my regulars won't come to the stall now. The other half have doubled their orders. Net, I'm up.\"",
                 "choices": [
                     {
                         "label": "Open shop.",
@@ -286,7 +286,7 @@
                         "flag": "caravan_saved"
                     }
                 ],
-                "text": "\"The Hallowmere wagon,\" Tobin says, jabbing a claw at you. \"You walked the Hallowmere wagon through the cut. Two of my crates were on that. Take ten off anything on this table and do not argue with me about it.\"",
+                "text": "\"The Hallowmere wagon,\" Tobin says, pointing a claw at you. \"You got it through the cut. Two of my crates were on it. Take ten off anything on this table, and don't argue with me.\"",
                 "choices": [
                     {
                         "label": "Open shop.",
@@ -315,7 +315,7 @@
                     }
                 ],
                 "once": true,
-                "text": "\"The northern ford,\" Tobin says, without enthusiasm. \"Yes. Nothing has been raided, and it is nine miles longer, and I have lost the two carters who would not do nine extra miles for what I pay.\" He sets out the mace-heads anyway. \"Safe is not the same as good. Nobody in this town wants to hear it.\"",
+                "text": "\"The northern ford,\" Tobin says without enthusiasm. \"Yes. Nothing's been raided, but it's nine miles longer. I've lost the two carters who wouldn't ride an extra nine miles for what I pay.\" He sets out the mace-heads. \"Safe isn't the same as good. Nobody here wants to hear that.\"",
                 "choices": [
                     {
                         "label": "Open shop.",
@@ -337,7 +337,7 @@
                 ]
             },
             {
-                "text": "\"Arms, armour and potions, fair prices, no questions.\" The half-dragonborn does not look up from his crate. \"That last part is advertising. I ask a great many questions. I simply do not act on the answers.\"",
+                "text": "\"Arms, armour, and potions. Fair prices, no questions.\" The half-dragonborn doesn't look up from his crate. \"That last part's advertising. I ask plenty of questions. I just don't act on the answers.\"",
                 "choices": [
                     {
                         "label": "Open shop.",
@@ -365,7 +365,7 @@
         ],
         "the_invoice": [
             {
-                "text": "\"I have been staring at it since Tuesday.\" Tobin turns it round on the crate so that you can see it. \"Twelve hundredweight of coarse salt, landed at the river stair, carriage paid, invoiced to me. I did not order it. I cannot prove I did not order it, because a man cannot prove a thing he did not do — that is not a legal difficulty, it is a difficulty with the shape of the world.\"\n\nHe taps the paper with one claw.\n\n\"And here is what has kept me up. It is *good salt*. I could sell it inside a fortnight at a profit. Nobody plays a trick on a man by handing him something he can sell.\"",
+                "text": "\"I've been staring at it since Tuesday.\" Tobin turns the paper so you can see it. \"Twelve hundredweight of coarse salt, landed at the river stair, carriage paid, invoiced to me. I didn't order it. I can't prove I didn't, because a man can't prove what he hasn't done. That's not a legal problem. It's how the world works.\"\n\nHe taps the page with one claw.\n\n\"And here's what's kept me up. It's *good salt*. I could sell it all within a fortnight and make a profit. Nobody tricks a man by giving him something he can sell.\"",
                 "interjections": [
                     {
                         "companion": "sera",
@@ -395,7 +395,7 @@
         ],
         "he_is_relieved": [
             {
-                "text": "\"Thank you,\" Tobin says, and means it enough to be brisk about it. \"River stair. The porter is Wenn — big, cheerful, cannot read a word and remembers everything, which is a combination I would pay for if I could find it twice. Look at the bill and look at the quay book, in that order.\"",
+                "text": "\"Thank you,\" Tobin says, brisk with relief. \"River stair. The porter's Wenn. Big, cheerful, can't read a word, remembers everything. I'd pay for that combination if I could find it twice. Check the bill, then the quay book.\"",
                 "choices": [
                     {
                         "label": "I'll come back.",
@@ -406,7 +406,7 @@
         ],
         "not_that_simple": [
             {
-                "text": "\"It is exactly that simple and that is the trouble,\" says Tobin. \"The moment I pay the carriage I have received that consignment. In writing. In the quay book. Whatever it was there for, I have now been the man it was there for.\" He shrugs, enormously. \"I have been in trade thirty-one years, and I have learned that a thing which costs nothing and profits you is the only kind of thing worth being frightened of.\"",
+                "text": "\"It's exactly that simple, and that's the trouble,\" Tobin says. \"The moment I pay the carriage, I've received the consignment. In writing, in the quay book. Whatever it was for, I'm now the man it was sent to.\" He gives a great shrug. \"I've been in trade thirty-one years. A thing that costs nothing and makes you a profit is the only thing worth fearing.\"",
                 "choices": [
                     {
                         "label": "All right. I'll go and look at it.",
@@ -426,7 +426,7 @@
         ],
         "pays_and_keeps": [
             {
-                "text": "He pays it, and signs for it, and the salt is gone inside a fortnight at a price he is not comfortable with.\n\n\"Forty gold clear,\" says Tobin Brassscale, counting sixty of it into your hand for the trouble, \"and one line in a public book, in my own hand, directly under eleven consignments belonging to a man nobody has ever met.\"\n\nHe closes the drawer.\n\n\"I have made money,\" he says, \"and acquired a history. I have done that before, in two other towns, and both times it took about four years to find out what the history was for.\"",
+                "text": "He pays the carriage and signs for the salt. It sells within a fortnight, though not at a price he's comfortable with.\n\nTobin Brassscale counts sixty gold into your hand. \"Forty gold clear for you, and one line in a public book, in my own hand, beneath eleven consignments belonging to a man nobody's met. I've made money and acquired a history. I've done that in two other towns. Both times it took about four years to learn what the history was for.\"",
                 "on_enter": [
                     {
                         "quest_stage": {
@@ -437,7 +437,7 @@
                 ],
                 "choices": [
                     {
-                        "label": "Four years is a long time.",
+                        "label": "Can you take your name off the quay book?",
                         "next": "cannot_unsign"
                     },
                     {
@@ -449,7 +449,7 @@
         ],
         "refuses_it": [
             {
-                "text": "He refuses it, formally, in front of the quay master, and the crates sit on the landing for four days going nobody's.\n\nOn the fifth night two men come up the stair with a handcart. They produce no paper. They argue with nobody. They go straight to the right crates without looking, load them, and take them away downriver, and the whole thing takes nine minutes.\n\nMott Wenn watches it done and does not stop them, because nobody has ever told him to stop anybody, and because they are extremely ordinary men doing an extremely ordinary job.",
+                "text": "He formally refuses the crates in front of the quay master. They sit on the landing for four days, unclaimed.\n\nOn the fifth night, two men come up the stair with a handcart. They show no papers and argue with no one. They walk straight to the right crates, load them, and take them downriver. It takes nine minutes.\n\nMott Wenn watches and doesn't stop them. Nobody's ever told him to stop anyone, and the men look like they're doing an ordinary job.",
                 "on_enter": [
                     {
                         "quest_stage": {
@@ -486,7 +486,7 @@
         ],
         "to_the_captain": [
             {
-                "text": "Reed takes the bill of lading, reads it twice, and writes to Greyhythe the same afternoon, which is faster than the town does anything.\n\nThe answer comes back in nineteen days. The consignee is a real man, of a real address in Greyhythe, and he has been dead two years, and his estate has never been closed.\n\nShe writes it in the day book, dated, in her own hand. Then she puts the pen down and says, to nobody in particular, that there is nothing in Rivermark's law which makes a dead man receiving salt an offence.",
+                "text": "Reed takes the bill of lading, reads it twice, and writes to Greyhythe that afternoon. That's faster than most things happen in town.\n\nThe answer comes back in nineteen days. The consignee was a real man with a real address in Greyhythe. He's been dead two years, and his estate is still open.\n\nReed dates the answer and writes it in the day book herself. Then she puts down the pen and says, to no one in particular, that Rivermark law has no offence for a dead man receiving salt.",
                 "on_enter": [
                     {
                         "quest_stage": {
@@ -515,7 +515,7 @@
         ],
         "cannot_unsign": [
             {
-                "text": "\"You cannot unsign a quay book,\" Tobin says. \"That is rather the point of a quay book.\" He goes back to the crate. \"I shall do what I have always done, which is to keep excellent records of my own, so that when somebody eventually comes to ask me about it I am the man with the better book. It has worked twice. I would not call it a plan.\"",
+                "text": "\"You can't unsign the quay book,\" Tobin says. \"That's the point of a quay book.\" He returns to the crate. \"I'll do what I've always done and keep excellent records of my own. When someone comes asking, I'll have the better book. It has worked twice. I wouldn't call it a plan.\"",
                 "choices": [
                     {
                         "label": "Leave.",
@@ -526,7 +526,7 @@
         ],
         "convenient_for_what": [
             {
-                "text": "\"For arriving,\" says Tobin. \"Salt, lime, oil, rope, boards. Those are not goods, that is a *list* — that is what a man buys who is about to keep something dry, light something, and hold something up.\" He spreads his claws. \"And every one of them landed in Rivermark, and none of them belongs to anybody in Rivermark, and none of them is still on the quay.\"\n\nA pause.\n\n\"I sell rope,\" he says. \"Nobody bought their rope from me.\"",
+                "text": "\"For arriving,\" Tobin says. \"Salt, lime, oil, rope, boards. Those aren't just goods. They're a *list*, the sort of things a man buys to keep something dry, light something, and hold something up.\" He spreads his claws. \"Every one landed in Rivermark. None belonged to anyone here, and none is still on the quay.\"\n\nHe pauses.\n\n\"I sell rope. Nobody bought theirs from me.\"",
                 "choices": [
                     {
                         "label": "Leave.",
@@ -537,7 +537,7 @@
         ],
         "no_innocent_reason": [
             {
-                "text": "\"None,\" says Tobin. \"And I have been generous with myself about it, because the alternative is unpleasant.\" He sets the mace-head down. \"The best I have managed is: somebody wanted goods to be in this town, on a public quay, under a name that could not be asked anything, until they were ready to take them somewhere they did not want carried through a gate.\"\n\nHe looks at you.\n\n\"That is not a crime. That is not even unusual. I have done it myself, in a small way, over a customs matter, and I slept perfectly well.\" He picks the mace-head back up. \"Twelve consignments, though. Twelve is not a customs matter.\"",
+                "text": "\"No luck,\" Tobin says. \"I've been generous with myself about it. The alternative's unpleasant.\" He sets down the mace-head. \"Best I can figure, someone wanted goods on a public quay under a name nobody could question, then planned to take them somewhere they couldn't pass through a gate.\"\n\nHe looks at you.\n\n\"That's not a crime, or even unusual. I've done something like it over a customs matter and slept fine. But twelve consignments isn't a customs matter.\" He picks up the mace-head again.",
                 "choices": [
                     {
                         "label": "Leave.",
@@ -647,7 +647,7 @@
         ],
         "he_will_not_risk_it": [
             {
-                "text": "\"No,\" says Tobin, and it costs him something to say it. \"Because it would not be me they came to. It would be the carriage, and the carriage is four men with families in Greyhythe, and they would not be told either — the price would simply go up and stay up and nobody would ever say why.\" He gets the door the rest of the way open. \"When it changes, come back and I will sell you this whole table at cost and be glad of it. It is not going to change this month.\"",
+                "text": "\"No,\" Tobin says, and the word costs him. \"They wouldn't come to me. They'd go after the carriage. That's four men with families in Greyhythe, and nobody would explain it to them. The price would just rise and stay there.\" He opens the door the rest of the way. \"When things change, come back. I'll sell you this whole table at cost, gladly. It is not going to change this month.\"",
                 "choices": [
                     {
                         "label": "Go.",
