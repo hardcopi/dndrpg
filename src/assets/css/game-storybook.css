@@ -1,0 +1,359 @@
+/* Storybook skin scoped to the play screen. */
+body.game-page {
+  --gw-cream: #f5e6c4;
+  --gw-ink: #2a1a10;
+  --gw-brass-0: #e8b44a;
+  --gw-brass-1: #a8742a;
+  --gw-frame: #1a1220;
+  --font-display: 'Cinzel', serif;
+  background: #1a1220;
+  color: #f5e6c4;
+  font-family: 'Alegreya', serif;
+}
+body.game-page .gw-window { background: radial-gradient(ellipse at 30% 0%, #3a2a40, #1a1220 70%); border-color: #a8742a; }
+body.game-page .gw-plate, body.game-page .topbar, body.game-page .rail-pane,
+body.game-page .hud-quest, body.game-page .hud-log, body.game-page .loc-stage,
+body.game-page .loc-ways { background: linear-gradient(#2e2034,#21172a); border-color: #5a3e22; color: #f5e6c4; }
+body.game-page .icon-btn, body.game-page .btn, body.game-page .action-btn,
+body.game-page .loc-act { color: #f5e6c4; background: linear-gradient(#7a2a38,#561a26); border-color: #a8742a; }
+body.game-page .icon-btn:hover, body.game-page .btn:hover, body.game-page .action-btn:hover { border-color: #e8b44a; }
+body.game-page .painted-host { min-width: 0; }
+.scene-paint { position: relative; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; border: 4px solid #08070a; outline: 2px solid #a8742a; box-shadow: 0 5px 18px #0009; background: #09070b; }
+.scene-paint > img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; object-fit: fill; }
+.scene-paint::after { content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 1; background: radial-gradient(ellipse at 50% 55%, transparent 60%, #0005); }
+.paint-hotspots { position: absolute; inset: 0; z-index: 2; }
+.paint-hotspot { position: absolute; transform: translate(-50%,-100%); display: flex; flex-direction: column; align-items: center; border: 0; background: transparent; padding: 0; cursor: pointer; color: #e8b44a; }
+.paint-label { display: block; white-space: nowrap; padding: 3px 8px; border: 1px solid #e8b44a; border-radius: 3px; background: #1a1220e8; box-shadow: 0 2px 6px #000; font: 700 clamp(8px, 1vw, 13px) 'Cinzel',serif; }
+.paint-label b { margin-right: 5px; color: #f5e6c4; }
+.paint-pin { width: 2px; height: 13px; background: linear-gradient(#e8b44a,transparent); }
+.paint-dot { width: 10px; height: 10px; border: 2px solid #e8b44a; border-radius: 50%; background: #e8b44a55; box-shadow: 0 0 8px #e8b44a; }
+.paint-hotspot.npc { color: #cfeee4; }
+.paint-hotspot.npc .paint-label { color: #cfeee4; border-color: #9fd6c8; }
+.paint-hotspot.npc .paint-pin { background: linear-gradient(#9fd6c8,transparent); }
+.paint-hotspot.npc .paint-dot { border-color: #9fd6c8; background: #9fd6c855; box-shadow: 0 0 8px #9fd6c8; }
+.paint-hotspot.is-locked { color: #a5a0a8; cursor: not-allowed; }
+.paint-hotspot.is-locked .paint-label { color: #aaa; border-color: #777; }
+.paint-object { position: absolute; z-index: 2; transform: translate(-50%,-50%); padding: 2px 6px; border: 1px dashed #f5e6c4aa; border-radius: 3px; color: #fff1ce; background: #1a1220a8; font: 500 clamp(8px, .9vw, 12px) 'Alegreya',serif; cursor: pointer; }
+.scene-tools { position: absolute; right: 8px; top: 8px; z-index: 4; display: flex; gap: 5px; }
+.scene-chip { padding: 4px 8px; border: 1px solid #a8742a; border-radius: 12px; color: #f5e6c4; background: #1a1220e8; font: 600 11px 'Cinzel',serif; cursor: pointer; }
+.paint-map { position: absolute; inset: 0; z-index: 5; padding: 2%; background: #1a1220; }
+.paint-map .loc-map { width: 100%; height: 100%; min-height: 0; }
+.paint-map .map-zoom, .paint-map #scene-info { display: none; }
+.scene-paint.map-open > img, .scene-paint.map-open > .rmfx-layer, .scene-paint.map-open > .paint-hotspots { visibility: hidden; }
+.scene-narration { margin-top: 8px; padding: 14px 20px; color: #2a1a10; background: linear-gradient(#f5e6c4,#ead3a2); border: 4px solid #08070a; outline: 2px solid #a8742a; box-shadow: inset 0 0 24px #a8742a44; }
+.scene-narration .loc-name { color: #6e2230; font: 700 17px 'Cinzel',serif; letter-spacing: 2px; }
+.scene-narration .loc-name-region { color: #6b4a2a; }
+.scene-subtitle { display: block; margin: -3px 0 5px; color: #6b4a2a; font: italic 14px 'Alegreya',serif; }
+.scene-narration .loc-read, .scene-narration .loc-read p { color: #2a1a10; font: 400 18px/1.42 'Alegreya',serif; }
+.scene-narration .loc-read p:first-letter { float: left; margin: 2px 6px 0 0; color: #6e2230; font: 700 34px/.9 'Cinzel Decorative',serif; }
+body.game-page .loc-inner.scene-storybook { max-width: none; padding: 8px 12px 16px; }
+body.game-page .loc-inner.scene-storybook .loc-text { gap: 8px; }
+body.game-page .painted-host { flex: 1 1 auto; min-height: 0; }
+body.game-page .scene-narration { flex: 0 0 auto; }
+body.game-page .scene-narration .loc-prose p { color: #2a1a10; font: 400 18px/1.35 'Alegreya',serif; margin: 0 0 5px; }
+body.game-page .scene-narration .loc-prose p:first-child:first-letter { float: left; margin: 2px 6px 0 0; color: #6e2230; font: 700 34px/.9 'Cinzel Decorative',serif; }
+@media (max-width: 1179px) { body.game-page .loc-inner.scene-storybook { height: auto; padding: 12px; } body.game-page .painted-host { flex: none; } }
+@media (max-width: 720px) { .scene-tools { right: 4px; top: 4px; gap: 2px; } .scene-chip { padding: 3px 5px; font-size: 9px; } .paint-label { font-size: 8px; padding: 2px 4px; } }
+
+/* Painted locations flow as one scrollable column; the legacy Amiga skin fixes
+   and clips these elements to the map's former viewport height. */
+body.game-page .loc-inner.scene-storybook { display: block; height: auto; min-height: 0; max-height: none; overflow: visible; }
+body.game-page .loc-inner.scene-storybook .loc-text { display: flex; flex-direction: column; height: auto; min-height: 0; max-height: none; overflow: visible; }
+body.game-page .loc-inner.scene-storybook .painted-host { flex: none; min-height: 0; height: auto; }
+body.game-page .loc-inner.scene-storybook .scene-paint { display: block; }
+body.game-page .loc-inner.scene-storybook .scene-narration { flex: none; height: auto; min-height: 0; max-height: none; overflow: visible; margin: 10px 0 0; }
+body.game-page .loc-inner.scene-storybook .loc-read { max-height: none; overflow: visible; padding: 0; background: transparent; }
+body.game-page .loc-inner.scene-storybook .loc-prose p,
+body.game-page .loc-inner.scene-storybook .loc-read .loc-prose p { color: #2a1a10; font: 400 18px/1.35 'Alegreya',serif; margin: 0 0 7px; }
+body.game-page .loc-inner.scene-storybook .loc-prose p:first-child:first-letter,
+body.game-page .loc-inner.scene-storybook .loc-read .loc-prose p:first-child:first-letter { float: left; margin: 2px 6px 0 0; color: #6e2230; font: 700 34px/.9 'Cinzel Decorative',serif; }
+body.game-page .loc-inner.scene-storybook .loc-name { display: inline-block; color: #6e2230; }
+body.game-page .loc-inner.scene-storybook .scene-subtitle { float: right; display: inline; margin: 2px 0 0; }
+body.game-page .loc-inner.scene-storybook .scene-narration-links { clear: both; display: flex; flex-wrap: wrap; gap: 3px 16px; padding-top: 3px; color: #6b4a2a; font: 15px 'Alegreya',serif; }
+.scene-notice, .scene-way { padding: 0; border: 0; border-bottom: 1px dotted currentColor; background: transparent; color: #6e2230; font: 700 14px 'Alegreya',serif; cursor: pointer; }
+.paint-object { padding: 1px 4px; border: 0; border-bottom: 1px dotted #f5e6c4; border-radius: 0; background: #1a122099; color: #fff1ce; font-size: clamp(8px,.78vw,11px); }
+.scene-way { color: #8a5d1f; margin-right: 8px; }
+.scene-notice-line, .scene-ways-line { display: inline; }
+.scene-way.is-locked { color: #81776b; cursor: not-allowed; }
+.paint-hotspot.edge-right { transform: translate(-100%,-100%); align-items: flex-end; }
+.paint-hotspot.edge-left { transform: translate(0,-100%); align-items: flex-start; }
+.paint-hotspot .scene-work-mark { color: #e8b44a; margin-right: 4px; }
+.scene-more { position: absolute; left: 50%; top: 94%; transform: translate(-50%,-100%); z-index: 3; padding: 3px 8px; border: 1px solid #9fd6c8; border-radius: 3px; background: #1a1220e8; color: #cfeee4; font: 700 11px 'Cinzel',serif; cursor: pointer; }
+body.game-page .rail-pane, body.game-page .hud-quest, body.game-page .hud-log, body.game-page .gw-actions {
+  background: linear-gradient(145deg,#2e2034,#21172a); border-color: #5a3e22; color: #f5e6c4;
+}
+body.game-page .rail-pane-head, body.game-page .hud-quest > h2, body.game-page .hud-log > h2, body.game-page .gw-actions > h2 {
+  color: #e8b44a; font: 700 12px 'Cinzel',serif; letter-spacing: 2px;
+}
+body.game-page .hud-party .party-card { background: linear-gradient(#34243a,#251a2d); border-color: #a8742a; color: #f5e6c4; }
+body.game-page .hud-party .party-card:hover { background: linear-gradient(#402c45,#2b1d33); border-color: #e8b44a; }
+body.game-page .hud-party .party-card.is-active { background: linear-gradient(#4a3c22,#2a2216); border-color: #e8b44a; }
+body.game-page .hud-party .party-face { border-color: #a8742a; border-radius: 3px; }
+body.game-page .hud-party .party-name, body.game-page .person-name { color: #e8b44a; font-family: 'Cinzel',serif; }
+body.game-page .hud-log, body.game-page .hud-quest { color: #f5e6c4; }
+body.game-page .scene-chip:disabled { opacity: .75; cursor: not-allowed; }
+@media (min-width:1180px) { body.game-page .loc-inner.scene-storybook { max-height: none; overflow: visible; } }
+
+/* ------------------------------------------------------------------ *
+   Review pass: the Amiga skin's navy panels win on specificity in a few
+   places (the .loc-sheet group, people cards, the window, dialogue panel).
+   Re-tint them plum here rather than editing game-amiga.css, so the whole
+   storybook look can be reverted by dropping this file.
+ * ------------------------------------------------------------------ */
+body.game-page {
+  --gw-frame: #1a1220;
+  --dlg-panel-top: #2e2034;
+  --dlg-panel-bottom: #1a1220;
+}
+body.game-page .gw-window {
+  background: radial-gradient(ellipse at 30% 0%, #3a2a40 0, #1a1220 70%);
+  box-shadow: inset 0 0 0 2px #a8742a, inset 0 0 0 5px #1a1220, 0 0 0 1px #5a3e22;
+}
+body.game-page .loc-stage,
+body.game-page .loc-ways,
+body.game-page .loc-sheet,
+body.game-page .loc-map .loc-actions { background: linear-gradient(180deg, #2e2034 0%, #21172a 100%); border-color: #5a3e22; }
+body.game-page .hud-people .person { background: linear-gradient(180deg, #34243a 0%, #251a2d 100%); border-color: #5a3e22; }
+body.game-page .hud-people .person:hover,
+body.game-page .hud-people .person:focus-visible { background: linear-gradient(180deg, #402c45 0%, #2b1d33 100%); border-color: #e8b44a; }
+body.game-page .hud-party .party-face,
+body.game-page .hud-people .person-face { background: #120c14; }
+body.game-page .loc-ways .loc-act { background: linear-gradient(180deg, #34243a 0%, #251a2d 100%); border-color: #5a3e22; }
+body.game-page .loc-ways .loc-act:hover:not(:disabled) { background: linear-gradient(180deg, #402c45 0%, #2b1d33 100%); border-color: #e8b44a; }
+body.game-page .icon-btn,
+body.game-page .chip,
+body.game-page .act-slot.loc-act { border-color: #a8742a; }
+body.game-page .chip { background: #2a1c2a; }
+body.game-page .dlg-panel { background: linear-gradient(180deg, #2e2034 0%, #1a1220 100%); box-shadow: inset 0 0 0 2px #a8742a, 0 8px 24px #000a; }
+body.game-page .dlg-bust { background: #120c14; }
+
+/* The parchment. Same selector weight as the Amiga .loc-sheet group plus the
+   scene class, so it wins without !important. */
+body.game-page .loc-inner.scene-storybook .loc-sheet.scene-narration {
+  position: relative;
+  padding: 12px 20px 14px;
+  color: #2a1a10;
+  background: linear-gradient(#f5e6c4, #ead3a2);
+  border: 2px solid #000;
+  border-radius: 4px;
+  outline: 0;
+  box-shadow: 0 0 0 2px #a8742a, 0 0 0 4px #000, inset 0 0 30px #a8742a55;
+  overflow: visible;
+}
+body.game-page .loc-inner.scene-storybook .scene-narration .loc-name {
+  display: inline-block;
+  padding: 0;
+  background: none;
+  border: 0;
+  color: #6e2230;
+  font: 700 17px 'Cinzel', serif;
+  letter-spacing: 2px;
+  text-shadow: none;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+body.game-page .loc-inner.scene-storybook .scene-subtitle { color: #6b4a2a; font: italic 14px 'Alegreya', serif; }
+body.game-page .loc-inner.scene-storybook .loc-read { color: #2a1a10; }
+body.game-page .loc-inner.scene-storybook .loc-prose .loc-first,
+body.game-page .loc-inner.scene-storybook .loc-prose .loc-ambience { font-style: italic; color: #4a3020; }
+/* Only the very first paragraph gets the drop cap. */
+body.game-page .loc-inner.scene-storybook .loc-prose p:not(:first-child):first-letter { float: none; margin: 0; color: inherit; font: inherit; }
+body.game-page .loc-inner.scene-storybook .scene-narration-links { color: #5a3a20; }
+body.game-page .loc-inner.scene-storybook .scene-narration-links .scene-notice,
+body.game-page .loc-inner.scene-storybook .scene-narration-links .scene-way { min-height: 0; padding: 0; box-shadow: none; background: transparent; border: 0; border-bottom: 1px dotted currentColor; border-radius: 0; text-transform: none; letter-spacing: 0; }
+body.game-page .loc-inner.scene-storybook .scene-narration-links .scene-notice { color: #6e2230; }
+body.game-page .loc-inner.scene-storybook .scene-narration-links .scene-way { color: #8a5d1f; }
+body.game-page .loc-inner.scene-storybook .scene-narration-links .scene-way:disabled { color: #81776b; }
+
+/* The bezel around the picture, as in the mockup. */
+body.game-page .scene-paint { border: 2px solid #000; outline: 0; border-radius: 4px; box-shadow: 0 0 0 2px #a8742a, 0 0 0 4px #000, 0 8px 20px #000a; }
+/* Hotspot labels follow the mockup's sizes and the hover lifts them a touch. */
+body.game-page .paint-hotspot { min-height: 0; box-shadow: none; text-transform: none; }
+body.game-page .paint-hotspot:hover .paint-label,
+body.game-page .paint-hotspot:focus-visible .paint-label { background: #2e2034f2; box-shadow: 0 0 0 1px currentColor, 0 2px 10px #000; }
+body.game-page .paint-hotspot:focus-visible { outline: none; }
+body.game-page .scene-chip { min-height: 0; text-transform: none; }
+/* On a phone the scene is small: tools move to the bottom corner so they do not sit on the exit labels along the top. */
+@media (max-width: 720px) { body.game-page .scene-tools { top: auto; bottom: 4px; } }
+
+/* ------------------------------------------------------------------ *
+   Two-column play screen (exploration only).
+
+   The scene takes the width; one rail on the right holds the party, the
+   verbs and a Tasks | Log | People panel. Everything here is scoped to
+   :not(.in-combat) — a fight keeps the grid style.css gives it (board on
+   the left, log rail on the right, .cbt-top spanning both), with only the
+   few rules at the end of this block telling it what to hide in the new rail.
+ * ------------------------------------------------------------------ */
+body.game-page:not(.in-combat) .game-shell {
+  grid-template-columns: minmax(0, 1fr) var(--sb-rail-w, 320px);
+  grid-template-rows: minmax(0, 1fr);
+}
+body.game-page:not(.in-combat) .scene { grid-column: 1; grid-row: 1; }
+body.game-page:not(.in-combat) .rail-right {
+  grid-column: 2; grid-row: 1;
+  display: flex; flex-direction: column; gap: 8px;
+  width: 100%; min-width: 0; min-height: 0; overflow: hidden;
+}
+
+/* The party: as tall as its cards, but allowed to give (and scroll) before
+   the actions are pushed off the bottom. */
+body.game-page .rail-right .rail-pane.rail-party { flex: 0 1 auto; min-height: 0; }
+body.game-page .rail-right .rail-party .rail-pane-head { justify-content: center; }
+body.game-page .rail-right .rail-party .rail-pane-head::before,
+body.game-page .rail-right .rail-party .rail-pane-head::after { content: '✦'; font-size: 9px; color: #a8742a; }
+body.game-page .hud-party { gap: 6px; }
+body.game-page .hud-party .party-card {
+  --portrait: 52px;
+  grid-template-areas: "face name" "face cls" "face hp" "face stat";
+  gap: 1px 10px;
+  padding: 6px 8px;
+}
+body.game-page .hud-party .party-name { font-size: 14px; letter-spacing: .5px; }
+body.game-page .hud-party .party-class {
+  grid-area: cls; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+  color: #d9c7a0; font: italic 13px/1.15 'Alegreya', serif;
+}
+body.game-page .hud-party .party-stats { justify-content: space-between; font: 12px 'Alegreya', serif; }
+body.game-page .hud-party .party-class ~ .party-stats .party-lv { display: none; }
+body.game-page .hud-party .party-card .hp-bar { height: 8px; }
+
+/* The verbs: a three-wide grid of wine plates, no frame and no heading — the
+   buttons are their own heading. */
+body.game-page:not(.in-combat) .rail-right .gw-actions { flex: 0 0 auto; background: transparent; border: 0; box-shadow: none; overflow: visible; }
+body.game-page:not(.in-combat) .rail-right .gw-actions > h2 { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+body.game-page .rail-right .gw-actions .action-bar { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; padding: 0; }
+body.game-page .rail-right .action-btn {
+  min-height: 3.3rem; padding: 6px 4px;
+  color: #f5e6c4; background: linear-gradient(#7a2a38, #561a26);
+  border: 1px solid #a8742a; border-radius: 4px;
+  box-shadow: inset 0 1px 0 #ffffff22, 0 2px 0 #000a;
+  font: 700 13px 'Cinzel', serif; letter-spacing: .5px;
+}
+body.game-page .rail-right .action-btn .act-icon { color: #e8b44a; }
+body.game-page .rail-right .action-btn:hover:not(:disabled),
+body.game-page .rail-right .action-btn:focus-visible {
+  color: #fff1ce; background: linear-gradient(#8e3444, #64202e); border-color: #e8b44a;
+}
+
+/* Tasks | Log | People: one framed panel, one body showing at a time. */
+body.game-page:not(.in-combat) .rail-tabs {
+  flex: 1 1 auto; min-height: 9rem;
+  display: flex; flex-direction: column; overflow: hidden;
+  background: linear-gradient(145deg, #2e2034, #21172a);
+  border: 2px solid #5a3e22; border-radius: 3px; box-shadow: 0 2px 0 #07090d;
+}
+body.game-page .rail-tab-bar { display: flex; flex: 0 0 auto; border-bottom: 1px solid #a8742a; background: linear-gradient(#2a1c22, #1a1220); }
+body.game-page .rail-tab {
+  flex: 1 1 0; display: flex; align-items: center; justify-content: center; gap: 5px;
+  min-height: 0; padding: 6px 4px 5px; margin: 0;
+  color: #b89c70; background: transparent; border: 0; border-bottom: 2px solid transparent; border-radius: 0;
+  box-shadow: none; text-transform: uppercase; cursor: pointer;
+  font: 700 11px 'Cinzel', serif; letter-spacing: 1.5px;
+}
+body.game-page .rail-tab:hover { color: #f5e6c4; }
+body.game-page .rail-tab.is-current { color: #e8b44a; border-bottom-color: #e8b44a; background: #e8b44a14; }
+body.game-page .rail-tab .loc-count { margin: 0; padding: 0 5px; font-size: 10px; line-height: 1.4; letter-spacing: 0; }
+body.game-page:not(.in-combat) .rail-tab-panel:not(.is-current) { display: none; }
+body.game-page:not(.in-combat) .rail-tab-panel.is-current { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; overflow: hidden; }
+/* Inside the tabs the panels lose their own frames and headings: the tab is
+   the heading, and the frame is the tab panel's. */
+body.game-page:not(.in-combat) .rail-tab-panel .hud-quest,
+body.game-page:not(.in-combat) .rail-tab-panel .hud-log {
+  flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column;
+  background: transparent; border: 0; box-shadow: none;
+}
+body.game-page:not(.in-combat) .rail-tab-panel .hud-quest > h2,
+body.game-page:not(.in-combat) .rail-tab-panel .hud-log > h2 { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+body.game-page:not(.in-combat) .rail-tab-panel .hud-log .log { flex: 1 1 auto; min-height: 0; max-height: none; }
+body.game-page .rail-tab-panel .hud-people { flex: 1 1 auto; min-height: 0; overflow-y: auto; scrollbar-width: thin; padding: 6px; }
+
+/* People: a compact list rather than face tiles — the painting already
+   shows where they stand. */
+body.game-page .rail-tab-panel .hud-people .people-list { display: flex; flex-direction: column; gap: 4px; margin: 0; padding: 0; list-style: none; }
+body.game-page .rail-tab-panel .hud-people .person {
+  flex-direction: row; align-items: center; justify-content: flex-start; gap: 8px;
+  padding: 3px 6px; text-align: left; min-height: 0;
+}
+body.game-page .rail-tab-panel .hud-people .person-face,
+body.game-page .rail-tab-panel .people-list.is-crowd .person-face { width: 32px; height: 32px; flex: 0 0 auto; }
+body.game-page .rail-tab-panel .hud-people .person-text { align-items: flex-start; }
+body.game-page .rail-tab-panel .hud-people .person-name { justify-content: flex-start; font-size: 13px; }
+body.game-page .rail-tab-panel .hud-people .people-crowd h3 { margin: 8px 2px 4px; font-size: 11px; letter-spacing: 1.5px; }
+
+/* The scene: as wide as the column allows, but never so tall that the prose
+   is pushed off the screen. #location-root is a size container, so the cap is
+   the screen's own height less a band for the narration; the 100dvh line is
+   the fallback for a browser without container units. */
+@media (min-width: 900px) {
+  body.game-page:not(.in-combat) #location-root { container-type: size; }
+  body.game-page:not(.in-combat) .loc-inner.scene-storybook { height: 100%; padding: 6px 8px 8px; }
+  body.game-page:not(.in-combat) .loc-inner.scene-storybook .loc-text {
+    height: 100%; margin: 0 auto;
+    width: min(100%, calc((100dvh - 320px) * 16 / 9));
+    width: min(100%, calc((100cqh - 215px) * 16 / 9));
+  }
+  body.game-page:not(.in-combat) .loc-inner.scene-storybook .painted-host { flex: 0 0 auto; }
+  body.game-page:not(.in-combat) .loc-inner.scene-storybook .scene-narration {
+    flex: 1 1 auto; min-height: 5.5rem; overflow-y: auto; scrollbar-width: thin;
+  }
+}
+
+/* Between the phone and the desk the rail narrows. */
+@media (max-width: 1179px) { body.game-page:not(.in-combat) .game-shell { --sb-rail-w: 290px; } }
+
+/* Phone and small tablet: one column — the scene and its prose, then the
+   rail's panels stacked under it, and the page scrolls. */
+@media (max-width: 899px) {
+  html:has(body.game-page:not(.in-combat)),
+  body.game-page:not(.in-combat) { height: auto; min-height: 100dvh; overflow: visible; }
+  body.game-page:not(.in-combat) .gw-window { height: auto; min-height: 100dvh; }
+  body.game-page:not(.in-combat) .game-shell {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    height: auto; overflow: visible;
+  }
+  body.game-page:not(.in-combat) .scene { grid-column: 1; grid-row: 1; }
+  body.game-page:not(.in-combat) .rail-right { grid-column: 1; grid-row: 2; overflow: visible; }
+  body.game-page:not(.in-combat) .screen { overflow: visible; }
+  body.game-page .rail-right .rail-pane.rail-party { flex: 0 0 auto; }
+  body.game-page:not(.in-combat) .rail-tabs { flex: 0 0 auto; }
+  body.game-page:not(.in-combat) .rail-tab-panel.is-current { height: 18rem; max-height: 50vh; }
+}
+
+/* A fight: the party and the verbs stand down (the board draws its own), the
+   tab bar goes, and the log takes the rail — the same arrangement as before
+   the tabs, when the log sat alone over the inspector. */
+body.in-combat .rail-right .rail-party,
+body.in-combat .rail-tab-bar,
+body.in-combat .rail-tab-panel[data-panel="tasks"],
+body.in-combat .rail-tab-panel[data-panel="people"] { display: none; }
+body.in-combat .rail-tabs,
+body.in-combat .rail-tab-panel[data-panel="log"] { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
+
+/* Review: on desktop the narration band is short, so set the prose a touch
+   tighter so the "You notice / Ways out" lines are in view without scrolling. */
+@media (min-width: 900px) {
+  body.game-page:not(.in-combat) .loc-inner.scene-storybook .loc-sheet.scene-narration { padding: 8px 18px 10px; }
+  body.game-page:not(.in-combat) .loc-inner.scene-storybook .loc-prose p,
+  body.game-page:not(.in-combat) .loc-inner.scene-storybook .loc-read .loc-prose p { font-size: 16.5px; line-height: 1.3; margin-bottom: 4px; }
+  body.game-page:not(.in-combat) .loc-inner.scene-storybook .scene-narration .loc-name { margin-bottom: 2px; font-size: 16px; }
+}
+
+/* Map-only places (no painting yet): the "Ways out" list was a single column
+   capped at about three and a half rows, so a hub with six or nine exits
+   (Hallowmarket, the Moot Yard, Boomhead) showed three and hid the rest
+   behind a scrollbar nobody saw at 1440x900. On the desk, lay the ways out in
+   as many columns as fit so every exit is on screen; the chart above takes
+   whatever height is left. */
+@media (min-width: 900px) {
+  body.game-page:not(.in-combat) .loc-inner:not(.scene-storybook) .loc-ways .action-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(15.5rem, 1fr));
+    max-height: 11.5rem;
+  }
+  body.game-page:not(.in-combat) .loc-inner:not(.scene-storybook) .loc-ways .loc-act { min-height: 2rem; }
+  body.game-page:not(.in-combat) .loc-inner:not(.scene-storybook) .loc-ways .loc-act span {
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+}

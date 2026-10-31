@@ -337,6 +337,36 @@
             {
                 "conditions": [
                     {
+                        "flag": "act_two_open"
+                    },
+                    {
+                        "not": {
+                            "quest": "act_one_epilogue",
+                            "status": "completed"
+                        }
+                    }
+                ],
+                "text": "Mara has come round the end of the bar and put a cup down at the table you always end up at, which she does not do. \"Sit,\" she says. \"It's gone quiet out there and I don't trust it. I'd like to say something before somebody downriver says it for me.\"",
+                "choices": [
+                    {
+                        "label": "Go on.",
+                        "effects": [
+                            {
+                                "start_quest": "act_one_epilogue"
+                            }
+                        ],
+                        "next": "after_the_survey"
+                    },
+                    {
+                        "label": "Not now.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "sera_arrested"
                     }
                 ],
@@ -909,6 +939,21 @@
                     {
                         "label": "Goodbye.",
                         "end": true
+                    },
+                    {
+                        "label": "You wanted a word, Mara.",
+                        "conditions": [
+                            {
+                                "flag": "act_two_open"
+                            },
+                            {
+                                "not": {
+                                    "quest": "act_one_epilogue",
+                                    "status": "completed"
+                                }
+                            }
+                        ],
+                        "next": "after_the_survey"
                     }
                 ]
             },
@@ -965,6 +1010,21 @@
                     {
                         "label": "Goodbye.",
                         "end": true
+                    },
+                    {
+                        "label": "You wanted a word, Mara.",
+                        "conditions": [
+                            {
+                                "flag": "act_two_open"
+                            },
+                            {
+                                "not": {
+                                    "quest": "act_one_epilogue",
+                                    "status": "completed"
+                                }
+                            }
+                        ],
+                        "next": "after_the_survey"
                     }
                 ]
             },
@@ -1081,6 +1141,21 @@
                     {
                         "label": "Goodbye.",
                         "end": true
+                    },
+                    {
+                        "label": "You wanted a word, Mara.",
+                        "conditions": [
+                            {
+                                "flag": "act_two_open"
+                            },
+                            {
+                                "not": {
+                                    "quest": "act_one_epilogue",
+                                    "status": "completed"
+                                }
+                            }
+                        ],
+                        "next": "after_the_survey"
                     }
                 ]
             }
@@ -2044,6 +2119,94 @@
                     },
                     {
                         "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "after_the_survey": [
+            {
+                "conditions": [
+                    {
+                        "flag": "survey_fate",
+                        "equals": "warned"
+                    }
+                ],
+                "text": "\"Forty-one on the Row in the rain, and Reed wrote down every one,\" Mara says. \"Half the town's been in since, asking what they're meant to do about it. The thing that wrote that figure is downriver, and Tull's packet goes down on the second and the fifth.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "act_one_epilogue",
+                            "stage": "end_warned"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "I'll see to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "survey_fate",
+                        "equals": "burned"
+                    }
+                ],
+                "text": "\"I've swept a lot of ash in this inn and it has never once kept a secret,\" Mara says. \"They'll start it all again, and then they'll go asking who stood by the fire. If you'd sooner be gone before the asking gets here, Tull's packet goes down on the second and the fifth.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "act_one_epilogue",
+                            "stage": "end_burned"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "I'll see to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "survey_fate",
+                        "equals": "sold"
+                    }
+                ],
+                "text": "Mara looks at your purse, and then at the paper beside it, and then at neither. \"I'll not lecture anybody on taking money. I've taken worse for less,\" she says. \"But a retainer's a leash with a pay-day, and whoever holds the other end will want you on Tull's packet. Second and the fifth.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "act_one_epilogue",
+                            "stage": "end_sold"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "I'll see to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "\"Word is you walked out of the works with a roll of paper nobody had thought to lock up,\" Mara says. \"I won't ask what's in it. It's no use in my cellar, and from here it only goes one way: down the river on Tull's packet, the second and the fifth.\"",
+                "on_enter": [
+                    {
+                        "quest_stage": {
+                            "quest": "act_one_epilogue",
+                            "stage": "end_took"
+                        }
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "I'll see to it.",
                         "end": true
                     }
                 ]

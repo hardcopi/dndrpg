@@ -15,6 +15,9 @@ if (!session_character_id()) {
   <link rel="stylesheet" href="<?= asset('assets/css/style.css') ?>">
   <!-- The Amiga window skin. Scoped to this page; see the file header. -->
   <link rel="stylesheet" href="<?= asset('assets/css/game-amiga.css') ?>">
+  <link rel="stylesheet" href="<?= asset('assets/css/scenefx.css') ?>">
+  <link rel="stylesheet" href="<?= asset('assets/css/game-storybook.css') ?>">
+  <link rel="stylesheet" href="<?= asset('assets/css/fonts.css') ?>">
   <!-- Generated dice geometry; see tools/gen_dice_css.py. -->
   <link rel="stylesheet" href="<?= asset('assets/css/dice.css') ?>">
 </head>
@@ -48,8 +51,9 @@ if (!session_character_id()) {
     </div>
 
   <!--
-    Three columns: the party and the people in the scene down the left, the
-    scene prose in the middle, the log and the tracker on the right.
+    Two columns while exploring: the scene (painting or chart, then the
+    prose) on the left, and one rail on the right for the party, the verbs
+    and a Tasks | Log | People panel. A fight keeps its own arrangement.
 
     This is a rewrite of a layout built for a tile map, where the map was the
     screen and everything else floated on top of it as a `pointer-events: none`
@@ -71,23 +75,6 @@ if (!session_character_id()) {
       CSS below shows it only in a fight, and the rail starts under it.
     -->
     <div class="cbt-top" id="cbt-top"></div>
-
-    <aside class="rail rail-left">
-      <!--
-        Half the rail for the party, half for whoever is standing in the
-        scene. Each pane scrolls on its own so a crowded street does not push
-        the party off the bottom, and a four-person roster does not bury the
-        innkeeper.
-      -->
-      <section class="rail-pane rail-party">
-        <h2 class="rail-pane-head">Party</h2>
-        <div class="hud-party" id="party-rail" aria-label="Party"></div>
-      </section>
-      <section class="rail-pane rail-people">
-        <h2 class="rail-pane-head">People here <span class="loc-count hidden" id="people-count"></span></h2>
-        <div class="hud-people" id="people-rail" aria-label="People here"></div>
-      </section>
-    </aside>
 
     <main class="scene">
       <!--
@@ -152,50 +139,69 @@ if (!session_character_id()) {
     </main>
 
     <!--
-      The HUD rail, in two halves: what you are trying to do on top, and what
-      has happened while you did it underneath.
+      The one rail, on the right: the party, the verbs, then a tabbed panel for
+      Tasks, Log and People here — one visible at a time, so the scene column
+      gets the width the left rail used to take.
 
-      The region chart used to sit between them as a thumbnail. It was too
-      small to read the far side of a region on, which meant it got opened full
-      size to be useful anyway — so it is a keystroke and a topbar button now,
-      and the space went to the two panels that are read at a glance rather
-      than studied.
+      The people are drawn on the painting as hotspots; the People tab is the
+      compact list of the same cast, for whoever has no spot and for reading.
+      In a fight the party and the verbs stand down, the tab bar goes, and the
+      log takes the column (see game-storybook.css).
     -->
     <aside class="rail rail-right">
-      <section class="hud-quest quest-tracker" id="quest-tracker" aria-live="polite"></section>
+      <section class="rail-pane rail-party">
+        <h2 class="rail-pane-head">The Party</h2>
+        <div class="hud-party" id="party-rail" aria-label="Party"></div>
+      </section>
 
-      <div class="rail-bottom">
-        <div class="hud-log" id="hud-log">
-          <h2 class="rail-pane-head">Log</h2>
-          <div class="hud-log-head">
-            <div class="log-filters" role="group" aria-label="Filter the log">
-              <button type="button" class="chip on" data-filter="all">All</button>
-              <button type="button" class="chip" data-filter="combat">Combat</button>
-              <button type="button" class="chip" data-filter="story">Story</button>
-            </div>
-            <button type="button" class="icon-btn icon-btn-sm" id="btn-log-collapse"
-                    title="Collapse log" aria-label="Collapse log" aria-expanded="true">
-              <svg aria-hidden="true"><use href="#i-chevron"></use></svg>
-            </button>
-          </div>
-          <div class="log" id="game-log" role="log" aria-live="polite" aria-relevant="additions"></div>
+      <section class="gw-actions">
+        <h2 class="rail-pane-head">Actions</h2>
+        <div class="hud-actions action-bar" id="action-bar" role="toolbar" aria-label="Actions"></div>
+      </section>
+
+      <section class="rail-tabs" id="rail-tabs">
+        <div class="rail-tab-bar" role="tablist" aria-label="Tasks, log and people">
+          <button type="button" class="rail-tab" role="tab" id="rail-tab-tasks" data-tab="tasks" aria-controls="rail-panel-tasks">Tasks</button>
+          <button type="button" class="rail-tab" role="tab" id="rail-tab-log" data-tab="log" aria-controls="rail-panel-log">Log</button>
+          <button type="button" class="rail-tab" role="tab" id="rail-tab-people" data-tab="people" aria-controls="rail-panel-people">People <span class="loc-count hidden" id="people-count"></span></button>
         </div>
 
-        <!--
-          Who you are pointing at, in a fight. It lives out here rather than in
-          `#combat-root` because it is the one part of the combat screen that is
-          a readout and not a control: inside the board it was an overlay on the
-          ground it was describing. ui-combat.js renders into it by id and does
-          not care that it is somewhere else; the CSS shows it only while a
-          fight is running, and the log above it gives up the space.
-        -->
-        <section class="cbt-inspector" id="cbt-inspector" aria-live="polite"></section>
+        <div class="rail-tab-panel" id="rail-panel-tasks" data-panel="tasks" role="tabpanel" aria-labelledby="rail-tab-tasks">
+          <section class="hud-quest quest-tracker" id="quest-tracker" aria-live="polite"></section>
+        </div>
 
-        <section class="gw-actions">
-          <h2 class="rail-pane-head">Actions</h2>
-          <div class="hud-actions action-bar" id="action-bar" role="toolbar" aria-label="Actions"></div>
-        </section>
-      </div>
+        <div class="rail-tab-panel" id="rail-panel-log" data-panel="log" role="tabpanel" aria-labelledby="rail-tab-log">
+          <div class="hud-log" id="hud-log">
+            <h2 class="rail-pane-head">Log</h2>
+            <div class="hud-log-head">
+              <div class="log-filters" role="group" aria-label="Filter the log">
+                <button type="button" class="chip on" data-filter="all">All</button>
+                <button type="button" class="chip" data-filter="combat">Combat</button>
+                <button type="button" class="chip" data-filter="story">Story</button>
+              </div>
+              <button type="button" class="icon-btn icon-btn-sm" id="btn-log-collapse"
+                      title="Collapse log" aria-label="Collapse log" aria-expanded="true">
+                <svg aria-hidden="true"><use href="#i-chevron"></use></svg>
+              </button>
+            </div>
+            <div class="log" id="game-log" role="log" aria-live="polite" aria-relevant="additions"></div>
+          </div>
+        </div>
+
+        <div class="rail-tab-panel" id="rail-panel-people" data-panel="people" role="tabpanel" aria-labelledby="rail-tab-people">
+          <div class="hud-people" id="people-rail" aria-label="People here"></div>
+        </div>
+      </section>
+
+      <!--
+        Who you are pointing at, in a fight. It lives out here rather than in
+        `#combat-root` because it is the one part of the combat screen that is
+        a readout and not a control: inside the board it was an overlay on the
+        ground it was describing. ui-combat.js renders into it by id and does
+        not care that it is somewhere else; the CSS shows it only while a
+        fight is running, and the log above it gives up the space.
+      -->
+      <section class="cbt-inspector" id="cbt-inspector" aria-live="polite"></section>
     </aside>
   </div>
 
@@ -222,6 +228,8 @@ if (!session_character_id()) {
   <script src="<?= asset('assets/js/svg-view.js') ?>"></script>
   <script src="<?= asset('assets/js/ui-map.js') ?>"></script>
   <script src="<?= asset('assets/js/ui-firstperson.js') ?>"></script>
+  <script src="<?= asset('assets/js/ui-scenefx.js') ?>"></script>
+  <script src="<?= asset('assets/js/scenes-data.js') ?>"></script>
   <script src="<?= asset('assets/js/game.js') ?>"></script>
   <script src="<?= asset('assets/js/ui-panels.js') ?>"></script>
   <script src="<?= asset('assets/js/dice-geometry.js') ?>"></script>

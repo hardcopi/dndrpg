@@ -11,7 +11,7 @@
     "stages": {
         "two_places": {
             "title": "Two places",
-            "objective": "Nothing to do about it. Keep your eyes open; once you have seen the mark in two places, go and ask Alder Pyke on Granary Row.",
+            "objective": "You have seen the mark in two places now. Go and ask Alder Pyke, the chainman on Granary Row, what it is.",
             "journal": "A plumb-bob hanging inside a square, cut or stamped or painted. I have seen it twice now, in two places that have no business sharing anything. It is probably a maker's mark. Most things are.",
             "target": {
                 "location": "granary_row"
