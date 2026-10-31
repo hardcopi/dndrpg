@@ -15,6 +15,11 @@ if (!session_character_id()) {
   <link rel="stylesheet" href="<?= asset('assets/css/style.css') ?>">
   <!-- The Amiga window skin. Scoped to this page; see the file header. -->
   <link rel="stylesheet" href="<?= asset('assets/css/game-amiga.css') ?>">
+  <link rel="stylesheet" href="<?= asset('assets/css/scenefx.css') ?>">
+  <link rel="stylesheet" href="<?= asset('assets/css/game-storybook.css') ?>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alegreya:wght@400;500;700&family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
   <!-- Generated dice geometry; see tools/gen_dice_css.py. -->
   <link rel="stylesheet" href="<?= asset('assets/css/dice.css') ?>">
 </head>
@@ -222,6 +227,8 @@ if (!session_character_id()) {
   <script src="<?= asset('assets/js/svg-view.js') ?>"></script>
   <script src="<?= asset('assets/js/ui-map.js') ?>"></script>
   <script src="<?= asset('assets/js/ui-firstperson.js') ?>"></script>
+  <script src="<?= asset('assets/js/ui-scenefx.js') ?>"></script>
+  <script src="<?= asset('assets/js/scenes-data.js') ?>"></script>
   <script src="<?= asset('assets/js/game.js') ?>"></script>
   <script src="<?= asset('assets/js/ui-panels.js') ?>"></script>
   <script src="<?= asset('assets/js/dice-geometry.js') ?>"></script>

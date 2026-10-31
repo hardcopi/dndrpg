@@ -41,6 +41,27 @@
 
   /** How long a travel narration line waits before the next, in ms. */
   const STEP_PACE = 260;
+  let paintedSceneNode = null;
+  let paintedSceneKey = null;
+  let paintedFx = null;
+  let paintedMapOpen = false;
+  let paintedMapWired = false;
+
+  function sceneConfig(loc) {
+    const scenes = window.RIVERMARK_SCENES || {};
+    const key = loc && (loc.location_key || loc.key || loc.slug);
+    if (key && scenes[key]) return { key, config: scenes[key] };
+    if (loc && loc.name === 'Market Square' && scenes.market_square) return { key: 'market_square', config: scenes.market_square };
+    return null;
+  }
+
+  function clearPaintedScene() {
+    if (paintedFx) paintedFx.destroy();
+    paintedFx = null;
+    paintedSceneNode = null;
+    paintedSceneKey = null;
+    paintedMapWired = false;
+  }
 
   /** How long the party stand at the destination before the chart closes. */
   const ARRIVAL_HOLD = 200;
@@ -346,6 +367,7 @@
     const locRoot = $('#location-root');
     const combatRoot = $('#combat-root');
     const inCombat = state.mode === 'combat';
+    if (inCombat) clearPaintedScene();
 
     if (locRoot) locRoot.classList.toggle('hidden', inCombat);
     if (combatRoot) combatRoot.classList.toggle('hidden', !inCombat);
@@ -399,6 +421,8 @@
     const root = $('#location-root');
     if (!root) return;
     const loc = state.location;
+    const painted = state.mode !== 'combat' && !fpOn() ? sceneConfig(loc) : null;
+    if (!painted || paintedSceneKey !== painted.key) clearPaintedScene();
     if (!loc) {
       root.innerHTML = '<p class="help-hint">Loading…</p>';
       return;
@@ -422,7 +446,18 @@
     // The region stays in the heading and is clipped by the skin: the region
     // bar above the chart is aria-hidden, so a screen reader that heard only
     // the place name would not be told which map it was on.
-    root.innerHTML = `
+    root.innerHTML = painted ? `
+      <div class="loc-inner scene-storybook">
+        <div class="loc-text">
+          <div class="painted-host" id="painted-host"></div>
+          <section class="loc-sheet scene-narration">
+            <h1 class="loc-name"><span class="loc-name-place">${esc(loc.name)}</span><span class="loc-name-region">, ${esc(loc.region_name)}</span></h1>
+            ${painted.config.subtitle ? `<small class="scene-subtitle">${esc(painted.config.subtitle)}</small>` : ''}
+            <div class="loc-read">${prosePanel(loc)}</div>
+          </section>
+          ${foot}
+        </div>
+      </div>` : `
       <div class="loc-inner">
         <div class="loc-text">
           <section class="loc-sheet">
@@ -437,8 +472,63 @@
         </div>
       </div>`;
 
-    mountSceneMap();
+    if (painted) mountPaintedScene(painted);
+    else paintedMapOpen = false;
+    if (!painted) mountSceneMap();
     renderPeopleRail();
+  }
+
+  function mountPaintedScene(painted) {
+    const host = $('#painted-host');
+    if (!host) return;
+    const cfg = painted.config;
+    const loc = state.location;
+    const exits = loc.exits || [];
+    const npcs = (loc.npcs || []).filter((n) => n && n.id);
+    if (!paintedSceneNode || paintedSceneKey !== painted.key) {
+      paintedSceneKey = painted.key;
+      paintedSceneNode = document.createElement('div');
+      paintedMapWired = false;
+      paintedSceneNode.className = 'scene-paint';
+      paintedSceneNode.innerHTML = `<img alt="${esc(loc.name)}" src="${esc(cfg.image)}"><div class="paint-hotspots"></div><div class="scene-tools"><button type="button" class="scene-chip" data-scene-map>Map</button><button type="button" class="scene-chip" data-scene-fx>✦ Effects <span></span></button><button type="button" class="scene-chip" id="scene-info" aria-label="Describe this place">ⓘ</button></div><div class="paint-map hidden">${sceneMap()}</div>`;
+      paintedFx = window.RivermarkFX ? window.RivermarkFX.mount(paintedSceneNode, cfg.fx || [], { image: cfg.image }) : null;
+    }
+    const layer = paintedSceneNode.querySelector('.paint-hotspots');
+    const exitMarkup = exits.map((e, i) => {
+      const key = e.to_key || e.to_location_key || e.location_key || (cfg.exits && Object.keys(cfg.exits)[i]);
+      const spot = (cfg.exits || {})[key];
+      if (!spot) return '';
+      return `<button type="button" class="paint-hotspot exit${e.locked ? ' is-locked' : ''}" style="left:${spot.x}%;top:${spot.y}%" data-act="travel" data-id="${+e.to_location_id}" ${e.locked ? 'disabled' : ''} aria-label="${esc(e.label || e.to_name || 'Travel')}"><span class="paint-label"><b>${esc(spot.icon || '⌂')}</b>${esc(e.label || e.to_name || '')}</span><i class="paint-pin"></i><i class="paint-dot"></i></button>`;
+    }).join('');
+    const npcMarkup = npcs.map((n, i) => {
+      const key = n.npc_key || n.key || n.slug;
+      let spot = (cfg.npcs || {})[key];
+      if (!spot && i === 0) spot = { x: 11.864, y: 53.86 };
+      else if (!spot && i === 1) spot = { x: 57.839, y: 60.64 };
+      else if (!spot) spot = { x: 8 + ((i * 13) % 84), y: 94 };
+      return `<button type="button" class="paint-hotspot npc" style="left:${spot.x}%;top:${spot.y}%" data-npc="${+n.id}" aria-label="Talk to ${esc(n.known ? n.name : (n.role || 'a stranger'))}"><span class="paint-label"><b>💬</b>${esc(n.known ? n.name : (n.role || 'A stranger'))}</span><i class="paint-pin"></i><i class="paint-dot"></i></button>`;
+    }).join('');
+    const objectMarkup = (cfg.objects || []).map((o) => `<button type="button" class="paint-object" style="left:${o.x}%;top:${o.y}%" data-act="${esc(o.act || 'search')}" aria-label="Search ${esc(o.label)}">${esc(o.label)}</button>`).join('');
+    layer.innerHTML = exitMarkup + npcMarkup + objectMarkup;
+    const fxButton = paintedSceneNode.querySelector('[data-scene-fx]');
+    if (fxButton) {
+      fxButton.querySelector('span').textContent = localStorage.getItem('rm-fx') === 'off' ? 'off' : 'on';
+      fxButton.onclick = () => { const on = localStorage.getItem('rm-fx') === 'off'; window.RivermarkFX && window.RivermarkFX.setEnabled(on); fxButton.querySelector('span').textContent = on ? 'on' : 'off'; };
+    }
+    const mapButton = paintedSceneNode.querySelector('[data-scene-map]');
+    if (mapButton) mapButton.onclick = () => { paintedMapOpen = !paintedMapOpen; syncPaintedMap(); };
+    const info = paintedSceneNode.querySelector('#scene-info');
+    if (info) info.onclick = openDescription;
+    host.appendChild(paintedSceneNode);
+    syncPaintedMap();
+  }
+
+  function syncPaintedMap() {
+    if (!paintedSceneNode) return;
+    paintedSceneNode.classList.toggle('map-open', paintedMapOpen);
+    const map = paintedSceneNode.querySelector('.paint-map');
+    if (map) map.classList.toggle('hidden', !paintedMapOpen);
+    if (paintedMapOpen && !paintedMapWired) { mountSceneMap(); paintedMapWired = true; }
   }
 
   /**
@@ -2110,6 +2200,9 @@
           // opens what the chart replaced.
           e.preventDefault();
           openDescription();
+          break;
+        case 'm':
+          if (sceneConfig(loc) && !fpOn()) { e.preventDefault(); paintedMapOpen = !paintedMapOpen; syncPaintedMap(); }
           break;
         case 'j':
           e.preventDefault();
