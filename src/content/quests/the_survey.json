@@ -82,7 +82,7 @@
         },
         "sold_it_back": {
             "title": "Sold back",
-            "journal": "Five hundred gold, counted out without argument, and retainer articles at forty a quarter for services left unspecified. He had them ready before I came. Not for me, but for whoever came. I keep thinking of the chair, worn through at the arms, and the paper, already drawn.",
+            "journal": "I handed the survey back across his desk. Five hundred gold, counted out without argument, and retainer articles at forty a quarter for services left unspecified. He had them ready before I came. Not for me, but for whoever came. I keep thinking of the chair, worn through at the arms, and the paper, already drawn.",
             "resolution": "sold_it_back",
             "terminal": true,
             "effects": [
@@ -121,7 +121,7 @@
         },
         "warned_the_town": {
             "title": "Read out on Granary Row",
-            "journal": "Pyke read the survey aloud; he can read one, and I can't. His chain measured half of it. Forty people stood in the rain on Granary Row as he told them what their roofs were valued at. Reed wrote it all down. No law is broken, and nobody can be arrested. The town knows what's coming. That's all knowing can do, and Pyke is out of work.",
+            "journal": "Pyke read the survey aloud; he can read one, and I can't. His chain measured half of it. Forty people stood in the rain on Granary Row as he told them what their roofs were valued at. Reed wrote it all down. No law is broken, and nobody can be arrested. The town knows what's coming. That's all knowing can do, and Pyke has been taken off the work, with no reason given.",
             "resolution": "warned_the_town",
             "terminal": true,
             "effects": [

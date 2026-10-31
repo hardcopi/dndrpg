@@ -1086,7 +1086,7 @@
         ],
         "he_does_not_answer_that_one": [
             {
-                "text": "\"That is a question about the future,\" Corse says. \"I make a point of not guessing in front of people who will remember what I guessed.\" It is the first time he has declined to answer. He does it so mildly that you are three streets away before you notice.",
+                "text": "\"That is a question about the future,\" Corse says. \"I make a point of not guessing in front of people who will remember what I guessed.\" It is the first question of yours he has declined. He does it so mildly that you are three streets away before you notice.",
                 "on_enter": [
                     {
                         "set_flag": "corse_declined_one"
@@ -1588,7 +1588,7 @@
         ],
         "nothing_at_all": [
             {
-                "text": "\"Nothing at all,\" Corse says. \"That is what a retainer is for. You are not paid to do a particular thing. You are paid so that when something comes up, you already belong to us and no one has to rush this conversation.\" He pours a drink. \"I have four such arrangements in this valley. Two have never been called on, and both sleep very well.\"",
+                "text": "\"Nothing at all,\" Corse says. \"That is what a retainer is for. You are not paid to do a particular thing. You are paid so that when something comes up, you already belong to us and no one has to rush this conversation.\" He pours a drink. \"I have four such arrangements in this valley. Most have never been called on, and they sleep very well.\"",
                 "choices": [
                     {
                         "label": "And if I want out?",

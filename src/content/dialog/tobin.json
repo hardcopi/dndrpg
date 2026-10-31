@@ -426,7 +426,7 @@
         ],
         "pays_and_keeps": [
             {
-                "text": "He pays the carriage and signs for the salt. It sells within a fortnight, though not at a price he's comfortable with.\n\n\"Forty gold clear,\" says Tobin Brassscale, counting sixty of it into your hand for the trouble, \"and one line in a public book, in my own hand, right under eleven consignments belonging to a man nobody's ever met.\"\n\nHe shuts the drawer.\n\n\"I've made money,\" he says, \"and picked up a history. I've done that before, in two other towns, and both times it took about four years to find out what the history was for.\"",
+                "text": "He pays the carriage and signs for the salt. It sells within a fortnight, though not at a price he's comfortable with.\n\nTobin Brassscale counts sixty gold into your hand for the trouble. \"That, and one line in a public book, in my own hand, right under eleven consignments belonging to a man nobody's ever met.\"\n\nHe shuts the drawer.\n\n\"I've made money,\" he says, \"and picked up a history. I've done that before, in two other towns, and both times it took about four years to find out what the history was for.\"",
                 "on_enter": [
                     {
                         "quest_stage": {
