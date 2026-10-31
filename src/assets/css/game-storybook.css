@@ -357,3 +357,164 @@ body.in-combat .rail-tab-panel[data-panel="log"] { flex: 1 1 auto; min-height: 0
     overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
   }
 }
+
+/* ------------------------------------------------------------------ *
+   Room to breathe (Rich, the Proving House cellar): nothing is drawn over
+   the picture any more. A place's verbs — the pit's bouts, the stair, a
+   fight, a rest — are a strip of their own under the painting or the
+   chart (renderLocation's .loc-dock), the narration is parchment that is
+   never clipped mid-sentence (it scrolls if a long first visit needs it),
+   and on a chart scene the strip sits beside Ways out so both stay in view.
+ * ------------------------------------------------------------------ */
+
+/* The strip. Same plum panel and brass heading plate as Ways out. */
+body.game-page .loc-dock { flex: 0 0 auto; min-width: 0; }
+body.game-page .loc-dock .loc-actions {
+  position: static;
+  display: flex; flex-wrap: wrap; align-items: stretch; align-content: flex-start;
+  margin: 0; padding: 0 6px 6px; gap: 6px;
+  background: linear-gradient(180deg, #2e2034 0%, #21172a 100%);
+  border: 2px solid #5a3e22; border-radius: 3px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.04), 0 2px 0 #07090d;
+  overflow: hidden;
+  pointer-events: auto;
+}
+body.game-page .loc-dock .loc-actions::before { content: none; }
+body.game-page .loc-dock-head {
+  flex: 1 0 calc(100% + 12px); margin: 0 -6px;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 2px 14px;
+  padding: 0.22rem 0.55rem;
+  background: linear-gradient(180deg, #3d3428 0%, #1c1814 55%, #2a241c 100%);
+  border-bottom: 1px solid #8a7044;
+}
+body.game-page .loc-dock-head h2 {
+  margin: 0; padding: 0; border: 0; background: none;
+  color: var(--gw-brass-0); font: 700 0.75rem var(--font-display);
+  letter-spacing: 0.14em; text-transform: uppercase; text-shadow: 0 1px 0 #120c06;
+}
+/* The "to level" readout rides in the heading line, not a row of its own. */
+body.game-page .loc-dock .pit-level { margin: 0; padding: 0; gap: 2px 10px; flex-wrap: wrap; align-items: baseline; }
+body.game-page .loc-dock .pit-level-head { color: #b89c70; font: 700 10px var(--font-display); letter-spacing: 1.5px; }
+body.game-page .loc-dock .pit-level-counts { gap: 10px; color: #d9c7a0; font: 13px 'Alegreya', serif; }
+body.game-page .loc-dock .pit-level-counts b { color: var(--gw-brass-0); }
+
+/* The bouts: one row of three wine plates, two lines each. */
+body.game-page .loc-dock .loc-pit { flex: 1 1 22rem; min-width: 0; margin: 0; padding: 0; border: 0; }
+body.game-page .loc-dock .pit-grid { gap: 6px; }
+body.game-page .loc-dock .pit-bout {
+  min-height: 0; height: 100%; padding: 6px 10px 7px; gap: 1px;
+  color: #f5e6c4; background: linear-gradient(#7a2a38, #561a26);
+  border: 1px solid #a8742a; border-radius: 4px;
+  box-shadow: inset 0 1px 0 #ffffff22, 0 2px 0 #000a;
+}
+body.game-page .loc-dock .pit-bout:hover,
+body.game-page .loc-dock .pit-bout:focus-visible { background: linear-gradient(#8e3444, #64202e); border-color: #e8b44a; }
+body.game-page .loc-dock .pit-label { font: 700 14px 'Cinzel', serif; letter-spacing: .5px; text-transform: none; }
+body.game-page .loc-dock .pit-sample { min-width: 0; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #e6cfa6; font: italic 13px 'Alegreya', serif; text-transform: none; letter-spacing: 0; }
+
+/* The other keys (the stair, a fight, a rest): the same height as a bout,
+   icon beside the word, so the stair reads as a door of this room rather
+   than a grey tile floating on the map. */
+body.game-page .loc-dock .action-list {
+  flex: 0 1 auto; min-width: 0;
+  display: flex; flex-wrap: wrap; align-items: stretch; justify-content: flex-start;
+  gap: 6px; margin: 0; padding: 0; max-height: none; overflow: visible;
+}
+
+body.game-page .loc-dock .act-slot.loc-act {
+  flex-direction: row; justify-content: flex-start; align-items: center; gap: 8px;
+  width: auto; min-width: 9.5rem; height: auto; min-height: 2.7rem;
+  padding: 6px 26px 6px 10px;
+  color: #f5e6c4; background: linear-gradient(#3a2840, #251a2d);
+  border: 1px solid #a8742a; border-radius: 4px;
+  box-shadow: inset 0 1px 0 #ffffff1a, 0 2px 0 #000a;
+}
+body.game-page .loc-dock .act-slot.loc-act .act-icon { width: 1.1rem; height: 1.1rem; color: #e8b44a; flex: 0 0 auto; }
+body.game-page .loc-dock .act-slot.loc-act.has-label { max-width: none; }
+body.game-page .loc-dock .act-slot.loc-act .loc-act-label { color: inherit; text-align: left; font: 700 13px/1.15 'Cinzel', serif; letter-spacing: .5px; white-space: nowrap; }
+body.game-page .loc-dock .act-slot.loc-act.is-danger { border-color: #c0504a; }
+body.game-page .loc-dock .act-slot.loc-act.is-urgent { border-color: #e8b44a; color: #e8b44a; }
+body.game-page .loc-dock .act-slot.loc-act:hover:not(:disabled),
+body.game-page .loc-dock .act-slot.loc-act:focus-visible { color: #fff1ce; background: linear-gradient(#4a3450, #2e2036); border-color: #e8b44a; }
+body.game-page .loc-dock .act-slot.loc-act kbd { right: 6px; bottom: 50%; transform: translateY(50%); color: #b89c70; }
+
+/* Chart places (no painting yet): parchment narration on top, the chart
+   filling the middle, then Ways out and the actions side by side. */
+body.game-page .loc-inner.is-chart .loc-sheet {
+  position: relative;
+  padding: 10px 18px 10px;
+  color: #2a1a10;
+  background: linear-gradient(#f5e6c4, #ead3a2);
+  border: 2px solid #000; border-radius: 4px;
+  box-shadow: 0 0 0 2px #a8742a, 0 0 0 4px #000, inset 0 0 30px #a8742a55;
+  margin: 4px;
+  overflow: visible;
+}
+body.game-page .loc-inner.is-chart .loc-sheet .loc-name {
+  display: block; padding: 0; margin: 0 0 3px; background: none; border: 0;
+  color: #6e2230; font: 700 16px 'Cinzel', serif; letter-spacing: 2px; text-shadow: none; text-transform: uppercase;
+}
+body.game-page .loc-inner.is-chart .loc-read { padding: 0 4px 0 0; background: transparent; color: #2a1a10; scrollbar-width: thin; scrollbar-color: #a8742a transparent; }
+body.game-page .loc-inner.is-chart .loc-read .loc-prose p,
+body.game-page .loc-inner.is-chart .loc-read .loc-first { color: #2a1a10; font: 400 17px/1.32 'Alegreya', serif; margin: 0 0 4px; }
+body.game-page .loc-inner.is-chart .loc-read .loc-first,
+body.game-page .loc-inner.is-chart .loc-read .loc-ambience { font-style: italic; color: #4a3020; }
+body.game-page .loc-inner.is-chart .loc-read .loc-prose p:first-child:first-letter { float: left; margin: 2px 6px 0 0; color: #6e2230; font: 700 32px/.9 'Cinzel Decorative', serif; }
+body.game-page .loc-inner.is-chart .loc-foot .loc-ways { margin: 0; padding: 0; border-bottom: 0; }
+
+@media (min-width: 900px) {
+  /* One grid for the whole column, so Ways out can sit under the chart on a
+     wide screen and beside it on a narrow one without moving in the DOM
+     (.loc-foot steps out of the way with display: contents). */
+  body.game-page:not(.in-combat) .loc-inner.is-chart {
+    display: block; max-width: none; height: 100%; min-height: 0; padding: 6px 8px 8px;
+  }
+  body.game-page:not(.in-combat) .loc-inner.is-chart .loc-text {
+    display: grid; height: 100%; min-height: 0; gap: 8px;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    grid-template-areas: "sheet" "stage" "ways";
+  }
+  body.game-page:not(.in-combat) .loc-inner.is-chart.has-dock .loc-text { grid-template-areas: "sheet" "stage" "dock"; }
+  body.game-page:not(.in-combat) .loc-inner.is-chart.has-dock.has-ways .loc-text {
+    grid-template-columns: fit-content(26rem) minmax(0, 1fr);
+    grid-template-areas: "sheet sheet" "stage stage" "ways dock";
+  }
+  body.game-page:not(.in-combat) .loc-inner.is-chart .loc-foot { display: contents; }
+  body.game-page:not(.in-combat) .loc-inner.is-chart .loc-sheet { grid-area: sheet; min-width: 0; }
+  body.game-page:not(.in-combat) .loc-inner.is-chart .loc-stage { grid-area: stage; min-height: 7rem; min-width: 0; }
+  body.game-page:not(.in-combat) .loc-inner.is-chart .loc-stage .loc-map { flex: 1 1 auto; min-height: 0; }
+  body.game-page:not(.in-combat) .loc-inner.is-chart .loc-foot .loc-ways { grid-area: ways; min-width: 0; }
+  body.game-page:not(.in-combat) .loc-inner.is-chart .loc-foot .loc-dock { grid-area: dock; min-width: 0; }
+  body.game-page:not(.in-combat) .loc-inner.is-chart .loc-foot .loc-dock .loc-actions { height: 100%; align-content: start; }
+  /* Whole sentences, as many as fit: about a quarter of the column, and a
+     thin scroll only when a first visit runs longer than that. */
+  body.game-page:not(.in-combat) .loc-inner.is-chart .loc-read {
+    max-height: clamp(4.4rem, 24cqh, 12rem); overflow-y: auto;
+  }
+  body.game-page:not(.in-combat) .loc-inner.is-chart.has-dock.has-ways .loc-ways .action-list { grid-template-columns: minmax(0, 1fr); }
+  body.game-page:not(.in-combat) .loc-inner.is-chart.has-dock.has-ways .loc-ways .loc-act span { white-space: normal; overflow: visible; }
+
+  /* Painted places with a strip: the picture gives up the strip's height so
+     the parchment still fits under it. */
+  body.game-page:not(.in-combat) .loc-inner.scene-storybook.has-dock .loc-text {
+    width: min(100%, calc((100dvh - 440px) * 16 / 9));
+    width: clamp(min(100%, 62cqw), calc((100cqh - 330px) * 16 / 9), 100%);
+  }
+  /* On a short screen that floor can be taller than the column; let the
+     scene column scroll rather than cut the parchment off. */
+  body.game-page:not(.in-combat) #location-root:has(.scene-storybook.has-dock) { overflow-y: auto; }
+}
+
+/* A narrow column (a 1024 laptop, a small window): the chart is letterboxed
+   anyway, so Ways out takes its spare side and the strip gets the full width
+   for the three bouts and the stair in one row. */
+@container (max-width: 820px) {
+  body.game-page:not(.in-combat) .loc-inner.is-chart.has-dock.has-ways .loc-text {
+    grid-template-columns: minmax(0, 1fr) minmax(11rem, 13.5rem);
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    grid-template-areas: "sheet sheet" "stage ways" "dock dock";
+  }
+  body.game-page:not(.in-combat) .loc-inner.is-chart.has-dock.has-ways .loc-ways { align-self: stretch; }
+  body.game-page:not(.in-combat) .loc-inner.is-chart .loc-read .loc-prose p { font-size: 16px; line-height: 1.28; }
+}
