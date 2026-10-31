@@ -1,0 +1,45 @@
+{
+    "quest_key": "act_one_epilogue",
+    "title": "End of Act I",
+    "description": "The survey is dealt with, one way or another, and the valley has gone quiet in the way a room does after somebody has said the thing out loud.",
+    "giver": "mara_hearthstone",
+    "on_job_board": false,
+    "required_level": 5,
+    "rewards": {
+        "xp": 0
+    },
+    "stages": {
+        "the_flagon": {
+            "title": "A word at the Flagon",
+            "objective": "It is over, or this part of it is. Go back to the Golden Flagon and sit down with Mara Hearthstone.",
+            "journal": "The survey is dealt with and Rivermark is still standing, which is not the same as being safe. Mara wants a word, and I have a fair idea what it will be about.",
+            "target": {
+                "location": "flagon_common_room"
+            }
+        },
+        "end_took": {
+            "title": "End of Act I: Kept",
+            "journal": "I kept the survey. Nine sheets, Rivermark on the sixth as a cost, and nobody in the valley with the standing to ask for it back. Mara says paper like that goes downriver on Tull's boat, the second and the fifth. I think she is right about where it goes.",
+            "resolution": "end_took",
+            "terminal": true
+        },
+        "end_burned": {
+            "title": "End of Act I: Burned",
+            "journal": "I burned the survey. Three years of chain-work went up in the rain, and the Concern will start again and ask who was standing near the fire. Mara says that kind of asking comes up the river on Tull's boat, the second and the fifth. I would rather be on it going the other way.",
+            "resolution": "end_burned",
+            "terminal": true
+        },
+        "end_sold": {
+            "title": "End of Act I: Sold back",
+            "journal": "I sold the survey back. Five hundred gold, and a retainer at forty a quarter for services not described. Mara looked at the purse and then did not look at it. A retainer is not paid for sitting still: Tull's boat goes downriver on the second and the fifth, and I expect to be on one of them.",
+            "resolution": "end_sold",
+            "terminal": true
+        },
+        "end_warned": {
+            "title": "End of Act I: Read out",
+            "journal": "Pyke read the survey out on Granary Row, and Reed wrote it all down, and Rivermark now knows what it was entered at and that it can do nothing. Mara says the answer to what comes next is on Tull's boat, the second and the fifth. Somebody downriver wrote the figure, and somebody downriver can be asked.",
+            "resolution": "end_warned",
+            "terminal": true
+        }
+    }
+}

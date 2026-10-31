@@ -21,6 +21,11 @@
             "title": "Find out what drew them",
             "objective": "The rats came for something. Find out what. Look at the four sacks along the cellar's north wall, then bring what you find up to Mara.",
             "journal": "The rats are not nesting in the cellar. They are commuting to it. Four sacks of spoiled grain are stacked against the north wall, and none of them are Mara's. Four of the sacks carry a second mark under the granary stamp, burnt into the hessian: a plumb-bob hanging inside a square. It is not the granary's.",
+            "effects": [
+                {
+                    "set_flag": "grain_stamp_seen"
+                }
+            ],
             "target": {
                 "location": "flagon_cellar"
             }

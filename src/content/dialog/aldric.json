@@ -7,6 +7,170 @@
                 "conditions": [
                     {
                         "companion": "aldric",
+                        "status": "active"
+                    },
+                    {
+                        "flag": "survey_fate",
+                        "equals": "took"
+                    }
+                ],
+                "once": true,
+                "text": "\"You kept it,\" Aldric says. \"A true record is no less true for sitting in a pack, and I have decided to take comfort in that.\" He folds his hands. \"I would not leave it there long.\"",
+                "choices": [
+                    {
+                        "label": "Patch us up.",
+                        "effects": [
+                            {
+                                "heal": 8
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "What order were you in?",
+                        "next": "the_order"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit down a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "aldric",
+                        "status": "active"
+                    },
+                    {
+                        "flag": "survey_fate",
+                        "equals": "burned"
+                    }
+                ],
+                "once": true,
+                "text": "\"I watched it burn and said nothing, and I have not decided whether that was courage or cowardice,\" Aldric says. \"Three years of somebody's wages, and every line of it true. I do not think a true thing should go on a fire.\"",
+                "choices": [
+                    {
+                        "label": "Patch us up.",
+                        "effects": [
+                            {
+                                "heal": 8
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "What order were you in?",
+                        "next": "the_order"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit down a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "aldric",
+                        "status": "active"
+                    },
+                    {
+                        "flag": "survey_fate",
+                        "equals": "sold"
+                    }
+                ],
+                "once": true,
+                "text": "\"I said nothing when the money was counted, and I am ashamed of it,\" Aldric says. \"I have not left. I would like you to know that I decide it again each morning.\"",
+                "choices": [
+                    {
+                        "label": "Patch us up.",
+                        "effects": [
+                            {
+                                "heal": 8
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "What order were you in?",
+                        "next": "the_order"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit down a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "aldric",
+                        "status": "active"
+                    },
+                    {
+                        "flag": "survey_fate",
+                        "equals": "warned"
+                    }
+                ],
+                "once": true,
+                "text": "\"I took my hat off when he read it, and I would again,\" Aldric says. \"It was said aloud, in the rain, to the people it concerned. Nothing I was taught says that is wrong.\"",
+                "choices": [
+                    {
+                        "label": "Patch us up.",
+                        "effects": [
+                            {
+                                "heal": 8
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "What order were you in?",
+                        "next": "the_order"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit down a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "aldric",
                         "status": "left"
                     }
                 ],

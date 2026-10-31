@@ -7,6 +7,150 @@
                 "conditions": [
                     {
                         "companion": "ilse",
+                        "status": "active"
+                    },
+                    {
+                        "flag": "survey_fate",
+                        "equals": "took"
+                    }
+                ],
+                "once": true,
+                "text": "\"You kept it,\" Ilse says. \"It is the only honest count of this valley anybody has made, and it was made to price us.\" She looks at the ridge. \"I would like to read the sheet with the ridge on it.\"",
+                "choices": [
+                    {
+                        "label": "Goblins.",
+                        "next": "the_count"
+                    },
+                    {
+                        "label": "Tell me about the deep warren.",
+                        "next": "the_deep"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit at the fire a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "ilse",
+                        "status": "active"
+                    },
+                    {
+                        "flag": "survey_fate",
+                        "equals": "burned"
+                    }
+                ],
+                "once": true,
+                "text": "\"It is ash,\" Ilse says. \"Somebody walked this whole valley for three years and wrote it down, and I of all people ought to mind. I find I do not, and I am going to think about why.\"",
+                "choices": [
+                    {
+                        "label": "Goblins.",
+                        "next": "the_count"
+                    },
+                    {
+                        "label": "Tell me about the deep warren.",
+                        "next": "the_deep"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit at the fire a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "ilse",
+                        "status": "active"
+                    },
+                    {
+                        "flag": "survey_fate",
+                        "equals": "sold"
+                    }
+                ],
+                "once": true,
+                "text": "\"You sold the count,\" Ilse says. She has not raised her voice or taken her eyes off the ridge. \"The whole valley, back to the people who made it to price it. I stayed after the warren. I am deciding about this.\"",
+                "choices": [
+                    {
+                        "label": "Goblins.",
+                        "next": "the_count"
+                    },
+                    {
+                        "label": "Tell me about the deep warren.",
+                        "next": "the_deep"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit at the fire a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "ilse",
+                        "status": "active"
+                    },
+                    {
+                        "flag": "survey_fate",
+                        "equals": "warned"
+                    }
+                ],
+                "once": true,
+                "text": "\"Forty people stood in the rain and somebody read it,\" Ilse says. \"They know what they are entered at now. I wanted that for the goblins, and I am glad of it for the town.\"",
+                "choices": [
+                    {
+                        "label": "Goblins.",
+                        "next": "the_count"
+                    },
+                    {
+                        "label": "Tell me about the deep warren.",
+                        "next": "the_deep"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit at the fire a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "ilse",
                         "status": "left"
                     }
                 ],

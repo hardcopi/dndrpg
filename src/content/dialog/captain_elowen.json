@@ -6,6 +6,70 @@
             {
                 "conditions": [
                     {
+                        "flag": "survey_fate",
+                        "equals": "took"
+                    }
+                ],
+                "once": true,
+                "text": "\"There's a roll of paper in this valley I'm told I'd rather not read,\" Reed says. \"I haven't asked to.\" She signs something without looking at it. \"If it ever becomes evidence of anything, you bring it to me before you bring it to anyone else.\"",
+                "choices": [
+                    {
+                        "label": "Nothing. Carry on.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "survey_fate",
+                        "equals": "burned"
+                    }
+                ],
+                "once": true,
+                "text": "\"There was smoke on the Row and I did not go and look,\" Reed says. \"Somebody will ask what I saw. I'll tell them I was at my desk, because I was.\"",
+                "choices": [
+                    {
+                        "label": "Nothing. Carry on.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "survey_fate",
+                        "equals": "sold"
+                    }
+                ],
+                "once": true,
+                "text": "\"Word's gone round that there's a retainer paper out on you,\" Reed says, quite evenly. \"It's lawful and I can't touch it. I'll only say I'd like to know, when they first ask something of you, which side of the desk you're sitting on.\"",
+                "choices": [
+                    {
+                        "label": "Nothing. Carry on.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "survey_fate",
+                        "equals": "warned"
+                    }
+                ],
+                "once": true,
+                "text": "\"Forty-one names,\" Reed says, and taps a page she has not turned over since. \"No law broken, nobody to charge, and I wrote it all down anyway. It will be there when somebody wants it. Somebody will.\"",
+                "choices": [
+                    {
+                        "label": "Nothing. Carry on.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "quarry_fate",
                         "equals": "ash"
                     }

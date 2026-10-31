@@ -175,9 +175,17 @@
                         "label": "I've seen your mark in two places now.",
                         "conditions": [
                             {
-                                "not": {
-                                    "quest": "the_same_mark"
-                                }
+                                "any": [
+                                    {
+                                        "not": {
+                                            "quest": "the_same_mark"
+                                        }
+                                    },
+                                    {
+                                        "quest": "the_same_mark",
+                                        "stage": "two_places"
+                                    }
+                                ]
                             },
                             {
                                 "any": [
@@ -589,9 +597,17 @@
                         "label": "I've seen your mark in two places now.",
                         "conditions": [
                             {
-                                "not": {
-                                    "quest": "the_same_mark"
-                                }
+                                "any": [
+                                    {
+                                        "not": {
+                                            "quest": "the_same_mark"
+                                        }
+                                    },
+                                    {
+                                        "quest": "the_same_mark",
+                                        "stage": "two_places"
+                                    }
+                                ]
                             },
                             {
                                 "any": [
@@ -767,9 +783,17 @@
                         "label": "I've seen your mark in two places now.",
                         "conditions": [
                             {
-                                "not": {
-                                    "quest": "the_same_mark"
-                                }
+                                "any": [
+                                    {
+                                        "not": {
+                                            "quest": "the_same_mark"
+                                        }
+                                    },
+                                    {
+                                        "quest": "the_same_mark",
+                                        "stage": "two_places"
+                                    }
+                                ]
                             },
                             {
                                 "any": [
@@ -943,9 +967,17 @@
                         "label": "I've seen your mark in two places now.",
                         "conditions": [
                             {
-                                "not": {
-                                    "quest": "the_same_mark"
-                                }
+                                "any": [
+                                    {
+                                        "not": {
+                                            "quest": "the_same_mark"
+                                        }
+                                    },
+                                    {
+                                        "quest": "the_same_mark",
+                                        "stage": "two_places"
+                                    }
+                                ]
                             },
                             {
                                 "any": [
@@ -1115,9 +1147,17 @@
                         "label": "I've seen your mark in two places now.",
                         "conditions": [
                             {
-                                "not": {
-                                    "quest": "the_same_mark"
-                                }
+                                "any": [
+                                    {
+                                        "not": {
+                                            "quest": "the_same_mark"
+                                        }
+                                    },
+                                    {
+                                        "quest": "the_same_mark",
+                                        "stage": "two_places"
+                                    }
+                                ]
                             },
                             {
                                 "any": [

@@ -447,6 +447,194 @@
             {
                 "conditions": [
                     {
+                        "flag": "survey_fate",
+                        "equals": "took"
+                    },
+                    {
+                        "quest": "the_polite_man",
+                        "status": "completed"
+                    }
+                ],
+                "text": "\"You still have it,\" Corse says, the way a man asks after a bad knee. \"I have not sent anybody to ask for it back and I shall not. Do sit; it is no more binding than the last time I explained that it was not.\"",
+                "choices": [
+                    {
+                        "label": "Then I'll have the hour.",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "quest": "the_factors_house"
+                                }
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "start_quest": "the_factors_house"
+                            }
+                        ],
+                        "next": "the_long_room_invite"
+                    },
+                    {
+                        "label": "What do you buy?",
+                        "next": "what_i_buy"
+                    },
+                    {
+                        "label": "Who do you buy it for?",
+                        "next": "who_for"
+                    },
+                    {
+                        "label": "Why Rivermark?",
+                        "next": "why_rivermark"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "survey_fate",
+                        "equals": "burned"
+                    },
+                    {
+                        "quest": "the_polite_man",
+                        "status": "completed"
+                    }
+                ],
+                "text": "\"A letter has gone downriver,\" Corse says. \"It says I do not know who stood next to the fire. Every word is true and I do not expect it to be believed.\" He moves the chair out for you anyway.",
+                "choices": [
+                    {
+                        "label": "Then I'll have the hour.",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "quest": "the_factors_house"
+                                }
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "start_quest": "the_factors_house"
+                            }
+                        ],
+                        "next": "the_long_room_invite"
+                    },
+                    {
+                        "label": "What do you buy?",
+                        "next": "what_i_buy"
+                    },
+                    {
+                        "label": "Who do you buy it for?",
+                        "next": "who_for"
+                    },
+                    {
+                        "label": "Why Rivermark?",
+                        "next": "why_rivermark"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "survey_fate",
+                        "equals": "sold"
+                    },
+                    {
+                        "quest": "the_polite_man",
+                        "status": "completed"
+                    }
+                ],
+                "text": "\"Your first quarter is lodged,\" Corse says, without looking up. \"It is entered under 'services', which nobody has yet been required to define. Do sit down.\"",
+                "choices": [
+                    {
+                        "label": "Then I'll have the hour.",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "quest": "the_factors_house"
+                                }
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "start_quest": "the_factors_house"
+                            }
+                        ],
+                        "next": "the_long_room_invite"
+                    },
+                    {
+                        "label": "What do you buy?",
+                        "next": "what_i_buy"
+                    },
+                    {
+                        "label": "Who do you buy it for?",
+                        "next": "who_for"
+                    },
+                    {
+                        "label": "Why Rivermark?",
+                        "next": "why_rivermark"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "survey_fate",
+                        "equals": "warned"
+                    },
+                    {
+                        "quest": "the_polite_man",
+                        "status": "completed"
+                    }
+                ],
+                "text": "\"Nothing has come back about the granary steps,\" Corse says. \"Nobody downriver is even annoyed, which is the whole of the lesson, and I would be a poor factor if I pretended it was not.\" He indicates the chair.",
+                "choices": [
+                    {
+                        "label": "Then I'll have the hour.",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "quest": "the_factors_house"
+                                }
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "start_quest": "the_factors_house"
+                            }
+                        ],
+                        "next": "the_long_room_invite"
+                    },
+                    {
+                        "label": "What do you buy?",
+                        "next": "what_i_buy"
+                    },
+                    {
+                        "label": "Who do you buy it for?",
+                        "next": "who_for"
+                    },
+                    {
+                        "label": "Why Rivermark?",
+                        "next": "why_rivermark"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "polite_man_fate",
                         "equals": "nothing"
                     }

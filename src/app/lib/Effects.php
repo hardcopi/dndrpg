@@ -44,6 +44,15 @@ class Effects
      */
     private const MAX_DEPTH = 8;
 
+    /**
+     * The five sightings of the surveyor's mark, any two of which open
+     * `the_same_mark` (docs/ACT_ONE.md, "The spine quest chain").
+     */
+    public const SAME_MARK_FLAGS = [
+        'grain_stamp_seen', 'mark_seen_paper', 'mark_seen_book',
+        'mark_seen_plate', 'mark_seen_stone',
+    ];
+
     private PDO $db;
     private WorldState $world;
     private ?QuestService $quests = null;
@@ -165,6 +174,9 @@ class Effects
             $value = (string) ($e['value'] ?? '1');
             $this->world->set($partyId, $key, $value);
             $r['flags_set'][$key] = $value;
+            if (in_array($key, self::SAME_MARK_FLAGS, true)) {
+                $r = self::merge($r, $this->openSameMark($partyId));
+            }
             return $r;
         }
         if (isset($e['clear_flag'])) {
@@ -554,6 +566,33 @@ class Effects
             return $r;
         }
         return $this->quests()->start($partyId, $questKey);
+    }
+
+    /**
+     * Start `the_same_mark` as soon as the second sighting is recorded.
+     *
+     * The quest used to open only if the player went back to Alder Pyke, whom
+     * nothing else names, and starting it there skipped its first stage in the
+     * same click. Silent when the quest is already taken in any form, when
+     * fewer than two sightings are set, or when the party is under its level:
+     * the next sighting re-checks, and Pyke's own reply still starts it.
+     */
+    private function openSameMark(int $partyId): array
+    {
+        $seen = 0;
+        foreach (self::SAME_MARK_FLAGS as $flag) {
+            if ($this->world->isSet($partyId, $flag)) {
+                $seen++;
+            }
+        }
+        $key = 'the_same_mark';
+        if ($seen < 2
+            || $this->quests()->questByKeyOrNull($key) === null
+            || $this->quests()->statusFor($partyId, $key) !== null
+            || $this->quests()->levelGate($partyId, $key) !== null) {
+            return self::blank();
+        }
+        return $this->quests()->start($partyId, $key);
     }
 
     private function startCombat(string $encounterKey): array
