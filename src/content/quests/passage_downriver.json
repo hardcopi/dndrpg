@@ -43,10 +43,11 @@
         },
         "not_yet": {
             "title": "Not on this one",
+            "objective": "The boat goes on the second and the fifth. Sixty gold and a name in Osgar Tull's book, whenever you are ready.",
             "journal": "Tull says the boat goes on the second and the fifth whether I am on it or not, and that in nineteen years he has never once had to persuade anybody twice. I am not finished up here.",
-            "resolution": "not_yet",
-            "terminal": true,
-            "outcome": "neutral",
+            "target": {
+                "location": "packet_stair"
+            },
             "effects": [
                 {
                     "set_flag": "passage_fate",

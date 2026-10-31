@@ -142,6 +142,15 @@ class QuestService
         }
 
         if (!$row) {
+            // advance() creates the row itself, so it has to honour the level
+            // gate start() does — otherwise a stage effect on a first-level
+            // party takes (and pays out) a quest they are too low for. A note
+            // rather than a throw, as start() does for its other refusals.
+            if ($this->leaderLevel($partyId) < (int) $quest['required_level']) {
+                $r = Effects::blank();
+                $r['notes'][] = "{$quest['title']} needs a higher level; not taken.";
+                return $r + ['ok' => true, 'quest' => $quest];
+            }
             $this->db->prepare(
                 'INSERT INTO party_quests (party_id, quest_id, status, started_at)
                  VALUES (?,?,\'active\',NOW())'

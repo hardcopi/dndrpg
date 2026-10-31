@@ -110,7 +110,7 @@
             "exits": [
                 {"to": "deep_shaft", "label": "Back up the far side to the shaft"},
                 {"to": "warlord_hall", "label": "Up the low end to the hall"},
-                {"to": "spoil_stair", "label": "Down through the broken floor, on the goblins' rope", "conditions": [{"flag":"warren_floor_fate"}], "hidden": true}
+                {"to": "spoil_stair", "label": "Down through the broken floor, on the goblins' rope", "conditions": [{"any": [{"flag":"warren_floor_fate"}, {"all": [{"flag":"warlord_hall_taken"}, {"level_at_least": 4}]}]}]}
             ]
         }
     }

@@ -124,7 +124,25 @@
                                 }
                             }
                         ],
-                        "next": "she_goes_anyway"
+                        "next": "she_goes_anyway",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "flag": "passage_fate",
+                                    "equals": "waiting"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Not on this one.",
+                        "next": "she_goes_anyway",
+                        "conditions": [
+                            {
+                                "flag": "passage_fate",
+                                "equals": "waiting"
+                            }
+                        ]
                     }
                 ]
             },
@@ -189,7 +207,25 @@
                                 }
                             }
                         ],
-                        "next": "she_goes_anyway"
+                        "next": "she_goes_anyway",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "flag": "passage_fate",
+                                    "equals": "waiting"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Not yet.",
+                        "next": "she_goes_anyway",
+                        "conditions": [
+                            {
+                                "flag": "passage_fate",
+                                "equals": "waiting"
+                            }
+                        ]
                     }
                 ]
             }
