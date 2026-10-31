@@ -22,6 +22,13 @@ USER="tok_${SUFFIX}"
 PASS_FAILED=0
 PASS_OK=0
 
+# The session's CSRF token. Every cookie POST has to carry it as X-CSRF-Token
+# (csrf_enforce in app/bootstrap.php); auth/status hands it out.
+csrf_of() { # csrf_of <jar>
+  curl -s -b "$1" -c "$1" "$BASE/api/index.php?r=auth/status" \
+    | python3 -c 'import json,sys; print(json.load(sys.stdin).get("csrf_token") or "")'
+}
+
 cleanup() {
   docker compose -f "$COMPOSE_DIR/docker-compose.yml" exec -T db \
     mysql -uweb -pdevpassword rpg_5e -e "
@@ -48,7 +55,7 @@ token_api() { # token_api <token> <route> [json]
 cookie_api() { # cookie_api <jar> <route> [json]
   local jar=$1 route=$2
   if [ $# -ge 3 ]; then
-    curl -s -b "$jar" -c "$jar" -X POST -H 'Content-Type: application/json' \
+    curl -s -H "X-CSRF-Token: $(csrf_of "$jar")" -b "$jar" -c "$jar" -X POST -H 'Content-Type: application/json' \
       -d "$3" "$BASE/api/index.php?r=$route"
   else
     curl -s -b "$jar" -c "$jar" "$BASE/api/index.php?r=$route"

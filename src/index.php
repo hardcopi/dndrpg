@@ -52,6 +52,7 @@ require_signed_in_page();
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <?= csrf_meta() ?>
   <title>Rivermark Chronicles — Open 5e RPG</title>
   <link rel="stylesheet" href="<?= asset('assets/css/style.css') ?>">
   <link rel="stylesheet" href="<?= asset('assets/css/picker.css') ?>">
@@ -112,7 +113,7 @@ require_signed_in_page();
     Not affiliated with any trademark holders. See <a href="about.php">Legal</a>.
   </footer>
 
-  <script src="assets/js/api.js"></script>
+  <script src="<?= asset('assets/js/api.js') ?>"></script>
   <script>
     function esc(s) {
       return String(s ?? '').replace(/[&<>"']/g, (c) => ({

@@ -16,6 +16,7 @@ require_admin_page();
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <?= csrf_meta() ?>
   <title>Content — Rivermark Chronicles</title>
   <link rel="stylesheet" href="<?= asset('assets/css/style.css') ?>">
 </head>
@@ -59,7 +60,7 @@ require_admin_page();
 
   <p class="admin-error" id="ce-error" role="alert" aria-live="polite"></p>
 
-  <script src="assets/js/api.js"></script>
+  <script src="<?= asset('assets/js/api.js') ?>"></script>
   <script src="assets/js/ui-dialog-graph.js"></script>
   <script src="assets/js/ui-content.js"></script>
 </body>

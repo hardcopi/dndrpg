@@ -31,11 +31,143 @@ function request_has_bearer(): bool
     return preg_match('/^Bearer\s+\S+/i', $header) === 1;
 }
 
+/**
+ * True when this request arrived over TLS.
+ *
+ * Read from what PHP-FPM was told by nginx itself — `HTTPS` from fastcgi_params,
+ * or the port it accepted on — and never from X-Forwarded-Proto. hermes has no
+ * proxy in front of it, so that header can only have been written by the
+ * client, and trusting it would let anybody switch the Secure flag off.
+ */
+function request_is_https(): bool
+{
+    $https = strtolower((string) ($_SERVER['HTTPS'] ?? ''));
+    if ($https !== '' && $https !== 'off') {
+        return true;
+    }
+    return (string) ($_SERVER['SERVER_PORT'] ?? '') === '443';
+}
+
+/**
+ * The session cookie's attributes, in one place.
+ *
+ * session_start(), session_regenerate_id() and anything that ever expires the
+ * cookie all have to send the same path, domain and flags, or the browser keeps
+ * two cookies under one name and sends whichever it likes. So they all read
+ * this rather than restating it.
+ *
+ * The lifetime and domain are left as php.ini has them, and the name stays
+ * PHPSESSID: an existing signed-in session has to survive the deploy that adds
+ * these flags, and changing either would orphan the cookie it is carried in.
+ * Secure is conditional so the plain-http dev stack still has a session at all.
+ */
+function session_cookie_params(): array
+{
+    return [
+        'lifetime' => (int) ini_get('session.cookie_lifetime'),
+        'path'     => '/',
+        'domain'   => (string) ini_get('session.cookie_domain'),
+        'secure'   => request_is_https(),
+        'httponly' => true,
+        'samesite' => 'Lax',
+    ];
+}
+
 if (session_status() === PHP_SESSION_NONE) {
     if (request_has_bearer()) {
         $_SESSION = [];
     } else {
+        // Strict mode refuses a session id the server never issued, which is
+        // what makes fixation need a real stolen id rather than an invented
+        // one. Ids that already exist on disk — the owner's, mid-deploy — are
+        // still accepted.
+        ini_set('session.use_strict_mode', '1');
+        ini_set('session.use_only_cookies', '1');
+        if (!headers_sent()) {
+            session_set_cookie_params(session_cookie_params());
+        }
         session_start();
+    }
+}
+
+/** Where the CSRF token lives in $_SESSION. */
+const CSRF_SESSION_KEY = 'csrf_token';
+
+/**
+ * This session's CSRF token, made on first ask.
+ *
+ * Lazily, so a session that began before tokens existed is handed one on its
+ * next page load or auth/status rather than being signed out for lacking it.
+ * Auth unsets it whenever the session id is regenerated, so a token learned
+ * against a planted session id dies with that id.
+ */
+function csrf_token(): string
+{
+    $token = $_SESSION[CSRF_SESSION_KEY] ?? null;
+    if (!is_string($token) || strlen($token) !== 64) {
+        $token = bin2hex(random_bytes(32));
+        $_SESSION[CSRF_SESSION_KEY] = $token;
+    }
+    return $token;
+}
+
+/** The `<meta>` api.js reads its token from. Goes in the <head> of any page that loads it. */
+function csrf_meta(): string
+{
+    return '<meta name="csrf-token" content="'
+        . htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8') . '">';
+}
+
+/**
+ * Whether this request has to prove it came from one of our own pages.
+ *
+ * Every method that can change something does, with three exemptions that are
+ * each about there being no ambient credential to ride on:
+ *
+ * - A Bearer request. The secret is in a header a cross-site page cannot set,
+ *   and bootstrap never even starts the cookie session for one.
+ * - Safe methods. Nothing behind GET is meant to change game state; the two
+ *   that touch bookkeeping (dialogue/npc, inventory/store) say so where they
+ *   do it.
+ * - A request with no session cookie AND none of the headers every current
+ *   browser puts on a cross-site POST (Origin, Sec-Fetch-*). That is the Unity
+ *   player and the curl harnesses signing in to get a token — they have no
+ *   page to read a token from. A browser cannot qualify: a forged login from
+ *   another site always carries Origin, so login CSRF stays closed even for a
+ *   visitor with no cookie yet.
+ */
+function csrf_required(): bool
+{
+    $method = strtoupper((string) ($_SERVER['REQUEST_METHOD'] ?? 'GET'));
+    if (in_array($method, ['GET', 'HEAD', 'OPTIONS'], true)) {
+        return false;
+    }
+    if (request_has_bearer()) {
+        return false;
+    }
+    if (isset($_COOKIE[session_name()])) {
+        return true;
+    }
+    return isset($_SERVER['HTTP_ORIGIN'])
+        || isset($_SERVER['HTTP_SEC_FETCH_SITE'])
+        || isset($_SERVER['HTTP_SEC_FETCH_MODE']);
+}
+
+/**
+ * Refuse a state-changing request that does not carry this session's token.
+ *
+ * The flag in the answer is what api.js keys its one refresh-and-retry on, so a
+ * tab holding a token from before a login elsewhere recovers by itself.
+ */
+function csrf_enforce(): void
+{
+    if (!csrf_required()) {
+        return;
+    }
+    $sent = (string) ($_SERVER['HTTP_X_CSRF_TOKEN'] ?? '');
+    $held = $_SESSION[CSRF_SESSION_KEY] ?? null;
+    if ($sent === '' || !is_string($held) || !hash_equals($held, $sent)) {
+        json_error('This page is out of date with your session. Reload it and try again.', 403, ['csrf' => true]);
     }
 }
 
@@ -195,9 +327,12 @@ function json_error(string $message, int $code = 400, array $extra = []): void
 
 function read_json_body(): array
 {
+    // JSON only. This used to fall back to $_POST, which made every route
+    // reachable by a plain cross-site <form> — no script, no preflight. Every
+    // client we have (api.js, Unity, the curl harnesses) sends JSON.
     $raw = file_get_contents('php://input');
     if ($raw === false || $raw === '') {
-        return $_POST ?: [];
+        return [];
     }
     $data = json_decode($raw, true);
     return is_array($data) ? $data : [];

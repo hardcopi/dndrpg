@@ -15,6 +15,10 @@ if (strtoupper((string) ($_SERVER['REQUEST_METHOD'] ?? 'GET')) === 'OPTIONS') {
     exit;
 }
 
+// Before routing, so no handler can forget it. See csrf_required() for who is
+// exempt and why.
+csrf_enforce();
+
 $route = $_GET['r'] ?? '';
 if ($route === '' && isset($_SERVER['PATH_INFO'])) {
     $route = trim($_SERVER['PATH_INFO'], '/');
@@ -129,19 +133,40 @@ function handle_auth(string $action): void
             'is_admin'           => $auth->isAdmin(),
             'registration_open'  => $auth->registrationOpen(),
             'via'                => $user === null ? null : ($auth->usingToken() ? 'token' : 'session'),
+            // How a page whose token went stale gets the current one: api.js
+            // asks here once after a 403 csrf and retries. Null for a Bearer
+            // client, which has no session to hold one.
+            'csrf_token'         => auth_csrf_token(),
         ]);
     }
 
     if ($action === 'login') {
         require_method('POST');
         $body = read_json_body();
-        $user = $auth->login((string) ($body['username'] ?? ''), (string) ($body['password'] ?? ''));
+        $username = (string) ($body['username'] ?? '');
+        $ip = (string) ($_SERVER['REMOTE_ADDR'] ?? '');
+        $throttle = new LoginThrottle();
+
+        // Refused before the password is looked at, so a locked name costs a
+        // guesser a request and teaches them nothing — not even whether the
+        // guess would have been right. Allowed attempts are counted HERE, in
+        // the same locked step as the check, not after a wrong password: a
+        // burst sent all at once would otherwise all pass the check before
+        // any of them was counted. A wrong password therefore needs nothing
+        // further; a right one is forgiven below.
+        login_throttle_refuse($throttle->reserveLogin($username, $ip));
+        $user = $auth->login($username, (string) ($body['password'] ?? ''));
+        $throttle->loginSucceeded($username, $ip);
+
         $issued = $auth->issueToken((int) $user['id'], (string) ($body['client'] ?? 'api'));
         json_response([
             'ok'         => true,
             'user'       => ['id' => (int) $user['id'], 'username' => $user['username'], 'role' => $user['role']],
             'token'      => $issued['token'],
             'expires_at' => $issued['expires_at'],
+            // The session id was just regenerated and the old token went with
+            // it; this is the one the page has to send from now on.
+            'csrf_token' => auth_csrf_token(),
         ]);
     }
 
@@ -150,6 +175,9 @@ function handle_auth(string $action): void
         if (!$auth->registrationOpen()) {
             json_error('Registration is closed on this server.', 403);
         }
+        $ip = (string) ($_SERVER['REMOTE_ADDR'] ?? '');
+        $throttle = new LoginThrottle();
+        login_throttle_refuse($throttle->reserveRegister($ip));
         $body = read_json_body();
         $user = $auth->register(
             (string) ($body['username'] ?? ''),
@@ -166,16 +194,45 @@ function handle_auth(string $action): void
             'user'       => ['id' => (int) $user['id'], 'username' => $user['username'], 'role' => $user['role']],
             'token'      => $issued['token'],
             'expires_at' => $issued['expires_at'],
+            'csrf_token' => auth_csrf_token(),
         ]);
     }
 
     if ($action === 'logout') {
         require_method('POST');
         $auth->logout();
-        json_response(['ok' => true]);
+        json_response(['ok' => true, 'csrf_token' => auth_csrf_token()]);
     }
 
     json_error('Unknown auth action', 404);
+}
+
+/** The session's CSRF token for an auth response, or null for a Bearer client. */
+function auth_csrf_token(): ?string
+{
+    return request_has_bearer() ? null : csrf_token();
+}
+
+/**
+ * Answer a locked sign-in with a 429 that says how long, and nothing else.
+ *
+ * The same words whether the name exists or not, and whether it was the name
+ * or the address that ran out — either distinction would tell a guesser
+ * something the plain "do not match" message is careful not to.
+ */
+function login_throttle_refuse(int $retryAfter): void
+{
+    if ($retryAfter <= 0) {
+        return;
+    }
+    $minutes = (int) ceil($retryAfter / 60);
+    header('Retry-After: ' . $retryAfter);
+    json_error(
+        'Too many sign-in attempts. Wait ' . $minutes . ' minute' . ($minutes === 1 ? '' : 's')
+            . ' and try again.',
+        429,
+        ['retry_after' => $retryAfter]
+    );
 }
 
 /**
@@ -2387,6 +2444,8 @@ function handle_inventory(string $action): void
     // a shop.
     if ($action === 'store') {
         $id = inventory_owner($_GET);
+        // stock() writes, but only to re-derive the shelf from `items` — the
+        // same rows every time — so a forged GET changes nothing anybody owns.
         $store = new GeneralStore($db);
         $store->stock();
         $char = (new CharacterGenerator($db))->getCharacter($id);
@@ -2571,6 +2630,10 @@ function handle_dialogue(string $action): void
     $map = new LocationEngine($db);
 
     if ($action === 'npc') {
+        // A GET that writes, knowingly: it marks the NPC known, which only
+        // ever adds a name to your own map. game.js asks it by GET, and a
+        // forged one can do no more than introduce you to somebody you were
+        // standing next to.
         $npcId = (int) ($_GET['npc_id'] ?? read_json_body()['npc_id'] ?? 0);
         $charId = session_character_id();
         $npc = $map->getNpc($npcId);
@@ -2588,6 +2651,10 @@ function handle_dialogue(string $action): void
     // are kept so seeded dialogue with hardcoded verbs still answers; authored
     // content goes through these three.
     if ($action === 'node') {
+        // POST only: entering a node marks the speaker known, and both
+        // clients (ui-dialog.js, Unity's LocationScreen) already POST it. As
+        // a GET it was a write reachable from an <img> on any site.
+        require_method('POST');
         $id = require_character_id();
         $partyId = require_party_id();
         $body = read_json_body();

@@ -15,6 +15,7 @@ $me = require_admin_page();
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <?= csrf_meta() ?>
   <title>Accounts — Rivermark Chronicles</title>
   <link rel="stylesheet" href="<?= asset('assets/css/style.css') ?>">
 </head>
@@ -77,7 +78,7 @@ $me = require_admin_page();
 
   <div id="modal-root" class="hidden"></div>
 
-  <script src="assets/js/api.js"></script>
+  <script src="<?= asset('assets/js/api.js') ?>"></script>
   <script>
     (function () {
       'use strict';

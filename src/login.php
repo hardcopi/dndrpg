@@ -40,6 +40,7 @@ $mode = ($_GET['mode'] ?? '') === 'register' && $registrationOpen ? 'register' :
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <?= csrf_meta() ?>
   <title><?= $mode === 'register' ? 'Create an account' : 'Sign in' ?> — Rivermark Chronicles</title>
   <link rel="stylesheet" href="<?= asset('assets/css/style.css') ?>">
   <link rel="stylesheet" href="<?= asset('assets/css/login.css') ?>">
@@ -116,7 +117,7 @@ $mode = ($_GET['mode'] ?? '') === 'register' && $registrationOpen ? 'register' :
     </div>
   </div>
 
-  <script src="assets/js/api.js"></script>
+  <script src="<?= asset('assets/js/api.js') ?>"></script>
   <script>
     (function () {
       const form = document.getElementById('auth-form');

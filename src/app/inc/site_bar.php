@@ -71,12 +71,22 @@ if ($signedIn) {
     btn.addEventListener('click', function (e) {
       e.preventDefault();
       var go = function () { location.href = 'login.php'; };
-      var req = (window.API && typeof window.API.post === 'function')
-        ? window.API.post('auth/logout', {})
+      // `typeof`, not `window.API`: api.js declares it with `const`, which
+      // never becomes a property of window, so the old test was always false
+      // and every page took the bare fetch below.
+      //
+      // The bare fetch carries the CSRF token too — about.php and the other
+      // pages without api.js have no other way to sign out. Read from the
+      // <meta> where a page has one (api.js keeps it current), else the
+      // token this include was rendered with.
+      var meta = document.querySelector('meta[name="csrf-token"]');
+      var token = meta ? meta.getAttribute('content') : <?= json_encode(csrf_token()) ?>;
+      var req = (typeof API !== 'undefined' && typeof API.post === 'function')
+        ? API.post('auth/logout', {})
         : fetch('api/?r=auth/logout', {
             method: 'POST',
             credentials: 'same-origin',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': token },
             body: '{}'
           });
       req.then(go, go);

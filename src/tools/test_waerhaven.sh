@@ -23,6 +23,13 @@ USER="wh_${SUFFIX}"
 PASS='a-good-long-password'
 FAILED=0; OK=0
 
+# The session's CSRF token. Every cookie POST has to carry it as X-CSRF-Token
+# (csrf_enforce in app/bootstrap.php); auth/status hands it out.
+csrf_of() { # csrf_of <jar>
+  curl -s -b "$1" -c "$1" "$BASE/api/index.php?r=auth/status" \
+    | python3 -c 'import json,sys; print(json.load(sys.stdin).get("csrf_token") or "")'
+}
+
 db() {
   docker compose -f "$COMPOSE_DIR/docker-compose.yml" exec -T db \
     mysql -uweb -pdevpassword --default-character-set=utf8mb4 rpg_5e "$@" 2>/dev/null
@@ -40,7 +47,7 @@ trap cleanup EXIT
 api() {
   local route=$1
   if [ $# -ge 2 ]; then
-    curl -s -b "$JAR" -c "$JAR" -X POST -H 'Content-Type: application/json' \
+    curl -s -H "X-CSRF-Token: $(csrf_of "$JAR")" -b "$JAR" -c "$JAR" -X POST -H 'Content-Type: application/json' \
       -d "$2" "$BASE/api/index.php?r=$route"
   else
     curl -s -b "$JAR" -c "$JAR" "$BASE/api/index.php?r=$route"
@@ -99,11 +106,12 @@ jar, base = sys.argv[1], sys.argv[2]
 def api(route, body=None):
     cmd = ['curl','-s','-b',jar,'-c',jar]
     if body is not None:
-        cmd += ['-X','POST','-H','Content-Type: application/json','-d',json.dumps(body)]
+        cmd += ['-X','POST','-H','Content-Type: application/json','-H','X-CSRF-Token: ' + CSRF,'-d',json.dumps(body)]
     cmd += [f'{base}/api/index.php?r={route}']
     out = subprocess.run(cmd, capture_output=True, text=True).stdout
     try: return json.loads(out)
     except Exception: return {}
+CSRF = api('auth/status').get('csrf_token') or ''
 seen, order = set(), collections.deque()
 state = api('location/current')
 here = state.get('location', {})
