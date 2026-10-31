@@ -11,9 +11,9 @@ window.RIVERMARK_SCENES = {
     },
     npcs: {
       captain_elowen: { x: 57.8, y: 60.6 },
-      market_farmer: { x: 11.9, y: 53.9 },
-      sera: { x: 30, y: 58 },
-      market_baker: { x: 44, y: 50 }
+      sera: { x: 11.9, y: 53.9 },
+      market_farmer: { x: 21, y: 63 },
+      market_baker: { x: 55, y: 42 }
     },
     objects: [
       { label: 'the well', x: 58, y: 70, act: 'search' },

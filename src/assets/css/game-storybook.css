@@ -93,3 +93,85 @@ body.game-page .hud-party .party-name, body.game-page .person-name { color: #e8b
 body.game-page .hud-log, body.game-page .hud-quest { color: #f5e6c4; }
 body.game-page .scene-chip:disabled { opacity: .75; cursor: not-allowed; }
 @media (min-width:1180px) { body.game-page .loc-inner.scene-storybook { max-height: none; overflow: visible; } }
+
+/* ------------------------------------------------------------------ *
+   Review pass: the Amiga skin's navy panels win on specificity in a few
+   places (the .loc-sheet group, people cards, the window, dialogue panel).
+   Re-tint them plum here rather than editing game-amiga.css, so the whole
+   storybook look can be reverted by dropping this file.
+ * ------------------------------------------------------------------ */
+body.game-page {
+  --gw-frame: #1a1220;
+  --dlg-panel-top: #2e2034;
+  --dlg-panel-bottom: #1a1220;
+}
+body.game-page .gw-window {
+  background: radial-gradient(ellipse at 30% 0%, #3a2a40 0, #1a1220 70%);
+  box-shadow: inset 0 0 0 2px #a8742a, inset 0 0 0 5px #1a1220, 0 0 0 1px #5a3e22;
+}
+body.game-page .loc-stage,
+body.game-page .loc-ways,
+body.game-page .loc-sheet,
+body.game-page .loc-map .loc-actions { background: linear-gradient(180deg, #2e2034 0%, #21172a 100%); border-color: #5a3e22; }
+body.game-page .hud-people .person { background: linear-gradient(180deg, #34243a 0%, #251a2d 100%); border-color: #5a3e22; }
+body.game-page .hud-people .person:hover,
+body.game-page .hud-people .person:focus-visible { background: linear-gradient(180deg, #402c45 0%, #2b1d33 100%); border-color: #e8b44a; }
+body.game-page .hud-party .party-face,
+body.game-page .hud-people .person-face { background: #120c14; }
+body.game-page .loc-ways .loc-act { background: linear-gradient(180deg, #34243a 0%, #251a2d 100%); border-color: #5a3e22; }
+body.game-page .loc-ways .loc-act:hover:not(:disabled) { background: linear-gradient(180deg, #402c45 0%, #2b1d33 100%); border-color: #e8b44a; }
+body.game-page .icon-btn,
+body.game-page .chip,
+body.game-page .act-slot.loc-act { border-color: #a8742a; }
+body.game-page .chip { background: #2a1c2a; }
+body.game-page .dlg-panel { background: linear-gradient(180deg, #2e2034 0%, #1a1220 100%); box-shadow: inset 0 0 0 2px #a8742a, 0 8px 24px #000a; }
+body.game-page .dlg-bust { background: #120c14; }
+
+/* The parchment. Same selector weight as the Amiga .loc-sheet group plus the
+   scene class, so it wins without !important. */
+body.game-page .loc-inner.scene-storybook .loc-sheet.scene-narration {
+  position: relative;
+  padding: 12px 20px 14px;
+  color: #2a1a10;
+  background: linear-gradient(#f5e6c4, #ead3a2);
+  border: 2px solid #000;
+  border-radius: 4px;
+  outline: 0;
+  box-shadow: 0 0 0 2px #a8742a, 0 0 0 4px #000, inset 0 0 30px #a8742a55;
+  overflow: visible;
+}
+body.game-page .loc-inner.scene-storybook .scene-narration .loc-name {
+  display: inline-block;
+  padding: 0;
+  background: none;
+  border: 0;
+  color: #6e2230;
+  font: 700 17px 'Cinzel', serif;
+  letter-spacing: 2px;
+  text-shadow: none;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+body.game-page .loc-inner.scene-storybook .scene-subtitle { color: #6b4a2a; font: italic 14px 'Alegreya', serif; }
+body.game-page .loc-inner.scene-storybook .loc-read { color: #2a1a10; }
+body.game-page .loc-inner.scene-storybook .loc-prose .loc-first,
+body.game-page .loc-inner.scene-storybook .loc-prose .loc-ambience { font-style: italic; color: #4a3020; }
+/* Only the very first paragraph gets the drop cap. */
+body.game-page .loc-inner.scene-storybook .loc-prose p:not(:first-child):first-letter { float: none; margin: 0; color: inherit; font: inherit; }
+body.game-page .loc-inner.scene-storybook .scene-narration-links { color: #5a3a20; }
+body.game-page .loc-inner.scene-storybook .scene-narration-links .scene-notice,
+body.game-page .loc-inner.scene-storybook .scene-narration-links .scene-way { min-height: 0; padding: 0; box-shadow: none; background: transparent; border: 0; border-bottom: 1px dotted currentColor; border-radius: 0; text-transform: none; letter-spacing: 0; }
+body.game-page .loc-inner.scene-storybook .scene-narration-links .scene-notice { color: #6e2230; }
+body.game-page .loc-inner.scene-storybook .scene-narration-links .scene-way { color: #8a5d1f; }
+body.game-page .loc-inner.scene-storybook .scene-narration-links .scene-way:disabled { color: #81776b; }
+
+/* The bezel around the picture, as in the mockup. */
+body.game-page .scene-paint { border: 2px solid #000; outline: 0; border-radius: 4px; box-shadow: 0 0 0 2px #a8742a, 0 0 0 4px #000, 0 8px 20px #000a; }
+/* Hotspot labels follow the mockup's sizes and the hover lifts them a touch. */
+body.game-page .paint-hotspot { min-height: 0; box-shadow: none; text-transform: none; }
+body.game-page .paint-hotspot:hover .paint-label,
+body.game-page .paint-hotspot:focus-visible .paint-label { background: #2e2034f2; box-shadow: 0 0 0 1px currentColor, 0 2px 10px #000; }
+body.game-page .paint-hotspot:focus-visible { outline: none; }
+body.game-page .scene-chip { min-height: 0; text-transform: none; }
+/* On a phone the scene is small: tools move to the bottom corner so they do not sit on the exit labels along the top. */
+@media (max-width: 720px) { body.game-page .scene-tools { top: auto; bottom: 4px; } }
