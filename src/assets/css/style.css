@@ -5619,7 +5619,8 @@ body.bm-pan-ready .battlemap { cursor: grab; }
    reason: `.bm-ring` is which side, `.is-selected` is what Attack will hit,
    `.bm-turn` is whose turn it is. SVG has no ::before, so the turn marker has
    to be a real element — the one place the card technique does not port. */
-.bm-token { cursor: pointer; transition: transform var(--dur-tap) var(--ease-linear); }
+/* A walk slides square to square (ui-combat.js STEP_MS is 110ms a square). */
+.bm-token { cursor: pointer; transition: transform 110ms var(--ease-linear); }
 .bm-hit-token { fill: transparent; }
 /* The acting figure is dragged to walk. The rest of the board stays pan-y,
    so a finger on empty ground still scrolls and the camera still pans. */
@@ -5728,6 +5729,105 @@ body.bm-pan-ready .battlemap { cursor: grab; }
   .bm-float text { animation: bm-hold var(--dur-rise) steps(1) forwards; }
   .bm-bolt, .bm-trail { animation: none; opacity: 0; }
   @keyframes bm-hold { 0%, 80% { opacity: 1; } 100% { opacity: 0; } }
+}
+
+/* --- atmosphere: torchlight, dust, and a blow landing ------------------
+   Paint that moves. Lengths are cells (see above). Everything here stops
+   under prefers-reduced-motion and the light simply stays lit. */
+.bm-light, .bm-motes { pointer-events: none; }
+.bm-glow {
+  mix-blend-mode: screen;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: bm-flicker 2.2s ease-in-out infinite alternate;
+}
+.bm-flame {
+  transform-box: fill-box;
+  transform-origin: 50% 90%;
+  animation: bm-flame 1.8s ease-in-out infinite alternate;
+}
+@keyframes bm-flicker {
+  0%   { opacity: 0.78; transform: scale(0.97); }
+  22%  { opacity: 0.95; transform: scale(1.02); }
+  41%  { opacity: 0.7;  transform: scale(0.95); }
+  63%  { opacity: 1;    transform: scale(1.03); }
+  100% { opacity: 0.84; transform: scale(0.99); }
+}
+@keyframes bm-flame {
+  0%   { transform: scale(0.9, 0.85) skewX(-4deg); opacity: 0.85; }
+  35%  { transform: scale(1.05, 1.12) skewX(3deg); opacity: 1; }
+  70%  { transform: scale(0.95, 0.92) skewX(-2deg); opacity: 0.9; }
+  100% { transform: scale(1.02, 1.05) skewX(4deg); opacity: 1; }
+}
+.bm-mote { opacity: 0; animation: bm-drift 12s linear infinite; }
+.bm-mote.is-dust   { fill: #ffe6b0; }
+.bm-mote.is-pollen { fill: #f4f0b8; }
+@keyframes bm-drift {
+  0%   { transform: translate(0, 0); opacity: 0; }
+  15%  { opacity: 0.55; }
+  85%  { opacity: 0.45; }
+  100% { transform: translate(var(--mx, 0.4px), -1.4px); opacity: 0; }
+}
+
+/* A blow landing: the figure flashes and flinches on its own body, never on
+   the token group (whose transform is its position). */
+.bm-body { transform-box: view-box; }
+.bm-token.is-struck .bm-body { animation: bm-flinch 0.42s ease-out; }
+.bm-token.is-crit .bm-body   { animation: bm-flinch-big 0.46s ease-out; }
+.bm-token.is-struck .bm-figure,
+.bm-token.is-struck .bm-face,
+.bm-token.is-crit .bm-figure,
+.bm-token.is-crit .bm-face { animation: bm-hurt 0.42s ease-out; }
+.bm-token.is-healed .bm-figure,
+.bm-token.is-healed .bm-face { animation: bm-healed 0.46s ease-out; }
+@keyframes bm-flinch {
+  0% { transform: translate(0, 0); }
+  20% { transform: translate(0.09px, 0); }
+  45% { transform: translate(-0.07px, 0); }
+  70% { transform: translate(0.04px, 0); }
+  100% { transform: translate(0, 0); }
+}
+@keyframes bm-flinch-big {
+  0% { transform: translate(0, 0); }
+  15% { transform: translate(0.16px, -0.03px); }
+  35% { transform: translate(-0.13px, 0.02px); }
+  60% { transform: translate(0.08px, 0); }
+  100% { transform: translate(0, 0); }
+}
+@keyframes bm-hurt {
+  0%   { filter: brightness(2.2) sepia(1) saturate(6) hue-rotate(-30deg); }
+  100% { filter: none; }
+}
+@keyframes bm-healed {
+  0%   { filter: brightness(1.8) sepia(1) saturate(4) hue-rotate(60deg); }
+  100% { filter: none; }
+}
+/* While sliding along a path: a small step bob. */
+.bm-token.is-walking .bm-body { animation: bm-step 0.22s ease-in-out infinite alternate; }
+@keyframes bm-step {
+  from { transform: translate(0, 0); }
+  to   { transform: translate(0, -0.07px); }
+}
+/* The board jolts a little on a hit and more on a crit. */
+.battlemap.is-jolt     { animation: bm-jolt 0.24s ease-out; }
+.battlemap.is-jolt-big { animation: bm-jolt-big 0.3s ease-out; }
+@keyframes bm-jolt {
+  0%, 100% { transform: translate(0, 0); }
+  30% { transform: translate(2px, 1px); }
+  65% { transform: translate(-1px, -1px); }
+}
+@keyframes bm-jolt-big {
+  0%, 100% { transform: translate(0, 0); }
+  20% { transform: translate(5px, 2px); }
+  45% { transform: translate(-4px, -2px); }
+  70% { transform: translate(2px, 1px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bm-glow, .bm-flame { animation: none; }
+  .bm-mote { animation: none; opacity: 0; }
+  .bm-token { transition: none; }
+  .bm-token .bm-body, .bm-token .bm-figure, .bm-token .bm-face,
+  .battlemap.is-jolt, .battlemap.is-jolt-big { animation: none; }
 }
 
 .bm-hp-back { fill: rgba(0, 0, 0, 0.65); }
