@@ -106,6 +106,337 @@ final class BattleMapGen
     ];
 
     /**
+     * Set pieces: the furniture of a palette laid out the way somebody would
+     * actually have left it, instead of rectangles dropped at random.
+     *
+     * Each layout is the CORRIDOR between the two deployment zones — eight
+     * columns (x 4..11) by twelve rows — drawn as text. A letter is a piece
+     * (see PIECES): what terrain it stamps and which pictures may stand on it.
+     * `.` leaves the ground alone. Rows 0 and 11 are under the rim on a walled
+     * palette, so a layout simply leaves them empty.
+     *
+     * The layouts are drawn for sense first: pillars in pairs either side of
+     * the lane, a low wall you can crouch behind halfway across, rubble at the
+     * foot of whatever broke, a pit in the middle you have to go round. Every
+     * one is symmetric enough that neither side starts with all the cover.
+     *
+     * Variety comes from the seed: which layout, whether it is mirrored
+     * top-to-bottom or left-to-right, and a nudge of up to a cell for each
+     * piece of furniture where the ground allows (then the art and the decals
+     * draw from the same stream). That is plenty — the same seed still
+     * builds the same board, which is the property worth keeping (see the
+     * class comment).
+     */
+    private const LAYOUTS = [
+        'arena' => [
+            [   // a pillared floor: two pairs of columns, low walls at the middle
+                '........',
+                '.A....R.',
+                '.P....P.',
+                '.r....r.',
+                '...WW...',
+                '........',
+                '........',
+                '...WW...',
+                '.r....r.',
+                '.P....P.',
+                '.R....A.',
+                '........',
+            ],
+            [   // the training yard: staggered barricades and weapon racks
+                '........',
+                '..A.....',
+                '..F.....',
+                '..F...R.',
+                '..F.....',
+                '......rr',
+                'rr......',
+                '.....F..',
+                '.....F..',
+                '.R...F..',
+                '.....A..',
+                '........',
+            ],
+            [   // the ruin: a broken wall either side of a pit
+                '......R.',
+                '...rr...',
+                '..WWW...',
+                '........',
+                '.p......',
+                '...OO...',
+                '...OO...',
+                '......p.',
+                '........',
+                '...WWW..',
+                '...rr...',
+                '.R......',
+            ],
+            [   // the fallen roof: beams down, barrels where they were stored
+                '........',
+                '........',
+                '...BBB..',
+                '...rr...',
+                '.R......',
+                '.R....P.',
+                '.P....R.',
+                '......R.',
+                '...rr...',
+                '..BBB...',
+                '........',
+                '........',
+            ],
+        ],
+        'interior' => [
+            [   // tables in two rows, a pair of posts, stores by the wall
+                '........',
+                '.RR...C.',
+                '........',
+                '.oo..oo.',
+                '........',
+                '...n....',
+                '....n...',
+                '........',
+                '.oo..oo.',
+                '........',
+                '.C...RR.',
+                '........',
+            ],
+            [   // the brawl: a long table down the middle, one table thrown over
+                '........',
+                '..R..n..',
+                '........',
+                '..ooo...',
+                '......T.',
+                '..r...T.',
+                '.T......',
+                '.T...r..',
+                '...ooo..',
+                '........',
+                '..n..C..',
+                '........',
+            ],
+        ],
+        'street' => [
+            [   // stalls along the edges, a well in the square
+                '........',
+                '.oo...o.',
+                '........',
+                '....r...',
+                '..o.....',
+                '.....n..',
+                '..n.....',
+                '.....o..',
+                '...r....',
+                '........',
+                '.o...oo.',
+                '........',
+            ],
+            [   // a cart overturned across the road, crates spilled
+                '........',
+                '..o.....',
+                '......n.',
+                '...TT...',
+                '...rr...',
+                '.C......',
+                '......C.',
+                '...rr...',
+                '...TT...',
+                '.n......',
+                '.....o..',
+                '........',
+            ],
+        ],
+        'cavern' => [
+            [   // stalagmite clumps and a sinkhole
+                '........',
+                '..S.....',
+                '.SS...rr',
+                '......K.',
+                '..rr....',
+                '...OO...',
+                '...OO.S.',
+                '.K....SS',
+                '....rr..',
+                '.S......',
+                '......S.',
+                '........',
+            ],
+            [   // a rockfall: boulders and rubble across the middle
+                '........',
+                '.....S..',
+                '.K......',
+                '.rr...S.',
+                '...K....',
+                '..rrr...',
+                '...rrr..',
+                '....K...',
+                '.S...rr.',
+                '......K.',
+                '..S.....',
+                '........',
+            ],
+        ],
+        'tunnel' => [
+            [   // a collapsed shoring beam and the rubble it brought down
+                '........',
+                '........',
+                '........',
+                '........',
+                '..rr.K..',
+                '........',
+                '...BB...',
+                '.....rr.',
+                '........',
+                '........',
+                '........',
+                '........',
+            ],
+            [   // a sinkhole in the passage floor
+                '........',
+                '........',
+                '........',
+                '........',
+                '.r......',
+                '...O..r.',
+                '.r......',
+                '......K.',
+                '........',
+                '........',
+                '........',
+                '........',
+            ],
+        ],
+        'camp' => [
+            [   // a stockade line and the stores behind it
+                '........',
+                '...C....',
+                '..FFF...',
+                '........',
+                '.R...rr.',
+                '.....n..',
+                '..n.....',
+                '.rr...R.',
+                '........',
+                '...FFF..',
+                '....C...',
+                '........',
+            ],
+            [   // wagons drawn up, woodpiles and barrels
+                '........',
+                '.oo.....',
+                '......R.',
+                '...rr...',
+                '..o..C..',
+                '....n...',
+                '...n....',
+                '..C..o..',
+                '...rr...',
+                '.R......',
+                '.....oo.',
+                '........',
+            ],
+        ],
+        'forest' => [
+            [   // a stream through the trees, a fallen log to hide behind
+                '..n.....',
+                '......n.',
+                '.n..rr..',
+                '...BB...',
+                'n.....n.',
+                '..~~....',
+                '...~~..n',
+                '.n..~~..',
+                '....rr..',
+                '..BB..n.',
+                'n.....o.',
+                '...n....',
+            ],
+            [   // a clearing ringed with trees and undergrowth
+                '...n....',
+                '.n....n.',
+                '..o..rr.',
+                'n.......',
+                '...rr.n.',
+                '.n......',
+                '......n.',
+                '.n.rr...',
+                '.......n',
+                '.rr..o..',
+                '.n....n.',
+                '....n...',
+            ],
+        ],
+    ];
+
+    /**
+     * What a layout letter is.
+     *
+     * `t` is the terrain character it stamps — the rule. `art` is the pictures
+     * that may stand on it, widest first; a run of four wall cells becomes a
+     * three-cell wall and a one-cell stub. Long pieces are drawn lying east to
+     * west and turned for a run that goes north to south (`rot` on the prop).
+     * `o` and `n` themselves are generic: the palette's own furniture, which is
+     * how a tavern still gets its tables.
+     */
+    private const PIECES = [
+        'P' => ['t' => 'n', 'art' => [['src' => 'battlemap/props/pillar.png', 'w' => 1, 'h' => 1, 'stand' => true]]],
+        'p' => ['t' => 'n', 'art' => [['src' => 'battlemap/props/pillar_broken.png', 'w' => 1, 'h' => 1, 'stand' => true]]],
+        'S' => ['t' => 'n', 'art' => [['src' => 'battlemap/props/stalagmites.png', 'w' => 1, 'h' => 1, 'stand' => true]]],
+        'K' => ['t' => 'n', 'art' => [['src' => 'battlemap/props/boulder.png', 'w' => 1, 'h' => 1]]],
+        'W' => ['t' => 'o', 'art' => [
+            ['src' => 'battlemap/props/wall_low_3.png', 'w' => 3, 'h' => 1, 'long' => true],
+            ['src' => 'battlemap/props/wall_low_2.png', 'w' => 2, 'h' => 1, 'long' => true],
+            ['src' => 'battlemap/props/wall_low_1.png', 'w' => 1, 'h' => 1, 'long' => true],
+        ]],
+        'B' => ['t' => 'o', 'art' => [
+            ['src' => 'battlemap/props/beam_3.png', 'w' => 3, 'h' => 1, 'long' => true],
+            ['src' => 'battlemap/props/beam_2.png', 'w' => 2, 'h' => 1, 'long' => true],
+            ['src' => 'battlemap/props/beam_1.png', 'w' => 1, 'h' => 1, 'long' => true],
+        ]],
+        'F' => ['t' => 'o', 'art' => [
+            ['src' => 'battlemap/props/barricade_3.png', 'w' => 3, 'h' => 1, 'long' => true],
+            ['src' => 'battlemap/props/barricade_2.png', 'w' => 2, 'h' => 1, 'long' => true],
+            ['src' => 'battlemap/props/barricade_1.png', 'w' => 1, 'h' => 1, 'long' => true],
+        ]],
+        'T' => ['t' => 'o', 'art' => [
+            ['src' => 'battlemap/props/table_over_3.png', 'w' => 3, 'h' => 1, 'long' => true],
+            ['src' => 'battlemap/props/table_over_2.png', 'w' => 2, 'h' => 1, 'long' => true],
+            ['src' => 'battlemap/props/table_over_1.png', 'w' => 1, 'h' => 1, 'long' => true],
+        ]],
+        'R' => ['t' => 'o', 'art' => [['src' => 'battlemap/props/barrels.png', 'w' => 1, 'h' => 1]]],
+        'C' => ['t' => 'o', 'art' => [['src' => 'battlemap/props/crates.png', 'w' => 1, 'h' => 1, 'stand' => true]]],
+        'A' => ['t' => 'o', 'art' => [['src' => 'battlemap/props/weapon_rack.png', 'w' => 1, 'h' => 1, 'stand' => true]]],
+        'O' => ['t' => 'v', 'art' => [
+            ['src' => 'battlemap/props/pit.png', 'w' => 2, 'h' => 2],
+            ['src' => 'battlemap/props/pit.png', 'w' => 1, 'h' => 1],
+        ]],
+        'r' => ['t' => ',', 'art' => []],
+        '~' => ['t' => '~', 'art' => []],
+        'o' => ['t' => 'o', 'art' => []],
+        'n' => ['t' => 'n', 'art' => []],
+    ];
+
+    /**
+     * Flat pictures on the floor. Never a rule and never a token.
+     *
+     * `rough` covers every `,` cell — rubble, gravel, straw, leaves — so the
+     * ground that costs double LOOKS like ground, lying flat, rather than the
+     * upright bones and rocks that used to stand there like enemies. `floor`
+     * is a handful of cracks, gravel and wisps of straw scattered over open ground for
+     * texture, drawn faint. Both are painted under the furniture and the
+     * tokens and take no pointer events.
+     */
+    private const DECALS = [
+        'arena'    => ['rough' => ['rubble', 'gravel', 'bones'], 'floor' => ['cracks', 'straw', 'bones', 'gravel']],
+        'interior' => ['rough' => ['straw', 'rubble'], 'floor' => ['straw']],
+        'street'   => ['rough' => ['gravel', 'mud', 'rubble'], 'floor' => ['cracks', 'mud', 'gravel', 'straw']],
+        'cavern'   => ['rough' => ['rubble', 'gravel', 'bones_skull'], 'floor' => ['cracks', 'gravel', 'bones']],
+        'tunnel'   => ['rough' => ['rubble', 'gravel', 'bones'], 'floor' => ['cracks', 'gravel', 'bones_skull']],
+        'camp'     => ['rough' => ['mud', 'straw', 'leaves'], 'floor' => ['leaves', 'straw']],
+        'forest'   => ['rough' => ['leaves', 'mud'], 'floor' => ['leaves', 'gravel']],
+    ];
+
+    /**
      * Floor and wall plates, per palette.
      *
      * These are the leftover Synty tiles from the old world map. They tile at
@@ -304,7 +635,7 @@ final class BattleMapGen
     /**
      * Build a battlefield.
      *
-     * @return array{w:int,h:int,cell_ft:int,seed:int,palette:string,terrain:string[],floor:?string,wall:?string,props:array,zones:array}
+     * @return array{w:int,h:int,cell_ft:int,seed:int,palette:string,terrain:string[],floor:?string,wall:?string,props:array,decals:array,zones:array}
      */
     public static function generate(int $seed, string $palette): array
     {
@@ -321,10 +652,15 @@ final class BattleMapGen
         if (!empty($spec['pinch'])) {
             self::stampPinch($grid, $rng);
         }
-        foreach ($spec['features'] as $feature) {
-            $n = self::rint($rng, (int) $feature['min'], (int) $feature['max']);
-            for ($i = 0; $i < $n; $i++) {
-                self::stampFeature($grid, $rng, (string) $feature['char'], (int) $feature['w'], (int) $feature['h']);
+        $pieces = [];
+        if (isset(self::LAYOUTS[$palette])) {
+            $pieces = self::stampLayout($grid, $rng, $palette);
+        } else {
+            foreach ($spec['features'] as $feature) {
+                $n = self::rint($rng, (int) $feature['min'], (int) $feature['max']);
+                for ($i = 0; $i < $n; $i++) {
+                    self::stampFeature($grid, $rng, (string) $feature['char'], (int) $feature['w'], (int) $feature['h']);
+                }
             }
         }
 
@@ -347,7 +683,8 @@ final class BattleMapGen
         // Dressing runs AFTER the terrain is final, on the leftover stream, so
         // adding a barrel cannot move a wall. Existing fights stored without
         // props keep their ground; new ones get furniture of the same seed.
-        $props = self::dress($terrain, $rng, $palette);
+        $props = self::dress($terrain, $rng, $palette, $pieces);
+        $decals = self::decals($terrain, $rng, $palette);
 
         return [
             'w'       => BattleGrid::W,
@@ -359,6 +696,7 @@ final class BattleMapGen
             'floor'   => self::FLOORS[$palette] ?? 'tiles/floor_stone.png',
             'wall'    => self::WALLS[$palette] ?? 'tiles/wall_stone.png',
             'props'   => $props,
+            'decals'  => $decals,
             'zones'   => ['party' => self::ZONE_PARTY, 'foe' => self::ZONE_FOE],
         ];
     }
@@ -541,6 +879,155 @@ final class BattleMapGen
         return $x >= $zone[0] && $x <= $zone[2] && $y >= $zone[1] && $y <= $zone[3];
     }
 
+    /**
+     * Lay one of the palette's set pieces into the corridor.
+     *
+     * Picks a layout, mirrors it on two coin flips, then stamps it piece by
+     * piece — a piece being a run of one letter — each nudged up to a cell in
+     * any direction when the ground there is clear, and left where it was
+     * drawn otherwise. Only open ground outside both zones is ever written, so
+     * the pinch of a tunnel and the rim of a room win over the drawing.
+     *
+     * @return array<string, string> cell key "x,y" => the layout letter there,
+     *                               which dress() reads to choose the picture
+     */
+    private static function stampLayout(array &$grid, int &$rng, string $palette): array
+    {
+        $layouts = self::LAYOUTS[$palette];
+        $rows = $layouts[self::rint($rng, 0, count($layouts) - 1)];
+        $flipY = self::rint($rng, 0, 1) === 1;
+        $flipX = self::rint($rng, 0, 1) === 1;
+        [$cx0, $cx1] = self::corridor();
+        $cw = $cx1 - $cx0 + 1;
+
+        // Cells of the drawing, already mirrored, in board coordinates.
+        $cells = [];
+        foreach ($rows as $ly => $line) {
+            $line = (string) $line;
+            for ($lx = 0, $n = min($cw, strlen($line)); $lx < $n; $lx++) {
+                $ch = $line[$lx];
+                if ($ch === '.' || !isset(self::PIECES[$ch])) {
+                    continue;
+                }
+                $x = $cx0 + ($flipX ? $cw - 1 - $lx : $lx);
+                $y = $flipY ? BattleGrid::H - 1 - $ly : $ly;
+                $cells[$x . ',' . $y] = $ch;
+            }
+        }
+
+        // Group into pieces: 4-connected runs of the same letter.
+        $seen = [];
+        $groups = [];
+        foreach ($cells as $k => $ch) {
+            if (isset($seen[$k])) {
+                continue;
+            }
+            $group = [];
+            $stack = [$k];
+            $seen[$k] = true;
+            while ($stack) {
+                $at = array_pop($stack);
+                $group[] = $at;
+                [$ax, $ay] = array_map('intval', explode(',', $at));
+                foreach ([[1, 0], [-1, 0], [0, 1], [0, -1]] as [$dx, $dy]) {
+                    $nk = ($ax + $dx) . ',' . ($ay + $dy);
+                    if (!isset($seen[$nk]) && ($cells[$nk] ?? null) === $ch) {
+                        $seen[$nk] = true;
+                        $stack[] = $nk;
+                    }
+                }
+            }
+            sort($group);
+            $groups[] = [$ch, $group];
+        }
+
+        $letters = [];
+        foreach ($groups as [$ch, $group]) {
+            // Ground stays where it was drawn — rubble at the foot of what
+            // fell, a stream that stays one stream. Only furniture is nudged.
+            $fixed = $ch === 'r' || $ch === '~';
+            $dx = $fixed ? 0 : self::rint($rng, -1, 1);
+            $dy = $fixed ? 0 : self::rint($rng, -1, 1);
+            $moved = self::placeable($grid, $group, $dx, $dy) ? [$dx, $dy] : [0, 0];
+            if (!self::placeable($grid, $group, $moved[0], $moved[1])) {
+                continue;
+            }
+            $t = self::PIECES[$ch]['t'];
+            foreach ($group as $k) {
+                [$x, $y] = array_map('intval', explode(',', $k));
+                $x += $moved[0];
+                $y += $moved[1];
+                $grid[$y][$x] = $t;
+                $letters[$x . ',' . $y] = $ch;
+            }
+        }
+        return $letters;
+    }
+
+    /** Whether every cell of a piece, shifted, lands on open ground outside both zones. */
+    private static function placeable(array $grid, array $group, int $dx, int $dy): bool
+    {
+        foreach ($group as $k) {
+            [$x, $y] = array_map('intval', explode(',', $k));
+            if (!self::clearFor($grid, $x + $dx, $y + $dy, 1, 1)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Flat floor pictures: one on every rough cell, a few over the open floor.
+     *
+     * Drawn from the leftover stream after the props, so they cannot move a
+     * wall or a barrel. Each carries a turn and a size so a field of rubble is
+     * not a stamp repeated; the client never reads them for anything but
+     * paint.
+     *
+     * @return array<int, array{x:int,y:int,src:string,rot:int,s:float,kind:string}>
+     */
+    private static function decals(array $terrain, int &$rng, string $palette): array
+    {
+        $set = self::DECALS[$palette] ?? self::DECALS['street'];
+        $out = [];
+        $open = [];
+        for ($y = 0; $y < BattleGrid::H; $y++) {
+            for ($x = 0; $x < BattleGrid::W; $x++) {
+                $ch = $terrain[$y][$x] ?? '.';
+                if ($ch === ',') {
+                    $name = $set['rough'][self::rint($rng, 0, count($set['rough']) - 1)];
+                    $out[] = [
+                        'x' => $x, 'y' => $y,
+                        'src' => 'battlemap/decals/' . $name . '.png',
+                        'rot' => self::rint($rng, 0, 7) * 45,
+                        's' => 1.1 + self::rint($rng, 0, 3) * 0.1,
+                        'kind' => 'rough',
+                    ];
+                } elseif ($ch === '.') {
+                    $open[] = [$x, $y];
+                }
+            }
+        }
+        $want = $open ? self::rint($rng, 4, 7) : 0;
+        $used = [];
+        for ($i = 0; $i < $want * 3 && count($used) < $want; $i++) {
+            [$x, $y] = $open[self::rint($rng, 0, count($open) - 1)];
+            if (isset($used[$x . ',' . $y])) {
+                continue;
+            }
+            $used[$x . ',' . $y] = true;
+            $name = $set['floor'][self::rint($rng, 0, count($set['floor']) - 1)];
+            $out[] = [
+                'x' => $x, 'y' => $y,
+                'src' => 'battlemap/decals/' . $name . '.png',
+                'rot' => self::rint($rng, 0, 7) * 45,
+                's' => 0.8 + self::rint($rng, 0, 3) * 0.1,
+                'kind' => 'floor',
+            ];
+        }
+        return $out;
+    }
+
     // -----------------------------------------------------------------------
     // The traversability guarantee
     // -----------------------------------------------------------------------
@@ -657,7 +1144,7 @@ final class BattleMapGen
      *
      * @return array<int, array{x:int,y:int,w:int,h:int,src:string,stand:bool}>
      */
-    private static function dress(array $terrain, int &$rng, string $palette): array
+    private static function dress(array $terrain, int &$rng, string $palette, array $pieces = []): array
     {
         $catalog = self::PROPS[$palette] ?? self::PROPS['street'];
         $visited = [];
@@ -665,14 +1152,42 @@ final class BattleMapGen
         for ($y = 0; $y < BattleGrid::H; $y++) {
             for ($x = 0; $x < BattleGrid::W; $x++) {
                 $ch = $terrain[$y][$x] ?? '.';
-                if ($ch === '.' || $ch === '#' || $ch === 'v' || !isset($catalog[$ch])) {
+                $letter = $pieces[$x . ',' . $y] ?? null;
+                $art = $letter !== null && (self::PIECES[$letter]['t'] ?? null) === $ch
+                    ? self::PIECES[$letter]['art'] : [];
+                // Rough ground and water get no props at all — rough ground
+                // is painted by decals() instead. An upright sprite on ground
+                // you can walk over is what made bones look like skeletons
+                // waiting their turn. A pit gets art only from its piece.
+                if (in_array($ch, ['.', '#', ',', '~'], true)) {
+                    continue;
+                }
+                if (!$art && ($ch === 'v' || !isset($catalog[$ch]))) {
                     continue;
                 }
                 if (isset($visited[$x . ',' . $y])) {
                     continue;
                 }
-                [$gw, $gh] = self::growRect($terrain, $x, $y, $ch, $visited);
-                $picked = self::pickProp($catalog[$ch], $gw, $gh, $rng);
+                if ($art) {
+                    [$gw, $gh] = self::growPiece($terrain, $pieces, $x, $y, $letter, $visited);
+                    $picked = self::pickProp($art, $gw, $gh, $rng);
+                    $rot = 0;
+                    if ($gh > $gw) {
+                        // A run going north to south: the long art, turned.
+                        $long = array_values(array_filter($art, static fn ($a) => !empty($a['long'])));
+                        $turned = $long ? self::pickProp($long, $gh, $gw, $rng) : null;
+                        if ($turned && (int) $turned['w'] > 1) {
+                            $picked = $turned;
+                            $picked['w'] = (int) $turned['h'];
+                            $picked['h'] = (int) $turned['w'];
+                            $rot = 90;
+                        }
+                    }
+                } else {
+                    [$gw, $gh] = self::growRect($terrain, $x, $y, $ch, $visited);
+                    $picked = self::pickProp($catalog[$ch], $gw, $gh, $rng);
+                    $rot = 0;
+                }
                 $pw = $picked ? (int) $picked['w'] : 1;
                 $ph = $picked ? (int) $picked['h'] : 1;
                 for ($j = 0; $j < $ph; $j++) {
@@ -681,7 +1196,7 @@ final class BattleMapGen
                     }
                 }
                 if ($picked) {
-                    $props[] = [
+                    $prop = [
                         'x'     => $x,
                         'y'     => $y,
                         'w'     => $pw,
@@ -689,10 +1204,46 @@ final class BattleMapGen
                         'src'   => $picked['src'],
                         'stand' => !empty($picked['stand']),
                     ];
+                    if ($rot) {
+                        $prop['rot'] = $rot;
+                    }
+                    $props[] = $prop;
                 }
             }
         }
         return $props;
+    }
+
+    /**
+     * growRect() for a layout piece: the block of one letter that is still
+     * the terrain that letter stamps (carve() may have opened a cell of it).
+     *
+     * @param array<string, string> $pieces
+     * @param array<string, bool>   $visited
+     * @return array{0:int,1:int}
+     */
+    private static function growPiece(array $terrain, array $pieces, int $x0, int $y0, string $letter, array $visited): array
+    {
+        $t = self::PIECES[$letter]['t'];
+        $same = static function (int $x, int $y) use ($terrain, $pieces, $letter, $visited, $t): bool {
+            return ($pieces[$x . ',' . $y] ?? null) === $letter
+                && ($terrain[$y][$x] ?? '') === $t
+                && !isset($visited[$x . ',' . $y]);
+        };
+        $w = 1;
+        while ($x0 + $w < BattleGrid::W && $same($x0 + $w, $y0)) {
+            $w++;
+        }
+        $h = 1;
+        while ($y0 + $h < BattleGrid::H) {
+            for ($i = 0; $i < $w; $i++) {
+                if (!$same($x0 + $i, $y0 + $h)) {
+                    break 2;
+                }
+            }
+            $h++;
+        }
+        return [$w, $h];
     }
 
     /**

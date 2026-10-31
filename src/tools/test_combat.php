@@ -1241,6 +1241,70 @@ foreach ($palettes as $palette) {
 same('dressed maps only put art on cover cells that exist', [], array_slice($propBad, 0, 5));
 ok('most generated maps get furniture', $dressed > 200);
 
+/*
+ * Floor decals are paint, and paint has to stay paint: a decal on every rough
+ * cell and only there or on open floor, every file on disk, nothing standing
+ * on rough ground any more (that is what made bones look like skeletons), and
+ * a long piece turned only a quarter, onto a run the shape of its footprint.
+ */
+$decalBad = [];
+$roughCells = 0;
+$turnedSeen = 0;
+$themed = 0;
+foreach ($palettes as $palette) {
+    for ($seed = 1; $seed <= 40; $seed++) {
+        $map = BattleMapGen::generate($seed * 7919, $palette);
+        $decalAt = [];
+        foreach ($map['decals'] ?? [] as $d) {
+            $ch = $map['terrain'][$d['y']][$d['x']] ?? '?';
+            if (!is_file($artRoot . $d['src'])) {
+                $decalBad[] = "{$palette}/{$seed}: missing decal {$d['src']}";
+            }
+            if (($d['kind'] === 'rough' && $ch !== ',') || ($d['kind'] === 'floor' && $ch !== '.')) {
+                $decalBad[] = "{$palette}/{$seed}: {$d['kind']} decal on '{$ch}' at {$d['x']},{$d['y']}";
+            }
+            if ($d['kind'] === 'rough') {
+                $decalAt[$d['x'] . ',' . $d['y']] = true;
+            }
+        }
+        foreach ($map['terrain'] as $y => $row) {
+            for ($x = 0; $x < strlen($row); $x++) {
+                if ($row[$x] === ',') {
+                    $roughCells++;
+                    if (!isset($decalAt[$x . ',' . $y])) {
+                        $decalBad[] = "{$palette}/{$seed}: bare rough ground at {$x},{$y}";
+                    }
+                }
+            }
+        }
+        foreach ($map['props'] as $p) {
+            if (str_starts_with($p['src'], 'battlemap/')) {
+                $themed++;
+            }
+            for ($j = 0; $j < $p['h']; $j++) {
+                for ($i = 0; $i < $p['w']; $i++) {
+                    $ch = $map['terrain'][$p['y'] + $j][$p['x'] + $i] ?? '.';
+                    if ($ch === ',' || $ch === '~') {
+                        $decalBad[] = "{$palette}/{$seed}: {$p['src']} standing on '{$ch}'";
+                    }
+                }
+            }
+            if (isset($p['rot'])) {
+                $turnedSeen++;
+                if ($p['rot'] !== 90 || $p['w'] !== 1 || $p['h'] < 2) {
+                    $decalBad[] = "{$palette}/{$seed}: odd turn on {$p['src']}";
+                }
+            }
+        }
+    }
+}
+same('decals are flat paint on rough or open ground, with their files', [], array_slice($decalBad, 0, 5));
+ok('rough ground still turns up', $roughCells > 100);
+ok('the themed set pieces get drawn', $themed > 300);
+ok('and some long pieces run north to south', $turnedSeen > 0);
+$d1 = BattleMapGen::generate(777, 'arena');
+same('the same seed lays the same decals', $d1['decals'], BattleMapGen::generate(777, 'arena')['decals']);
+
 // Deployment turns the old rank into a starting column and nothing else.
 $map = BattleMapGen::generate(4242, 'street');
 $spots = BattleMapGen::deploy(

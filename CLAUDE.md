@@ -166,7 +166,12 @@ a generated 16×12 board of 5-ft cells held in `combat_sessions.state_json`:
 movement costs feet, reach and weapon range are distances, obstacles give cover,
 leaving somebody's reach provokes an opportunity attack. `app/lib/BattleGrid.php`
 is the geometry (pure static, no PDO), `app/lib/BattleMapGen.php` generates the
-terrain, `assets/js/ui-battlemap.js` draws it as inline SVG.
+terrain, `assets/js/ui-battlemap.js` draws it as inline SVG. Generated boards
+are laid out from hand-drawn set pieces (`LAYOUTS`/`PIECES` in BattleMapGen:
+pillars, low walls, beams, barricades, pits) with their painted art in
+`assets/images/battlemap/props/` (versioned, not ignored), and rough ground is
+painted with flat `decals` (`assets/images/battlemap/decals/`) — never an
+upright prop, which is what made bones read as enemy tokens.
 
 The old rank is kept but demoted: `characters.combat_rank`, `monsters.rank_pref`
 and `encounter_monsters.rank_override` now decide only which end of a
