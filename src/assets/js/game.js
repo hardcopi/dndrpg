@@ -411,8 +411,8 @@
    * The scene.
    *
    * Reads top to bottom the way the player thinks about it: where am I, what
-   * is it like, what can I do — and who is here lives on the left rail under
-   * the party, so a crowded street never has to share the prose column.
+   * is it like, what can I do — and who is here lives in the rail's People
+   * tab, so a crowded street never has to share the prose column.
    * Where can I go is the chart, which highlights the places you can walk to
    * from here.
    */
@@ -490,8 +490,31 @@
       paintedSceneNode = document.createElement('div');
       paintedMapWired = false;
       paintedSceneNode.className = 'scene-paint';
-      paintedSceneNode.innerHTML = `<img alt="${esc(loc.name)}" src="${esc(cfg.image)}"><div class="paint-hotspots"></div><div class="scene-tools"><button type="button" class="scene-chip" data-scene-map>Map</button><button type="button" class="scene-chip" data-scene-fx>✦ Effects <span></span></button><button type="button" class="scene-chip" id="scene-info" aria-label="Describe this place">ⓘ</button></div><div class="paint-map hidden">${sceneMap()}</div>`;
+      paintedSceneNode.innerHTML = `<img alt="${esc(loc.name)}" src="${esc(cfg.image)}"><div class="paint-hotspots"></div><div class="scene-tools"><button type="button" class="scene-chip" data-scene-map>Map</button><button type="button" class="scene-chip" data-scene-fx>✦ Effects <span></span></button><button type="button" class="scene-chip" id="scene-info" aria-label="Describe this place">ⓘ</button></div><div class="paint-map hidden">${sceneMap({ info: false })}</div>`;
       paintedFx = window.RivermarkFX ? window.RivermarkFX.mount(paintedSceneNode, cfg.fx || [], { image: cfg.image }) : null;
+      if (window.ResizeObserver) {
+        let t = null;
+        const node = paintedSceneNode;
+        new ResizeObserver(() => {
+          clearTimeout(t);
+          t = setTimeout(() => { if (paintedSceneNode === node) settlePaintLabels(node); }, 80);
+        }).observe(node);
+      }
+      // Label widths change when the webfonts arrive, which resizes nothing.
+      if (document.fonts && document.fonts.ready) {
+        const node = paintedSceneNode;
+        document.fonts.ready.then(() => { if (paintedSceneNode === node) settlePaintLabels(node); });
+      }
+    } else {
+      // Same painting, new state: the image and the fx canvas stay, but the
+      // chart behind the Map chip is redrawn so the party marks, the people
+      // and the ways are current. Cheap — it is a string — and re-wired by
+      // syncPaintedMap() below if the overlay is open, or when it next opens.
+      const map = paintedSceneNode.querySelector('.paint-map');
+      if (map) {
+        map.innerHTML = sceneMap({ info: false });
+        paintedMapWired = false;
+      }
     }
     const layer = paintedSceneNode.querySelector('.paint-hotspots');
     const exitMarkup = exits.map((e, i) => {
@@ -521,7 +544,7 @@
     const objectMarkup = (cfg.objects || []).map((o) => `<button type="button" class="paint-object" style="left:${o.x}%;top:${o.y}%" data-act="${esc(o.act || 'search')}" aria-label="Search ${esc(o.label)}">${esc(o.label)}</button>`).join('');
     layer.innerHTML = exitMarkup + npcMarkup + objectMarkup;
     const moreButton = paintedSceneNode.querySelector('[data-focus-people]');
-    if (moreButton) moreButton.onclick = () => { const rail = $('#people-rail'); if (rail) { rail.tabIndex = -1; rail.scrollIntoView({ behavior: 'smooth', block: 'center' }); rail.focus({ preventScroll: true }); } };
+    if (moreButton) moreButton.onclick = () => { if (window.UI && window.UI.selectRailTab) window.UI.selectRailTab('people'); const rail = $('#people-rail'); if (rail) { rail.tabIndex = -1; rail.scrollIntoView({ behavior: 'smooth', block: 'center' }); rail.focus({ preventScroll: true }); } };
     const fxButton = paintedSceneNode.querySelector('[data-scene-fx]');
     if (fxButton) {
       const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -535,6 +558,72 @@
     if (info) info.onclick = openDescription;
     host.appendChild(paintedSceneNode);
     syncPaintedMap();
+    settlePaintLabels(paintedSceneNode);
+  }
+
+  /**
+   * Nudge hotspot labels apart where they overlap.
+   *
+   * The spots are authored as percentages on the painting, and a label's width
+   * depends on the font size, which scales with the viewport — so two labels
+   * that clear each other at 1920 can sit on top of each other at 1440. Exits
+   * are placed first and never move; NPCs and objects after them are pushed up
+   * or down in small steps until they are clear, staying inside the picture.
+   * The pin under a label stretches by the same amount, so it still points at
+   * its dot. Runs on every render and, debounced, on resize.
+   */
+  const LABEL_STEP = 4;
+  const LABEL_MAX_SHIFT = 40;
+
+  function settlePaintLabels(node) {
+    if (!node || !node.isConnected) return;
+    const box = node.getBoundingClientRect();
+    if (!box.width || !box.height) return;
+    const spots = [...node.querySelectorAll('.paint-hotspot, .paint-object')];
+    // Reset first, so a resize measures from the authored positions.
+    spots.forEach((el) => {
+      el.style.marginTop = '';
+      const pin = el.querySelector('.paint-pin');
+      if (pin) pin.style.height = '';
+    });
+    const labelOf = (el) => el.querySelector('.paint-label') || el;
+    const rel = (el, dy) => {
+      const r = labelOf(el).getBoundingClientRect();
+      return { l: r.left - box.left, r: r.right - box.left, t: r.top - box.top + dy, b: r.bottom - box.top + dy };
+    };
+    const hits = (a, b) => a.l < b.r + 2 && b.l < a.r + 2 && a.t < b.b + 2 && b.t < a.b + 2;
+    // Exits keep their place; everything else gives way to them, in order.
+    const rank = (el) => (el.classList.contains('exit') ? 0 : 1);
+    const ordered = spots.map((el, i) => ({ el, i })).sort((a, b) => rank(a.el) - rank(b.el) || a.i - b.i);
+    const placed = [];
+    ordered.forEach(({ el }) => {
+      const base = rel(el, 0);
+      if (rank(el) === 0 || !placed.some((p) => hits(base, p))) {
+        placed.push(base);
+        return;
+      }
+      // A hotspot is anchored by its bottom edge — the dot — so the label can
+      // only move by changing the pin: longer to go up (any distance), shorter
+      // to come down (no further than the pin is long). An object label has no
+      // pin and no dot, and simply moves.
+      const pin = el.querySelector('.paint-pin');
+      const pinH = pin ? pin.offsetHeight : 0;
+      const maxDown = pin ? Math.max(0, pinH - 3) : LABEL_MAX_SHIFT;
+      let best = 0;
+      for (let d = LABEL_STEP; d <= LABEL_MAX_SHIFT && !best; d += LABEL_STEP) {
+        // Up first: a label on a longer stalk still reads as belonging to its dot.
+        best = [-d, d].find((dy) => {
+          if (dy > maxDown) return false;
+          const r = { ...base, t: base.t + dy, b: base.b + dy };
+          return r.t >= 0 && r.b <= box.height && !placed.some((p) => hits(r, p));
+        }) || 0;
+      }
+      if (best) {
+        if (pin) pin.style.height = `${pinH - best}px`;
+        else el.style.marginTop = `${best}px`;
+      }
+      placed.push({ ...base, t: base.t + best, b: base.b + best });
+    });
   }
 
   function paintedNarrationLinks(loc, cfg) {
@@ -543,6 +632,17 @@
     const objectLine = objects.length ? `<div class="scene-notice-line"><b>You notice:</b> ${objects.map((o, i) => `<button type="button" data-act="${esc(o.act || 'search')}" class="scene-notice" aria-label="Search ${esc(o.label)}">${esc(o.label)}</button>${i < objects.length - 1 ? '<span aria-hidden="true"> · </span>' : ''}`).join('')}</div>` : '';
     const exitLine = exits.length ? `<div class="scene-ways-line"><b>Ways out:</b> ${exits.map((e) => `<button type="button" class="scene-way${e.locked ? ' is-locked' : ''}" data-act="travel" data-id="${+e.to_location_id}"${e.locked ? ' disabled' : ''}>${esc(e.label || e.to_name || '')}</button>`).join('')}</div>` : '';
     return `<div class="scene-narration-links">${objectLine}${exitLine}</div>`;
+  }
+
+  /** Whether this place has a painting with a chart behind it (the Map verb). */
+  function hasSceneMap() {
+    return state.mode !== 'combat' && !fpOn() && !!sceneConfig(state.location);
+  }
+
+  function toggleSceneMap() {
+    if (!hasSceneMap()) return;
+    paintedMapOpen = !paintedMapOpen;
+    syncPaintedMap();
   }
 
   function syncPaintedMap() {
@@ -561,11 +661,15 @@
    * here. What is new is the ⓘ, in the corner opposite: the description of the
    * place you are standing in, which is what this space used to be.
    */
-  function sceneMap() {
+  function sceneMap(opts = {}) {
     if (!state.regionMap || !window.WorldMap) {
       return '<div class="loc-map is-empty"><p class="help-hint">Nowhere charted yet.</p></div>';
     }
     if (fpOn()) return firstPersonScene();
+    // Inside the painted scene's overlay the painting's own ⓘ chip is the
+    // description button; a second one here would be a second #scene-info.
+    const info = opts.info === false ? '' : `<button type="button" class="icon-btn map-info" id="scene-info"
+              title="What this place looks like (I)" aria-label="Describe this place">i</button>`;
     return `<div class="loc-map" id="scene-map">
       ${window.WorldMap.svg(state.regionMap,
         { ways: currentWays(), quests: questPins(), party: partyMarks(), people: npcMarks() })}
@@ -578,8 +682,7 @@
                 title="Zoom in (+) · drag to pan" aria-label="Zoom in">+</button>
       </div>
       ${fpToggle('Walk it in first person (V)', 'Look')}
-      <button type="button" class="icon-btn map-info" id="scene-info"
-              title="What this place looks like (I)" aria-label="Describe this place">i</button>
+      ${info}
       ${actionsPanel(state.location)}
     </div>`;
   }
@@ -802,7 +905,7 @@
     // The first-person view has no chart under it, so none of the pan, zoom or
     // quest-pin wiring below applies to it.
     if (fpOn()) {
-      const info = $('#scene-info');
+      const info = box.querySelector('.map-info');
       if (info) info.addEventListener('click', openDescription);
       box.querySelectorAll('[data-fp]').forEach((b) => {
         b.addEventListener('click', () => {
@@ -827,7 +930,9 @@
     // way, a whole region seen from too far to read the place you are standing
     // in. The chart is the scene now — it should open where you are.
     const ctl = window.WorldMap.controls(box, sceneView, 1.7);
-    const info = $('#scene-info');
+    // Looked up inside the chart: the painted scene's chip is wired by
+    // mountPaintedScene, and binding it here too opened the description twice.
+    const info = box.querySelector('.map-info');
     if (info) info.addEventListener('click', openDescription);
     if (!ctl) return;
 
@@ -897,7 +1002,7 @@
   }
 
   /**
-   * Who is here, drawn into the left rail beside the party.
+   * Who is here, drawn into the People tab of the right-hand rail.
    *
    * The authored cast leads; ambient townsfolk follow in a muted second list,
    * because a market square holds a dozen of them and they must not compete
@@ -2320,6 +2425,7 @@
     // actions
     travelTo, talkTo, startCombat, handleEvents,
     search: doSearch, loot: doLoot, rest: doRest, camp: doCamp,
+    hasSceneMap, toggleSceneMap,
   };
 
   if (document.readyState === 'loading') {

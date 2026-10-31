@@ -175,3 +175,158 @@ body.game-page .paint-hotspot:focus-visible { outline: none; }
 body.game-page .scene-chip { min-height: 0; text-transform: none; }
 /* On a phone the scene is small: tools move to the bottom corner so they do not sit on the exit labels along the top. */
 @media (max-width: 720px) { body.game-page .scene-tools { top: auto; bottom: 4px; } }
+
+/* ------------------------------------------------------------------ *
+   Two-column play screen (exploration only).
+
+   The scene takes the width; one rail on the right holds the party, the
+   verbs and a Tasks | Log | People panel. Everything here is scoped to
+   :not(.in-combat) — a fight keeps the grid style.css gives it (board on
+   the left, log rail on the right, .cbt-top spanning both), with only the
+   few rules at the end of this block telling it what to hide in the new rail.
+ * ------------------------------------------------------------------ */
+body.game-page:not(.in-combat) .game-shell {
+  grid-template-columns: minmax(0, 1fr) var(--sb-rail-w, 320px);
+  grid-template-rows: minmax(0, 1fr);
+}
+body.game-page:not(.in-combat) .scene { grid-column: 1; grid-row: 1; }
+body.game-page:not(.in-combat) .rail-right {
+  grid-column: 2; grid-row: 1;
+  display: flex; flex-direction: column; gap: 8px;
+  width: 100%; min-width: 0; min-height: 0; overflow: hidden;
+}
+
+/* The party: as tall as its cards, but allowed to give (and scroll) before
+   the actions are pushed off the bottom. */
+body.game-page .rail-right .rail-pane.rail-party { flex: 0 1 auto; min-height: 0; }
+body.game-page .rail-right .rail-party .rail-pane-head { justify-content: center; }
+body.game-page .rail-right .rail-party .rail-pane-head::before,
+body.game-page .rail-right .rail-party .rail-pane-head::after { content: '✦'; font-size: 9px; color: #a8742a; }
+body.game-page .hud-party { gap: 6px; }
+body.game-page .hud-party .party-card {
+  --portrait: 52px;
+  grid-template-areas: "face name" "face cls" "face hp" "face stat";
+  gap: 1px 10px;
+  padding: 6px 8px;
+}
+body.game-page .hud-party .party-name { font-size: 14px; letter-spacing: .5px; }
+body.game-page .hud-party .party-class {
+  grid-area: cls; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+  color: #d9c7a0; font: italic 13px/1.15 'Alegreya', serif;
+}
+body.game-page .hud-party .party-stats { justify-content: space-between; font: 12px 'Alegreya', serif; }
+body.game-page .hud-party .party-class ~ .party-stats .party-lv { display: none; }
+body.game-page .hud-party .party-card .hp-bar { height: 8px; }
+
+/* The verbs: a three-wide grid of wine plates, no frame and no heading — the
+   buttons are their own heading. */
+body.game-page:not(.in-combat) .rail-right .gw-actions { flex: 0 0 auto; background: transparent; border: 0; box-shadow: none; overflow: visible; }
+body.game-page:not(.in-combat) .rail-right .gw-actions > h2 { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+body.game-page .rail-right .gw-actions .action-bar { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; padding: 0; }
+body.game-page .rail-right .action-btn {
+  min-height: 3.3rem; padding: 6px 4px;
+  color: #f5e6c4; background: linear-gradient(#7a2a38, #561a26);
+  border: 1px solid #a8742a; border-radius: 4px;
+  box-shadow: inset 0 1px 0 #ffffff22, 0 2px 0 #000a;
+  font: 700 13px 'Cinzel', serif; letter-spacing: .5px;
+}
+body.game-page .rail-right .action-btn .act-icon { color: #e8b44a; }
+body.game-page .rail-right .action-btn:hover:not(:disabled),
+body.game-page .rail-right .action-btn:focus-visible {
+  color: #fff1ce; background: linear-gradient(#8e3444, #64202e); border-color: #e8b44a;
+}
+
+/* Tasks | Log | People: one framed panel, one body showing at a time. */
+body.game-page:not(.in-combat) .rail-tabs {
+  flex: 1 1 auto; min-height: 9rem;
+  display: flex; flex-direction: column; overflow: hidden;
+  background: linear-gradient(145deg, #2e2034, #21172a);
+  border: 2px solid #5a3e22; border-radius: 3px; box-shadow: 0 2px 0 #07090d;
+}
+body.game-page .rail-tab-bar { display: flex; flex: 0 0 auto; border-bottom: 1px solid #a8742a; background: linear-gradient(#2a1c22, #1a1220); }
+body.game-page .rail-tab {
+  flex: 1 1 0; display: flex; align-items: center; justify-content: center; gap: 5px;
+  min-height: 0; padding: 6px 4px 5px; margin: 0;
+  color: #b89c70; background: transparent; border: 0; border-bottom: 2px solid transparent; border-radius: 0;
+  box-shadow: none; text-transform: uppercase; cursor: pointer;
+  font: 700 11px 'Cinzel', serif; letter-spacing: 1.5px;
+}
+body.game-page .rail-tab:hover { color: #f5e6c4; }
+body.game-page .rail-tab.is-current { color: #e8b44a; border-bottom-color: #e8b44a; background: #e8b44a14; }
+body.game-page .rail-tab .loc-count { margin: 0; padding: 0 5px; font-size: 10px; line-height: 1.4; letter-spacing: 0; }
+body.game-page:not(.in-combat) .rail-tab-panel:not(.is-current) { display: none; }
+body.game-page:not(.in-combat) .rail-tab-panel.is-current { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; overflow: hidden; }
+/* Inside the tabs the panels lose their own frames and headings: the tab is
+   the heading, and the frame is the tab panel's. */
+body.game-page:not(.in-combat) .rail-tab-panel .hud-quest,
+body.game-page:not(.in-combat) .rail-tab-panel .hud-log {
+  flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column;
+  background: transparent; border: 0; box-shadow: none;
+}
+body.game-page:not(.in-combat) .rail-tab-panel .hud-quest > h2,
+body.game-page:not(.in-combat) .rail-tab-panel .hud-log > h2 { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+body.game-page:not(.in-combat) .rail-tab-panel .hud-log .log { flex: 1 1 auto; min-height: 0; max-height: none; }
+body.game-page .rail-tab-panel .hud-people { flex: 1 1 auto; min-height: 0; overflow-y: auto; scrollbar-width: thin; padding: 6px; }
+
+/* People: a compact list rather than face tiles — the painting already
+   shows where they stand. */
+body.game-page .rail-tab-panel .hud-people .people-list { display: flex; flex-direction: column; gap: 4px; margin: 0; padding: 0; list-style: none; }
+body.game-page .rail-tab-panel .hud-people .person {
+  flex-direction: row; align-items: center; justify-content: flex-start; gap: 8px;
+  padding: 3px 6px; text-align: left; min-height: 0;
+}
+body.game-page .rail-tab-panel .hud-people .person-face,
+body.game-page .rail-tab-panel .people-list.is-crowd .person-face { width: 32px; height: 32px; flex: 0 0 auto; }
+body.game-page .rail-tab-panel .hud-people .person-text { align-items: flex-start; }
+body.game-page .rail-tab-panel .hud-people .person-name { justify-content: flex-start; font-size: 13px; }
+body.game-page .rail-tab-panel .hud-people .people-crowd h3 { margin: 8px 2px 4px; font-size: 11px; letter-spacing: 1.5px; }
+
+/* The scene: as wide as the column allows, but never so tall that the prose
+   is pushed off the screen. #location-root is a size container, so the cap is
+   the screen's own height less a band for the narration; the 100dvh line is
+   the fallback for a browser without container units. */
+@media (min-width: 900px) {
+  body.game-page:not(.in-combat) #location-root { container-type: size; }
+  body.game-page:not(.in-combat) .loc-inner.scene-storybook { height: 100%; padding: 6px 8px 8px; }
+  body.game-page:not(.in-combat) .loc-inner.scene-storybook .loc-text {
+    height: 100%; margin: 0 auto;
+    width: min(100%, calc((100dvh - 320px) * 16 / 9));
+    width: min(100%, calc((100cqh - 165px) * 16 / 9));
+  }
+  body.game-page:not(.in-combat) .loc-inner.scene-storybook .painted-host { flex: 0 0 auto; }
+  body.game-page:not(.in-combat) .loc-inner.scene-storybook .scene-narration {
+    flex: 1 1 auto; min-height: 5.5rem; overflow-y: auto; scrollbar-width: thin;
+  }
+}
+
+/* Between the phone and the desk the rail narrows. */
+@media (max-width: 1179px) { body.game-page:not(.in-combat) .game-shell { --sb-rail-w: 290px; } }
+
+/* Phone and small tablet: one column — the scene and its prose, then the
+   rail's panels stacked under it, and the page scrolls. */
+@media (max-width: 899px) {
+  html:has(body.game-page:not(.in-combat)),
+  body.game-page:not(.in-combat) { height: auto; min-height: 100dvh; overflow: visible; }
+  body.game-page:not(.in-combat) .gw-window { height: auto; min-height: 100dvh; }
+  body.game-page:not(.in-combat) .game-shell {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    height: auto; overflow: visible;
+  }
+  body.game-page:not(.in-combat) .scene { grid-column: 1; grid-row: 1; }
+  body.game-page:not(.in-combat) .rail-right { grid-column: 1; grid-row: 2; overflow: visible; }
+  body.game-page:not(.in-combat) .screen { overflow: visible; }
+  body.game-page .rail-right .rail-pane.rail-party { flex: 0 0 auto; }
+  body.game-page:not(.in-combat) .rail-tabs { flex: 0 0 auto; }
+  body.game-page:not(.in-combat) .rail-tab-panel.is-current { height: 18rem; max-height: 50vh; }
+}
+
+/* A fight: the party and the verbs stand down (the board draws its own), the
+   tab bar goes, and the log takes the rail — the same arrangement as before
+   the tabs, when the log sat alone over the inspector. */
+body.in-combat .rail-right .rail-party,
+body.in-combat .rail-tab-bar,
+body.in-combat .rail-tab-panel[data-panel="tasks"],
+body.in-combat .rail-tab-panel[data-panel="people"] { display: none; }
+body.in-combat .rail-tabs,
+body.in-combat .rail-tab-panel[data-panel="log"] { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }

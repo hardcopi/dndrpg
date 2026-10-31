@@ -272,6 +272,50 @@
         collapse.setAttribute('aria-label', label);
       });
     }
+    initRailTabs();
+  }
+
+  /**
+   * Tasks | Log | People, one at a time, under the party and the verbs.
+   *
+   * The panels are always in the DOM — the tracker, the log and the people
+   * list render into them by id whether or not they are showing — so a tab is
+   * only a class. Which one was open is a preference, not game state, so it
+   * lives in localStorage. In a fight the CSS ignores all of this and shows
+   * the log.
+   */
+  const RAIL_TAB_PREF = 'rpg.railtab';
+
+  function selectRailTab(name) {
+    const tabs = $$('.rail-tab');
+    if (!tabs.some((t) => t.dataset.tab === name)) name = 'tasks';
+    tabs.forEach((t) => {
+      const on = t.dataset.tab === name;
+      t.classList.toggle('is-current', on);
+      t.setAttribute('aria-selected', String(on));
+      t.tabIndex = on ? 0 : -1;
+    });
+    $$('.rail-tab-panel').forEach((p) => p.classList.toggle('is-current', p.dataset.panel === name));
+    try { window.localStorage.setItem(RAIL_TAB_PREF, name); } catch (e) { /* private mode */ }
+  }
+
+  function initRailTabs() {
+    const tabs = $$('.rail-tab');
+    if (!tabs.length) return;
+    let saved = null;
+    try { saved = window.localStorage.getItem(RAIL_TAB_PREF); } catch (e) { /* private mode */ }
+    selectRailTab(saved || 'tasks');
+    tabs.forEach((t, i) => {
+      t.addEventListener('click', () => selectRailTab(t.dataset.tab));
+      t.addEventListener('keydown', (e) => {
+        if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+        e.preventDefault();
+        e.stopPropagation();
+        const next = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
+        selectRailTab(next.dataset.tab);
+        next.focus();
+      });
+    });
   }
 
   /**
@@ -712,6 +756,7 @@
       card.innerHTML = `
         <img class="party-face" src="${esc(G().classArtUrl(pc, '_face'))}" alt="">
         <div class="party-name">${esc(pc.name)}</div>
+        ${pc.class ? `<div class="party-class">${esc([pc.race, pc.class].filter(Boolean).join(' '))} · Lv ${esc(pc.level ?? 1)}</div>` : ''}
         <div class="hp-bar"><span class="${G().hpBand(pc.current_hp, pc.max_hp)}" style="width:${G().hpPct(pc.current_hp, pc.max_hp)}%"></span></div>
         ${pc.xp_progress ? `<div class="xp-bar rail-xp"
             title="Level ${esc(pc.level)}${pc.xp_progress.next_level
@@ -797,9 +842,23 @@
       { label: 'Search', hint: 'Look the place over', run: () => G().search() },
       { label: 'Camp', hint: 'Rest, and see how the party is taking it', run: openCamp },
       { label: 'Journal', hint: 'Quests taken and quests done', run: openJournal },
+      // The painted scene keeps its chart behind a toggle (M); a place with
+      // no painting already IS the chart, so there is nothing to open.
+      {
+        label: 'Map',
+        hint: G().hasSceneMap && G().hasSceneMap() ? 'Show the region map (M)' : 'The map is already on screen',
+        disabled: !(G().hasSceneMap && G().hasSceneMap()),
+        run: () => G().toggleSceneMap(),
+      },
+      {
+        label: 'Character',
+        hint: 'Open the character sheet',
+        disabled: !st.character,
+        run: () => openCharacterSheet(st.character.id),
+      },
     ];
 
-    const icons = { Talk: 'i-parley', Search: 'i-sense', Camp: 'i-camp', Journal: 'i-journal' };
+    const icons = { Talk: 'i-parley', Search: 'i-sense', Camp: 'i-camp', Journal: 'i-journal', Map: 'i-map', Character: 'i-heart' };
     bar.innerHTML = '';
     buttons.forEach((b) => {
       const el = document.createElement('button');
@@ -1917,7 +1976,7 @@
     showModal, closeTopModal, closeAllModals, confirm,
     // rails
     renderPartyRail, renderQuestTracker, renderActionBar,
-    appendLogLine, redrawLog, refreshRolls,
+    appendLogLine, redrawLog, refreshRolls, selectRailTab,
     // panels
     openCharacterSheet, openJournal, openCamp, openShop, openRolls,
     approvalBand,
