@@ -5956,7 +5956,16 @@ body.bm-pan-ready .battlemap { cursor: grab; }
 /* The slide matches `.bm-token`'s 110ms, and is only on while walking, so a
    pan or a zoom never leaves the cards trailing behind the floor. */
 .bm-card.is-walking { transition: left 110ms var(--ease-linear), top 110ms var(--ease-linear); }
-.bm-card-body { position: absolute; inset: 0; }
+.bm-card-body { position: absolute; inset: 0; transition: opacity 0.12s ease-out; }
+/* See-through (BattleMap bindFade): a card near the mouse, or in front of the
+   lit square, or every card while Shift is held. It stops taking the pointer
+   so a click lands on the floor behind it; the figure is still clicked on
+   its own square, where its ring is. */
+.bm-card.is-faded .bm-card-body,
+.bm-stage.is-xray .bm-card .bm-card-body { opacity: 0.3; }
+.bm-stage.fade-snap .bm-card-body { transition: none; }
+.bm-card.is-faded .bm-card-art,
+.bm-stage.is-xray .bm-card .bm-card-art { pointer-events: none; }
 /* A run seen end-on with no end-on art: its side view, squeezed to one cell. */
 .bm-card[data-fit="squash"] .bm-card-art { object-fit: fill; }
 .bm-card-art {

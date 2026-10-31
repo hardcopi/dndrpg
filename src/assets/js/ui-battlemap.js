@@ -1872,6 +1872,104 @@
   window.addEventListener('blur', dropSpace);
 
   /**
+   * See-through cards: what stands up in the diorama hides the floor behind
+   * it, which is where every click on this board lands.
+   *
+   * As the mouse moves, any card whose projected box the pointer is on (or
+   * near), and any card standing in front of the lit square (paintHover),
+   * goes see-through and stops taking the pointer, so the click goes to the
+   * floor behind it. The figure itself is still a click away: its token's
+   * ring and hit circle are on its own square in the SVG, and pointing there
+   * lights that square and names the figure as before.
+   *
+   * Geometry, not mouseenter/leave: a faded card stops getting pointer
+   * events, so events on the card would fade it, unfade it, and fade it
+   * again every frame. The test is the card's projected rect (a transformed
+   * element's bounding rect is what is on screen) with a wider margin to stay
+   * faded than to become faded, so moving between cells near an edge does not
+   * flicker. Mouse only — a finger has no hover. Holding Shift fades every
+   * standing card at once (`is-xray` on the stage), for a look at the whole
+   * floor.
+   */
+  const FADE_NEAR = 6;
+  const FADE_KEEP = 16;
+  let xray = false;
+  // Where the mouse last was over the board, kept across redraws.
+  let px = null;
+  let py = null;
+  function setXray(on) {
+    if (xray === on) return;
+    xray = on;
+    document.querySelectorAll('.bm-stage').forEach((el) => el.classList.toggle('is-xray', on));
+  }
+  if (typeof document !== 'undefined') {
+    const typing = (el) => !!(el && typeof el.closest === 'function'
+      && el.closest('input, textarea, select, [contenteditable]'));
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Shift' && !e.repeat && !typing(e.target)) setXray(true);
+    });
+    document.addEventListener('keyup', (e) => { if (e.key === 'Shift') setXray(false); });
+    window.addEventListener('blur', () => setXray(false));
+  }
+
+  function bindFade(root) {
+    const fresh = root.querySelector('.bm-stage');
+    if (fresh) fresh.classList.toggle('is-xray', xray);
+    // Once per box: a redraw replaces the stage inside it, not the box, and
+    // run() looks the stage up each time.
+    if (root.dataset.bmFade) return;
+    root.dataset.bmFade = '1';
+    let raf = 0;
+    const run = () => {
+      raf = 0;
+      const stage = root.querySelector('.bm-stage');
+      if (!stage) return;  // the flat board has nothing standing up
+      const cards = stage.querySelectorAll('.bm-card');
+      if (px === null) {
+        for (const c of cards) c.classList.remove('is-faded');
+        return;
+      }
+      const lit = root.querySelector('.bm-hover-cell');
+      const cr = lit ? lit.getBoundingClientRect() : null;
+      for (const c of cards) {
+        if (c.classList.contains('is-off')) continue;
+        const r = c.getBoundingClientRect();
+        const m = c.classList.contains('is-faded') ? FADE_KEEP : FADE_NEAR;
+        let on = px >= r.left - m && px <= r.right + m && py >= r.top - m && py <= r.bottom + m;
+        if (!on && cr && cr.width) {
+          // In front of the lit square: over a fair part of it, and its foot
+          // below the square's middle on screen (behind it, a card is hidden
+          // by the square's own row rather than hiding it).
+          const ix = Math.min(r.right, cr.right) - Math.max(r.left, cr.left);
+          const iy = Math.min(r.bottom, cr.bottom) - Math.max(r.top, cr.top);
+          on = ix > cr.width * 0.15 && iy > cr.height * 0.15 && r.bottom > cr.top + cr.height / 2;
+        }
+        c.classList.toggle('is-faded', on);
+      }
+    };
+    const later = () => { if (!raf) raf = requestAnimationFrame(run); };
+    root.addEventListener('pointermove', (ev) => {
+      if (ev.pointerType !== 'mouse') return;
+      px = ev.clientX;
+      py = ev.clientY;
+      later();
+    });
+    root.addEventListener('pointerleave', () => { px = null; py = null; later(); });
+    // A touch puts nothing see-through, and takes back what a mouse left.
+    root.addEventListener('pointerdown', (ev) => {
+      if (ev.pointerType !== 'mouse') { px = null; py = null; later(); }
+    });
+    // A redraw (a poll, an action) under a mouse that has not moved keeps
+    // what it had faded, rather than flashing it back for a frame.
+    // Snapped, not faded in, so a redraw does not blink the cards.
+    if (px !== null && fresh) {
+      fresh.classList.add('fade-snap');
+      run();
+      requestAnimationFrame(() => requestAnimationFrame(() => fresh.classList.remove('fade-snap')));
+    }
+  }
+
+  /**
    * Give the board a camera, and give it back the one it had.
    *
    * Called after every render, because every render is a new SVG. The view is
@@ -1962,6 +2060,7 @@
     const svg = root.querySelector('.battlemap');
     if (!svg) return;
     const h = handlers || {};
+    bindFade(root);
     moveDragAllowed = () => !h.canDrag || h.canDrag();
     // How fit() gets the board redrawn when the box wants it turned.
     reflow = h.onReflow || null;
