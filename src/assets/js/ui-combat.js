@@ -442,6 +442,7 @@
             <button type="button" class="icon-btn icon-btn-sm" data-zoom="in"
                     title="Zoom in (+) · hold Space or the middle button to drag"
                     aria-label="Zoom in">+</button>
+            ${viewToggleHtml()}
           </div>
           ${ui.placing ? `<div class="cbt-placing">Placing <strong>${esc(ui.placing.name)}</strong>
             — click the ground. <button type="button" class="btn btn-small" data-cancel-place>Cancel</button></div>` : ''}
@@ -908,8 +909,14 @@
         else cam.reset();
       };
     });
+    // The view is a different board — a stage, a plane, cards — not a
+    // different camera on the same one, so changing it is a render.
+    const view = $('[data-view]', box);
+    if (view) view.onclick = () => { window.BattleMap.setViewMode(view.dataset.view); render(); };
 
     window.BattleMap.bind(box, {
+      // The board's box now wants it turned the other way (see fit()).
+      onReflow: () => { if (st()) render(); },
       canDrag: () => !ui.placing && !!actor && actor.type === 'pc' && s.status === 'active' && !ui.busy,
       onToken: (cid) => {
         if (ui.placing) return placeAt(cellOfCid(cid));
@@ -936,6 +943,27 @@
         window.BattleMap.paintPath(box, s, cid || !cell ? null : `${cell[0]},${cell[1]}`);
       },
     });
+  }
+
+  /** What each board view is called, and the glyph its button shows. */
+  const BOARD_VIEWS = {
+    tilt: { name: 'Tilted', glyph: '◩' },
+    low: { name: 'Low angle', glyph: '◪' },
+    flat: { name: 'Top-down', glyph: '▭' },
+  };
+
+  /**
+   * The view toggle, last in the zoom cluster. The glyph is the view you are
+   * looking at; the title says which one a press goes to.
+   */
+  function viewToggleHtml() {
+    const BM = window.BattleMap;
+    if (!BM || !BM.viewMode) return '';
+    const now = BM.viewMode();
+    const next = BM.nextViewMode(now);
+    const label = `View: ${BOARD_VIEWS[now].name} — switch to ${BOARD_VIEWS[next].name}`;
+    return `<button type="button" class="icon-btn icon-btn-sm" data-view="${next}"
+                    title="${esc(label)}" aria-label="${esc(label)}">${BOARD_VIEWS[now].glyph}</button>`;
   }
 
   function cellOfCid(cid) {

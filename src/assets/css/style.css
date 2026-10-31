@@ -5826,7 +5826,9 @@ body.bm-pan-ready .battlemap { cursor: grab; }
   .bm-glow, .bm-flame { animation: none; }
   .bm-mote { animation: none; opacity: 0; }
   .bm-token { transition: none; }
-  .bm-token .bm-body, .bm-token .bm-figure, .bm-token .bm-face,
+  /* [data-cid] lifts these to the specificity of `.bm-token.is-struck .bm-body`,
+     which would otherwise beat them; equal, and later, wins. */
+  .bm-token[data-cid] .bm-body, .bm-token[data-cid] .bm-figure, .bm-token[data-cid] .bm-face,
   .battlemap.is-jolt, .battlemap.is-jolt-big { animation: none; }
 }
 
@@ -5834,6 +5836,313 @@ body.bm-pan-ready .battlemap { cursor: grab; }
 .bm-hp.ok { fill: var(--success); }
 .bm-hp.mid { fill: var(--warn); }
 .bm-hp.low { fill: var(--danger); }
+
+/* --- the diorama: the 'tilt' and 'low' views ---------------------------
+   The same SVG board, laid on a plane tilted back in CSS 3D, with walls on
+   its rim and the figures and tall props standing on it as screen-facing
+   cards. See the "diorama" section of ui-battlemap.js for the structure and
+   for how fit() sizes it.
+
+   SAFARI RULE, and it is not a style preference: nothing in the 3D chain —
+   `.bm-plane`, `.bm-cards`, a card, a wall — may carry `filter`, `opacity`
+   below 1, `overflow` other than visible, `mix-blend-mode`, `clip-path`,
+   `mask`, `isolation`, `contain: paint` or `will-change` on opacity/filter.
+   Any one of them flattens the whole scene into the floor in WebKit. Effects
+   go on leaves (the `<img>` inside a card, a glow inside a wall); the board's
+   jolt moves `.bm-stage`, which holds the perspective and is outside the chain.
+
+   Lengths here are real px, from three variables ui-battlemap.js writes:
+   `--cell` (px per cell at the current zoom), `--cell0` (px per cell at
+   zoom 1, which the walls use because they only show unzoomed), and the
+   viewBox's `--vbx`/`--vby`. A card's own `--cx`/`--cy` is its foot in cells.
+   `--tilt` is written by fit(), which leans each view within a range to suit
+   the panel; on a turned board all of these are in the plane's frame. */
+.bm-stage {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: var(--persp, 1800px);
+  perspective-origin: 50% 20%;
+}
+.cbt-map > .bm-stage { inset: var(--sp-4); }
+.bm-plane {
+  position: relative;
+  flex: none;
+  transform-style: preserve-3d;
+  transform-origin: 50% 50%;
+  transform: translate(var(--sx, 0px), var(--sy, 0px)) rotateX(var(--tilt));
+}
+/* The plane is exactly the board's shape, so the SVG fills it with nothing to
+   letterbox and its viewBox maps linearly onto the plane's pixels — which is
+   what lets a card find its cell with a subtraction and a multiply. */
+.bm-plane > .battlemap {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+}
+/* Turned (a landscape board in a portrait panel, or the reverse): the plane is
+   H cells wide and W deep, and the SVG keeps its own W x H box, set by fit(),
+   centred and turned a quarter clockwise into it. A 2D transform on a leaf of
+   the plane, so the Safari rule is untouched; clicks still land on its cells. */
+.bm-stage.is-turned .bm-plane > .battlemap {
+  inset: auto;
+  left: 50%;
+  top: 50%;
+  width: var(--board-w);
+  height: var(--board-h);
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+.bm-cards {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  pointer-events: none;
+}
+/* A figure's picture is a click target for its token; see bind(). */
+.bm-card.is-figure .bm-card-art { pointer-events: auto; cursor: pointer; }
+
+/* The flat copies of whatever is standing up. Ring, turn pulse, selection and
+   hit circle stay on the floor: they are where the click goes. */
+.bm-token.has-card .bm-figure,
+.bm-token.has-card .bm-face,
+.bm-token.has-card .bm-hp-back,
+.bm-token.has-card .bm-hp,
+.bm-token.has-card .bm-cover-badge,
+.bm-prop.has-card { display: none; }
+.bm-shadow { pointer-events: none; }
+
+/* A card: foot on its cell, standing up by un-tilting about its own bottom
+   edge. `--lift` raises a hovering Tiny thing in the card's own (upright)
+   frame. Pointer-events none: a click on a body falls through to the floor,
+   which is where every click on this board is meant to land. */
+.bm-card {
+  position: absolute;
+  left: calc((var(--cx) - var(--vbx, 0)) * var(--cell) - var(--w) * var(--cell) / 2);
+  top: calc((var(--cy) - var(--vby, 0)) * var(--cell) - var(--h) * var(--cell));
+  width: calc(var(--w) * var(--cell));
+  height: calc(var(--h) * var(--cell));
+  transform-origin: 50% 100%;
+  transform: rotateX(calc(-1 * var(--tilt))) translateY(calc(var(--lift, 0) * -1 * var(--cell)));
+  pointer-events: none;
+}
+/* Off camera: the plane cannot clip (overflow would flatten it), so this is
+   the clip. */
+.bm-card.is-off { display: none; }
+/* The slide matches `.bm-token`'s 110ms, and is only on while walking, so a
+   pan or a zoom never leaves the cards trailing behind the floor. */
+.bm-card.is-walking { transition: left 110ms var(--ease-linear), top 110ms var(--ease-linear); }
+.bm-card-body { position: absolute; inset: 0; }
+/* A run seen end-on with no end-on art: its side view, squeezed to one cell. */
+.bm-card[data-fit="squash"] .bm-card-art { object-fit: fill; }
+.bm-card-art {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: 50% 100%;
+  /* Torchlight, from how near the nearest flames are. A leaf, so allowed. */
+  filter: brightness(var(--lit, 1));
+  user-select: none;
+}
+.bm-card-art.is-pixel { image-rendering: pixelated; }
+.bm-card-hp {
+  position: absolute;
+  left: 50%;
+  top: calc(-0.16 * var(--cell));
+  width: calc(0.72 * var(--cell));
+  height: calc(0.1 * var(--cell));
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.65);
+  border-radius: 999px;
+  overflow: hidden;      /* a child of a card, not the card: a leaf */
+}
+.bm-card-hp > i { display: block; height: 100%; background: var(--success); }
+.bm-card-hp > i.mid { background: var(--warn); }
+.bm-card-hp > i.low { background: var(--danger); }
+.bm-card-cover {
+  position: absolute;
+  right: calc(-0.22 * var(--cell));
+  top: calc(0.08 * var(--cell));
+  width: calc(0.44 * var(--cell));
+  height: calc(0.48 * var(--cell));
+}
+/* The card cannot be hovered (pointer-events none); bind() tells it when its
+   token is. */
+.bm-card.is-hovered .bm-cover-badge { opacity: 1; }
+
+.bm-card.is-walking .bm-card-body { animation: bm-card-step 0.22s ease-in-out infinite alternate; }
+.bm-card.is-struck .bm-card-body { animation: bm-card-flinch 0.42s ease-out; }
+.bm-card.is-crit .bm-card-body   { animation: bm-card-flinch-big 0.46s ease-out; }
+.bm-card.is-struck .bm-card-art,
+.bm-card.is-crit .bm-card-art { animation: bm-hurt 0.42s ease-out; }
+.bm-card.is-healed .bm-card-art { animation: bm-healed 0.46s ease-out; }
+@keyframes bm-card-step {
+  from { transform: translateY(0); }
+  to   { transform: translateY(calc(-0.07 * var(--cell))); }
+}
+@keyframes bm-card-flinch {
+  0%   { transform: translateX(0); }
+  20%  { transform: translateX(calc(0.09 * var(--cell))); }
+  45%  { transform: translateX(calc(-0.07 * var(--cell))); }
+  70%  { transform: translateX(calc(0.04 * var(--cell))); }
+  100% { transform: translateX(0); }
+}
+@keyframes bm-card-flinch-big {
+  0%   { transform: translate(0, 0); }
+  15%  { transform: translate(calc(0.16 * var(--cell)), calc(-0.03 * var(--cell))); }
+  35%  { transform: translate(calc(-0.13 * var(--cell)), calc(0.02 * var(--cell))); }
+  60%  { transform: translate(calc(0.08 * var(--cell)), 0); }
+  100% { transform: translate(0, 0); }
+}
+.bm-stage.is-jolt     { animation: bm-jolt 0.24s ease-out; }
+.bm-stage.is-jolt-big { animation: bm-jolt-big 0.3s ease-out; }
+
+/* The rim. The back wall stands on the top edge, the side walls on the side
+   edges, the lip hangs under the front; each is a box laid flat beyond its
+   edge and folded up about that edge. Darkest toward the top, where no torch
+   reaches. Sized off `--cell0` and hidden (by visibility, so fit() can still
+   measure them) while zoomed, when the plane's edge is not the board's. */
+.bm-wall,
+.bm-lip { position: absolute; pointer-events: none; }
+.bm-wall {
+  background-color: #2a1f16;
+  background-image:
+    linear-gradient(rgba(8, 5, 3, 0.95), rgba(8, 5, 3, 0.5) 55%, rgba(8, 5, 3, 0.35)),
+    var(--wall-tex, none);
+  background-size: 100% 100%, var(--cell0) var(--cell0);
+}
+.bm-wall.is-back {
+  left: 0;
+  width: 100%;
+  top: calc(-2.4 * var(--cell0));
+  height: calc(2.4 * var(--cell0));
+  transform-origin: 50% 100%;
+  transform: rotateX(-90deg);
+}
+.bm-wall.is-left,
+.bm-wall.is-right {
+  top: 0;
+  height: 100%;
+  width: calc(2.4 * var(--cell0));
+}
+.bm-wall.is-left {
+  left: calc(-2.4 * var(--cell0));
+  transform-origin: 100% 50%;
+  transform: rotateY(90deg);
+  background-image:
+    linear-gradient(90deg, rgba(8, 5, 3, 0.95), rgba(8, 5, 3, 0.55)),
+    var(--wall-tex, none);
+}
+.bm-wall.is-right {
+  left: 100%;
+  transform-origin: 0 50%;
+  transform: rotateY(-90deg);
+  background-image:
+    linear-gradient(270deg, rgba(8, 5, 3, 0.95), rgba(8, 5, 3, 0.55)),
+    var(--wall-tex, none);
+}
+/* Out of doors: no wall, but the same headroom reserved for a figure on the
+   back row (see wallsHtml). Never seen. */
+.bm-wall.is-ghost {
+  top: calc(-1.7 * var(--cell0));
+  height: calc(1.7 * var(--cell0));
+  background: none;
+  visibility: hidden;
+}
+.bm-lip {
+  left: 0;
+  top: 100%;
+  width: 100%;
+  height: calc(0.35 * var(--cell0));
+  transform-origin: 50% 0;
+  transform: rotateX(-90deg);
+  background: linear-gradient(#3b2b1d, #1c140d);
+}
+.bm-lip.is-earth { background: linear-gradient(#3a3020, #17120a); }
+.is-zoomed .bm-wall,
+.is-zoomed .bm-lip { visibility: hidden; }
+
+/* A sconce on the back wall, and the light it throws on the stone behind it.
+   The glow covers the whole wall and draws its pool with the gradient, so it
+   never hangs past the wall's end; its flicker is opacity on a leaf. */
+.bm-torch {
+  position: absolute;
+  left: calc(var(--tx) * var(--cell0));
+  bottom: calc(0.95 * var(--cell0));
+  height: calc(0.9 * var(--cell0));
+  width: auto;
+  transform: translateX(-50%);
+}
+.bm-wall-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse calc(2.2 * var(--cell0)) calc(1.8 * var(--cell0))
+      at calc(var(--tx) * var(--cell0)) 62%,
+    rgba(255, 170, 70, 0.5), rgba(255, 140, 50, 0));
+  animation: bm-wall-flicker 2.2s ease-in-out infinite alternate;
+}
+@keyframes bm-wall-flicker {
+  0%   { opacity: 0.78; }
+  22%  { opacity: 0.95; }
+  41%  { opacity: 0.7; }
+  63%  { opacity: 1; }
+  100% { opacity: 0.84; }
+}
+
+/* A number, standing at the cell like a figure rather than painted on the
+   tilted floor. The zero-size box is the foot and the hinge; the span rises. */
+.bm-cfloat {
+  position: absolute;
+  left: calc((var(--cx) - var(--vbx, 0)) * var(--cell));
+  top: calc((var(--cy) - var(--vby, 0)) * var(--cell));
+  width: 0;
+  height: 0;
+  transform-origin: 0 0;
+  transform: rotateX(calc(-1 * var(--tilt)));
+  pointer-events: none;
+}
+.bm-cfloat > span {
+  position: absolute;
+  left: 0;
+  bottom: calc(1.75 * var(--cell));
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-family: var(--mono);
+  font-size: calc(0.5 * var(--cell));
+  font-weight: var(--fw-bold);
+  color: var(--text);
+  text-shadow: 0 0 3px rgba(0, 0, 0, 0.9), 0 0 1px #000;
+  animation: bm-crise var(--dur-rise) var(--ease-out) forwards;
+}
+.bm-cfloat.float-dmg > span { color: var(--danger); }
+.bm-cfloat.float-crit > span { color: var(--gold-bright); font-size: calc(0.72 * var(--cell)); }
+.bm-cfloat.float-heal > span { color: var(--success); }
+.bm-cfloat.float-miss > span { color: var(--text-dim); font-size: calc(0.42 * var(--cell)); }
+.bm-cfloat.float-cast > span { color: var(--accent); font-size: calc(0.42 * var(--cell)); }
+.bm-cfloat.float-cond > span { color: var(--warn); font-size: calc(0.4 * var(--cell)); }
+.bm-cfloat.float-boon > span { color: var(--success); font-size: calc(0.4 * var(--cell)); }
+.bm-cfloat.float-save-ok > span { color: var(--success); font-size: calc(0.4 * var(--cell)); }
+.bm-cfloat.float-save-bad > span { color: var(--danger); font-size: calc(0.4 * var(--cell)); }
+@keyframes bm-crise {
+  0%   { transform: translate(-50%, calc(0.15 * var(--cell))); opacity: 0; }
+  12%  { opacity: 1; }
+  70%  { opacity: 1; }
+  100% { transform: translate(-50%, calc(-1.1 * var(--cell))); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bm-card.is-walking { transition: none; }
+  /* [data-card] for the same specificity reason as the token rule above. */
+  .bm-card[data-card] .bm-card-body, .bm-card[data-card] .bm-card-art, .bm-wall-glow,
+  .bm-stage.is-jolt, .bm-stage.is-jolt-big { animation: none; }
+  .bm-cfloat > span { animation: bm-hold var(--dur-rise) steps(1) forwards; }
+}
 
 .cbt-placing {
   position: absolute;

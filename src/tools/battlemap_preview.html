@@ -15,6 +15,12 @@
   `window.Game` is stubbed to the one method the module actually uses. That is
   the whole of its dependency on the rest of the game.
 
+  It also shows the diorama views (tilt / low / flat): the real html() and
+  controls() — and so the real fit() — with a pillar, a low wall, a turned
+  barricade and three figures standing on the board. Art in
+  assets/images/battlemap/upright/ that is not on disk yet simply leaves the
+  flat prop in place, which is the fallback working.
+
   Open at /tools/battlemap_preview.html
 -->
 <html lang="en">
@@ -51,6 +57,17 @@
       <h2>Together</h2>
       <p class="note">What playEvents actually does: the bolt lands, then the number.</p>
       <button class="btn btn-small" id="volley">shoot and hit</button>
+      <h2>View</h2>
+      <p class="note">The diorama: the same board tilted back, walls on the rim,
+        figures and tall props standing as cards. Stored like the game's toggle.</p>
+      <button class="btn btn-small" data-view="tilt">tilt</button>
+      <button class="btn btn-small" data-view="low">low</button>
+      <button class="btn btn-small" data-view="flat">flat</button>
+      <button class="btn btn-small" data-palette>indoor / outdoor</button>
+      <h2>Motion</h2>
+      <button class="btn btn-small" id="hit">hit the bandit</button>
+      <button class="btn btn-small" id="crit">crit the bandit</button>
+      <button class="btn btn-small" id="walk">walk Sera round the pillar</button>
     </div>
   </div>
 
@@ -61,6 +78,7 @@
       (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])),
   };
   </script>
+  <script src="/assets/js/svg-view.js"></script>
   <script src="/assets/js/ui-battlemap.js"></script>
   <script>
   const ARCHER = [2, 6];
@@ -75,21 +93,68 @@
         const rows = Array.from({ length: 12 }, () => '.'.repeat(16).split(''));
         for (const [x, y] of [[7, 3], [7, 4], [8, 4], [8, 5]]) rows[y][x] = 'n';
         for (const [x, y] of [[5, 8], [6, 8], [6, 9]]) rows[y][x] = ',';
+        for (const [x, y] of [[10, 7], [11, 7], [3, 3], [3, 4]]) rows[y][x] = 'o';
         return rows.map((r) => r.join(''));
       })(),
       zones: null,
+      palette: 'arena',
+      seed: 7,
+      // Furniture for the diorama to stand up: a pillar, a run of low wall
+      // east to west, a barricade turned north to south (end cards), and a
+      // pit, which stays flat.
+      props: [
+        { x: 7, y: 3, w: 1, h: 1, src: 'battlemap/props/pillar.png', stand: true },
+        { x: 8, y: 4, w: 1, h: 1, src: 'battlemap/props/pillar_broken.png', stand: true },
+        { x: 10, y: 7, w: 2, h: 1, src: 'battlemap/props/wall_low_2.png' },
+        { x: 3, y: 3, w: 1, h: 2, src: 'battlemap/props/barricade_2.png', rot: 90 },
+        { x: 12, y: 9, w: 1, h: 1, src: 'battlemap/props/pit.png' },
+      ],
     },
     combatants: [
       { cid: 'pc_1', name: 'Sera', side: 'party', x: ARCHER[0], y: ARCHER[1],
-        hp: 17, max_hp: 19, ac: 14, alive: true, conditions: [] },
+        hp: 17, max_hp: 19, ac: 14, alive: true, conditions: [], sprite_key: 'ranger' },
       { cid: 'mon_1', name: 'Bandit', side: 'foe', x: TARGET[0], y: TARGET[1],
-        hp: 8, max_hp: 11, ac: 13, alive: true, conditions: [] },
+        hp: 8, max_hp: 11, ac: 13, alive: true, conditions: [], sprite_key: 'bandit' },
+      { cid: 'mon_2', name: 'Goblin', side: 'foe', x: 7, y: 2,
+        hp: 4, max_hp: 7, ac: 13, alive: true, conditions: [], sprite_key: 'goblin' },
     ],
-    ui: null,
+    ui: { targets: { mon_1: { dist: 55, cover: 2 } } },
   };
 
   const stage = document.getElementById('stage');
-  stage.innerHTML = BattleMap.html(state, { selected: null, faceUrl: () => '' });
+  // What ui-combat.js does on every render: draw, then controls() — which is
+  // where the camera is attached and, tilted, where fit() sizes the plane.
+  function draw() {
+    stage.innerHTML = BattleMap.html(state, { selected: null, faceUrl: () => '' });
+    BattleMap.controls(stage);
+    BattleMap.bind(stage, { onReflow: draw });
+  }
+  draw();
+  BattleMap.whenFigures(draw);
+
+  document.querySelectorAll('[data-view]').forEach((b) => {
+    b.onclick = () => { BattleMap.setViewMode(b.dataset.view); draw(); };
+  });
+  document.querySelector('[data-palette]').onclick = () => {
+    state.grid.palette = state.grid.palette === 'arena' ? 'forest' : 'arena';
+    draw();
+  };
+  document.getElementById('hit').onclick = () => BattleMap.hitToken(stage, 'mon_1', 'hit');
+  document.getElementById('crit').onclick = () => BattleMap.hitToken(stage, 'mon_1', 'crit');
+  document.getElementById('walk').onclick = async () => {
+    const path = [[2, 6], [3, 6], [4, 6], [5, 6], [6, 5], [7, 5], [8, 6], [9, 6], [9, 5], [9, 4], [9, 3]];
+    const back = path.slice().reverse();
+    const at = state.combatants[0];
+    const route = at.x === path[0][0] && at.y === path[0][1] ? path : back;
+    BattleMap.walking(stage, 'pc_1', true);
+    for (const [x, y] of route.slice(1)) {
+      BattleMap.moveToken(stage, 'pc_1', x, y);
+      await new Promise((r) => setTimeout(r, 110));
+    }
+    await new Promise((r) => setTimeout(r, 110));
+    BattleMap.walking(stage, 'pc_1', false);
+    [at.x, at.y] = route[route.length - 1];
+  };
 
   document.querySelectorAll('[data-float]').forEach((b) => {
     b.onclick = () => {
