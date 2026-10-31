@@ -137,7 +137,7 @@ window.RIVERMARK_SCENES = {
       street_minstrel: {x: 51, y: 76},
       street_drover: {x: 62, y: 72},
       street_seer: {x: 78, y: 80},
-      street_scholar: {x: 43, y: 68},
+      street_scholar: {x: 39, y: 69},
       watch_street: {x: 68, y: 66},
       street_almoner: {x: 24, y: 84}
     },
