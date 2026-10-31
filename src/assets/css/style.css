@@ -9631,3 +9631,86 @@ body.studio-page > .site-bar {
   font-size: 0.85em;
   opacity: 0.8;
 }
+
+/* --- Spell targeting -------------------------------------------------------
+   A spell that needs somebody puts the board in `.is-aiming`. Who it may take
+   glows in the spell's colour (red for a harm, green for a help) and pulses on
+   its floor ring; everybody else dims, so the choice reads at a glance on the
+   tilted board, the low one and the flat one alike. */
+.cbt-map.is-aiming { --aim-col: var(--danger); }
+.cbt-map.is-aiming.aim-ally { --aim-col: var(--success); }
+.cbt-map.is-aiming.aim-any { --aim-col: var(--warn); }
+.cbt-map.is-aiming .bm-card.aim-ok,
+.cbt-map.is-aiming .bm-token.aim-ok { cursor: crosshair; }
+.cbt-map.is-aiming .bm-card.aim-ok .bm-card-art {
+  filter: brightness(var(--lit, 1)) drop-shadow(0 0 2px var(--aim-col)) drop-shadow(0 0 5px var(--aim-col));
+}
+.cbt-map.is-aiming .bm-card.aim-ok.is-hovered .bm-card-art {
+  filter: brightness(calc(var(--lit, 1) * 1.15)) drop-shadow(0 0 3px #fff) drop-shadow(0 0 8px var(--aim-col));
+}
+.cbt-map.is-aiming .bm-card.aim-ok.is-hovered .bm-card-body { transform: translateY(-4%); transition: transform 0.12s ease-out; }
+.cbt-map.is-aiming .bm-card.aim-no .bm-card-art { filter: brightness(calc(var(--lit, 1) * 0.62)) grayscale(0.6); }
+/* A marker over each head that can be chosen: a chevron in the spell's
+   colour, bobbing, so the choice reads from across the board. */
+.cbt-map.is-aiming .bm-card.aim-ok::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: -14%;
+  width: 0;
+  height: 0;
+  margin-left: -7px;
+  border: 7px solid transparent;
+  border-top: 10px solid var(--aim-col);
+  filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.8));
+  animation: bm-aim-bob 0.9s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+.cbt-map.is-aiming .bm-card.aim-ok.is-hovered::before { border-top-color: #fff; }
+@keyframes bm-aim-bob { from { transform: translateY(0); } to { transform: translateY(-5px); } }
+.cbt-map.is-aiming .bm-card.aim-no { cursor: not-allowed; }
+.cbt-map.is-aiming .bm-token.aim-ok .bm-ring {
+  stroke: var(--aim-col);
+  stroke-width: 0.12;
+  animation: bm-aim-pulse 1.1s ease-in-out infinite alternate;
+}
+.cbt-map.is-aiming .bm-token.aim-ok:hover .bm-ring { stroke: #fff; stroke-width: 0.16; }
+.cbt-map.is-aiming .bm-token.aim-no { opacity: 0.45; cursor: not-allowed; }
+@keyframes bm-aim-pulse { from { stroke-opacity: 0.55; } to { stroke-opacity: 1; } }
+.cbt-map.is-aiming .aim-refused .bm-card-body,
+.cbt-map.is-aiming .bm-token.aim-refused .bm-body { animation: bm-aim-refuse 0.32s ease-in-out; }
+@keyframes bm-aim-refuse {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-6%); }
+  75% { transform: translateX(6%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cbt-map.is-aiming .bm-token.aim-ok .bm-ring,
+  .cbt-map.is-aiming .bm-card.aim-ok::before,
+  .cbt-map.is-aiming .aim-refused .bm-card-body,
+  .cbt-map.is-aiming .bm-token.aim-refused .bm-body { animation: none; }
+}
+.cbt-aiming {
+  display: grid;
+  grid-template-columns: minmax(14em, 1fr) auto auto;
+  row-gap: var(--sp-4);
+  border-color: var(--aim-col);
+  max-width: calc(100% - 1rem);
+}
+.cbt-aim-text { grid-column: 1 / -1; text-align: center; }
+.cbt-aim-count { color: var(--text-dim); }
+.cbt-aim-hint { font-family: var(--mono); color: var(--text-dim); min-width: 0;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; align-self: center; }
+.cbt-aim-hint.is-ok { color: var(--success-ink); }
+.cbt-aim-hint.is-bad { color: var(--danger-ink); }
+
+.aim-row .aim-face { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; flex: none;
+  border: 2px solid var(--border); }
+.aim-row.is-foe .aim-face { border-color: var(--danger-dim); }
+.aim-row.is-party .aim-face { border-color: var(--success-dim); }
+.aim-row .aim-hp { width: 60px; height: 6px; background: var(--danger-well); border-radius: 3px; overflow: hidden; flex: none; }
+.aim-row .aim-hp i { display: block; height: 100%; background: var(--success); }
+.aim-list .aim-out { margin: var(--sp-8) 0 0; }
+
+/* The campfire picker: who to mend, with their hit points, the unhurt greyed. */
+.cast-pick-list .aim-row .spell-note { min-width: 5em; text-align: right; }
