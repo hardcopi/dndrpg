@@ -6,13 +6,13 @@
     "on_job_board": false,
     "required_level": 4,
     "rewards": {
-        "xp": 500,
+        "xp": 1500,
         "gold": 150
     },
     "stages": {
         "the_hollow_gallery": {
             "title": "The hollow gallery",
-            "objective": "Get down to the lowest gallery the warren still holds.",
+            "objective": "Get down to the lowest gallery the warren still holds, and ask Nakka to show you what she has been losing.",
             "journal": "Below the shaft there is one more level and the goblins are propping it. The floor rings hollow for the whole width of the gallery, which means there is a void under a floor that was cut solid.",
             "target": {
                 "location": "broken_floor"
@@ -20,7 +20,7 @@
         },
         "the_edge_is_cut": {
             "title": "The edge is cut",
-            "objective": "Look at the edge of the hole.",
+            "objective": "Look at the edge of the hole, then tell Nakka what you mean to do about the gallery.",
             "journal": "Thirty feet across, and every foot of the rim is dressed. Stone that falls breaks along its bedding and leaves a shelf. This does not have a shelf. Somebody took this floor out from underneath, working upward, and stopped when they came through.",
             "target": {
                 "location": "broken_floor"
@@ -43,7 +43,7 @@
                     "set_flag": "deep_known"
                 },
                 {
-                    "xp": 200
+                    "xp": 600
                 },
                 {
                     "approval": {
@@ -72,7 +72,7 @@
                     "set_flag": "broken_floor_shored"
                 },
                 {
-                    "xp": 150
+                    "xp": 450
                 },
                 {
                     "approval": {

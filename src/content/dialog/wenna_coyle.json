@@ -7,6 +7,24 @@
                 "conditions": [
                     {
                         "flag": "works_alarmed"
+                    },
+                    {
+                        "not": {
+                            "any": [
+                                {
+                                    "quest": "what_the_quarry_fell_on",
+                                    "stage": "the_works"
+                                },
+                                {
+                                    "quest": "the_indentured",
+                                    "stage": "the_arithmetic"
+                                },
+                                {
+                                    "quest": "the_dig",
+                                    "stage": "the_board"
+                                }
+                            ]
+                        }
                     }
                 ],
                 "text": "The hut window is shuttered and Coyle has the ledgers off the rack and stacked. \"Four wardens and an overseer,\" she says, without looking up from what she is writing. \"I have them down as an incident. Incidents go in the day book and the day book goes downriver on the fifth.\" She blots it. \"I am not frightened of you. I am a great deal more use to this works than Rourke was and everybody including Rourke knew it.\"",

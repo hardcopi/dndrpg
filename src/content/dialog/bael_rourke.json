@@ -38,6 +38,12 @@
                 "conditions": [
                     {
                         "flag": "works_alarmed"
+                    },
+                    {
+                        "not": {
+                            "quest": "the_survey",
+                            "stage": "the_rack"
+                        }
                     }
                 ],
                 "text": "Rourke is not in the office. Rourke is on the muster floor with his arm strapped, arguing about a barrow, because there is a barrow that has not come up and that is a real problem and the rest of it is not.",
@@ -368,6 +374,35 @@
         ],
         "the_rack_explained": [
             {
+                "conditions": [
+                    {
+                        "not": {
+                            "level_at_least": 5
+                        }
+                    }
+                ],
+                "text": "\"Working paper,\" Rourke says, and then looks at you properly, which he has not done yet. He takes in the boots, the way you stand, how many of you there are and how few of you there have been down a heading. \"I'll tell you what I tell the clerks. Whoever walks out of here with that roll is going to be asked by somebody important where they got it, and what they mean to do with it, and they had better have an answer that does not fall over.\" He turns back to the shutter. \"You haven't got that answer yet. Come back when you've been somewhere that has made you harder to argue with, and ask me again.\"",
+                "choices": [
+                    {
+                        "label": "Ask to see the fair sheets anyway.",
+                        "effects": [
+                            {
+                                "start_quest": "the_survey"
+                            }
+                        ],
+                        "next": "the_rack_explained"
+                    },
+                    {
+                        "label": "Where do the faces point?",
+                        "next": "the_aim_point"
+                    },
+                    {
+                        "label": "Back.",
+                        "next": "he_is_delighted"
+                    }
+                ]
+            },
+            {
                 "text": "\"Working paper,\" Rourke says. \"Field books from the chainmen, sections, and the fair sheets they're drawn up into.\" He is entirely indifferent to it. \"The strongbox has the wages and the strongbox is bolted down. That lot's just paper. If somebody wanted it they'd be welcome and they'd be carrying about nine pound of damp paper up two hundred stairs for nothing.\"",
                 "on_enter": [
                     {
@@ -388,6 +423,28 @@
                     {
                         "label": "Back.",
                         "next": "he_is_delighted"
+                    },
+                    {
+                        "label": "Take the fair sheets.",
+                        "conditions": [
+                            {
+                                "quest": "the_survey",
+                                "stage": "the_rack"
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_survey",
+                                    "stage": "in_hand"
+                                }
+                            },
+                            {
+                                "give_item": "the_valley_survey",
+                                "quantity": 1
+                            }
+                        ],
+                        "next": "he_does_not_notice"
                     }
                 ]
             }

@@ -6,13 +6,13 @@
     "on_job_board": false,
     "required_level": 3,
     "rewards": {
-        "xp": 250,
+        "xp": 750,
         "gold": 40
     },
     "stages": {
         "whose_wages": {
             "title": "Who pays the chainman",
-            "objective": "Ask Alder Pyke who actually pays him.",
+            "objective": "Ask Alder Pyke on Granary Row who actually pays him.",
             "journal": "Pyke draws one and threepence a day at the Rivermark counting house. The counting house is not paying it. It is honouring a note for somebody who is.",
             "target": {
                 "location": "granary_row"
@@ -20,7 +20,7 @@
         },
         "the_note": {
             "title": "The note of hand",
-            "objective": "The wages are drawn at the counting house. Go and read what they are drawn on.",
+            "objective": "The wages are drawn at the counting house. Go and read what they are drawn on: search the Counting House for the note, then bring it back to Pyke.",
             "journal": "The counting house keeps the notes it has honoured for a year before it burns them. Pyke's are in the tray with the rest, and there will be one with a mark on it instead of a name.",
             "target": {
                 "location": "counting_house"
@@ -40,7 +40,7 @@
                     "set_flag": "knows_corse_name"
                 },
                 {
-                    "xp": 100
+                    "xp": 300
                 },
                 {
                     "approval": {

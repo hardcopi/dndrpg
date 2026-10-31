@@ -6,14 +6,14 @@
     "on_job_board": false,
     "required_level": 4,
     "rewards": {
-        "xp": 400,
+        "xp": 1400,
         "gold": 80,
         "item": "deepworks_lamp"
     },
     "stages": {
         "the_floor_of_the_warren": {
             "title": "Down what replaced the floor",
-            "objective": "The warren's floor did not fall in. Go and see what took it out.",
+            "objective": "The warren's floor did not fall in. Go down the spoil stair and see what took it out; the stair ends at the headings, where Coyle keeps the hut.",
             "journal": "Ilse has been saying for two years that something is taking the bottom of the warren floor by floor. She was right about the fact and wrong about the verb. Nothing is taking it. Somebody is buying it out, a course at a time, and paying men to carry it away.",
             "target": {
                 "location": "spoil_stair"
@@ -21,7 +21,7 @@
         },
         "the_works": {
             "title": "Walk the works",
-            "objective": "Nobody has stopped you yet. Walk it, and count what you see.",
+            "objective": "Nobody has stopped you yet. Walk it, and count what you see; then go back to Coyle's hut and tell her what you counted.",
             "journal": "Sawn treads. A handrail. A bucket of sand on every landing in case of fire. Below that, a plank floor the size of the market square, a bell, a board of numbered pegs, a canteen and two hundred people working in shifts. There is nothing hidden about any of it. It is simply eleven miles from anybody who would object.",
             "target": {
                 "location": "the_headings"
@@ -41,7 +41,7 @@
                     "set_flag": "deepworks_known"
                 },
                 {
-                    "xp": 150
+                    "xp": 525
                 },
                 {
                     "approval": {

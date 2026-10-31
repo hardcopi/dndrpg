@@ -11,7 +11,7 @@
     "stages": {
         "the_rack": {
             "title": "Not in the strongbox",
-            "objective": "The strongbox holds the wages. The rack holds the working paper. Look in the rack.",
+            "objective": "The strongbox holds the wages. The rack holds the working paper. Look in the rack: go back to Rourke in his office and ask him what is in it.",
             "journal": "Rourke's strongbox is bolted through the floor and through the joist and there are eleven pounds in it. The rolled paper in the rack beside it is not locked up at all, because nobody at the works has ever thought of it as worth anything. It is only the survey.",
             "target": {
                 "location": "overseers_office"
@@ -19,7 +19,7 @@
         },
         "in_hand": {
             "title": "In hand",
-            "objective": "You have it. Now decide what it is for.",
+            "objective": "You have it. Now decide what it is for: take it to Ludo Corse at the Factor's House in Greyhythe, or to Alder Pyke on Granary Row.",
             "journal": "Every field, road, weir, seam and roof between the ford and Greyhythe, measured and valued and totalled in one hand. Rivermark is on sheet six. It is not drawn as a town. It is entered in the margin under the head 'clearance', as a cost, and the figure beside it has been revised downward twice — which means somebody sat down twice and worked out that we would come cheaper than that.",
             "target": {
                 "location": "factors_house"

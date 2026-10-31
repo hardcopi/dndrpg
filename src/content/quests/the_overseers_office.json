@@ -11,7 +11,7 @@
     "stages": {
         "the_ladder": {
             "title": "Up the ladder",
-            "objective": "Bael Rourke runs the works from a hut above the headings. Get into it.",
+            "objective": "Bael Rourke runs the works from a hut above the headings. Get into it: climb the ladder and talk to him.",
             "journal": "Bael Rourke came up through the headings and has the hands to prove it. He runs two hundred people on time and under cost and is extremely proud of the first half of that. His office is up a ladder and its shutter faces the works, which means everybody can see who is standing in it.",
             "target": {
                 "location": "overseers_office"
@@ -19,7 +19,7 @@
         },
         "the_strongbox": {
             "title": "The strongbox and the rack",
-            "objective": "The strongbox is bolted through the joist. The rack beside it is not locked at all.",
+            "objective": "The strongbox is bolted through the joist. The rack beside it is not locked at all. Speak to Rourke: talk your way in, take the office off him, or go back down the ladder.",
             "journal": "There is a strongbox in Rourke's office bolted through the floor and through the joist, and there are eleven pounds in it, and it is the only thing in the room anybody has ever thought to secure. The rolled paper in the rack next to it is working paper. Nobody at the works has ever considered it worth anything.",
             "target": {
                 "location": "overseers_office"

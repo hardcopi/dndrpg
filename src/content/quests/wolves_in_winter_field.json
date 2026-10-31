@@ -6,7 +6,7 @@
     "on_job_board": true,
     "required_level": 2,
     "rewards": {
-        "xp": 300,
+        "xp": 450,
         "gold": 120
     },
     "stages": {
@@ -37,7 +37,7 @@
                     "value": "killed"
                 },
                 {
-                    "xp": 100
+                    "xp": 150
                 },
                 {
                     "approval": {
@@ -62,7 +62,7 @@
                     "set_flag": "fen_water_rising"
                 },
                 {
-                    "xp": 150
+                    "xp": 225
                 },
                 {
                     "approval": {
