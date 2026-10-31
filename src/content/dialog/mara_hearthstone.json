@@ -347,21 +347,22 @@
                     }
                 ],
                 "text": "Mara has come round the end of the bar and put a cup down at the table you always end up at, which she does not do. \"Sit,\" she says. \"It's gone quiet out there and I don't trust it. I'd like to say something before somebody downriver says it for me.\"",
-                "on_enter": [
-                    {
-                        "start_quest": "act_one_epilogue"
-                    }
-                ],
                 "choices": [
                     {
                         "label": "Go on.",
+                        "effects": [
+                            {
+                                "start_quest": "act_one_epilogue"
+                            }
+                        ],
                         "next": "after_the_survey"
                     },
                     {
                         "label": "Not now.",
                         "end": true
                     }
-                ]
+                ],
+                "once": true
             },
             {
                 "conditions": [
@@ -681,6 +682,21 @@
                     {
                         "label": "Goodbye.",
                         "end": true
+                    },
+                    {
+                        "label": "You wanted a word, Mara.",
+                        "conditions": [
+                            {
+                                "flag": "act_two_open"
+                            },
+                            {
+                                "not": {
+                                    "quest": "act_one_epilogue",
+                                    "status": "completed"
+                                }
+                            }
+                        ],
+                        "next": "after_the_survey"
                     }
                 ]
             },
@@ -737,6 +753,21 @@
                     {
                         "label": "Goodbye.",
                         "end": true
+                    },
+                    {
+                        "label": "You wanted a word, Mara.",
+                        "conditions": [
+                            {
+                                "flag": "act_two_open"
+                            },
+                            {
+                                "not": {
+                                    "quest": "act_one_epilogue",
+                                    "status": "completed"
+                                }
+                            }
+                        ],
+                        "next": "after_the_survey"
                     }
                 ]
             },
@@ -807,6 +838,21 @@
                     {
                         "label": "Goodbye.",
                         "end": true
+                    },
+                    {
+                        "label": "You wanted a word, Mara.",
+                        "conditions": [
+                            {
+                                "flag": "act_two_open"
+                            },
+                            {
+                                "not": {
+                                    "quest": "act_one_epilogue",
+                                    "status": "completed"
+                                }
+                            }
+                        ],
+                        "next": "after_the_survey"
                     }
                 ]
             }
