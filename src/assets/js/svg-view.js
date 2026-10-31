@@ -38,6 +38,10 @@
     const slop = o.panSlop ?? PAN_SLOP;
     const canPan = o.canPan || ((ev) => ev.button === 0 || ev.button === 1);
     const onApply = o.onApply || (() => {});
+    // Opt-in: the SVG is drawn rotated a quarter clockwise on screen (the
+    // combat board's turned diorama), so screen right is the drawing's -y and
+    // screen down its +x. Asked on every use, since the caller decides it.
+    const turned = o.turned || (() => false);
 
     const view = {
       z: o.start?.z ?? zoomMin,
@@ -67,9 +71,12 @@
       const r = svgEl.getBoundingClientRect();
       if (!r.width || !r.height) return null;
       const vb = svgEl.viewBox.baseVal;
+      const u = (clientX - r.left) / r.width;
+      const v = (clientY - r.top) / r.height;
+      if (turned()) return { x: vb.x + v * vb.width, y: vb.y + (1 - u) * vb.height };
       return {
-        x: vb.x + ((clientX - r.left) / r.width) * vb.width,
-        y: vb.y + ((clientY - r.top) / r.height) * vb.height,
+        x: vb.x + u * vb.width,
+        y: vb.y + v * vb.height,
       };
     }
 
@@ -150,8 +157,13 @@
       e.preventDefault();
       const r = svgEl.getBoundingClientRect();
       const vb = svgEl.viewBox.baseVal;
-      view.cx -= (dx / r.width) * vb.width;
-      view.cy -= (dy / r.height) * vb.height;
+      if (turned()) {
+        view.cx -= (dy / r.height) * vb.width;
+        view.cy += (dx / r.width) * vb.height;
+      } else {
+        view.cx -= (dx / r.width) * vb.width;
+        view.cy -= (dy / r.height) * vb.height;
+      }
       panning.x = e.clientX;
       panning.y = e.clientY;
       apply();

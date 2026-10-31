@@ -5854,7 +5854,9 @@ body.bm-pan-ready .battlemap { cursor: grab; }
    Lengths here are real px, from three variables ui-battlemap.js writes:
    `--cell` (px per cell at the current zoom), `--cell0` (px per cell at
    zoom 1, which the walls use because they only show unzoomed), and the
-   viewBox's `--vbx`/`--vby`. A card's own `--cx`/`--cy` is its foot in cells. */
+   viewBox's `--vbx`/`--vby`. A card's own `--cx`/`--cy` is its foot in cells.
+   `--tilt` is written by fit(), which leans each view within a range to suit
+   the panel; on a turned board all of these are in the plane's frame. */
 .bm-stage {
   position: absolute;
   inset: 0;
@@ -5882,6 +5884,18 @@ body.bm-pan-ready .battlemap { cursor: grab; }
   height: 100%;
   max-width: none;
   max-height: none;
+}
+/* Turned (a landscape board in a portrait panel, or the reverse): the plane is
+   H cells wide and W deep, and the SVG keeps its own W x H box, set by fit(),
+   centred and turned a quarter clockwise into it. A 2D transform on a leaf of
+   the plane, so the Safari rule is untouched; clicks still land on its cells. */
+.bm-stage.is-turned .bm-plane > .battlemap {
+  inset: auto;
+  left: 50%;
+  top: 50%;
+  width: var(--board-w);
+  height: var(--board-h);
+  transform: translate(-50%, -50%) rotate(90deg);
 }
 .bm-cards {
   position: absolute;
@@ -5923,6 +5937,8 @@ body.bm-pan-ready .battlemap { cursor: grab; }
    pan or a zoom never leaves the cards trailing behind the floor. */
 .bm-card.is-walking { transition: left 110ms var(--ease-linear), top 110ms var(--ease-linear); }
 .bm-card-body { position: absolute; inset: 0; }
+/* A run seen end-on with no end-on art: its side view, squeezed to one cell. */
+.bm-card[data-fit="squash"] .bm-card-art { object-fit: fill; }
 .bm-card-art {
   display: block;
   width: 100%;

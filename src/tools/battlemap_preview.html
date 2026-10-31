@@ -127,6 +127,7 @@
   function draw() {
     stage.innerHTML = BattleMap.html(state, { selected: null, faceUrl: () => '' });
     BattleMap.controls(stage);
+    BattleMap.bind(stage, { onReflow: draw });
   }
   draw();
   BattleMap.whenFigures(draw);

@@ -241,7 +241,14 @@
     // every interpolation below that reads it adds nothing at all — the markup
     // is byte for byte what it was before tilt existed.
     const mode = o.view || viewMode();
-    const deck = mode !== 'flat' ? deal(state, o, grid) : null;
+    // Turned (see turnFor) is decided against the box fit() last measured,
+    // because the plane's shape and every card's position depend on it.
+    let turned = false;
+    if (mode !== 'flat') {
+      turned = turnFor(mode, lastBox, lastTurned);
+      lastTurned = turned;
+    }
+    const deck = mode !== 'flat' ? deal(state, o, grid, turned) : null;
 
     const svg = `<svg class="battlemap" viewBox="0 0 ${W} ${H}"
                  role="img" aria-label="The battlefield">
@@ -307,7 +314,8 @@
     </svg>`;
 
     if (!deck) return svg;
-    return `<div class="bm-stage is-${mode}" style="--tilt:${VIEW_TILT[mode]}deg">
+    const deg = lastDeg[`${mode}${turned ? '+t' : ''}`] || VIEW_TILT[mode];
+    return `<div class="bm-stage is-${mode}${turned ? ' is-turned' : ''}" style="--tilt:${deg}deg">
       <div class="bm-plane">${svg}${wallsHtml(grid, deck)}
         <div class="bm-cards">${deck.cards}</div>
       </div>
@@ -487,8 +495,12 @@
       // Tilted, a torch on the back rim is a sconce on the back wall (see
       // wallsHtml) and one on the front rim would be a flame lying on the
       // floor at the viewer's feet; both keep the pool of light they cast and
-      // lose the flat flame.
-      const flame = deck && deck.walled && torchOnRim(t) ? '' : `
+      // lose the flat flame. Turned, the old top and bottom rims are the side
+      // walls and the back wall is the old left edge, so any edge counts.
+      const rim = deck && deck.turned
+        ? torchOnRim(t) || t.x < 1.2 || t.x > W - 1.2
+        : torchOnRim(t);
+      const flame = deck && deck.walled && rim ? '' : `
         <g transform="translate(${x.toFixed(2)} ${y.toFixed(2)})">
           <ellipse class="bm-flame" cx="0" cy="-0.04" rx="0.1" ry="0.17"
             fill="url(#bm-flame-grad)" ${anim}/></g>`;
@@ -741,8 +753,8 @@
       const card = deck ? deck.tokenCard.get(c.cid) : null;
       const carded = card ? ` has-card" data-card="${card.tag}` : '';
       const shadow = card ? `
-        <ellipse class="bm-shadow" cx="${card.dx.toFixed(3)}" cy="${(card.dy - 0.04).toFixed(3)}"
-          rx="${card.rx.toFixed(3)}" ry="${(card.rx * 0.6).toFixed(3)}" fill="url(#bm-shadow-grad)"/>` : '';
+        <ellipse class="bm-shadow" cx="${card.sx.toFixed(3)}" cy="${card.sy.toFixed(3)}"
+          rx="${card.rx.toFixed(3)}" ry="${card.ry.toFixed(3)}" fill="url(#bm-shadow-grad)"/>` : '';
 
       return `<g class="${cls}${c.token ? ' has-token' : ''}${drawn.figure ? ' has-figure' : ''}${carded}"
           transform="translate(${c.x + 0.5} ${c.y + 0.5})"
@@ -778,7 +790,7 @@
   //
   //   .bm-stage   perspective, and the jolt (outside the 3D chain)
   //   .bm-plane   rotateX(tilt), preserve-3d, sized by fit()
-  //     svg       the board, unchanged, filling the plane
+  //     svg       the board, unchanged, filling the plane (turned: rotated into it)
   //     .bm-wall  ×3 and .bm-lip, standing on / hanging from the rim
   //     .bm-cards preserve-3d; a card is rotateX(-tilt) about its foot
   //
@@ -794,12 +806,73 @@
   // `--cell`, px per cell), which syncVars() writes on every pan and zoom. So
   // the camera moves them without a redraw, and the arithmetic that keeps a
   // card on its cell is a subtraction and a multiply in the stylesheet.
+  //
+  // FILLING THE PANEL. The angle is not fixed: fit() picks one inside the
+  // view's TILT_RANGE so the projected board's shape matches the panel's
+  // (steeper is shorter), then scales to fill. And a landscape board in a
+  // portrait panel — or the other way round — is drawn TURNED (`is-turned`):
+  // the plane is H cells wide and W deep, and the SVG inside it is rotated a
+  // quarter clockwise, so original cell (x, y) sits at view (H - y, x) and
+  // column 0 is at the back. The SVG is still what is clicked; only the
+  // cards, the shadows and the camera's numbers are converted, by toView()
+  // and in syncVars(). Whether to turn is decided at html() time from the
+  // last box fit() measured, and fit() asks for one re-render (bind()'s
+  // `onReflow`) when the box says otherwise.
   // =========================================================================
 
   const VIEW_KEY = 'rm.board.view';
-  /** Degrees the floor leans back, per view. 'flat' is today's board. */
+  /** Degrees the floor leans back, per view, before fit() adapts it. 'flat' is today's board. */
   const VIEW_TILT = { tilt: 50, low: 32 };
+  /** The range fit() may lean each view through to match the panel's shape. */
+  const TILT_RANGE = { tilt: [40, 60], low: [26, 40] };
   const VIEW_ORDER = ['tilt', 'low', 'flat'];
+
+  /** Turn when that makes a cell this much bigger; turn back below the second. */
+  const TURN_ON = 1.12;
+  const TURN_OFF = 1.06;
+  /** The panel fit() last measured, and what html() last decided from it. */
+  let lastBox = null;
+  let lastTurned = false;
+  /** The angle fit() last chose per view (and turn), so a redraw opens on it. */
+  const lastDeg = {};
+
+  /**
+   * The biggest cell a board vw wide and vd deep could get in this box, by
+   * the orthographic estimate fit() starts from, over the view's angle range.
+   */
+  function bestCell(vw, vd, mode, box) {
+    const [lo, hi] = TILT_RANGE[mode];
+    let best = 0;
+    for (let i = 0; i <= 4; i++) {
+      const t = (lo + (hi - lo) * i / 4) * Math.PI / 180;
+      best = Math.max(best, Math.min(
+        box.w / (vw + 1),
+        box.h / (vd * Math.cos(t) + WALL_H * Math.sin(t) + 1)
+      ));
+    }
+    return best;
+  }
+
+  /**
+   * Should this board be drawn turned in this box? A pure function of the
+   * board, the view, the box and what is on screen now (`was`, for the
+   * hysteresis that stops a box right at the threshold flapping).
+   */
+  function turnFor(mode, box, was) {
+    if (!box || !box.w || !box.h || !TILT_RANGE[mode]) return false;
+    const gain = bestCell(H, W, mode, box) / bestCell(W, H, mode, box);
+    return gain > (was ? TURN_OFF : TURN_ON);
+  }
+
+  /** A footprint's top-left cell in the plane's frame; see "filling the panel". */
+  function toView(x, y, fp, turned) {
+    return turned ? [H - y - (fp || 1), x] : [x, y];
+  }
+
+  /** A point in the plane's frame back on the board (the SVG's own units). */
+  function toBoard(vx, vy, turned) {
+    return turned ? [vy, H - vx] : [vx, vy];
+  }
 
   /**
    * The view the player chose, or the one their screen suits.
@@ -887,7 +960,7 @@
    * Each card and the flat thing it replaces share a `data-card` tag, which
    * is how cardFail() finds what to hand back.
    */
-  function deal(state, o, grid) {
+  function deal(state, o, grid, turned) {
     const deck = {
       cards: '',
       shadows: '',
@@ -895,14 +968,17 @@
       tokenCard: new Map(),
       // Fixed and drawn boards are rooms; an outdoor palette has no walls.
       walled: INDOOR.has(grid.palette) || !!grid.image,
+      turned: !!turned,
     };
     const n = (v) => Number(v).toFixed(3);
     const torches = deck.walled ? (torchPlan(grid) || []) : [];
     // Torchlight on a figure: brighter near a flame, never black. The floor
     // glow is the SVG's; this is only so a goblin in the far corner of a lit
-    // room does not stand there at full daylight.
-    const litAt = (fx, fy) => {
+    // room does not stand there at full daylight. Asked in the plane's frame,
+    // answered in the board's, where the torches are.
+    const litAt = (vx, vy) => {
       if (!torches.length) return '';
+      const [fx, fy] = toBoard(vx, vy, turned);
       // A rim torch every four or five cells along both long edges puts most
       // of a 16×12 floor within reach of two of them, so the falloff is short
       // or everybody stands in the same full light.
@@ -931,9 +1007,17 @@
       const dx = (spec.footprint - 1) / 2;
       const dy = (spec.footprint - 1) + CARD_FOOT;
       const lift = spec.size === 'tiny' ? TINY_LIFT * CARD_SCALE : 0;
-      deck.tokenCard.set(c.cid, { tag, dx, dy, rx: Math.max(0.26, w * 0.4) });
-      const fx = c.x + 0.5 + dx;
-      const fy = c.y + 0.5 + dy;
+      const fp = spec.footprint;
+      // The shadow is drawn inside the token's group, in the board's units
+      // and relative to the token's centre; turned, the foot offset in the
+      // plane's frame comes back to the board rotated, with its radii swapped.
+      const rx = Math.max(0.26, w * 0.4);
+      deck.tokenCard.set(c.cid, turned
+        ? { tag, sx: dy - 0.04, sy: (fp - 1) - dx, rx: rx * 0.6, ry: rx }
+        : { tag, sx: dx, sy: dy - 0.04, rx, ry: rx * 0.6 });
+      const [ax, ay] = toView(c.x, c.y, fp, turned);
+      const fx = ax + 0.5 + dx;
+      const fy = ay + 0.5 + dy;
       const pct = c.max_hp ? Math.max(0, Math.min(1, c.hp / c.max_hp)) : 0;
       const shot = targets[c.cid];
       const cover = shot && Number(shot.cover) > 0
@@ -942,7 +1026,7 @@
         : '';
       list.push({ fx, fy, html: `<div class="bm-card is-figure ${c.side === 'party' ? 'is-party' : 'is-foe'}"
           data-card="${tag}" data-cid="${esc(c.cid)}" data-cx="${n(fx)}" data-cy="${n(fy)}"
-          data-dx="${n(dx)}" data-dy="${n(dy)}"
+          data-dx="${n(dx)}" data-dy="${n(dy)}" data-fp="${fp}"
           style="--cx:${n(fx)};--cy:${n(fy)};--w:${n(w)};--h:${n(h)};--lift:${n(lift)}${litAt(fx, fy)}">
         <div class="bm-card-body">
           <img class="bm-card-art is-pixel" src="${esc(artUrl('figures/' + spec.file))}" alt=""
@@ -957,16 +1041,32 @@
     for (const p of (Array.isArray(grid.props) ? grid.props : [])) {
       const up = UPRIGHT[p.src];
       if (!up) continue;
-      const w = Math.max(1, Number(p.w) || 1);
-      const h = Math.max(1, Number(p.h) || 1);
-      const x = Number(p.x) || 0;
-      const y = Number(p.y) || 0;
+      let w = Math.max(1, Number(p.w) || 1);
+      let h = Math.max(1, Number(p.h) || 1);
+      let x = Number(p.x) || 0;
+      let y = Number(p.y) || 0;
+      let across = Number(p.rot) === 90;
+      // Turned, the footprint is laid out in the plane's frame, and a run
+      // that went east to west now runs away from the viewer (end cards) and
+      // a north-south one now runs across (one long card).
+      if (turned) [x, y, w, h, across] = [H - y - h, x, h, w, !across];
       const parts = [];
       const uh = up.h * PROP_SCALE;
-      if (Number(p.rot) === 90) {
-        if (!up.end) continue;
+      // Only a run (a `long` or `tile` piece) has a direction; a single
+      // thing — a crate, a wardrobe — stands the same whichever way it was
+      // turned, so it never takes the end-on branch.
+      if (!up.long && !up.tile) {
+        parts.push({ file: up.file, fx: x + w / 2, fy: y + h - 0.2, w: uh * 0.6, h: uh, fit: 'aspect' });
+      } else if (across && up.end) {
         for (let j = 0; j < h; j++) {
           parts.push({ file: up.end, fx: x + w / 2, fy: y + j + 0.8, w: uh * 0.6, h: uh, fit: 'aspect' });
+        }
+      } else if (across) {
+        // A run seen end-on with no end-on picture (a bench, a table): one
+        // narrow card per cell, its side view squeezed to the cell — reads as
+        // the near end of the thing, and depth-sorts cell by cell.
+        for (let j = 0; j < h; j++) {
+          parts.push({ file: up.file, fx: x + w / 2, fy: y + j + 0.8, w: 0.92, h: uh * 0.85, fit: 'squash' });
         }
       } else if (up.tile) {
         // Art of one thing (a single tipped table), so a run is a row of them
@@ -974,17 +1074,18 @@
         for (let i = 0; i < w; i++) {
           parts.push({ file: up.file, fx: x + i + 0.5, fy: y + h - 0.2, w: uh * 0.6, h: uh, fit: 'aspect' });
         }
-      } else if (up.long) {
-        parts.push({ file: up.file, fx: x + w / 2, fy: y + h - 0.2, w: w * 1.04, h: uh, fit: 'long' });
       } else {
-        parts.push({ file: up.file, fx: x + w / 2, fy: y + h - 0.2, w: uh * 0.6, h: uh, fit: 'aspect' });
+        parts.push({ file: up.file, fx: x + w / 2, fy: y + h - 0.2, w: w * 1.04, h: uh, fit: 'long' });
       }
       const tag = `c${++seq}`;
       deck.propCard.set(p, tag);
       for (const c of parts) {
         const rx = c.fit === 'long' ? c.w / 2 : Math.max(0.34, Math.min(0.6, c.h * 0.32));
-        deck.shadows += `<ellipse class="bm-shadow" data-card="${tag}" cx="${n(c.fx + 0.08)}" cy="${n(c.fy - 0.1)}"
-          rx="${n(rx)}" ry="${n(c.fit === 'long' ? 0.3 : rx * 0.6)}" fill="url(#bm-shadow-grad)"/>`;
+        const ry = c.fit === 'long' ? 0.3 : rx * 0.6;
+        // The shadows are drawn in the SVG, so in the board's frame.
+        const [sx, sy] = toBoard(c.fx + 0.08, c.fy - 0.1, turned);
+        deck.shadows += `<ellipse class="bm-shadow" data-card="${tag}" cx="${n(sx)}" cy="${n(sy)}"
+          rx="${n(turned ? ry : rx)}" ry="${n(turned ? rx : ry)}" fill="url(#bm-shadow-grad)"/>`;
         list.push({ fx: c.fx, fy: c.fy, html: `<div class="bm-card is-prop" data-card="${tag}"
             data-fit="${c.fit}" data-cap="${n(uh)}" data-cx="${n(c.fx)}" data-cy="${n(c.fy)}"
             style="--cx:${n(c.fx)};--cy:${n(c.fy)};--w:${n(c.w)};--h:${n(c.h)}${litAt(c.fx, c.fy)}">
@@ -1016,8 +1117,19 @@
       return `<div class="bm-wall is-back is-ghost"></div><div class="bm-lip is-earth"></div>`;
     }
     const tex = ` style="--wall-tex:url('${esc(artUrl(grid.wall || UP + 'wall_face.jpg'))}')"`;
-    const sconces = (torchPlan(grid) || []).filter((t) => t.y < 1.2).map((t) => {
-      const at = `--tx:${t.x.toFixed(2)}`;
+    // `tx` is along the back wall, in the plane's frame. Turned, the back
+    // wall is the board's left edge, which the generator never hangs a torch
+    // on — so a lit board gets a few spaced evenly along it instead.
+    const plan = torchPlan(grid) || [];
+    let backs = deck.turned
+      ? plan.filter((t) => t.x < 1.2).map((t) => ({ ...t, tx: H - t.y }))
+      : plan.filter((t) => t.y < 1.2).map((t) => ({ ...t, tx: t.x }));
+    if (deck.turned && !backs.length && plan.length) {
+      const k = H >= 10 ? 3 : 2;
+      backs = Array.from({ length: k }, (_, i) => ({ ...plan[i % plan.length], tx: H * (i + 1) / (k + 1) }));
+    }
+    const sconces = backs.map((t) => {
+      const at = `--tx:${t.tx.toFixed(2)}`;
       return `<div class="bm-wall-glow" style="${at};animation-duration:${t.dur}s;animation-delay:${t.delay}s"></div>
         <img class="bm-torch" src="${esc(artUrl(UP + 'torch.png'))}" alt="" draggable="false"
              style="${at}" onerror="this.remove()">`;
@@ -1034,6 +1146,7 @@
   function cardSized(img) {
     const card = img && img.closest('.bm-card');
     if (!card || !img.naturalWidth || !img.naturalHeight) return;
+    if (card.dataset.fit === 'squash') return;  // sized to its cell on purpose
     const aspect = img.naturalWidth / img.naturalHeight;
     if (card.dataset.fit === 'long') {
       const w = parseFloat(card.style.getPropertyValue('--w')) || 1;
@@ -1078,7 +1191,11 @@
     const pw = parseFloat(plane.style.width);
     if (!pw) return;
     const vb = svg.viewBox && svg.viewBox.baseVal;
-    const v = vb && vb.width ? vb : { x: 0, y: 0, width: W, height: H };
+    const b = vb && vb.width ? vb : { x: 0, y: 0, width: W, height: H };
+    // The viewBox is in the board's frame; the cards are in the plane's.
+    const v = plane.closest('.is-turned')
+      ? { x: H - (b.y + b.height), y: b.x, width: b.height, height: b.width }
+      : b;
     plane.style.setProperty('--vbx', v.x.toFixed(4));
     plane.style.setProperty('--vby', v.y.toFixed(4));
     plane.style.setProperty('--vbw', v.width.toFixed(4));
@@ -1109,7 +1226,18 @@
    * cell, and hidden with `visibility` rather than `display` when zoomed so
    * they still have a box. So the answer depends only on the box and the
    * board, and a re-render mid-zoom lands on the same size.
+   *
+   * Before the scale, the ANGLE: bisected inside the view's TILT_RANGE until
+   * the measured union's aspect matches the box's, so a tall panel gets a
+   * shallower floor and a letterbox a steeper one, rather than bands. The
+   * projected aspect barely depends on the scale (the perspective scales with
+   * the board), so each probe is one apply and one measure. The answer is
+   * memoised by box and board, so an ordinary redraw re-measures only to
+   * centre. Whether the board should be TURNED is checked here too, and a
+   * redraw asked for if the box disagrees with what was drawn.
    */
+  let fitMemo = null;
+
   function fit(root) {
     const stage = root && root.querySelector('.bm-stage');
     const plane = stage && stage.querySelector('.bm-plane');
@@ -1117,11 +1245,29 @@
     const cw = stage.clientWidth;
     const ch = stage.clientHeight;
     if (!cw || !ch) return;
-    const deg = parseFloat(stage.style.getPropertyValue('--tilt')) || 50;
+    const mode = stage.classList.contains('is-low') ? 'low' : 'tilt';
+    const turned = stage.classList.contains('is-turned');
+    lastBox = { w: cw, h: ch };
+    if (turnFor(mode, lastBox, turned) !== turned) askReflow(root);
+    else reflowRuns = 0;
+    const VW = turned ? H : W;
+    const VD = turned ? W : H;
+    const [lo, hi] = TILT_RANGE[mode];
 
+    const setDeg = (d) => {
+      stage.style.setProperty('--tilt', `${d.toFixed(2)}deg`);
+      lastDeg[`${mode}${turned ? '+t' : ''}`] = d.toFixed(2);
+    };
+    const guess = (d) => {
+      const t = d * Math.PI / 180;
+      return Math.min(cw / (VW + 1), ch / (VD * Math.cos(t) + WALL_H * Math.sin(t) + 1));
+    };
     const apply = (cell, sx, sy) => {
-      plane.style.width = `${(W * cell).toFixed(2)}px`;
-      plane.style.height = `${(H * cell).toFixed(2)}px`;
+      plane.style.width = `${(VW * cell).toFixed(2)}px`;
+      plane.style.height = `${(VD * cell).toFixed(2)}px`;
+      // The SVG's own box, which the turned plane rotates into place.
+      plane.style.setProperty('--board-w', `${(W * cell).toFixed(2)}px`);
+      plane.style.setProperty('--board-h', `${(H * cell).toFixed(2)}px`);
       plane.style.setProperty('--cell0', `${cell.toFixed(3)}px`);
       plane.style.setProperty('--sx', `${sx.toFixed(1)}px`);
       plane.style.setProperty('--sy', `${sy.toFixed(1)}px`);
@@ -1141,12 +1287,27 @@
       return r > l ? { l, t, w: r - l, h: b - t } : null;
     };
 
-    const size = () => {
-      const tilt = deg * Math.PI / 180;
-      let c = Math.min(
-        cw / (W + 1),
-        ch / (H * Math.cos(tilt) + WALL_H * Math.sin(tilt) + 1)
-      );
+    // Steeper is shorter, so the aspect rises with the angle.
+    const aspectAt = (d) => {
+      setDeg(d);
+      apply(guess(d), 0, 0);
+      const u = union();
+      return u ? u.w / u.h : 0;
+    };
+    const lean = () => {
+      const want = cw / ch;
+      if (aspectAt(lo) >= want) return lo;
+      if (aspectAt(hi) <= want) return hi;
+      let a = lo;
+      let b = hi;
+      for (let i = 0; i < 6; i++) {
+        const m = (a + b) / 2;
+        if (aspectAt(m) < want) a = m; else b = m;
+      }
+      return (a + b) / 2;
+    };
+    const size = (deg) => {
+      let c = guess(deg);
       for (let i = 0; i < 3; i++) {
         apply(c, 0, 0);
         const u = union();
@@ -1155,10 +1316,18 @@
         if (Math.abs(k - 1) < 0.01) break;
         c *= k;
       }
-      apply(c, 0, 0);
-      return { c };
+      return c;
     };
-    const cell = size().c;
+
+    const memoKey = [cw, ch, W, H, mode, turned, !!plane.querySelector('.bm-wall.is-ghost')].join('|');
+    if (!fitMemo || fitMemo.key !== memoKey) {
+      const deg = lean();
+      setDeg(deg);
+      fitMemo = { key: memoKey, deg, cell: size(deg) };
+    }
+    setDeg(fitMemo.deg);
+    const cell = fitMemo.cell;
+    apply(cell, 0, 0);
     const u = union();
     const box = stage.getBoundingClientRect();
     const sx = u ? (box.left + box.width / 2) - (u.l + u.w / 2) : 0;
@@ -1185,6 +1354,31 @@
       resizeFrame = requestAnimationFrame(() => { resizeFrame = 0; fit(root); });
     });
     resizeObs.observe(root);
+  }
+
+  /**
+   * Ask the caller to draw the board again, because the box now wants it
+   * turned the other way. One frame later, so a burst of fits asks once; and
+   * checked again then against whatever board is on screen by that time.
+   * `reflowRuns` is the loop guard: it is cleared by any fit that is content
+   * with what it was given, and a redraw that somehow keeps disagreeing is
+   * left alone after two tries rather than redrawn forever.
+   */
+  let reflow = null;
+  let reflowFrame = 0;
+  let reflowRuns = 0;
+  function askReflow(root) {
+    if (reflowFrame) cancelAnimationFrame(reflowFrame);
+    reflowFrame = requestAnimationFrame(() => {
+      reflowFrame = 0;
+      const stage = root.isConnected && root.querySelector('.bm-stage');
+      if (!stage || !reflow || reflowRuns >= 2) return;
+      const turned = stage.classList.contains('is-turned');
+      const mode = stage.classList.contains('is-low') ? 'low' : 'tilt';
+      if (turnFor(mode, lastBox, turned) === turned) return;
+      reflowRuns++;
+      reflow();
+    });
   }
 
   /** The cards standing for one combatant (normally one; none for the flat). */
@@ -1315,8 +1509,9 @@
     if (cards) {
       const f = document.createElement('div');
       f.className = `bm-cfloat ${cls || ''}`;
-      f.style.setProperty('--cx', (x + 0.5).toFixed(3));
-      f.style.setProperty('--cy', (y + 0.5 + CARD_FOOT).toFixed(3));
+      const [ax, ay] = toView(x, y, 1, !!cards.closest('.is-turned'));
+      f.style.setProperty('--cx', (ax + 0.5).toFixed(3));
+      f.style.setProperty('--cy', (ay + 0.5 + CARD_FOOT).toFixed(3));
       const span = document.createElement('span');
       span.textContent = text;
       f.appendChild(span);
@@ -1415,9 +1610,11 @@
     const g = root && root.querySelector(`.bm-token[data-cid="${cssEscape(cid)}"]`);
     if (!g) return;
     g.setAttribute('transform', `translate(${x + 0.5} ${y + 0.5})`);
+    const turned = !!root.querySelector('.bm-stage.is-turned');
     for (const card of cardsFor(root, cid)) {
-      const cx = x + 0.5 + (parseFloat(card.dataset.dx) || 0);
-      const cy = y + 0.5 + (parseFloat(card.dataset.dy) || 0);
+      const [ax, ay] = toView(x, y, parseFloat(card.dataset.fp) || 1, turned);
+      const cx = ax + 0.5 + (parseFloat(card.dataset.dx) || 0);
+      const cy = ay + 0.5 + (parseFloat(card.dataset.dy) || 0);
       card.dataset.cx = cx.toFixed(3);
       card.dataset.cy = cy.toFixed(3);
       card.style.setProperty('--cx', cx.toFixed(3));
@@ -1534,6 +1731,9 @@
       zoomMax: ZOOM_MAX,
       zoomStep: ZOOM_STEP,
       start: boardView,
+      // A turned board's SVG is rotated a quarter on screen, so a drag and a
+      // zoom anchor have to be rotated back into its units.
+      turned: () => !!svg.closest('.is-turned'),
       // Drag the ground with any button and the camera follows. A bare
       // left-click is still a move order — SvgView ignores movement under its
       // few pixels of slop, and the click handler asks `consumePan()` so a pan
@@ -1600,6 +1800,8 @@
     if (!svg) return;
     const h = handlers || {};
     moveDragAllowed = () => !h.canDrag || h.canDrag();
+    // How fit() gets the board redrawn when the box wants it turned.
+    reflow = h.onReflow || null;
 
     const cellOf = (ev) => {
       const el = ev.target.closest('[data-bm-cell]');

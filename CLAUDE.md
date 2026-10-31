@@ -205,7 +205,18 @@ plane and walls (never the cards, or the board would resize as people walk).
 Which props stand up is the `UPRIGHT` table in `ui-battlemap.js`, keyed by the
 flat prop's `src` and naming art in `assets/images/battlemap/upright/`; a
 card whose art fails hands the flat prop back, so missing art degrades to the
-flat look. `flat` must stay byte-identical to the pre-tilt markup. **Safari
+flat look. **The board fills its panel**: 50° and 32° are only where a view
+starts — `fit()` bisects the angle inside `TILT_RANGE` (tilt 40–60°, low
+26–40°) until the projected board's aspect matches the panel's, then scales.
+And when swapping the board's axes gives a clearly bigger cell (`turnFor()`,
+12% to turn, 6% to turn back), the board is drawn **turned**: the plane is
+H wide × W deep and the SVG inside it is rotated 90° clockwise in CSS, so
+board cell (x, y) is plane cell (H − y, x). Clicks still land on the SVG's own
+cells; only the cards (`toView()`), the SVG-side shadows, the camera numbers
+in `syncVars()` and `svg-view.js`'s pan/zoom (`opts.turned`) are converted.
+The decision is made at `html()` time from the box `fit()` last measured, and
+`fit()` asks for one re-render through `bind()`'s `onReflow` when the box
+disagrees. `flat` must stay byte-identical to the pre-tilt markup. **Safari
 rule:** nothing in the 3D chain (`.bm-plane`, `.bm-cards`, a card, a wall)
 may carry `filter`, `opacity` < 1, non-visible `overflow`, a blend mode,
 `clip-path`/`mask`, `isolation` or paint containment — WebKit flattens the

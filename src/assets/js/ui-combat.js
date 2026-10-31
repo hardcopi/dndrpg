@@ -915,6 +915,8 @@
     if (view) view.onclick = () => { window.BattleMap.setViewMode(view.dataset.view); render(); };
 
     window.BattleMap.bind(box, {
+      // The board's box now wants it turned the other way (see fit()).
+      onReflow: () => { if (st()) render(); },
       canDrag: () => !ui.placing && !!actor && actor.type === 'pc' && s.status === 'active' && !ui.busy,
       onToken: (cid) => {
         if (ui.placing) return placeAt(cellOfCid(cid));
