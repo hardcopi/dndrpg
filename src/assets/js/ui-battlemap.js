@@ -349,6 +349,7 @@
       <g class="bm-cover-marks">${coverMarksHtml(terrain)}</g>
       <g class="bm-grid">${gridHtml()}
         <rect class="bm-edge" x="0" y="0" width="${W}" height="${H}"/></g>
+      <g class="bm-hover" pointer-events="none"></g>
       <g class="bm-tokens">${tokensHtml(state, o, deck)}</g>
       <g class="bm-motes" pointer-events="none">${motesHtml(grid)}</g>
       <g class="bm-shots"></g>
@@ -1515,6 +1516,38 @@
       <text class="bm-route-cost" x="${dx + 0.5}" y="${dy + 0.5}" dy="0.12">${entry.cost}</text>`;
   }
 
+  /**
+   * The square under the mouse, so it is plain what a click will land on.
+   *
+   * The caller has already turned the pointer into a cell: off the square's
+   * own hit rect, which the browser tests under the diorama's tilt and turn,
+   * or off the figure the pointer is on, which stands on one. `kind` is what
+   * a click there would do — 'idle' (nothing much, so barely drawn), 'move',
+   * 'target', or 'bad' (refused) — and is the caller's call, from the
+   * server's reach and target lists. A finger has no hover, so the last
+   * pointer being touch or a pen clears it rather than leaving a square lit
+   * where a tap happened to land.
+   */
+  let lastPointer = 'mouse';
+  if (typeof document !== 'undefined') {
+    const note = (ev) => { lastPointer = ev.pointerType || 'mouse'; };
+    document.addEventListener('pointerdown', note, { capture: true, passive: true });
+    document.addEventListener('pointermove', note, { capture: true, passive: true });
+  }
+  function paintHover(root, cell, kind) {
+    const layer = root && root.querySelector('.bm-hover');
+    if (!layer) return;
+    if (!cell || lastPointer !== 'mouse') {
+      if (layer.firstChild) layer.innerHTML = '';
+      return;
+    }
+    const k = `${cell[0]},${cell[1]}:${kind || 'idle'}`;
+    if (layer.dataset.at === k && layer.firstChild) return;
+    layer.dataset.at = k;
+    layer.innerHTML = `<rect class="bm-hover-cell is-${kind || 'idle'}" x="${cell[0]}" y="${cell[1]}"
+      width="1" height="1"/>`;
+  }
+
   /** The footprint of a spell, painted from the server's own `aoe` event. */
   function paintAoe(root, cells) {
     const layer = root && root.querySelector('.bm-aoe');
@@ -2113,7 +2146,7 @@
 
   window.BattleMap = {
     html, bind, controls, camera, forget, whenFigures, figureUrl,
-    paintPath, paintAoe, paintAim, paintArea, moveToken, floatText, shoot, hitToken, walking,
+    paintPath, paintAoe, paintAim, paintArea, paintHover, moveToken, floatText, shoot, hitToken, walking,
     viewMode, setViewMode, nextViewMode, fit, cardSized, cardFail,
     W, H, SHOT_MS,
   };

@@ -964,6 +964,7 @@
         act('move', { x, y });
       },
       onHover: (cid, cell) => {
+        hoverSquare(s, actor, cid, cell);
         const changed = cid !== ui.hovered;
         ui.hovered = cid;
         if (changed) renderInspector();
@@ -987,6 +988,53 @@
     // A redraw (a state poll, a resize) wipes the footprint and the glows;
     // the placement survives in ui.aiming, so put them back.
     if (ui.aiming?.mode === 'area' && ui.aiming.at) paintArea();
+    // And the lit square, which a redraw under a still mouse would otherwise drop.
+    if (ui.hoverAt) hoverSquare(s, actor, ui.hoverAt.cid, ui.hoverAt.cell);
+  }
+
+  /**
+   * Light the square under the mouse (see BattleMap.paintHover), coloured by
+   * what a click there would do. A figure stands on a square, so pointing at
+   * one lights the square it stands on — in the diorama its picture is what
+   * the eye aims at, not the floor behind it.
+   */
+  function hoverSquare(s, actor, cid, cell) {
+    const box = $('#cbt-map', root());
+    if (!box || !window.BattleMap?.paintHover) return;
+    const at = cell || (cid ? cellOfCid(cid) : null);
+    if (!at || coarsePointer()) {
+      ui.hoverAt = null;
+      window.BattleMap.paintHover(box, null);
+      return;
+    }
+    ui.hoverAt = { cid, cell: at };
+    window.BattleMap.paintHover(box, at, hoverKind(s, actor, cid, at));
+  }
+
+  /**
+   * What a click on this square would do, read off the same lists the click
+   * handlers obey — the server's reach and targets, or the spell being aimed —
+   * so the colour cannot promise a move or a hit the click will not make.
+   */
+  function hoverKind(s, actor, cid, cell) {
+    const who = cid
+      ? combatant(cid)
+      : (s.combatants || []).find((c) => c.alive && c.x === cell[0] && c.y === cell[1]);
+    const a = ui.aiming;
+    if (a?.mode === 'area') {
+      const p = areaPlace(a, cell);
+      return p && !p.clamped && areaHits(a, p.key).length ? 'target' : 'bad';
+    }
+    if (a) return who && a.targets[who.cid] ? 'target' : 'bad';
+    if (ui.placing) return 'target';
+    if (!actor || actor.type !== 'pc' || s.status !== 'active' || ui.busy) return 'idle';
+    const u = uiFor(actor);
+    if (who && who.alive) {
+      if (who.cid === actor.cid || who.side === actor.side) return 'idle';
+      return map(u?.targets)[who.cid] ? 'target' : 'bad';
+    }
+    const r = map(u?.reach)[`${cell[0]},${cell[1]}`];
+    return r && r.end && r.cost ? 'move' : 'bad';
   }
 
   /** What each board view is called, and the glyph its button shows. */

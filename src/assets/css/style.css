@@ -5594,6 +5594,26 @@ body.bm-pan-ready .battlemap { cursor: grab; }
 
 .bm-hit { fill: transparent; cursor: pointer; }
 .bm-hit:focus-visible { fill: color-mix(in srgb, var(--gold) 25%, transparent); outline: none; }
+/* No focus ring on the board's own squares and figures, keyboard or mouse.
+   A click focuses the square (it has a tabindex, for the keyboard), and
+   Chrome then draws its UA ring in the SVG's units, where 1 is a whole cell:
+   a white-and-black bullseye cells across, sitting under a Fireball for as
+   long as the burst plays before the board is redrawn. Keyboard focus is
+   shown by the fill above and the token rule below instead. */
+.battlemap [tabindex]:focus,
+.battlemap [tabindex]:focus-visible { outline: none; }
+.bm-token:focus-visible .bm-ring { stroke: var(--gold-bright); stroke-width: 0.14; }
+
+/* The square under the mouse (BattleMap.paintHover): faint when a click there
+   does nothing much, and coloured by what it would do when it does. */
+.bm-hover-cell {
+  fill: rgba(245, 236, 214, 0.1);
+  stroke: rgba(245, 236, 214, 0.6);
+  stroke-width: 0.04;
+}
+.bm-hover-cell.is-move   { fill: color-mix(in srgb, var(--success) 32%, transparent); stroke: var(--success); stroke-width: 0.09; }
+.bm-hover-cell.is-target { fill: color-mix(in srgb, var(--gold-bright) 24%, transparent); stroke: var(--gold-bright); stroke-width: 0.09; }
+.bm-hover-cell.is-bad    { fill: color-mix(in srgb, var(--danger) 24%, transparent); stroke: var(--danger); stroke-width: 0.07; stroke-dasharray: 0.14 0.07; }
 
 .bm-route { fill: none; stroke: var(--gold); stroke-width: 0.09; stroke-linejoin: round; stroke-linecap: round; }
 .bm-route.is-provokes { stroke: var(--danger); stroke-dasharray: 0.25 0.15; }
