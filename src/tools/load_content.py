@@ -690,8 +690,15 @@ def want_key(o, kind, index, p, w, label=None):
 # Locations the engine owns rather than content/: written by
 # sql/migrations/2026-08-25-freeplay-inn.sql (and WatchJobs::MOUTH_KEY), kept out
 # of the retire sweep by their `_` prefix, and looked up by key at runtime.
-# Free-play quests may point a stage at one; nothing else is exempt.
-ENGINE_LOCATIONS = {"_freeplay_cellar"}
+# Free-play quests may point a stage at one, and the Proving House's people
+# `place` themselves in the common room; nothing else is exempt.
+#
+# The yard is here for the placement, and it is not optional. The placement
+# pass writes location_id for EVERY npc file and clears it for any without a
+# `place`, so once content/npcs/_fp_*.json existed every content load took the
+# migration's innkeeper, shopkeeper and fighter off the floor. Content wins
+# that column, so content has to say where they stand.
+ENGINE_LOCATIONS = {"_freeplay_cellar", "_freeplay_yard"}
 
 # Merchants whose shelf is a RULE applied by a migration (the same line
 # GeneralStore::sells() draws) instead of an authored `shop` list in the npc file.

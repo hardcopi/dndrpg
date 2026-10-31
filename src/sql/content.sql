@@ -1825,6 +1825,9 @@ ON DUPLICATE KEY UPDATE
   starting_feats_json = VALUES(starting_feats_json);
 
 -- === Placements ===
+UPDATE npcs SET location_id = (SELECT id FROM locations WHERE location_key = '_freeplay_yard') WHERE npc_key = '_fp_brenna';
+UPDATE npcs SET location_id = (SELECT id FROM locations WHERE location_key = '_freeplay_yard') WHERE npc_key = '_fp_hessa';
+UPDATE npcs SET location_id = (SELECT id FROM locations WHERE location_key = '_freeplay_yard') WHERE npc_key = '_fp_odd';
 UPDATE npcs SET location_id = (SELECT id FROM locations WHERE location_key = 'low_court') WHERE npc_key = 'aggie_slate';
 UPDATE npcs SET location_id = (SELECT id FROM locations WHERE location_key = 'granary_row') WHERE npc_key = 'alder_pyke';
 UPDATE npcs SET location_id = (SELECT id FROM locations WHERE location_key = 'flagon_common_room') WHERE npc_key = 'aldric';
@@ -1929,7 +1932,7 @@ UPDATE npcs SET location_id = (SELECT id FROM locations WHERE location_key = 'ti
 UPDATE npcs SET location_id = (SELECT id FROM locations WHERE location_key = 'mill_ruin') WHERE npc_key = 'wick_lorrimer';
 UPDATE npcs SET location_id = (SELECT id FROM locations WHERE location_key = 'uv_camp') WHERE npc_key = 'wren_tallow';
 UPDATE npcs SET location_id = (SELECT id FROM locations WHERE location_key = 'the_green_bough') WHERE npc_key = 'yrsa';
-UPDATE npcs SET location_id = NULL WHERE npc_key IN ('_fp_brenna', '_fp_cousin', '_fp_hessa', '_fp_odd');
+UPDATE npcs SET location_id = NULL WHERE npc_key IN ('_fp_cousin');
 UPDATE encounters SET location_id = (SELECT id FROM locations WHERE location_key = 'broken_floor') WHERE encounter_key = 'broken_floor_gremlins';
 UPDATE encounters SET location_id = (SELECT id FROM locations WHERE location_key = 'flagon_cellar') WHERE encounter_key = 'cellar_rats_swarm';
 UPDATE encounters SET location_id = (SELECT id FROM locations WHERE location_key = 'flagon_cellar') WHERE encounter_key = 'cellar_stirges';
