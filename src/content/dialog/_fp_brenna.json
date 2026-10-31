@@ -42,7 +42,7 @@
                     },
                     {
                         "label": "In a moment.",
-                        "action": "close"
+                        "end": true
                     }
                 ]
             },
@@ -61,7 +61,7 @@
                     },
                     {
                         "label": "Right.",
-                        "action": "close"
+                        "end": true
                     }
                 ]
             },
@@ -94,7 +94,7 @@
                     },
                     {
                         "label": "I'll decide myself.",
-                        "action": "close"
+                        "end": true
                     }
                 ]
             }
@@ -121,7 +121,7 @@
                 "choices": [
                     {
                         "label": "I won't.",
-                        "action": "close"
+                        "end": true
                     }
                 ]
             }
@@ -132,7 +132,7 @@
                 "choices": [
                     {
                         "label": "All right.",
-                        "action": "close"
+                        "end": true
                     }
                 ]
             }
@@ -159,7 +159,7 @@
                 "choices": [
                     {
                         "label": "I will.",
-                        "action": "close"
+                        "end": true
                     }
                 ]
             }
@@ -170,7 +170,7 @@
                 "choices": [
                     {
                         "label": "Understood.",
-                        "action": "close"
+                        "end": true
                     }
                 ]
             }
