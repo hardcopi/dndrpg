@@ -2,6 +2,25 @@
 
 _Written by Codex (ChatGPT) from a read-only review of this repo at f86a9d7, Oct 30 2026; citations spot-checked. Movement footprint fix (#15) and UI polish (#13) landed after the review._
 
+## Current focus: Act I playable end to end in the new look (Oct 30 2026)
+
+Decided with Rich on Oct 30 2026. Look and feel: the painted early-90s "storybook VGA" style (plum-and-gold frame, parchment narration, point-and-click painted scenes with hotspot labels, cheap ambient effects on top, no video). Details: the Act I audit (25 issues: 6 blockers, 9 confusing, 10 polish) and the tutorial outline, kept outside the repo for now. Web fixes go live once checks pass (Rich is the only player).
+
+1. **Unblock the content build** (~½ day). Fix the 38 loader errors in the freeplay content so content can be rebuilt and deployed the normal way.
+2. **Make Act I finishable** (a few days). Fix the blockers:
+   - Nakka killed or truced never offers the level-4 quest that opens the Deepworks.
+   - Taking the overseer's office by force hides "Take the fair sheets" (the Survey) and stalls "What the Quarry Fell On".
+   - Early Greyhythe lets a level 1 party finish "The Polite Man", which hides "The Same Mark" and "Paper Town" for good; add a level check on quest advance.
+   - Sera arrested first: Mara's lockup line blocks the cellar hand-in.
+   - "Not on this one" to the ferryman closes the boat for Act II.
+   - XP: a party of four can't reach level 5 for the finale; rebalance, and have Rourke say why when the party is short.
+   - Also: point from Corse to the warren floor, and make objectives say how to finish each step.
+3. **Point-and-click scene screen** (~1 week). Replace the region map in the middle of the play screen with the painted scene: hotspot labels for exits, NPCs and objects, prose narration under it, and the ambient effects layer (smoke, fire, birds, water, fog, dust, drips, candles, sway). Fall back to the map where no scene is painted. Market Square first, then the rest of Rivermark. Per-location effect config lives in a static file.
+4. **Paint the Act I path** (1–2 weeks of art, region by region). Only the ~40–50 locations the main quest uses: Rivermark, Greyhythe, Quarry Wilds, Goblin Warren, the Deepworks and the finale. Reuse the 95 existing paintings where they hold up; repaint the rest in the new style.
+5. **Tutorial and wrap-up** (~1 week). Optional "First Night at the Flagon" tutorial from Mara alongside the cellar job (talk, journal, map errand to Tobin's Goods, the rat fight, loot, search, a free room; every step skippable). Journal "what I know / what next" leads plus a "where you left off" recap. Companion (Kessa, Aldric, Sera, Ilse), Reed and Mara reactions to the four survey endings, and a proper end-of-act moment.
+
+Roughly 4–5 weeks, with something new to play every few days. Stages 1–2 don't depend on the look and can run alongside stage 3. The four-branch Act II opening (below) follows once Act I plays through cleanly.
+
 ## Top recommendations
 
 1. **Ship the next story beat:** Act I has a detailed finale and Act II handoff, but no Act II campaign content in `src/content/quests/` yet. Turn the four `survey_fate` outcomes into distinct, playable openings.
