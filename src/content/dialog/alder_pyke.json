@@ -1409,7 +1409,7 @@
                 "text": "\"Counting house,\" he says. \"Friday. One and threepence a day, with the boy's tuppence coming out of that.\" You wait for more. He looks puzzled. \"That's it. The whole of it. I'm not on anybody's household. I'd have to eat at their table, and I'd rather not.\"",
                 "choices": [
                     {
-                        "label": "The counting house doesn't pay you. It honours a note. Whose?",
+                        "label": "The counting house doesn't pay you. It honours a note. I want to see it.",
                         "effects": [
                             {
                                 "quest_stage": {
