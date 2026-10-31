@@ -137,10 +137,8 @@ window.RIVERMARK_SCENES = {
       street_minstrel: {x: 51, y: 70},
       street_drover: {x: 62, y: 72},
       street_seer: {x: 78, y: 80},
-      street_stranger: {x: 36, y: 72},
       street_scholar: {x: 43, y: 68},
       watch_street: {x: 68, y: 66},
-      child_watching: {x: 71, y: 72},
       street_almoner: {x: 24, y: 84}
     },
     objects: [],
@@ -974,7 +972,7 @@ window.RIVERMARK_SCENES = {
       ford_lane: {x: 97, y: 85, icon: "→"},
       mill_ruin: {x: 32, y: 25, icon: "↑"},
       priory_track: {x: 70, y: 25, icon: "↑"},
-      harrow_steading: {x: 12, y: 28, icon: "←"}
+      harrow_steading: {x: 12, y: 35, icon: "←"}
     },
     npcs: {
       joss_frayle: {x: 57, y: 86}

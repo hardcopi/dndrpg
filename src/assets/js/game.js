@@ -533,7 +533,9 @@
       else if (!n.is_ambient) unconfigured.push(n);
     });
     const npcButton = (n, spot) => {
-      const name = n.known ? n.name : (n.role || 'A stranger');
+      // Ambient folk are named for what they look like ("A minstrel"), which
+      // reads better on the painting than four labels saying "Townsfolk".
+      const name = n.known || n.is_ambient ? n.name : (n.role || 'A stranger');
       const mark = n.has_work || n.quest_mark ? '<b class="scene-work-mark">!</b>' : '';
       const anchor = spot.x > 80 ? 'edge-right' : (spot.x < 20 ? 'edge-left' : '');
       return `<button type="button" class="paint-hotspot npc ${anchor}" style="left:${spot.x}%;top:${spot.y}%" data-npc="${+n.id}" aria-label="Talk to ${esc(name)}"><span class="paint-label">${mark}${esc(name)}</span><i class="paint-pin"></i><i class="paint-dot"></i></button>`;
