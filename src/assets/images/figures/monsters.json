@@ -1,5 +1,5 @@
 {
-  "notes": "Figures fill their canvas; scale at draw time by height_cells (Tiny .5, Small .75, Medium 1, Large 2 = 2x2, Huge 3 = 3x3). Feet/base 4px above canvas bottom. Wide creatures use 320x320, others 192x320. key = server art key (sprite_key, else monster_key). aliases maps a bestiary key onto that figure key when the names differ (the_growth -> boss_worm, worg -> black_wolf, and the other shared sheets).",
+  "notes": "Figures fill their canvas; scale at draw time by height_cells (Tiny .5, Small .75, Medium 1, Large 2 = 2x2, Huge 3 = 3x3). Feet/base 4px above canvas bottom. Wide creatures use 320x320, others 192x320. key = server art key (sprite_key, else monster_key). aliases maps a bestiary key onto that figure key when the names differ (the_growth -> boss_worm, worg -> black_wolf, and the other shared sheets). Companions with a face of their own (kessa, aldric, jimmy_able, sera_vance) are heroes keyed by their sprite_key.",
   "aliases": {
     "the_growth": "boss_worm",
     "purple_worm": "boss_worm",
@@ -1332,6 +1332,58 @@
       ],
       "file": "wizard.png",
       "aga_file": "wizard_s.png"
+    },
+    {
+      "key": "kessa",
+      "race": "half-orc",
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "kessa.png",
+      "aga_file": "kessa_s.png"
+    },
+    {
+      "key": "aldric",
+      "race": "human",
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "aldric.png",
+      "aga_file": "aldric_s.png"
+    },
+    {
+      "key": "jimmy_able",
+      "race": "human",
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "jimmy_able.png",
+      "aga_file": "jimmy_able_s.png"
+    },
+    {
+      "key": "sera_vance",
+      "race": "human",
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "sera_vance.png",
+      "aga_file": "sera_vance_s.png"
     }
   ]
 }
