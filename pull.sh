@@ -8,13 +8,11 @@ REMOTE="root@hermes.five-star.com:/home/www/rpg/"
 LOCAL="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/src/"
 SSH="ssh -o BatchMode=yes -i ${HOME}/.ssh/id_ed25519"
 
-# database.php holds prod credentials - never bring it down.
-# .claude/settings.local.json is per-machine.
-EXCLUDES=(
-    --exclude 'app/config/database.php'
-    --exclude '.git'
-    --exclude '.claude/settings.local.json'
-)
+# Same list deploy.sh uses — see rsync-excludes. It keeps prod's database.php
+# up there, and it is what stops --delete below from removing local paths
+# deploy.sh never sends (sql/, tools/, docs/, ...): rsync leaves an excluded
+# path alone on the receiving side.
+EXCLUDES=(--exclude-from "$(dirname "${LOCAL%/}")/rsync-excludes")
 
 echo "PULL  hermes:/home/www/rpg  ->  ${LOCAL}"
 echo
