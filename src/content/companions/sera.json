@@ -16,7 +16,7 @@
         "wisdom": 12,
         "charisma": 13
     },
-    "sprite_key": "merchant",
+    "sprite_key": "sera_vance",
     "combat_rank": "back",
     "npc_key": "sera",
     "personal_quest": "sera_leash",
