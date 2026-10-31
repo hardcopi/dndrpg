@@ -686,6 +686,17 @@ def want_key(o, kind, index, p, w, label=None):
     return o
 
 
+# Locations the engine owns rather than content/: written by
+# sql/migrations/2026-08-25-freeplay-inn.sql (and WatchJobs::MOUTH_KEY), kept out
+# of the retire sweep by their `_` prefix, and looked up by key at runtime.
+# Free-play quests may point a stage at one; nothing else is exempt.
+ENGINE_LOCATIONS = {"_freeplay_cellar"}
+
+# Merchants whose shelf is a RULE applied by a migration (the same line
+# GeneralStore::sells() draws) instead of an authored `shop` list in the npc file.
+ENGINE_SHOPS = {"_fp_odd"}
+
+
 def want_location(key, index, p, w):
     """A reference to a location, by its globally unique location_key."""
     if key is None:
@@ -693,6 +704,8 @@ def want_location(key, index, p, w):
     if not isinstance(key, str):
         p.err(w, f"expected a location key, got {type(key).__name__}")
         return None
+    if key in ENGINE_LOCATIONS and key not in index.locations:
+        return key
     if key not in index.locations:
         p.err(w, f"no location {key!r} is authored in content/locations/")
         return None
@@ -986,7 +999,7 @@ def check_effect(eff, index, p, where):
             npc = index.get("npcs", v) if index.has("npcs", v) else None
             if npc is None:
                 p.err(at, f"open_shop names unknown npc {v!r}")
-            elif not npc.get("shop"):
+            elif not npc.get("shop") and v not in ENGINE_SHOPS:
                 p.err(at, f"open_shop names {v!r}, who has no `shop` stock list "
                           f"in content/npcs/{v}.json — the counter would be empty")
     elif vtype == "approval":

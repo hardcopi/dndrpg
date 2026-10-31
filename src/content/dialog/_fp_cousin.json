@@ -10,7 +10,7 @@
                 "choices": [
                     {
                         "label": "I'll go.",
-                        "action": "close"
+                        "end": true
                     }
                 ]
             },
@@ -58,7 +58,7 @@
                 "choices": [
                     {
                         "label": "All right.",
-                        "action": "close"
+                        "end": true
                     }
                 ]
             }

@@ -19,7 +19,7 @@
                     },
                     {
                         "label": "In a moment.",
-                        "action": "close"
+                        "end": true
                     }
                 ]
             },
@@ -40,7 +40,7 @@
                     },
                     {
                         "label": "In a moment.",
-                        "action": "close"
+                        "end": true
                     }
                 ]
             },
@@ -56,7 +56,7 @@
                     },
                     {
                         "label": "Right.",
-                        "action": "close"
+                        "end": true
                     }
                 ]
             },
@@ -72,7 +72,7 @@
                     },
                     {
                         "label": "Right.",
-                        "action": "close"
+                        "end": true
                     }
                 ]
             },
@@ -104,7 +104,7 @@
                     },
                     {
                         "label": "Later.",
-                        "action": "close"
+                        "end": true
                     }
                 ]
             }
@@ -131,7 +131,7 @@
                 "choices": [
                     {
                         "label": "Understood.",
-                        "action": "close"
+                        "end": true
                     }
                 ]
             }
@@ -142,7 +142,7 @@
                 "choices": [
                     {
                         "label": "All right.",
-                        "action": "close"
+                        "end": true
                     }
                 ]
             }
@@ -169,7 +169,7 @@
                 "choices": [
                     {
                         "label": "I'll watch my hands.",
-                        "action": "close"
+                        "end": true
                     }
                 ]
             }
@@ -180,7 +180,7 @@
                 "choices": [
                     {
                         "label": "All right.",
-                        "action": "close"
+                        "end": true
                     }
                 ]
             }
