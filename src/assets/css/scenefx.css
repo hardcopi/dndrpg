@@ -1,0 +1,6 @@
+/* Rivermark ambient scene effects: the layer sits over the painting and under the hotspots. */
+.rmfx-layer { position: absolute; inset: 0; pointer-events: none; z-index: 1; overflow: hidden; }
+.rmfx-layer[hidden] { display: none; }
+.rmfx-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.rmfx-sway { position: absolute; background-repeat: no-repeat; will-change: transform; image-rendering: auto; }
+@media (prefers-reduced-motion: reduce) { .rmfx-layer { display: none; } }
