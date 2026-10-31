@@ -5950,6 +5950,34 @@ body.bm-pan-ready .battlemap { cursor: grab; }
   user-select: none;
 }
 .bm-card-art.is-pixel { image-rendering: pixelated; }
+/* A standee: the portrait token of someone with no full-body sheet, stood up
+   on a little wooden foot. The disc is the card's full width; the foot fills
+   what is left below it. Both are leaves, so the radius and the clip-path
+   are allowed (see the Safari note above). */
+.bm-card.is-standee .bm-standee-face {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: calc(var(--w) * var(--cell));
+  object-fit: cover;
+  object-position: 50% 30%;
+  border-radius: 50%;
+  border: calc(0.06 * var(--cell)) solid var(--accent);
+  box-sizing: border-box;
+  background: #14110d;
+}
+.bm-card.is-standee.is-foe .bm-standee-face { border-color: var(--danger); }
+.bm-standee-base {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 62%;
+  height: calc((var(--h) - var(--w)) * var(--cell) + 2px);
+  transform: translateX(-50%);
+  background: linear-gradient(90deg, #3a2a1a, #6b4e32 45%, #2c1f13);
+  clip-path: polygon(42% 0, 58% 0, 58% 62%, 100% 82%, 100% 100%, 0 100%, 0 82%, 42% 62%);
+}
 .bm-card-hp {
   position: absolute;
   left: 50%;
@@ -6064,6 +6092,17 @@ body.bm-pan-ready .battlemap { cursor: grab; }
   background: linear-gradient(#3b2b1d, #1c140d);
 }
 .bm-lip.is-earth { background: linear-gradient(#3a3020, #17120a); }
+/* Zoomed, the floor's edge on screen is the camera's, not the room's, so
+   there are no walls to stand on it; the edge fades into the dark instead of
+   ending in a cliff. A leaf of the plane, under the cards. */
+.bm-edgefade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  visibility: hidden;
+  box-shadow: inset 0 0 calc(2 * var(--cell0)) calc(0.7 * var(--cell0)) rgba(9, 11, 15, 0.95);
+}
+.is-zoomed .bm-edgefade { visibility: visible; }
 .is-zoomed .bm-wall,
 .is-zoomed .bm-lip { visibility: hidden; }
 

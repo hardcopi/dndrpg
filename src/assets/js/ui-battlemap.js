@@ -223,8 +223,50 @@
    * worked out here so that there is one art resolver on the board and it is
    * the one ui-combat.js already had.
    */
+  /**
+   * Bring a board saved by an older generator up to today's look.
+   *
+   * A fight is stored with its board, so one started before the set pieces
+   * and decals (#32) keeps the old dressing for as long as it lasts: bones
+   * and rocks as side-view sprites on rough ground, which stand up off the
+   * floor like something to fight, and long tables laid north to south with
+   * no `rot`. Paint only — the terrain, which is what the rules read, is not
+   * touched — and current generators still put the same two sprites on rough
+   * ground in some palettes, so this is a permanent translation, not a
+   * one-off. The saved state is never modified; a copy is.
+   */
+  const LEGACY_DECAL = {
+    'decor/bones.png': 'battlemap/decals/bones.png',
+    'decor/rocks.png': 'battlemap/decals/rubble.png',
+  };
+  function modernize(grid) {
+    const props = Array.isArray(grid.props) ? grid.props : [];
+    if (!props.some((p) => p && (LEGACY_DECAL[p.src] || legacyRun(p)))) return grid;
+    const decals = Array.isArray(grid.decals) ? grid.decals.slice() : [];
+    const taken = new Set(decals.map((d) => `${d.x},${d.y}`));
+    const kept = [];
+    for (const p of props) {
+      const flat = p && LEGACY_DECAL[p.src];
+      if (!flat) {
+        kept.push(legacyRun(p) ? { ...p, rot: 90 } : p);
+        continue;
+      }
+      const x = Number(p.x) || 0;
+      const y = Number(p.y) || 0;
+      if (taken.has(`${x},${y}`)) continue;
+      taken.add(`${x},${y}`);
+      decals.push({ x, y, src: flat, kind: 'rough', s: 1, rot: ((x * 7 + y * 13) % 4) * 90 });
+    }
+    return { ...grid, props: kept, decals };
+  }
+  /** A long piece laid north to south by a generator that did not say so. */
+  function legacyRun(p) {
+    const up = p && UPRIGHT[p.src];
+    return !!(up && up.long && Number(p.rot) !== 90 && (Number(p.h) || 1) > (Number(p.w) || 1));
+  }
+
   function html(state, opts) {
-    const grid = state.grid || {};
+    const grid = modernize(state.grid || {});
     const terrain = grid.terrain || [];
     sizeFrom(terrain);
     const ui = state.ui || null;
@@ -907,6 +949,8 @@
   const PROP_SCALE = 1.3;
   /** Feet a touch south of the ring's centre, so they sit on the ring rather than inside it. */
   const CARD_FOOT = 0.12;
+  /** A standee's height over its disc: the disc, plus the stem and foot it stands on. */
+  const STANDEE_H = 1.8;
   /** The back and side walls, in cells at zoom 1. */
   const WALL_H = 2.4;
 
@@ -998,15 +1042,28 @@
       if (c.x == null || c.y == null || !c.alive) continue;
       if ((c.conditions || []).some((k) => (typeof k === 'string' ? k : k.key) === 'unconscious')) continue;
       const artKey = String((o.artKey ? o.artKey(c) : '') || c.sprite_key || '');
-      const spec = figureFor(c, artKey);
-      if (!spec) continue;
+      let spec = figureFor(c, artKey);
+      // No full-body sheet (a companion with a portrait of their own, a
+      // monster the catalogue has not drawn): a standee — the portrait token
+      // stood up on a base — rather than a coin lying on the floor beside
+      // people who are standing.
+      let face = '';
+      if (!spec) {
+        if (!o.faceUrl) continue;
+        face = String(o.faceUrl(c) || '');
+        if (!face) continue;
+        const size = knownSize(c.size) || 'medium';
+        const fh = FIGURE_H[size];
+        spec = { size, height: fh, footprint: fh >= 2 ? fh : 1, aspect: 1, file: '' };
+      }
       const tag = `c${++seq}`;
-      const h = spec.height * CARD_SCALE;
-      const w = h * spec.aspect;
+      const disc = face ? (spec.footprint > 1 ? spec.footprint * 0.9 : Math.max(0.6, Math.min(1, spec.height))) : 0;
+      const h = face ? disc * STANDEE_H : spec.height * CARD_SCALE;
+      const w = face ? disc : h * spec.aspect;
       // Seated on the footprint the way figureHtml() seats the flat sheet.
       const dx = (spec.footprint - 1) / 2;
       const dy = (spec.footprint - 1) + CARD_FOOT;
-      const lift = spec.size === 'tiny' ? TINY_LIFT * CARD_SCALE : 0;
+      const lift = spec.size === 'tiny' && !face ? TINY_LIFT * CARD_SCALE : 0;
       const fp = spec.footprint;
       // The shadow is drawn inside the token's group, in the board's units
       // and relative to the token's centre; turned, the foot offset in the
@@ -1024,13 +1081,18 @@
         ? `<svg class="bm-card-cover" viewBox="-0.28 -0.3 0.56 0.62" aria-hidden="true">${
           shieldHtml(0, 0, Number(shot.cover), 'bm-cover-badge')}</svg>`
         : '';
-      list.push({ fx, fy, html: `<div class="bm-card is-figure ${c.side === 'party' ? 'is-party' : 'is-foe'}"
+      const art = face
+        ? `<span class="bm-standee-base"></span>
+          <img class="bm-card-art bm-standee-face" src="${esc(face)}" alt=""
+               draggable="false" onerror="window.BattleMap.cardFail(this)">`
+        : `<img class="bm-card-art is-pixel" src="${esc(artUrl('figures/' + spec.file))}" alt=""
+               draggable="false" onerror="window.BattleMap.cardFail(this)">`;
+      list.push({ fx, fy, html: `<div class="bm-card is-figure${face ? ' is-standee' : ''} ${c.side === 'party' ? 'is-party' : 'is-foe'}"
           data-card="${tag}" data-cid="${esc(c.cid)}" data-cx="${n(fx)}" data-cy="${n(fy)}"
           data-dx="${n(dx)}" data-dy="${n(dy)}" data-fp="${fp}"
           style="--cx:${n(fx)};--cy:${n(fy)};--w:${n(w)};--h:${n(h)};--lift:${n(lift)}${litAt(fx, fy)}">
         <div class="bm-card-body">
-          <img class="bm-card-art is-pixel" src="${esc(artUrl('figures/' + spec.file))}" alt=""
-               draggable="false" onerror="window.BattleMap.cardFail(this)">
+          ${art}
           <div class="bm-card-hp"><i class="${pct > 0.5 ? 'ok' : pct > 0.25 ? 'mid' : 'low'}"
                style="width:${(pct * 100).toFixed(1)}%"></i></div>
           ${cover}
@@ -1114,7 +1176,7 @@
    */
   function wallsHtml(grid, deck) {
     if (!deck.walled) {
-      return `<div class="bm-wall is-back is-ghost"></div><div class="bm-lip is-earth"></div>`;
+      return `<div class="bm-wall is-back is-ghost"></div><div class="bm-lip is-earth"></div><div class="bm-edgefade"></div>`;
     }
     const tex = ` style="--wall-tex:url('${esc(artUrl(grid.wall || UP + 'wall_face.jpg'))}')"`;
     // `tx` is along the back wall, in the plane's frame. Turned, the back
@@ -1136,7 +1198,7 @@
     }).join('');
     return `<div class="bm-wall is-back"${tex}>${sconces}</div>
       <div class="bm-wall is-left"${tex}></div><div class="bm-wall is-right"${tex}></div>
-      <div class="bm-lip"></div>`;
+      <div class="bm-lip"></div><div class="bm-edgefade"></div>`;
   }
 
   /**
