@@ -567,7 +567,7 @@
    * The spots are authored as percentages on the painting, and a label's width
    * depends on the font size, which scales with the viewport — so two labels
    * that clear each other at 1920 can sit on top of each other at 1440. Exits
-   * are placed first and never move; NPCs and objects after them are pushed up
+   * are placed first (and only move to clear another exit); NPCs and objects after them are pushed up
    * or down in small steps until they are clear, staying inside the picture.
    * The pin under a label stretches by the same amount, so it still points at
    * its dot. Runs on every render and, debounced, on resize.
@@ -598,7 +598,9 @@
     const placed = [];
     ordered.forEach(({ el }) => {
       const base = rel(el, 0);
-      if (rank(el) === 0 || !placed.some((p) => hits(base, p))) {
+      // Exits go first, so an exit only ever gives way to another exit (two
+      // ways out painted close together, e.g. the Ford's mill and steading).
+      if (!placed.some((p) => hits(base, p))) {
         placed.push(base);
         return;
       }

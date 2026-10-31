@@ -339,3 +339,21 @@ body.in-combat .rail-tab-panel[data-panel="log"] { flex: 1 1 auto; min-height: 0
   body.game-page:not(.in-combat) .loc-inner.scene-storybook .loc-read .loc-prose p { font-size: 16.5px; line-height: 1.3; margin-bottom: 4px; }
   body.game-page:not(.in-combat) .loc-inner.scene-storybook .scene-narration .loc-name { margin-bottom: 2px; font-size: 16px; }
 }
+
+/* Map-only places (no painting yet): the "Ways out" list was a single column
+   capped at about three and a half rows, so a hub with six or nine exits
+   (Hallowmarket, the Moot Yard, Boomhead) showed three and hid the rest
+   behind a scrollbar nobody saw at 1440x900. On the desk, lay the ways out in
+   as many columns as fit so every exit is on screen; the chart above takes
+   whatever height is left. */
+@media (min-width: 900px) {
+  body.game-page:not(.in-combat) .loc-inner:not(.scene-storybook) .loc-ways .action-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(15.5rem, 1fr));
+    max-height: 11.5rem;
+  }
+  body.game-page:not(.in-combat) .loc-inner:not(.scene-storybook) .loc-ways .loc-act { min-height: 2rem; }
+  body.game-page:not(.in-combat) .loc-inner:not(.scene-storybook) .loc-ways .loc-act span {
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+}
