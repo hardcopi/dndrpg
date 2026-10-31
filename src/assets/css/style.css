@@ -5490,12 +5490,52 @@ body.bm-pan-ready .battlemap { cursor: grab; }
   stroke-width: 0.06;
 }
 
-.bm-cell.is-rough { fill: color-mix(in srgb, var(--grass) 28%, transparent); }
+/* Rough ground is drawn by its decals now — rubble, gravel, straw, leaves
+   lying flat — so the cell only darkens the floor a touch, enough to read as
+   "worse footing" from across the board without the old green slab. */
+.bm-cell.is-rough { fill: rgba(40, 26, 12, 0.16); }
 .bm-cell.is-water { fill: color-mix(in srgb, var(--water) 45%, transparent); }
 .bm-cell.is-low   { fill: color-mix(in srgb, var(--building) 38%, transparent); stroke: var(--border); stroke-width: 0.03; }
 .bm-cell.is-tall  { fill: color-mix(in srgb, var(--building) 50%, transparent); stroke: var(--wall); stroke-width: 0.05; }
 .bm-cell.is-wall  { fill: var(--wall); }
 .bm-cell.is-pit   { fill: var(--pit); }
+/* Furniture drawn on a cover cell IS the cover; the slab under it only made a
+   barrel look like it was set into a wall. A thin outline stays so the square
+   the rule occupies is still visible when the picture is smaller than it. */
+.bm-cell.is-low.is-dressed,
+.bm-cell.is-tall.is-dressed,
+.bm-cell.is-pit.is-dressed {
+  fill: rgba(20, 14, 8, 0.12);
+  stroke: rgba(20, 14, 8, 0.25);
+  stroke-width: 0.02;
+}
+
+/* Floor decals: paint on the ground and nothing else. Rough-ground decals
+   are the ground; open-floor ones are texture, drawn faint so a crack or a
+   stain can never compete with a token. */
+.bm-decal { pointer-events: none; }
+.bm-decal.is-rough { opacity: 0.92; }
+.bm-decal.is-floor { opacity: 0.38; }
+
+/* Cover, shown on hover: a shield with the AC it is worth. On an obstacle it
+   is the most that obstacle gives; on a target it is what this shot is
+   actually up against (ui.targets[cid].cover). */
+.bm-cover-mark, .bm-cover-badge { opacity: 0; transition: opacity var(--dur-fast); pointer-events: none; }
+.bm-cover-mark.is-on,
+.bm-token:hover .bm-cover-badge,
+.bm-token:focus .bm-cover-badge { opacity: 1; }
+.bm-shield {
+  fill: color-mix(in srgb, var(--accent) 70%, #1a1208);
+  stroke: var(--gold);
+  stroke-width: 0.035;
+}
+.bm-shield-num {
+  font-family: var(--mono);
+  font-size: 0.2px;
+  font-weight: var(--fw-bold);
+  fill: #fff7e0;
+  text-anchor: middle;
+}
 
 /* A board that came with a picture.
 

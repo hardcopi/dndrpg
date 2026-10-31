@@ -194,8 +194,8 @@
   const TERRAIN = {
     ',': ['is-rough', 'rough ground — costs double to cross'],
     '~': ['is-water', 'shallow water — costs double to cross'],
-    'o': ['is-low', 'low cover'],
-    'n': ['is-tall', 'tall cover — blocks sight'],
+    'o': ['is-low', 'low cover — +2 AC to anyone behind it; blocks movement, not sight'],
+    'n': ['is-tall', 'tall cover — +5 AC to anyone behind it; blocks movement and sight'],
     '#': ['is-wall', 'a wall'],
     'v': ['is-pit', 'a pit — nothing walks across it'],
   };
@@ -252,8 +252,9 @@
             ${grid.floor ? `style="fill:url(#${floorId})"` : ''}/>
       ${grid.image ? `<image class="bm-art" href="${esc(artUrl(grid.image))}"
             x="0" y="0" width="${W}" height="${H}" preserveAspectRatio="none"/>` : ''}
+      <g class="bm-decals">${decalsHtml(grid)}</g>
       <g class="bm-terrain${grid.image ? ' is-drawn' : ''}">${
-        terrainHtml(terrain, { wallId, waterId, hasWall: !grid.image && !!grid.wall })
+        terrainHtml(terrain, { wallId, waterId, hasWall: !grid.image && !!grid.wall, dressed: dressedCells(grid) })
       }</g>
       <g class="bm-props">${propsHtml(grid)}</g>
       <g class="bm-zones">${zonesHtml(grid, state)}</g>
@@ -262,6 +263,7 @@
       <g class="bm-aoe"></g>
       <g class="bm-path"></g>
       <g class="bm-cells">${cellsHtml(terrain)}</g>
+      <g class="bm-cover-marks">${coverMarksHtml(terrain)}</g>
       <g class="bm-grid">${gridHtml()}
         <rect class="bm-edge" x="0" y="0" width="${W}" height="${H}"/></g>
       <g class="bm-tokens">${tokensHtml(state, o)}</g>
@@ -288,10 +290,73 @@
             style="fill:url(#${tex.waterId})"/>`;
           continue;
         }
-        out += `<rect class="bm-cell ${spec[0]}" x="${x}" y="${y}" width="1" height="1"/>`;
+        // A cover cell with furniture drawn on it is the furniture; the grey
+        // slab under a barrel only made the barrel look like it sat in a wall.
+        const dressed = tex && tex.dressed && tex.dressed.has(key(x, y));
+        out += `<rect class="bm-cell ${spec[0]}${dressed ? ' is-dressed' : ''}" x="${x}" y="${y}" width="1" height="1"/>`;
       }
     }
     return out;
+  }
+
+  /** The cells some prop covers, so the terrain can stop drawing a slab there. */
+  function dressedCells(grid) {
+    const out = new Set();
+    for (const p of (Array.isArray(grid.props) ? grid.props : [])) {
+      const w = Math.max(1, Number(p.w) || 1);
+      const h = Math.max(1, Number(p.h) || 1);
+      for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) out.add(key((Number(p.x) || 0) + i, (Number(p.y) || 0) + j));
+    }
+    return out;
+  }
+
+  /**
+   * Flat pictures lying on the floor — rubble on rough ground, cracks and
+   * stains on open ground. Paint, never a rule: the server's `decals` list is
+   * art only, drawn under the terrain and the furniture and taking no clicks,
+   * so nothing here can ever be mistaken for something standing up.
+   */
+  function decalsHtml(grid) {
+    const list = Array.isArray(grid.decals) ? grid.decals : [];
+    return list.map((d) => {
+      const x = Number(d.x) || 0;
+      const y = Number(d.y) || 0;
+      const s = Math.max(0.3, Math.min(1.6, Number(d.s) || 1));
+      const rot = Number(d.rot) || 0;
+      const kind = d.kind === 'floor' ? 'is-floor' : 'is-rough';
+      return `<image class="bm-decal ${kind}" href="${esc(artUrl(d.src))}"
+        x="${(x + 0.5 - s / 2).toFixed(3)}" y="${(y + 0.5 - s / 2).toFixed(3)}"
+        width="${s.toFixed(3)}" height="${s.toFixed(3)}"
+        transform="rotate(${rot} ${x + 0.5} ${y + 0.5})"
+        preserveAspectRatio="xMidYMid meet" pointer-events="none"
+        onerror="this.remove()"/>`;
+    }).join('');
+  }
+
+  /**
+   * A small shield on each cover cell, shown while the pointer is on it.
+   *
+   * bind() lights the one under the pointer (`is-on`); a token in cover
+   * carries the same shield, shown while it is hovered. The number is the most the obstacle can give, the same number the
+   * tooltip and coverBetween() use.
+   */
+  function coverMarksHtml(terrain) {
+    let out = '';
+    for (let y = 0; y < H; y++) {
+      const row = terrain[y] || '';
+      for (let x = 0; x < W; x++) {
+        const ch = row[x];
+        if (ch !== 'o' && ch !== 'n') continue;
+        out += shieldHtml(x + 0.5, y + 0.5, ch === 'n' ? 5 : 2, 'bm-cover-mark', ` data-cover-at="${x},${y}"`);
+      }
+    }
+    return out;
+  }
+
+  function shieldHtml(cx, cy, bonus, cls, attrs) {
+    return `<g class="${cls}"${attrs || ''} transform="translate(${cx} ${cy})" pointer-events="none">
+      <path class="bm-shield" d="M0,-0.26 L0.22,-0.17 L0.2,0.06 Q0.14,0.2 0,0.28 Q-0.14,0.2 -0.2,0.06 L-0.22,-0.17 Z"/>
+      <text class="bm-shield-num" y="0.08">+${bonus}</text></g>`;
   }
 
   /**
@@ -312,8 +377,21 @@
       const h = Math.max(1, Number(p.h) || 1);
       const x = Number(p.x) || 0;
       const y = Number(p.y) || 0;
-      const stand = p.stand ? Math.min(1.1, 0.55 + h * 0.2) : 0;
       const pad = 0.06;
+      if (Number(p.rot) === 90) {
+        // Long art is drawn lying east to west; a north-south run is the same
+        // picture turned a quarter about the middle of its footprint.
+        const cx = x + w / 2;
+        const cy = y + h / 2;
+        return `<image class="bm-prop" href="${esc(artUrl(p.src))}"
+          x="${(cx - h / 2 + pad).toFixed(3)}" y="${(cy - w / 2 + pad).toFixed(3)}"
+          width="${(h - pad * 2).toFixed(3)}" height="${(w - pad * 2).toFixed(3)}"
+          transform="rotate(90 ${cx} ${cy})"
+          preserveAspectRatio="xMidYMid meet"
+          pointer-events="none"
+          onerror="this.remove()"/>`;
+      }
+      const stand = p.stand ? Math.min(1.1, 0.55 + h * 0.2) : 0;
       return `<image class="bm-prop" href="${esc(artUrl(p.src))}"
         x="${x + pad}" y="${y - stand + pad}"
         width="${w - pad * 2}" height="${h + stand - pad * 2}"
@@ -499,6 +577,7 @@
         <circle class="bm-turn" r="0.46"/>
         <circle class="bm-ring" r="${ringR}"${ringFill}/>
         ${drawn.art}
+        ${shot && Number(shot.cover) > 0 ? shieldHtml(0.34, -0.3, Number(shot.cover), 'bm-cover-badge') : ''}
         <rect class="bm-hp-back" x="-0.36" y="0.38" width="0.72" height="0.12" rx="0.06"/>
         <rect class="bm-hp ${pct > 0.5 ? 'ok' : pct > 0.25 ? 'mid' : 'low'}"
               x="-0.36" y="0.38" width="${(0.72 * pct).toFixed(3)}" height="0.12" rx="0.06"/>
@@ -913,16 +992,31 @@
       }
     });
 
+    let litCover = null;
+    const lightCover = (cell) => {
+      const k = cell ? key(cell[0], cell[1]) : null;
+      if (k === litCover) return;
+      if (litCover) {
+        const was = svg.querySelector(`[data-cover-at="${litCover}"]`);
+        if (was) was.classList.remove('is-on');
+      }
+      litCover = k;
+      const now = k && svg.querySelector(`[data-cover-at="${k}"]`);
+      if (now) now.classList.add('is-on');
+    };
     svg.addEventListener('mousemove', (ev) => {
       const cid = tokenOf(ev);
       const cell = cellOf(ev);
+      lightCover(cid ? null : cell);
       if (h.onHover) h.onHover(cid, cell);
     });
     svg.addEventListener('mouseleave', () => {
+      lightCover(null);
       if (drag && drag.moved) return;
       if (h.onHover) h.onHover(null, null);
     });
     svg.addEventListener('focusin', (ev) => {
+      lightCover(tokenOf(ev) ? null : cellOf(ev));
       if (h.onHover) h.onHover(tokenOf(ev), cellOf(ev));
     });
   }
