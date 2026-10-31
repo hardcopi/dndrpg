@@ -17,9 +17,7 @@ if (!session_character_id()) {
   <link rel="stylesheet" href="<?= asset('assets/css/game-amiga.css') ?>">
   <link rel="stylesheet" href="<?= asset('assets/css/scenefx.css') ?>">
   <link rel="stylesheet" href="<?= asset('assets/css/game-storybook.css') ?>">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Alegreya:wght@400;500;700&family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="<?= asset('assets/css/fonts.css') ?>">
   <!-- Generated dice geometry; see tools/gen_dice_css.py. -->
   <link rel="stylesheet" href="<?= asset('assets/css/dice.css') ?>">
 </head>
