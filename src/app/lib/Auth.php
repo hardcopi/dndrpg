@@ -249,6 +249,11 @@ class Auth
      */
     private static function regenerateSession(): void
     {
+        // The CSRF token goes with the id it was issued against. An attacker
+        // who planted a session id could have read that session's token off a
+        // page; dropping it here means the signed-in session gets a fresh one
+        // (made on next ask by csrf_token()) that they have never seen.
+        unset($_SESSION[CSRF_SESSION_KEY]);
         if (session_status() === PHP_SESSION_ACTIVE && !headers_sent()) {
             session_regenerate_id(true);
         }

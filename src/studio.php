@@ -20,6 +20,7 @@ $moduleKey = preg_replace('/[^a-z0-9_]/', '', (string) ($_GET['module'] ?? ''));
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <?= csrf_meta() ?>
   <title>Studio — Rivermark Chronicles</title>
   <link rel="stylesheet" href="<?= asset('assets/css/style.css') ?>">
 </head>

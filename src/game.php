@@ -11,6 +11,7 @@ if (!session_character_id()) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <?= csrf_meta() ?>
   <title>Adventure — Rivermark Chronicles</title>
   <link rel="stylesheet" href="<?= asset('assets/css/style.css') ?>">
   <!-- The Amiga window skin. Scoped to this page; see the file header. -->
