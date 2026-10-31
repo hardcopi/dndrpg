@@ -6,7 +6,7 @@
     "on_job_board": true,
     "required_level": 3,
     "rewards": {
-        "xp": 400,
+        "xp": 800,
         "gold": 120
     },
     "stages": {
@@ -44,7 +44,7 @@
                     "quantity": 1
                 },
                 {
-                    "xp": 100
+                    "xp": 200
                 },
                 {
                     "approval": {

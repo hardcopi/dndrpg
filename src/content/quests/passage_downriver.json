@@ -11,7 +11,7 @@
     "stages": {
         "the_second_and_the_fifth": {
             "title": "The second and the fifth",
-            "objective": "Osgar Tull takes the packet down. Find out what it costs and what he carries.",
+            "objective": "Osgar Tull takes the packet down. Find out what it costs and what he carries: ask him on the packet stair, and tell him whether you are booking a berth.",
             "journal": "Osgar Tull has taken the packet down on the second and the fifth for nineteen years. He will carry anything that pays, and he will remember everyone he carried, which is a different service and is priced separately.",
             "target": {
                 "location": "packet_stair"

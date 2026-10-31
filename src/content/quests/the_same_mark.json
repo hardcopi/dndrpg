@@ -6,12 +6,12 @@
     "on_job_board": false,
     "required_level": 2,
     "rewards": {
-        "xp": 150
+        "xp": 450
     },
     "stages": {
         "two_places": {
             "title": "Two places",
-            "objective": "Nothing to do about it. Keep your eyes open.",
+            "objective": "Nothing to do about it. Keep your eyes open; once you have seen the mark in two places, go and ask Alder Pyke on Granary Row.",
             "journal": "A plumb-bob hanging inside a square, cut or stamped or painted. I have seen it twice now, in two places that have no business sharing anything. It is probably a maker's mark. Most things are.",
             "target": {
                 "location": "granary_row"
@@ -19,7 +19,7 @@
         },
         "asked_the_chainman": {
             "title": "Ask the man who paints them",
-            "objective": "Alder Pyke walks lines for whoever is paying. Ask him what the mark is.",
+            "objective": "Alder Pyke walks lines for whoever is paying. Ask him what the mark is, and tell him whether you mean to keep count.",
             "journal": "There is an old chainman on Granary Row with a hundred feet of chain over his shoulder and a plumb-bob in his pocket, and the plumb-bob has the mark stamped on the flat. He paints them. He has painted a great many.",
             "target": {
                 "location": "granary_row"

@@ -6,7 +6,7 @@
     "on_job_board": true,
     "required_level": 2,
     "rewards": {
-        "xp": 300,
+        "xp": 450,
         "gold": 100
     },
     "stages": {
@@ -40,7 +40,7 @@
                     "set_flag": "grazing_bought_known"
                 },
                 {
-                    "xp": 100
+                    "xp": 150
                 },
                 {
                     "approval": {
@@ -72,7 +72,7 @@
                     "pressure": 1
                 },
                 {
-                    "xp": 120
+                    "xp": 175
                 },
                 {
                     "approval": {

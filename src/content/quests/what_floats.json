@@ -6,7 +6,7 @@
     "on_job_board": true,
     "required_level": 3,
     "rewards": {
-        "xp": 400,
+        "xp": 800,
         "gold": 110
     },
     "stages": {
@@ -40,7 +40,7 @@
                     "set_flag": "pool_dead_named"
                 },
                 {
-                    "xp": 150
+                    "xp": 300
                 },
                 {
                     "approval": {
@@ -65,7 +65,7 @@
                     "set_flag": "pool_dead_buried"
                 },
                 {
-                    "xp": 100
+                    "xp": 200
                 },
                 {
                     "approval": {

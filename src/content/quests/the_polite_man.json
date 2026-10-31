@@ -6,13 +6,13 @@
     "on_job_board": false,
     "required_level": 4,
     "rewards": {
-        "xp": 350,
+        "xp": 1225,
         "gold": 60
     },
     "stages": {
         "go_downriver": {
             "title": "Greyhythe",
-            "objective": "Ludo Corse keeps house at Greyhythe. Go and look at him.",
+            "objective": "Ludo Corse keeps house at Greyhythe. Go to the Factor's House and speak to him.",
             "journal": "Ludo Corse, factor, of Greyhythe. Pyke says he has been down twice in three years, was perfectly civil both times, and paid on the day.",
             "target": {
                 "location": "factors_house"
@@ -20,7 +20,7 @@
         },
         "the_chair": {
             "title": "The chair on your side of the desk",
-            "objective": "Sit down. Ask him whatever you like.",
+            "objective": "Sit down. Ask him whatever you like. When you have no more questions, tell him so and he will see you out.",
             "journal": "He answered the door himself, put me in the chair, and asked whether I had eaten. There is a chair on my side of the desk and it is worn through at the arms, which means a great many people have sat in it, which means a great many people have come here to ask him something.",
             "target": {
                 "location": "factors_house"
@@ -28,7 +28,7 @@
         },
         "asked_everything": {
             "title": "Everything, honestly",
-            "journal": "I asked him what he buys and he told me. I asked him who he buys it for and he told me. I asked him what the mark on the note was and he said it was the house's mark and had been since his grandfather. He did not lie once and I came out into the street knowing nothing I could say aloud to Reed. That is not an accident. That is a method, and he has been using it on better people than me for a long time.",
+            "journal": "I asked him what he buys and he told me. I asked him who he buys it for and he told me. I asked him what the mark on the note was and he said it was the house's mark and had been since his grandfather. He did not lie once and I came out into the street knowing nothing I could say aloud to Reed. That is not an accident. That is a method, and he has been using it on better people than me for a long time. He did say, in passing, that nobody has ever told him what the works at the head of the valley are for. If there is anything to find, it is up there, and the goblins who hold the warren on the quarry road are the nearest people to it who will talk.",
             "resolution": "asked_everything",
             "terminal": true,
             "effects": [
@@ -40,7 +40,7 @@
                     "set_flag": "met_corse"
                 },
                 {
-                    "xp": 100
+                    "xp": 350
                 },
                 {
                     "approval": {
@@ -54,7 +54,7 @@
         },
         "asked_nothing": {
             "title": "Nothing worth asking",
-            "journal": "I sat in the chair for a quarter of an hour and could not think of a question that would not have made me look like a fool. He was very kind about it. He said most people find the second visit easier.",
+            "journal": "I sat in the chair for a quarter of an hour and could not think of a question that would not have made me look like a fool. He was very kind about it. He said most people find the second visit easier. As I left he mentioned, as one mentions the weather, that nobody has ever told him what the works at the head of the valley are for. The goblins on the quarry road hold the warren under it, and they are the nearest people to it who will talk.",
             "resolution": "asked_nothing",
             "terminal": true,
             "outcome": "neutral",
