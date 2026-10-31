@@ -77,7 +77,8 @@ it on the host**; you cannot do it from the VM.
 | Changed | Action |
 |---|---|
 | PHP / HTML / assets in `src/` | nothing — `src/` is bind-mounted, edits are live |
-| `docker/nginx/default.conf` | `docker compose restart web` |
+| `docker/nginx/default.conf` or `deny-private.conf` | `docker compose restart web` |
+| `docker-compose.yml` mounts (e.g. first checkout with `deny-private.conf`) | `docker compose up -d web` — `restart` keeps the old mounts, and nginx will not start on an `include` of a file that is not there |
 | `docker/php/Dockerfile` | `docker compose up -d --build php` |
 | Anything in `src/sql/` | full DB rebuild — see **Database** below |
 | `docker-compose.yml` | `docker compose up -d` |
@@ -1299,10 +1300,22 @@ database somebody is playing on.
   `$HOME=/root` where there is none. Use `sudo -u richard ./deploy.sh`. For the
   production database, `mysql` on hermes authenticates root over the socket, so
   nothing needs a password on a command line.
-- **`sql/` is NOT excluded from `deploy.sh`,** despite the comment above the
-  `EXCLUDES` array saying schema files are applied deliberately rather than
-  swept along. The migrations are published to the public web root. They are
-  inert as files, but it publishes the schema.
+- **What deploys is decided by `rsync-excludes`**, at the repo root and read by
+  both `deploy.sh` and `pull.sh`. It used to be a per-script array, and
+  `deploy.sh`'s comment said `sql/` was excluded while the array did not
+  list it — so `content.sql`, every quest and line of dialogue, was
+  downloadable from the live site. Add to the file, not to either script: a
+  path deploy stops sending must also be one pull stops seeing, or pull's
+  `--delete` removes the local copy. Check a new line against the PHP for a
+  runtime read first — `content/` must keep deploying, because
+  `ContentEditor` and `ContentExporter` write JSON under it.
+- **hermes's nginx refuses the same paths**, via
+  `/etc/nginx/snippets/rpg-deny-private.conf` included in the rpg vhost; the
+  reviewed copy is `docker/nginx/deny-private.conf`, mounted at that same path
+  by the local stack. They are server-level `if`s, not `location`s, because
+  `location ^~ /embed/` would otherwise shield `/embed/README.md` from any
+  regex. Changing it means `docker compose restart web` here and a copy plus
+  `nginx -t && systemctl reload nginx` on hermes.
 - **Migrations are never run by a deploy.** `deploy.sh` copies files; it does
   not apply them. Anything with a new column must be migrated on hermes first or
   the live site 500s — `LocationEngine::getState()` asks for the delve status on

@@ -35,6 +35,42 @@ went away.
 
     python3 tools/apply_content_safely.py --check      # report, change nothing
     python3 tools/apply_content_safely.py --apply
+    python3 tools/apply_content_safely.py --restore-from backups/<db>-<stamp>-progress.json
+
+All or nothing
+--------------
+The first version of this tool held the only copy of the snapshot in a Python
+dict, piped content.sql through one mysql process, and then restored row by row
+through hundreds more. content.sql opens with DELETEs and is not a transaction,
+so a load that failed half-way had already committed the deletes — and the
+snapshot that could have put them back died with the process.
+
+So, on --apply, before anything is written:
+
+  * the snapshot goes to disk as JSON (`--backup-dir`, default `backups/` at the
+    repo root: outside src/, so deploy.sh can never publish somebody's save,
+    and gitignored). `--restore-from` puts one back on its own.
+  * a full mysqldump of the target database is taken beside it, through
+    `--mysqldump`, which mirrors `--mysql`. Opt out with `--no-mysqldump` only.
+
+Either failing stops the run with nothing written. Then content.sql, the restore
+and the re-links go down ONE mysql session as one transaction, and the client
+stops at the first error. A failure anywhere — a bad statement in content.sql, a
+restore that will not insert, the connection dropping — ends the session with
+the transaction open, and MySQL rolls the lot back. Players are exactly where
+they were.
+
+That only holds while content.sql is pure DML on InnoDB: DDL, TRUNCATE, LOCK
+TABLES and friends commit implicitly, and a MyISAM table cannot roll back. Both
+are checked before the backup is taken rather than assumed, because content.sql
+is generated and load_content.py could start emitting something else tomorrow.
+
+Against hermes, where `--mysql` is `~/rivermark/bin/hermes-mysql` (i.e.
+`ssh root@hermes mysql`), the dump wants the same transport:
+
+    python3 tools/apply_content_safely.py --apply \\
+        --mysql ~/rivermark/bin/hermes-mysql \\
+        --mysqldump "ssh -o BatchMode=yes root@hermes.five-star.com mysqldump"
 
 A trap worth knowing about
 --------------------------
@@ -49,6 +85,11 @@ means what it says.
 from __future__ import annotations
 
 import argparse
+import datetime
+import gzip
+import json
+import os
+import re
 import shlex
 import subprocess
 import sys
@@ -56,6 +97,14 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 CONTENT_SQL = ROOT / "sql" / "content.sql"
+BACKUP_DIR = ROOT.parent / "backups"
+
+# --content-sql loads a file other than the real one. It exists so
+# test_apply_content_safely.sh can hand over a copy with a broken statement
+# half-way down and prove the rollback; pointed at a stale file on a live
+# database it would quietly revert the world, so it is hidden from --help and
+# refused unless this is set in the environment.
+TEST_ENV = "APPLY_CONTENT_SAFELY_TEST"
 
 COMPOSE_DIR = ROOT.parent
 DB_SERVICE = "db"
@@ -71,6 +120,7 @@ DB_PASS = "devpassword"
 # and a prefix that was right for the snapshot and wrong for the load would
 # take the snapshot from one database and rebuild another.
 CLIENT: list[str] | None = None
+DUMP_CLIENT: list[str] | None = None
 
 
 def client_cmd() -> tuple[list[str], str | None]:
@@ -81,6 +131,16 @@ def client_cmd() -> tuple[list[str], str | None]:
         "docker", "compose", "exec", "-T", DB_SERVICE,
         "mysql", f"-u{DB_USER}", f"-p{DB_PASS}",
         "--default-character-set=utf8mb4",
+    ], str(COMPOSE_DIR))
+
+
+def dump_cmd() -> tuple[list[str], str | None]:
+    """The mysqldump invocation, defaulted the same way as client_cmd()."""
+    if DUMP_CLIENT is not None:
+        return list(DUMP_CLIENT), None
+    return ([
+        "docker", "compose", "exec", "-T", DB_SERVICE,
+        "mysqldump", f"-u{DB_USER}", f"-p{DB_PASS}",
     ], str(COMPOSE_DIR))
 
 
@@ -265,6 +325,11 @@ SNAPSHOTS = [
 ]
 
 
+def _stderr(proc_stderr: str) -> str:
+    return "\n".join(l for l in proc_stderr.splitlines()
+                     if "Using a password" not in l)
+
+
 def mysql(database: str, sql: str, batch: bool = True) -> str:
     """One statement (or several) against one database, named explicitly."""
     cmd, cwd = client_cmd()
@@ -273,9 +338,7 @@ def mysql(database: str, sql: str, batch: bool = True) -> str:
     cmd += [database, "-e", sql]
     proc = subprocess.run(cmd, cwd=cwd, capture_output=True, text=True)
     if proc.returncode != 0:
-        err = "\n".join(l for l in proc.stderr.splitlines()
-                        if "Using a password" not in l)
-        raise RuntimeError(f"mysql failed:\n{err}")
+        raise RuntimeError(f"mysql failed:\n{_stderr(proc.stderr)}")
     return proc.stdout
 
 
@@ -285,25 +348,44 @@ def quote(value: str | None) -> str:
     return "'" + value.replace("\\", "\\\\").replace("'", "''") + "'"
 
 
-def snapshot(database: str) -> dict[str, list[list[str]]]:
+# mysql -B escapes a field's backslash, tab, newline and NUL, and writes NULL
+# as \N. Decoded here so the snapshot on disk holds the values themselves —
+# quote() then escapes them once, rather than a second time over the client's
+# escaping, which turned a stored newline into a literal backslash-n.
+_BATCH_ESC = {"\\": "\\", "t": "\t", "n": "\n", "0": "\0"}
+
+
+def unescape(field: str) -> str | None:
+    if field == "\\N":
+        return None
+    return re.sub(r"\\(.)", lambda m: _BATCH_ESC.get(m.group(1), m.group(0)), field)
+
+
+def snapshot(database: str) -> dict[str, list[list[str | None]]]:
     out = {}
     for spec in SNAPSHOTS:
         raw = mysql(database, " ".join(spec["select"].split()))
-        rows = [line.split("\t") for line in raw.splitlines() if line.strip()]
+        rows = [[unescape(f) for f in line.split("\t")]
+                for line in raw.splitlines() if line.strip()]
         out[spec["table"]] = rows
     return out
 
 
-def restore(database: str, snap: dict[str, list[list[str]]]) -> dict[str, tuple[int, int]]:
-    """Put the snapshot back. Returns table -> (rows wanted, rows actually there)."""
-    report = {}
+def restore_sql(snap: dict[str, list[list[str | None]]]) -> list[str]:
+    """
+    The statements that put a snapshot back, and a count after each table.
+
+    Returned rather than run so the caller can put them inside the same
+    transaction as the load: a restore that fails must take the load down with
+    it, or the database is left holding new content and half a party.
+    """
+    out = []
     for spec in SNAPSHOTS:
         table, rows = spec["table"], snap[spec["table"]]
         for row in rows:
-            values = dict(zip(spec["cols"], row))
             params = {}
-            for col, val in values.items():
-                if col in spec["nullable"] and val == "":
+            for col, val in zip(spec["cols"], row):
+                if val is None or (col in spec["nullable"] and val == ""):
                     params[col] = "NULL"
                 elif val.lstrip("-").isdigit():
                     params[col] = val
@@ -315,32 +397,165 @@ def restore(database: str, snap: dict[str, list[list[str]]]) -> dict[str, tuple[
             # subquery (the 1093 restriction is UPDATE/DELETE only).
             sql += (" AND NOT EXISTS (SELECT 1 FROM " + table + " x WHERE "
                     + spec["identity"].format(**params) + ")")
-            mysql(database, " ".join(sql.split()), batch=False)
-        after = int(mysql(database, f"SELECT COUNT(*) FROM {table}").strip() or 0)
-        report[table] = (len(rows), after)
-    return report
+            out.append(" ".join(sql.split()))
+        out.append(f"SELECT '@@restored', '{table}', {len(rows)}, COUNT(*) FROM {table}")
+    return out
 
 
-def apply_content(database: str) -> None:
+# --- Is content.sql safe to wrap in a transaction? ------------------------
+#
+# A statement that commits implicitly (any DDL, TRUNCATE, LOCK TABLES, SET
+# autocommit = 1, ...) would end the transaction half-way and leave everything
+# before it committed — the exact failure this tool exists to prevent, arriving
+# silently. So the check is an allow-list, not a deny-list: a statement whose
+# verb is not one of these stops the apply before anything is backed up or
+# written, and the remedy is to look at what load_content.py has started
+# emitting, not to extend the list without thinking.
+TXN_SAFE = {"INSERT", "UPDATE", "DELETE", "REPLACE", "SELECT", "SET"}
+
+_TOKENS = re.compile(
+    r"'(?:[^'\\]|\\.|'')*'"          # 'string', with \' and '' escapes
+    r'|"(?:[^"\\]|\\.|"")*"'         # "string"
+    r"|`[^`]*`"                      # `identifier`
+    r"|--[^\n]*|#[^\n]*"             # line comments
+    r"|/\*.*?\*/"                    # block comments (and /*! hints — see below)
+    r"|;",
+    re.S,
+)
+_LEADING_NOISE = re.compile(r"^(?:\s+|--[^\n]*(?:\n|$)|#[^\n]*(?:\n|$)|/\*(?!!).*?\*/)*", re.S)
+
+
+def split_statements(sql: str) -> list[str]:
+    """Split on the semicolons that are not inside a string, name or comment."""
+    out, start = [], 0
+    for m in _TOKENS.finditer(sql):
+        if m.group(0) == ";":
+            out.append(sql[start:m.start()])
+            start = m.end()
+    out.append(sql[start:])
+    return [s for s in out if _LEADING_NOISE.sub("", s).strip()]
+
+
+def verb(stmt: str) -> str:
+    body = _LEADING_NOISE.sub("", stmt)
+    m = re.match(r"[A-Za-z_]+", body)
+    return m.group(0).upper() if m else body[:20]
+
+
+def prepare_content(path: Path) -> tuple[str, list[str]]:
     """
-    Run content.sql against a named database.
+    content.sql made ready to run inside a transaction, and anything in it that
+    would stop that being true.
 
-    The `USE` line is stripped rather than trusted: it hardcodes `rpg_5e`, so a
-    file piped at any other database silently lands on the live one instead.
+    The `USE` statement is dropped rather than trusted: it hardcodes `rpg_5e`,
+    so a file piped at any other database silently lands on the live one
+    instead. Dropped by STATEMENT, not by line — a line-based strip would also
+    eat any line of a multi-line string that happened to begin "use ".
     """
-    sql = CONTENT_SQL.read_text(encoding="utf-8")
-    cleaned = "\n".join(
-        line for line in sql.splitlines()
-        if not line.strip().lower().startswith("use ")
-    )
-    cmd, cwd = client_cmd()
-    cmd += [database]
-    proc = subprocess.run(cmd, cwd=cwd, input=cleaned,
-                          capture_output=True, text=True)
-    if proc.returncode != 0:
-        err = "\n".join(l for l in proc.stderr.splitlines()
-                        if "Using a password" not in l)
-        raise RuntimeError(f"content.sql failed:\n{err}")
+    kept, problems = [], []
+    for stmt in split_statements(path.read_text(encoding="utf-8")):
+        v = verb(stmt)
+        if v == "USE":
+            continue
+        brief = " ".join(stmt.split())[:100]
+        if "/*!" in stmt:
+            # An executable comment runs whatever is inside it, which the verb
+            # check cannot see.
+            problems.append(f"executable /*! comment: {brief}")
+        elif v not in TXN_SAFE:
+            problems.append(f"{v}: {brief}")
+        elif v == "SET" and re.search(r"\b(autocommit|transaction)\b", stmt, re.I):
+            problems.append(f"SET that ends or reshapes the transaction: {brief}")
+        kept.append(stmt.strip())
+    return ";\n".join(kept) + ";\n", problems
+
+
+def non_innodb_tables(database: str) -> list[str]:
+    """Tables a ROLLBACK would not reach."""
+    raw = mysql(database,
+                "SELECT CONCAT(TABLE_NAME, ' (', COALESCE(ENGINE, '?'), ')') "
+                "FROM information_schema.TABLES "
+                f"WHERE TABLE_SCHEMA = {quote(database)} AND TABLE_TYPE = 'BASE TABLE' "
+                "AND COALESCE(ENGINE, '') <> 'InnoDB'")
+    return [l for l in raw.splitlines() if l.strip()]
+
+
+# --- Backups ----------------------------------------------------------------
+
+SNAPSHOT_FORMAT = "apply_content_safely/1"
+
+
+def write_snapshot(path: Path, database: str, snap: dict) -> None:
+    """
+    The snapshot as JSON, written to a temporary name, fsynced, renamed, and
+    read back. A file that is not provably complete is not a backup; the caller
+    treats any exception here as "write nothing".
+    """
+    doc = {
+        "format": SNAPSHOT_FORMAT,
+        "database": database,
+        "taken_at": datetime.datetime.now().isoformat(timespec="seconds"),
+        "tables": {spec["table"]: {"cols": spec["cols"], "rows": snap[spec["table"]]}
+                   for spec in SNAPSHOTS},
+    }
+    tmp = path.with_name(path.name + ".partial")
+    with open(tmp, "w", encoding="utf-8") as fh:
+        json.dump(doc, fh, ensure_ascii=False, indent=1)
+        fh.flush()
+        os.fsync(fh.fileno())
+    os.replace(tmp, path)
+    # Every value, not just the row counts: a file with the right number of
+    # rows and a mangled key in one of them restores the wrong thing, quietly.
+    if json.loads(path.read_text(encoding="utf-8")) != doc:
+        raise RuntimeError(f"{path}: did not read back identical to what was written")
+    load_snapshot(path)
+
+
+def load_snapshot(path: Path) -> dict[str, list[list[str | None]]]:
+    doc = json.loads(path.read_text(encoding="utf-8"))
+    if doc.get("format") != SNAPSHOT_FORMAT:
+        raise RuntimeError(f"{path}: not a snapshot written by this tool")
+    out = {}
+    for spec in SNAPSHOTS:
+        t = doc["tables"].get(spec["table"])
+        if t is None or t["cols"] != spec["cols"]:
+            raise RuntimeError(f"{path}: {spec['table']} is missing or has other columns")
+        out[spec["table"]] = t["rows"]
+    return out
+
+
+def write_dump(path: Path, database: str) -> None:
+    """
+    A full mysqldump of the target, gzipped. --single-transaction so the game
+    can keep running while it is taken; --no-tablespaces because it needs a
+    privilege (PROCESS) the app's user does not have and nothing here wants.
+    Complete means mysqldump exited 0 AND wrote its closing comment — a dump cut
+    off by a dropped ssh connection can exit 0 from the far side's point of view
+    and still be half a database.
+    """
+    cmd, cwd = dump_cmd()
+    cmd += ["--single-transaction", "--routines", "--triggers", "--no-tablespaces",
+            "--default-character-set=utf8mb4", database]
+    tmp = path.with_name(path.name + ".partial")
+    tail = b""
+    with gzip.open(tmp, "wb") as gz:
+        proc = subprocess.Popen(cmd, cwd=cwd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        assert proc.stdout is not None and proc.stderr is not None
+        for chunk in iter(lambda: proc.stdout.read(1 << 20), b""):
+            gz.write(chunk)
+            tail = (tail + chunk)[-512:]
+        err = proc.stderr.read().decode("utf-8", "replace")
+        rc = proc.wait()
+    if rc != 0:
+        tmp.unlink(missing_ok=True)
+        raise RuntimeError(f"mysqldump exited {rc}:\n{_stderr(err)}")
+    if b"-- Dump completed" not in tail:
+        tmp.unlink(missing_ok=True)
+        raise RuntimeError("mysqldump output has no '-- Dump completed' trailer; "
+                           "treating it as truncated")
+    with open(tmp, "rb") as fh:
+        os.fsync(fh.fileno())
+    os.replace(tmp, path)
 
 
 # Columns that a content load NULLS rather than deletes, and the key that can
@@ -393,18 +608,93 @@ RELINKS = [
 ]
 
 
-def relink(database: str) -> list[str]:
+def relink_sql() -> list[str]:
     """Put back the ids a content load nulled, resolving them through their keys."""
-    notes = []
+    out = []
     for spec in RELINKS:
-        before = int(mysql(database, spec["count"]).strip() or 0)
-        if before == 0:
+        count = " ".join(spec["count"].split())
+        out.append(f"SELECT '@@relink_before', '{spec['what']}', ({count})")
+        out.append(" ".join(spec["sql"].split()))
+        out.append(f"SELECT '@@relink_after', '{spec['what']}', ({count})")
+    return out
+
+
+def run_transaction(database: str, body: list[str]) -> tuple[bool, list[list[str]], str]:
+    """
+    Run statements as ONE transaction in ONE mysql session.
+
+    Returns (committed, marker rows, stderr). The client is told --skip-force so
+    that a `force` line in somebody's my.cnf cannot make it carry on past an
+    error and reach the COMMIT; without --force the batch client stops at the
+    first failing statement and disconnects, and the server rolls the open
+    transaction back. `@@committed` is selected only after COMMIT returns, so
+    its presence is the evidence, not the exit code alone.
+    """
+    script = "\n".join([
+        "SET NAMES utf8mb4;",
+        "START TRANSACTION;",
+        *(s if s.rstrip().endswith(";") else s + ";" for s in body),
+        "SET FOREIGN_KEY_CHECKS = 1;",
+        "COMMIT;",
+        "SELECT '@@committed';",
+    ]) + "\n"
+    cmd, cwd = client_cmd()
+    cmd += ["--skip-force", "-N", "-B", database]
+    proc = subprocess.run(cmd, cwd=cwd, input=script, capture_output=True, text=True)
+    markers = [line.split("\t") for line in proc.stdout.splitlines()
+               if line.startswith("@@")]
+    committed = proc.returncode == 0 and ["@@committed"] in markers
+    return committed, markers, _stderr(proc.stderr)
+
+
+def recovery_steps(args: argparse.Namespace, snap_path: Path | None,
+                   dump_path: Path | None) -> str:
+    me = f"python3 {Path(__file__).resolve()} --database {shlex.quote(args.database)}"
+    if args.mysql:
+        me += f" --mysql {shlex.quote(args.mysql)}"
+    if CLIENT is not None:
+        client = " ".join(shlex.quote(c) for c in CLIENT)
+        where = ""
+    else:
+        client = f"docker compose exec -T {DB_SERVICE} mysql -u{DB_USER} -p{DB_PASS}"
+        where = f"   (from {COMPOSE_DIR})"
+    lines = [
+        "Recovery:",
+        f"  1. See where things stand (read-only):\n       {me} --check",
+    ]
+    if snap_path:
+        lines.append("  2. If player progress is missing, put the snapshot back "
+                     "(inserts only what is absent; safe to repeat):\n"
+                     f"       {me} --restore-from {shlex.quote(str(snap_path))}")
+    if dump_path:
+        lines.append("  3. Last resort — the whole database as it was before this run "
+                     "(loses anything players did since):\n"
+                     f"       gunzip -c {shlex.quote(str(dump_path))} | {client} "
+                     f"--default-character-set=utf8mb4 {shlex.quote(args.database)}{where}")
+    return "\n".join(lines)
+
+
+def report_restore(markers: list[list[str]]) -> int:
+    lost = 0
+    for m in markers:
+        if m[0] != "@@restored":
             continue
-        mysql(database, spec["sql"])
-        after = int(mysql(database, spec["count"]).strip() or 0)
-        notes.append(f"  {spec['what']:34s} {before - after:3d} re-linked by key"
-                     + ("" if after == 0 else f", {after} still unresolved"))
-    return notes
+        table, wanted, after = m[1], int(m[2]), int(m[3])
+        flag = "" if after >= wanted else f"   <-- {wanted - after} NOT RESTORED"
+        lost += max(0, wanted - after)
+        print(f"  {table:26s} {wanted:5d} snapshotted, {after:5d} present{flag}")
+    return lost
+
+
+def report_relinks(markers: list[list[str]]) -> None:
+    before = {m[1]: int(m[2]) for m in markers if m[0] == "@@relink_before"}
+    after = {m[1]: int(m[2]) for m in markers if m[0] == "@@relink_after"}
+    notes = [f"  {what:34s} {n - after.get(what, 0):3d} re-linked by key"
+             + ("" if after.get(what, 0) == 0 else f", {after[what]} still unresolved")
+             for what, n in before.items() if n]
+    if notes:
+        print("re-linked ids the load nulled:")
+        print("\n".join(notes))
 
 
 def main() -> int:
@@ -416,56 +706,146 @@ def main() -> int:
                     help="actually do it; without this nothing is written")
     ap.add_argument("--check", action="store_true",
                     help="report what is at risk and exit")
+    ap.add_argument("--restore-from", metavar="SNAPSHOT.json", type=Path,
+                    help="put a snapshot written by --apply back, on its own, and exit")
+    ap.add_argument("--force-database", action="store_true",
+                    help="with --restore-from: allow a snapshot taken from another "
+                         "database than --database")
     ap.add_argument("--mysql", default=None,
                     help="mysql client to run, as a shell-style command "
                          "(e.g. --mysql mysql). Default: this project's "
                          "docker compose stack. Use it where there is none.")
+    ap.add_argument("--mysqldump", default=None,
+                    help="mysqldump to run for the pre-apply backup, shell-style; "
+                         "mirrors --mysql (e.g. \"ssh root@hermes mysqldump\"). "
+                         "Default: this project's docker compose stack.")
+    ap.add_argument("--no-mysqldump", action="store_true",
+                    help="skip the full database dump (the JSON snapshot is still "
+                         "written). An explicit opt-out; there is no default that skips it.")
+    ap.add_argument("--backup-dir", type=Path, default=BACKUP_DIR,
+                    help=f"where backups go (default: {BACKUP_DIR})")
+    ap.add_argument("--content-sql", type=Path, default=None, help=argparse.SUPPRESS)
     args = ap.parse_args()
+    # Piped into a log, stdout is block-buffered and the FAILED on stderr would
+    # print above the report it concludes.
+    sys.stdout.reconfigure(line_buffering=True)
 
+    global CLIENT, DUMP_CLIENT
     if args.mysql:
-        global CLIENT
         CLIENT = shlex.split(args.mysql)
+    if args.mysqldump:
+        DUMP_CLIENT = shlex.split(args.mysqldump)
 
-    if not CONTENT_SQL.exists():
-        print(f"No {CONTENT_SQL}. Run tools/load_content.py first.", file=sys.stderr)
-        return 1
+    content_sql = CONTENT_SQL
+    if args.content_sql is not None:
+        if os.environ.get(TEST_ENV) != "1":
+            print(f"--content-sql is for the test harness and needs {TEST_ENV}=1.",
+                  file=sys.stderr)
+            return 2
+        content_sql = args.content_sql
 
     print(f"target database: {args.database}\n")
+
+    if args.restore_from:
+        return restore_only(args)
+
+    if not content_sql.exists():
+        print(f"No {content_sql}. Run tools/load_content.py first.", file=sys.stderr)
+        return 1
+
     before = snapshot(args.database)
     print("player progress currently held:")
     for spec in SNAPSHOTS:
         print(f"  {spec['table']:26s} {len(before[spec['table']]):5d} row(s)")
 
+    content, problems = prepare_content(content_sql)
+    soft = non_innodb_tables(args.database)
+    if problems or soft:
+        print(f"\n{content_sql.name} cannot be applied as one transaction:", file=sys.stderr)
+        for p in problems[:20]:
+            print(f"  implicit commit risk: {p}", file=sys.stderr)
+        for t in soft:
+            print(f"  not InnoDB, so a rollback would not reach it: {t}", file=sys.stderr)
+        print("Nothing written. Fix the generator or the table before loading.", file=sys.stderr)
+        return 1
+
     if not args.apply:
-        print("\nNothing written. Re-run with --apply to load content and carry this across.")
-        print("Take a database backup first — this tool is careful, not magic.")
+        print(f"\n{content_sql.name} is pure DML on InnoDB: --apply will run it as one transaction.")
+        print("Nothing written. Re-run with --apply to load content and carry this across.")
         return 0
 
-    print("\napplying content.sql ...")
-    apply_content(args.database)
+    # Backups, before a single write. Any failure here ends the run.
+    stamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+    snap_path = args.backup_dir / f"{args.database}-{stamp}-progress.json"
+    dump_path = None if args.no_mysqldump else args.backup_dir / f"{args.database}-{stamp}.sql.gz"
+    try:
+        args.backup_dir.mkdir(parents=True, exist_ok=True)
+        write_snapshot(snap_path, args.database, before)
+        print(f"\nsnapshot written: {snap_path}")
+        if dump_path:
+            print("dumping the database ...")
+            write_dump(dump_path, args.database)
+            print(f"dump written:     {dump_path} ({dump_path.stat().st_size:,} bytes)")
+        else:
+            print("mysqldump skipped (--no-mysqldump)")
+    except Exception as exc:  # noqa: BLE001 — every failure means the same thing here
+        print(f"\nBACKUP FAILED, nothing written to {args.database}:\n  {exc}", file=sys.stderr)
+        return 1
 
-    print("restoring progress by key ...")
-    report = restore(args.database, before)
+    print(f"\napplying {content_sql.name}, restoring progress and re-linking, "
+          "as one transaction ...")
+    committed, markers, err = run_transaction(
+        args.database, [content] + restore_sql(before) + relink_sql())
 
-    notes = relink(args.database)
-    if notes:
-        print("re-linking ids the load nulled ...")
-        print("\n".join(notes))
+    if not committed:
+        print("\nFAILED — the transaction was not committed.", file=sys.stderr)
+        if err:
+            print(err, file=sys.stderr)
+        print("\nmysql stopped at the first error and the server rolled back the open "
+              "transaction,\nso the content, the restore and the re-links should all "
+              "be exactly as before this run.\nIf the connection dropped after COMMIT "
+              "was sent, it may instead have committed — check.\n", file=sys.stderr)
+        print(recovery_steps(args, snap_path, dump_path), file=sys.stderr)
+        return 1
 
-    print("\nresult:")
-    lost = 0
-    for table, (wanted, after) in report.items():
-        flag = "" if after >= wanted else f"   <-- {wanted - after} NOT RESTORED"
-        if after < wanted:
-            lost += wanted - after
-        print(f"  {table:26s} {wanted:5d} snapshotted, {after:5d} present{flag}")
-
+    report_relinks(markers)
+    print("\nresult (committed):")
+    lost = report_restore(markers)
     if lost:
         print(f"\n{lost} row(s) could not be restored. That means the content they "
               f"pointed at is no longer in content/ — a retired quest, npc or item. "
               f"Check that this was intended.")
     else:
         print("\nAll player progress carried across intact.")
+    print(f"backups kept: {snap_path}" + (f", {dump_path}" if dump_path else ""))
+    return 0
+
+
+def restore_only(args: argparse.Namespace) -> int:
+    """--restore-from: the snapshot's rows, put back in one transaction."""
+    try:
+        snap = load_snapshot(args.restore_from)
+    except Exception as exc:  # noqa: BLE001
+        print(f"Cannot read {args.restore_from}: {exc}", file=sys.stderr)
+        return 1
+    taken = json.loads(args.restore_from.read_text(encoding="utf-8")).get("database")
+    if taken != args.database:
+        if not args.force_database:
+            print(f"Refusing: snapshot was taken from {taken!r}, not {args.database!r}.\n"
+                  f"Pass --force-database to restore it into {args.database!r} anyway.",
+                  file=sys.stderr)
+            return 1
+        print(f"note: snapshot was taken from {taken!r}, restoring into "
+              f"{args.database!r} (--force-database)")
+    print(f"restoring {args.restore_from} (only rows that are absent) ...")
+    committed, markers, err = run_transaction(args.database, restore_sql(snap))
+    if not committed:
+        print(f"\nFAILED — nothing committed.\n{err}", file=sys.stderr)
+        return 1
+    print("\nresult (committed):")
+    lost = report_restore(markers)
+    if lost:
+        print(f"\n{lost} row(s) point at content that is not in this database.")
     return 0
 
 

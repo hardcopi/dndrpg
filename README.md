@@ -245,6 +245,28 @@ It intentionally omits `--delete`, so a local deletion cannot remove a live
 file, and it chowns to `www-data` afterwards because files arrive over SSH as
 root.
 
+**What does not go** is listed in `rsync-excludes` at the repo root, which
+`deploy.sh` and `pull.sh` both read: `sql/`, `tools/`, `docs/`, every `.md`,
+`.py`, `.sh` and `.sql`, dotfiles, and the dev `database.php`. The web root is
+public and nginx reads no `.htaccess`, so whatever is sent can be downloaded.
+`pull.sh` reads the same list because it pulls with `--delete`, and rsync
+leaves excluded paths alone on the receiving side — without it, a pull would
+delete the local copies of everything deploy stopped sending.
+
+**hermes also refuses those paths at the nginx layer.** The rules are
+`docker/nginx/deny-private.conf`, installed on hermes as
+`/etc/nginx/snippets/rpg-deny-private.conf` and pulled into the rpg vhost's
+`server` block with `include /etc/nginx/snippets/rpg-deny-private.conf;` — the
+local stack mounts the same file at the same path, so the include line is
+identical in both. They answer 404 for `/sql/`, `/tools/`, `/docs/`,
+`/content/` (not `/content.php`), `/tests/`, dotfiles other than
+`/.well-known/`, and `*.sql .md .py .pyc .sh .log .bak .orig .swp`. They are
+the fence for `content/`, which has to be on disk because the editors write
+JSON there, and for files earlier deploys already left on hermes: no
+`--delete` means excluding a path stops it being sent but never removes it.
+Edit the repo copy, then copy it to hermes and `nginx -t && systemctl reload
+nginx` there.
+
 ---
 
 ## Before changing anything
