@@ -39,6 +39,11 @@
  * rather than by the SVG, because render() throws the SVG away on every action
  * and a camera that snapped back to fitted after each swing would be worse than
  * no camera.
+ *
+ * THE DIORAMA ('tilt' and 'low' views) wraps this same SVG in a plane tilted
+ * back in CSS 3D and stands the figures and tall props up on it as cards. The
+ * SVG is not redrawn for it and stays the thing every click lands on; 'flat'
+ * is the board exactly as it was. See the section of that name below.
  */
 (function () {
   const esc = (s) => window.Game.esc(s);
@@ -230,7 +235,15 @@
     const wallId = `bm-wl-${pid}`;
     const waterId = `bm-wt-${pid}`;
 
-    return `<svg class="battlemap" viewBox="0 0 ${W} ${H}"
+    // The diorama is decided here, before a line of the SVG is written,
+    // because the SVG has to know which of its things are standing up as
+    // cards (and so hide their flat copies). In flat mode `deck` is null and
+    // every interpolation below that reads it adds nothing at all — the markup
+    // is byte for byte what it was before tilt existed.
+    const mode = o.view || viewMode();
+    const deck = mode !== 'flat' ? deal(state, o, grid) : null;
+
+    const svg = `<svg class="battlemap" viewBox="0 0 ${W} ${H}"
                  role="img" aria-label="The battlefield">
       <defs>
         <clipPath id="bm-round"><circle cx="0" cy="0" r="0.34"/></clipPath>
@@ -260,7 +273,12 @@
         </radialGradient>
         <pattern id="${waterId}" width="1" height="1" patternUnits="userSpaceOnUse">
           <image href="${esc(artUrl('tiles/water.png'))}" width="1" height="1"
-                 preserveAspectRatio="xMidYMid slice"/></pattern>
+                 preserveAspectRatio="xMidYMid slice"/></pattern>${deck ? `
+        <radialGradient id="bm-shadow-grad">
+          <stop offset="0" stop-color="#0a0500" stop-opacity="0.6"/>
+          <stop offset="0.6" stop-color="#0a0500" stop-opacity="0.3"/>
+          <stop offset="1" stop-color="#0a0500" stop-opacity="0"/>
+        </radialGradient>` : ''}
       </defs>
       <rect class="bm-floor" x="0" y="0" width="${W}" height="${H}"
             ${grid.floor ? `style="fill:url(#${floorId})"` : ''}/>
@@ -270,8 +288,9 @@
       <g class="bm-terrain${grid.image ? ' is-drawn' : ''}">${
         terrainHtml(terrain, { wallId, waterId, hasWall: !grid.image && !!grid.wall, dressed: dressedCells(grid) })
       }</g>
-      <g class="bm-props">${propsHtml(grid)}</g>
-      <g class="bm-light" pointer-events="none">${lightHtml(grid)}</g>
+      <g class="bm-props">${propsHtml(grid, deck)}</g>${deck ? `
+      <g class="bm-shadows" pointer-events="none">${deck.shadows}</g>` : ''}
+      <g class="bm-light" pointer-events="none">${lightHtml(grid, deck)}</g>
       <g class="bm-zones">${zonesHtml(grid, state)}</g>
       <g class="bm-reach">${reachHtml(ui)}</g>
       <g class="bm-threat">${threatHtml(ui)}</g>
@@ -281,11 +300,18 @@
       <g class="bm-cover-marks">${coverMarksHtml(terrain)}</g>
       <g class="bm-grid">${gridHtml()}
         <rect class="bm-edge" x="0" y="0" width="${W}" height="${H}"/></g>
-      <g class="bm-tokens">${tokensHtml(state, o)}</g>
+      <g class="bm-tokens">${tokensHtml(state, o, deck)}</g>
       <g class="bm-motes" pointer-events="none">${motesHtml(grid)}</g>
       <g class="bm-shots"></g>
       <g class="bm-floats"></g>
     </svg>`;
+
+    if (!deck) return svg;
+    return `<div class="bm-stage is-${mode}" style="--tilt:${VIEW_TILT[mode]}deg">
+      <div class="bm-plane">${svg}${wallsHtml(grid, deck)}
+        <div class="bm-cards">${deck.cards}</div>
+      </div>
+    </div>`;
   }
 
   function terrainHtml(terrain, tex) {
@@ -425,22 +451,49 @@
     return spots;
   }
 
-  function lightHtml(grid) {
-    if (grid.image && !Array.isArray(grid.lights) && grid.palette !== 'fixed') return '';
+  /**
+   * Every torch with its flicker timing, or null for a board that brings its
+   * own light in the picture.
+   *
+   * One list for both drawings — the floor glow here and, in the diorama, the
+   * sconce on the back wall — so the two cannot disagree about where a torch
+   * is or how fast it gutters. The dice are rolled in the order lightHtml()
+   * always rolled them, which keeps the flat board exactly as it was.
+   */
+  function torchPlan(grid) {
+    if (grid.image && !Array.isArray(grid.lights) && grid.palette !== 'fixed') return null;
     const rnd = seeded((Number(grid.seed) || 0) ^ 0x51ed);
+    return torchSpots(grid, rnd).map(([x, y]) => ({
+      x,
+      y,
+      dur: (1.6 + rnd() * 1.4).toFixed(2),
+      delay: (-rnd() * 3).toFixed(2),
+    }));
+  }
+
+  /** Is this torch on the board's back or front rim, where the diorama has a wall or a lip? */
+  const torchOnRim = (t) => t.y < 1.2 || t.y > H - 1.2;
+
+  function lightHtml(grid, deck) {
+    const plan = torchPlan(grid);
+    if (!plan) return '';
     const indoor = INDOOR.has(grid.palette);
     let out = indoor
       ? `<rect class="bm-vignette" x="0" y="0" width="${W}" height="${H}" fill="url(#bm-vignette-grad)"/>`
       : '';
-    for (const [x, y] of torchSpots(grid, rnd)) {
-      const dur = (1.6 + rnd() * 1.4).toFixed(2);
-      const delay = (-rnd() * 3).toFixed(2);
-      const anim = `style="animation-duration:${dur}s;animation-delay:${delay}s"`;
-      out += `<circle class="bm-glow" cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r="3"
-          fill="url(#bm-glow-grad)" ${anim}/>
+    for (const t of plan) {
+      const { x, y } = t;
+      const anim = `style="animation-duration:${t.dur}s;animation-delay:${t.delay}s"`;
+      // Tilted, a torch on the back rim is a sconce on the back wall (see
+      // wallsHtml) and one on the front rim would be a flame lying on the
+      // floor at the viewer's feet; both keep the pool of light they cast and
+      // lose the flat flame.
+      const flame = deck && deck.walled && torchOnRim(t) ? '' : `
         <g transform="translate(${x.toFixed(2)} ${y.toFixed(2)})">
           <ellipse class="bm-flame" cx="0" cy="-0.04" rx="0.1" ry="0.17"
             fill="url(#bm-flame-grad)" ${anim}/></g>`;
+      out += `<circle class="bm-glow" cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r="3"
+          fill="url(#bm-glow-grad)" ${anim}/>${flame}`;
     }
     return out;
   }
@@ -477,7 +530,7 @@
    *
    * Painted before the hit-cells so a barrel never eats a click.
    */
-  function propsHtml(grid) {
+  function propsHtml(grid, deck) {
     const list = Array.isArray(grid.props) ? grid.props.slice() : [];
     list.sort((a, b) => (a.y - b.y) || (a.x - b.x));
     return list.map((p) => {
@@ -486,12 +539,16 @@
       const x = Number(p.x) || 0;
       const y = Number(p.y) || 0;
       const pad = 0.06;
+      // A prop standing up as a card in the diorama keeps its flat picture in
+      // the markup, hidden, so that a card whose art fails can hand it back.
+      const tag = deck ? deck.propCard.get(p) : null;
+      const cls = tag ? `bm-prop has-card" data-card="${tag}` : 'bm-prop';
       if (Number(p.rot) === 90) {
         // Long art is drawn lying east to west; a north-south run is the same
         // picture turned a quarter about the middle of its footprint.
         const cx = x + w / 2;
         const cy = y + h / 2;
-        return `<image class="bm-prop" href="${esc(artUrl(p.src))}"
+        return `<image class="${cls}" href="${esc(artUrl(p.src))}"
           x="${(cx - h / 2 + pad).toFixed(3)}" y="${(cy - w / 2 + pad).toFixed(3)}"
           width="${(h - pad * 2).toFixed(3)}" height="${(w - pad * 2).toFixed(3)}"
           transform="rotate(90 ${cx} ${cy})"
@@ -500,7 +557,7 @@
           onerror="this.remove()"/>`;
       }
       const stand = p.stand ? Math.min(1.1, 0.55 + h * 0.2) : 0;
-      return `<image class="bm-prop" href="${esc(artUrl(p.src))}"
+      return `<image class="${cls}" href="${esc(artUrl(p.src))}"
         x="${x + pad}" y="${y - stand + pad}"
         width="${w - pad * 2}" height="${h + stand - pad * 2}"
         preserveAspectRatio="xMidYMid meet"
@@ -642,7 +699,7 @@
     return { art: `${foot}<g${seat}>${held}${sheet}</g>`, figure: true };
   }
 
-  function tokensHtml(state, o) {
+  function tokensHtml(state, o, deck) {
     const ui = state.ui || null;
     const targets = (ui && ui.targets && !Array.isArray(ui.targets)) ? ui.targets : {};
     const actorCid = state.order ? state.order[state.turn_index] : null;
@@ -677,10 +734,20 @@
       const ringR = drawn.figure ? '0.40' : (c.token ? '0.47' : '0.40');
       const ringFill = (drawn.figure || c.token) ? ' fill="none"' : '';
 
-      return `<g class="${cls}${c.token ? ' has-token' : ''}${drawn.figure ? ' has-figure' : ''}"
+      // Standing up as a card in the diorama: the token keeps its ring, its
+      // turn pulse and its hit circle on the floor, hides its picture and its
+      // bar (the card carries both), and casts the card's shadow from inside
+      // the group, so the shadow travels with the token when it walks.
+      const card = deck ? deck.tokenCard.get(c.cid) : null;
+      const carded = card ? ` has-card" data-card="${card.tag}` : '';
+      const shadow = card ? `
+        <ellipse class="bm-shadow" cx="${card.dx.toFixed(3)}" cy="${(card.dy - 0.04).toFixed(3)}"
+          rx="${card.rx.toFixed(3)}" ry="${(card.rx * 0.6).toFixed(3)}" fill="url(#bm-shadow-grad)"/>` : '';
+
+      return `<g class="${cls}${c.token ? ' has-token' : ''}${drawn.figure ? ' has-figure' : ''}${carded}"
           transform="translate(${c.x + 0.5} ${c.y + 0.5})"
           data-cid="${esc(c.cid)}" ${dead ? '' : 'role="button" tabindex="0"'}>
-        <title>${esc(c.name)} — HP ${esc(c.hp)}/${esc(c.max_hp)}, AC ${esc(c.ac)}${esc(note)}</title>
+        <title>${esc(c.name)} — HP ${esc(c.hp)}/${esc(c.max_hp)}, AC ${esc(c.ac)}${esc(note)}</title>${shadow}
         <circle class="bm-hit-token" r="0.48"/>
         <circle class="bm-turn" r="0.46"/>
         <g class="bm-body">
@@ -693,6 +760,449 @@
         </g>
       </g>`;
     }).join('');
+  }
+
+  // =========================================================================
+  // The diorama: the same board, tilted back, with things standing on it
+  //
+  // The SVG above is not redrawn for this, and that is the whole design. It is
+  // laid in a `.bm-plane` the exact shape of the board, the plane is rotated
+  // back in CSS 3D inside a `.bm-stage` that holds the perspective, and the
+  // browser hit-tests clicks through that transform by itself — so every cell
+  // rect, every token ring, reach, path, AoE, threat and cover mark is the
+  // same element in the same cell units, and no line of this file un-projects
+  // a pointer. What is NEW is only what stands up: walls on the board's rim,
+  // and a card per figure and per tall prop, rotated back by the same angle so
+  // that it faces the screen. Cards, walls and the lip are all
+  // `pointer-events: none`; a click goes past them to the floor.
+  //
+  //   .bm-stage   perspective, and the jolt (outside the 3D chain)
+  //   .bm-plane   rotateX(tilt), preserve-3d, sized by fit()
+  //     svg       the board, unchanged, filling the plane
+  //     .bm-wall  ×3 and .bm-lip, standing on / hanging from the rim
+  //     .bm-cards preserve-3d; a card is rotateX(-tilt) about its foot
+  //
+  // SAFARI flattens a 3D context the moment anything in the chain has a
+  // filter, opacity below 1, overflow other than visible, a blend mode, a
+  // clip-path or mask, isolation or paint containment. So none of those go on
+  // `.bm-plane`, `.bm-cards` or a card itself; the flicker, the hurt flash and
+  // the torchlight on a figure all live on LEAVES — the `<img>` in a card, a
+  // glow div inside a wall — and the board's jolt moves `.bm-stage`.
+  //
+  // Cards are positioned in CSS from their own foot point in cell units
+  // (`--cx --cy`) and the camera's current viewBox (`--vbx --vby` and
+  // `--cell`, px per cell), which syncVars() writes on every pan and zoom. So
+  // the camera moves them without a redraw, and the arithmetic that keeps a
+  // card on its cell is a subtraction and a multiply in the stylesheet.
+  // =========================================================================
+
+  const VIEW_KEY = 'rm.board.view';
+  /** Degrees the floor leans back, per view. 'flat' is today's board. */
+  const VIEW_TILT = { tilt: 50, low: 32 };
+  const VIEW_ORDER = ['tilt', 'low', 'flat'];
+
+  /**
+   * The view the player chose, or the one their screen suits.
+   *
+   * A narrow column has the least height to spare and gains least from
+   * standing things up, so a phone opens flat and a tablet at the shallower
+   * angle; the stored choice wins either way.
+   */
+  function viewMode() {
+    let stored = null;
+    try { stored = window.localStorage.getItem(VIEW_KEY); } catch (_) { /* private mode */ }
+    if (stored === 'flat' || VIEW_TILT[stored]) return stored;
+    const w = window.innerWidth || 1024;
+    return w >= 900 ? 'tilt' : w >= 600 ? 'low' : 'flat';
+  }
+
+  function setViewMode(m) {
+    if (m !== 'flat' && !VIEW_TILT[m]) return;
+    try { window.localStorage.setItem(VIEW_KEY, m); } catch (_) { /* not kept, still applied */ }
+  }
+
+  /** The view the toggle goes to next. */
+  function nextViewMode(m) {
+    const i = VIEW_ORDER.indexOf(m || viewMode());
+    return VIEW_ORDER[(i + 1) % VIEW_ORDER.length];
+  }
+
+  /** Card height per cell of figure height. A Medium body is 2 cells tall standing: the tilt
+   *  foreshortens the floor, not the figures, so a body one cell high reads as a toy. */
+  const CARD_SCALE = 2.0;
+  /** The same lift for furniture, so a pillar still stands taller than the people beside it. */
+  const PROP_SCALE = 1.3;
+  /** Feet a touch south of the ring's centre, so they sit on the ring rather than inside it. */
+  const CARD_FOOT = 0.12;
+  /** The back and side walls, in cells at zoom 1. */
+  const WALL_H = 2.4;
+
+  const UP = 'battlemap/upright/';
+
+  /**
+   * Which flat props stand up, and how.
+   *
+   * Keyed by the prop's flat `src` exactly as the server sends it; the value
+   * names the upright picture (in battlemap/upright/) and its height in cells.
+   * Width comes from the picture's own aspect once it loads — except for a
+   * `long` piece, a run of wall or a table along its footprint, which is
+   * exactly as wide as that footprint (×1.04, so a run reads as continuous)
+   * and as tall as its aspect says, capped at `h`. A long piece turned north
+   * to south (`rot: 90`) is seen end-on, so it stands as one `end` card per
+   * cell instead; a long piece with no end art stays flat when turned.
+   *
+   * Anything not here — pits, beams, rubble, decals, trees, anything that
+   * lies down — stays the flat SVG prop it was. That is deliberate rather than
+   * unfinished: a pit standing up is a hole in the air.
+   */
+  const UPRIGHT = {};
+  const upright = (srcs, spec) => srcs.forEach((s) => { UPRIGHT[s] = spec; });
+  const PROPS = 'battlemap/props/';
+  upright([PROPS + 'pillar.png', 'decor/column.png'], { file: 'pillar.png', h: 2.1 });
+  upright([PROPS + 'pillar_broken.png'], { file: 'pillar_broken.png', h: 1.55 });
+  upright([PROPS + 'barrels.png', 'decor/barrel_pile.png'], { file: 'barrels.png', h: 1.1 });
+  upright([PROPS + 'crates.png', 'decor/crate_pile.png', 'decor/crate_stack.png'], { file: 'crates.png', h: 1.3 });
+  upright([PROPS + 'weapon_rack.png'], { file: 'weapon_rack.png', h: 1.5 });
+  upright([1, 2, 3].map((n) => `${PROPS}wall_low_${n}.png`), { file: 'wall_low.png', long: true, h: 0.9, end: 'wall_low_end.png' });
+  upright([1, 2, 3].map((n) => `${PROPS}table_over_${n}.png`), { file: 'table_over.png', tile: true, h: 0.95, end: 'table_over_end.png' });
+  upright([1, 2, 3].map((n) => `${PROPS}barricade_${n}.png`), { file: 'barricade.png', long: true, h: 1.0, end: 'barricade_end.png' });
+  upright([PROPS + 'stalagmites.png'], { file: 'stalagmites.png', h: 1.5 });
+  upright([PROPS + 'boulder.png', 'decor/boulder.png'], { file: 'boulder.png', h: 1.0 });
+  upright(['decor/barrel.png'], { file: 'barrel.png', h: 0.95 });
+  upright(['decor/keg.png'], { file: 'keg.png', h: 0.85 });
+  upright(['decor/crate.png'], { file: 'crate.png', h: 0.85 });
+  upright(['decor/chest.png'], { file: 'chest.png', h: 0.7 });
+  upright(['decor/chair.png'], { file: 'chair.png', h: 1.0 });
+  upright(['decor/table_plain.png', 'decor/table_tavern.png', 'decor/table_long.png'], { file: 'table.png', long: true, h: 0.85 });
+  upright(['decor/pew.png', 'decor/pew_long.png'], { file: 'bench.png', long: true, h: 0.75 });
+  upright(['decor/bookshelf_tall.png'], { file: 'bookshelf.png', h: 2.1 });
+  upright(['decor/bookshelf_wide.png'], { file: 'bookshelf_wide.png', long: true, h: 2.1 });
+  upright(['decor/wardrobe.png', 'decor/cabinet_tall.png'], { file: 'wardrobe.png', h: 2.0 });
+
+  /**
+   * Everything that stands up on this board, worked out once per render.
+   *
+   * Returns the cards' markup (back to front), the props' floor shadows, and
+   * which tokens and props have a card so the SVG can hide their flat copies.
+   * Each card and the flat thing it replaces share a `data-card` tag, which
+   * is how cardFail() finds what to hand back.
+   */
+  function deal(state, o, grid) {
+    const deck = {
+      cards: '',
+      shadows: '',
+      propCard: new Map(),
+      tokenCard: new Map(),
+      // Fixed and drawn boards are rooms; an outdoor palette has no walls.
+      walled: INDOOR.has(grid.palette) || !!grid.image,
+    };
+    const n = (v) => Number(v).toFixed(3);
+    const torches = deck.walled ? (torchPlan(grid) || []) : [];
+    // Torchlight on a figure: brighter near a flame, never black. The floor
+    // glow is the SVG's; this is only so a goblin in the far corner of a lit
+    // room does not stand there at full daylight.
+    const litAt = (fx, fy) => {
+      if (!torches.length) return '';
+      // A rim torch every four or five cells along both long edges puts most
+      // of a 16×12 floor within reach of two of them, so the falloff is short
+      // or everybody stands in the same full light.
+      const sum = torches.reduce((a, t) => a + Math.max(0, 1 - Math.hypot(fx - t.x, fy - t.y) / 4.5), 0);
+      return `;--lit:${(0.72 + 0.38 * Math.min(1, sum)).toFixed(2)}`;
+    };
+    const ui = state.ui || null;
+    const targets = (ui && ui.targets && !Array.isArray(ui.targets)) ? ui.targets : {};
+    const list = [];
+    let seq = 0;
+
+    // Figures. Only the living and standing, and only once the catalogue has
+    // said which sheet is real: before then figureFor() is guessing, and a
+    // card that guessed wrong would flash in and fall back on every board
+    // drawn in the first half-second of a fight.
+    for (const c of (figureIndex ? state.combatants || [] : [])) {
+      if (c.x == null || c.y == null || !c.alive) continue;
+      if ((c.conditions || []).some((k) => (typeof k === 'string' ? k : k.key) === 'unconscious')) continue;
+      const artKey = String((o.artKey ? o.artKey(c) : '') || c.sprite_key || '');
+      const spec = figureFor(c, artKey);
+      if (!spec) continue;
+      const tag = `c${++seq}`;
+      const h = spec.height * CARD_SCALE;
+      const w = h * spec.aspect;
+      // Seated on the footprint the way figureHtml() seats the flat sheet.
+      const dx = (spec.footprint - 1) / 2;
+      const dy = (spec.footprint - 1) + CARD_FOOT;
+      const lift = spec.size === 'tiny' ? TINY_LIFT * CARD_SCALE : 0;
+      deck.tokenCard.set(c.cid, { tag, dx, dy, rx: Math.max(0.26, w * 0.4) });
+      const fx = c.x + 0.5 + dx;
+      const fy = c.y + 0.5 + dy;
+      const pct = c.max_hp ? Math.max(0, Math.min(1, c.hp / c.max_hp)) : 0;
+      const shot = targets[c.cid];
+      const cover = shot && Number(shot.cover) > 0
+        ? `<svg class="bm-card-cover" viewBox="-0.28 -0.3 0.56 0.62" aria-hidden="true">${
+          shieldHtml(0, 0, Number(shot.cover), 'bm-cover-badge')}</svg>`
+        : '';
+      list.push({ fx, fy, html: `<div class="bm-card is-figure ${c.side === 'party' ? 'is-party' : 'is-foe'}"
+          data-card="${tag}" data-cid="${esc(c.cid)}" data-cx="${n(fx)}" data-cy="${n(fy)}"
+          data-dx="${n(dx)}" data-dy="${n(dy)}"
+          style="--cx:${n(fx)};--cy:${n(fy)};--w:${n(w)};--h:${n(h)};--lift:${n(lift)}${litAt(fx, fy)}">
+        <div class="bm-card-body">
+          <img class="bm-card-art is-pixel" src="${esc(artUrl('figures/' + spec.file))}" alt=""
+               draggable="false" onerror="window.BattleMap.cardFail(this)">
+          <div class="bm-card-hp"><i class="${pct > 0.5 ? 'ok' : pct > 0.25 ? 'mid' : 'low'}"
+               style="width:${(pct * 100).toFixed(1)}%"></i></div>
+          ${cover}
+        </div></div>` });
+    }
+
+    // Props.
+    for (const p of (Array.isArray(grid.props) ? grid.props : [])) {
+      const up = UPRIGHT[p.src];
+      if (!up) continue;
+      const w = Math.max(1, Number(p.w) || 1);
+      const h = Math.max(1, Number(p.h) || 1);
+      const x = Number(p.x) || 0;
+      const y = Number(p.y) || 0;
+      const parts = [];
+      const uh = up.h * PROP_SCALE;
+      if (Number(p.rot) === 90) {
+        if (!up.end) continue;
+        for (let j = 0; j < h; j++) {
+          parts.push({ file: up.end, fx: x + w / 2, fy: y + j + 0.8, w: uh * 0.6, h: uh, fit: 'aspect' });
+        }
+      } else if (up.tile) {
+        // Art of one thing (a single tipped table), so a run is a row of them
+        // rather than one picture stretched three cells wide.
+        for (let i = 0; i < w; i++) {
+          parts.push({ file: up.file, fx: x + i + 0.5, fy: y + h - 0.2, w: uh * 0.6, h: uh, fit: 'aspect' });
+        }
+      } else if (up.long) {
+        parts.push({ file: up.file, fx: x + w / 2, fy: y + h - 0.2, w: w * 1.04, h: uh, fit: 'long' });
+      } else {
+        parts.push({ file: up.file, fx: x + w / 2, fy: y + h - 0.2, w: uh * 0.6, h: uh, fit: 'aspect' });
+      }
+      const tag = `c${++seq}`;
+      deck.propCard.set(p, tag);
+      for (const c of parts) {
+        const rx = c.fit === 'long' ? c.w / 2 : Math.max(0.34, Math.min(0.6, c.h * 0.32));
+        deck.shadows += `<ellipse class="bm-shadow" data-card="${tag}" cx="${n(c.fx + 0.08)}" cy="${n(c.fy - 0.1)}"
+          rx="${n(rx)}" ry="${n(c.fit === 'long' ? 0.3 : rx * 0.6)}" fill="url(#bm-shadow-grad)"/>`;
+        list.push({ fx: c.fx, fy: c.fy, html: `<div class="bm-card is-prop" data-card="${tag}"
+            data-fit="${c.fit}" data-cap="${n(uh)}" data-cx="${n(c.fx)}" data-cy="${n(c.fy)}"
+            style="--cx:${n(c.fx)};--cy:${n(c.fy)};--w:${n(c.w)};--h:${n(c.h)}${litAt(c.fx, c.fy)}">
+          <div class="bm-card-body">
+            <img class="bm-card-art" src="${esc(artUrl(UP + c.file))}" alt="" draggable="false"
+                 onload="window.BattleMap.cardSized(this)" onerror="window.BattleMap.cardFail(this)">
+          </div></div>` });
+      }
+    }
+
+    // Back to front. preserve-3d sorts by depth anyway; DOM order is what
+    // settles a tie, and a tie is exactly what two cards on one row are.
+    list.sort((a, b) => (a.fy - b.fy) || (a.fx - b.fx));
+    deck.cards = list.map((c) => c.html).join('');
+    return deck;
+  }
+
+  /**
+   * The walls standing on the rim, the sconces on the back one, and the lip.
+   *
+   * An outdoor board gets no walls, only the lip — but it does get a GHOST
+   * back wall, invisible and Medium-figure tall, which fit() measures like any
+   * other. That reserves headroom for a figure on the back row without fit()
+   * measuring the cards themselves, which would make the board change size
+   * every time somebody walked to the back of it.
+   */
+  function wallsHtml(grid, deck) {
+    if (!deck.walled) {
+      return `<div class="bm-wall is-back is-ghost"></div><div class="bm-lip is-earth"></div>`;
+    }
+    const tex = ` style="--wall-tex:url('${esc(artUrl(grid.wall || UP + 'wall_face.jpg'))}')"`;
+    const sconces = (torchPlan(grid) || []).filter((t) => t.y < 1.2).map((t) => {
+      const at = `--tx:${t.x.toFixed(2)}`;
+      return `<div class="bm-wall-glow" style="${at};animation-duration:${t.dur}s;animation-delay:${t.delay}s"></div>
+        <img class="bm-torch" src="${esc(artUrl(UP + 'torch.png'))}" alt="" draggable="false"
+             style="${at}" onerror="this.remove()">`;
+    }).join('');
+    return `<div class="bm-wall is-back"${tex}>${sconces}</div>
+      <div class="bm-wall is-left"${tex}></div><div class="bm-wall is-right"${tex}></div>
+      <div class="bm-lip"></div>`;
+  }
+
+  /**
+   * A card's art came in: give it the width (or, for a long piece, the
+   * height) its picture's proportions ask for.
+   */
+  function cardSized(img) {
+    const card = img && img.closest('.bm-card');
+    if (!card || !img.naturalWidth || !img.naturalHeight) return;
+    const aspect = img.naturalWidth / img.naturalHeight;
+    if (card.dataset.fit === 'long') {
+      const w = parseFloat(card.style.getPropertyValue('--w')) || 1;
+      const cap = parseFloat(card.dataset.cap) || 1;
+      card.style.setProperty('--h', Math.min(cap, w / aspect).toFixed(3));
+    } else {
+      const h = parseFloat(card.style.getPropertyValue('--h')) || 1;
+      card.style.setProperty('--w', (h * aspect).toFixed(3));
+    }
+  }
+
+  /**
+   * A card's art is missing: take the card (and its siblings, for a run of
+   * end cards) away and put the flat thing back, so a board with art not yet
+   * on disk looks exactly like the flat board did rather than having holes.
+   */
+  function cardFail(img) {
+    const card = img && img.closest('.bm-card');
+    const plane = card && card.closest('.bm-plane');
+    if (!plane) return;
+    const sel = `[data-card="${cssEscape(card.dataset.card)}"]`;
+    plane.querySelectorAll(`.bm-card${sel}, .bm-shadow${sel}`).forEach((el) => el.remove());
+    plane.querySelectorAll(`.has-card${sel}`).forEach((el) => {
+      el.classList.remove('has-card');
+      const shadow = el.querySelector('.bm-shadow');
+      if (shadow) shadow.remove();
+    });
+  }
+
+  /**
+   * Hand the camera's view to the stylesheet, and hide the cards it is not
+   * looking at.
+   *
+   * The plane cannot clip — overflow on it would flatten the 3D — so a card
+   * whose foot is outside the viewBox would stand on thin air beside the
+   * board. Hiding it is the clip, done per card.
+   */
+  function syncVars(root) {
+    const plane = root && root.querySelector('.bm-plane');
+    const svg = plane && plane.querySelector('.battlemap');
+    if (!svg) return;
+    const pw = parseFloat(plane.style.width);
+    if (!pw) return;
+    const vb = svg.viewBox && svg.viewBox.baseVal;
+    const v = vb && vb.width ? vb : { x: 0, y: 0, width: W, height: H };
+    plane.style.setProperty('--vbx', v.x.toFixed(4));
+    plane.style.setProperty('--vby', v.y.toFixed(4));
+    plane.style.setProperty('--vbw', v.width.toFixed(4));
+    plane.style.setProperty('--vbh', v.height.toFixed(4));
+    plane.style.setProperty('--cell', `${(pw / v.width).toFixed(3)}px`);
+    for (const card of plane.querySelectorAll('.bm-card')) {
+      const cx = parseFloat(card.dataset.cx);
+      const cy = parseFloat(card.dataset.cy);
+      card.classList.toggle('is-off',
+        cx < v.x || cx > v.x + v.width || cy < v.y || cy > v.y + v.height);
+    }
+  }
+
+  /**
+   * Size the tilted board to fill its box.
+   *
+   * There is no closed form worth trusting once perspective is involved, so
+   * this guesses from the orthographic projection — the floor's height times
+   * cos(tilt), plus the back wall's times sin(tilt) — and then MEASURES. The
+   * bounding rect of a 3D-transformed element is its projected box, so the
+   * union of the plane's, the walls' and the lip's rects is exactly what is
+   * on screen; the plane is rescaled by how far that misses, and once more in
+   * case the perspective (which scales with the plane) moved it. Then the
+   * whole thing is shifted so that union sits in the middle of the box.
+   *
+   * Cards are deliberately not measured (see wallsHtml), and nor is anything
+   * that depends on the zoom: the walls are sized off `--cell0`, the zoom-1
+   * cell, and hidden with `visibility` rather than `display` when zoomed so
+   * they still have a box. So the answer depends only on the box and the
+   * board, and a re-render mid-zoom lands on the same size.
+   */
+  function fit(root) {
+    const stage = root && root.querySelector('.bm-stage');
+    const plane = stage && stage.querySelector('.bm-plane');
+    if (!plane) return;
+    const cw = stage.clientWidth;
+    const ch = stage.clientHeight;
+    if (!cw || !ch) return;
+    const deg = parseFloat(stage.style.getPropertyValue('--tilt')) || 50;
+
+    const apply = (cell, sx, sy) => {
+      plane.style.width = `${(W * cell).toFixed(2)}px`;
+      plane.style.height = `${(H * cell).toFixed(2)}px`;
+      plane.style.setProperty('--cell0', `${cell.toFixed(3)}px`);
+      plane.style.setProperty('--sx', `${sx.toFixed(1)}px`);
+      plane.style.setProperty('--sy', `${sy.toFixed(1)}px`);
+      // Perspective in proportion to the board, so a small board and a big
+      // one lean back by the same amount rather than the small one looking
+      // like a photograph taken from across the room.
+      stage.style.setProperty('--persp', `${(Math.max(W, H) * cell * 2.6).toFixed(0)}px`);
+    };
+    const union = () => {
+      let l = Infinity; let t = Infinity; let r = -Infinity; let b = -Infinity;
+      for (const el of [plane, ...plane.querySelectorAll('.bm-wall, .bm-lip')]) {
+        const q = el.getBoundingClientRect();
+        if (!q.width && !q.height) continue;
+        l = Math.min(l, q.left); t = Math.min(t, q.top);
+        r = Math.max(r, q.right); b = Math.max(b, q.bottom);
+      }
+      return r > l ? { l, t, w: r - l, h: b - t } : null;
+    };
+
+    const size = () => {
+      const tilt = deg * Math.PI / 180;
+      let c = Math.min(
+        cw / (W + 1),
+        ch / (H * Math.cos(tilt) + WALL_H * Math.sin(tilt) + 1)
+      );
+      for (let i = 0; i < 3; i++) {
+        apply(c, 0, 0);
+        const u = union();
+        if (!u) break;
+        const k = Math.min(cw / u.w, ch / u.h) * 0.97;
+        if (Math.abs(k - 1) < 0.01) break;
+        c *= k;
+      }
+      apply(c, 0, 0);
+      return { c };
+    };
+    const cell = size().c;
+    const u = union();
+    const box = stage.getBoundingClientRect();
+    const sx = u ? (box.left + box.width / 2) - (u.l + u.w / 2) : 0;
+    const sy = u ? (box.top + box.height / 2) - (u.t + u.h / 2) : 0;
+    apply(cell, sx, sy);
+    syncVars(root);
+  }
+
+  /**
+   * Refit when the board's box changes shape — a window resized, a side
+   * panel collapsed. One observer for the module, moved to each new board as
+   * it is drawn, so a render is never an observer leaked.
+   */
+  let resizeObs = null;
+  let resizeFrame = 0;
+  function observe(root) {
+    if (resizeObs) resizeObs.disconnect();
+    if (resizeFrame) cancelAnimationFrame(resizeFrame);
+    resizeObs = null;
+    resizeFrame = 0;
+    if (!root || !root.querySelector('.bm-stage') || typeof ResizeObserver !== 'function') return;
+    resizeObs = new ResizeObserver(() => {
+      if (resizeFrame) return;
+      resizeFrame = requestAnimationFrame(() => { resizeFrame = 0; fit(root); });
+    });
+    resizeObs.observe(root);
+  }
+
+  /** The cards standing for one combatant (normally one; none for the flat). */
+  function cardsFor(root, cid) {
+    return root ? root.querySelectorAll(`.bm-card[data-cid="${cssEscape(cid)}"]`) : [];
+  }
+
+  /**
+   * Which token the pointer is on, told to its card: a card is pointer-events
+   * none, so it cannot hover itself, and the cover badge it carries is shown
+   * on hover the way the flat token's is.
+   */
+  function hoverCard(root, cid) {
+    if (!root || !root.querySelector('.bm-cards')) return;
+    for (const el of root.querySelectorAll('.bm-card.is-hovered')) {
+      if (el.dataset.cid !== cid) el.classList.remove('is-hovered');
+    }
+    if (cid) for (const el of cardsFor(root, cid)) el.classList.add('is-hovered');
   }
 
   // =========================================================================
@@ -798,6 +1308,22 @@
    * that vanished early.
    */
   function floatText(root, x, y, text, cls) {
+    // In the diorama a number painted on the SVG would be painted on the
+    // FLOOR, lying back at fifty degrees. So it is a little card of its own,
+    // standing at the cell like a figure does and rising off it.
+    const cards = root && root.querySelector('.bm-cards');
+    if (cards) {
+      const f = document.createElement('div');
+      f.className = `bm-cfloat ${cls || ''}`;
+      f.style.setProperty('--cx', (x + 0.5).toFixed(3));
+      f.style.setProperty('--cy', (y + 0.5 + CARD_FOOT).toFixed(3));
+      const span = document.createElement('span');
+      span.textContent = text;
+      f.appendChild(span);
+      cards.appendChild(f);
+      setTimeout(() => f.remove(), 1200);
+      return;
+    }
     const layer = root && root.querySelector('.bm-floats');
     if (!layer) return;
     const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
@@ -850,19 +1376,26 @@
     const g = root && root.querySelector(`.bm-token[data-cid="${cssEscape(cid)}"]`);
     if (!g) return;
     const cls = kind === 'crit' ? 'is-crit' : kind === 'heal' ? 'is-healed' : 'is-struck';
-    g.classList.remove('is-struck', 'is-crit', 'is-healed');
-    // Reflow so a second hit in the same beat restarts the animation.
-    void g.getBoundingClientRect();
-    g.classList.add(cls);
-    setTimeout(() => g.classList.remove(cls), 460);
+    // The token and, in the diorama, its card: the same classes on both, and
+    // the stylesheet decides which of them has anything to animate.
+    for (const el of [g, ...cardsFor(root, cid)]) {
+      el.classList.remove('is-struck', 'is-crit', 'is-healed');
+      // Reflow so a second hit in the same beat restarts the animation.
+      void el.getBoundingClientRect();
+      el.classList.add(cls);
+      setTimeout(() => el.classList.remove(cls), 460);
+    }
     if (kind === 'crit' || kind === 'hit') {
-      const svg = root.querySelector('.battlemap');
-      if (svg) {
+      // Tilted, the jolt moves the stage: the svg is inside the 3D chain, and
+      // an animated transform on it would be a second transform fighting the
+      // plane's. The stage holds the perspective and is outside the chain.
+      const board = root.querySelector('.bm-stage') || root.querySelector('.battlemap');
+      if (board) {
         const jolt = kind === 'crit' ? 'is-jolt-big' : 'is-jolt';
-        svg.classList.remove('is-jolt', 'is-jolt-big');
-        void svg.getBoundingClientRect();
-        svg.classList.add(jolt);
-        setTimeout(() => svg.classList.remove(jolt), 320);
+        board.classList.remove('is-jolt', 'is-jolt-big');
+        void board.getBoundingClientRect();
+        board.classList.add(jolt);
+        setTimeout(() => board.classList.remove(jolt), 320);
       }
     }
   }
@@ -871,6 +1404,10 @@
   function walking(root, cid, on) {
     const g = root && root.querySelector(`.bm-token[data-cid="${cssEscape(cid)}"]`);
     if (g) g.classList.toggle('is-walking', !!on);
+    // On the card this also turns its slide on: a card only transitions
+    // `left`/`top` while walking, so a pan or a zoom (which move every card
+    // through the same properties) never lags behind the floor.
+    for (const el of cardsFor(root, cid)) el.classList.toggle('is-walking', !!on);
   }
 
   /** Slide a token to where it ended up, for the move animation. */
@@ -878,6 +1415,15 @@
     const g = root && root.querySelector(`.bm-token[data-cid="${cssEscape(cid)}"]`);
     if (!g) return;
     g.setAttribute('transform', `translate(${x + 0.5} ${y + 0.5})`);
+    for (const card of cardsFor(root, cid)) {
+      const cx = x + 0.5 + (parseFloat(card.dataset.dx) || 0);
+      const cy = y + 0.5 + (parseFloat(card.dataset.dy) || 0);
+      card.dataset.cx = cx.toFixed(3);
+      card.dataset.cy = cy.toFixed(3);
+      card.style.setProperty('--cx', cx.toFixed(3));
+      card.style.setProperty('--cy', cy.toFixed(3));
+    }
+    if (root.querySelector('.bm-cards')) syncVars(root);
   }
 
   function cssEscape(s) {
@@ -974,7 +1520,13 @@
    */
   function controls(root) {
     const svg = root && root.querySelector('.battlemap');
-    if (!svg || !window.SvgView) return null;
+    if (!svg) return null;
+    if (!window.SvgView) {
+      // No camera, but a tilted board still has to be sized.
+      fit(root);
+      observe(root);
+      return null;
+    }
 
     boardCam = window.SvgView(svg, {
       base: { x: 0, y: 0, w: W, h: H },
@@ -1001,8 +1553,15 @@
       onApply: (v) => {
         boardView = { z: v.z, cx: v.cx, cy: v.cy };
         root.classList.toggle('is-zoomed', v.z > ZOOM_MIN * 1.001);
+        // The cards follow the camera through the stylesheet (see syncVars).
+        // A no-op on a flat board, and before fit() has sized the plane.
+        syncVars(root);
       },
     });
+    // Every render is a new plane, so every render is fitted — and the
+    // observer moves to the new box (or is dropped, on a flat board).
+    fit(root);
+    observe(root);
     return boardCam;
   }
 
@@ -1015,6 +1574,7 @@
   function forget() {
     boardView = null;
     boardCam = null;
+    observe(null);
   }
 
   /**
@@ -1090,7 +1650,16 @@
       if (!drag || !ev || ev.pointerId !== drag.pointerId) return;
       const was = drag;
       drag = null;
-      if (!was.moved) return;
+      if (!was.moved) {
+        // A press that began on the acting figure's card handed the pointer
+        // to the svg (see the card listeners below), so no click reaches the
+        // card: a press-and-release there still selects, here.
+        if (was.cardCid) {
+          try { svg.releasePointerCapture(was.pointerId); } catch (_) { /* already gone */ }
+          if (h.onToken) h.onToken(was.cardCid);
+        }
+        return;
+      }
       suppressClick = true;
       setTimeout(() => { suppressClick = false; }, 0);
       try { svg.releasePointerCapture(was.pointerId); } catch (_) { /* already gone */ }
@@ -1154,10 +1723,12 @@
       const cid = tokenOf(ev);
       const cell = cellOf(ev);
       lightCover(cid ? null : cell);
+      hoverCard(root, cid);
       if (h.onHover) h.onHover(cid, cell);
     });
     svg.addEventListener('mouseleave', () => {
       lightCover(null);
+      hoverCard(root, null);
       if (drag && drag.moved) return;
       if (h.onHover) h.onHover(null, null);
     });
@@ -1165,11 +1736,53 @@
       lightCover(tokenOf(ev) ? null : cellOf(ev));
       if (h.onHover) h.onHover(tokenOf(ev), cellOf(ev));
     });
+
+    // A standing figure two cells tall is what the eye aims at, so its picture
+    // is a click target for its token (the stylesheet turns pointer events
+    // back on for `.bm-card.is-figure .bm-card-art` only). The cost is that the
+    // square behind a body is clicked past the body's feet, the same trade the
+    // flat board's ring makes on a smaller scale. Props stay unclickable.
+    const cards = root.querySelector('.bm-cards');
+    if (cards) {
+      const cardCid = (ev) => {
+        const el = ev.target.closest && ev.target.closest('.bm-card.is-figure[data-cid]');
+        return el ? el.dataset.cid : null;
+      };
+      // Your own figure's body is a drag handle too, as its ring is: the press
+      // is handed to the svg with pointer capture, so the drag machinery
+      // above runs unchanged and the drop is read off the cells as before.
+      cards.addEventListener('pointerdown', (ev) => {
+        if (ev.button !== 0 || spaceHeld || !moveDragAllowed()) return;
+        const cid = cardCid(ev);
+        const tok = cid && svg.querySelector('.bm-token.is-actor.is-party:not(.is-dead)');
+        if (!tok || tok.dataset.cid !== cid) return;
+        ev.preventDefault();
+        drag = { pointerId: ev.pointerId, x: ev.clientX, y: ev.clientY, moved: false, cardCid: cid };
+        try { svg.setPointerCapture(ev.pointerId); } catch (_) { /* not ours */ }
+      });
+      cards.addEventListener('click', (ev) => {
+        if (suppressClick) { suppressClick = false; return; }
+        if ((boardCam && boardCam.consumePan()) || spaceHeld) return;
+        const cid = cardCid(ev);
+        if (cid && h.onToken) h.onToken(cid);
+      });
+      cards.addEventListener('mousemove', (ev) => {
+        const cid = cardCid(ev);
+        lightCover(null);
+        hoverCard(root, cid);
+        if (h.onHover) h.onHover(cid, null);
+      });
+      cards.addEventListener('mouseleave', () => {
+        hoverCard(root, null);
+        if (h.onHover) h.onHover(null, null);
+      });
+    }
   }
 
   window.BattleMap = {
     html, bind, controls, camera, forget, whenFigures, figureUrl,
     paintPath, paintAoe, paintAim, moveToken, floatText, shoot, hitToken, walking,
+    viewMode, setViewMode, nextViewMode, fit, cardSized, cardFail,
     W, H, SHOT_MS,
   };
 })();

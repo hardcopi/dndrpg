@@ -188,6 +188,31 @@ grid of the *world* map, with spawn rings and a client-side mirror of
 `reachable()`. This is a self-contained battlefield generated per encounter, and
 it shares no code, no table and no concept with the world map.
 
+**The board has three views**, `BattleMap.viewMode()` — `tilt` (50°), `low`
+(32°) and `flat` — toggled from the zoom cluster and kept in
+`localStorage['rm.board.view']` (unset: tilt from 900px wide, low from 600,
+flat below). Tilt is a *diorama of the same SVG*, not a second renderer: the
+SVG sits in a `.bm-plane` the board's exact shape, rotated back in CSS 3D
+inside a `.bm-stage` that holds the perspective, with walls folded up on the
+rim (indoor and drawn boards only) and every live figure and tall prop
+standing on it as a screen-facing card. The browser hit-tests through the
+transform, so every click still lands on the SVG's own cells and rings — the
+cards and walls are `pointer-events: none` and nothing un-projects a pointer.
+Cards are placed in CSS from their foot in cells and the camera's viewBox
+(`--cx/--cy`, `--vbx/--vby`, `--cell`), which `syncVars()` writes on every
+pan and zoom; `fit()` sizes the plane by measuring the projected rects of
+plane and walls (never the cards, or the board would resize as people walk).
+Which props stand up is the `UPRIGHT` table in `ui-battlemap.js`, keyed by the
+flat prop's `src` and naming art in `assets/images/battlemap/upright/`; a
+card whose art fails hands the flat prop back, so missing art degrades to the
+flat look. `flat` must stay byte-identical to the pre-tilt markup. **Safari
+rule:** nothing in the 3D chain (`.bm-plane`, `.bm-cards`, a card, a wall)
+may carry `filter`, `opacity` < 1, non-visible `overflow`, a blend mode,
+`clip-path`/`mask`, `isolation` or paint containment — WebKit flattens the
+scene — so effects live on leaves (the `<img>` in a card, a wall's glow div)
+and the hit jolt moves `.bm-stage`. `tools/battlemap_preview.html` shows all
+three views.
+
 Things that no longer exist and should not be reintroduced: `maps`, `map_tiles`,
 `map_decor`, `map_links`, `npc_positions`, `MapEngine`, `MapEditor`, the
 `editor/*` API group, `assets/js/editor.js`, `tools/build_maps.py`, `src/maps/`.
