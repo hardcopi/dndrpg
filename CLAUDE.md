@@ -208,7 +208,12 @@ be both — the same way `allow_camp` and `has_job_board` work.
 - `app/lib/DelveEngine.php` writes one into real `regions`/`locations` rows,
   stocks the encounters, and drops the previous floor as the party leaves it.
   At most one generated region exists per party, however deep they go.
-- `app/lib/EncounterBudget.php` sizes the fights against the party.
+- `app/lib/EncounterBudget.php` sizes the fights against the party. It has
+  **four** columns — warm-up, fair, hard and 5e's deadly — and deadly is
+  opt-in: only the pit's *hard match* spends it (`PitEngine::TIERS` maps
+  `hard` to the `deadly` budget, so the pit still offers three tiers), while
+  an authored `deadly` encounter and every delve room stop at hard.
+  `tools/test_budget.php` pins the four.
 - `app/lib/MapService.php` asks the **map service** for a floor, and
   `app/lib/GeneratedLevel.php` turns what comes back into the array
   `DungeonGen::generate()` returns. See **The map service** below.
@@ -894,6 +899,19 @@ it does; anything not listed there is applied on a fresh build after
 checksum will stop matching and the edit will not be applied — write another.
 `src/tools/test_migrate.sh` drives all of this against throwaway containers.
 
+**A migration that writes content goes stale, and is left stale on purpose.**
+`2026-08-25-freeplay-inn.sql` writes the August dialogue for `_fp_brenna`,
+`_fp_hessa` and `_fp_odd`, in an older shape with `"action": "close"` on
+choices — a field `DialogueLint` now rejects as unknown. It cannot be edited
+(its checksum is recorded on hermes), and does not need to be: every later
+content load overwrites those rows, hermes's already have, and a fresh build
+reloads `content.sql` after the migrations for exactly this reason (see
+`00-load.sh`). The only database that still shows the old lines is one that
+ran the migration and has had no content load since — typically a long-lived
+dev volume — where `tools/test_dialogue_lint.php` fails on `unknown field
+'action'`. The fix is a content load, not a lint exception:
+`python3 tools/apply_content_safely.py --apply` against that database.
+
 `content.sql` is generated from `src/content/*.json` by `src/tools/load_content.py`,
 so regenerate it before rebuilding if you changed the JSON.
 
@@ -1380,6 +1398,8 @@ database somebody is playing on.
   the SCRIPT's URL, not the page's — so `./assets/js/x.js` from a file already in
   `/assets/js/` asks for `/assets/js/assets/js/x.js`. Resolve through
   `new URL(asset('...'), document.baseURI)`.
-- **`tools/test_delve.php` has one flaky assertion** — "somebody paid for it, or
+- **`tools/test_delve.php` has two flaky assertions** — "somebody paid for it, or
   saved well" fails perhaps one run in five, because it asserts on a saving
-  throw. It predates the delve being freed from the Undervault.
+  throw. It predates the delve being freed from the Undervault. "searching puts
+  the found secret on the map" (expected `'stuck'`, got NULL) also fails
+  intermittently, before and after the same change; its cause is not pinned down.
