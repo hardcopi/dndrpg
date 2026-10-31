@@ -54,6 +54,12 @@ class FixedBattleMaps
         // battle map and reads as the arena continuing past the edge.
         '_freeplay_yard' => [
             'image'   => 'battlemaps/proving_pit.jpg',
+            // The sconces in the picture, in cells, so the board's torchlight
+            // flickers where the painting has flames (ui-battlemap lightHtml).
+            'lights'  => [
+                [1.2, 0.6], [3.6, 0.6], [6.8, 0.6], [9.1, 0.6], [12.1, 0.6], [14.6, 0.6],
+                [1.8, 11.3], [3.0, 11.3], [13.8, 11.3],
+            ],
             'terrain' => [
                 '################',
                 '#..............#',
@@ -110,6 +116,7 @@ class FixedBattleMaps
             'palette' => 'fixed',
             'terrain' => $map['terrain'],
             'image'   => $map['image'],
+            'lights'  => $map['lights'] ?? [],
             'floor'   => null,
             'wall'    => null,
             'props'   => [],

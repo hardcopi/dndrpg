@@ -1897,6 +1897,7 @@
           }
           if (ev.hit) {
             flash(ev.target, ev.crit ? 'crit-flash' : 'hit-flash');
+            boardHit(ev.target, ev.crit ? 'crit' : 'hit');
             float(ev.target, '-' + ev.damage, ev.crit ? 'float-crit' : 'float-dmg');
             stepHp(ev.target, ev.target_hp, ev.target_max_hp);
             if (ev.crit) shake();
@@ -1932,6 +1933,7 @@
 
         case 'heal':
           flash(ev.target, 'heal-flash');
+          boardHit(ev.target, 'heal');
           float(ev.target, '+' + ev.amount, 'float-heal');
           break;
 
@@ -2086,11 +2088,25 @@
       if (end) window.BattleMap.moveToken(box, ev.actor, end[0], end[1]);
       return 0;
     }
+    if (window.BattleMap.walking) window.BattleMap.walking(box, ev.actor, true);
     for (let i = 1; i < path.length; i++) {
       window.BattleMap.moveToken(box, ev.actor, path[i][0], path[i][1]);
-      await G().sleep(70);
+      await G().sleep(STEP_MS);
     }
+    // Let the last square's slide finish before the next beat starts.
+    await G().sleep(STEP_MS);
+    if (window.BattleMap.walking) window.BattleMap.walking(box, ev.actor, false);
     return 0;
+  }
+
+  /** One square of a walk. Matched by `.bm-token`'s transition in the stylesheet. */
+  const STEP_MS = 110;
+
+  /** The board's half of a blow: the figure flinches where it stands. */
+  function boardHit(cid, kind) {
+    if (G().reducedMotion()) return;
+    const box = $('#cbt-map', root());
+    if (box && window.BattleMap && window.BattleMap.hitToken) window.BattleMap.hitToken(box, cid, kind);
   }
 
   function stepHp(cid, hp, maxHp) {

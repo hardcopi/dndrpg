@@ -244,6 +244,20 @@
         ${grid.wall ? `<pattern id="${wallId}" width="1" height="1" patternUnits="userSpaceOnUse">
           <image href="${esc(artUrl(grid.wall))}" width="1" height="1"
                  preserveAspectRatio="xMidYMid slice"/></pattern>` : ''}
+        <radialGradient id="bm-glow-grad">
+          <stop offset="0" stop-color="#ffcf7a" stop-opacity="0.7"/>
+          <stop offset="0.45" stop-color="#ff9a3c" stop-opacity="0.28"/>
+          <stop offset="1" stop-color="#ff8a2a" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="bm-flame-grad" cx="0.5" cy="0.65" r="0.6">
+          <stop offset="0" stop-color="#fff3c4"/>
+          <stop offset="0.5" stop-color="#ffb347"/>
+          <stop offset="1" stop-color="#e2531c" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="bm-vignette-grad" cx="0.5" cy="0.5" r="0.72">
+          <stop offset="0.55" stop-color="#000" stop-opacity="0"/>
+          <stop offset="1" stop-color="#000" stop-opacity="0.5"/>
+        </radialGradient>
         <pattern id="${waterId}" width="1" height="1" patternUnits="userSpaceOnUse">
           <image href="${esc(artUrl('tiles/water.png'))}" width="1" height="1"
                  preserveAspectRatio="xMidYMid slice"/></pattern>
@@ -257,6 +271,7 @@
         terrainHtml(terrain, { wallId, waterId, hasWall: !grid.image && !!grid.wall, dressed: dressedCells(grid) })
       }</g>
       <g class="bm-props">${propsHtml(grid)}</g>
+      <g class="bm-light" pointer-events="none">${lightHtml(grid)}</g>
       <g class="bm-zones">${zonesHtml(grid, state)}</g>
       <g class="bm-reach">${reachHtml(ui)}</g>
       <g class="bm-threat">${threatHtml(ui)}</g>
@@ -267,6 +282,7 @@
       <g class="bm-grid">${gridHtml()}
         <rect class="bm-edge" x="0" y="0" width="${W}" height="${H}"/></g>
       <g class="bm-tokens">${tokensHtml(state, o)}</g>
+      <g class="bm-motes" pointer-events="none">${motesHtml(grid)}</g>
       <g class="bm-shots"></g>
       <g class="bm-floats"></g>
     </svg>`;
@@ -357,6 +373,98 @@
     return `<g class="${cls}"${attrs || ''} transform="translate(${cx} ${cy})" pointer-events="none">
       <path class="bm-shield" d="M0,-0.26 L0.22,-0.17 L0.2,0.06 Q0.14,0.2 0,0.28 Q-0.14,0.2 -0.2,0.06 L-0.22,-0.17 Z"/>
       <text class="bm-shield-num" y="0.08">+${bonus}</text></g>`;
+  }
+
+  // =========================================================================
+  // Atmosphere: torchlight and dust. Paint that moves, never a rule.
+  //
+  // Positions come from a tiny generator seeded by the board's own seed, so
+  // the torches are where they were last turn (render() redraws the whole SVG
+  // after every action) and a fight looks the same each time it is loaded.
+  // The flicker itself is CSS, with per-element durations and negative delays
+  // so nothing pulses in step. prefers-reduced-motion stops all of it and
+  // leaves the light where it is.
+  // =========================================================================
+
+  function seeded(seed) {
+    let t = (Number(seed) >>> 0) || 1;
+    return () => {
+      t = (t + 0x6D2B79F5) >>> 0;
+      let r = Math.imul(t ^ (t >>> 15), 1 | t);
+      r = (r + Math.imul(r ^ (r >>> 7), 61 | r)) ^ r;
+      return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  /** Palettes lit by fire rather than by the sky. */
+  const INDOOR = new Set(['interior', 'cavern', 'tunnel', 'arena', 'fixed']);
+
+  /**
+   * Where the torches are, in cell units.
+   *
+   * A drawn board names its own (`grid.lights`, the sconces in the picture).
+   * A walled board hangs one every few cells on a rim wall that faces the
+   * floor. An unwalled indoor board — the pit — gets them just off its top and
+   * bottom edge, which is where the walls of the room it stands in would be.
+   */
+  function torchSpots(grid, rnd) {
+    if (Array.isArray(grid.lights)) {
+      return grid.lights.map((l) => [Number(l[0]) || 0, Number(l[1]) || 0]);
+    }
+    if (!INDOOR.has(grid.palette)) return [];
+    const t = grid.terrain || [];
+    const wall = (x, y) => (t[y] || '')[x] === '#';
+    const spots = [];
+    const start = 1 + Math.floor(rnd() * 3);
+    for (let x = start; x < W - 1; x += 4 + Math.floor(rnd() * 2)) {
+      for (const [y, inner, at] of [[0, 1, 0.35], [H - 1, H - 2, H - 0.35]]) {
+        if (wall(x, y) && !wall(x, inner)) spots.push([x + 0.5, at]);
+        else if (!wall(x, y) && grid.palette === 'arena') spots.push([x + 0.5, y === 0 ? 0.08 : H - 0.08]);
+      }
+    }
+    return spots;
+  }
+
+  function lightHtml(grid) {
+    if (grid.image && !Array.isArray(grid.lights) && grid.palette !== 'fixed') return '';
+    const rnd = seeded((Number(grid.seed) || 0) ^ 0x51ed);
+    const indoor = INDOOR.has(grid.palette);
+    let out = indoor
+      ? `<rect class="bm-vignette" x="0" y="0" width="${W}" height="${H}" fill="url(#bm-vignette-grad)"/>`
+      : '';
+    for (const [x, y] of torchSpots(grid, rnd)) {
+      const dur = (1.6 + rnd() * 1.4).toFixed(2);
+      const delay = (-rnd() * 3).toFixed(2);
+      const anim = `style="animation-duration:${dur}s;animation-delay:${delay}s"`;
+      out += `<circle class="bm-glow" cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r="3"
+          fill="url(#bm-glow-grad)" ${anim}/>
+        <g transform="translate(${x.toFixed(2)} ${y.toFixed(2)})">
+          <ellipse class="bm-flame" cx="0" cy="-0.04" rx="0.1" ry="0.17"
+            fill="url(#bm-flame-grad)" ${anim}/></g>`;
+    }
+    return out;
+  }
+
+  /**
+   * Dust in the torchlight, pollen out of doors: a dozen and a half specks
+   * that drift and fade on long loops. Drawn over the tokens because dust is
+   * in the air, and far too faint and small to hide anybody.
+   */
+  function motesHtml(grid) {
+    const rnd = seeded((Number(grid.seed) || 0) ^ 0xd057);
+    const kind = INDOOR.has(grid.palette) ? 'is-dust' : 'is-pollen';
+    let out = '';
+    for (let i = 0; i < 18; i++) {
+      const x = (rnd() * W).toFixed(2);
+      const y = (rnd() * H).toFixed(2);
+      const r = (0.025 + rnd() * 0.03).toFixed(3);
+      const dur = (9 + rnd() * 9).toFixed(1);
+      const delay = (-rnd() * 18).toFixed(1);
+      const dx = ((rnd() - 0.5) * 1.6).toFixed(2);
+      out += `<circle class="bm-mote ${kind}" cx="${x}" cy="${y}" r="${r}"
+        style="animation-duration:${dur}s;animation-delay:${delay}s;--mx:${dx}px"/>`;
+    }
+    return out;
   }
 
   /**
@@ -575,12 +683,14 @@
         <title>${esc(c.name)} — HP ${esc(c.hp)}/${esc(c.max_hp)}, AC ${esc(c.ac)}${esc(note)}</title>
         <circle class="bm-hit-token" r="0.48"/>
         <circle class="bm-turn" r="0.46"/>
+        <g class="bm-body">
         <circle class="bm-ring" r="${ringR}"${ringFill}/>
         ${drawn.art}
         ${shot && Number(shot.cover) > 0 ? shieldHtml(0.34, -0.3, Number(shot.cover), 'bm-cover-badge') : ''}
         <rect class="bm-hp-back" x="-0.36" y="0.38" width="0.72" height="0.12" rx="0.06"/>
         <rect class="bm-hp ${pct > 0.5 ? 'ok' : pct > 0.25 ? 'mid' : 'low'}"
               x="-0.36" y="0.38" width="${(0.72 * pct).toFixed(3)}" height="0.12" rx="0.06"/>
+        </g>
       </g>`;
     }).join('');
   }
@@ -726,6 +836,42 @@
 
   /** How long a bolt is in the air. Matched by `bm-fly` in the stylesheet. */
   const SHOT_MS = 220;
+
+  /**
+   * A blow landing, on the board: the struck figure flashes and flinches.
+   *
+   * `kind` is 'hit', 'crit' or 'heal'. The flinch is on the token's inner
+   * `.bm-body`, because the outer group's transform is its position and a
+   * CSS animation there would yank it to the corner of the board. The board
+   * itself jolts a couple of screen pixels on a hit and about five on a crit
+   * (the <svg> element is moved, not its viewBox, so the camera is untouched).
+   */
+  function hitToken(root, cid, kind) {
+    const g = root && root.querySelector(`.bm-token[data-cid="${cssEscape(cid)}"]`);
+    if (!g) return;
+    const cls = kind === 'crit' ? 'is-crit' : kind === 'heal' ? 'is-healed' : 'is-struck';
+    g.classList.remove('is-struck', 'is-crit', 'is-healed');
+    // Reflow so a second hit in the same beat restarts the animation.
+    void g.getBoundingClientRect();
+    g.classList.add(cls);
+    setTimeout(() => g.classList.remove(cls), 460);
+    if (kind === 'crit' || kind === 'hit') {
+      const svg = root.querySelector('.battlemap');
+      if (svg) {
+        const jolt = kind === 'crit' ? 'is-jolt-big' : 'is-jolt';
+        svg.classList.remove('is-jolt', 'is-jolt-big');
+        void svg.getBoundingClientRect();
+        svg.classList.add(jolt);
+        setTimeout(() => svg.classList.remove(jolt), 320);
+      }
+    }
+  }
+
+  /** Mark a token as walking, for the little step bob while it slides. */
+  function walking(root, cid, on) {
+    const g = root && root.querySelector(`.bm-token[data-cid="${cssEscape(cid)}"]`);
+    if (g) g.classList.toggle('is-walking', !!on);
+  }
 
   /** Slide a token to where it ended up, for the move animation. */
   function moveToken(root, cid, x, y) {
@@ -1023,7 +1169,7 @@
 
   window.BattleMap = {
     html, bind, controls, camera, forget, whenFigures, figureUrl,
-    paintPath, paintAoe, paintAim, moveToken, floatText, shoot,
+    paintPath, paintAoe, paintAim, moveToken, floatText, shoot, hitToken, walking,
     W, H, SHOT_MS,
   };
 })();
