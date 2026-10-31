@@ -450,6 +450,35 @@ def read_private_engine_flags():
     return read_flag_constants(ENGINE_PRIVATE_CONSTANTS)
 
 
+@functools.lru_cache(maxsize=1)
+def read_watch_done_flags():
+    """
+    The `watch_done:<quest>` flags WatchJobs writes, as ((flag, owner), ...).
+
+    WatchJobs::onArrive() sets one when a party stands in a watch job's stamped
+    room, so the Proving House gates on them and no effect in the corpus sets
+    most of them. They cannot go in ENGINE_FLAG_CONSTANTS: they are built from a
+    quest key rather than declared, and content may set one too (`_fp_cousin`
+    sets `fp_watch_stayed`'s), so refusing them as engine-owned would be wrong.
+
+    Read the way DialogueLint::engineFlags() builds them — doneFlag()'s prefix
+    over the keys in ORDER — rather than by excusing the prefix, so a gate on
+    `watch_done:fp_watch_nope` is still a gate nothing sets.
+    """
+    rel = "app/lib/WatchJobs.php"
+    src = open(os.path.join(ROOT, rel), encoding="utf-8").read()
+    consts = dict(re.findall(r"public const ([A-Z_]+)\s*=\s*'([a-z0-9_]+)'\s*;", src))
+    order = re.search(r"const ORDER\s*=\s*\[(.*?)\];", src, re.S)
+    prefix = re.search(r"function doneFlag\(.*?return '([a-z_]+:)'\s*\.", src, re.S)
+    if not order or not prefix:
+        raise SystemExit(f"{rel} no longer declares ORDER / doneFlag() the way "
+                         f"tools/load_content.py reads them")
+    keys = [consts.get(c) for c in re.findall(r"self::([A-Z_]+)", order.group(1))]
+    if not keys or None in keys:
+        raise SystemExit(f"ORDER in {rel} parsed as {keys!r}")
+    return tuple((prefix.group(1) + k, f"{rel} doneFlag(ORDER)") for k in keys)
+
+
 def read_busts(path):
     f = os.path.join(path, "busts.json")
     if not os.path.exists(f):

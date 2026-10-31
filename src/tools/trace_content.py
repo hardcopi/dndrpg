@@ -324,6 +324,13 @@ def flag_ledger(tree, effects, conditions):
     for name, where in engine_flags():
         setters[name].append((where, True, "engine"))
 
+    # WatchJobs finishes a watch job by writing `watch_done:<quest>`. Only for
+    # jobs that are real quests: an ORDER entry with no quest behind it would
+    # otherwise excuse a gate on a job nobody can take.
+    for name, where in load_content.read_watch_done_flags():
+        if name.split(":", 1)[1] in tree["quests"]:
+            setters[name].append((where, True, "engine"))
+
     for cond, (where, live) in conditions:
         if isinstance(cond.get("flag"), str):
             readers[cond["flag"]].append((where, live))
@@ -822,6 +829,9 @@ def main():
     # flag somebody forgot to finish. The thresholds themselves are NOT exempt:
     # a band of pressure nobody wrote a reaction for is exactly this finding.
     private = {f for f, _ in load_content.read_private_engine_flags()}
+    # And WatchJobs reads its own `watch_done:` back in canTurnIn(), so a job's
+    # flag that no conversation asks about is still doing its work.
+    private |= {f for f, _ in load_content.read_watch_done_flags()}
     for flag in sorted(set(setters) | set(readers)):
         s, r = setters.get(flag, []), readers.get(flag, [])
         if full or args.flags:

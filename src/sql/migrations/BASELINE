@@ -23,7 +23,11 @@
 #       Oddvar's shelf, none of which is in content.sql for the same reason.
 #       Its _fp_* dialogue UPDATEs are OLDER than content/dialog/_fp_*.json,
 #       which is why 00-load.sh loads content.sql a second time after the
-#       migrations: content wins every row the two both write.
+#       migrations: content wins every row the two both write. Those UPDATEs
+#       carry a retired `"action"` choice field; a database that ran this file
+#       and had no content load since fails test_dialogue_lint.php on it. Fix
+#       that database with tools/apply_content_safely.py --apply, never by
+#       editing this file — its checksum is recorded on hermes.
 #   2026-10-29-freeplay-road.sql   the West Gate <-> Proving House road, again
 #       `_`-ended exits that content.sql leaves alone.
 

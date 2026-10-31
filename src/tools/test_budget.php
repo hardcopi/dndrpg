@@ -44,35 +44,42 @@ section('the table itself');
 same('twenty levels, no gaps', range(1, 20), array_keys(EncounterBudget::THRESHOLDS));
 $shape = true;
 $rising = true;
-$prev = [0, 0, 0];
+$prev = [0, 0, 0, 0];
 foreach (EncounterBudget::THRESHOLDS as $level => $row) {
-    if (count($row) !== 3) {
+    if (count($row) !== 4) {
         $shape = false;
     }
-    // easy < medium < hard, at every level.
-    if (!($row[0] < $row[1] && $row[1] < $row[2])) {
+    // easy < medium < hard < deadly, at every level.
+    if (!($row[0] < $row[1] && $row[1] < $row[2] && $row[2] < $row[3])) {
         $shape = false;
     }
     // And every column climbs with level, or a party would get weaker fights
     // for levelling up.
-    for ($i = 0; $i < 3; $i++) {
+    for ($i = 0; $i < 4; $i++) {
         if ($row[$i] < $prev[$i]) {
             $rising = false;
         }
     }
     $prev = $row;
 }
-ok('every row is easy, medium, hard in order', $shape);
+ok('every row is easy, medium, hard, deadly in order', $shape);
 ok('and no column ever falls as level rises', $rising);
-same('three tiers, and no deadly', ['warmup', 'fair', 'hard'],
+// Four, on purpose: the deadly column came back for the pit's hard match (see
+// the THRESHOLDS docblock). This used to assert three and "no deadly", and so
+// failed on the change it was meant to describe.
+same('four tiers, deadly last', ['warmup', 'fair', 'hard', 'deadly'],
     array_keys(EncounterBudget::TIERS));
+same('each tier reads its own column', [0, 1, 2, 3], array_values(EncounterBudget::TIERS));
+same('deadly is the 5e table, not an invention: level 1 is 100, level 20 is 12,700',
+    [100, 12700], [EncounterBudget::THRESHOLDS[1][3], EncounterBudget::THRESHOLDS[20][3]]);
 
 section('a budget scales on both level and headcount');
 same('one first-level character, fair', 50, EncounterBudget::forParty([1], 'fair'));
 same('four of them', 200, EncounterBudget::forParty([1, 1, 1, 1], 'fair'));
 same('a mixed party sums its members', 1050, EncounterBudget::forParty([3, 3, 4, 5], 'fair'));
-ok('hard is more than fair is more than a warm-up',
-    EncounterBudget::forParty([3, 3], 'hard') > EncounterBudget::forParty([3, 3], 'fair')
+ok('deadly is more than hard is more than fair is more than a warm-up',
+    EncounterBudget::forParty([3, 3], 'deadly') > EncounterBudget::forParty([3, 3], 'hard')
+    && EncounterBudget::forParty([3, 3], 'hard') > EncounterBudget::forParty([3, 3], 'fair')
     && EncounterBudget::forParty([3, 3], 'fair') > EncounterBudget::forParty([3, 3], 'warmup'));
 same('an empty party is read as one first-level character, not as zero',
     EncounterBudget::forParty([1], 'fair'), EncounterBudget::forParty([], 'fair'));

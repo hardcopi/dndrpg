@@ -108,6 +108,29 @@ $whereIs = function (int $id) use ($db): ?string {
     return is_string($k) ? $k : null;
 };
 
+echo "\n== the cellar stair is the Pit, and the Pit wants a reason ==\n";
+// DelveEngine::descend() asks WatchJobs::pitGate() before it opens this stair:
+// a party goes down on a watch job or not at all. Asserted rather than only
+// satisfied, so that when the gate moves this file says so instead of dying on
+// the first descend() with an uncaught exception.
+$refused = null;
+try {
+    $delves->descend($leader, $partyId);
+} catch (InvalidArgumentException $e) {
+    $refused = $e->getMessage();
+}
+ok('a party with no job and no sandbox is turned back at the Pit',
+    is_string($refused) && str_starts_with($refused, 'Not without a reason'),
+    'got ' . var_export($refused, true));
+ok('and no delve was opened for it', $delves->current($partyId) === null);
+
+// Then through the gate the way a party that has finished the watch is: the
+// last job's terminal stage (content/quests/fp_watch_stayed.json) sets the
+// sandbox flag, and from then on the Pit is free. The sandbox rather than an
+// active job, because a job draws its own floor — the crate's is authored —
+// and this file is about where the stair is, not what is at the bottom of it.
+(new WorldState($db))->set($partyId, WatchJobs::SANDBOX_FLAG);
+
 echo "\n== the mouth is recorded by key ==\n";
 $delves->descend($leader, $partyId);
 $row = $delves->current($partyId);

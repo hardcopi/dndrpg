@@ -87,6 +87,29 @@ class DialogueLint
         ...LocationEngine::FOUND_EXIT_FLAGS,
     ];
 
+    /**
+     * ENGINE_FLAGS, plus the flags the engine builds from a quest key.
+     *
+     * `WatchJobs::onArrive()` sets `watch_done:<quest>` when a party stands in
+     * a watch job's stamped room, so the Proving House's people gate on it and
+     * nothing in the corpus sets most of them (`_fp_cousin` also sets
+     * `fp_watch_stayed`'s, in talk). A constant cannot hold
+     * those, so they are made here by the engine's own `doneFlag()` from the
+     * engine's own `ORDER` — one per quest WatchJobs actually recognises, and
+     * nothing else. Not a `watch_done:` prefix: that would wave through
+     * `watch_done:fp_watch_nope`, a gate on a job that does not exist, which is
+     * exactly the dead scene this check is for.
+     *
+     * @return string[]
+     */
+    public static function engineFlags(): array
+    {
+        return array_merge(
+            self::ENGINE_FLAGS,
+            array_map([WatchJobs::class, 'doneFlag'], WatchJobs::ORDER)
+        );
+    }
+
     /** load_content.py:45 */
     private const KEY_RE = '/^[a-z0-9_]+$/';
 
@@ -744,7 +767,7 @@ class DialogueLint
      * been written to it yet. Without the merge, adding a gate and the effect
      * that opens it in one edit would report both halves as broken.
      *
-     * ENGINE_FLAGS is merged in for a different reason: those are written by
+     * engineFlags() is merged in for a different reason: those are written by
      * code, so no amount of reading the content will ever find the effect that
      * sets them.
      */
@@ -755,7 +778,7 @@ class DialogueLint
         }
 
         $written = $this->flagsWritten;
-        foreach (self::ENGINE_FLAGS as $f) {
+        foreach (self::engineFlags() as $f) {
             $written[$f] = true;
         }
         foreach (self::flagsWrittenIn($doc) as $f) {

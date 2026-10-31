@@ -304,6 +304,21 @@ $d['nodes']['more']['conditions'] = [['flag' => 'brand_new']];
 $d['nodes']['more'] = [$d['nodes']['more'], ['text' => 'Or not.', 'choices' => [['label' => 'x', 'next' => 'greeting']]]];
 same('a flag written and read in the same unsaved document is fine', [], $wired->check($d));
 
+// Flags the engine writes from a quest key. `watch_done:<quest>` is set by
+// WatchJobs::onArrive() and by no effect, so the corpus never shows a writer —
+// but only the jobs WatchJobs knows are excused, never the prefix: a gate on a
+// job that does not exist is still a scene nobody can reach.
+$d = $good;
+$d['nodes']['greeting']['conditions'] = [['flag' => WatchJobs::doneFlag(WatchJobs::SHRINE)]];
+$d['nodes']['greeting'] = [$d['nodes']['greeting'], $tail];
+same('a gate on a watch job the engine finishes is fine', [], $wired->check($d));
+
+$d = $good;
+$d['nodes']['greeting']['conditions'] = [['flag' => 'watch_done:fp_watch_nope']];
+$d['nodes']['greeting'] = [$d['nodes']['greeting'], $tail];
+ok('a gate on a watch job that does not exist still warns',
+   has($wired->check($d), "no effect anywhere sets the flag 'watch_done:fp_watch_nope'"));
+
 // ---------------------------------------------------------------------------
 section('Pools');
 
@@ -456,6 +471,14 @@ ok('every shipped conversation was linted', $checked > 50, "only {$checked} chec
 ok('no shipped conversation reports an error', $noisy === [],
    implode(' | ', array_slice($noisy, 0, 4)) . (count($noisy) > 4 ? ' …+' . (count($noisy) - 4) : ''));
 
+// engineFlags() excuses `watch_done:<quest>` for every key in WatchJobs::ORDER,
+// which is code. If one of those stopped being a quest, its flag would go on
+// being excused while nothing could ever set it — so the list is held to the
+// quest rows it is meant to name.
+$questKeys = db()->query('SELECT quest_key FROM quests')->fetchAll(PDO::FETCH_COLUMN);
+same('every watch job the engine can finish is a real quest', [],
+     array_values(array_diff(WatchJobs::ORDER, $questKeys)));
+
 ok('the world index is populated', $flags['written'] && $flags['read'],
    sprintf('%d written, %d read', count($flags['written']), count($flags['read'])));
 
@@ -473,3 +496,8 @@ echo "        (for information: {$deadEffects} flags set that no condition reads
 // ---------------------------------------------------------------------------
 echo PHP_EOL . str_repeat('-', 52) . PHP_EOL;
 printf("%d passed, %d failed%s", $RESULTS['pass'], $RESULTS['fail'], PHP_EOL);
+
+// The header has always promised this, and the file never did it: every FAIL
+// above printed and the run still exited 0, so a CI step or a shell loop over
+// test_*.php counted a broken corpus as a pass.
+exit($RESULTS['fail'] > 0 ? 1 : 0);
