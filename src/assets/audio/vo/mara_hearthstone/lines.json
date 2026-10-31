@@ -11,16 +11,11 @@
    "src": "bf05a75a13bd59aa.mp3"
   }
  ],
- "8c995a5770ff67985b1f4109f4209a17fd566e10": [
+ "47d17a45304dd8ce737a2d38837c6e2df2f5176a": [
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "ab3e582ccf44ad44.mp3"
-  },
-  {
-   "speaker": "narrator",
-   "voice": "bf_emma",
-   "src": "885f96ecdbbc6754.mp3"
+   "src": "a086a6606436e145.mp3"
   }
  ],
  "958ff3ded7369c85f95065ada1194be239a51908": [
@@ -40,11 +35,11 @@
    "src": "fdabcd0f179597d4.mp3"
   }
  ],
- "b3df59d270165f52f28668cf0fbffc2b2fa0e5d1": [
+ "b7a5bdec8d40c92734cc5f7f91a2b9565a749f6e": [
   {
    "speaker": "narrator",
    "voice": "bf_emma",
-   "src": "a7113293f752c701.mp3"
+   "src": "963765ffeb146c8c.mp3"
   },
   {
    "speaker": "mara_hearthstone",
@@ -54,15 +49,15 @@
   {
    "speaker": "narrator",
    "voice": "bf_emma",
-   "src": "992574a2305453d5.mp3"
+   "src": "335a1a3647834489.mp3"
   },
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "bbc75f46d97cdb5d.mp3"
+   "src": "de3738e353504a90.mp3"
   }
  ],
- "af134061820fb1fd3ab75d857cfda05f16919e90": [
+ "2a57641ca1c67bba8925eb10e0b498751d6e1069": [
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
@@ -71,19 +66,19 @@
   {
    "speaker": "narrator",
    "voice": "bf_emma",
-   "src": "445db930c8d1bff9.mp3"
+   "src": "ad0cfb3d677b6737.mp3"
   },
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "5cb3afead197dcae.mp3"
+   "src": "ea9e086927810b39.mp3"
   }
  ],
- "338795695aabdd19a3f5d7926aee09a30f7d8d82": [
+ "c82a4fa3d3953960cf81cd95c7dd75f436f15698": [
   {
    "speaker": "narrator",
    "voice": "bf_emma",
-   "src": "52c752631796bbff.mp3"
+   "src": "806c81ad673785ab.mp3"
   },
   {
    "speaker": "mara_hearthstone",
@@ -96,11 +91,50 @@
    "src": "0972a27a1efb0e09.mp3"
   }
  ],
- "4c616c54a1a68bc17620482532b5765b0f83e314": [
+ "6bb12245b5b79e71e8cd39781d1828a6dda6dcc2": [
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "2f477a14d031d936.mp3"
+   "src": "03cf1a29ba6cda28.mp3"
+  }
+ ],
+ "6c9b94a870dbd7de64999c6286e2512b7316e348": [
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "05b6d6f44517a32f.mp3"
+  },
+  {
+   "speaker": "mara_hearthstone",
+   "voice": "af_jessica",
+   "src": "2fc277c81ac210bf.mp3"
+  },
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "0972a27a1efb0e09.mp3"
+  },
+  {
+   "speaker": "mara_hearthstone",
+   "voice": "af_jessica",
+   "src": "e4b3059d98608d53.mp3"
+  },
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "fd8ec04600b12a0f.mp3"
+  },
+  {
+   "speaker": "mara_hearthstone",
+   "voice": "af_jessica",
+   "src": "cf7b1d69485daa4d.mp3"
+  }
+ ],
+ "fceb2d8fe2e6151adb79b13faa8f6b95c28ba762": [
+  {
+   "speaker": "mara_hearthstone",
+   "voice": "af_jessica",
+   "src": "71b33b28b5fef7d8.mp3"
   },
   {
    "speaker": "narrator",
@@ -110,19 +144,36 @@
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "bd784f3290efce6b.mp3"
-  }
- ],
- "3089f25f0aab6189a98ffa11e7975560ff56e13f": [
+   "src": "a66afe086fd50dc2.mp3"
+  },
   {
    "speaker": "narrator",
    "voice": "bf_emma",
-   "src": "4d46ebd9aa8accba.mp3"
+   "src": "8a221634df50f8c8.mp3"
   },
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "cd524e7b199995f5.mp3"
+   "src": "2113496675d4057d.mp3"
+  }
+ ],
+ "d57ed092b2e64f98815241c5d88b863d0d7ed73e": [
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "818976f5b5ea694c.mp3"
+  }
+ ],
+ "93e955f9bf7b8213f306fabd6001dc7d9753455b": [
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "c45dbcd21808349c.mp3"
+  },
+  {
+   "speaker": "mara_hearthstone",
+   "voice": "af_jessica",
+   "src": "5cf071320fab622b.mp3"
   },
   {
    "speaker": "narrator",
@@ -132,76 +183,10 @@
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "a4e41bf01f2dcf4b.mp3"
-  },
-  {
-   "speaker": "narrator",
-   "voice": "bf_emma",
-   "src": "f3ec7815dbe6878f.mp3"
-  },
-  {
-   "speaker": "mara_hearthstone",
-   "voice": "af_jessica",
-   "src": "fc7ec87541d6820c.mp3"
+   "src": "4881f511302b6c96.mp3"
   }
  ],
- "093cd5783b3e8749b841a7a4fe06030e35bc009c": [
-  {
-   "speaker": "mara_hearthstone",
-   "voice": "af_jessica",
-   "src": "705f2d46dfc75a33.mp3"
-  },
-  {
-   "speaker": "narrator",
-   "voice": "bf_emma",
-   "src": "5a2cdec3f61ea49c.mp3"
-  },
-  {
-   "speaker": "mara_hearthstone",
-   "voice": "af_jessica",
-   "src": "c56652900e706dae.mp3"
-  },
-  {
-   "speaker": "narrator",
-   "voice": "bf_emma",
-   "src": "4ecd1205b48b114d.mp3"
-  },
-  {
-   "speaker": "mara_hearthstone",
-   "voice": "af_jessica",
-   "src": "b41d9b22455947c0.mp3"
-  }
- ],
- "cdfdb4efda6753460ef833e4c08bc54f19afc27e": [
-  {
-   "speaker": "narrator",
-   "voice": "bf_emma",
-   "src": "2c076425b07ab209.mp3"
-  }
- ],
- "a6bbf61f04562af094f059ed3be7cafb09eac910": [
-  {
-   "speaker": "narrator",
-   "voice": "bf_emma",
-   "src": "869017a4bdd96f8f.mp3"
-  },
-  {
-   "speaker": "mara_hearthstone",
-   "voice": "af_jessica",
-   "src": "2d8f51a738695c26.mp3"
-  },
-  {
-   "speaker": "narrator",
-   "voice": "bf_emma",
-   "src": "0972a27a1efb0e09.mp3"
-  },
-  {
-   "speaker": "mara_hearthstone",
-   "voice": "af_jessica",
-   "src": "f30e8a8d5d0fdb1c.mp3"
-  }
- ],
- "5a83e595f0cbc30fc8218d5766735bb9dc657a02": [
+ "18d8add2b139942c56cc5a052a315cbd438652b6": [
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
@@ -215,20 +200,20 @@
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "7aa73af5061ca83e.mp3"
+   "src": "3331ec42cf7094fd.mp3"
   },
   {
    "speaker": "narrator",
    "voice": "bf_emma",
-   "src": "572785d638f1cfeb.mp3"
+   "src": "df04a422151d6272.mp3"
   },
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "4827c42b3c7bcde9.mp3"
+   "src": "2a9d376d1af0929e.mp3"
   }
  ],
- "f278b00e70884982580cd441ece3bd957f0d6e68": [
+ "95596feaf764d1a73910c1a07a3e5a028f7743ec": [
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
@@ -237,12 +222,12 @@
   {
    "speaker": "narrator",
    "voice": "bf_emma",
-   "src": "d4a0ac1671d6ce4c.mp3"
+   "src": "74cc755e58df744a.mp3"
   },
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "acd04120f4000ae2.mp3"
+   "src": "29a3c3905e17f824.mp3"
   },
   {
    "speaker": "narrator",
@@ -252,24 +237,46 @@
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "24f829b869946706.mp3"
+   "src": "48df9d89d190deb8.mp3"
   }
  ],
- "bb6b0aee003ca9ba9e9737837de15093d3600bbf": [
+ "ed1d09873ed38b819bc2863dea2a2d1a44fa94ed": [
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "be85f3c43dd0d868.mp3"
+  },
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "42e0bfa3c10c9c76.mp3"
+   "src": "38dff668eeed2615.mp3"
   },
   {
    "speaker": "narrator",
    "voice": "bf_emma",
-   "src": "1f6e11be6b730713.mp3"
+   "src": "0972a27a1efb0e09.mp3"
   },
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "8ce5ba47339e6226.mp3"
+   "src": "5bea1785940818df.mp3"
+  }
+ ],
+ "17c8e69707b635d94afe281b137b0939d816bea0": [
+  {
+   "speaker": "mara_hearthstone",
+   "voice": "af_jessica",
+   "src": "f304fe785538cbe7.mp3"
+  },
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "fddd5e337a6f5663.mp3"
+  },
+  {
+   "speaker": "mara_hearthstone",
+   "voice": "af_jessica",
+   "src": "13c402a93b98ac7d.mp3"
   }
  ],
  "fb86ddf7acb573c37ef2f0827bc398d542e230a8": [
@@ -282,6 +289,108 @@
    "speaker": "narrator",
    "voice": "bf_emma",
    "src": "a10667eb7b2abc9c.mp3"
+  }
+ ],
+ "3fe28b83c64b8d617c94753dc547300b0af4d011": [
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "b08b0caa040ba546.mp3"
+  },
+  {
+   "speaker": "mara_hearthstone",
+   "voice": "af_jessica",
+   "src": "918c78bf51e72a1a.mp3"
+  }
+ ],
+ "0cc2c586dd9e4174f31a13eb0d9f9ce097f4bfe1": [
+  {
+   "speaker": "mara_hearthstone",
+   "voice": "af_jessica",
+   "src": "77d560837b1f1b19.mp3"
+  },
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "7cae2aacf1bc5d91.mp3"
+  },
+  {
+   "speaker": "mara_hearthstone",
+   "voice": "af_jessica",
+   "src": "9a50b61fee9bea9f.mp3"
+  }
+ ],
+ "1aa7ac3d6f4aea46b2845ccd41d8ad5220ee1f4b": [
+  {
+   "speaker": "mara_hearthstone",
+   "voice": "af_jessica",
+   "src": "44da5fb278fbcb09.mp3"
+  },
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "75b5e88e61a91ad7.mp3"
+  },
+  {
+   "speaker": "mara_hearthstone",
+   "voice": "af_jessica",
+   "src": "9bbc5bce96c19d2f.mp3"
+  }
+ ],
+ "97571960820766ad28f1a67237bd9f52f74f136e": [
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "d7c5bcefddfb2c55.mp3"
+  },
+  {
+   "speaker": "mara_hearthstone",
+   "voice": "af_jessica",
+   "src": "57ad09aea73a982b.mp3"
+  },
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "85b2ae4d5be08da2.mp3"
+  },
+  {
+   "speaker": "mara_hearthstone",
+   "voice": "af_jessica",
+   "src": "692c2606c4d18780.mp3"
+  }
+ ],
+ "4e4d460cd7a575a93d8a51eb2cfaaee647094827": [
+  {
+   "speaker": "mara_hearthstone",
+   "voice": "af_jessica",
+   "src": "cf7bf68eaecdd04e.mp3"
+  },
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "c66b27493f230bc1.mp3"
+  },
+  {
+   "speaker": "mara_hearthstone",
+   "voice": "af_jessica",
+   "src": "4030bb0ad13061df.mp3"
+  }
+ ],
+ "4ab1cc2451bff5c3fad3decc1f84b9488fa773cd": [
+  {
+   "speaker": "mara_hearthstone",
+   "voice": "af_jessica",
+   "src": "1234b0db0386c449.mp3"
+  },
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "1acc5fc49916f185.mp3"
+  },
+  {
+   "speaker": "mara_hearthstone",
+   "voice": "af_jessica",
+   "src": "dc22dbd13e4359b0.mp3"
   }
  ],
  "5413589bae9c1506fd33e5277f732dbac96961bd": [
@@ -337,42 +446,54 @@
    "src": "2708bda886c3eafa.mp3"
   }
  ],
- "2a3a40583f03c5fd1a3047164be80da607196b67": [
+ "66446b538590256cb49d35160cbf9a16b5aed0e1": [
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "fbd73d8edd0e0bbe.mp3"
+   "src": "76efc4c235c18419.mp3"
   },
   {
    "speaker": "narrator",
    "voice": "bf_emma",
-   "src": "b4248edfbdee5fd9.mp3"
+   "src": "b1ed85b255d2bdc1.mp3"
   },
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "dfcf5e25d498e9a4.mp3"
+   "src": "b3a36f0e71685864.mp3"
   }
  ],
- "5bc0d054ff302ff987a0be63935c7f4dff646b45": [
+ "aac2e481fd29250acc3db357ae8ab271ce8bd3a1": [
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "2565b85479dc1c31.mp3"
+  },
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "a15b1875b48d6a49.mp3"
+   "src": "4eb68b7ad0af343d.mp3"
   }
  ],
- "75569abeae47c6eb380376f42765ea309771d52e": [
+ "5cb863a8f79dd2337cd8527f78be0c24600bc79c": [
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "24f5823c0586e4af.mp3"
+   "src": "a09eae4179ab4217.mp3"
   }
  ],
- "4aa6de0f3dfd1e763d9552ab74152e3439013616": [
+ "4fd0aa40be8690841291e32b3ed379ffb7167305": [
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "d6dfc8b42dcba8a9.mp3"
+   "src": "47385d4fee14c393.mp3"
+  }
+ ],
+ "6e53c3135539d6ab76c745dac668bc3d3787aa0b": [
+  {
+   "speaker": "mara_hearthstone",
+   "voice": "af_jessica",
+   "src": "21428170e6d72ae6.mp3"
   },
   {
    "speaker": "narrator",
@@ -382,7 +503,7 @@
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "c0c153bb0b163022.mp3"
+   "src": "0ad9f639c159fe44.mp3"
   }
  ],
  "060fdf30d2f6aa8a35fc5e24a8900b74e11381f7": [
@@ -409,16 +530,16 @@
    "src": "4d4028926579b023.mp3"
   }
  ],
- "dc1fd6f1293a107eced050a5b77f6be2180024dc": [
+ "47dfa0049367cb67025a04eacd301d2b8dc045bd": [
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "2cb72c5542832f23.mp3"
+   "src": "6258d0cfd3ee9dca.mp3"
   },
   {
    "speaker": "narrator",
    "voice": "bf_emma",
-   "src": "3e3503ea941ed2e3.mp3"
+   "src": "975be29a0c18de73.mp3"
   },
   {
    "speaker": "mara_hearthstone",
@@ -443,11 +564,11 @@
    "src": "00c34f1767bdab26.mp3"
   }
  ],
- "7fc0f4dfc49ad23cda007cba6ea9ed3ccfe13637": [
+ "94aaee8252a6fd3f2ce0ca0f8742f001256d7477": [
   {
    "speaker": "narrator",
    "voice": "bf_emma",
-   "src": "3e79cd93b42871a3.mp3"
+   "src": "adb6bc84576f6bd9.mp3"
   },
   {
    "speaker": "mara_hearthstone",
@@ -457,12 +578,12 @@
   {
    "speaker": "narrator",
    "voice": "bf_emma",
-   "src": "4f9c14a5de2c1a6d.mp3"
+   "src": "52f5921c5639fb3d.mp3"
   },
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "5bc300f772de7c09.mp3"
+   "src": "b3fd7423e60df4bd.mp3"
   }
  ],
  "580a9900f59ebcfc1d9e97b92e345db2cef6640c": [
@@ -528,11 +649,11 @@
    "src": "27e317f5e8eb5c0c.mp3"
   }
  ],
- "b09272610e3d2e68f2bebe3b9cc240e4397cdb88": [
+ "32b3cc07d74f22934e77ce3ac5edaad5f7974f57": [
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "8b70decb508c1bfa.mp3"
+   "src": "a603c3ca453359a4.mp3"
   },
   {
    "speaker": "narrator",
@@ -542,7 +663,7 @@
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "2f9f95ac94e309b1.mp3"
+   "src": "956096157b9071f1.mp3"
   }
  ],
  "da0cbb946ed1b538ed536e78cf53b978b53ea552": [
@@ -586,7 +707,7 @@
    "src": "dee50d8cbbc3cb95.mp3"
   }
  ],
- "3dacabc8b6748fef2f233d82398f9ddd092dd77e": [
+ "71741a0d8edaa02e17c652fced9c0e3907a70e89": [
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
@@ -600,7 +721,7 @@
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "f1932060b791bac7.mp3"
+   "src": "3b8ead4a70f53415.mp3"
   }
  ],
  "faccda5b5a3cb7212848347025f1ee468dcbd1bf": [
@@ -649,28 +770,28 @@
    "src": "4f52756e29a3c4d0.mp3"
   }
  ],
- "7ceefcf2a43a031504fdffa77985c3bda7ef5322": [
+ "a466f913c0ae0622a7796d37d0c573f19863adfe": [
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "e19a94c469487116.mp3"
+   "src": "ed5b4d9ffcc19004.mp3"
   },
   {
    "speaker": "narrator",
    "voice": "bf_emma",
-   "src": "7417cc0145c1a627.mp3"
+   "src": "91ddb9a4964710d4.mp3"
   },
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "79a01dbf9cfd18f9.mp3"
+   "src": "5bbce78c65d77f32.mp3"
   }
  ],
- "686693342e1837fe631e496b4876f1715acb3a16": [
+ "9a3f5cdfac84fca4bab17acf98b5938bd993b8c4": [
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "29bab26c6a93fd58.mp3"
+   "src": "0cd81d9b964124cd.mp3"
   },
   {
    "speaker": "narrator",
@@ -680,7 +801,7 @@
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "6eee95f8f001c69f.mp3"
+   "src": "c9c7a813f7298193.mp3"
   }
  ],
  "220a559ca436871e1ed6977dc3b6f1c1c9cd2d2e": [
@@ -700,28 +821,28 @@
    "src": "e26b3c83f1e74bfb.mp3"
   }
  ],
- "eb3b4ee5980d1a5b05f8741da28886a04baea7b7": [
+ "094468d564e5c3ed52e3f937720cf4dabee706b8": [
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "473f4afd435a6bb0.mp3"
+   "src": "d7a6bd0725521b8d.mp3"
   },
   {
    "speaker": "narrator",
    "voice": "bf_emma",
-   "src": "7091f612fd1f5083.mp3"
+   "src": "1779d0cc660b7945.mp3"
   },
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "e4156380776c19ca.mp3"
+   "src": "b38fcbf6382d80f6.mp3"
   }
  ],
- "53193ccf7c7bba55ed2e11ef7e1dbeef5db00e33": [
+ "88674dded4e2492b7dc6daf6ce20aa39d9c3eeb9": [
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "025acf52d430ebd6.mp3"
+   "src": "9bb240670c138b6e.mp3"
   },
   {
    "speaker": "narrator",
@@ -731,7 +852,7 @@
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "6d258a502a182491.mp3"
+   "src": "16311a17cf50afcb.mp3"
   }
  ],
  "1455c1c24695efde6f7a4d647d2ea37a0cac71dc": [
@@ -775,11 +896,11 @@
    "src": "0e8fba0bf7cfeae2.mp3"
   }
  ],
- "5a857ce1b4e4c4d9e5b565e1d238f896a3cb1e5c": [
+ "bc697f5231f1d625ddea67a560697a02fa4c52cb": [
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "89ad17951ab34c3f.mp3"
+   "src": "38f9a3de53e70f1c.mp3"
   },
   {
    "speaker": "narrator",
@@ -789,7 +910,7 @@
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "32c919e8254a1dda.mp3"
+   "src": "3308d1d275ada653.mp3"
   }
  ],
  "7bef1e742334133f77fa6056769716e2c6f1ea62": [
@@ -823,11 +944,11 @@
    "src": "667edb9c12c223a8.mp3"
   }
  ],
- "a9a990f16fe62caf13b0becce62dd92cdae83fad": [
+ "68f90cf39e93e650fd2444a78d9a172c3804ec0a": [
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "8fc7ed1d0969e1c2.mp3"
+   "src": "86f966dd050f8b3e.mp3"
   },
   {
    "speaker": "narrator",
@@ -837,10 +958,10 @@
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "aaca9d7942ff03be.mp3"
+   "src": "10b66e55d7f573d7.mp3"
   }
  ],
- "7ec3e09f3084638530168bf1c8cd1fb961bd07b5": [
+ "ff2ada661acfe51c29e70d405189553f7965bbf9": [
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
@@ -849,32 +970,32 @@
   {
    "speaker": "narrator",
    "voice": "bf_emma",
-   "src": "7b8eb8902fa91336.mp3"
+   "src": "74cc755e58df744a.mp3"
   },
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "7da79ddc326f54ea.mp3"
+   "src": "b51cae3ccf29588c.mp3"
   },
   {
    "speaker": "narrator",
    "voice": "bf_emma",
-   "src": "c155d65fe8fa1f98.mp3"
+   "src": "142325e7f6a9b0d2.mp3"
   },
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "aaf8a1a0b97ae54a.mp3"
+   "src": "2d653de4304c8c4b.mp3"
   },
   {
    "speaker": "narrator",
    "voice": "bf_emma",
-   "src": "fddd5e337a6f5663.mp3"
+   "src": "fd8ec04600b12a0f.mp3"
   },
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "3a068c2e37daf2d3.mp3"
+   "src": "a6d8ba9b91d45651.mp3"
   }
  ],
  "b06edaabab93d38997b7da4a77d9171e83795889": [
@@ -896,11 +1017,11 @@
    "src": "0ef57484d4908a5e.mp3"
   }
  ],
- "592bd268b3da20f8703ea176dd413ea3b9b5a3c6": [
+ "888859649580145a7fdf6fa0d8096152387de061": [
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "4f4505ea48de6edf.mp3"
+   "src": "1aa5f35e1dc2d60d.mp3"
   },
   {
    "speaker": "narrator",
@@ -910,20 +1031,20 @@
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "fb70a5b5e1e4f31b.mp3"
+   "src": "3ebdaca021e9c134.mp3"
   },
   {
    "speaker": "narrator",
    "voice": "bf_emma",
-   "src": "6df95f6d5de9ab12.mp3"
+   "src": "8a221634df50f8c8.mp3"
   },
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "dd684da38888446c.mp3"
+   "src": "466c339385b0552b.mp3"
   }
  ],
- "2d7d814dd43ffcb85a992da21e1b75712f03f7f1": [
+ "61c889c16de18cd7824e9e4ba9e5cac618aec8da": [
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
@@ -932,36 +1053,36 @@
   {
    "speaker": "narrator",
    "voice": "bf_emma",
-   "src": "10b09c5539b137da.mp3"
+   "src": "74cc755e58df744a.mp3"
   },
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "d283a14d2dccb6f1.mp3"
+   "src": "de0aeceb1c7d937c.mp3"
   }
  ],
- "b3c31bc5286cdd380b009029f0e9956f575845ad": [
+ "c4dbbc65191430065ec6672426d271a638c164a2": [
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "3ff25fed3ae469f4.mp3"
+   "src": "94f3883107ea8acc.mp3"
   },
   {
    "speaker": "narrator",
    "voice": "bf_emma",
-   "src": "b9b180ddc2eeb817.mp3"
+   "src": "ecbdf22057115647.mp3"
   },
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "4562d7b7138ed527.mp3"
+   "src": "c9326d196761c783.mp3"
   }
  ],
- "3efa4952dc149336e6b8194c2e992ca0a3fc7bde": [
+ "a13c2d66589b4dae63bb304ccc3144d303c3b6f2": [
   {
    "speaker": "narrator",
    "voice": "bf_emma",
-   "src": "1e65f68cd4c04108.mp3"
+   "src": "eba37c8ce21c734a.mp3"
   },
   {
    "speaker": "mara_hearthstone",
@@ -971,39 +1092,29 @@
   {
    "speaker": "narrator",
    "voice": "bf_emma",
-   "src": "ee9972b63e6479d7.mp3"
-  },
-  {
-   "speaker": "mara_hearthstone",
-   "voice": "af_jessica",
-   "src": "3cc3cab265615ae2.mp3"
-  },
-  {
-   "speaker": "narrator",
-   "voice": "bf_emma",
-   "src": "ff8db2df57a42d40.mp3"
-  },
-  {
-   "speaker": "mara_hearthstone",
-   "voice": "af_jessica",
-   "src": "3ff25fed3ae469f4.mp3"
-  },
-  {
-   "speaker": "narrator",
-   "voice": "bf_emma",
    "src": "0972a27a1efb0e09.mp3"
   },
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "daf5f4bc8f223a7a.mp3"
-  }
- ],
- "3478b64a94dac1307c2754510ffe44e832969c84": [
+   "src": "3fec23f6ddf9d168.mp3"
+  },
   {
    "speaker": "narrator",
    "voice": "bf_emma",
-   "src": "3380f2ae44e2ee92.mp3"
+   "src": "4f777c71acaa5d9b.mp3"
+  },
+  {
+   "speaker": "mara_hearthstone",
+   "voice": "af_jessica",
+   "src": "73a2742c44a66a27.mp3"
+  }
+ ],
+ "73c41393b3f8c1cb8233c4d38e2a36911a8ba663": [
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "1e184f23a0cd6ff4.mp3"
   }
  ],
  "0cd8baf240253464f535f6355c431f2e18c120f0": [
@@ -1028,7 +1139,7 @@
    "src": "1a25ac26bd088696.mp3"
   }
  ],
- "7fc48df38f4f16806e9937da6e571af57372816c": [
+ "c6b1acc53dd17877893a9b9ee9406cc4012868e5": [
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
@@ -1037,17 +1148,17 @@
   {
    "speaker": "narrator",
    "voice": "bf_emma",
-   "src": "d0f4fc8542dad9cf.mp3"
+   "src": "74cc755e58df744a.mp3"
   },
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "23ba45c02e45a1ac.mp3"
+   "src": "c7d1d63648ead537.mp3"
   },
   {
    "speaker": "narrator",
    "voice": "bf_emma",
-   "src": "5909235da6e5b474.mp3"
+   "src": "a5ca9216069482af.mp3"
   }
  ],
  "7a5092ae3db31945840c3d333a4d02ce1aaaad8a": [
@@ -1069,11 +1180,11 @@
    "src": "b464157427ea9909.mp3"
   }
  ],
- "d16d0588df63e6c144f4ac4945c707bd945bc2ad": [
+ "896a5065611a50b4cdd9bfabd8eee59ce939a5a8": [
   {
    "speaker": "narrator",
    "voice": "bf_emma",
-   "src": "85e2286154659793.mp3"
+   "src": "d1bfe9b1e0a63aa0.mp3"
   }
  ],
  "04153ad26986484c47cddec62361040cab1c50bf": [
@@ -1110,11 +1221,11 @@
    "src": "1c3189706b732049.mp3"
   }
  ],
- "c95e98f51ec204244b1003403d727a5355b4d4d8": [
+ "7415858b111d1382a08e24e08cdc1d8b568fc78c": [
   {
    "speaker": "narrator",
    "voice": "bf_emma",
-   "src": "869e99d16f926f83.mp3"
+   "src": "96648cfbefa85bc3.mp3"
   },
   {
    "speaker": "mara_hearthstone",
@@ -1124,22 +1235,22 @@
   {
    "speaker": "narrator",
    "voice": "bf_emma",
-   "src": "9f956e7c93d89686.mp3"
+   "src": "1ae19bec061d772b.mp3"
   },
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "4791cb5f9125d345.mp3"
+   "src": "95106eca2c04a344.mp3"
   },
   {
    "speaker": "narrator",
    "voice": "bf_emma",
-   "src": "26358ecb43daea97.mp3"
+   "src": "00754ae7c8f7ca43.mp3"
   },
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "e919ead8f755c020.mp3"
+   "src": "4d4f1a565da0b977.mp3"
   }
  ],
  "cf1da4c4ec94650f6d8ef16431f29d88ab11ef13": [
@@ -1220,11 +1331,11 @@
    "src": "c6ff2e338e574328.mp3"
   }
  ],
- "d7d7c52d187f83397d86823978415d7c87860c39": [
+ "3d090c63cfd41b96565434da47b98175e3ad1dd9": [
   {
    "speaker": "narrator",
    "voice": "bf_emma",
-   "src": "5b942685edb0a042.mp3"
+   "src": "b6fcba763f17523a.mp3"
   },
   {
    "speaker": "mara_hearthstone",
@@ -1234,12 +1345,12 @@
   {
    "speaker": "narrator",
    "voice": "bf_emma",
-   "src": "7b8eb8902fa91336.mp3"
+   "src": "74cc755e58df744a.mp3"
   },
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "9ba0f98297a4dcda.mp3"
+   "src": "f000268ad3da8074.mp3"
   },
   {
    "speaker": "narrator",
@@ -1249,12 +1360,12 @@
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "9e4a6b6746752d14.mp3"
+   "src": "a2d74569e1e06473.mp3"
   },
   {
    "speaker": "narrator",
    "voice": "bf_emma",
-   "src": "362623b47b91e872.mp3"
+   "src": "aa91dc1206dd4f9b.mp3"
   }
  ],
  "51b0c9867ca58416bfc75aabed11f0acda567d09": [
@@ -1271,11 +1382,11 @@
    "src": "ac5ea4da86cb4e3f.mp3"
   }
  ],
- "bc01c7fdb8d37340ff6cf943b0fc905f6f901c8a": [
+ "9118c4840e36949c04c24c195405e0fac79b5c59": [
   {
    "speaker": "narrator",
    "voice": "bf_emma",
-   "src": "a9f92bec12326aae.mp3"
+   "src": "eb27ac247111630a.mp3"
   },
   {
    "speaker": "mara_hearthstone",
@@ -1290,7 +1401,7 @@
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "4cf753002b0992be.mp3"
+   "src": "2197df9876db04b3.mp3"
   },
   {
    "speaker": "narrator",
@@ -1300,56 +1411,46 @@
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "903c29add079607a.mp3"
+   "src": "633695da65f0d685.mp3"
   },
   {
    "speaker": "narrator",
    "voice": "bf_emma",
-   "src": "62b6277de7c89f0a.mp3"
+   "src": "b476aca77d264dfd.mp3"
   },
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "f52211e28ac07abd.mp3"
-  },
-  {
-   "speaker": "narrator",
-   "voice": "bf_emma",
-   "src": "0972a27a1efb0e09.mp3"
-  },
-  {
-   "speaker": "mara_hearthstone",
-   "voice": "af_jessica",
-   "src": "0d4330598c5056a1.mp3"
+   "src": "58e5a2433b2fc9bf.mp3"
   }
  ],
- "d0d95b7104545c8b78c128f3af8d8c5ac6ea122d": [
+ "7bb2cb246baabc8f2cadc8b7f8e406b40a167b41": [
   {
    "speaker": "narrator",
    "voice": "bf_emma",
-   "src": "f7af2f771d180e8a.mp3"
+   "src": "17cdfd3573cae961.mp3"
   }
  ],
- "bc50a3e3e01fe8d870dbe0cec23c8b8e27499ca6": [
+ "aebe25162771a2ee6d7b5f00065a8d5f60f43a9d": [
   {
    "speaker": "narrator",
    "voice": "bf_emma",
-   "src": "6d6578ad6278d288.mp3"
+   "src": "f79c70fd77c4ac5f.mp3"
   },
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "7e7952891a0b2477.mp3"
+   "src": "fac1071e33c3d718.mp3"
   },
   {
    "speaker": "narrator",
    "voice": "bf_emma",
-   "src": "990e390a74d6c840.mp3"
+   "src": "8ba06d4b7bb9da12.mp3"
   },
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "f15eba48d49961d7.mp3"
+   "src": "18dd9be526e3afad.mp3"
   }
  ],
  "62abee99e406baf1b84efc3db44e23e6cee02baa": [
@@ -1460,7 +1561,7 @@
    "src": "cc844c1d97646848.mp3"
   }
  ],
- "f91f798e27f3172c63701e71547e9ab43603a143": [
+ "020fc7d9e23b7a4d5d0d54628b2ba227c912d633": [
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
@@ -1474,27 +1575,165 @@
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "df69de35ecf483b1.mp3"
+   "src": "232e4bd62131d690.mp3"
   },
   {
    "speaker": "narrator",
    "voice": "bf_emma",
-   "src": "fb090f92c6f24de9.mp3"
+   "src": "6dc54504a65c8e9d.mp3"
   },
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "978220a384acaab3.mp3"
+   "src": "cc3747c25be00941.mp3"
+  }
+ ],
+ "4fc86a0aeb5a8df54713695e08314d220b78fedd": [
+  {
+   "speaker": "mara_hearthstone",
+   "voice": "af_jessica",
+   "src": "080fff07ee1ac8c3.mp3"
   },
   {
    "speaker": "narrator",
    "voice": "bf_emma",
-   "src": "636c99a1e3298572.mp3"
+   "src": "74cc755e58df744a.mp3"
   },
   {
    "speaker": "mara_hearthstone",
    "voice": "af_jessica",
-   "src": "5085ad076a8c1c96.mp3"
+   "src": "b57928d56506b2b5.mp3"
+  }
+ ],
+ "0a3fda315f6ba075016c5a4e03222839ef8cfdb1": [
+  {
+   "speaker": "mara_hearthstone",
+   "voice": "af_jessica",
+   "src": "d3186c44100ed869.mp3"
+  },
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "74cc755e58df744a.mp3"
+  },
+  {
+   "speaker": "mara_hearthstone",
+   "voice": "af_jessica",
+   "src": "e90af045d2fddfce.mp3"
+  }
+ ],
+ "9a22f29cff97bd3a5abe2f667c46e0d86558f6ce": [
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "caf0d72d17f4f12a.mp3"
+  },
+  {
+   "speaker": "mara_hearthstone",
+   "voice": "af_jessica",
+   "src": "f2efadd4b92b4d30.mp3"
+  },
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "0972a27a1efb0e09.mp3"
+  },
+  {
+   "speaker": "mara_hearthstone",
+   "voice": "af_jessica",
+   "src": "5b0380b113a3a062.mp3"
+  }
+ ],
+ "ba583b7954eaa2a7a514942e8bf33efa81da1967": [
+  {
+   "speaker": "mara_hearthstone",
+   "voice": "af_jessica",
+   "src": "b9ac9f6419c3d8b3.mp3"
+  },
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "74cc755e58df744a.mp3"
+  },
+  {
+   "speaker": "mara_hearthstone",
+   "voice": "af_jessica",
+   "src": "84a2904a4a02e4b2.mp3"
+  }
+ ],
+ "744660c5f08b3d3cb041951e2514aed1862a8909": [
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "cbc453a2a4190667.mp3"
+  },
+  {
+   "speaker": "mara_hearthstone",
+   "voice": "af_jessica",
+   "src": "d2536280009d4412.mp3"
+  }
+ ],
+ "fc29b35451e90d9525d7e4095de01d61cec2d77a": [
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "f1d4b88e603a1eb4.mp3"
+  },
+  {
+   "speaker": "mara_hearthstone",
+   "voice": "af_jessica",
+   "src": "6ed634194c5d6935.mp3"
+  }
+ ],
+ "1100bb76ed6b58aa84ad4aa15322289ea43b3a9b": [
+  {
+   "speaker": "mara_hearthstone",
+   "voice": "af_jessica",
+   "src": "07c63b1104d791aa.mp3"
+  },
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "6a824b88b1d7e20f.mp3"
+  },
+  {
+   "speaker": "mara_hearthstone",
+   "voice": "af_jessica",
+   "src": "68cf0d4d5199defb.mp3"
+  }
+ ],
+ "6c92e7dba29d7ab25dcca310bb0fa09b46e011f7": [
+  {
+   "speaker": "mara_hearthstone",
+   "voice": "af_jessica",
+   "src": "a7b4d079f7636eb4.mp3"
+  },
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "f1d84e78fd865a36.mp3"
+  },
+  {
+   "speaker": "mara_hearthstone",
+   "voice": "af_jessica",
+   "src": "147ba57c7cafd84f.mp3"
+  }
+ ],
+ "b90da77eb3d4dd23b526cf9c9ff7c352399d4161": [
+  {
+   "speaker": "mara_hearthstone",
+   "voice": "af_jessica",
+   "src": "fec06f8a8965728a.mp3"
+  },
+  {
+   "speaker": "narrator",
+   "voice": "bf_emma",
+   "src": "4f9c14a5de2c1a6d.mp3"
+  },
+  {
+   "speaker": "mara_hearthstone",
+   "voice": "af_jessica",
+   "src": "48b6b70888e23baf.mp3"
   }
  ]
 }
