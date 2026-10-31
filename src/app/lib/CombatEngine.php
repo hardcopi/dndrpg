@@ -7475,8 +7475,12 @@ class CombatEngine
                 }
             } catch (Throwable $e) {
                 // Content naming a stage that does not exist, or a quest this
-                // party never took. Not worth losing the victory over.
-                $lines[] = '(' . $e->getMessage() . ')';
+                // party never took. Not worth losing the victory over. The
+                // line is shown to the player, so only a refusal's own text goes
+                // in it; anything else is logged and referenced.
+                $lines[] = '(' . (exception_is_player_facing($e)
+                    ? $e->getMessage()
+                    : 'The quest could not be updated — ref ' . log_exception($e, 'combat')) . ')';
             }
         }
         return $lines;

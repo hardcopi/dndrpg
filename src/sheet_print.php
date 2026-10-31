@@ -61,7 +61,10 @@ if (!Ownership::character($characterId)) {
 
 try {
     $sheet = (new CharacterSheet(db()))->build($characterId);
-} catch (RuntimeException $e) {
+} catch (InvalidArgumentException $e) {
+    // "Character not found" is a 404. Anything else (a database fault, a
+    // missing content row) is not, and goes on to the page handler, which logs
+    // it and shows the generic error page.
     sheet_refuse(404, 'No such character', 'There is no character of yours with that number.');
 }
 

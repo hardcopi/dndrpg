@@ -337,7 +337,7 @@ final class DelveEngine
         $stmt->execute([$mouthId]);
         $id = (int) $stmt->fetchColumn();
         if ($id <= 0) {
-            throw new RuntimeException('That stair does not stand in any module.');
+            throw new InvalidArgumentException('That stair does not stand in any module.');
         }
         return $id;
     }

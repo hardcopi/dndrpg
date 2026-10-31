@@ -72,7 +72,7 @@ class ModelPortrait
         if (!$bust || !$face) {
             if ($bust) { imagedestroy($bust); }
             if ($face) { imagedestroy($face); }
-            throw new RuntimeException('That portrait was not a readable PNG.');
+            throw new InvalidArgumentException('That portrait was not a readable PNG.');
         }
 
         // Decoded before either is written: a character with a bust and no face

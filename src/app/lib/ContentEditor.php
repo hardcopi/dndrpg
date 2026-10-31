@@ -298,7 +298,7 @@ class ContentEditor
 
         $json = json_encode($doc, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
         if ($json === false) {
-            throw new InvalidArgumentException('That conversation cannot be encoded: ' . json_last_error_msg());
+            throw new InvalidArgumentException('That conversation cannot be encoded.');
         }
         $this->db->prepare('UPDATE npcs SET dialogue_json = ? WHERE id = ?')->execute([$json, $npcId]);
 
@@ -2614,7 +2614,7 @@ class ContentEditor
     {
         $dir = dirname($path);
         if (!is_dir($dir) || !is_writable($dir)) {
-            throw new InvalidArgumentException('Cannot write art to ' . $dir . '.');
+            throw new InvalidArgumentException('The art could not be written. Check the studio art directory configuration.');
         }
         if ($format === 'jpeg') {
             $ok = imagejpeg($im, $path, 88);
