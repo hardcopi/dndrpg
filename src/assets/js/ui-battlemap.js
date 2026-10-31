@@ -760,6 +760,9 @@
    */
   function aimClass(o, c) {
     if (!o.aim || !c.alive) return '';
+    // An area spell lights whoever its template is over, which changes as the
+    // pointer moves — ui-combat toggles aim-hit on the elements directly.
+    if (o.aim.mode === 'area') return '';
     return o.aim.targets && o.aim.targets[c.cid] ? 'aim-ok' : 'aim-no';
   }
 
@@ -1543,14 +1546,66 @@
     const cells = Math.max(1, Math.ceil((ft || 5) / 5));
 
     if (shape === 'radius' || shape === 'sphere' || shape === 'cube') {
-      const r = shape === 'cube' ? Math.floor((cells - 1) / 2) : cells;
-      layer.innerHTML = `<rect class="bm-aim" x="${x - r}" y="${y - r}"
-        width="${r * 2 + 1}" height="${r * 2 + 1}"/>`;
+      layer.innerHTML = squareRect(shape, cells, x, y, 'bm-aim');
       return;
     }
     layer.innerHTML = `<line class="bm-aim-line" x1="${from[0] + 0.5}" y1="${from[1] + 0.5}"
       x2="${x + 0.5}" y2="${y + 0.5}"/>
       <rect class="bm-aim" x="${x}" y="${y}" width="1" height="1"/>`;
+  }
+
+  /**
+   * The square a blast of this size covers on a Chebyshev board: a radius of
+   * n cells is (2n+1) across; a cube of n cells sits on its aim point with
+   * BattleGrid::template's (n-1)/2 offset, so an even cube leans down-right.
+   */
+  function squareRect(shape, n, x, y, cls) {
+    const r = shape === 'cube' ? Math.floor((n - 1) / 2) : n;
+    const w = shape === 'cube' ? n : r * 2 + 1;
+    return `<rect class="${cls}" x="${x - r}" y="${y - r}" width="${w}" height="${w}"/>`;
+  }
+
+  /**
+   * An area spell being placed (see ui-combat's area aiming).
+   *
+   * `cells` is a footprint the server already worked out (a cone, a line, a
+   * cube pushed out from the caster) and is drawn as it is. A blast at a
+   * point is drawn as its square, which is the template before walls are
+   * taken out of it — who it actually catches is lit on the figures, from the
+   * server's own list, so a goblin behind a pillar inside the square stays
+   * dark. `range_ft` draws the edge of where it may be centred, and
+   * `clamped` marks the pointer when the blast is being held at that edge.
+   */
+  function paintArea(root, opts) {
+    const layer = root && root.querySelector('.bm-aoe');
+    if (!layer) return;
+    const o = opts || {};
+    let out = '';
+    if (o.from && o.range_ft) {
+      const r = Math.floor(o.range_ft / 5);
+      out += `<rect class="bm-aim-range" x="${o.from[0] - r}" y="${o.from[1] - r}"
+        width="${r * 2 + 1}" height="${r * 2 + 1}"/>`;
+    }
+    if (o.cells) {
+      out += o.cells.map((k) => {
+        const [x, y] = parseKey(k);
+        return `<rect class="bm-aim-cell" x="${x}" y="${y}" width="1" height="1"/>`;
+      }).join('');
+    }
+    if (o.at) {
+      const n = Math.max(1, Math.ceil((o.ft || 5) / 5));
+      out += squareRect(o.shape, n, o.at[0], o.at[1], 'bm-aim bm-aim-blast');
+      out += `<circle class="bm-aim-centre" cx="${o.at[0] + 0.5}" cy="${o.at[1] + 0.5}" r="0.18"/>`;
+      if (o.from) {
+        out += `<line class="bm-aim-line" x1="${o.from[0] + 0.5}" y1="${o.from[1] + 0.5}"
+          x2="${o.at[0] + 0.5}" y2="${o.at[1] + 0.5}"/>`;
+      }
+    }
+    if (o.clamped) {
+      const [x, y] = o.clamped;
+      out += `<path class="bm-aim-cursor" d="M${x + 0.25} ${y + 0.25}L${x + 0.75} ${y + 0.75}M${x + 0.75} ${y + 0.25}L${x + 0.25} ${y + 0.75}"/>`;
+    }
+    layer.innerHTML = out;
   }
 
   // =========================================================================
@@ -2058,7 +2113,7 @@
 
   window.BattleMap = {
     html, bind, controls, camera, forget, whenFigures, figureUrl,
-    paintPath, paintAoe, paintAim, moveToken, floatText, shoot, hitToken, walking,
+    paintPath, paintAoe, paintAim, paintArea, moveToken, floatText, shoot, hitToken, walking,
     viewMode, setViewMode, nextViewMode, fit, cardSized, cardFail,
     W, H, SHOT_MS,
   };

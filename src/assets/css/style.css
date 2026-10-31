@@ -9692,15 +9692,86 @@ body.studio-page > .site-bar {
 }
 .cbt-aiming {
   display: grid;
-  grid-template-columns: minmax(14em, 1fr) auto auto;
+  grid-template-columns: minmax(0, 1fr) auto auto;
   row-gap: var(--sp-4);
   border-color: var(--aim-col);
-  max-width: calc(100% - 1rem);
+  /* A box at left:50% only gets the right half of the board to shrink into,
+     which is what was cutting the hint off. A set width, capped by the board. */
+  width: min(44rem, calc(100% - 1rem));
+}
+.cbt-aiming.is-area { grid-template-columns: minmax(0, 1fr) auto auto auto; }
+/* On a phone the board is a short strip above the action list, and a banner
+   pinned to its foot sat over the actions. Pinned to the screen instead, so
+   it stays in reach while the list below is scrolled. */
+@media (max-width: 760px) {
+  .cbt-aiming { position: fixed; bottom: 0.5rem; z-index: 40; width: calc(100% - 1rem); }
 }
 .cbt-aim-text { grid-column: 1 / -1; text-align: center; }
 .cbt-aim-count { color: var(--text-dim); }
+/* Two lines held open whatever the text, so the buttons beside it never move
+   under the pointer as the hint changes. */
 .cbt-aim-hint { font-family: var(--mono); color: var(--text-dim); min-width: 0;
-  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; align-self: center; }
+  line-height: 1.35; min-height: 2.7em; align-self: center;
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; }
+.cbt-aim-hint.is-warn { color: var(--warn); }
+.cbt-aim-hint.aim-refused { animation: bm-aim-refuse 0.32s ease-in-out; }
+
+/* ---- Area spells: a template on the floor, and who it catches lit ---- */
+.bm-aim-range { fill: none; stroke: var(--warn); stroke-width: 0.05; stroke-dasharray: 0.3 0.2; opacity: 0.7; }
+.bm-aim-blast { fill: color-mix(in srgb, var(--danger) 26%, transparent); stroke: var(--danger); stroke-width: 0.07; }
+.bm-aim-cell { fill: color-mix(in srgb, var(--danger) 30%, transparent); stroke: var(--danger); stroke-width: 0.03; }
+.bm-aim-centre { fill: var(--danger); stroke: #fff; stroke-width: 0.05; }
+.bm-aim-cursor { stroke: var(--text-dim); stroke-width: 0.08; stroke-linecap: round; }
+.cbt-map.is-aiming.aim-area { cursor: crosshair; }
+.cbt-map.is-aiming.aim-area .bm-card.aim-hit .bm-card-art {
+  filter: brightness(calc(var(--lit, 1) * 1.1)) drop-shadow(0 0 2px var(--danger)) drop-shadow(0 0 6px var(--danger));
+}
+.cbt-map.is-aiming.aim-area .bm-card.aim-hit-ally .bm-card-art {
+  filter: brightness(calc(var(--lit, 1) * 1.1)) drop-shadow(0 0 2px var(--warn)) drop-shadow(0 0 7px var(--warn));
+}
+.cbt-map.is-aiming.aim-area .bm-card.aim-spared .bm-card-art { filter: brightness(calc(var(--lit, 1) * 0.8)); }
+.cbt-map.is-aiming.aim-area .bm-card.aim-hit::before,
+.cbt-map.is-aiming.aim-area .bm-card.aim-hit-ally::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: -14%;
+  width: 0;
+  height: 0;
+  margin-left: -7px;
+  border: 7px solid transparent;
+  border-top: 10px solid var(--danger);
+  filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.8));
+  pointer-events: none;
+  animation: bm-aim-bob 0.9s ease-in-out infinite alternate;
+}
+.cbt-map.is-aiming.aim-area .bm-card.aim-hit-ally::before { border-top-color: var(--warn); }
+.cbt-map.is-aiming.aim-area .bm-card.aim-hit-ally::after {
+  content: '!';
+  position: absolute;
+  left: 50%;
+  top: calc(-14% - 22px);
+  transform: translateX(-50%);
+  min-width: 18px;
+  padding: 0 4px;
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 18px;
+  text-align: center;
+  color: #1a1206;
+  background: var(--warn);
+  border-radius: 9px;
+  pointer-events: none;
+}
+.cbt-map.is-aiming.aim-area .bm-token.aim-hit .bm-ring { stroke: var(--danger); stroke-width: 0.14; }
+.cbt-map.is-aiming.aim-area .bm-token.aim-hit-ally .bm-ring { stroke: var(--warn); stroke-width: 0.16; stroke-dasharray: 0.25 0.12; }
+.area-row .area-ff { display: block; color: var(--warn); font-weight: 600; }
+.area-row.has-friends { border-color: color-mix(in srgb, var(--warn) 50%, var(--border)); }
+@media (prefers-reduced-motion: reduce) {
+  .cbt-map.is-aiming.aim-area .bm-card.aim-hit::before,
+  .cbt-map.is-aiming.aim-area .bm-card.aim-hit-ally::before,
+  .cbt-aim-hint.aim-refused { animation: none; }
+}
 .cbt-aim-hint.is-ok { color: var(--success-ink); }
 .cbt-aim-hint.is-bad { color: var(--danger-ink); }
 

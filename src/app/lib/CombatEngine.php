@@ -2161,7 +2161,7 @@ class CombatEngine
         }
 
         $stmt = $this->db->prepare(
-            'SELECT s.id, s.name, s.level, s.school, s.damage_dice, s.damage_type,
+            'SELECT s.id, s.spell_key, s.name, s.level, s.school, s.damage_dice, s.damage_type,
                     s.casting_time, s.range_text, s.target_kind, s.concentration,
                     s.reaches_back_rank
                FROM spells s
@@ -2181,6 +2181,7 @@ class CombatEngine
             }
             $out[] = [
                 'id'          => (int) $spell['id'],
+                'spell_key'   => (string) ($spell['spell_key'] ?? ''),
                 'name'        => (string) $spell['name'],
                 'level'       => (int) $spell['level'],
                 'school'      => (string) ($spell['school'] ?? ''),
@@ -5462,15 +5463,17 @@ class CombatEngine
 
         $area = null;
         if (is_array($range['aoe'] ?? null)) {
-            $area = BattleGrid::template(
-                $state['grid']['terrain'] ?? [],
-                (string) $range['aoe']['shape'],
-                (int) $range['aoe']['ft'],
-                (int) $actor['x'],
-                (int) $actor['y'],
-                $aim[0],
-                $aim[1]
-            );
+            $terrain = $state['grid']['terrain'] ?? [];
+            if (($range['origin'] ?? '') === 'point') {
+                // The point is the player's to choose and the server's to
+                // check: a blast centred out of range or behind a wall is
+                // refused before anything is spent.
+                $why = self::spotRefusal($terrain, $actor, $range, (string) $spell['name'], $aim[0], $aim[1]);
+                if ($why !== null) {
+                    throw new InvalidArgumentException($why);
+                }
+            }
+            $area = self::areaCells($terrain, $actor, $range, $aim[0], $aim[1]);
         }
 
         $targets = $this->spellTargets($state, $actor, $spell, $targetCid, $range, $area);
@@ -5490,7 +5493,7 @@ class CombatEngine
                 'spell'  => $spell['name'],
                 'shape'  => (string) $range['aoe']['shape'],
                 'ft'     => (int) $range['aoe']['ft'],
-                'origin' => [(int) $actor['x'], (int) $actor['y']],
+                'origin' => ($range['origin'] ?? '') === 'point' ? $aim : [(int) $actor['x'], (int) $actor['y']],
                 'toward' => $aim,
                 'cells'  => $area,
             ]);
@@ -5507,12 +5510,26 @@ class CombatEngine
             $state = $this->dropConcentration($state, (string) $actor['cid'], 'replaced');
         }
 
+        // A blast centred on a point spreads from that point, so that is where
+        // cover is measured from — a goblin is not sheltered from a fireball
+        // by the body standing between it and the wizard who threw it.
+        $from = $actor;
+        if ($area !== null && ($range['origin'] ?? '') === 'point') {
+            $from = ['cid' => '', 'x' => $aim[0], 'y' => $aim[1], 'side' => ''];
+            // Whoever stands on the point is where it starts, not in its way.
+            foreach ($state['combatants'] as $c) {
+                if (!empty($c['alive']) && (int) ($c['x'] ?? -1) === $aim[0] && (int) ($c['y'] ?? -1) === $aim[1]) {
+                    $from['cid'] = (string) $c['cid'];
+                }
+            }
+        }
         foreach ($targets as $t) {
             // Cover is worked out per target and here rather than inside, so
             // that the caster's own square never counts as cover from itself.
-            $cover = ((string) $t['cid'] === (string) $actor['cid'])
+            $atOrigin = (int) $t['x'] === (int) $from['x'] && (int) $t['y'] === (int) $from['y'];
+            $cover = ((string) $t['cid'] === (string) $actor['cid'] && $from === $actor) || $atOrigin
                 ? 0
-                : BattleGrid::coverBetween($state['grid']['terrain'] ?? [], $state['combatants'], $actor, $t);
+                : BattleGrid::coverBetween($state['grid']['terrain'] ?? [], $state['combatants'], $from, $t);
             $state = $this->applySpellTo(
                 $state,
                 $actor['cid'],
@@ -5597,18 +5614,7 @@ class CombatEngine
         }
 
         if ($area !== null) {
-            $cells = array_flip($area);
-            $wantAllies = $kind === 'all_allies' || $kind === 'ally';
-            $out = [];
-            $pool = $wantAllies
-                ? self::allyTargets($state['combatants'], $actor)
-                : self::standing($state['combatants'], self::enemySide($actor));
-            foreach ($pool as $c) {
-                if (isset($cells[BattleGrid::keyOf((int) $c['x'], (int) $c['y'])])) {
-                    $out[] = $c;
-                }
-            }
-            return $out;
+            return self::areaVictims($state['combatants'], $actor, $spell, $range, $area);
         }
 
         if ($kind === 'all_enemies') {
@@ -5681,11 +5687,140 @@ class CombatEngine
             (int) ($spell['reaches_back_rank'] ?? 1)
         );
         $kind = (string) ($spell['target_kind'] ?? 'enemy');
+        $key = (string) ($spell['spell_key'] ?? '');
+        if (isset(self::AREA_FROM_SELF[$key])) {
+            $range = ['kind' => 'self', 'ft' => 0, 'aoe' => self::AREA_FROM_SELF[$key]];
+        } elseif ($range['aoe'] === null && isset(self::AREA_AT_POINT[$key])) {
+            $range['aoe'] = self::AREA_AT_POINT[$key];
+        }
         if (($range['kind'] ?? '') === 'self' && $range['aoe'] === null
             && in_array($kind, ['enemy', 'ally', 'any'], true)) {
             $range = ['kind' => 'touch', 'ft' => 5, 'aoe' => null];
         }
+        // Where the area starts: at the caster (a cone, a line, a cube pushed
+        // out from you, a radius around you) or at a point chosen in range.
+        $range['origin'] = $range['aoe'] === null ? null
+            : (($range['kind'] ?? '') === 'self' ? 'self' : 'point');
         return $range;
+    }
+
+    /**
+     * Areas the SRD places at "a point you choose within range", by spell key.
+     *
+     * The range line on these cards is only the distance ("150 feet"); the
+     * size of the blast is in the spell's text, so it is written down here
+     * rather than parsed out of prose. A cylinder is its radius on a flat
+     * board. Meteor Swarm (four spheres) and Fire Storm (ten cubes) are not
+     * here — one click cannot place them — and stay automatic.
+     */
+    public const AREA_AT_POINT = [
+        'fireball'               => ['shape' => 'sphere', 'ft' => 20],
+        'delayed_blast_fireball' => ['shape' => 'sphere', 'ft' => 20],
+        'shatter'                => ['shape' => 'sphere', 'ft' => 10],
+        'faerie_fire'            => ['shape' => 'cube',   'ft' => 20],
+        'flame_strike'           => ['shape' => 'radius', 'ft' => 10],
+        'ice_storm'              => ['shape' => 'radius', 'ft' => 20],
+        'sleet_storm'            => ['shape' => 'radius', 'ft' => 20],
+        'hypnotic_pattern'       => ['shape' => 'cube',   'ft' => 30],
+        'incendiary_cloud'       => ['shape' => 'sphere', 'ft' => 20],
+        'insect_plague'          => ['shape' => 'sphere', 'ft' => 20],
+        'sunburst'               => ['shape' => 'sphere', 'ft' => 60],
+        'spike_growth'           => ['shape' => 'radius', 'ft' => 20],
+    ];
+
+    /** Self-origin areas whose card lost the shape: Cone of Cold is "Self (60-foot cone)". */
+    public const AREA_FROM_SELF = [
+        'cone_of_cold' => ['shape' => 'cone', 'ft' => 60],
+    ];
+
+    /**
+     * Area spells whose caster picks who is spared. Everything else in an
+     * area hits every creature in it, friend or foe, as the SRD says — a
+     * fireball does not know whose side you are on.
+     */
+    public const AREA_SPARES_ALLIES = ['spirit_guardians'];
+
+    /**
+     * The cells an area spell covers when aimed at ($x,$y).
+     *
+     * A point-origin area is centred on the point and spreads from it, so its
+     * sight lines are drawn from there. A Self-origin cone or line points
+     * from the caster; a Self cube is pushed out from the caster in the aimed
+     * direction so that one face touches them (the SRD's "originating from
+     * you"); a Self radius sits on the caster wherever the click was.
+     *
+     * @return string[] cell keys
+     */
+    public static function areaCells(array $terrain, array $actor, array $range, int $x, int $y): array
+    {
+        $shape = (string) $range['aoe']['shape'];
+        $ft = (int) $range['aoe']['ft'];
+        $ax = (int) $actor['x'];
+        $ay = (int) $actor['y'];
+        if (($range['origin'] ?? 'self') === 'point') {
+            return BattleGrid::template($terrain, $shape, $ft, $x, $y, $x, $y);
+        }
+        if ($shape === 'radius' || $shape === 'sphere') {
+            return BattleGrid::template($terrain, $shape, $ft, $ax, $ay, $ax, $ay);
+        }
+        if ($shape === 'cube') {
+            [$dx, $dy] = BattleGrid::direction($ax, $ay, $x, $y);
+            $step = intdiv(max(1, BattleGrid::ftToCells($ft)) - 1, 2) + 1;
+            return BattleGrid::template($terrain, 'cube', $ft, $ax, $ay, $ax + $dx * $step, $ay + $dy * $step);
+        }
+        return BattleGrid::template($terrain, $shape, $ft, $ax, $ay, $x, $y);
+    }
+
+    /**
+     * Why a point-origin area cannot be centred on ($x,$y), or null if it can:
+     * on the board, not inside rock, within the spell's range, and in sight.
+     */
+    public static function spotRefusal(array $terrain, array $actor, array $range, string $spellName, int $x, int $y): ?string
+    {
+        if (!BattleGrid::inBounds($terrain, $x, $y) || BattleGrid::info($terrain, $x, $y)['opaque']) {
+            return "{$spellName} has to burst somewhere open.";
+        }
+        $dist = BattleGrid::feet((int) $actor['x'], (int) $actor['y'], $x, $y);
+        $carries = (int) ($range['ft'] ?? 0);
+        if ($dist > $carries) {
+            return "That spot is {$dist} feet away, and {$spellName} carries {$carries}.";
+        }
+        if (!BattleGrid::losClear($terrain, (int) $actor['x'], (int) $actor['y'], $x, $y)) {
+            return "You cannot see that spot from where you stand.";
+        }
+        return null;
+    }
+
+    /**
+     * Everybody standing in an area who the spell takes.
+     *
+     * Helpful areas take the caster's side. Harmful ones take everybody in the
+     * cells — friendly fire, by the rules — except the caster of a Self-origin
+     * area, who is where it starts rather than inside it, and the allies of a
+     * spell that lets its caster spare them.
+     *
+     * @param string[] $area
+     * @return array<int, array>
+     */
+    public static function areaVictims(array $combatants, array $actor, array $spell, array $range, array $area): array
+    {
+        $cells = array_flip($area);
+        $kind = (string) ($spell['target_kind'] ?? 'enemy');
+        if ($kind === 'all_allies' || $kind === 'ally') {
+            $pool = self::allyTargets($combatants, $actor);
+        } elseif (in_array((string) ($spell['spell_key'] ?? ''), self::AREA_SPARES_ALLIES, true)) {
+            $pool = self::standing($combatants, self::enemySide($actor));
+        } else {
+            $pool = array_values(array_filter($combatants, static fn ($c) => self::isTargetable($c)
+                && !(($range['origin'] ?? 'self') === 'self' && (string) $c['cid'] === (string) $actor['cid'])));
+        }
+        $out = [];
+        foreach ($pool as $c) {
+            if (isset($c['x'], $c['y']) && isset($cells[BattleGrid::keyOf((int) $c['x'], (int) $c['y'])])) {
+                $out[] = $c;
+            }
+        }
+        return $out;
     }
 
     /**
@@ -5731,7 +5866,7 @@ class CombatEngine
         $range = self::castRange($spell);
         $kind = (string) ($spell['target_kind'] ?? 'enemy');
         if (is_array($range['aoe'] ?? null)) {
-            return ['mode' => 'area', 'targets' => []];
+            return self::areaAim($state, $actor, $spell, $range);
         }
         if ($kind === 'self' || ($range['kind'] ?? '') === 'self') {
             return ['mode' => 'self', 'targets' => [(string) $actor['cid'] => ['dist' => 0]]];
@@ -5750,6 +5885,104 @@ class CombatEngine
             }
         }
         return ['mode' => $kind === 'ally' || $kind === 'any' ? $kind : 'enemy', 'targets' => $targets];
+    }
+
+    /**
+     * Every way an area spell could be placed from here, and who each catches.
+     *
+     * Point-origin: `spots`, every cell the blast may be centred on (in range,
+     * in sight, open), each with the cids it would take. Self-origin cones,
+     * lines and cubes: `dirs`, the eight compass directions, each with its
+     * footprint, the cids it takes and an `aim` cell to send that the server
+     * snaps back to the same direction. A Self radius has one entry, on the
+     * caster. The board previews from exactly this and sends the point back;
+     * doCast() asks the same functions, so the preview is the result.
+     *
+     * Built from templateHas() per body rather than a footprint per point, so
+     * a 150-foot fireball over a whole board stays a few thousand sight checks.
+     */
+    private static function areaAim(array $state, array $actor, array $spell, array $range): array
+    {
+        $terrain = $state['grid']['terrain'] ?? [];
+        $shape = (string) $range['aoe']['shape'];
+        $ft = (int) $range['aoe']['ft'];
+        $out = ['mode' => 'area', 'targets' => [], 'origin' => (string) $range['origin'],
+                'shape' => $shape, 'ft' => $ft, 'range_ft' => (int) ($range['ft'] ?? 0)];
+        $ax = (int) $actor['x'];
+        $ay = (int) $actor['y'];
+
+        if ($range['origin'] === 'point') {
+            // Who could ever be caught, once: the same pool areaVictims uses.
+            $everyone = [];
+            foreach ($state['combatants'] as $c) {
+                if (isset($c['x'], $c['y'])) {
+                    $everyone[] = $c;
+                }
+            }
+            $pool = self::areaVictims($everyone, $actor, $spell, $range,
+                array_map(static fn ($c) => BattleGrid::keyOf((int) $c['x'], (int) $c['y']), $everyone));
+            $n = max(1, BattleGrid::ftToCells($ft));
+            $spots = [];
+            $reachCells = intdiv((int) ($range['ft'] ?? 0), BattleGrid::CELL_FT);
+            for ($y = $ay - $reachCells; $y <= $ay + $reachCells; $y++) {
+                for ($x = $ax - $reachCells; $x <= $ax + $reachCells; $x++) {
+                    if (!BattleGrid::inBounds($terrain, $x, $y)
+                        || self::spotRefusal($terrain, $actor, $range, '', $x, $y) !== null) {
+                        continue;
+                    }
+                    $hits = [];
+                    foreach ($pool as $c) {
+                        $cx = (int) $c['x'];
+                        $cy = (int) $c['y'];
+                        if (BattleGrid::cells($x, $y, $cx, $cy) > $n) {
+                            continue;
+                        }
+                        if (BattleGrid::templateHas($terrain, $shape, $ft, $x, $y, $x, $y, $cx, $cy)) {
+                            $hits[] = (string) $c['cid'];
+                        }
+                    }
+                    $spots[BattleGrid::keyOf($x, $y)] = $hits;
+                }
+            }
+            $out['spots'] = $spots;
+            return $out;
+        }
+
+        $dirs = [];
+        $compass = ($shape === 'radius' || $shape === 'sphere')
+            ? [[0, 0]]
+            : [[0, -1], [1, -1], [1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0], [-1, -1]];
+        foreach ($compass as [$dx, $dy]) {
+            // A cell to send that snaps back to this direction: the first one
+            // along it that is on the board. Off the edge entirely, there is
+            // nothing that way to aim at.
+            $aim = null;
+            if ($dx === 0 && $dy === 0) {
+                $aim = [$ax, $ay];
+            } else {
+                for ($i = 1; $i <= 40; $i++) {
+                    if (BattleGrid::inBounds($terrain, $ax + $dx * $i, $ay + $dy * $i)) {
+                        $aim = [$ax + $dx * $i, $ay + $dy * $i];
+                        break;
+                    }
+                }
+            }
+            if ($aim === null) {
+                continue;
+            }
+            $cells = self::areaCells($terrain, $actor, $range, $aim[0], $aim[1]);
+            if ($cells === []) {
+                continue;
+            }
+            $dirs["{$dx},{$dy}"] = [
+                'aim'   => $aim,
+                'cells' => $cells,
+                'hits'  => array_map(static fn ($c) => (string) $c['cid'],
+                    self::areaVictims($state['combatants'], $actor, $spell, $range, $cells)),
+            ];
+        }
+        $out['dirs'] = $dirs;
+        return $out;
     }
 
     /**

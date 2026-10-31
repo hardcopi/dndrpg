@@ -1055,6 +1055,65 @@ final class BattleGrid
     }
 
     /**
+     * Whether one cell is inside the template template() would draw.
+     *
+     * The same switch asked of one cell rather than of all of them, so the
+     * board can preview who a fireball catches at every point in range without
+     * building every footprint. `tools/test_spell_target.php` checks it
+     * against template() cell for cell, for every shape, so the two cannot
+     * drift apart quietly.
+     */
+    public static function templateHas(
+        array $terrain,
+        string $shape,
+        int $ft,
+        int $ox,
+        int $oy,
+        int $tx,
+        int $ty,
+        int $x,
+        int $y
+    ): bool {
+        if (!self::inBounds($terrain, $x, $y)) {
+            return false;
+        }
+        $n = max(1, self::ftToCells($ft));
+        switch ($shape) {
+            case 'radius':
+            case 'sphere':
+                $in = self::cells($tx, $ty, $x, $y) <= $n;
+                break;
+            case 'cube':
+                $half = intdiv($n - 1, 2);
+                $in = $x >= $tx - $half && $x < $tx - $half + $n
+                    && $y >= $ty - $half && $y < $ty - $half + $n;
+                break;
+            case 'line':
+                [$dx, $dy] = self::direction($ox, $oy, $tx, $ty);
+                $in = false;
+                for ($i = 1; $i <= $n; $i++) {
+                    if ($ox + $dx * $i === $x && $oy + $dy * $i === $y) {
+                        $in = true;
+                        break;
+                    }
+                }
+                break;
+            case 'cone':
+                if ($x === $ox && $y === $oy) {
+                    return false;
+                }
+                [$dx, $dy] = self::direction($ox, $oy, $tx, $ty);
+                $d = self::cells($ox, $oy, $x, $y);
+                $w = $d > $n ? null : self::coneOffset($dx, $dy, $x - $ox, $y - $oy);
+                $in = $w !== null && $w * 2 <= $d;
+                break;
+            default:
+                return false;
+        }
+        return $in && self::losClear($terrain, $ox, $oy, $x, $y);
+    }
+
+    /**
      * The offset of a cell from the cone's axis, or null if it is behind the
      * caster and so outside the cone whatever its distance.
      *

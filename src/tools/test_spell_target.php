@@ -94,8 +94,13 @@ $SP = [
     'frost'     => ['name' => 'Ray of Frost', 'target_kind' => 'enemy', 'range_text' => '60 feet'],
     'vampiric'  => ['name' => 'Vampiric Touch', 'target_kind' => 'enemy', 'range_text' => 'Self'],
     'bless'     => ['name' => 'Bless', 'target_kind' => 'all_allies', 'range_text' => '30 feet'],
-    'fireball'  => ['name' => 'Fireball', 'target_kind' => 'all_enemies', 'range_text' => '150 feet'],
-    'hands'     => ['name' => 'Burning Hands', 'target_kind' => 'all_enemies', 'range_text' => 'Self (15-foot cone)'],
+    'fireball'  => ['name' => 'Fireball', 'spell_key' => 'fireball', 'target_kind' => 'all_enemies', 'range_text' => '150 feet'],
+    'shatter'   => ['name' => 'Shatter', 'spell_key' => 'shatter', 'target_kind' => 'all_enemies', 'range_text' => '60 feet'],
+    'faerie'    => ['name' => 'Faerie Fire', 'spell_key' => 'faerie_fire', 'target_kind' => 'all_enemies', 'range_text' => '60 feet'],
+    'hands'     => ['name' => 'Burning Hands', 'spell_key' => 'burning_hands', 'target_kind' => 'all_enemies', 'range_text' => 'Self (15-foot cone)'],
+    'cold'      => ['name' => 'Cone of Cold', 'spell_key' => 'cone_of_cold', 'target_kind' => 'all_enemies', 'range_text' => '60 feet'],
+    'wave'      => ['name' => 'Thunderwave', 'spell_key' => 'thunderwave', 'target_kind' => 'all_enemies', 'range_text' => 'Self (15-foot cube)'],
+    'guardians' => ['name' => 'Spirit Guardians', 'spell_key' => 'spirit_guardians', 'target_kind' => 'all_enemies', 'range_text' => 'Self (15-foot radius)'],
     'shield'    => ['name' => 'Shield', 'target_kind' => 'self', 'range_text' => 'Self'],
 ];
 
@@ -116,8 +121,8 @@ same('Fire Bolt asks for an enemy', 'enemy', $aim('bolt')['mode']);
 same('Burning Hands asks for a spot', 'area', $aim('hands')['mode']);
 same('Shield asks for nobody', 'self', $aim('shield')['mode']);
 same('Bless takes everyone it reaches, no choice', 'auto', $aim('bless')['mode']);
-same('so does Fireball (no template on the card)', 'auto', $aim('fireball')['mode']);
-same('Vampiric Touch ("Self") is read as a touch', ['kind' => 'touch', 'ft' => 5, 'aoe' => null],
+same('Fireball asks for a spot (its 20-ft sphere is in the SRD text, not the card)', 'area', $aim('fireball')['mode']);
+same('Vampiric Touch ("Self") is read as a touch', ['kind' => 'touch', 'ft' => 5, 'aoe' => null, 'origin' => null],
     CombatEngine::castRange($SP['vampiric']));
 
 echo "\n== who each could take from here ==\n";
@@ -200,6 +205,180 @@ try {
     $ui = $engine->spellAim($live, $live['combatants'][0], $db->query(
         "SELECT * FROM spells WHERE spell_key = 'cure_wounds'")->fetch());
     same('and the real cure_wounds row is an ally spell by touch', ['pc_1', 'pc_2', 'pc_4'], $keys($ui));
+} finally {
+    $db->rollBack();
+}
+
+echo "\n== area spells: templateHas() is template(), cell for cell ==\n";
+// A board with a wall and a pillar in it, so sight lines matter.
+$walled = array_fill(0, 12, str_repeat('.', 16));
+for ($y = 2; $y <= 8; $y++) {
+    $walled[$y][8] = '#';
+}
+$walled[4][4] = '#';
+$mismatch = [];
+$shapes = [['sphere', 20], ['sphere', 10], ['radius', 15], ['cube', 20], ['cube', 15], ['cube', 30],
+           ['cone', 15], ['cone', 60], ['line', 100], ['line', 30]];
+foreach ($shapes as [$shape, $ft]) {
+    foreach ([[2, 5], [10, 3], [0, 0], [15, 11]] as [$ox, $oy]) {
+        foreach ([[6, 5], [12, 9], [2, 0], [0, 11], [9, 5], [$ox, $oy]] as [$tx, $ty]) {
+            if (in_array($shape, ['sphere', 'radius', 'cube'], true)) {
+                [$ox2, $oy2] = [$tx, $ty];
+            } else {
+                [$ox2, $oy2] = [$ox, $oy];
+            }
+            $want = array_flip(BattleGrid::template($walled, $shape, $ft, $ox2, $oy2, $tx, $ty));
+            for ($y = 0; $y < 12; $y++) {
+                for ($x = 0; $x < 16; $x++) {
+                    $has = BattleGrid::templateHas($walled, $shape, $ft, $ox2, $oy2, $tx, $ty, $x, $y);
+                    if ($has !== isset($want["$x,$y"])) {
+                        $mismatch[] = "$shape $ft from $ox2,$oy2 at $tx,$ty: cell $x,$y";
+                    }
+                }
+            }
+        }
+    }
+}
+ok('every shape, every cell, with walls in the way', !$mismatch, implode('; ', array_slice($mismatch, 0, 4)));
+
+echo "\n== area spells: how they are placed ==\n";
+$r = CombatEngine::castRange($SP['fireball']);
+same('Fireball is a 20-ft sphere at a point within 150 ft',
+    ['kind' => 'ranged', 'ft' => 150, 'aoe' => ['shape' => 'sphere', 'ft' => 20], 'origin' => 'point'], $r);
+same('Burning Hands starts at the caster', 'self', CombatEngine::castRange($SP['hands'])['origin']);
+same('Cone of Cold is a 60-ft cone from the caster, not a 60-ft shot',
+    ['kind' => 'self', 'ft' => 0, 'aoe' => ['shape' => 'cone', 'ft' => 60], 'origin' => 'self'],
+    CombatEngine::castRange($SP['cold']));
+same('Faerie Fire is a 20-ft cube at a point within 60 ft', ['shape' => 'cube', 'ft' => 20],
+    CombatEngine::castRange($SP['faerie'])['aoe']);
+
+$fb = $aim('fireball');
+same('Fireball offers a spot, not a body', ['area', 'point', 150], [$fb['mode'], $fb['origin'], $fb['range_ft']]);
+$hit = $fb['spots']['6,5'] ?? null;
+sort($hit);
+same('centred on the goblin it takes the goblin, you and Kessa beside you — not Sera, already down',
+    ['mon_1', 'pc_1', 'pc_2'], $hit);
+$far = $fb['spots']['15,0'] ?? null;
+same('centred on the far goblin, only him', ['mon_2'], $far);
+same('every cell of a 16x12 board is in 150 ft', 16 * 12, count($fb['spots']));
+
+$sh = $aim('shatter');
+ok('Shatter carries 60 ft: the far corner is not a spot', !isset($sh['spots']['15,0']));
+ok('…and 60 ft east is', isset($sh['spots']['14,5']));
+same('…and 65 ft is the refusal the server gives', 'That spot is 65 feet away, and Shatter carries 60.',
+    CombatEngine::spotRefusal($s['grid']['terrain'], $me, CombatEngine::castRange($SP['shatter']), 'Shatter', 15, 0));
+
+$wst = board();
+$wst['grid']['terrain'] = $walled;
+$wfb = $engine->spellAim($wst, $wst['combatants'][0], $SP['fireball']);
+ok('behind the wall is not a spot (you cannot see it)', !isset($wfb['spots']['12,5']));
+ok('the wall itself is not a spot', !isset($wfb['spots']['8,5']));
+same('…and the server says why', 'You cannot see that spot from where you stand.',
+    CombatEngine::spotRefusal($walled, $wst['combatants'][0], CombatEngine::castRange($SP['fireball']), 'Fireball', 12, 5));
+
+echo "\n== area spells: what the board previews is what the cast takes ==\n";
+$areaPick = function (string $k, array $st, int $x, int $y) use ($invoke, $SP) {
+    $spell = $SP[$k];
+    $range = CombatEngine::castRange($spell);
+    $cells = CombatEngine::areaCells($st['grid']['terrain'], $st['combatants'][0], $range, $x, $y);
+    $out = array_map(static fn ($t) => (string) $t['cid'],
+        $invoke('spellTargets', $st, $st['combatants'][0], $spell, '', $range, $cells));
+    sort($out);
+    return $out;
+};
+foreach (['open floor' => $s, 'walled' => $wst] as $label => $st) {
+    foreach (['fireball', 'shatter', 'faerie'] as $k) {
+        $a = $engine->spellAim($st, $st['combatants'][0], $SP[$k]);
+        $bad = [];
+        foreach ($a['spots'] as $key => $hits) {
+            [$x, $y] = array_map('intval', explode(',', (string) $key));
+            sort($hits);
+            if ($areaPick($k, $st, $x, $y) !== $hits) {
+                $bad[] = $key;
+            }
+        }
+        ok("{$SP[$k]['name']} on {$label}: every spot's preview equals the cast (" . count($a['spots']) . ' spots)',
+            !$bad, implode(' ', array_slice($bad, 0, 5)));
+    }
+    foreach (['hands', 'cold', 'wave'] as $k) {
+        $a = $engine->spellAim($st, $st['combatants'][0], $SP[$k]);
+        $bad = [];
+        foreach ($a['dirs'] as $key => $d) {
+            $hits = $d['hits'];
+            sort($hits);
+            if ($areaPick($k, $st, $d['aim'][0], $d['aim'][1]) !== $hits) {
+                $bad[] = $key;
+            }
+        }
+        ok("{$SP[$k]['name']} on {$label}: every direction's preview equals the cast", !$bad, implode(' ', $bad));
+    }
+}
+
+echo "\n== area spells: friendly fire, and who is spared ==\n";
+$crowd = board([body('mon_3', 'foe', 4, 5, ['name' => 'Rat'])]);
+$bh = $engine->spellAim($crowd, $crowd['combatants'][0], $SP['hands']);
+$east = $bh['dirs']['1,0']['hits'];
+sort($east);
+same('Burning Hands east takes the rat and Kessa standing in it', ['mon_3', 'pc_2'], $east);
+ok('…and never the caster it starts from', !in_array('pc_1', $east, true));
+$tw = $engine->spellAim($crowd, $crowd['combatants'][0], $SP['wave']);
+$cells = $tw['dirs']['1,0']['cells'];
+sort($cells);
+same('Thunderwave east is a 3x3 cube with one face against you', ['3,4', '3,5', '3,6', '4,4', '4,5', '4,6', '5,4', '5,5', '5,6'], $cells);
+$sg = $engine->spellAim($crowd, $crowd['combatants'][0], $SP['guardians']);
+same('Spirit Guardians sits on you, one way only', ['0,0'], array_keys($sg['dirs']));
+same('…and spares Kessa (its caster picks who is unaffected)', ['mon_3'], $sg['dirs']['0,0']['hits']);
+
+echo "\n== end to end: a fireball, refused and then cast ==\n";
+$db->beginTransaction();
+try {
+    $db->prepare(
+        "INSERT INTO characters (name, race, class, level, strength, dexterity, constitution,
+            intelligence, wisdom, charisma, max_hp, current_hp, armor_class, speed,
+            proficiency_bonus, spell_slots_json)
+         VALUES (?, 'Human', 'Wizard', 5, 8,14,12,16,10,10, 28,28, 12, 30, 3, '{}')"
+    )->execute(['__blast_probe_' . bin2hex(random_bytes(3))]);
+    $wid = (int) $db->lastInsertId();
+    $db->prepare('INSERT INTO character_spells (character_id, spell_id, prepared)
+                  SELECT ?, id, 1 FROM spells WHERE spell_key IN (?, ?)')->execute([$wid, 'fireball', 'shatter']);
+    $fbId = (int) $db->query("SELECT id FROM spells WHERE spell_key = 'fireball'")->fetchColumn();
+    $shId = (int) $db->query("SELECT id FROM spells WHERE spell_key = 'shatter'")->fetchColumn();
+    $live = board();
+    $live['combatants'][0] = array_merge($live['combatants'][0], [
+        'character_id' => $wid, 'type' => 'pc', 'int' => 16, 'dex' => 14, 'prof' => 3, 'feats' => [],
+        'action_used' => false, 'level' => 5, 'class' => 'Wizard', 'name' => 'Wenna',
+    ]);
+    $slotsNow = fn () => json_decode((string) $db->query("SELECT spell_slots_json FROM characters WHERE id = {$wid}")
+        ->fetchColumn(), true) ?: [];
+    threw('Shatter centred 65 ft away is refused', fn () => $invoke('doCast', $live, $shId, '', 15, 0, null), 'carries 60');
+    threw('Fireball on an empty corner catches nobody and is refused',
+        fn () => $invoke('doCast', $live, $fbId, '', 15, 11, null), 'Nothing to point');
+    same('…and neither spent a slot', [], $slotsNow());
+    $after = $invoke('doCast', $live, $fbId, '', 6, 5, null);
+    $hp = [];
+    foreach ($after['combatants'] as $c) {
+        $hp[$c['cid']] = $c['hp'];
+    }
+    ok('the goblin at the centre is burned', $hp['mon_1'] < 20, "hp {$hp['mon_1']}");
+    ok('so is Kessa, standing 15 ft from it — friendly fire', $hp['pc_2'] < 20, "hp {$hp['pc_2']}");
+    ok('so is the caster, inside her own blast', $hp['pc_1'] < 20, "hp {$hp['pc_1']}");
+    same('Ilse, 30 ft from the centre, is not', 20, $hp['pc_3']);
+    $ev = array_values(array_filter($after['events'] ?? [], fn ($e) => ($e['type'] ?? '') === 'aoe'))[0] ?? [];
+    same('the board is told the blast was centred where it was sent', [6, 5], $ev['origin'] ?? null);
+    same('…and it covered 81 cells (a 20-ft sphere is 9x9 on this grid)', 81, count($ev['cells'] ?? []));
+    same('one 3rd-level slot spent', ['3' => 1], array_map('intval', $slotsNow()));
+    $saves = [];
+    foreach ($after['events'] ?? [] as $e) {
+        if (($e['type'] ?? '') === 'save') {
+            $saves[$e['actor']] = (int) $e['dc'];
+        }
+    }
+    $fullDc = Rules::spellSaveDc($live['combatants'][0]);
+    same('the goblin at the centre gets no cover from Kessa standing between him and the caster '
+        . '(cover is measured from the blast)', $fullDc, $saves['mon_1'] ?? null);
+    $fromCaster = BattleGrid::coverBetween($live['grid']['terrain'], $live['combatants'],
+        $live['combatants'][0], $live['combatants'][5]);
+    ok('…where measured from the caster he would have had some', $fromCaster > 0, "cover {$fromCaster}");
 } finally {
     $db->rollBack();
 }
