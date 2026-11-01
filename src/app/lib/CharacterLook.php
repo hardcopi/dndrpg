@@ -288,7 +288,12 @@ class CharacterLook
         }
 
         $this->inheritWalkSprite($key, $fallbackSpriteKey);
-        $this->recordBustCount($key, $characterId);
+        // No busts.json line. That file is the dialogue actors' expression
+        // counts, read when content is imported; a player character is never
+        // an actor, and an actor missing from it counts as one bust anyway.
+        // It is also in git and deploy.sh pushes it, so a line written here
+        // on hermes would be overwritten by the next deploy and dragged into
+        // the repo by the next pull — drift with nothing to show for it.
 
         return $key;
     }
@@ -347,29 +352,6 @@ class CharacterLook
                 @copy($from, $to);
             }
         }
-    }
-
-    /**
-     * One bust, said out loud, and the previous look's entry taken back out.
-     *
-     * DialogEngine reads busts.json to know how many expressions an actor has
-     * (ModelPortrait::recordBustCount). Left alone, every re-dress would add a
-     * line for a key whose files are gone.
-     */
-    private function recordBustCount(string $key, int $characterId): void
-    {
-        $path = "{$this->out}/busts.json";
-        $counts = [];
-        if (is_file($path)) {
-            $counts = json_decode((string) file_get_contents($path), true) ?: [];
-        }
-        foreach (array_keys($counts) as $old) {
-            if (self::ownerOf((string) $old) === $characterId) {
-                unset($counts[$old]);
-            }
-        }
-        $counts[$key] = 1;
-        @file_put_contents($path, json_encode($counts, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
     }
 
     // ---------------------------------------------------------------- helpers
