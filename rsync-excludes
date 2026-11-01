@@ -74,3 +74,14 @@ __pycache__/
 # of them belong in the cast. Referenced by no page and no manifest; the clips
 # the game plays are named for a hash of their words in assets/audio/vo/<npc>/.
 _accent_samples/
+
+# The character look library (assets/looks/, ~0.6 GB, ~51k WebP files baked
+# by tools/bake_looks.py). It IS served — the game draws every player's
+# portrait and board figure out of it — but it is not deploy.sh's to send:
+# a 51k-file tree would turn every routine deploy into a long rsync scan, and
+# it changes on a different clock from the code (when the creator snapshot is
+# re-baked, not when PHP changes). It travels by its own script (not written
+# yet — PR6). Excluded here so deploy.sh never pushes it, and — the reason
+# the list is shared — so pull.sh's --delete never deletes a local bake that
+# hermes does not have yet.
+/assets/looks/
