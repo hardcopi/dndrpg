@@ -122,6 +122,10 @@ if ($status !== 200) {
 $suffix = 'look_' . getmypid();
 $db = db();
 $made = [];
+// A bake writes no busts.json line (CharacterLook::bake), so the file is the
+// same bytes after every bake below as before the first.
+$bustsJson = APP_ROOT . '/assets/images/npcs/busts.json';
+$bustsMd5 = @md5_file($bustsJson);
 
 register_shutdown_function(static function () use ($db, $suffix, &$made): void {
     $like = "{$suffix}_%";
@@ -135,18 +139,6 @@ register_shutdown_function(static function () use ($db, $suffix, &$made): void {
             }
         }
     }
-    // busts.json gained a line per bake; take back the ones for these ids.
-    $bj = "{$out}/busts.json";
-    $counts = json_decode((string) @file_get_contents($bj), true) ?: [];
-    $ids->execute([$like]);
-    foreach ($ids->fetchAll(PDO::FETCH_COLUMN) as $id) {
-        foreach (array_keys($counts) as $k) {
-            if (CharacterLook::ownerOf((string) $k) === (int) $id) {
-                unset($counts[$k]);
-            }
-        }
-    }
-    @file_put_contents($bj, json_encode($counts, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 
     $db->prepare('DELETE FROM characters WHERE user_id IN (SELECT id FROM users WHERE username LIKE ?)')->execute([$like]);
     $db->prepare('DELETE FROM parties WHERE user_id IN (SELECT id FROM users WHERE username LIKE ?)')->execute([$like]);
@@ -292,6 +284,8 @@ check(lookless($r['character'] ?? []), 'and it clears the look');
 check($s === 200 && ($r['character']['look_key'] ?? null) === $first['key'], 'dressed again');
 [$s, $r] = $a->call('character/avatar', ['character_id' => $idA, 'sprite_key' => '']);
 check($s === 200 && lookless($r['character'] ?? []), 'clearing the avatar clears the look too');
+
+check(@md5_file($bustsJson) === $bustsMd5, 'busts.json is byte-for-byte unchanged by the bakes');
 
 echo "\n{$pass} passed, {$fail} failed\n";
 exit($fail === 0 ? 0 : 1);

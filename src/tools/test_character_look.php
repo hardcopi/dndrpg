@@ -235,7 +235,8 @@ $strangers = ['lk_12_abcdef_bust.png', 'lk_12_abcdef_face.png', 'lk_12_abcdef_fi
 foreach ($strangers as $f) {
     copy("{$out}/cleric.png", "{$out}/{$f}");
 }
-file_put_contents("{$out}/busts.json", json_encode(['lk_12_abcdef' => 1, 'cleric' => 8]));
+$bustsBefore = json_encode(['cleric' => 8]);
+file_put_contents("{$out}/busts.json", $bustsBefore);
 
 $keyA = $look->bake(1, $looks['a'], 'cleric');
 check($keyA === CharacterLook::keyFor(1, 'p2:look:feminine_Elf/topknot__purple|plate__steel'), 'bake returns the key for this id and look', $keyA);
@@ -257,8 +258,7 @@ check($fig !== false
     && ((imagecolorat($fig, 100, 200) >> 24) & 0x7F) === 0,
     'the figure keeps its alpha: clear corner, opaque body');
 check(is_file("{$out}/{$keyA}.png") && is_file("{$out}/{$keyA}_sheet.png"), 'the map sprite is inherited from the class');
-$busts = json_decode((string) file_get_contents("{$out}/busts.json"), true);
-check(($busts[$keyA] ?? null) === 1 && ($busts['cleric'] ?? null) === 8, 'busts.json gains one bust and keeps the rest');
+check(file_get_contents("{$out}/busts.json") === $bustsBefore, 'busts.json is not touched by a bake');
 
 // Re-dress: a new key, the old files gone, the stranger's untouched.
 $keyB = $look->bake(1, $looks['b'], 'cleric');
@@ -268,9 +268,7 @@ check($left === [], 'the previous look\'s files are deleted', implode(', ', $lef
 foreach ($strangers as $f) {
     check(is_file("{$out}/{$f}"), "character 12's {$f} survives character 1 re-dressing");
 }
-$busts = json_decode((string) file_get_contents("{$out}/busts.json"), true);
-check(!isset($busts[$keyA]) && isset($busts[$keyB]) && isset($busts['lk_12_abcdef']),
-    'busts.json forgets the old look and nobody else\'s', json_encode($busts));
+check(file_get_contents("{$out}/busts.json") === $bustsBefore, 'busts.json is not touched by a re-dress either');
 check(is_file("{$out}/{$keyB}_fig.png") && is_file("{$out}/{$keyB}_sheet.png"), 'the new look is complete');
 
 // Same look again: same key, still all there (delete-then-write of one name).
