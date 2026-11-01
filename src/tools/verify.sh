@@ -114,6 +114,7 @@ if [ "$PHP_MODE" != none ]; then
     # playing on: scratch rows inside a transaction they roll back, or a
     # throwaway party they remove on the way out.
     run "test_creation"       phprun test_creation.php
+    run "test_look_api"       phprun test_look_api.php
     run "test_route"          phprun test_route.php
     run "test_auth"           phprun test_auth.php
     run "test_levelup"        phprun test_levelup.php

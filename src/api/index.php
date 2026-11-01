@@ -1703,6 +1703,36 @@ function handle_character(string $action): void
         ]);
     }
 
+    /**
+     * Dress a character in a look from the creator's library.
+     *
+     * The third way to look like somebody, and the simplest on the wire: the
+     * picture is not posted, as `portrait`'s are, because every picture the
+     * creator can show was baked in advance (tools/bake_looks.py). The body
+     * names five choices, CharacterLook finds the picture, and the game files
+     * it under an `lk_<id>_<hash>` sprite_key. Race and class are read off the
+     * character, never the body. Re-dressing is the same call again.
+     */
+    if ($action === 'look') {
+        require_method('POST');
+        $body = read_json_body();
+        $id = (int) ($body['character_id'] ?? session_character_id() ?? 0);
+        if ($id <= 0) {
+            json_error('character_id required', 400);
+        }
+        assert_character_accessible($id);
+        if (!is_array($body['look'] ?? null)) {
+            json_error('look required', 400);
+        }
+
+        $char = $gen->dressLook($id, $body['look']);
+        json_response([
+            'ok'         => true,
+            'sprite_key' => $char['sprite_key'],
+            'character'  => $char,
+        ]);
+    }
+
     if ($action === 'sheet') {
         $body = read_json_body();
         $id = (int) ($body['character_id'] ?? $_GET['character_id'] ?? session_character_id() ?? 0);

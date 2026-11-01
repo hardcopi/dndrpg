@@ -21,6 +21,9 @@ class CharacterGenerator
     /** Explicit owner for anything this creates; falls back to the session. */
     private ?int $ownerId = null;
 
+    /** See looks(). */
+    private ?CharacterLook $looks = null;
+
     public function __construct(PDO $db, ?int $ownerId = null)
     {
         $this->db = $db;
@@ -213,6 +216,21 @@ class CharacterGenerator
             }
         }
 
+        // The look, validated before anything is written for the same reason
+        // the feat is: a creator that let somebody pick a face and then made
+        // the character without it would be a character in the database
+        // wearing the class default and a player who thinks otherwise. Race
+        // and class are the ones just resolved, not the request's — see
+        // CharacterLook. A look the library has no pictures of is refused
+        // here too, while the error can still stop the creation.
+        $look = null;
+        if (!empty($data['look']) && is_array($data['look'])) {
+            $look = $this->looks()->normalise($data['look'], (string) $race['name'], (string) $class['name']);
+            if (!$this->looks()->exists($look)) {
+                throw new InvalidArgumentException('That look has not been drawn yet. Try another combination.');
+            }
+        }
+
         $base = $this->resolveAbilities(
             $method,
             $data['abilities'] ?? [],
@@ -312,6 +330,12 @@ class CharacterGenerator
         $chosen = trim((string) ($data['sprite_key'] ?? ''));
         if ($chosen !== '') {
             $this->setAvatar($characterId, $chosen);
+        }
+
+        // After the avatar, so a request carrying both ends up wearing the
+        // look: it is the more specific of the two answers.
+        if ($look !== null) {
+            $this->wearLook($characterId, $look, (string) $class['name']);
         }
 
         // Starting gear from SRD-flavored kits
@@ -797,6 +821,13 @@ class CharacterGenerator
         ];
         $char['sprite_key'] = $char['sprite_key'] ?? self::DEFAULT_SPRITE;
 
+        // The creator look, decoded for the client: `look` is the picks the
+        // creator reopens on, `look_key` the picture they resolved to. Both
+        // null for a character wearing anything else — setAvatar clears them.
+        // `look_json` stays in the row beside it, like every other column.
+        $char['look'] = !empty($char['look_json']) ? json_decode((string) $char['look_json'], true) : null;
+        $char['look_key'] = $char['look_key'] ?? null;
+
         // Feats, twice over and deliberately.
         //
         // `feats` is the plain list of keys, and it MUST stay that shape:
@@ -898,12 +929,23 @@ class CharacterGenerator
     public function setAvatar(int $characterId, string $spriteKey): array
     {
         if ($spriteKey === '') {
-            $this->db->prepare('UPDATE characters SET sprite_key = NULL WHERE id = ?')
-                ->execute([$characterId]);
+            $this->db->prepare(
+                'UPDATE characters SET sprite_key = NULL, look_json = NULL, look_key = NULL WHERE id = ?'
+            )->execute([$characterId]);
             return $this->getCharacter($characterId);
         }
 
         if (!preg_match('/^[a-z][a-z0-9_]*$/', $spriteKey)) {
+            throw new InvalidArgumentException('Unknown avatar.');
+        }
+
+        // A baked look is one character's and nobody else's. Its files sit in
+        // the same folder as every painted token, so the file check below
+        // would accept `lk_12_…` for character 7 and one player could wear
+        // another's face. Only the exact shape CharacterLook::keyFor() makes,
+        // and only with this character's id in it.
+        if (str_starts_with($spriteKey, CharacterLook::PREFIX)
+            && CharacterLook::ownerOf($spriteKey) !== $characterId) {
             throw new InvalidArgumentException('Unknown avatar.');
         }
 
@@ -914,9 +956,79 @@ class CharacterGenerator
             throw new InvalidArgumentException('Unknown avatar.');
         }
 
-        $this->db->prepare('UPDATE characters SET sprite_key = ? WHERE id = ?')
-            ->execute([$spriteKey, $characterId]);
+        // Anything but their own look clears the record of one, so the row
+        // never claims a look the character is not wearing: the creator would
+        // reopen on picks that no longer match the face in the party rail.
+        // Re-selecting the look they already wear keeps it.
+        if (str_starts_with($spriteKey, CharacterLook::PREFIX)) {
+            $this->db->prepare('UPDATE characters SET sprite_key = ? WHERE id = ?')
+                ->execute([$spriteKey, $characterId]);
+        } else {
+            $this->db->prepare(
+                'UPDATE characters SET sprite_key = ?, look_json = NULL, look_key = NULL WHERE id = ?'
+            )->execute([$spriteKey, $characterId]);
+        }
         return $this->getCharacter($characterId);
+    }
+
+    /**
+     * Dress a character in a look from the library: validate, bake, record.
+     *
+     * The creator and a later re-dress are the same operation, which is why
+     * both arrive here. The picks are normalised against the character's OWN
+     * race and class, read from the row rather than taken from the caller.
+     *
+     * Companions are refused. Their art follows their authored template —
+     * SPRITE_SELECT puts `cmp.sprite_key` ahead of the row's — so a look baked
+     * onto one would be written, recorded, and never seen.
+     */
+    public function dressLook(int $characterId, array $picks): array
+    {
+        $stmt = $this->db->prepare('SELECT race, class, companion_key FROM characters WHERE id = ?');
+        $stmt->execute([$characterId]);
+        $row = $stmt->fetch();
+        if (!$row) {
+            throw new InvalidArgumentException('Character not found.');
+        }
+        if (!empty($row['companion_key'])) {
+            throw new InvalidArgumentException('Companions wear their own faces.');
+        }
+        $look = $this->looks()->normalise($picks, (string) $row['race'], (string) $row['class']);
+        $this->wearLook($characterId, $look, (string) $row['class']);
+        return $this->getCharacter($characterId);
+    }
+
+    /**
+     * Bake a normalised look and write all three columns in one UPDATE, so
+     * there is no moment at which the sprite_key and the record of the look
+     * disagree.
+     *
+     * The walk sprite is inherited from the CLASS sprite, not from whatever
+     * they wear now. A character re-dressing is wearing their previous lk_
+     * key, whose files the bake deletes before it copies — inheriting from
+     * that would copy from a file that has just gone.
+     */
+    private function wearLook(int $characterId, array $look, string $className): void
+    {
+        $cls = $this->db->prepare('SELECT sprite_key FROM classes WHERE name = ?');
+        $cls->execute([$className]);
+        $fallback = (string) ($cls->fetchColumn() ?: self::DEFAULT_SPRITE);
+
+        $key = $this->looks()->bake($characterId, $look, $fallback);
+        $this->db->prepare(
+            'UPDATE characters SET sprite_key = ?, look_json = ?, look_key = ? WHERE id = ?'
+        )->execute([
+            $key,
+            json_encode($look, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
+            $this->looks()->key($look),
+            $characterId,
+        ]);
+    }
+
+    /** The look library, made on first use: most requests never touch it. */
+    private function looks(): CharacterLook
+    {
+        return $this->looks ??= new CharacterLook();
     }
 
     /**
