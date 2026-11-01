@@ -37,3 +37,4 @@
 2026-08-24-delve-mouth-key.sql      dungeon_delves.mouth_location_key is in schema.sql; its backfill has no delves to fill on a fresh build
 2026-08-24-npc-map-pos.sql          npcs.map_x / map_y are in schema.sql
 2026-08-24-region-plan.sql          regions.plan_json is in schema.sql
+2026-11-01-character-look.sql       characters.look_json / look_key are in schema.sql

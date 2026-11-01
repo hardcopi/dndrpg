@@ -1,10 +1,12 @@
 FROM php:8.4-fpm
 
-# Extension set mirrors what hermes has enabled for this app.
+# Extension set mirrors what hermes has enabled for this app. GD is built with
+# WebP because hermes's is, and CharacterLook decodes the look library
+# (assets/looks/v1/**.webp) with it; without it a look cannot be baked.
 RUN apt-get update && apt-get install -y --no-install-recommends \
-        libpng-dev libjpeg62-turbo-dev libfreetype6-dev \
+        libpng-dev libjpeg62-turbo-dev libfreetype6-dev libwebp-dev \
         libzip-dev libxslt1-dev default-mysql-client \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
     && docker-php-ext-install -j"$(nproc)" \
         pdo_mysql mysqli gd zip exif xsl sockets opcache \
     && rm -rf /var/lib/apt/lists/*
