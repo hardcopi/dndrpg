@@ -249,10 +249,13 @@ function handle_admin(string $action): void
     $db = db();
 
     if ($action === 'users') {
+        // Retired characters still count — they can come back — and deleted
+        // ones do not, because the player has been told they are gone.
+        $notDeleted = Ownership::deletionTracked() ? ' AND c.deleted_at IS NULL' : '';
         $rows = $db->query(
             'SELECT u.id, u.username, u.email, u.role, u.is_active, u.created_at, u.last_login_at,
                     u.password_hash IS NOT NULL AS has_password,
-                    (SELECT COUNT(*) FROM characters c WHERE c.user_id = u.id) AS characters
+                    (SELECT COUNT(*) FROM characters c WHERE c.user_id = u.id' . $notDeleted . ') AS characters
                FROM users u ORDER BY u.id'
         )->fetchAll();
         json_response([
@@ -877,6 +880,70 @@ function assert_character_readable(int $id): array
     return $row;
 }
 
+/**
+ * Refuse to take somebody off the roster while their party is on a battlefield.
+ *
+ * Retire and delete both ask this. A fight holds its combatants in
+ * `state_json` and would go on swinging for somebody the character list has
+ * stopped showing, and the session would be pointing at a row that is gone.
+ * The check is on the PARTY rather than on this character because the session
+ * belongs to whoever leads it — a fight is the party's, not one member's. Same
+ * answer as casting mid-fight, and the same 409.
+ */
+function refuse_while_party_fighting(int $id, string $doing): void
+{
+    $db = db();
+    $theirParty = WorldState::partyIdFor($db, $id);
+    if (!$theirParty) {
+        return;
+    }
+    $fighting = $db->prepare(
+        'SELECT COUNT(*) FROM combat_sessions cs
+           INNER JOIN character_party cp ON cp.character_id = cs.character_id
+          WHERE cp.party_id = ? AND cs.is_active = 1'
+    );
+    $fighting->execute([$theirParty]);
+    if ((int) $fighting->fetchColumn() > 0) {
+        json_error("There is a fight on. Finish it before {$doing} anybody.", 409);
+    }
+}
+
+/**
+ * Move the session off a character who has just left the roster.
+ *
+ * If they were whoever the session was playing, it is now pointing at somebody
+ * who is gone. Move it to a survivor in the same party rather than leaving the
+ * next request to fail on a character that cannot load — and when there is no
+ * survivor, let go of the party as well, because a session holding a party it
+ * has nobody to play in answers "which game?" with one it cannot open.
+ *
+ * @param array<string, mixed> $result the route's answer, added to
+ * @return array<string, mixed>
+ */
+function session_step_off(int $id, array $result): array
+{
+    if ($id !== session_character_id()) {
+        return $result;
+    }
+    $next = db()->prepare(
+        'SELECT c.id FROM characters c
+         INNER JOIN character_party cp ON cp.character_id = c.id
+         -- A companion must not inherit the session: they are not a
+         -- character you may play, so handing them the protagonist slot
+         -- puts the game in a state the character list cannot show.
+         WHERE cp.party_id = ? AND c.is_active = 1 AND c.companion_key IS NULL
+         ORDER BY cp.slot LIMIT 1'
+    );
+    $next->execute([session_party_id()]);
+    $nextId = $next->fetchColumn();
+    if ($nextId) {
+        set_active_character((int) $nextId, session_party_id());
+        $result['active_character_id'] = (int) $nextId;
+    } else {
+        unset($_SESSION['character_id'], $_SESSION['party_id']);
+    }
+    return $result;
+}
 
 function handle_meta(string $action): void
 {
@@ -1098,6 +1165,14 @@ function handle_session(string $action): void
 {
     if ($action === 'status') {
         $cid = session_character_id();
+        // Deleted from another tab or another device: session_step_off() only
+        // reaches the session that pressed the button. Let go of them here,
+        // where every page asks first, rather than hand back somebody no route
+        // will read.
+        if ($cid && Ownership::isDeleted($cid)) {
+            unset($_SESSION['character_id'], $_SESSION['party_id']);
+            $cid = null;
+        }
         $pid = session_party_id();
         $data = ['ok' => true, 'character_id' => $cid, 'party_id' => $pid];
         if ($cid) {
@@ -1530,53 +1605,41 @@ function handle_character(string $action): void
         }
         assert_character_manageable($id);
 
-        // Not while their party is on a battlefield.
-        //
-        // The route had no UI at all until the picker grew a Retire button, so
-        // this could not happen before and can now: a fight holds its
-        // combatants in `state_json` and would go on swinging for somebody the
-        // character list has stopped showing, and the session would be pointing
-        // at a retired row. The check is on the PARTY rather than on this
-        // character because the session belongs to whoever leads it — a fight
-        // is the party's, not one member's. Same answer as casting mid-fight,
-        // and the same 409.
-        $theirParty = WorldState::partyIdFor($db, $id);
-        if ($theirParty) {
-            $fighting = $db->prepare(
-                'SELECT COUNT(*) FROM combat_sessions cs
-                   INNER JOIN character_party cp ON cp.character_id = cs.character_id
-                  WHERE cp.party_id = ? AND cs.is_active = 1'
-            );
-            $fighting->execute([$theirParty]);
-            if ((int) $fighting->fetchColumn() > 0) {
-                json_error('There is a fight on. Finish it before retiring anybody.', 409);
-            }
-        }
+        refuse_while_party_fighting($id, 'retiring');
 
         $result = $gen->retire($id);
-        // If they retired whoever the session was playing, the session is now
-        // pointing at somebody who is gone. Move it to a survivor rather than
-        // leaving the next request to fail on a character that cannot load.
-        if ($id === session_character_id()) {
-            $next = $db->prepare(
-                'SELECT c.id FROM characters c
-                 INNER JOIN character_party cp ON cp.character_id = c.id
-                 -- A companion must not inherit the session: they are not a
-                 -- character you may play, so handing them the protagonist slot
-                 -- puts the game in a state the character list cannot show.
-                 WHERE cp.party_id = ? AND c.is_active = 1 AND c.companion_key IS NULL
-                 ORDER BY cp.slot LIMIT 1'
-            );
-            $next->execute([session_party_id()]);
-            $nextId = $next->fetchColumn();
-            if ($nextId) {
-                set_active_character((int) $nextId, session_party_id());
-                $result['active_character_id'] = (int) $nextId;
-            } else {
-                unset($_SESSION['character_id']);
-            }
+        json_response(session_step_off($id, $result));
+    }
+
+    // Delete, from the picker's confirm popup. Retiring plus a `deleted_at`;
+    // see CharacterGenerator::delete() for what it keeps and why, and why the
+    // last character may go here when it may not be retired.
+    if ($action === 'delete') {
+        require_method('POST');
+        $body = read_json_body();
+        $id = (int) ($body['character_id'] ?? 0);
+        if ($id <= 0) {
+            json_error('character_id required', 400);
         }
-        json_response($result);
+        if (!Ownership::deletionTracked()) {
+            json_error('Deleting characters needs migrations/2026-11-01-character-deleted-at.sql.', 503);
+        }
+        // YOURS, and nothing wider. assert_character_manageable lets an admin
+        // through for anybody, which is right for reading a broken save and
+        // wrong for this: a delete an admin made by mistake on somebody else's
+        // roster is a player's character vanishing for no reason they can see.
+        // So the owner column is asked directly, after the shared gate has
+        // already said 404 for anything deleted or not a character.
+        assert_character_manageable($id);
+        $mine = $db->prepare('SELECT 1 FROM characters WHERE id = ? AND user_id = ?');
+        $mine->execute([$id, session_user_id()]);
+        if (!$mine->fetchColumn()) {
+            json_error('No such character.', 404);
+        }
+        refuse_while_party_fighting($id, 'deleting');
+
+        $result = $gen->delete($id);
+        json_response(session_step_off($id, $result));
     }
 
     // Undo a retirement. Retiring is a soft delete so that this can exist.

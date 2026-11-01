@@ -201,6 +201,12 @@ CREATE TABLE characters (
     -- grid: this one id is the whole of a character's position.
     current_location_id INT UNSIGNED NULL,
     is_active TINYINT(1) DEFAULT 1,
+    -- Set when a player DELETES the character, as opposed to retiring them.
+    -- Always alongside is_active = 0, so lists that hide the retired hide
+    -- these too; the difference is that restore refuses a deleted row and no
+    -- route will so much as read one. Kept, not dropped, so a mistake is an
+    -- UPDATE away. See migrations/2026-11-01-character-deleted-at.sql.
+    deleted_at DATETIME NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     -- The name of a living PLAYER character, or NULL. Exists only to carry the
     -- uniqueness constraint; nothing should read it. STORED rather than VIRTUAL

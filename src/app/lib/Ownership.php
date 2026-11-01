@@ -28,9 +28,61 @@ declare(strict_types=1);
 
 class Ownership
 {
+    /**
+     * Is this character yours — and still somebody at all?
+     *
+     * A DELETED character belongs to nobody, admins included. Every route that
+     * names a character by id comes through here (the API's accessible,
+     * readable and manageable gates, session/select, the inventory owner, the
+     * printed sheet), so this is the one line that makes a deleted row
+     * unreachable rather than a filter added to each of them and forgotten on
+     * the next. Lists need nothing: a deleted character is also is_active = 0
+     * and out of character_party, which every list already filters on.
+     *
+     * Admins are refused too, deliberately. Being able to open a broken save
+     * is why they pass the ownership test; a deleted character is not a save
+     * anybody is playing, and getting one back is an UPDATE, not a route.
+     */
     public static function character(int $id): bool
     {
+        if (self::isDeleted($id)) {
+            return false;
+        }
         return self::ownsRow('characters', $id);
+    }
+
+    /**
+     * Has a player deleted this character?
+     *
+     * False on a database that has not had the migration yet, rather than an
+     * unknown-column error on every request that names a character: until the
+     * column exists nothing can have been deleted, so false is the true answer
+     * and the site keeps working through a deploy that lands before the
+     * migration does. Only character/delete itself needs the column, and says so.
+     */
+    public static function isDeleted(int $id): bool
+    {
+        if (!self::deletionTracked()) {
+            return false;
+        }
+        $stmt = db()->prepare('SELECT 1 FROM characters WHERE id = ? AND deleted_at IS NOT NULL');
+        $stmt->execute([$id]);
+        return (bool) $stmt->fetchColumn();
+    }
+
+    /**
+     * Does `characters.deleted_at` exist here? Asked once per request.
+     *
+     * See migrations/2026-11-01-character-deleted-at.sql.
+     */
+    public static function deletionTracked(): bool
+    {
+        static $tracked = null;
+        if ($tracked === null) {
+            $stmt = db()->query("SHOW COLUMNS FROM characters LIKE 'deleted_at'");
+            $tracked = $stmt !== false && $stmt->fetch() !== false;
+        }
+        return $tracked;
     }
 
     /**
