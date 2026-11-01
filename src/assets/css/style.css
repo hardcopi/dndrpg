@@ -2921,7 +2921,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .wiz-idfield select { width: 100%; }
 
 /* Two rows before one column: at the width where four fields stop fitting, the
-   name still deserves the full measure, and pairing gender with race keeps the
+   name still deserves the full measure, and pairing Body with race keeps the
    line's reading order intact. Only below that does it become a stack. */
 @media (max-width: 62rem) {
   .wiz-idline { grid-template-columns: 1fr 1fr; }
@@ -2929,6 +2929,14 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 }
 @media (max-width: 34rem) {
   .wiz-idline { grid-template-columns: 1fr; }
+}
+/* Body is the look picker's segmented control, which is a fingertip tall; on
+   a line of selects it takes the select's box instead, so the four fields sit
+   on one baseline. A phone stacks the line, nothing sits beside it, and it
+   keeps the 44px. */
+.wiz-idline .look-seg { margin-bottom: var(--sp-12); }
+@media (min-width: 34.0625rem) {
+  .wiz-idline .look-seg-opt span { min-height: 38px; padding-block: 0; }
 }
 
 /* What the race grants — speed, ability bonuses, traits — under the line that
@@ -2955,35 +2963,198 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   gap: var(--sp-12);
 }
 
-/* A painting, not an iframe. The box used to be 700px because a Unity player
-   fills its container and a zero-height box is a blank page that looks like a
-   broken build. A painted bust has a size of its own. */
-#look-model-well {
+/* ---- The look picker ---------------------------------------------------
+
+   The painting on the left, the five choices on the right. The figure is the
+   library's full length — 384×1024 on black — so the frame is fixed at that
+   aspect and sized by its width, and the picture always fills it exactly:
+   no letterbox to read as a failed load, and nothing for the swap to jump.
+
+   Smooth, deliberately. These are paintings, and the pixel filter the walk
+   sprites wear would turn a face into mosaic. */
+.look-picker {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--sp-24);
+  align-items: start;
+}
+.look-stage {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--sp-12);
+}
+
+/* A frame like the plates on the walls: gold-dim edge, a dark mat inside it,
+   and the mat drawn OVER the picture by ::after so the image cannot cover it. */
+.look-frame {
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+  background: #000;
+  border: 1px solid var(--gold-dim);
+  border-radius: var(--r-md);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+}
+.look-frame::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 3px #1e1a15, inset 0 0 0 4px var(--ornament);
+}
+.look-frame img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  image-rendering: auto;
+}
+.look-frame-full { width: 216px; aspect-ratio: 384 / 1024; }
+.look-frame-bust { width: 132px; aspect-ratio: 384 / 512; }
+/* The old picture stays up while the new one loads, so a slow file reads as a
+   pause rather than a blink. Only the frame's edge says anything is happening. */
+.look-frame-full.is-loading { border-color: var(--ornament); }
+/* An image that never arrived is not drawn at all — a broken-image glyph, or
+   the previous person under a caption describing somebody else, would both be
+   worse than an empty frame that says why. */
+.look-frame.is-missing img { visibility: hidden; }
+.look-missing {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: var(--sp-16);
+  text-align: center;
+  font-size: var(--fs-sm);
+  line-height: var(--lh-normal);
+  color: var(--text-dim);
+  background: radial-gradient(ellipse at 50% 40%, #1e1a15, #000 75%);
+}
+.look-picker.is-nolib .look-controls { opacity: 0.45; pointer-events: none; }
+
+.look-controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-14);
+  min-width: 0;
+  max-width: 34rem;
+}
+.look-field {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+.look-field legend {
+  padding: 0;
+  margin-bottom: var(--sp-4);
+  color: var(--text-dim);
+  font-size: var(--fs-sm);
+}
+.look-field[hidden] { display: none; }
+
+/* Prev / next either side of a select: the select for jumping, the arrows for
+   walking. Both are 44px tall, a fingertip's worth, on every screen. */
+.look-cycle {
+  display: flex;
+  align-items: stretch;
+  gap: var(--sp-6);
+}
+.look-cycle select { flex: 1 1 auto; min-width: 0; margin: 0; min-height: 44px; }
+.look-arrow { flex: 0 0 auto; min-width: 44px; min-height: 44px; padding: 0 var(--sp-10); }
+
+/* Body: two radios drawn as the creator's tabs. */
+.look-seg { display: flex; gap: var(--sp-6); }
+.look-seg-opt { flex: 1 1 0; margin: 0; cursor: pointer; }
+.look-seg-opt input,
+.look-swatch input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+.look-seg-opt span {
+  display: grid;
+  place-items: center;
+  min-height: 44px;
+  padding: var(--sp-6) var(--sp-12);
+  background: var(--bg-panel-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  color: var(--text-dim);
+}
+.look-seg-opt:hover span { border-color: var(--gold-dim); color: var(--text); }
+.look-seg-opt input:checked + span {
+  color: var(--gold);
+  border-color: var(--gold);
+  background: var(--bg-raised);
+}
+.look-seg-opt input:focus-visible + span { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+/* Swatches are paint with the name underneath: colour alone is not enough to
+   tell chestnut from auburn, and not everybody sees the difference anyway. */
+.look-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-6);
+}
+.look-swatch {
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: auto;
-  padding: var(--sp-16);
+  gap: var(--sp-2);
+  width: 4.25rem;
+  margin: 0;
+  padding: var(--sp-4) 0;
+  border: 1px solid transparent;
   border-radius: var(--r-md);
-  overflow: hidden;
-  background: #1e1a15;
-  border: 1px solid var(--border);
+  cursor: pointer;
 }
-
-#look-token-bust {
-  width: 288px;
-  height: 384px;
-  object-fit: cover;
-  border-radius: var(--r-md);
-  background: #15110e;
+.look-swatch:hover { border-color: var(--border); }
+.look-swatch-chip {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--r-circle);
+  background: var(--sw);
+  border: 2px solid var(--border-strong);
+  box-shadow: inset 0 -4px 8px rgba(0, 0, 0, 0.35), inset 0 3px 6px rgba(255, 255, 255, 0.18);
 }
+.look-swatch-name {
+  font-size: var(--fs-2xs);
+  color: var(--text-dim);
+  text-align: center;
+  line-height: 1.15;
+}
+.look-swatch input:checked ~ .look-swatch-chip {
+  border-color: var(--gold-bright);
+  box-shadow: 0 0 0 2px var(--gold-well), 0 0 0 3px var(--gold),
+    inset 0 -4px 8px rgba(0, 0, 0, 0.35), inset 0 3px 6px rgba(255, 255, 255, 0.18);
+}
+.look-swatch input:checked ~ .look-swatch-name { color: var(--gold); }
+.look-swatch input:focus-visible ~ .look-swatch-chip { outline: 2px solid var(--gold); outline-offset: 3px; }
+/* Bald or hooded: the colours stay where they were, greyed, so changing the
+   style back finds them as they were left. */
+.look-field.is-off .look-swatch { cursor: not-allowed; opacity: 0.35; filter: grayscale(1); }
+.look-field.is-off .look-swatch:hover { border-color: transparent; }
+.look-note {
+  margin: var(--sp-4) 0 0;
+  font-size: var(--fs-xs);
+  color: var(--text-dim);
+}
+.look-note:empty { display: none; }
+.look-actions { display: flex; gap: var(--sp-8); }
+.look-caption { margin: 0; }
 
-.look-token-nav {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: var(--sp-8);
-  margin-top: var(--sp-12);
+/* Below about 600px the controls go under the painting, figure and bust side
+   by side and scaled to the width, so a phone never scrolls sideways. */
+@media (max-width: 600px) {
+  .look-picker { grid-template-columns: minmax(0, 1fr); gap: var(--sp-16); }
+  .look-stage { justify-content: center; }
+  .look-frame-full { width: min(44vw, 200px); }
+  .look-frame-bust { width: min(30vw, 132px); }
+  .look-controls { max-width: none; }
+  .look-swatch { width: 3.9rem; }
 }
 
 .wiz-nav {
@@ -3004,11 +3175,9 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 
 /* Re-dressing an existing character is the look step with the wizard removed. */
 .redress-mode .wiz-nav { justify-content: flex-end; }
-
-/* Re-dressing is the painted bust and nothing else — no rail, no identity
-   line, no other step. The well still sizes to the picture; there is no
-   700px iframe to fill the window with. */
-.redress-mode #look-model-well { height: auto; }
+/* Body is all that is left of the identity line there; it takes the width of
+   a field rather than the name's 2.2fr share of a line with nothing else on it. */
+.redress-mode .wiz-idline { grid-template-columns: minmax(0, 20rem); }
 
 @media (max-width: 720px) {
   /* The page scrolls everywhere now, so the phone no longer needs telling. */
@@ -3081,6 +3250,9 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
      walk frames deliberately are not smoothed the same way. */
   image-rendering: auto;
 }
+/* A library look's bust is 3:4 on black, not a square cut from a sprite. */
+.pd-bust.is-look { aspect-ratio: 384 / 512; background: #000; border-color: var(--gold-dim); }
+.pd-bust.is-look .pd-bust-layer { object-fit: cover; }
 .pd-stage-actions { display: flex; gap: var(--sp-8); justify-content: center; margin-bottom: var(--sp-6); }
 
 /* Nine categories in one column ran off the bottom of any screen.

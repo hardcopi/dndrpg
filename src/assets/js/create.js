@@ -115,14 +115,18 @@
       id: 'identity',
       label: 'Identity',
       blurb: 'Who are they?',
-      // A painted bust is always showing for a race that has tokens, so this
-      // step still gates on the name alone.
+      // The look gates only when its picture is known to be missing: the
+      // server refuses to create somebody wearing a look nobody painted, and
+      // finding that out on Review is four steps too late. A look still
+      // loading does not block — the answer is a moment away, and Next
+      // flickering off and on with every swatch would be worse.
       ready: () => {
         const name = $('#name').value.trim();
         if (!name) return 'A name is required.';
         if (name.length < 2) return 'That name is a little short.';
         if (state.nameChecked !== name) return 'Checking that name…';
         if (state.nameFree === false) return state.nameReason || 'That name is taken.';
+        if (lookStatus === 'missing') return 'That look has not been painted yet — pick another.';
         return null;
       },
     },
@@ -177,7 +181,12 @@
    */
   function renderWizard() {
     // Re-dressing is one step with no wizard around it — see enterRedressMode.
-    if (state.redressId) return;
+    // Its only gate is the look's: Save on a picture nobody painted would
+    // be refused by the server, so it is refused here first.
+    if (state.redressId) {
+      $('#submit-btn').disabled = lookStatus === 'missing' || lookStatus === 'nolib';
+      return;
+    }
 
     const step = STEPS[state.step];
 
@@ -187,10 +196,6 @@
 
     $('#wiz-title').textContent = step.label;
     $('#wiz-blurb').textContent = step.blurb;
-
-    // The bust is cheap to paint and the well is already in the document, so
-    // coming back to this step just refreshes whose face is showing.
-    if (step.id === 'identity') paintToken();
 
     // The rail. A step you have reached is a button; one you have not is inert
     // text, because letting somebody jump to Review before choosing a class
@@ -349,7 +354,7 @@
     }
     // Re-dressing an existing character reuses this whole page rather than
     // growing a second copy of the picker inside the character sheet. Same
-    // bust well, same submit of a sprite key — only the wizard chrome differs.
+    // picker, same five choices — only the wizard chrome and the route differ.
     if (params.get('redress')) state.redressId = parseInt(params.get('redress'), 10);
 
     const [races, classes, pb, feats] = await Promise.all([
@@ -385,7 +390,7 @@
     });
     raceSel.addEventListener('change', fillSubraces);
     fillSubraces();
-    bindTokenWell();
+    buildLookControls();
 
     const classSel = $('#class');
     state.classes.forEach((c) => {
@@ -430,15 +435,22 @@
     resetStandardArray();
     renderAbilities();
 
+    // The look is drawn last, once the race, the class and any link are all
+    // known, so the first picture fetched is the one that is wanted rather
+    // than the default on its way to being replaced.
+    readRaceUrl(params);
+    applyClassOutfit();
+    readLookUrl(params);
+
     // Re-dressing an existing character reuses this page rather than growing a
-    // second copy of the look picker inside the character sheet — same bust
-    // well, same sprite key, only the submit differs.
+    // second copy of the look picker inside the character sheet — same
+    // picker, only the submit differs.
     if (state.redressId) {
-      await enterRedressMode();
+      await enterRedressMode(params);
     } else {
       initWizard();
       goToStep(0);
-      paintToken();
+      startLook();
     }
   }
 
@@ -470,109 +482,455 @@
   }
 
   // =========================================================================
-  // The look: a painted bust, not a doll
+  // The look: five choices from the creator's library
   //
-  // The Unity Sidekick used to live in this box. It was a WebGL player and a
-  // set of mesh bundles, and it made every new character a low-poly toy. The
-  // rest of the game is a painting — Gold Box rooms, dialogue busts, race
-  // plates — so the creator now picks from painted busts of the same kind.
-  // Reroll and the arrows walk the list; the race select and the gender
-  // select filter it. There is no recipe and no portrait post: the files
-  // already live in assets/images/npcs/ as `{key}_bust.png` and `{key}_face.png`,
-  // and create sends the key.
+  // The Unity Sidekick lived in this box, then a carousel of painted tokens.
+  // Both were somebody else's character you settled for. The library is every
+  // combination of body, hair and outfit for every people, painted in advance
+  // by tools/bake_looks.py and filed by a naming rule (looks_options.json), so
+  // a pick here is a different static file — no render, no recipe, no upload.
+  // Create and re-dress post the five choices; CharacterLook resolves the same
+  // file by the same rule and bakes it into the sprite namespace.
+  //
+  // The client builds the path for one reason only: to SHOW it. Whether a
+  // look is legal is the server's question, and the options file both read is
+  // what keeps the two from offering different menus.
   // =========================================================================
-  let tokenIndex = 0;
-  let tokenRace = '';
+  const LOOK = (window.LOOK_OPTIONS && typeof window.LOOK_OPTIONS === 'object') ? window.LOOK_OPTIONS : null;
+  const LOOK_LIB = window.LOOK_LIB || 'assets/looks/v1/';
+
+  /**
+   * Swatch paint, by option name. Display only: the name is what is posted,
+   * and an option this table forgets is drawn in a neutral grey rather than
+   * not drawn at all.
+   */
+  const SWATCH = {
+    black: '#1c1815', 'dark brown': '#3d2718', chestnut: '#6e3b1f', auburn: '#8e3a1c',
+    red: '#b5441f', blond: '#d8b26a', grey: '#8f8c88', white: '#ebe6dc', purple: '#6b3c8e',
+    steel: '#9ea7b1', bronze: '#a8743a', blackened: '#2d2b2e',
+    'grey-brown': '#6f6354', brown: '#6b4426',
+    blue: '#2f4f8f', crimson: '#8c1c24', green: '#2f6b3a',
+  };
+
+  /**
+   * The Body choices. They come from the library when there is one, and
+   * stand on their own when there is not, because Body also decides which
+   * names the dice roll (NameGen::GENDERS) and a missing library must not
+   * take the name dice's only steer with it.
+   */
+  const BODIES = (LOOK && LOOK.genders.length) ? LOOK.genders : ['feminine', 'masculine'];
+
+  /** The five picks, in the names the server takes: style_key, colour names, outfit key. */
+  const look = {
+    gender: BODIES[0],
+    hair_style: 'shoulder',
+    hair_color: 'dark brown',
+    outfit: 'tunic',
+    outfit_color: null,
+  };
+  /**
+   * Whether the player has chosen an outfit themselves. Until they do, the
+   * outfit follows the class — a Wizard in plate is a picture arguing with
+   * the sheet beside it. Once they have, a class change leaves it alone:
+   * a choice made on purpose is not a default to be overwritten.
+   */
+  let outfitTouched = false;
+  /** 'off' until the page has settled, then loading | ok | missing | nolib. */
+  let lookStatus = 'off';
+  /** Bumped on every paint, so a slow image cannot land on top of a newer pick. */
+  let lookSeq = 0;
   let redressRace = '';
+  let redressClass = '';
 
-  function tokenCatalog() {
-    return (window.LOOK_TOKENS && typeof window.LOOK_TOKENS === 'object')
-      ? window.LOOK_TOKENS : {};
-  }
+  const capital = (s) => (s ? s.charAt(0).toUpperCase() + s.slice(1) : '');
 
-  function tokensFor(race, gender) {
-    const rows = tokenCatalog()[race] || [];
-    if (!gender) return rows.slice();
-    const hit = rows.filter((t) => t.gender === gender);
-    return hit.length ? hit : rows.slice();
-  }
-
-  function activeRace() {
+  function lookRace() {
     return redressRace || $('#race')?.value || '';
   }
-
-  function currentToken() {
-    const list = tokensFor(activeRace(), $('#name-gender')?.value || '');
-    if (!list.length) return null;
-    if (tokenIndex < 0 || tokenIndex >= list.length) tokenIndex = 0;
-    return list[tokenIndex];
+  function lookClass() {
+    return redressClass || $('#class')?.value || '';
+  }
+  /** The library's spelling of a race, or null if it has no pictures of them. */
+  function libraryRace(race) {
+    if (!LOOK) return null;
+    return LOOK.races.find((r) => r.toLowerCase() === String(race).toLowerCase()) || null;
+  }
+  function isHairless(race) {
+    return !!LOOK && (LOOK.hairless_races || []).includes(libraryRace(race));
+  }
+  function styleOf(key) {
+    return (LOOK?.hair_styles || []).find((s) => s.style_key === key || s.label === key) || null;
+  }
+  /** Bald and hooded heads have no colour to choose. */
+  function styleHasColour(key) {
+    const s = styleOf(key);
+    return !!s && !(LOOK.no_colour_styles || []).includes(s.label);
+  }
+  function outfitOf(key) {
+    return (LOOK?.outfits || []).find((o) => o.key === key) || null;
   }
 
-  function paintToken() {
-    const img = $('#look-token-bust');
-    const cap = $('#look-token-caption');
-    if (!img) return;
-    const race = activeRace();
-    const list = tokensFor(race, $('#name-gender')?.value || '');
-    if (tokenRace !== race) {
-      tokenRace = race;
-      tokenIndex = 0;
+  /**
+   * The picks as the API takes them, with the ones this body cannot have
+   * set to null — so a dragonborn's request says nothing about hair rather
+   * than carrying a colour from the elf the player looked at first.
+   */
+  function lookPicks() {
+    const hairless = isHairless(lookRace());
+    const coloured = !hairless && styleHasColour(look.hair_style);
+    return {
+      gender: look.gender,
+      hair_style: hairless ? null : look.hair_style,
+      hair_color: coloured ? look.hair_color : null,
+      outfit: look.outfit,
+      outfit_color: look.outfit === 'tunic' ? null : look.outfit_color,
+    };
+  }
+
+  /** looks_options' path_template, stem_rule and variant_rule, for showing. */
+  function lookPath(kind) {
+    const race = libraryRace(lookRace());
+    const p = lookPicks();
+    const us = (s) => String(s).replace(/ /g, '_');
+    const stem = p.hair_style === null ? 'base'
+      : (p.hair_color === null ? p.hair_style : `${p.hair_style}__${us(p.hair_color)}`);
+    const variant = p.outfit === 'tunic' ? 'tunic' : `${p.outfit}__${us(p.outfit_color)}`;
+    return `${LOOK_LIB}${p.gender}_${race}/${stem}/${variant}.${kind}.webp`;
+  }
+
+  /** One line of what they are wearing, for the caption and the review. */
+  function lookSummary() {
+    const p = lookPicks();
+    const parts = [capital(p.gender)];
+    if (p.hair_style !== null) {
+      const style = styleOf(p.hair_style)?.label || p.hair_style;
+      parts.push(p.hair_color ? `${p.hair_color} hair, ${style}` : style);
     }
-    if (!list.length) {
-      img.removeAttribute('src');
-      img.alt = '';
-      if (cap) cap.textContent = 'No painted look for this people yet.';
+    const o = outfitOf(p.outfit);
+    parts.push(p.outfit_color ? `${o?.label || p.outfit}, ${p.outfit_color}` : (o?.label || p.outfit));
+    return parts.join(' · ');
+  }
+
+  /** Dress for the class, unless the player has already chosen. */
+  function applyClassOutfit() {
+    if (outfitTouched || !LOOK) return;
+    setOutfit((LOOK.class_outfit || {})[lookClass()] || 'tunic');
+  }
+
+  /**
+   * Change outfit, keeping the colour if the new one comes in it and taking
+   * the first colour if not — plate in "brown" does not exist.
+   */
+  function setOutfit(key) {
+    const o = outfitOf(key);
+    if (!o) return;
+    look.outfit = o.key;
+    if (o.key === 'tunic') return;
+    if (!o.colours.includes(look.outfit_color)) look.outfit_color = o.colours[0];
+  }
+
+  // ---- Controls -----------------------------------------------------------
+
+  /** A row of radios dressed as paint; native radios, so arrow keys walk it. */
+  function swatches(name, colours) {
+    return colours.map((c) => `
+      <label class="look-swatch" title="${capital(c)}">
+        <input type="radio" name="${name}" value="${c}">
+        <span class="look-swatch-chip" style="--sw: ${SWATCH[c] || '#777'}"></span>
+        <span class="look-swatch-name">${capital(c)}</span>
+      </label>`).join('');
+  }
+
+  /** Built once; syncLookControls() moves the values about afterwards. */
+  function buildLookControls() {
+    // Body first and unconditionally: it sits on the identity line, outside
+    // the picker, and steers the name dice whether or not anything is painted.
+    $('#look-gender').innerHTML = BODIES.map((g) => `
+      <label class="look-seg-opt">
+        <input type="radio" name="look-gender" value="${g}">
+        <span>${capital(g)}</span>
+      </label>`).join('');
+    $('#look-gender').addEventListener('change', (e) => {
+      look.gender = e.target.value;
+      lookChanged();
+    });
+    syncBody();
+
+    if (!LOOK) return;
+    $('#look-hair-style').innerHTML = LOOK.hair_styles
+      .map((s) => `<option value="${s.style_key}">${capital(s.label)}</option>`).join('');
+    $('#look-hair-color').innerHTML = swatches('look-hair-color', LOOK.hair_colours);
+    $('#look-outfit').innerHTML = LOOK.outfits
+      .map((o) => `<option value="${o.key}">${o.label}</option>`).join('');
+
+    $('#look-picker').addEventListener('change', (e) => {
+      const t = e.target;
+      if (t.id === 'look-hair-style') look.hair_style = t.value;
+      else if (t.name === 'look-hair-color') look.hair_color = t.value;
+      else if (t.id === 'look-outfit') { outfitTouched = true; setOutfit(t.value); }
+      else if (t.name === 'look-outfit-color') { outfitTouched = true; look.outfit_color = t.value; }
+      else return;
+      lookChanged();
+    });
+
+    // The arrows step the select beside them and wrap, then go down the same
+    // path as choosing from it, so there is one way a pick changes.
+    $('#look-picker').addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-cycle]');
+      if (!btn) return;
+      const sel = document.getElementById(btn.dataset.cycle);
+      const n = sel.options.length;
+      sel.selectedIndex = (sel.selectedIndex + Number(btn.dataset.dir) + n) % n;
+      sel.dispatchEvent(new Event('change', { bubbles: true }));
+    });
+
+    $('#look-surprise').addEventListener('click', surpriseLook);
+    $('#class')?.addEventListener('change', () => {
+      applyClassOutfit();
+      lookChanged();
+    });
+  }
+
+  /** Body's radios, which sit outside the picker and outlive a missing library. */
+  function syncBody() {
+    document.querySelectorAll('input[name="look-gender"]').forEach((r) => { r.checked = r.value === look.gender; });
+  }
+
+  /** Put the picks into the controls, and hide or grey what this body lacks. */
+  function syncLookControls() {
+    syncBody();
+    if (!LOOK) return;
+    const hairless = isHairless(lookRace());
+    const coloured = styleHasColour(look.hair_style);
+
+    $('#look-hair-style').value = look.hair_style;
+    document.querySelectorAll('input[name="look-hair-color"]').forEach((r) => {
+      r.checked = r.value === look.hair_color;
+      r.disabled = !coloured;
+    });
+    $('#look-outfit').value = look.outfit;
+
+    // Dragonborn have no hair at all, so both hair controls go rather than
+    // sitting there inert. A bald or hooded head is a choice the player made,
+    // so the colour stays where it is, greyed, and comes back if they change
+    // their mind — taking the swatches away would move everything under them.
+    $('#look-style-field').hidden = hairless;
+    $('#look-hair-field').hidden = hairless;
+    $('#look-hair-field').classList.toggle('is-off', !coloured);
+    const note = $('#look-hair-note');
+    note.hidden = coloured;
+    note.textContent = look.hair_style === 'hood'
+      ? 'The hood hides the hair, so there is no colour to choose.'
+      : 'A shaven head has no colour to choose.';
+
+    const o = outfitOf(look.outfit);
+    const field = $('#look-outfit-field');
+    field.hidden = !o || o.key === 'tunic';
+    if (o && o.key !== 'tunic') {
+      const box = $('#look-outfit-color');
+      if (box.dataset.outfit !== o.key) {
+        box.innerHTML = swatches('look-outfit-color', o.colours);
+        box.dataset.outfit = o.key;
+      }
+      box.querySelectorAll('input').forEach((r) => { r.checked = r.value === look.outfit_color; });
+    }
+    const def = (LOOK.class_outfit || {})[lookClass()];
+    $('#look-outfit-note').textContent = !outfitTouched && def
+      ? `What a ${lookClass()} usually wears. Change it if you like.`
+      : '';
+  }
+
+  /** Roll every pick but the body and the race, both of which were said on purpose. */
+  function surpriseLook() {
+    if (!LOOK) return;
+    const any = (list) => list[Math.floor(Math.random() * list.length)];
+    look.hair_style = any(LOOK.hair_styles).style_key;
+    look.hair_color = any(LOOK.hair_colours);
+    const o = any(LOOK.outfits);
+    look.outfit = o.key;
+    look.outfit_color = o.key === 'tunic' ? null : any(o.colours);
+    // Asking for a surprise is choosing to take one: a class change after
+    // this does not undo the outfit it rolled.
+    outfitTouched = true;
+    lookChanged();
+  }
+
+  function lookChanged() {
+    syncLookControls();
+    paintLook();
+    syncLookUrl();
+  }
+
+  // ---- The painting -------------------------------------------------------
+
+  /**
+   * Show the picks. Preload first and swap on arrival, so the old painting
+   * stays up until the new one is ready rather than flashing black between.
+   *
+   * A file that is not there is the normal case while the library is only
+   * partly baked, and the vhost answers a missing file with the homepage and
+   * a 200 — so the browser's refusal to decode it is the only signal, and
+   * it is enough. The frame says so in words and the picture goes, rather
+   * than leaving a different person standing there under a caption that
+   * describes somebody else.
+   */
+  function paintLook() {
+    if (lookStatus === 'off') return;
+    const seq = ++lookSeq;
+    const frame = $('#look-frame-full');
+    const bustFrame = $('#look-frame-bust');
+    const missing = $('#look-missing');
+    const cap = $('#look-caption');
+    const race = lookRace();
+
+    if (!libraryRace(race)) {
+      lookStatus = 'nolib';
+      frame.classList.add('is-missing');
+      bustFrame.classList.add('is-missing');
+      missing.hidden = false;
+      missing.textContent = `No looks have been painted for ${race ? 'the ' + race : 'this people'} yet. `
+        + 'They will wear their class portrait until there are.';
+      cap.textContent = '';
+      $('#look-picker').classList.add('is-nolib');
+      renderWizard();
       return;
     }
-    if (tokenIndex >= list.length) tokenIndex = 0;
-    const t = list[tokenIndex];
-    img.src = artUrl('assets/images/npcs/' + t.key + '_bust.png');
-    img.alt = race + ' look';
-    if (cap) {
-      cap.textContent = list.length > 1 ? (tokenIndex + 1) + ' of ' + list.length : '';
+    $('#look-picker').classList.remove('is-nolib');
+
+    lookStatus = 'loading';
+    frame.classList.add('is-loading');
+    cap.textContent = lookSummary();
+    const fullUrl = lookPath('full');
+    const bustUrl = lookPath('bust');
+
+    const full = new Image();
+    full.onload = () => {
+      if (seq !== lookSeq) return;
+      $('#look-full').src = fullUrl;
+      $('#look-full').alt = `${race}: ${lookSummary()}`;
+      frame.classList.remove('is-loading', 'is-missing');
+      missing.hidden = true;
+      lookStatus = 'ok';
+      renderWizard();
+    };
+    full.onerror = () => {
+      if (seq !== lookSeq) return;
+      frame.classList.remove('is-loading');
+      frame.classList.add('is-missing');
+      bustFrame.classList.add('is-missing');
+      missing.hidden = false;
+      missing.textContent = 'This look has not been painted yet. Try another hair, outfit or colour.';
+      lookStatus = 'missing';
+      renderWizard();
+    };
+    full.src = fullUrl;
+
+    const bust = new Image();
+    bust.onload = () => {
+      if (seq !== lookSeq) return;
+      $('#look-bust').src = bustUrl;
+      bustFrame.classList.remove('is-missing');
+    };
+    bust.onerror = () => {
+      if (seq === lookSeq) bustFrame.classList.add('is-missing');
+    };
+    bust.src = bustUrl;
+  }
+
+  // ---- The address bar ----------------------------------------------------
+
+  const LOOK_PARAMS = ['race', 'gender', 'hair_style', 'hair_color', 'outfit', 'outfit_color'];
+
+  /**
+   * A look is a link: the picks go into the query string as they change, so
+   * a look can be sent to somebody or reopened. Only the look's own params
+   * are rewritten — `redress`, `party_id` and `module` mean something else
+   * here and are left exactly as they came. replaceState, not push: a
+   * hundred swatch clicks are not a hundred places Back should go.
+   *
+   * Colours are written with underscores, as the files are named, so the
+   * link has no %20 in it; both spellings are read back.
+   */
+  function syncLookUrl() {
+    if (lookStatus === 'off' || !LOOK) return;
+    const params = new URLSearchParams(location.search);
+    const p = lookPicks();
+    const slug = (s) => String(s).replace(/ /g, '_');
+    const set = (k, v) => (v === null || v === undefined || v === '' ? params.delete(k) : params.set(k, v));
+    // A re-dress cannot change race, so it does not pretend to in the link.
+    set('race', state.redressId ? null : lookRace());
+    set('gender', p.gender);
+    set('hair_style', p.hair_style);
+    set('hair_color', p.hair_color && slug(p.hair_color));
+    set('outfit', p.outfit);
+    set('outfit_color', p.outfit_color && slug(p.outfit_color));
+    const q = params.toString();
+    history.replaceState(history.state, '', location.pathname + (q ? '?' + q : '') + location.hash);
+  }
+
+  /**
+   * Take what a link says, where it says something the menu has. Anything
+   * else is ignored rather than refused: a stale link should open on the
+   * nearest look, not on an error.
+   */
+  function readLookUrl(params) {
+    // Gender before the guard: it is the name dice's steer as well as the
+    // face's, so a link that says it still means it with no library here.
+    const g = params.get('gender');
+    if (BODIES.includes(g)) look.gender = g;
+    if (!LOOK) return;
+    const unslug = (s) => String(s || '').replace(/_/g, ' ');
+    const style = styleOf(params.get('hair_style') || '');
+    if (style) look.hair_style = style.style_key;
+    const hc = unslug(params.get('hair_color'));
+    if (LOOK.hair_colours.includes(hc)) look.hair_color = hc;
+    if (outfitOf(params.get('outfit'))) {
+      setOutfit(params.get('outfit'));
+      outfitTouched = true;
+    }
+    const oc = unslug(params.get('outfit_color'));
+    if (outfitOf(look.outfit)?.colours.includes(oc)) {
+      look.outfit_color = oc;
+      outfitTouched = true;
     }
   }
 
-  function stepToken(delta) {
-    const list = tokensFor(activeRace(), $('#name-gender')?.value || '');
-    if (!list.length) return;
-    tokenIndex = (tokenIndex + delta + list.length) % list.length;
-    paintToken();
+  /** The race in a link, put into the select before anything is drawn. */
+  function readRaceUrl(params) {
+    const want = params.get('race');
+    const sel = $('#race');
+    if (!want || !sel) return;
+    const opt = [...sel.options].find((o) => o.value.toLowerCase() === want.toLowerCase());
+    if (opt) {
+      sel.value = opt.value;
+      fillSubraces();
+    }
   }
 
-  function rerollToken() {
-    const list = tokensFor(activeRace(), $('#name-gender')?.value || '');
-    if (list.length < 2) { paintToken(); return; }
-    let next = tokenIndex;
-    while (next === tokenIndex) next = Math.floor(Math.random() * list.length);
-    tokenIndex = next;
-    paintToken();
-  }
-
-  function bindTokenWell() {
-    $('#look-token-prev')?.addEventListener('click', () => stepToken(-1));
-    $('#look-token-next')?.addEventListener('click', () => stepToken(1));
-    $('#look-token-reroll')?.addEventListener('click', rerollToken);
-    $('#name-gender')?.addEventListener('change', () => {
-      tokenIndex = 0;
-      paintToken();
-    });
+  /** Turn the picture on, once the race, class and any link have been read. */
+  function startLook() {
+    syncLookControls();
+    lookStatus = 'loading';
+    paintLook();
+    syncLookUrl();
   }
 
   /**
    * Strip the page down to the look.
    *
    * Everything else here — abilities, race, class — is decided once at creation
-   * and is not a wardrobe, so re-dressing shows the painted bust and no wizard
+   * and is not a wardrobe, so re-dressing shows the picker and no wizard
    * chrome at all: no rail, no Back, no Next, just the character and Save.
    * Hiding rather than building a second page keeps one implementation of it.
    *
-   * The identity line goes with the chrome. A name is not a wardrobe either, and
-   * a race select that silently changed whose bust was showing on somebody
-   * else's body would be the one control on this page that could change a
-   * character into a different character.
+   * The identity line goes with the chrome, all but Body. A name is not a
+   * wardrobe either, and a race select that silently changed whose body was
+   * showing on somebody else's sheet would be the one control on this page
+   * that could change a character into a different character. Race and class
+   * come off the character, which is also what the server reads them from.
+   * Body is a look pick like any other, so it stays — alone on the line.
    */
-  async function enterRedressMode() {
+  async function enterRedressMode(params) {
     let sheet;
     try {
       sheet = await API.get('character/sheet&character_id=' + state.redressId);
@@ -592,7 +950,7 @@
     $('#wiz-rail').remove();
     $('#wiz-back').remove();
     $('#wiz-next').remove();
-    $('.wiz-idline')?.remove();
+    document.querySelectorAll('.wiz-idline > .wiz-idfield:not(#look-body-field)').forEach((f) => f.remove());
     $('#name-check')?.remove();
     $('#racial-preview')?.remove();
 
@@ -602,15 +960,29 @@
     $('#wiz-blurb').textContent =
       `Level ${c.level} ${c.race} ${c.class} — change how they look.`;
 
-    // Open on the bust they are already wearing, so re-dressing starts from
-    // the character rather than from a stranger of the right species.
     redressRace = c.race || '';
-    const list = tokensFor(redressRace, '');
-    const have = c.sprite_key || '';
-    const found = list.findIndex((t) => t.key === have);
-    tokenIndex = found >= 0 ? found : 0;
-    tokenRace = redressRace;
-    paintToken();
+    redressClass = c.class || '';
+
+    // Open on the look they already wear, so re-dressing starts from the
+    // character rather than from a stranger of the right people. The record
+    // holds labels ("long and loose", "dark brown"); styleOf() reads either.
+    // A character from before the library has no record and is dressed for
+    // their class, the same default a new one gets.
+    const saved = c.look;
+    if (saved && BODIES.includes(saved.gender)) look.gender = saved.gender;
+    if (saved && LOOK) {
+      if (styleOf(saved.hair_style || '')) look.hair_style = styleOf(saved.hair_style).style_key;
+      if (saved.hair_color) look.hair_color = saved.hair_color;
+      if (outfitOf(saved.outfit)) {
+        look.outfit = saved.outfit;
+        look.outfit_color = saved.outfit_color || null;
+        outfitTouched = true;
+      }
+    } else {
+      applyClassOutfit();
+    }
+    readLookUrl(params);
+    startLook();
   }
 
   function showFormError(message) {
@@ -654,8 +1026,9 @@
     }
     showNameRoll(r);
 
-    // Changing the race changes whose bust is showing.
-    paintToken();
+    // Changing the race changes whose body is showing, and for a dragonborn
+    // whether there is any hair to choose.
+    lookChanged();
   }
 
   /**
@@ -677,9 +1050,9 @@
     const tables = state.nameTables || [];
     const has = !!race && (tables.includes(race.subrace || '') || tables.includes(race.name));
     btn.hidden = !has;
-    // The gender select is not hidden with it. It shares a line with three
-    // other fields now, and a control that disappears for some races takes the
-    // ones beside it for a walk every time the race changes.
+    // Body is not hidden with it. It shares a line with three other fields,
+    // and a control that disappears for some races takes the ones beside it
+    // for a walk every time the race changes.
   }
 
   /**
@@ -697,10 +1070,11 @@
 
     btn.disabled = true;
     try {
-      const gender = $('#name-gender')?.value || '';
+      // Body always has a value, so the dice always draw from that pool:
+      // the name and the face beside it are one person.
       let q = 'meta/roll_name&race=' + encodeURIComponent(race.name);
       if (race.subrace) q += '&subrace=' + encodeURIComponent(race.subrace);
-      if (gender) q += '&gender=' + encodeURIComponent(gender);
+      q += '&gender=' + encodeURIComponent(look.gender);
       if (state.redressId) q += '&except=' + state.redressId;
       const r = await API.get(q);
       if (!r.name) return;
@@ -1169,7 +1543,7 @@
       ['Starting gear', (cls?.starting_gear || []).join(', ') || 'none'],
       ['Racial traits', race?.traits || 'none'],
       ['Origin feat', state.originFeats.find((f) => f.key === state.feat)?.name || 'none taken'],
-      ['Look', 'a painted bust'],
+      ['Look', libraryRace(race?.name || '') ? lookSummary() : 'their class portrait'],
     ].map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('');
 
     renderReviewPortrait();
@@ -1178,16 +1552,22 @@
   /**
    * The character, as they will actually appear.
    *
-   * The painted bust they picked, falling back to the class art if this race
-   * has no tokens yet — which is the same fallback the party rail already
-   * uses, so the review cannot promise a face nobody is going to get.
+   * The bust of the look they picked — the same file the server will copy
+   * into their sprite — or the class art when their people has no looks
+   * painted, which is what the server will leave them wearing. Either way the
+   * review cannot promise a face nobody is going to get.
    */
   function renderReviewPortrait() {
     const box = $('#review-bust');
     if (!box) return;
 
-    const token = currentToken();
-    const key = token?.key || ($('#class').value || 'fighter').toLowerCase();
+    const painted = !!libraryRace(lookRace()) && lookStatus !== 'missing';
+    box.classList.toggle('is-look', painted);
+    if (painted) {
+      box.innerHTML = `<img class="pd-bust-layer" src="${lookPath('bust')}" alt="">`;
+      return;
+    }
+    const key = ($('#class').value || 'fighter').toLowerCase();
     box.innerHTML =
       `<img class="pd-bust-layer" src="${artUrl(`assets/images/npcs/${key}_bust.png`)}" alt="">`;
     // Not every actor was cut with a bust; the face always exists.
@@ -1231,15 +1611,15 @@
     err.classList.add('hidden');
 
     // Re-dressing only ever posts the look; nothing else on this form is theirs
-    // to change any more.
+    // to change any more. Race and class are not sent: the server reads them
+    // off the character, so this request cannot dress anybody as anybody else.
     if (state.redressId) {
       $('#submit-btn').disabled = true;
       try {
-        const key = currentToken()?.key || '';
-        if (!key) throw new Error('No painted look is available for this people.');
-        await API.post('character/avatar', {
+        if (lookStatus !== 'ok') throw new Error('That look has not been painted yet — pick another.');
+        await API.post('character/look', {
           character_id: state.redressId,
-          sprite_key: key,
+          look: lookPicks(),
         });
         window.location.href = 'game.php';
       } catch (ex) {
@@ -1264,10 +1644,12 @@
       abilities: state.abilities,
       background: $('#background').value,
       alignment: $('#alignment').value,
-      // The painted bust they picked. The files already live on disk as
-      // `{key}_bust.png` / `{key}_face.png`; create just sends the key.
-      sprite_key: currentToken()?.key || '',
     };
+    // The five choices, and no sprite_key: the server finds the picture by
+    // the same rule the preview did and bakes it once the row exists. A
+    // people with no looks painted sends none, and is created wearing the
+    // class portrait the review showed.
+    if (libraryRace(payload.race)) payload.look = lookPicks();
     if (state.feat) payload.feat = state.feat;
     if (state.partyId) payload.party_id = state.partyId;
     if (state.module && !state.partyId) payload.module = state.module;
