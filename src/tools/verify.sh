@@ -140,6 +140,16 @@ if [ "$PHP_MODE" != none ]; then
 
     run "image_libs"          phprun check_image_libs.php
     run "db_compat"           phprun check_db_compat.php
+
+    # Over real HTTP, against the site BASE names. These reach the database
+    # through the compose stack for their setup and cleanup, so they need the
+    # stack rather than a host php, and they are skipped when nothing answers.
+    # Throwaway accounts, removed on the way out: safe against a database
+    # somebody is playing on.
+    if [ "$PHP_MODE" = docker ] \
+            && curl -s -o /dev/null "${BASE:-http://localhost:8081}/api/?r=session/status"; then
+        run "test_char_delete" bash tools/test_char_delete.sh
+    fi
 else
     printf '\n\033[33mSKIPPED the PHP harnesses — no php on PATH and no compose\n'
     printf 'stack. They run in the container:\n'

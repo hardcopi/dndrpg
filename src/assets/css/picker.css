@@ -729,6 +729,135 @@ body.picker-page > main { padding-top: 0; }
   color: #f8ebcd;
 }
 
+/* Delete is on the sheet beside Retire and must not read as its twin. Oak like
+   its neighbours, so the row stays one row, but rimmed and lettered in the
+   armed-Retire red: the colour this page already uses for "this takes
+   somebody away". The solid red is saved for the button inside the popup. */
+.picker-page .cs-buttons .delete-btn {
+  border-color: #7a2018;
+  color: #ffd2c8;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 239, 199, 0.25),
+    inset 0 -2px 0 rgba(74, 16, 12, 0.7),
+    0 2px 0 #1a120c;
+}
+
+.picker-page .cs-buttons .delete-btn:hover { border-color: #c4281c; }
+
+/* ------------------------------------------------------------------ *
+   The delete confirmation
+ * ------------------------------------------------------------------ */
+
+/* The scroll and the frame the board is made of, on a dimmed page: parchment
+   to read, iron round it, oak buttons under it. Fixed and centred so it is the
+   same popup on a phone and a desk. */
+.cs-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: 0.75rem;
+}
+
+.cs-modal[hidden] { display: none; }
+
+body.has-modal { overflow: hidden; }
+
+.cs-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(6, 8, 12, 0.74);
+}
+
+.cs-modal-panel {
+  position: relative;
+  width: min(27rem, 100%);
+  padding: 0.35rem 0.55rem;
+  background: linear-gradient(180deg, #243044 0%, #1a2433 18%, #121820 100%);
+  border: 3px solid #07090d;
+  border-radius: 4px;
+  box-shadow:
+    inset 0 0 0 2px #5c6b7c,
+    inset 0 0 0 5px #1a222c,
+    0 0 0 1px #8b97a6,
+    0 18px 40px rgba(0, 0, 0, 0.65);
+}
+
+.cs-modal-panel .cs-roll { left: 0.15rem; right: 0.15rem; top: 0.2rem; }
+.cs-modal-panel .cs-roll-bot { top: auto; bottom: 0.2rem; }
+
+.cs-modal-in {
+  margin: 0.85rem 0.15rem;
+  padding: 1rem 1.15rem 1.1rem;
+  color: var(--cs-ink);
+  background-color: #e8d6a8;
+  background-image:
+    url("../images/login/oak-noise.webp"),
+    linear-gradient(180deg, var(--cs-parchment-0) 0%, #e8d6a8 38%, var(--cs-parchment-1) 100%);
+  background-size: 180px, auto;
+  background-blend-mode: multiply, normal;
+  box-shadow: inset 0 0 0 1px rgba(90, 58, 24, 0.28);
+}
+
+.cs-modal-title {
+  margin: 0 0 0.4rem;
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 750;
+  line-height: 1.2;
+  color: var(--cs-ink);
+  overflow-wrap: anywhere;
+}
+
+.cs-modal-text {
+  margin: 0 0 0.9rem;
+  font-family: var(--font-display);
+  font-size: 1.02rem;
+  color: #3e2a18;
+}
+
+.cs-modal-error {
+  margin: 0 0 0.9rem;
+  padding: 0.45rem 0.6rem;
+  border-left: 3px solid #8a1c12;
+  background: rgba(196, 40, 28, 0.12);
+  color: #6e1208;
+  font-weight: 700;
+}
+
+.cs-modal-error[hidden] { display: none; }
+
+/* Two classes on the row so these outrank the board's own phone rule further
+   down, which shrinks every .cs-buttons .btn to 2.5rem — too small a target
+   for the one button on the page that has to be hit on purpose. */
+.picker-page .cs-buttons.cs-modal-buttons .btn { min-height: 2.9rem; }
+
+.picker-page .cs-modal-buttons .del-confirm {
+  border-color: #4a100c;
+  background: linear-gradient(180deg, #b8493c 0%, #8a2016 50%, #5a120c 100%);
+  color: #fff3dd;
+}
+
+.picker-page .cs-modal-buttons .btn:focus-visible {
+  outline: 3px solid #24160d;
+  outline-offset: 2px;
+}
+
+/* A phone: the two choices stacked full width, Cancel on top, each a thumb's
+   worth of target. Nothing here depends on hover. */
+@media (max-width: 30rem) {
+  .cs-modal { padding: 0.5rem; align-items: end; }
+  .cs-modal-in { padding: 0.9rem 0.9rem 1rem; }
+  .picker-page .cs-buttons.cs-modal-buttons { flex-direction: column; }
+  .picker-page .cs-buttons.cs-modal-buttons .btn {
+    flex: 0 0 auto;
+    width: 100%;
+    min-height: 3rem;
+    font-size: 1.05rem;
+  }
+}
+
 /* The full sheet, under the board. Shared sheet classes, on a dark panel,
    so the select screen can be the picture without throwing the numbers away. */
 .cs-dossier:empty { display: none; }
@@ -827,6 +956,8 @@ body.picker-page > main { padding-top: 0; }
   .cs-figure,
   .picker-page .rail-pick,
   .picker-page .cs-buttons .btn,
+  .cs-modal-panel,
+  .cs-modal-in,
   .cs-new {
     background: Canvas;
     color: CanvasText;

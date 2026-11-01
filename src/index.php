@@ -108,6 +108,30 @@ require_signed_in_page();
 
   <div id="cs-dossier" class="cs-dossier"></div>
 
+  <!--
+    The delete confirmation. Written once into the page rather than built per
+    press, so the dialog's own focus handling has a fixed thing to hold; a
+    sibling of the stage rather than inside it, so that marking everything
+    else `inert` while it is open does not mark it too. See askDelete().
+  -->
+  <div id="del-modal" class="cs-modal" hidden>
+    <div class="cs-modal-backdrop" data-del-cancel></div>
+    <div class="cs-modal-panel" role="dialog" aria-modal="true"
+         aria-labelledby="del-title" aria-describedby="del-desc">
+      <span class="cs-roll" aria-hidden="true"></span>
+      <div class="cs-modal-in">
+        <h2 id="del-title" class="cs-modal-title">Delete?</h2>
+        <p id="del-desc" class="cs-modal-text">This cannot be undone from here.</p>
+        <p id="del-error" class="cs-modal-error" role="alert" hidden></p>
+        <div class="cs-buttons cs-modal-buttons">
+          <button type="button" class="btn" id="del-cancel" data-del-cancel>Cancel</button>
+          <button type="button" class="btn del-confirm" id="del-confirm">Delete</button>
+        </div>
+      </div>
+      <span class="cs-roll cs-roll-bot" aria-hidden="true"></span>
+    </div>
+  </div>
+
   <footer class="footer-legal">
     Uses only content from the 5e System Reference Document under OGL 1.0a / CC-BY 4.0.
     Not affiliated with any trademark holders. See <a href="about.php">Legal</a>.
@@ -449,6 +473,20 @@ require_signed_in_page();
              state.arming === Number(c.id) ? 'Really retire?' : 'Retire'}</button>`;
 
       /*
+       * Deleting somebody, behind a real confirmation — the popup, not a second
+       * press. Retire stays as it was because it is the gentle one: it can be
+       * undone, so two presses are proportionate. Delete cannot be undone from
+       * the game, so it asks in words, by name, with Cancel under your finger.
+       * Same exclusion as Retire: the route refuses companions.
+       */
+      const del = c.companion_key
+        ? ''
+        : `<button type="button" class="btn btn-small delete-btn"
+                   data-delete="${esc(c.id)}" data-name="${esc(c.name)}"
+                   aria-haspopup="dialog"
+                   title="Delete ${esc(c.name)} for good. Asks first.">Delete</button>`;
+
+      /*
        * The party, across the top of their own sheet. See partyTabs().
        *
        * The rail on the right already lists everybody, but it lists them by
@@ -586,6 +624,7 @@ require_signed_in_page();
               <button type="button" class="btn" data-open="store" data-id="${esc(c.id)}"
                       title="Buy supplies and sell what you do not want. Nothing enchanted beyond +1.">Store</button>
               ${retire}
+              ${del}
             </div>
           </div>
         </article>`;
@@ -1105,9 +1144,7 @@ require_signed_in_page();
      * The route is the game's own: it refuses the last character anywhere, it
      * refuses companions, and it moves the session off whoever it just retired
      * so the next request does not load a character that is gone. All this does
-     * is ask, and then read the world again — the rail has one fewer name in it
-     * and the sheet on screen is of somebody who is no longer there, so it
-     * lands on whoever is left.
+     * is ask, and then read the world again — see rosterChanged().
      */
     async function retireCharacter(btn) {
       const id = Number(btn.dataset.retire);
@@ -1121,24 +1158,151 @@ require_signed_in_page();
       btn.disabled = true;
       try {
         const r = await API.post('character/retire', { character_id: id });
-        state.sheets.delete(id);
-        state.characters = (await API.get('session/list')).characters || [];
-        // The party's marching order has changed, so any sheet that draws tabs
-        // for it is now drawing a member who has gone.
-        state.sheets.clear();
-        renderRail();
-        const next = state.characters[0];
-        if (next) {
-          await showSheet(Number(next.id));
-        } else {
-          renderShelf('Start your first adventure');
-        }
-        showNotice(r.message || 'Retired.');
+        await rosterChanged(id, r.message || 'Retired.');
       } catch (err) {
         btn.disabled = false;
         showError(err.message || 'They could not be retired.');
       }
     }
+
+    /**
+     * Somebody has left the roster: read the world again.
+     *
+     * The rail has one fewer name in it and the sheet on screen is of somebody
+     * who is no longer there, so it lands on whoever is left — or on the shelf,
+     * when nobody is, which is now possible because Delete may take the last.
+     */
+    async function rosterChanged(goneId, message) {
+      state.sheets.delete(goneId);
+      state.characters = (await API.get('session/list')).characters || [];
+      // The party's marching order has changed, so any sheet that draws tabs
+      // for it is now drawing a member who has gone.
+      state.sheets.clear();
+      renderRail();
+      const next = state.characters[0];
+      if (next) {
+        await showSheet(Number(next.id));
+      } else {
+        renderShelf('Start your first adventure');
+      }
+      showNotice(message);
+    }
+
+    // =====================================================================
+    // Delete, behind a confirm popup
+    // =====================================================================
+
+    /*
+     * A dialog of our own rather than `confirm()`, for the reasons Retire gives
+     * and one more: the browser's box cannot say Cancel is the safe answer.
+     * Here Cancel is first, has focus when it opens, and is what Esc, a click
+     * on the backdrop and Enter-without-thinking all do. Delete is the red one
+     * and has to be reached for.
+     *
+     * Modal in the full sense. Everything else on the page is `inert` while it
+     * is open, so a screen reader cannot wander out of it and a stray click
+     * cannot land on the sheet behind; Tab is still wrapped by hand, because
+     * inert does not stop focus leaving the document for the browser chrome
+     * and coming back in at the far end.
+     */
+    const delModal = {
+      el: document.getElementById('del-modal'),
+      id: null,
+      trigger: null,   // the Delete button that opened it; focus goes back there
+      busy: false,
+    };
+
+    function askDelete(btn) {
+      delModal.id = Number(btn.dataset.delete);
+      delModal.trigger = btn;
+      delModal.busy = false;
+      document.getElementById('del-title').textContent = `Delete ${btn.dataset.name}?`;
+      const error = document.getElementById('del-error');
+      error.hidden = true;
+      error.textContent = '';
+      document.getElementById('del-confirm').disabled = false;
+      for (const el of document.body.children) {
+        if (el !== delModal.el && el.tagName !== 'SCRIPT') el.inert = true;
+      }
+      document.body.classList.add('has-modal');
+      delModal.el.hidden = false;
+      document.getElementById('del-cancel').focus();
+    }
+
+    function closeDelete(deleted) {
+      if (delModal.el.hidden) return;
+      delModal.el.hidden = true;
+      for (const el of document.body.children) el.inert = false;
+      document.body.classList.remove('has-modal');
+      // Back to the control that opened it. After a delete that button has
+      // been drawn away with the sheet, so focus goes to the same control on
+      // whoever's sheet came up instead, then to the list — never to <body>,
+      // where a keyboard user would have to start the page again.
+      const back = (!deleted && delModal.trigger && document.contains(delModal.trigger))
+        ? delModal.trigger
+        : (document.querySelector('[data-delete]')
+           || document.querySelector('.rail-pick')
+           || document.getElementById('btn-new'));
+      delModal.trigger = null;
+      if (back) back.focus();
+    }
+
+    async function confirmDelete() {
+      if (delModal.busy) return;
+      delModal.busy = true;
+      const confirmBtn = document.getElementById('del-confirm');
+      const error = document.getElementById('del-error');
+      confirmBtn.disabled = true;
+      error.hidden = true;
+      let r;
+      try {
+        r = await API.post('character/delete', { character_id: delModal.id });
+      } catch (err) {
+        // Said inside the popup, where the player is looking — the fight
+        // refusal most of all, which is a "not now" and not a "no".
+        error.textContent = err.message || 'They could not be deleted.';
+        error.hidden = false;
+        confirmBtn.disabled = false;
+        delModal.busy = false;
+        document.getElementById('del-cancel').focus();
+        return;
+      }
+      // Done, whatever happens next. A list that fails to re-read is the
+      // page's problem and goes to the banner, not into a popup that would
+      // otherwise go on saying they could not be deleted when they were.
+      try {
+        await rosterChanged(delModal.id, r.message || 'Deleted.');
+      } catch (err) {
+        showError(err.message || 'Deleted, but the list could not be read again. Reload the page.');
+      }
+      closeDelete(true);
+    }
+
+    delModal.el.addEventListener('click', (e) => {
+      if (delModal.busy) return;
+      if (e.target.closest('[data-del-cancel]')) closeDelete(false);
+      else if (e.target.closest('#del-confirm')) confirmDelete();
+    });
+
+    delModal.el.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        if (!delModal.busy) closeDelete(false);
+        return;
+      }
+      if (e.key !== 'Tab') return;
+      const stops = [...delModal.el.querySelectorAll('button:not(:disabled)')];
+      if (!stops.length) return;
+      const first = stops[0];
+      const last = stops[stops.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    });
 
     // A figure that fails to decode reveals the bust, then the face. The
     // error event does not bubble, so this listens in the capture phase and
@@ -1271,6 +1435,11 @@ require_signed_in_page();
       const retire = e.target.closest('[data-retire]');
       if (retire) {
         await retireCharacter(retire);
+        return;
+      }
+      const del = e.target.closest('[data-delete]');
+      if (del) {
+        askDelete(del);
         return;
       }
       // A party tab: same door as a name in the rail, so the same handler

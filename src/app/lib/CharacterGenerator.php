@@ -718,6 +718,57 @@ class CharacterGenerator
     }
 
     /**
+     * Delete a character, as the player sees it: gone, and not coming back.
+     *
+     * Built on retiring rather than beside it. The row is kept, is_active goes
+     * to 0 and they leave character_party exactly as a retirement does, so the
+     * name is freed and every list that hides the retired hides them with no
+     * change of its own. `deleted_at` is the one thing added, and it is what
+     * Ownership::character() reads to make the row unreachable from any route
+     * — including restore. Their look art on disk is left alone too, so a
+     * mistake is put right with an UPDATE and nothing has to be re-baked.
+     *
+     * Unlike retire, deleting your LAST character is allowed. Retire's guard
+     * exists so that you are never left with nothing to play, which is right
+     * for a button that means "put them aside"; somebody pressing Delete on
+     * their only character and confirming it has said they want nothing, and
+     * an empty roster is a state the front page already handles — it opens the
+     * shelf. The caller moves the session off them, which is the only thing
+     * that would otherwise break.
+     *
+     * Works on an already-retired character too: a retired row is still on the
+     * restore path, and deleting is how a player takes it off.
+     */
+    public function delete(int $characterId): array
+    {
+        $stmt = $this->db->prepare(
+            'SELECT id, name, companion_key, deleted_at FROM characters WHERE id = ?'
+        );
+        $stmt->execute([$characterId]);
+        $char = $stmt->fetch();
+        if (!$char || $char['deleted_at'] !== null) {
+            throw new InvalidArgumentException('No such character.');
+        }
+        if ($char['companion_key']) {
+            throw new InvalidArgumentException(
+                $char['name'] . ' is a companion. Dismiss them at camp instead.'
+            );
+        }
+
+        $this->db->prepare(
+            'UPDATE characters SET is_active = 0, deleted_at = NOW() WHERE id = ?'
+        )->execute([$characterId]);
+        $this->db->prepare('DELETE FROM character_party WHERE character_id = ?')
+            ->execute([$characterId]);
+
+        return [
+            'ok'      => true,
+            'message' => $char['name'] . ' has been deleted.',
+            'deleted' => (int) $char['id'],
+        ];
+    }
+
+    /**
      * Bring a retired character back.
      *
      * Retiring is a soft delete precisely so this is possible — the row, its
