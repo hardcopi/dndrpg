@@ -116,3 +116,9 @@ src/assets/audio/vo/_accent_samples/
 # are not. Shipped to hermes by its own script, never by deploy.sh (see
 # rsync-excludes).
 src/assets/looks/
+
+# Per-character look art baked at runtime by app/lib/CharacterLook.php:
+# assets/images/npcs/lk_<character id>_<6 hex>{,_bust,_face,_fig,_sheet}.png.
+# It is a player's save written by the live server, not source; a pull.sh
+# from hermes brings it down and it must not end up in a commit.
+src/assets/images/npcs/lk_*

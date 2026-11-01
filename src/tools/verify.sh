@@ -108,6 +108,7 @@ if [ "$PHP_MODE" != none ]; then
     run "test_wards"          phprun test_wards.php
     run "test_focus"          phprun test_focus.php
     run "test_paperdoll"      phprun test_paperdoll.php
+    run "test_character_look" phprun test_character_look.php
 
     # DB-backed. Every one of these is safe against a database somebody is
     # playing on: scratch rows inside a transaction they roll back, or a

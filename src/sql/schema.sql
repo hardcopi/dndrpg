@@ -186,6 +186,17 @@ CREATE TABLE characters (
     -- is already wide. TEXT is stored off-page and costs the row nothing.
     -- SidekickAppearance caps what it writes at 4 KB regardless.
     sidekick_json TEXT NULL,
+    -- The creator look: a picture from the baked look library at
+    -- assets/looks/v1, chosen by picks rather than drawn. look_json is the
+    -- picks (gender, hair style and colour, outfit and its colour) as
+    -- CharacterLook::normalise() leaves them; look_key is the creator's key
+    -- for the picture they resolve to (`p2:look:feminine_Elf/topknot__purple`).
+    -- Both NULL for a character with no look, and both cleared when somebody
+    -- picks an ordinary avatar, so the row never claims a look it is not
+    -- wearing. The picture itself reaches the game as an `lk_<id>_<hash>`
+    -- sprite_key baked by CharacterLook, like every other piece of art.
+    look_json TEXT NULL,
+    look_key VARCHAR(120) NULL,
     -- Where the character stands. The world is a graph of locations, not a
     -- grid: this one id is the whole of a character's position.
     current_location_id INT UNSIGNED NULL,
