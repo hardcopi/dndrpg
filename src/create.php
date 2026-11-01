@@ -65,9 +65,9 @@ require_signed_in_page();
       <section class="wiz-step" data-step="identity" hidden>
         <!--
           One line, four fields. The Roll button rides inside the name field's
-          own cell so it cannot push the selects out of line, and the gender
-          select stays put whether or not the chosen race has names to roll —
-          a control that vanishes takes the three beside it for a walk.
+          own cell so it cannot push the selects out of line, and Body stays
+          put whether or not the chosen race has names to roll — a control
+          that vanishes takes the three beside it for a walk.
         -->
         <div class="wiz-idline">
           <div class="wiz-idfield wiz-idfield-name">
@@ -84,22 +84,26 @@ require_signed_in_page();
             </div>
           </div>
 
-          <div class="wiz-idfield">
-            <!--
-              Which pool the dice draw from. "Either" is a real answer rather
-              than a shrug — it draws from the whole culture at once — because
-              the game models no gender anywhere else, and this steers a
-              suggestion rather than setting a field on the character. Choosing
-              one also sets the look's Body below; "Either" leaves it alone,
-              because a painting has to be one or the other.
-            -->
-            <label for="name-gender">Gender</label>
-            <select id="name-gender" aria-label="Which names to draw from">
-              <option value="">Either</option>
-              <option value="masculine">Masculine</option>
-              <option value="feminine">Feminine</option>
-            </select>
-          </div>
+          <!--
+            Body: the one answer to "feminine or masculine" on this page. It
+            picks the painting below AND the pool the name dice draw from.
+            There used to be a Gender select here for the names and a Body
+            choice in the picker for the face, which was one question asked
+            twice — and the two could disagree, a feminine face under a name
+            rolled from the masculine list. "Either" went with the select: a
+            painting has to be one or the other, so Body always has a value
+            and the dice always draw from that pool.
+
+            It lives on this line rather than among the look controls so it is
+            at the top on a phone, beside the name it steers, and so it stays
+            live for a people with no paintings yet — their names still roll.
+            The game models gender nowhere else; this is a look and a naming
+            hint, not a field on the sheet.
+          -->
+          <fieldset class="wiz-idfield look-field" id="look-body-field">
+            <legend>Body</legend>
+            <div class="look-seg" id="look-gender"></div>
+          </fieldset>
 
           <div class="wiz-idfield">
             <label for="race">Race</label>
@@ -145,11 +149,7 @@ require_signed_in_page();
           </div>
 
           <div class="look-controls">
-            <fieldset class="look-field">
-              <legend>Body</legend>
-              <div class="look-seg" id="look-gender"></div>
-            </fieldset>
-
+            <!-- Body is on the identity line above; see the note there. -->
             <div class="look-field" id="look-style-field">
               <label for="look-hair-style">Hair style</label>
               <div class="look-cycle">

@@ -512,9 +512,17 @@
     blue: '#2f4f8f', crimson: '#8c1c24', green: '#2f6b3a',
   };
 
+  /**
+   * The Body choices. They come from the library when there is one, and
+   * stand on their own when there is not, because Body also decides which
+   * names the dice roll (NameGen::GENDERS) and a missing library must not
+   * take the name dice's only steer with it.
+   */
+  const BODIES = (LOOK && LOOK.genders.length) ? LOOK.genders : ['feminine', 'masculine'];
+
   /** The five picks, in the names the server takes: style_key, colour names, outfit key. */
   const look = {
-    gender: (LOOK && LOOK.genders[0]) || 'feminine',
+    gender: BODIES[0],
     hair_style: 'shoulder',
     hair_color: 'dark brown',
     outfit: 'tunic',
@@ -635,12 +643,20 @@
 
   /** Built once; syncLookControls() moves the values about afterwards. */
   function buildLookControls() {
-    if (!LOOK) return;
-    $('#look-gender').innerHTML = LOOK.genders.map((g) => `
+    // Body first and unconditionally: it sits on the identity line, outside
+    // the picker, and steers the name dice whether or not anything is painted.
+    $('#look-gender').innerHTML = BODIES.map((g) => `
       <label class="look-seg-opt">
         <input type="radio" name="look-gender" value="${g}">
         <span>${capital(g)}</span>
       </label>`).join('');
+    $('#look-gender').addEventListener('change', (e) => {
+      look.gender = e.target.value;
+      lookChanged();
+    });
+    syncBody();
+
+    if (!LOOK) return;
     $('#look-hair-style').innerHTML = LOOK.hair_styles
       .map((s) => `<option value="${s.style_key}">${capital(s.label)}</option>`).join('');
     $('#look-hair-color').innerHTML = swatches('look-hair-color', LOOK.hair_colours);
@@ -649,8 +665,7 @@
 
     $('#look-picker').addEventListener('change', (e) => {
       const t = e.target;
-      if (t.name === 'look-gender') look.gender = t.value;
-      else if (t.id === 'look-hair-style') look.hair_style = t.value;
+      if (t.id === 'look-hair-style') look.hair_style = t.value;
       else if (t.name === 'look-hair-color') look.hair_color = t.value;
       else if (t.id === 'look-outfit') { outfitTouched = true; setOutfit(t.value); }
       else if (t.name === 'look-outfit-color') { outfitTouched = true; look.outfit_color = t.value; }
@@ -670,28 +685,24 @@
     });
 
     $('#look-surprise').addEventListener('click', surpriseLook);
-
-    // The name dice's gender is a question about names, but somebody who has
-    // said "feminine" there means it of the face too. "Either" is no answer
-    // for a painting, so it leaves the Body where it was.
-    $('#name-gender')?.addEventListener('change', (e) => {
-      if (!LOOK?.genders.includes(e.target.value)) return;
-      look.gender = e.target.value;
-      lookChanged();
-    });
     $('#class')?.addEventListener('change', () => {
       applyClassOutfit();
       lookChanged();
     });
   }
 
+  /** Body's radios, which sit outside the picker and outlive a missing library. */
+  function syncBody() {
+    document.querySelectorAll('input[name="look-gender"]').forEach((r) => { r.checked = r.value === look.gender; });
+  }
+
   /** Put the picks into the controls, and hide or grey what this body lacks. */
   function syncLookControls() {
+    syncBody();
     if (!LOOK) return;
     const hairless = isHairless(lookRace());
     const coloured = styleHasColour(look.hair_style);
 
-    document.querySelectorAll('input[name="look-gender"]').forEach((r) => { r.checked = r.value === look.gender; });
     $('#look-hair-style').value = look.hair_style;
     document.querySelectorAll('input[name="look-hair-color"]').forEach((r) => {
       r.checked = r.value === look.hair_color;
@@ -863,10 +874,12 @@
    * nearest look, not on an error.
    */
   function readLookUrl(params) {
+    // Gender before the guard: it is the name dice's steer as well as the
+    // face's, so a link that says it still means it with no library here.
+    const g = params.get('gender');
+    if (BODIES.includes(g)) look.gender = g;
     if (!LOOK) return;
     const unslug = (s) => String(s || '').replace(/_/g, ' ');
-    const g = params.get('gender');
-    if (LOOK.genders.includes(g)) look.gender = g;
     const style = styleOf(params.get('hair_style') || '');
     if (style) look.hair_style = style.style_key;
     const hc = unslug(params.get('hair_color'));
@@ -910,11 +923,12 @@
    * chrome at all: no rail, no Back, no Next, just the character and Save.
    * Hiding rather than building a second page keeps one implementation of it.
    *
-   * The identity line goes with the chrome. A name is not a wardrobe either, and
-   * a race select that silently changed whose body was showing on somebody
-   * else's sheet would be the one control on this page that could change a
-   * character into a different character. Race and class come off the
-   * character, which is also what the server reads them from.
+   * The identity line goes with the chrome, all but Body. A name is not a
+   * wardrobe either, and a race select that silently changed whose body was
+   * showing on somebody else's sheet would be the one control on this page
+   * that could change a character into a different character. Race and class
+   * come off the character, which is also what the server reads them from.
+   * Body is a look pick like any other, so it stays — alone on the line.
    */
   async function enterRedressMode(params) {
     let sheet;
@@ -936,7 +950,7 @@
     $('#wiz-rail').remove();
     $('#wiz-back').remove();
     $('#wiz-next').remove();
-    $('.wiz-idline')?.remove();
+    document.querySelectorAll('.wiz-idline > .wiz-idfield:not(#look-body-field)').forEach((f) => f.remove());
     $('#name-check')?.remove();
     $('#racial-preview')?.remove();
 
@@ -955,8 +969,8 @@
     // A character from before the library has no record and is dressed for
     // their class, the same default a new one gets.
     const saved = c.look;
+    if (saved && BODIES.includes(saved.gender)) look.gender = saved.gender;
     if (saved && LOOK) {
-      if (LOOK.genders.includes(saved.gender)) look.gender = saved.gender;
       if (styleOf(saved.hair_style || '')) look.hair_style = styleOf(saved.hair_style).style_key;
       if (saved.hair_color) look.hair_color = saved.hair_color;
       if (outfitOf(saved.outfit)) {
@@ -1036,9 +1050,9 @@
     const tables = state.nameTables || [];
     const has = !!race && (tables.includes(race.subrace || '') || tables.includes(race.name));
     btn.hidden = !has;
-    // The gender select is not hidden with it. It shares a line with three
-    // other fields now, and a control that disappears for some races takes the
-    // ones beside it for a walk every time the race changes.
+    // Body is not hidden with it. It shares a line with three other fields,
+    // and a control that disappears for some races takes the ones beside it
+    // for a walk every time the race changes.
   }
 
   /**
@@ -1056,10 +1070,11 @@
 
     btn.disabled = true;
     try {
-      const gender = $('#name-gender')?.value || '';
+      // Body always has a value, so the dice always draw from that pool:
+      // the name and the face beside it are one person.
       let q = 'meta/roll_name&race=' + encodeURIComponent(race.name);
       if (race.subrace) q += '&subrace=' + encodeURIComponent(race.subrace);
-      if (gender) q += '&gender=' + encodeURIComponent(gender);
+      q += '&gender=' + encodeURIComponent(look.gender);
       if (state.redressId) q += '&except=' + state.redressId;
       const r = await API.get(q);
       if (!r.name) return;

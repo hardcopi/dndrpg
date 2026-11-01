@@ -2921,7 +2921,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .wiz-idfield select { width: 100%; }
 
 /* Two rows before one column: at the width where four fields stop fitting, the
-   name still deserves the full measure, and pairing gender with race keeps the
+   name still deserves the full measure, and pairing Body with race keeps the
    line's reading order intact. Only below that does it become a stack. */
 @media (max-width: 62rem) {
   .wiz-idline { grid-template-columns: 1fr 1fr; }
@@ -2929,6 +2929,14 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 }
 @media (max-width: 34rem) {
   .wiz-idline { grid-template-columns: 1fr; }
+}
+/* Body is the look picker's segmented control, which is a fingertip tall; on
+   a line of selects it takes the select's box instead, so the four fields sit
+   on one baseline. A phone stacks the line, nothing sits beside it, and it
+   keeps the 44px. */
+.wiz-idline .look-seg { margin-bottom: var(--sp-12); }
+@media (min-width: 34.0625rem) {
+  .wiz-idline .look-seg-opt span { min-height: 38px; padding-block: 0; }
 }
 
 /* What the race grants — speed, ability bonuses, traits — under the line that
@@ -3167,6 +3175,9 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 
 /* Re-dressing an existing character is the look step with the wizard removed. */
 .redress-mode .wiz-nav { justify-content: flex-end; }
+/* Body is all that is left of the identity line there; it takes the width of
+   a field rather than the name's 2.2fr share of a line with nothing else on it. */
+.redress-mode .wiz-idline { grid-template-columns: minmax(0, 20rem); }
 
 @media (max-width: 720px) {
   /* The page scrolls everywhere now, so the phone no longer needs telling. */
