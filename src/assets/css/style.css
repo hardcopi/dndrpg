@@ -5646,6 +5646,9 @@ body.bm-pan-ready .battlemap { cursor: grab; }
    so a finger on empty ground still scrolls and the camera still pans. */
 .bm-token.is-actor.is-party .bm-hit-token { touch-action: none; }
 .bm-figure { pointer-events: none; image-rendering: pixelated; }
+/* A creator look (lk_ key) is a painting, not pixel art: see LOOK_KEY in
+   ui-battlemap.js. The card's twin is simply not given .is-pixel. */
+.bm-figure.is-smooth { image-rendering: auto; }
 .bm-face.is-held { visibility: hidden; }
 .bm-foot { fill: none; stroke-width: 0.045; pointer-events: none; }
 .bm-token.is-party .bm-foot { stroke: var(--accent); }

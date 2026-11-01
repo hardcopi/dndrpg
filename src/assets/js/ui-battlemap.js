@@ -142,6 +142,22 @@
   }
 
   /**
+   * A creator look: `lk_<character id>_<6 hex>`, baked by CharacterLook.php.
+   *
+   * Not in monsters.json and never will be — there is one per character, and
+   * a re-dress makes a new one — so the catalogue saying "I do not know this
+   * key" is not, for these, a reason to fall back to the face. The figure is
+   * `npcs/<key>_fig.png`, beside the bust and face of the same key, because
+   * npcs/ is the one folder the server writes art into.
+   *
+   * Drawn SMOOTH. The catalogue's figures are 32-colour pixel art and are
+   * scaled nearest-neighbour to keep their edges; a look is a painting, and
+   * the same treatment turns it to jagged mush. Same 192x320 frame as the
+   * catalogue's, so the aspect and the sole line carry over unchanged.
+   */
+  const LOOK_KEY = /^lk_\d+_[0-9a-f]{6}$/;
+
+  /**
    * Which sheet, and how tall.
    *
    * Payload `size` wins when it is one of the five words the sheets are drawn
@@ -151,8 +167,9 @@
    */
   function figureFor(c, key) {
     if (!key) return null;
-    const row = figureIndex ? figureIndex[key] : null;
-    if (figureIndex && !row) return null;
+    const look = LOOK_KEY.test(key);
+    const row = figureIndex && !look ? figureIndex[key] : null;
+    if (figureIndex && !row && !look) return null;
     const payload = knownSize(c.size);
     const fromRow = row ? knownSize(row.size) : '';
     let size = payload || fromRow;
@@ -164,17 +181,24 @@
     const height = FIGURE_H[size];
     const wide = !!(row && (row.wide || (row.canvas && row.canvas[0] >= 320)));
     const aspect = wide ? 1 : 192 / 320;
+    const file = (row && row.file) || `${key}.png`;
     return {
       size,
       height,
       footprint: height >= 2 ? height : 1,
       aspect,
-      file: (row && row.file) || `${key}.png`,
+      file,
+      // Where the picture is, whole. The card and the flat board both draw
+      // from this rather than building `figures/` + file themselves, which
+      // is the one place a look's figure lives somewhere else.
+      url: look ? artUrl(`npcs/${key}_fig.png`) : artUrl('figures/' + file),
+      smooth: look,
     };
   }
 
   /** The full-body "style b" sheet for a combatant, or '' when the catalogue has none. */
   function figureUrl(c, key) {
+    if (key && LOOK_KEY.test(key)) return `/assets/images/npcs/${key}_fig.png`;
     const row = figureIndex && key ? figureIndex[key] : null;
     return row && row.file ? '/assets/images/figures/' + row.file : '';
   }
@@ -743,9 +767,11 @@
            width="${n(spec.footprint)}" height="${n(spec.footprint)}"/>`
       : '';
     const held = face.replace('class="bm-face', 'class="bm-face is-held');
-    const sheet = `<image class="bm-figure" href="${esc(artUrl('figures/' + spec.file))}"
+    // Pixel art keeps its edges; a creator look is a painting and does not.
+    const pixel = spec.smooth ? '' : ' image-rendering="pixelated"';
+    const sheet = `<image class="bm-figure${spec.smooth ? ' is-smooth' : ''}" href="${esc(spec.url)}"
          x="${n(imgX)}" y="${n(imgY)}" width="${n(imgW)}" height="${n(imgH)}"
-         preserveAspectRatio="xMidYMax meet" image-rendering="pixelated"
+         preserveAspectRatio="xMidYMax meet"${pixel}
          onerror="var g=this.parentNode;var f=g&amp;&amp;g.querySelector('.is-held');if(f)f.classList.remove('is-held');this.remove()"/>`;
     // The server's footprint is the anchor cell and the cells east and south
     // of it, so the picture is seated on that box rather than on the anchor.
@@ -1071,7 +1097,7 @@
         if (!face) continue;
         const size = knownSize(c.size) || 'medium';
         const fh = FIGURE_H[size];
-        spec = { size, height: fh, footprint: fh >= 2 ? fh : 1, aspect: 1, file: '' };
+        spec = { size, height: fh, footprint: fh >= 2 ? fh : 1, aspect: 1, file: '', url: '', smooth: false };
       }
       const tag = `c${++seq}`;
       const disc = face ? (spec.footprint > 1 ? spec.footprint * 0.9 : Math.max(0.6, Math.min(1, spec.height))) : 0;
@@ -1102,7 +1128,7 @@
         ? `<span class="bm-standee-base"></span>
           <img class="bm-card-art bm-standee-face" src="${esc(face)}" alt=""
                draggable="false" onerror="window.BattleMap.cardFail(this)">`
-        : `<img class="bm-card-art is-pixel" src="${esc(artUrl('figures/' + spec.file))}" alt=""
+        : `<img class="bm-card-art${spec.smooth ? '' : ' is-pixel'}" src="${esc(spec.url)}" alt=""
                draggable="false" onerror="window.BattleMap.cardFail(this)">`;
       list.push({ fx, fy, html: `<div class="bm-card is-figure${face ? ' is-standee' : ''} ${c.side === 'party' ? 'is-party' : 'is-foe'} ${aimClass(o, c)}"
           data-card="${tag}" data-cid="${esc(c.cid)}" data-cx="${n(fx)}" data-cy="${n(fy)}"
