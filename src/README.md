@@ -615,3 +615,45 @@ RPG_PACK_DIR=/path/to/packs python3 tools/slice_assets.py
 
 The generators are the only thing that reads the packs, so the game runs fine
 without them present — you just can't re-cut art until they're restored.
+
+### Baking the character look library
+
+A player character's pictures — the creator's full figure, the bust, the
+party-rail face and the battle-map figure — come from a **look library** baked
+by `tools/bake_looks.py` out of a snapshot of the Odin creator (v7, pose2):
+1,172 looks x 11 outfit variants = 12,892 entries, four WebP files each, under
+`assets/looks/v1/<char>/<stem>/<variant>.<kind>.webp`. The look key a
+character stores is the creator's own (`p2:look:<char>/<stem>|<variant>`), so
+nothing translates between the two.
+
+The library is **not in git and not sent by `deploy.sh`** (~0.6 GB, ~51k
+files; see `.gitignore` and `rsync-excludes`). It ships by its own script.
+
+It needs rembg, which is not in the system Python — use the creator's venv,
+and run it as `richard` (the matting model lives in `~richard/.rembg`):
+
+```bash
+PY=/home/richard/rivermark/creator-src/.venv/bin/python
+SRC=/home/richard/rivermark/creator-src/pose2-v7-20261101
+
+# ~95 representative entries, with review sheets — about a minute
+$PY tools/bake_looks.py --src $SRC --out /tmp/looks --select trial --jobs 4 \
+    --contact-sheets /tmp/sheets --hard-cases /tmp/sheets
+
+# everything — about an hour; idempotent, so an interrupted bake resumes
+$PY tools/bake_looks.py --src $SRC --select all --jobs 4
+
+# the closed lists the picker and server validate against
+$PY tools/bake_looks.py --src $SRC --write-options     # assets/data/looks_options.json
+$PY tools/test_bake_looks.py
+```
+
+`--dry-run` lists what would be baked, `--force` re-bakes what exists,
+`--select` also takes key or `char/stem/variant` prefixes. Every run rewrites
+`manifest.json` from what is on disk and writes `bake_stats.json`, with an
+extrapolation of the full bake's time and size from the run just done.
+Look at `contact_fig.png` and `cutout_closeups.png` after any change to the
+matting: the board figure is the one picture the bake has to make up rather
+than compose, and why it is made the way it is — isnet, one matte per outfit,
+the measured backdrop, the shadow under the feet — is written beside each
+step in the tool.

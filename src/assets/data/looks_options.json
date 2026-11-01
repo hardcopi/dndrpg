@@ -1,0 +1,162 @@
+{
+ "library_version": "v1",
+ "creator_version": "v7",
+ "pose": "pose2",
+ "path_template": "assets/looks/v1/{char}/{stem}/{variant}.{kind}.webp",
+ "stem_rule": {
+  "coloured": "{style_key}__{hair_colour with spaces as _}",
+  "no_colour": "{style_key}",
+  "hairless": "base"
+ },
+ "variant_rule": {
+  "tunic": "tunic",
+  "other": "{outfit}__{colour with spaces as _}"
+ },
+ "key_template": "p2:look:{char}/{stem}[|{variant}] or p2:base:{char}[|{variant}]; no |variant for tunic",
+ "kinds": [
+  "full",
+  "bust",
+  "fig",
+  "face"
+ ],
+ "genders": [
+  "feminine",
+  "masculine"
+ ],
+ "races": [
+  "Dwarf",
+  "Elf",
+  "Gnome",
+  "Half-Elf",
+  "Half-Orc",
+  "Halfling",
+  "Human",
+  "Sarsen",
+  "Tiefling",
+  "Dragonborn"
+ ],
+ "hairless_races": [
+  "Dragonborn"
+ ],
+ "hair_styles": [
+  {
+   "label": "bald or shaven",
+   "style_key": "bald"
+  },
+  {
+   "label": "cropped short",
+   "style_key": "cropped"
+  },
+  {
+   "label": "shoulder-length",
+   "style_key": "shoulder"
+  },
+  {
+   "label": "long and loose",
+   "style_key": "long_loose"
+  },
+  {
+   "label": "long braids",
+   "style_key": "braids"
+  },
+  {
+   "label": "topknot",
+   "style_key": "topknot"
+  },
+  {
+   "label": "wild and shaggy",
+   "style_key": "shaggy"
+  },
+  {
+   "label": "tied back",
+   "style_key": "tied_back"
+  },
+  {
+   "label": "hidden under a hood",
+   "style_key": "hood"
+  }
+ ],
+ "hair_colours": [
+  "black",
+  "dark brown",
+  "chestnut",
+  "auburn",
+  "red",
+  "blond",
+  "grey",
+  "white",
+  "purple"
+ ],
+ "no_colour_styles": [
+  "bald or shaven",
+  "hidden under a hood"
+ ],
+ "outfits": [
+  {
+   "key": "tunic",
+   "label": "Tunic (travelling clothes)",
+   "colours": [
+    "default"
+   ],
+   "colour_slugs": []
+  },
+  {
+   "key": "plate",
+   "label": "Plate armour",
+   "colours": [
+    "steel",
+    "bronze",
+    "blackened"
+   ],
+   "colour_slugs": [
+    "steel",
+    "bronze",
+    "blackened"
+   ]
+  },
+  {
+   "key": "leather",
+   "label": "Leather armour",
+   "colours": [
+    "grey-brown",
+    "brown",
+    "black"
+   ],
+   "colour_slugs": [
+    "grey-brown",
+    "brown",
+    "black"
+   ]
+  },
+  {
+   "key": "robe",
+   "label": "Mage robes",
+   "colours": [
+    "grey",
+    "blue",
+    "crimson",
+    "green"
+   ],
+   "colour_slugs": [
+    "grey",
+    "blue",
+    "crimson",
+    "green"
+   ]
+  }
+ ],
+ "class_outfit": {
+  "Barbarian": "leather",
+  "Bard": "leather",
+  "Cleric": "plate",
+  "Druid": "robe",
+  "Fighter": "plate",
+  "Monk": "tunic",
+  "Paladin": "plate",
+  "Ranger": "leather",
+  "Rogue": "leather",
+  "Sorcerer": "robe",
+  "Warlock": "robe",
+  "Wizard": "robe"
+ }
+}

@@ -106,3 +106,13 @@ src/assets/images/art.json
 # judgement, not an asset: no page references them, deploy.sh excludes them,
 # and `tools/gen_voiceover.py --sample-accents` makes them again in a minute.
 src/assets/audio/vo/_accent_samples/
+
+# The character look library, baked by src/tools/bake_looks.py from a snapshot
+# of the Odin creator: 12,892 looks x four pictures, ~0.6 GB in ~51k files.
+# It is a build product, reproducible byte-for-byte from the snapshot its
+# manifest.json names, and a clone carrying it would be twenty times the size
+# of everything else in the repository. src/assets/data/looks_options.json —
+# the closed lists the game validates against — IS versioned; the pictures
+# are not. Shipped to hermes by its own script, never by deploy.sh (see
+# rsync-excludes).
+src/assets/looks/
