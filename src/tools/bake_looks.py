@@ -478,6 +478,14 @@ def fig_of(rgba: np.ndarray) -> np.ndarray:
     return np.clip(canvas * 255.0 + 0.5, 0, 255).astype(np.uint8)
 
 
+# Races whose head does not sit in the shared face window. A Dragonborn's head
+# is a crest and a snout: the window that frames a human from crown to chin
+# shows a Dragonborn's crest and cuts at the eyes, so theirs is larger and
+# lower, framing eyes to jaw with the crest's base. Measured on both
+# Dragonborn busts in the trial contact sheet (side, centre_x, top).
+FACE_BY_RACE = {"Dragonborn": (230, 192, 40)}
+
+
 def face_of(bust: np.ndarray, side: int = 200, cx: int = 192, top: int = 20) -> np.ndarray:
     """The party-rail face, cut from the bust — never generated separately, for
     the reason tools/cut_face.py gives: two paintings are two people.
@@ -573,7 +581,7 @@ def bake_group(task: dict) -> dict:
             if "bust" in todo:
                 imgs["bust"] = bust
             if "face" in todo:
-                imgs["face"] = face_of(bust, *face_args)
+                imgs["face"] = face_of(bust, *FACE_BY_RACE.get(e["choices"]["race"], face_args))
             if norm_full or norm_bust:
                 st["normalised"][e["char"]] = {"full": bg_full.tolist(), "bust": bg_bust.tolist()}
 
@@ -934,7 +942,7 @@ def main() -> int:
 
     params = {"select": args.select, "jobs": jobs, "ort_threads": threads, "matte_model": "isnet-general-use",
               "backdrop_limit": BACKDROP_LIMIT, "fig": [FIG_W, FIG_H], "fig_rows": [FIG_TOP, FIG_BOTTOM],
-              "fig_max_w": FIG_MAX_W, "face": dict(zip(("side", "cx", "top"), face_args)), "face_size": FACE,
+              "fig_max_w": FIG_MAX_W, "face": dict(zip(("side", "cx", "top"), face_args)), "face_by_race": FACE_BY_RACE, "face_size": FACE,
               "webp": {"full": "q85 m4", "bust": "q85 m4", "face": "q85 m4", "fig": "q90 alpha100 m4"}}
     man = write_manifest(args.out, args.src, entries, params, tot["normalised"])
     stats = extrapolate(tot, wall, jobs, entries)
