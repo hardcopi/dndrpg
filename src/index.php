@@ -724,7 +724,9 @@ require_signed_in_page();
       if (!file) {
         return `<img class="cs-body is-portrait" alt="" data-step="bust" data-face="${esc(face)}" src="${esc(bust)}">`;
       }
-      return `<img class="cs-body" alt="" data-step="figure" data-bust="${esc(bust)}" data-face="${esc(face)}" src="${esc(file)}">`;
+      const row = figureCatalog ? figureCatalog[key] : null;
+      const smooth = row && row.smooth ? ' is-smooth' : '';
+      return `<img class="cs-body${smooth}" alt="" data-step="figure" data-bust="${esc(bust)}" data-face="${esc(face)}" src="${esc(file)}">`;
     }
 
     /**

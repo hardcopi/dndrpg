@@ -3,7 +3,7 @@
     "name": "Ilse Thornwood",
     "role": "Hill Warden",
     "description": "Wood elf warden of the eastern hills. Comes into town for salt and leaves before dark.",
-    "sprite_key": "ranger",
+    "sprite_key": "ilse",
     "dialog": "ilse",
     "place": {
         "location": "wardens_camp"

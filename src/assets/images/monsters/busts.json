@@ -18,6 +18,7 @@
  "city_guard": 1,
  "concern_warden": 1,
  "crawler": 1,
+ "deep_gremlin": 1,
  "dire_wolf": 1,
  "dragon": 1,
  "drowned_man": 1,
@@ -47,6 +48,7 @@
  "tentacled": 1,
  "thief_captain": 1,
  "warden_serjeant": 1,
+ "wererat": 1,
  "wight": 1,
  "wolf": 1
 }

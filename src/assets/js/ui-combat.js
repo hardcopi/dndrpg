@@ -262,6 +262,19 @@
     return `/assets/images/battlers/${key}.png?v=${G().TILE_CACHE_VER}`;
   }
 
+  /**
+   * Whether the inspector's picture is a painting. A catalogue figure says so
+   * itself (`smooth` in figures/monsters.json, or a painted look); with no
+   * figure the picture is the `battlers/` cut or the bust, both paintings.
+   */
+  function battlerSmooth(c) {
+    const BM = window.BattleMap;
+    const key = artKey(c);
+    const fig = BM && BM.figureUrl ? BM.figureUrl(c, key) : '';
+    if (!fig) return true;
+    return !!(BM.figureSmooth && BM.figureSmooth(c, key));
+  }
+
   function bustFallbackUrl(c) {
     const dir = c.type === 'pc' ? 'npcs' : 'monsters';
     return `assets/images/${dir}/${artKey(c)}_bust.png?v=${G().TILE_CACHE_VER}`;
@@ -1522,7 +1535,7 @@
 
     const shot = map(uiFor(currentActor())?.targets)[c.cid];
     box.innerHTML = `
-      <img class="cbt-battler" src="${esc(battlerUrl(c))}" alt=""
+      <img class="cbt-battler${battlerSmooth(c) ? ' is-smooth' : ''}" src="${esc(battlerUrl(c))}" alt=""
            onerror="this.onerror=null;this.src='${esc(bustFallbackUrl(c))}'">
       <div class="cbt-inspect-name">${esc(c.name)}</div>
       <div class="cbt-inspect-line">${esc(c.side === 'party' ? 'Your side' : 'Hostile')}${

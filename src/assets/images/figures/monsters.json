@@ -1,5 +1,5 @@
 {
-  "notes": "Figures fill their canvas; scale at draw time by height_cells (Tiny .5, Small .75, Medium 1, Large 2 = 2x2, Huge 3 = 3x3). Feet/base 4px above canvas bottom. Wide creatures use 320x320, others 192x320. key = server art key (sprite_key, else monster_key). aliases maps a bestiary key onto that figure key when the names differ (the_growth -> boss_worm, worg -> black_wolf, and the other shared sheets). Companions with a face of their own (kessa, aldric, jimmy_able, sera_vance) are heroes keyed by their sprite_key.",
+  "notes": "Figures fill their canvas; scale at draw time by height_cells (Tiny .5, Small .75, Medium 1, Large 2 = 2x2, Huge 3 = 3x3). Feet/base 4px above canvas bottom. Wide creatures use 320x320, others 192x320. key = server art key (sprite_key, else monster_key). aliases maps a bestiary key onto that figure key when the names differ (the_growth -> boss_worm, worg -> black_wolf, and the other shared sheets). Companions with a face of their own (kessa, aldric, jimmy_able, sera_vance) are heroes keyed by their sprite_key. smooth: true marks a painted figure (the Act I restyle, Nov 2026), drawn with smooth scaling instead of nearest-neighbour; rows without it are the 32-colour sheets. Painted rows have no aga_file of their own yet.",
   "aliases": {
     "the_growth": "boss_worm",
     "purple_worm": "boss_worm",
@@ -7,12 +7,10 @@
     "carrion_crawler": "crawler",
     "crust": "rock_man",
     "stone_giant": "rock_man",
-    "deep_gremlin": "gremlin",
     "drowned_clerk": "boss_drowned",
     "fen_horror": "tentacled",
     "fen_howler": "howler",
     "grey_ooze": "ooze",
-    "wererat": "ratman",
     "fire_giant": "ogre",
     "frost_giant": "ogre",
     "storm_giant": "ogre",
@@ -61,7 +59,8 @@
         96,
         160
       ],
-      "portrait": "https://rpg.five-star.com/assets/images/monsters/bandit_bust.png"
+      "portrait": "https://rpg.five-star.com/assets/images/monsters/bandit_bust.png",
+      "smooth": true
     },
     {
       "key": "city_guard",
@@ -101,7 +100,8 @@
         160,
         160
       ],
-      "portrait": "https://rpg.five-star.com/assets/images/monsters/giant_rat_bust.png"
+      "portrait": "https://rpg.five-star.com/assets/images/monsters/giant_rat_bust.png",
+      "smooth": true
     },
     {
       "key": "kobold",
@@ -121,7 +121,8 @@
         96,
         160
       ],
-      "portrait": "https://rpg.five-star.com/assets/images/monsters/kobold_bust.png"
+      "portrait": "https://rpg.five-star.com/assets/images/monsters/kobold_bust.png",
+      "smooth": true
     },
     {
       "key": "stirge",
@@ -141,7 +142,8 @@
         160,
         160
       ],
-      "portrait": "https://rpg.five-star.com/assets/images/monsters/stirge_bust.png"
+      "portrait": "https://rpg.five-star.com/assets/images/monsters/stirge_bust.png",
+      "smooth": true
     },
     {
       "key": "giant_centipede",
@@ -181,7 +183,8 @@
         96,
         160
       ],
-      "portrait": "https://rpg.five-star.com/assets/images/monsters/goblin_bust.png"
+      "portrait": "https://rpg.five-star.com/assets/images/monsters/goblin_bust.png",
+      "smooth": true
     },
     {
       "key": "sump_gremlin",
@@ -221,11 +224,11 @@
         160,
         160
       ],
-      "portrait": "https://rpg.five-star.com/assets/images/monsters/wolf_bust.png"
+      "portrait": "https://rpg.five-star.com/assets/images/monsters/wolf_bust.png",
+      "smooth": true
     },
     {
       "key": "gremlin",
-      "monster_key": "deep_gremlin",
       "name": "Deep Gremlin",
       "size": "Small",
       "footprint": 1,
@@ -261,7 +264,8 @@
         96,
         160
       ],
-      "portrait": "https://rpg.five-star.com/assets/images/monsters/gnoll_bust.png"
+      "portrait": "https://rpg.five-star.com/assets/images/monsters/gnoll_bust.png",
+      "smooth": true
     },
     {
       "key": "ooze",
@@ -361,7 +365,8 @@
         96,
         160
       ],
-      "portrait": "https://rpg.five-star.com/assets/images/monsters/bugbear_bust.png"
+      "portrait": "https://rpg.five-star.com/assets/images/monsters/bugbear_bust.png",
+      "smooth": true
     },
     {
       "key": "dire_wolf",
@@ -381,7 +386,8 @@
         160,
         160
       ],
-      "portrait": "https://rpg.five-star.com/assets/images/monsters/dire_wolf_bust.png"
+      "portrait": "https://rpg.five-star.com/assets/images/monsters/dire_wolf_bust.png",
+      "smooth": true
     },
     {
       "key": "giant_spider",
@@ -441,7 +447,8 @@
         160,
         160
       ],
-      "portrait": "https://rpg.five-star.com/assets/images/monsters/pale_crawler_bust.png"
+      "portrait": "https://rpg.five-star.com/assets/images/monsters/pale_crawler_bust.png",
+      "smooth": true
     },
     {
       "key": "concern_warden",
@@ -561,7 +568,8 @@
         96,
         160
       ],
-      "portrait": "https://rpg.five-star.com/assets/images/monsters/ogre_bust.png"
+      "portrait": "https://rpg.five-star.com/assets/images/monsters/ogre_bust.png",
+      "smooth": true
     },
     {
       "key": "boss_drowned",
@@ -585,7 +593,6 @@
     },
     {
       "key": "ratman",
-      "monster_key": "wererat",
       "name": "Wererat",
       "size": "Medium",
       "footprint": 1,
@@ -862,6 +869,38 @@
         160
       ],
       "portrait": "https://rpg.five-star.com/assets/images/monsters/griffon_bust.png"
+    },
+    {
+      "key": "deep_gremlin",
+      "monster_key": "deep_gremlin",
+      "name": "Deep Gremlin",
+      "size": "Small",
+      "footprint": 1,
+      "height_cells": 0.75,
+      "canvas": [
+        192,
+        320
+      ],
+      "wide": false,
+      "file": "deep_gremlin.png",
+      "portrait": "https://rpg.five-star.com/assets/images/monsters/deep_gremlin_bust.png",
+      "smooth": true
+    },
+    {
+      "key": "wererat",
+      "monster_key": "wererat",
+      "name": "Wererat",
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "wide": false,
+      "file": "wererat.png",
+      "portrait": "https://rpg.five-star.com/assets/images/monsters/wererat_bust.png",
+      "smooth": true
     }
   ],
   "heroes": [
@@ -876,7 +915,8 @@
         320
       ],
       "file": "barbarian.png",
-      "aga_file": "barbarian_s.png"
+      "aga_file": "barbarian_s.png",
+      "smooth": true
     },
     {
       "key": "bard",
@@ -889,7 +929,8 @@
         320
       ],
       "file": "bard.png",
-      "aga_file": "bard_s.png"
+      "aga_file": "bard_s.png",
+      "smooth": true
     },
     {
       "key": "cleric",
@@ -915,7 +956,8 @@
         320
       ],
       "file": "druid.png",
-      "aga_file": "druid_s.png"
+      "aga_file": "druid_s.png",
+      "smooth": true
     },
     {
       "key": "fighter",
@@ -928,7 +970,8 @@
         320
       ],
       "file": "fighter.png",
-      "aga_file": "fighter_s.png"
+      "aga_file": "fighter_s.png",
+      "smooth": true
     },
     {
       "key": "monk",
@@ -941,7 +984,8 @@
         320
       ],
       "file": "monk.png",
-      "aga_file": "monk_s.png"
+      "aga_file": "monk_s.png",
+      "smooth": true
     },
     {
       "key": "paladin",
@@ -954,7 +998,8 @@
         320
       ],
       "file": "paladin.png",
-      "aga_file": "paladin_s.png"
+      "aga_file": "paladin_s.png",
+      "smooth": true
     },
     {
       "key": "ranger",
@@ -967,7 +1012,8 @@
         320
       ],
       "file": "ranger.png",
-      "aga_file": "ranger_s.png"
+      "aga_file": "ranger_s.png",
+      "smooth": true
     },
     {
       "key": "rogue",
@@ -993,7 +1039,8 @@
         320
       ],
       "file": "sorcerer.png",
-      "aga_file": "sorcerer_s.png"
+      "aga_file": "sorcerer_s.png",
+      "smooth": true
     },
     {
       "key": "token_dragonborn_f1",
@@ -1318,7 +1365,8 @@
         320
       ],
       "file": "warlock.png",
-      "aga_file": "warlock_s.png"
+      "aga_file": "warlock_s.png",
+      "smooth": true
     },
     {
       "key": "wizard",
@@ -1331,7 +1379,8 @@
         320
       ],
       "file": "wizard.png",
-      "aga_file": "wizard_s.png"
+      "aga_file": "wizard_s.png",
+      "smooth": true
     },
     {
       "key": "kessa",
@@ -1344,7 +1393,8 @@
         320
       ],
       "file": "kessa.png",
-      "aga_file": "kessa_s.png"
+      "aga_file": "kessa_s.png",
+      "smooth": true
     },
     {
       "key": "aldric",
@@ -1357,7 +1407,8 @@
         320
       ],
       "file": "aldric.png",
-      "aga_file": "aldric_s.png"
+      "aga_file": "aldric_s.png",
+      "smooth": true
     },
     {
       "key": "jimmy_able",
@@ -1383,7 +1434,580 @@
         320
       ],
       "file": "sera_vance.png",
-      "aga_file": "sera_vance_s.png"
+      "aga_file": "sera_vance_s.png",
+      "smooth": true
+    },
+    {
+      "key": "goblin_warlord",
+      "race": null,
+      "size": "Small",
+      "footprint": 1,
+      "height_cells": 0.75,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "goblin_warlord.png",
+      "smooth": true
+    },
+    {
+      "key": "mara_hearthstone",
+      "race": null,
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "mara_hearthstone.png",
+      "smooth": true
+    },
+    {
+      "key": "ludo_corse",
+      "race": null,
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "ludo_corse.png",
+      "smooth": true
+    },
+    {
+      "key": "elowen",
+      "race": null,
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "elowen.png",
+      "smooth": true
+    },
+    {
+      "key": "scribe",
+      "race": null,
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "scribe.png",
+      "smooth": true
+    },
+    {
+      "key": "alder_pyke",
+      "race": null,
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "alder_pyke.png",
+      "smooth": true
+    },
+    {
+      "key": "tibald_ashe",
+      "race": null,
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "tibald_ashe.png",
+      "smooth": true
+    },
+    {
+      "key": "skulker",
+      "race": null,
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "skulker.png",
+      "smooth": true
+    },
+    {
+      "key": "dorn_ackley",
+      "race": null,
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "dorn_ackley.png",
+      "smooth": true
+    },
+    {
+      "key": "saurial",
+      "race": null,
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "saurial.png",
+      "smooth": true
+    },
+    {
+      "key": "gest_pyle",
+      "race": null,
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "gest_pyle.png",
+      "smooth": true
+    },
+    {
+      "key": "tull_barrow",
+      "race": null,
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "tull_barrow.png",
+      "smooth": true
+    },
+    {
+      "key": "wenna_coyle",
+      "race": null,
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "wenna_coyle.png",
+      "smooth": true
+    },
+    {
+      "key": "wick_lorrimer",
+      "race": null,
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "wick_lorrimer.png",
+      "smooth": true
+    },
+    {
+      "key": "bael_rourke",
+      "race": null,
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "bael_rourke.png",
+      "smooth": true
+    },
+    {
+      "key": "smith",
+      "race": null,
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "smith.png",
+      "smooth": true
+    },
+    {
+      "key": "dagen_wyke",
+      "race": null,
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "dagen_wyke.png",
+      "smooth": true
+    },
+    {
+      "key": "baker",
+      "race": null,
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "baker.png",
+      "smooth": true
+    },
+    {
+      "key": "sib_marrell",
+      "race": null,
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "sib_marrell.png",
+      "smooth": true
+    },
+    {
+      "key": "nell_quist",
+      "race": null,
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "nell_quist.png",
+      "smooth": true
+    },
+    {
+      "key": "mott_wenn",
+      "race": null,
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "mott_wenn.png",
+      "smooth": true
+    },
+    {
+      "key": "prisoner_3",
+      "race": null,
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "prisoner_3.png",
+      "smooth": true
+    },
+    {
+      "key": "sten_harrow",
+      "race": null,
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "sten_harrow.png",
+      "smooth": true
+    },
+    {
+      "key": "pol_reddick",
+      "race": null,
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "pol_reddick.png",
+      "smooth": true
+    },
+    {
+      "key": "joss_frayle",
+      "race": null,
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "joss_frayle.png",
+      "smooth": true
+    },
+    {
+      "key": "corrin_dale",
+      "race": null,
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "corrin_dale.png",
+      "smooth": true
+    },
+    {
+      "key": "serjeant_ballow",
+      "race": null,
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "serjeant_ballow.png",
+      "smooth": true
+    },
+    {
+      "key": "fessick",
+      "race": null,
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "fessick.png",
+      "smooth": true
+    },
+    {
+      "key": "gillian_petch",
+      "race": null,
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "gillian_petch.png",
+      "smooth": true
+    },
+    {
+      "key": "corbin_waite",
+      "race": null,
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "corbin_waite.png",
+      "smooth": true
+    },
+    {
+      "key": "osgar_tull",
+      "race": null,
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "osgar_tull.png",
+      "smooth": true
+    },
+    {
+      "key": "rilk",
+      "race": null,
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "rilk.png",
+      "smooth": true
+    },
+    {
+      "key": "beggar",
+      "race": null,
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "beggar.png",
+      "smooth": true
+    },
+    {
+      "key": "farmer",
+      "race": null,
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "farmer.png",
+      "smooth": true
+    },
+    {
+      "key": "jester",
+      "race": null,
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "jester.png",
+      "smooth": true
+    },
+    {
+      "key": "miner",
+      "race": null,
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "miner.png",
+      "smooth": true
+    },
+    {
+      "key": "sweeper",
+      "race": null,
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "sweeper.png",
+      "smooth": true
+    },
+    {
+      "key": "captain",
+      "race": null,
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "captain.png",
+      "smooth": true
+    },
+    {
+      "key": "child_2",
+      "race": null,
+      "size": "Small",
+      "footprint": 1,
+      "height_cells": 0.75,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "child_2.png",
+      "smooth": true
+    },
+    {
+      "key": "child_1",
+      "race": null,
+      "size": "Small",
+      "footprint": 1,
+      "height_cells": 0.75,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "child_1.png",
+      "smooth": true
+    },
+    {
+      "key": "ilse",
+      "race": null,
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "ilse.png",
+      "smooth": true
+    },
+    {
+      "key": "doren_ferrow",
+      "race": null,
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "doren_ferrow.png",
+      "smooth": true
+    },
+    {
+      "key": "yrsa",
+      "race": null,
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "yrsa.png",
+      "smooth": true
+    },
+    {
+      "key": "nessa_reth",
+      "race": null,
+      "size": "Medium",
+      "footprint": 1,
+      "height_cells": 1.0,
+      "canvas": [
+        192,
+        320
+      ],
+      "file": "nessa_reth.png",
+      "smooth": true
     }
   ]
 }

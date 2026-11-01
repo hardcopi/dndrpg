@@ -192,8 +192,18 @@
       // from this rather than building `figures/` + file themselves, which
       // is the one place a look's figure lives somewhere else.
       url: look ? artUrl(`npcs/${key}_fig.png`) : artUrl('figures/' + file),
-      smooth: look,
+      // A look is a painting, and so is any catalogue row marked `smooth`
+      // (the painted Act I NPCs, companions and monsters); only the
+      // 32-colour sheets keep nearest-neighbour edges.
+      smooth: look || !!(row && row.smooth),
     };
+  }
+
+  /** True when a key's full-body picture is a painting, drawn without pixelated scaling. */
+  function figureSmooth(c, key) {
+    if (key && LOOK_KEY.test(key)) return true;
+    const row = figureIndex && key ? figureIndex[key] : null;
+    return !!(row && row.smooth);
   }
 
   /** The full-body "style b" sheet for a combatant, or '' when the catalogue has none. */
@@ -2270,7 +2280,7 @@
   }
 
   window.BattleMap = {
-    html, bind, controls, camera, forget, whenFigures, figureUrl,
+    html, bind, controls, camera, forget, whenFigures, figureUrl, figureSmooth,
     paintPath, paintAoe, paintAim, paintArea, paintHover, moveToken, floatText, shoot, hitToken, walking,
     viewMode, setViewMode, nextViewMode, fit, cardSized, cardFail,
     W, H, SHOT_MS,

@@ -487,6 +487,11 @@ body.picker-page > main { padding-top: 0; }
   pointer-events: none;
 }
 
+/* A painted figure (a `smooth` row in figures/monsters.json) is not pixel art. */
+.cs-body.is-smooth {
+  image-rendering: auto;
+}
+
 .cs-body.is-portrait {
   image-rendering: auto;
   height: 72%;

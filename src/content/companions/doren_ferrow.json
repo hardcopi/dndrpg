@@ -16,7 +16,7 @@
         "wisdom": 10,
         "charisma": 12
     },
-    "sprite_key": "bard",
+    "sprite_key": "doren_ferrow",
     "combat_rank": "front",
     "npc_key": "doren_ferrow",
     "personal_quest": "the_beam",
