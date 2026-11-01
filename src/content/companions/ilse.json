@@ -17,7 +17,7 @@
     "wisdom": 15,
     "charisma": 10
   },
-  "sprite_key": "ranger",
+  "sprite_key": "ilse",
   "combat_rank": "back",
   "npc_key": "ilse",
   "personal_quest": "ilse_deep_warren",

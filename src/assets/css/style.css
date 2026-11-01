@@ -6764,6 +6764,7 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
   image-rendering: pixelated;
   filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.6));
 }
+.cbt-battler.is-smooth { image-rendering: auto; }
 .cbt-inspect-name { color: var(--gold); font-size: var(--fs-md); }
 .cbt-inspect-line { color: var(--text-dim); font-size: var(--fs-2xs); }
 .cbt-inspect-stats {

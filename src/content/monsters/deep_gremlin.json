@@ -45,7 +45,7 @@
     "dex": 5
   },
   "rank_pref": "front",
-  "sprite_key": "gremlin",
+  "sprite_key": "deep_gremlin",
   "loot": [
     {
       "gold": "2d4",
