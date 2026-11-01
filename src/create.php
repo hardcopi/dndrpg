@@ -89,9 +89,9 @@ require_signed_in_page();
               Which pool the dice draw from. "Either" is a real answer rather
               than a shrug — it draws from the whole culture at once — because
               the game models no gender anywhere else, and this steers a
-              suggestion rather than setting a field on the character. The
-              gender select now also filters the painted busts below. "Either"
-              shows all of them.
+              suggestion rather than setting a field on the character. Choosing
+              one also sets the look's Body below; "Either" leaves it alone,
+              because a painting has to be one or the other.
             -->
             <label for="name-gender">Gender</label>
             <select id="name-gender" aria-label="Which names to draw from">
@@ -118,18 +118,77 @@ require_signed_in_page();
         <p id="racial-preview" class="wiz-benefits"></p>
 
         <!--
-          This used to be a Unity embed; it is now a painted bust of the chosen
-          race. Reroll and the arrows walk the list. Files already live on disk
-          as `{key}_bust.png`.
+          The look: five choices and the painting they name.
+
+          This was a Unity embed, then a carousel of painted tokens — a
+          dozen-odd strangers per people to scroll through and settle for. It
+          is now the creator's library (tools/bake_looks.py): every
+          combination of body, hair and outfit was painted in advance, so a
+          pick is a different static file and not a render. Nothing is drawn
+          here and nothing is posted but the five choices; the server finds
+          the same picture by the same rule.
+
+          The figure is the full length on black, the bust beside it is the
+          one the dialogue and the review use. Controls are native selects
+          and radios so the keyboard and a screen reader get them for free;
+          the swatches are radios dressed as paint.
         -->
-        <div id="look-model-well">
-          <img id="look-token-bust" alt="">
-          <div class="look-token-nav">
-            <button type="button" id="look-token-prev" class="btn btn-small" aria-label="Previous look">◀</button>
-            <button type="button" id="look-token-reroll" class="btn btn-small">Reroll</button>
-            <button type="button" id="look-token-next" class="btn btn-small" aria-label="Next look">▶</button>
+        <div class="look-picker" id="look-picker">
+          <div class="look-stage">
+            <figure class="look-frame look-frame-full" id="look-frame-full">
+              <img id="look-full" alt="" width="384" height="1024" decoding="async">
+              <figcaption class="look-missing" id="look-missing" hidden></figcaption>
+            </figure>
+            <figure class="look-frame look-frame-bust" id="look-frame-bust">
+              <img id="look-bust" alt="" width="384" height="512" decoding="async">
+            </figure>
           </div>
-          <p id="look-token-caption" class="help-hint"></p>
+
+          <div class="look-controls">
+            <fieldset class="look-field">
+              <legend>Body</legend>
+              <div class="look-seg" id="look-gender"></div>
+            </fieldset>
+
+            <div class="look-field" id="look-style-field">
+              <label for="look-hair-style">Hair style</label>
+              <div class="look-cycle">
+                <button type="button" class="btn look-arrow" data-cycle="look-hair-style" data-dir="-1"
+                        aria-label="Previous hair style">◀</button>
+                <select id="look-hair-style"></select>
+                <button type="button" class="btn look-arrow" data-cycle="look-hair-style" data-dir="1"
+                        aria-label="Next hair style">▶</button>
+              </div>
+            </div>
+
+            <fieldset class="look-field" id="look-hair-field">
+              <legend>Hair colour</legend>
+              <div class="look-swatches" id="look-hair-color"></div>
+              <p class="look-note" id="look-hair-note" hidden></p>
+            </fieldset>
+
+            <div class="look-field">
+              <label for="look-outfit">Outfit</label>
+              <div class="look-cycle">
+                <button type="button" class="btn look-arrow" data-cycle="look-outfit" data-dir="-1"
+                        aria-label="Previous outfit">◀</button>
+                <select id="look-outfit"></select>
+                <button type="button" class="btn look-arrow" data-cycle="look-outfit" data-dir="1"
+                        aria-label="Next outfit">▶</button>
+              </div>
+              <p class="look-note" id="look-outfit-note"></p>
+            </div>
+
+            <fieldset class="look-field" id="look-outfit-field">
+              <legend>Outfit colour</legend>
+              <div class="look-swatches" id="look-outfit-color"></div>
+            </fieldset>
+
+            <div class="look-actions">
+              <button type="button" class="btn" id="look-surprise">Surprise me</button>
+            </div>
+            <p class="help-hint look-caption" id="look-caption" aria-live="polite"></p>
+          </div>
         </div>
       </section>
 
@@ -252,7 +311,7 @@ require_signed_in_page();
       <section class="wiz-step" data-step="review" hidden>
         <div class="review-layout">
           <div class="review-portrait">
-            <div class="pd-bust" id="review-bust"></div>
+            <div class="pd-bust is-look" id="review-bust"></div>
             <h2 id="review-name"></h2>
             <p class="help-hint" id="review-sub"></p>
           </div>
@@ -285,16 +344,22 @@ require_signed_in_page();
      */
     $artVer = max(array_map(
         static fn(string $m): int => @filemtime(__DIR__ . '/' . $m) ?: 0,
-        ['assets/images/npcs/busts.json', 'assets/images/paperdoll/index.json', 'assets/images/npcs/tokens.json']
+        ['assets/images/npcs/busts.json', 'assets/images/paperdoll/index.json']
     ));
-    $tokensPath = __DIR__ . '/assets/images/npcs/tokens.json';
+    // The look library's menu: which choices exist, how they name a file, and
+    // which outfit each class starts in. The same file CharacterLook reads, so
+    // the picker cannot offer a choice the server would refuse. The library
+    // itself needs no version on its URLs: the folder name is the version and
+    // a baked file never changes under it.
+    $lookOptionsPath = __DIR__ . '/assets/data/looks_options.json';
   ?>
   <script>
     window.ART_VER = <?= json_encode((string) $artVer) ?>;
     // The races that exist and are not on offer. Defined in bootstrap.php
     // because the public races page has to agree with this picker about it.
     window.RACES_WITHHELD = <?= json_encode(array_values(RACES_WITHHELD)) ?>;
-    window.LOOK_TOKENS = <?= is_file($tokensPath) ? file_get_contents($tokensPath) : '{}' ?>;
+    window.LOOK_OPTIONS = <?= is_file($lookOptionsPath) ? file_get_contents($lookOptionsPath) : 'null' ?>;
+    window.LOOK_LIB = 'assets/looks/v1/';
   </script>
   <script src="assets/js/api.js?v=<?= filemtime(__DIR__ . '/assets/js/api.js') ?>"></script>
   <script src="assets/js/dice-geometry.js?v=<?= filemtime(__DIR__ . '/assets/js/dice-geometry.js') ?>"></script>
