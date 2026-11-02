@@ -6,6 +6,28 @@
     "sprite_key": "skulker",
     "dialog": "garrow_finch",
     "place": {
-        "location": "flagon_common_room"
+        "location": "flagon_common_room",
+        "conditions": [
+            {
+                "any": [
+                    {
+                        "quest": "kessa_debt"
+                    },
+                    {
+                        "flag": "met_garrow"
+                    },
+                    {
+                        "all": [
+                            {
+                                "companion": "kessa"
+                            },
+                            {
+                                "level_at_least": 2
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
     }
 }

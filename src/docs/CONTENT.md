@@ -232,6 +232,22 @@ UPDATE npcs SET location_id = (SELECT id FROM locations WHERE location_key = 'ma
  WHERE npc_key = 'sera';
 ```
 
+An NPC's `place` may also say **when** they are there, in the same condition
+vocabulary dialogue uses:
+
+```json
+"place": { "location": "flagon_common_room",
+           "conditions": [{ "any": [{ "quest": "kessa_debt" },
+                                    { "all": [{ "companion": "kessa" }, { "level_at_least": 2 }] }] }] }
+```
+
+They are stored in `npcs.place_conditions_json` and `LocationEngine::npcsAt()`
+leaves the person out of the scene — painting, rail and chart — while they
+fail. Write them so a save already past the moment still passes: Garrow Finch's
+include the quest he starts and the flag meeting him sets, so nobody who has
+talked to him loses him. Only NPCs take `conditions`; a fight or a pile of loot
+has its own gates.
+
 A location is a scene rather than a square, so **any number of people may share
 one** and there is nothing to collide with. Every NPC of a kind the files no
 longer place is set back to `NULL` on each import, so deleting a `place` block
@@ -662,6 +678,7 @@ A list is AND. `any` / `all` / `not` nest.
 | `{"ability": "strength", "at_least": 15}` | |
 | `{"has_item": "brass_key"}` | anywhere in the party's packs |
 | `{"gold_at_least": 50}` | |
+| `{"party_size_at_least": 2}` | at least that many walking together — the party's characters plus companions travelling (not waiting at camp). `{"not": {"party_size_at_least": 2}}` is "the player is alone", for lines that say "us" |
 
 Origin tags are derived at character creation from race, subrace, class and
 background, lowercased with spaces as underscores — `half_orc`, `wood_elf`,

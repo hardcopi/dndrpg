@@ -263,6 +263,17 @@ same('level_at_least rejects above', false, holds(['level_at_least' => 4], $ctx)
 same('gold_at_least holds', true, holds(['gold_at_least' => 120], $ctx));
 same('gold_at_least rejects above', false, holds(['gold_at_least' => 121], $ctx));
 
+// "Come with us" is said to a recruit only when there is an us. The party is
+// who walks together — ctx['party'] — so the leader alone is one, and a
+// companion waiting at camp (aldric above) is not counted.
+same('party_size_at_least: alone is one', true, holds(['party_size_at_least' => 1], $ctx));
+same('party_size_at_least: alone is not two', false, holds(['party_size_at_least' => 2], $ctx));
+same('not party_size_at_least 2 is how a line asks "alone?"', true,
+    holds(['not' => ['party_size_at_least' => 2]], $ctx));
+$pair = ['party' => [$leader, ['id' => 2, 'name' => 'Kessa Dunmar']]] + $ctx;
+same('party_size_at_least: a companion walking makes two', true, holds(['party_size_at_least' => 2], $pair));
+same('and the solo line is hidden then', false, holds(['not' => ['party_size_at_least' => 2]], $pair));
+
 same('has_item finds a pooled item', true, holds(['has_item' => 'brass_key'], $ctx));
 same('has_item is false for what nobody carries', false, holds(['has_item' => 'silvered_shortsword'], $ctx));
 

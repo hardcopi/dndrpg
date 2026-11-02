@@ -283,7 +283,7 @@ Rivermark's buildings are solid blocks the party walks *around*, so a scene set
 | `mara_hearthstone` | Golden Flagon Inn | 5, 1 | behind the bar |
 | `aldric` | Golden Flagon Inn | 6, 4 | the table he has not left in a week |
 | `kessa` | Golden Flagon Inn | 9, 6 | drinking, on the runner from the door |
-| `garrow_finch` | Golden Flagon Inn | 12, 6 | across the room from Kessa, waiting |
+| `garrow_finch` | Golden Flagon Inn | 12, 6 | across the room from Kessa, waiting — **only once her debt has caught up with her**: Kessa recruited and the party level 2 (`kessa_debt`'s level), or the quest or `met_garrow` already on the save. Before that she is the one saying somebody is coming; `place.conditions` in his file |
 | `tobin` | Rivermark | 14, 17 | the market square, among his stalls |
 | `captain_elowen` | Rivermark | 38, 16 | the square, outside the watch house |
 | `sera` | Rivermark | 24, 13 | the mill alley, where the books are kept |

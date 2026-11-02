@@ -390,6 +390,14 @@ class ContentExporter
             // omitted key rather than an error.
             if ($r['location_key'] !== null) {
                 $out['place'] = ['location' => $r['location_key']];
+                // When they are there, if anybody said. Dropping it here would
+                // put Garrow Finch back in the Flagon from the first night on
+                // the next export, with nothing in the diff but one deletion.
+                $when = ($r['place_conditions_json'] ?? null) !== null
+                    ? json_decode((string) $r['place_conditions_json'], true) : null;
+                if (is_array($when) && $when !== []) {
+                    $out['place']['conditions'] = $when;
+                }
             }
 
             $this->write('npcs/' . $r['npc_key'] . '.json', $out);

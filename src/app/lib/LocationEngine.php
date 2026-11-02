@@ -385,7 +385,7 @@ class LocationEngine
             // "here".
             'SELECT n.id, n.npc_key, n.name, n.role, n.description, n.image_url,
                     n.sprite_key, n.pose, n.is_ambient, n.is_merchant, n.is_quest_giver,
-                    n.map_x, n.map_y
+                    n.map_x, n.map_y, n.place_conditions_json
                FROM npcs n
               WHERE n.location_id = ?
               ORDER BY n.is_ambient, n.id'
@@ -400,6 +400,16 @@ class LocationEngine
         $out = [];
         foreach ($stmt->fetchAll() as $n) {
             if (isset($recruited[(int) $n['id']])) {
+                continue;
+            }
+            // Somebody placed with `place.conditions` is not here until the
+            // story has brought them: Garrow Finch was drinking across the room
+            // while Kessa told the party he was coming. Without a party there
+            // is no story to ask, and the scene shows the authored room.
+            $when = $n['place_conditions_json'] !== null
+                ? json_decode((string) $n['place_conditions_json'], true) : null;
+            unset($n['place_conditions_json']);
+            if ($partyId && is_array($when) && !Requirements::pass($when, $ctx)) {
                 continue;
             }
             $n['id'] = (int) $n['id'];

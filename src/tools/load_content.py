@@ -237,6 +237,7 @@ CONDITION_SPEC = {
     "ability":        ({"at_least"}, "ability"),
     "has_item":       (set(), "item"),
     "gold_at_least":  (set(), "int"),
+    "party_size_at_least": (set(), "int"),
 }
 
 EFFECT_SPEC = {
@@ -1807,7 +1808,7 @@ def check_pools(variants, p, where):
 
 # The `*_at_least` family, where a bigger threshold implies a smaller one.
 AT_LEAST_KEYS = {"approval_at_least", "gold_at_least", "level_at_least",
-                 "at_least", "romance_stage"}
+                 "party_size_at_least", "at_least", "romance_stage"}
 
 
 def _canon(v):
@@ -2275,8 +2276,13 @@ def validate_placements(index, p):
             at = (rel, "$.place")
             if want_dict(place, p, at) is None:
                 continue
-            check_fields(place, ({"location"}, set()), p, at)
+            # A person may say WHEN they are there; a fight or a pile of loot
+            # may not. An encounter has its own gates (flags, quest stages) and
+            # an item's place is a location_items row with nowhere to keep one.
+            check_fields(place, ({"location"}, {"conditions"} if kind == "npcs" else set()), p, at)
             want_location(place.get("location"), index, p, (rel, "$.place.location"))
+            if kind == "npcs" and "conditions" in place:
+                check_condition_list(place["conditions"], index, p, (rel, "$.place.conditions"))
 
 
 def validate_encounter_reachability(index, p):
@@ -3027,13 +3033,21 @@ def emit_placements(lines, index):
                   if isinstance(o.get("place"), dict)}
         unplaced = [k for k in entries if k not in placed]
         for key, loc in placed.items():
+            # An NPC's `place.conditions` ride with the location, and are
+            # written (or cleared to NULL, "always here") on every load for the
+            # same reason the location is: a deleted line must stop applying.
+            extra = ""
+            if kind == "npcs":
+                conds = entries[key]["place"].get("conditions") or None
+                extra = f", place_conditions_json = {sql_json(conds)}"
             lines.append(
-                f"UPDATE {table} SET location_id = {loc_ref(loc)} "
+                f"UPDATE {table} SET location_id = {loc_ref(loc)}{extra} "
                 f"WHERE {keycol} = {sql_str(key)};"
             )
         if unplaced:
+            extra = ", place_conditions_json = NULL" if kind == "npcs" else ""
             lines.append(
-                f"UPDATE {table} SET location_id = NULL "
+                f"UPDATE {table} SET location_id = NULL{extra} "
                 f"WHERE {keycol} IN ({key_list(unplaced)});"
             )
     lines.append("")

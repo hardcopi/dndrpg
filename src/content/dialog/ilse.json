@@ -1716,6 +1716,22 @@
                     },
                     {
                         "label": "Come with us.",
+                        "conditions": [
+                            {
+                                "party_size_at_least": 2
+                            }
+                        ],
+                        "next": "the_recruit"
+                    },
+                    {
+                        "label": "Come with me.",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "party_size_at_least": 2
+                                }
+                            }
+                        ],
                         "next": "the_recruit"
                     },
                     {
@@ -1789,6 +1805,22 @@
                     },
                     {
                         "label": "Come with us and prove it.",
+                        "conditions": [
+                            {
+                                "party_size_at_least": 2
+                            }
+                        ],
+                        "next": "the_recruit"
+                    },
+                    {
+                        "label": "Come with me and prove it.",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "party_size_at_least": 2
+                                }
+                            }
+                        ],
                         "next": "the_recruit"
                     },
                     {

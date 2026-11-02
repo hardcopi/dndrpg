@@ -110,6 +110,14 @@ class Requirements
         if (isset($c['level_at_least'])) {
             return (int) ($ctx['level'] ?? 1) >= (int) $c['level_at_least'];
         }
+        // How many walk together: the party's own characters plus the
+        // companions travelling with it, not the ones waiting at camp — the
+        // same rows ctx['party'] holds, because a companion at the fire is not
+        // in the room to be said "us" about. `{"not": {"party_size_at_least":
+        // 2}}` is how a line asks whether the player is on their own.
+        if (isset($c['party_size_at_least'])) {
+            return count($ctx['party'] ?? []) >= (int) $c['party_size_at_least'];
+        }
         if (isset($c['gold_at_least'])) {
             return (int) ($ctx['gold'] ?? 0) >= (int) $c['gold_at_least'];
         }

@@ -2072,6 +2072,22 @@
                     },
                     {
                         "label": "Come with us.",
+                        "conditions": [
+                            {
+                                "party_size_at_least": 2
+                            }
+                        ],
+                        "next": "the_recruit"
+                    },
+                    {
+                        "label": "Come with me.",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "party_size_at_least": 2
+                                }
+                            }
+                        ],
                         "next": "the_recruit"
                     },
                     {
