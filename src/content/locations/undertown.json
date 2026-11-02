@@ -9,7 +9,7 @@
         "sump_drain": {
             "name": "The Sump Drain",
             "type": "room",
-            "map_pos": [12, 14],
+            "map_pos": [12, 17],
             "random_encounter_pct": 10,
             "hidden_until_visited": true,
             "description": "Behind the Flagon's north wall the brick opens into a throat wide enough to stoop through, and the smell that has been bothering the cellar for a month is standing here waiting for you. Water comes down the wall in a thin constant sheet and goes away along a channel cut into the floor. Somebody has been through recently: the sludge on the ledge is scuffed, and the scuffs go both ways.",
@@ -28,7 +28,7 @@
         "low_conduit": {
             "name": "The Low Conduit",
             "type": "room",
-            "map_pos": [30, 26],
+            "map_pos": [30, 17],
             "random_encounter_pct": 15,
             "description": "The main run, and the reason any of this exists: a barrel vault of dressed brick going away under the High Street in both directions, water ankle-deep down the middle and a dry ledge on either side. Voices carry down here further than they should and arrive without a direction. Every twenty feet a smaller drain comes in from a house above, and most of them have been stopped up with rag by whoever lives below them.",
             "first_visit": "You come out of the crawl into a tunnel you could drive a cart down, if a cart could get here, and the sound of your own boots goes off ahead of you and does not come back.",
@@ -49,7 +49,7 @@
         "weir_chamber": {
             "name": "The Weir Chamber",
             "type": "room",
-            "map_pos": [52, 16],
+            "map_pos": [57, 14],
             "random_encounter_pct": 20,
             "description": "Four drains arrive here at four different heights and fall into one pool over a stepped stone weir, and the noise of it is the only thing in Undertown that will not let you hear yourself think. The pool is deeper than the lamplight goes. A rail was set into the wall once for people to hold; half of it is still there, and the half that is missing was taken, not lost.",
             "first_visit": "The noise arrives before the room does — a flat continuous roar off the brick that you feel in your teeth a hundred feet out.",
@@ -68,7 +68,7 @@
         "flood_gate": {
             "name": "The Flood Gate",
             "type": "site",
-            "map_pos": [77, 12],
+            "map_pos": [80, 30],
             "description": "An iron gate the size of a barn door, hung in a stone frame across the eastern cut, with a worm-screw and a wheel to raise it. Everything else down here is two hundred years old and looks it. This has new pintles, new packing, and grease on the screw that has not yet gone grey. Beyond the gate the cut runs on dry, and it is the only dry thing at this depth.",
             "first_visit": "The gate is shut, and the brickwork on either side of it is wet to a line four feet up, and the cut beyond the gate is not wet at all. Somebody has decided where the water stops.",
             "ambience": [
@@ -84,7 +84,7 @@
         "low_court": {
             "name": "The Low Court",
             "type": "site",
-            "map_pos": [45, 44],
+            "map_pos": [54, 38],
             "allow_camp": true,
             "description": "Under the market square the drains open out into a vaulted room the size of the square above it, dry, swept, and lit by lamps that are not stolen because everyone here knows who owns them. Sixty or so people live in the bays along the walls, which are curtained with sailcloth and kept better than most rooms in the town over their heads. At the north end somebody has set a scaffold plank across two barrels and worn the middle of it smooth, and that is the bench, and Undertown is very serious about it.",
             "first_visit": "You come round the turn expecting more brick and find lamplight, washing on a line, and about forty people who stopped talking at exactly the same moment.",
@@ -104,7 +104,7 @@
         "drowned_counting_room": {
             "name": "The Drowned Counting Room",
             "type": "room",
-            "map_pos": [17, 45],
+            "map_pos": [51, 59],
             "description": "Not a drain. A room: plastered, with a moulded cornice under two feet of silt-water, and an iron door standing open on a strongroom at the back. The Fennow bank stood on this ground and failed the year of the second flood, and the cellar it kept its boxes in was never emptied, because emptying it would have meant agreeing whose the boxes were. The water is cold and comes to the chest and the names on the box-plates are still readable.",
             "first_visit": "Your lamp goes over a cornice, and a plaster rose, and the top of a door frame, and it takes a moment to understand that you are standing on somebody's ceiling.",
             "ambience": [
@@ -120,7 +120,7 @@
         "bricked_arch": {
             "name": "The Bricked Arch",
             "type": "room",
-            "map_pos": [72, 42],
+            "map_pos": [75, 10],
             "description": "The passage ends at an arch that has been filled in with brick, and the fill is nothing like the arch. The arch is old, soft, hand-made and lime-set. The fill is hard grey brick in a cement that has not weathered at all, laid plumb, laid well, and — this is the part that takes a while to notice — laid from the other side. Whoever closed it walked away in the direction you cannot go.",
             "first_visit": "The lamp shows a wall where the map in your head says there should be a passage, and the wall is newer than you are.",
             "ambience": [
@@ -137,7 +137,7 @@
         "grain_stair": {
             "name": "The Grain Stair",
             "type": "room",
-            "map_pos": [58, 64],
+            "map_pos": [22, 54],
             "description": "A brick stair going up under Granary Row to a loading hatch, and a landing at the bottom swept cleaner than anywhere else down here. The sweeping is the tell: grain has been coming down these steps in quantity and somebody has been very careful that it should not look as though it had. There is a barrow at the foot of the stair with a broken handle, and a smell of malt and mouse.",
             "first_visit": "The steps are worn in the middle, which takes years, and the landing is swept, which takes somebody deciding to.",
             "ambience": [

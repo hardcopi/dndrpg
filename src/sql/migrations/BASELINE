@@ -39,3 +39,4 @@
 2026-08-24-region-plan.sql          regions.plan_json is in schema.sql
 2026-11-01-character-look.sql       characters.look_json / look_key are in schema.sql
 2026-11-01-character-deleted-at.sql  characters.deleted_at is in schema.sql
+2026-11-01-npc-place-conditions.sql  npcs.place_conditions_json is in schema.sql

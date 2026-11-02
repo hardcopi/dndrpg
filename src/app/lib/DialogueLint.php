@@ -181,7 +181,8 @@ class DialogueLint
      * it can miss a shadow, it cannot invent one.
      */
     private const AT_LEAST_KEYS = ['approval_at_least', 'gold_at_least',
-                                   'level_at_least', 'at_least', 'romance_stage'];
+                                   'level_at_least', 'party_size_at_least',
+                                   'at_least', 'romance_stage'];
 
     /**
      * @param string[]           $parleyRoots  node keys reached by a parley

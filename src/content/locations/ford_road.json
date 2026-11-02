@@ -29,7 +29,7 @@
         "the_ford": {
             "name": "The Ford",
             "type": "site",
-            "map_pos": [68, 30],
+            "map_pos": [53, 29],
             "allow_camp": true,
             "description": "The river runs wide and shallow over a bed of laid stone here, and has done since somebody laid it. On the near bank there is a mounting-block, a rope stay, and a flat grey stone standing on end that is not a milestone. On the far bank the ground is bare in four long rectangles where nothing has grown back in four years, and the carters who use the crossing water their horses upstream of them.",
             "first_visit": "The water is loud and the crossing is easy and nobody who uses it stops. You can see where they do not stop: four patches of bare ground on the west bank, laid out square, in a row.",
@@ -49,7 +49,7 @@
         "mill_ruin": {
             "name": "The Burnt Mill",
             "type": "site",
-            "map_pos": [58, 12],
+            "map_pos": [69, 36],
             "description": "Three stone walls, a wheel-pit full of black water, and a roof that came down inward rather than out. The race still runs — it was cut too well to stop — and it turns nothing. Everyone in Rivermark can tell you the mill burned. Very few of them can tell you which year, and none of them have been out to look.",
             "first_visit": "The race is the first thing you hear: clean running water, working exactly as built, going past a building that has not needed it since before the fire.",
             "ambience": [
@@ -65,7 +65,7 @@
         "priory_track": {
             "name": "The Priory Track",
             "type": "site",
-            "map_pos": [30, 16],
+            "map_pos": [25, 14],
             "allow_camp": true,
             "random_encounter_pct": 10,
             "description": "A stone-flagged track climbing away from the river between overgrown hedges — laid for processions and mended for carts, which is why the flags are cracked in the middle and sound at the edges. Every quarter-mile there is a cross-stone with the top broken off. Somebody walks this in both directions regularly and does not clear the brambles.",
@@ -83,7 +83,7 @@
         "harrow_steading": {
             "name": "Harrow Steading",
             "type": "building",
-            "map_pos": [50, 48],
+            "map_pos": [46, 46],
             "allow_camp": true,
             "description": "A long low farmhouse with a yard, a byre, and a dog that has decided about you before you reach the gate. Good ground, well kept: the ditches are clear, the gates hang true, and the muck-heap is squared off. There is a table under the porch with a lamp on it, and the lamp is for reading letters after dark, because the house is not big enough to read them in.",
             "first_visit": "The dog gets up. It does not bark. It walks to the end of its chain and waits to see which way you go, which is a better-trained dog than most towns have watchmen.",
@@ -102,7 +102,7 @@
         "drovers_rest": {
             "name": "The Drovers' Rest",
             "type": "camp",
-            "map_pos": [74, 62],
+            "map_pos": [55, 60],
             "inn_cost": 3,
             "allow_camp": true,
             "description": "Where the drove track meets the ford road: a walled fold big enough for sixty beasts, a water trough fed off a spring, a lean-to with a fire-back, and a pole for hanging a lantern. It is not an inn and does not pretend to be. Whoever is going through sleeps against the wall with the cattle on the windward side and pays nobody, because there is nobody to pay.",
@@ -122,7 +122,7 @@
         "winter_field": {
             "name": "Winter Field",
             "type": "site",
-            "map_pos": [52, 70],
+            "map_pos": [17, 48],
             "allow_camp": true,
             "random_encounter_pct": 25,
             "description": "Two hundred acres of low grazing between the drove track and the fen edge, held in common and used from Michaelmas to spring. Half of it is under water this year and the good half is being eaten twice as hard. There are thorn brakes along the fen side that nobody has cut back, and the beasts will not graze within forty paces of them.",
@@ -141,7 +141,7 @@
         "fen_road_head": {
             "name": "The Fen Road Head",
             "type": "site",
-            "map_pos": [24, 62],
+            "map_pos": [22, 66],
             "allow_camp": true,
             "description": "The last dry ground. The road stops being a road and becomes a causeway of laid faggots and stone, and the first hundred yards of it have been mended recently by somebody who knew exactly how much to spend. There is a post here with a horn on a chain, for calling across, and the chain is bright where the horn has been lifted.",
             "first_visit": "The ground gives underfoot and then stops giving, and that is the causeway. West of here the country is water pretending to be land.",

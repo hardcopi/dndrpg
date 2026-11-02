@@ -660,7 +660,13 @@ CREATE TABLE npcs (
     -- does not appear. Placement lives on the NPC row because a person stands
     -- in at most one place; it is authored via the place block in
     -- content/npcs/*.json.
-    location_id INT UNSIGNED NULL
+    location_id INT UNSIGNED NULL,
+    -- When they are there: the `place.conditions` list, as JSON, in the
+    -- condition vocabulary dialogue uses. NULL is "always". Read by
+    -- LocationEngine::npcsAt(), which leaves somebody out of the scene while
+    -- their conditions fail — Garrow Finch is not in the Flagon until Kessa's
+    -- debt has caught up with her.
+    place_conditions_json TEXT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- What each merchant actually sells.

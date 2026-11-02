@@ -217,7 +217,9 @@ foreach ($looks as $i => $n) {
     $rgb = $i === 'a' ? [200, 40, 40] : [40, 40, 200];
     foreach ($look->paths($n) as $kind => $rel) {
         [$w, $h] = ['full' => [384, 1024], 'bust' => [384, 512], 'fig' => [192, 320], 'face' => [144, 144]][$kind];
-        fixture("{$lib}/{$rel}", $w, $h, $rgb, $kind === 'fig');
+        // The library's face is painted a colour the bust is not, so the bake
+        // can be caught copying it instead of cutting the face from the bust.
+        fixture("{$lib}/{$rel}", $w, $h, $kind === 'face' ? [20, 200, 20] : $rgb, $kind === 'fig');
     }
 }
 check($look->exists($looks['a']), 'exists() finds all four fixture pictures');
@@ -252,6 +254,10 @@ foreach (['bust' => [384, 512], 'face' => [144, 144], 'fig' => [192, 320]] as $k
     check($size !== false && $size[2] === IMAGETYPE_PNG && $size[0] === $w && $size[1] === $h,
         "{$kind} is a {$w}x{$h} PNG", $size ? "{$size[0]}x{$size[1]} type {$size[2]}" : 'missing');
 }
+$face = @imagecreatefrompng("{$out}/{$keyA}_face.png");
+check($face !== false && (imagecolorat($face, 72, 72) & 0xFFFFFF) === 0xC82828,
+    'the face is cut from the bust (FACE_WINDOW), not copied from the library\'s tight crop',
+    $face ? sprintf('%06x', imagecolorat($face, 72, 72) & 0xFFFFFF) : 'missing');
 $fig = @imagecreatefrompng("{$out}/{$keyA}_fig.png");
 check($fig !== false
     && ((imagecolorat($fig, 5, 5) >> 24) & 0x7F) === 127

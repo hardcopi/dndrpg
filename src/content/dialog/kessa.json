@@ -1529,6 +1529,27 @@
                 "choices": [
                     {
                         "label": "Come with us.",
+                        "conditions": [
+                            {
+                                "party_size_at_least": 2
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "recruit": "kessa"
+                            }
+                        ],
+                        "next": "she_joins"
+                    },
+                    {
+                        "label": "Come with me.",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "party_size_at_least": 2
+                                }
+                            }
+                        ],
                         "effects": [
                             {
                                 "recruit": "kessa"
@@ -1563,6 +1584,27 @@
                 "choices": [
                     {
                         "label": "Then move with us.",
+                        "conditions": [
+                            {
+                                "party_size_at_least": 2
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "recruit": "kessa"
+                            }
+                        ],
+                        "next": "she_joins"
+                    },
+                    {
+                        "label": "Then move with me.",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "party_size_at_least": 2
+                                }
+                            }
+                        ],
                         "effects": [
                             {
                                 "recruit": "kessa"
@@ -1583,6 +1625,27 @@
                 "choices": [
                     {
                         "label": "Fair. Come with us anyway.",
+                        "conditions": [
+                            {
+                                "party_size_at_least": 2
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "recruit": "kessa"
+                            }
+                        ],
+                        "next": "she_joins"
+                    },
+                    {
+                        "label": "Fair. Come with me anyway.",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "party_size_at_least": 2
+                                }
+                            }
+                        ],
                         "effects": [
                             {
                                 "recruit": "kessa"

@@ -62,6 +62,23 @@ class CharacterLook
         'fig'  => [192, 320],
     ];
 
+    /**
+     * The head, as a window on the 384x512 bust: left, top, side.
+     *
+     * The library's own face is cut by bake_looks.py through a 200px window at
+     * the crown, which is a forehead-to-mouth crop: in the 32px circles of the
+     * people list and the initiative bar, with the top of the frame favoured,
+     * what was left was hair and a brow. The painted NPC faces beside them are
+     * head and shoulders. This window is that framing on the library's
+     * normalised busts — crown to collar on all twenty bodies, the short
+     * peoples' lower heads and the Dragonborn's crest included — and it is the
+     * same window ui-map.js used to draw token busts through, for the same
+     * reason. Re-cut from the bust rather than re-baking the library, because
+     * the bust is what every look already has on disk, here and on hermes;
+     * tools/reframe_faces.php applies it to faces baked before this.
+     */
+    public const FACE_WINDOW = [58, 18, 268];
+
     /** Every kind a library entry has, and the four exists() asks for. */
     public const KINDS = ['full', 'bust', 'fig', 'face'];
 
@@ -260,6 +277,9 @@ class CharacterLook
         $images = [];
         try {
             foreach (self::SIZES as $kind => [$w, $h]) {
+                if ($kind === 'face') {
+                    continue;   // cut from the bust below, not copied
+                }
                 $im = @imagecreatefromwebp("{$this->library}/{$paths[$kind]}");
                 if (!$im || imagesx($im) !== $w || imagesy($im) !== $h) {
                     throw new RuntimeException("The look library's {$kind} picture for this look is unreadable.");
@@ -271,6 +291,7 @@ class CharacterLook
                 imagesavealpha($im, true);
                 $images[$kind] = $im;
             }
+            $images['face'] = self::faceFromBust($images['bust']);
 
             if (!is_dir($this->out) && !@mkdir($this->out, 0775, true)) {
                 throw new RuntimeException('The portrait folder is not writable.');
@@ -296,6 +317,22 @@ class CharacterLook
         // the repo by the next pull — drift with nothing to show for it.
 
         return $key;
+    }
+
+    /**
+     * A 144px head-and-shoulders face, cut from a 384x512 bust through
+     * FACE_WINDOW. Public because tools/reframe_faces.php re-cuts faces that
+     * are already on disk with it, and the two must not disagree.
+     */
+    public static function faceFromBust(GdImage $bust): GdImage
+    {
+        [$x, $y, $side] = self::FACE_WINDOW;
+        [$fw, $fh] = self::SIZES['face'];
+        $face = imagecreatetruecolor($fw, $fh);
+        imagealphablending($face, false);
+        imagesavealpha($face, true);
+        imagecopyresampled($face, $bust, 0, 0, $x, $y, $fw, $fh, $side, $side);
+        return $face;
     }
 
     /** `lk_<id>_<first six hex of sha1(look key)>`. */

@@ -501,6 +501,7 @@
       paintedSceneNode.className = 'scene-paint';
       paintedSceneNode.innerHTML = `<img alt="${esc(loc.name)}" src="${esc(cfg.image)}"><div class="paint-hotspots"></div><div class="scene-tools"><button type="button" class="scene-chip" data-scene-map>Map</button><button type="button" class="scene-chip" data-scene-fx>✦ Effects <span></span></button><button type="button" class="scene-chip" id="scene-info" aria-label="Describe this place">ⓘ</button></div><div class="paint-map hidden">${sceneMap({ info: false })}</div>`;
       paintedFx = window.RivermarkFX ? window.RivermarkFX.mount(paintedSceneNode, cfg.fx || [], { image: cfg.image }) : null;
+      bindPaintPeek(paintedSceneNode);
       if (window.ResizeObserver) {
         let t = null;
         const node = paintedSceneNode;
@@ -545,14 +546,20 @@
       // Ambient folk are named for what they look like ("A minstrel"), which
       // reads better on the painting than four labels saying "Townsfolk".
       const name = n.known || n.is_ambient ? n.name : (n.role || 'A stranger');
-      const mark = n.has_work || n.quest_mark ? '<b class="scene-work-mark">!</b>' : '';
+      const work = n.has_work || n.quest_mark;
+      const mark = work ? '<b class="scene-work-mark">!</b>' : '';
       const anchor = spot.x > 80 ? 'edge-right' : (spot.x < 20 ? 'edge-left' : '');
-      return `<button type="button" class="paint-hotspot npc ${anchor}" style="left:${spot.x}%;top:${spot.y}%" data-npc="${+n.id}" aria-label="Talk to ${esc(name)}"><span class="paint-label">${mark}${esc(name)}</span><i class="paint-pin"></i><i class="paint-dot"></i></button>`;
+      return `<button type="button" class="paint-hotspot npc ${anchor}${work ? ' has-work' : ''}" style="left:${spot.x}%;top:${spot.y}%" data-npc="${+n.id}" aria-label="Talk to ${esc(name)}"><span class="paint-label">${mark}${esc(name)}</span><i class="paint-pin"></i><i class="paint-dot"></i></button>`;
     };
     const row = unconfigured.slice(0, 5).map((n, i, list) => npcButton(n, { x: (i + 1) * 100 / (list.length + 1), y: 94 })).join('');
     const more = unconfigured.length > 5 ? `<button type="button" class="scene-more" data-focus-people>+${unconfigured.length - 5} more</button>` : '';
     const npcMarkup = configured.map(({ n, spot }) => npcButton(n, spot)).join('') + row + more;
-    const objectMarkup = (cfg.objects || []).map((o) => `<button type="button" class="paint-object" style="left:${o.x}%;top:${o.y}%" data-act="${esc(o.act || 'search')}" aria-label="Search ${esc(o.label)}">${esc(o.label)}</button>`).join('');
+    // An object is a dot with its name over it, like a person, so that the
+    // name can wait for the pointer the way theirs does.
+    const objectMarkup = (cfg.objects || []).map((o) => {
+      const anchor = o.x > 80 ? 'edge-right' : (o.x < 20 ? 'edge-left' : '');
+      return `<button type="button" class="paint-object ${anchor}" style="left:${o.x}%;top:${o.y}%" data-act="${esc(o.act || 'search')}" aria-label="Search ${esc(o.label)}"><span class="paint-label">${esc(o.label)}</span><i class="paint-dot"></i></button>`;
+    }).join('');
     layer.innerHTML = exitMarkup + npcMarkup + objectMarkup;
     const moreButton = paintedSceneNode.querySelector('[data-focus-people]');
     if (moreButton) moreButton.onclick = () => { if (window.UI && window.UI.selectRailTab) window.UI.selectRailTab('people'); const rail = $('#people-rail'); if (rail) { rail.tabIndex = -1; rail.scrollIntoView({ behavior: 'smooth', block: 'center' }); rail.focus({ preventScroll: true }); } };
@@ -573,13 +580,43 @@
   }
 
   /**
+   * Names on the painting wait to be asked for.
+   *
+   * A person's or an object's name is drawn on hover and on keyboard focus
+   * (CSS), because twelve labels laid over a painting hide the painting —
+   * the people are in the rail and the objects in the narration under it, so
+   * nothing is lost by keeping the picture clear. A finger has no hover, so on
+   * touch the first tap on a dot shows its name and the second one acts; a tap
+   * anywhere else puts the name away. Decided per tap from the pointer that
+   * made it, not from a media query, so a laptop with a touchscreen gets the
+   * mouse behaviour from its mouse. Enter and Space on a focused dot arrive
+   * as clicks with no pointer behind them and act at once — the name is
+   * already showing, because focus shows it. Ways out keep their labels: they
+   * are the navigation, and a way out nobody can read is a door nobody finds.
+   */
+  function bindPaintPeek(node) {
+    let touch = false;
+    node.addEventListener('pointerdown', (ev) => { touch = ev.pointerType === 'touch' || ev.pointerType === 'pen'; }, true);
+    node.addEventListener('keydown', () => { touch = false; }, true);
+    node.addEventListener('click', (ev) => {
+      const spot = ev.target.closest('.paint-hotspot.npc, .paint-object');
+      const peeking = [...node.querySelectorAll('.is-peek')];
+      peeking.forEach((el) => { if (el !== spot) el.classList.remove('is-peek'); });
+      if (!spot || !touch || spot.classList.contains('is-peek')) return;
+      ev.preventDefault();
+      ev.stopPropagation();
+      spot.classList.add('is-peek');
+    }, true);
+  }
+
+  /**
    * Nudge hotspot labels apart where they overlap.
    *
    * The spots are authored as percentages on the painting, and a label's width
    * depends on the font size, which scales with the viewport — so two labels
-   * that clear each other at 1920 can sit on top of each other at 1440. Exits
-   * are placed first (and only move to clear another exit); NPCs and objects after them are pushed up
-   * or down in small steps until they are clear, staying inside the picture.
+   * that clear each other at 1920 can sit on top of each other at 1440. Only
+   * the ways out are always labelled now, so it is exits clearing exits: each
+   * is pushed up or down in small steps until it is clear, inside the picture.
    * The pin under a label stretches by the same amount, so it still points at
    * its dot. Runs on every render and, debounced, on resize.
    */
@@ -590,7 +627,10 @@
     if (!node || !node.isConnected) return;
     const box = node.getBoundingClientRect();
     if (!box.width || !box.height) return;
-    const spots = [...node.querySelectorAll('.paint-hotspot, .paint-object')];
+    // Only the labels that are always drawn: a person's or an object's name
+    // shows one at a time, raised over the rest (bindPaintPeek), so nudging it
+    // clear of names that are not showing would only move it off its dot.
+    const spots = [...node.querySelectorAll('.paint-hotspot.exit')];
     // Reset first, so a resize measures from the authored positions.
     spots.forEach((el) => {
       el.style.marginTop = '';

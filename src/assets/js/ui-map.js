@@ -525,23 +525,6 @@
   const PC_Y = 0;
 
   /**
-   * A player's chosen look is a `token_*` key, and its `_face.png` is cut
-   * tight: forehead and chin off the edge. Every other face (class art, NPC
-   * keys used by companions) is head and shoulders. So a token face is drawn
-   * from its `_bust.png` (384x512) through this window instead, which frames
-   * it the way an NPC face is framed. The face stays underneath as the
-   * fallback when there is no bust.
-   */
-  const TOKEN_FACE = /^(.*\/npcs\/token_[^/?#]+)_face\.png(\?.*)?$/;
-  const BUST_W = 384;
-  const BUST_H = 512;
-  const BUST_VIEW = '54 10 276 276';
-  function tokenBust(url) {
-    const m = TOKEN_FACE.exec(String(url || ''));
-    return m ? `${m[1]}_bust.png${m[2] || ''}` : null;
-  }
-
-  /**
    * Where the people who live here stand.
    *
    * Above the place, where the party is below it: the two never collide, and
@@ -613,13 +596,6 @@
           width="${(r * 2).toFixed(2)}" height="${(r * 2).toFixed(2)}"
           clip-path="url(#${clipId})" preserveAspectRatio="xMidYMid slice"
           onerror="this.remove()"/>` : ''}
-        ${tokenBust(pc.face) ? `<g clip-path="url(#${clipId})"><svg
-          x="${(-r).toFixed(2)}" y="${(-r).toFixed(2)}"
-          width="${(r * 2).toFixed(2)}" height="${(r * 2).toFixed(2)}"
-          viewBox="${BUST_VIEW}" preserveAspectRatio="xMidYMid slice"><image
-          class="wm-pc-face" href="${esc(tokenBust(pc.face))}"
-          width="${BUST_W}" height="${BUST_H}"
-          onerror="this.closest('g').remove()"/></svg></g>` : ''}
         <circle class="wm-pc-ring" r="${r.toFixed(2)}"/>
       </g>`;
     // Reversed, so the pile stacks left-over-right: the faces are laid out by
