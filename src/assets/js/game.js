@@ -567,6 +567,10 @@
       return `<button type="button" class="paint-object ${anchor}" style="left:${o.x}%;top:${o.y}%" data-act="${esc(o.act || 'search')}" aria-label="Search ${esc(o.label)}"><span class="paint-label">${esc(o.label)}</span><i class="paint-dot"></i></button>`;
     }).join('');
     layer.innerHTML = exitMarkup + npcMarkup + objectMarkup;
+    // A hub with many ways out cannot label them all on a phone-sized picture
+    // without the plates piling up; the CSS keeps just their arrows there, and
+    // the Ways out line under the prose names them.
+    layer.classList.toggle('many-exits', (exitMarkup.match(/paint-hotspot exit/g) || []).length > 4);
     const moreButton = paintedSceneNode.querySelector('[data-focus-people]');
     if (moreButton) moreButton.onclick = () => { if (window.UI && window.UI.selectRailTab) window.UI.selectRailTab('people'); const rail = $('#people-rail'); if (rail) { rail.tabIndex = -1; rail.scrollIntoView({ behavior: 'smooth', block: 'center' }); rail.focus({ preventScroll: true }); } };
     const fxButton = paintedSceneNode.querySelector('[data-scene-fx]');

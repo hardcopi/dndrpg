@@ -51,5 +51,10 @@ Goblin Warren (6), the Deepworks (8) and the Ford Road (8). The art hand-off
 (`scenes-<region>.json`, hotspot `{key, kind, x, y, label, painted}`) converts
 one-to-one: exits by `to`, NPCs by `npc_key`, objects become Search labels
 (a "Job board" object runs the board verb where the place has one).
+Waerhaven (Eleven Weeks: Hallowgate Ward, Highstrand, the Boom, Tarrow, the Slipways,
+Old Waer, the Underquay, the Wardenswatch — 49) and the Undervault head camp (4) were
+painted in the same look in Nov 2026 (`GenerateImage`, 1280×720 progressive JPEG, exits laid
+out in up to three columns × three rows; on a phone a scene with five or more exits shows
+arrows only). Brackwater (7) is Act II.
 Every other place still shows the region chart, with its Ways out laid out in
 columns so a nine-exit hub fits at 1440×900.
