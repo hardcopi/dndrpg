@@ -6,6 +6,94 @@
             {
                 "conditions": [
                     {
+                        "flag": "meeting_fate",
+                        "equals": "costed"
+                    },
+                    {
+                        "not": {
+                            "quest": "a_short_measure",
+                            "status": "active"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"Held,\" says Pol, calling a figure and chalking it. \"That's the word on the floor. Nobody's bought on the Row this week and Marrow is in a temper about it, and the carts still come through both ways, and the stone doesn't care.\" Another sack. \"I don't know what a costing of removal is. I know what a quarter is. It's thirteen weeks of this.\"",
+                "choices": [
+                    {
+                        "label": "Mind the doors.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "minuted"
+                    },
+                    {
+                        "not": {
+                            "quest": "a_short_measure",
+                            "status": "active"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"Written down, I heard,\" Pol says, without stopping. \"Good. I like a figure written down. You can weigh against it later.\" He chalks the sack. \"Most things that happen to this row aren't written down anywhere. They just turn out to have happened.\"",
+                "choices": [
+                    {
+                        "label": "Mind the doors.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "subscribed"
+                    },
+                    {
+                        "not": {
+                            "quest": "a_short_measure",
+                            "status": "active"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"Owners, they're saying,\" Pol says to the sack. \"Of the house that's buying the Row.\" He calls the figure. \"If they buy this floor I'll weigh for them same as for Marrow, same as for whoever was before him. I'd like you to know that's not a threat. It's the job.\"",
+                "choices": [
+                    {
+                        "label": "Mind the doors.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "walked"
+                    },
+                    {
+                        "not": {
+                            "quest": "a_short_measure",
+                            "status": "active"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"Walked out,\" Pol says, and for once the beam stops. \"Carters had it by noon. In the middle of their business, they're saying.\" He starts it swinging again. \"First thing I've heard all year I couldn't weigh. I keep picking it up and putting it down.\"",
+                "choices": [
+                    {
+                        "label": "Mind the doors.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "short_measure_fate",
                         "equals": "stone"
                     }

@@ -6,6 +6,126 @@
             {
                 "conditions": [
                     {
+                        "flag": "meeting_fate",
+                        "equals": "costed"
+                    },
+                    {
+                        "not": {
+                            "quest": "a_short_measure",
+                            "status": "active"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"Held,\" Nell Quist says, before you have said a word, \"is what the whole High Street has been saying at my stall all week, like the one word of a song they know.\" She turns a tray. \"I don't know what it means. I know my flour came up the Row this morning same as always, and that it might not have. Seed cake?\"",
+                "choices": [
+                    {
+                        "label": "I will take one.",
+                        "next": "sold"
+                    },
+                    {
+                        "label": "What are the chalk marks?",
+                        "next": "the_board"
+                    },
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "minuted"
+                    },
+                    {
+                        "not": {
+                            "quest": "a_short_measure",
+                            "status": "active"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"You went down to Brackwater and argued, I heard, and nothing came of it.\" Nell wraps a cake. \"Nothing is what usually comes of it. I give a seed cake to anybody who argues anyway. That's the rule of this stall and I made it this morning.\"",
+                "choices": [
+                    {
+                        "label": "I will take one.",
+                        "next": "sold"
+                    },
+                    {
+                        "label": "What are the chalk marks?",
+                        "next": "the_board"
+                    },
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "subscribed"
+                    },
+                    {
+                        "not": {
+                            "quest": "a_short_measure",
+                            "status": "active"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "Nell looks at you over the trays. \"Is it true? You've bought into them? The ones buying the Row?\" She doesn't wait for the answer. \"Then you can pay full price for the cake, same as the counting house does. I'm not angry. I'm just not giving it away.\"",
+                "choices": [
+                    {
+                        "label": "I will take one.",
+                        "next": "sold"
+                    },
+                    {
+                        "label": "What are the chalk marks?",
+                        "next": "the_board"
+                    },
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "walked"
+                    },
+                    {
+                        "not": {
+                            "quest": "a_short_measure",
+                            "status": "active"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"Walked out!\" Nell says, and laughs out loud for the first time you've heard. \"Mott Wenn told half the square before the bread was out.\" She pushes a cake across. \"I walked out of exactly one thing in my life, and it was a marriage, and I've never regretted the walking. Only the eleven years before it.\"",
+                "choices": [
+                    {
+                        "label": "I will take one.",
+                        "next": "sold"
+                    },
+                    {
+                        "label": "What are the chalk marks?",
+                        "next": "the_board"
+                    },
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "short_measure_fate",
                         "equals": "stone"
                     }

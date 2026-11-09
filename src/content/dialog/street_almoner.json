@@ -6,6 +6,126 @@
             {
                 "conditions": [
                     {
+                        "flag": "meeting_fate",
+                        "equals": "costed"
+                    },
+                    {
+                        "not": {
+                            "quest": "the_almoners_list",
+                            "status": "active"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "Wyke has the book open on his knee and a pencil instead of a pen, which you have never seen him use. \"Held,\" he says. \"Granary Row and the Steps, for the quarter. Fourteen families on the Row were packing. Nine have stopped.\" He rubs a name out and writes it again, lighter. \"I have moved them out of the front of the book and into pencil. Pencil is not a cure. It is a quarter. I have not had a quarter for anybody in nineteen years.\"",
+                "choices": [
+                    {
+                        "label": "What's in the book?",
+                        "next": "the_book"
+                    },
+                    {
+                        "label": "Here — a copper for the box.",
+                        "next": "a_copper"
+                    },
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "minuted"
+                    },
+                    {
+                        "not": {
+                            "quest": "the_almoners_list",
+                            "status": "active"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"Written down,\" says Wyke, when you tell him, \"in Brackwater, in a book I shall never see.\" He pats the one under his arm. \"I know about written down. This is the fattest book in the parish and it has never fed anybody.\" A pause. \"It has made somebody read it, now and then. Alms for the granary families.\"",
+                "choices": [
+                    {
+                        "label": "What's in the book?",
+                        "next": "the_book"
+                    },
+                    {
+                        "label": "Here — a copper for the box.",
+                        "next": "a_copper"
+                    },
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "subscribed"
+                    },
+                    {
+                        "not": {
+                            "quest": "the_almoners_list",
+                            "status": "active"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "Wyke looks at you for a long time over the box. \"The front of the book is where the benefactors go,\" he says. \"I have not decided which page you go on now. A share in the house that is buying the Row.\" He holds the box out anyway. \"I will take your copper. I take everybody's. That is the one rule I have never once broken.\"",
+                "choices": [
+                    {
+                        "label": "What's in the book?",
+                        "next": "the_book"
+                    },
+                    {
+                        "label": "Here — a copper for the box.",
+                        "next": "a_copper"
+                    },
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "walked"
+                    },
+                    {
+                        "not": {
+                            "quest": "the_almoners_list",
+                            "status": "active"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"You walked out of the room where they decide it,\" Wyke says. \"I have stood outside that kind of room for nineteen years with a box on a strap.\" He almost laughs, and does not. \"It changes nothing on my list, you understand. I should still have liked very much to see it.\"",
+                "choices": [
+                    {
+                        "label": "What's in the book?",
+                        "next": "the_book"
+                    },
+                    {
+                        "label": "Here — a copper for the box.",
+                        "next": "a_copper"
+                    },
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "almoner_list_fate",
                         "equals": "fed"
                     }

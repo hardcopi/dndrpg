@@ -137,6 +137,9 @@ try {
         'hollis_marrow' => ['costed' => 'what held does to a price', 'minuted' => 'keep paper', 'subscribed' => 'same trade now', 'walked' => 'never understanding them'],
         'garrow_finch'  => ['costed' => 'held debt is still a debt', 'minuted' => 'They keep beautifully', 'subscribed' => 'buy at a discount', 'walked' => 'a line lower'],
         'mott_wenn'     => ['costed' => 'Carried a letter up', 'minuted' => 'He won', 'subscribed' => 'one name', 'walked' => 'different on Tuesday'],
+        'street_almoner' => ['costed' => 'into pencil', 'minuted' => 'fattest book', 'subscribed' => 'which page', 'walked' => 'room where they decide'],
+        'pol_reddick'   => ['costed' => 'thirteen weeks', 'minuted' => 'weigh against it later', 'subscribed' => "It's the job", 'walked' => "couldn't weigh"],
+        'market_baker'  => ['costed' => 'one word of a song', 'minuted' => 'argues anyway', 'subscribed' => 'full price', 'walked' => 'regretted the walking'],
     ];
     foreach ($heard as $npc => $lines) {
         foreach ($lines as $fate => $needle) {
@@ -149,6 +152,9 @@ try {
     }
     $p = party($db, $base + ['quarry_fate' => 'pact']); ended($db, $p, 'subscribed');
     ok('Marrow in the lockup is not on the floor shaking hands', !str_contains(greet($db, $p, 'hollis_marrow'), 'same trade now'));
+    $p = party($db, $base); ended($db, $p, 'walked');
+    (new Effects($db))->apply($p, [['start_quest' => 'a_short_measure']]);
+    ok('Nell with a short measure open talks about the flour, not the meeting', !str_contains(greet($db, $p, 'market_baker'), 'regretted the walking'));
     $p = party($db, $base); ended($db, $p, 'costed');
     (new Effects($db))->apply($p, [['start_quest' => 'the_watch_payroll'], ['quest_stage' => ['quest' => 'the_watch_payroll', 'stage' => 'ask_the_clerk']]]);
     ok('a quest at the second desk still comes first', str_contains(greet($db, $p, 'tibald_ashe'), 'watch roll'));

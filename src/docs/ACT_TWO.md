@@ -121,6 +121,13 @@ Wat. Test: `tools/test_fenmoor_lot.php`.
     of his book.
   - **Mott Wenn** carried the sealed letter up the stair and counts who climbed
     it after. The boatmen carry the rest.
+  - **Granary Row itself**, as three more once-only greetings each. None of them
+    shows while that NPC's own quest is open.
+    - **Dagen Wyke**, almoner to the granary families, moves nine packing
+      families into pencil (`costed`).
+    - **Pol Reddick** counts a quarter as thirteen weeks of weighing.
+    - **Nell Quist** gives a seed cake to anybody who argues anyway (`minuted`),
+      and charges subscribers full price.
   - None of them knows who asked for the Fenmoor crate. That thread stays open.
 - **Sera's second offer.** If Sera turned Corse down (`sera_post_fate` =
   `stayed`) and is in the party, Minna Crale offers her the empty second desk at
