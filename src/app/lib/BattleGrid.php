@@ -78,6 +78,15 @@ final class BattleGrid
         'n' => ['cost' => null, 'opaque' => true,  'cover' => 5, 'label' => 'tall cover'],
         '#' => ['cost' => null, 'opaque' => true,  'cover' => 5, 'label' => 'wall'],
         'v' => ['cost' => null, 'opaque' => false, 'cover' => 0, 'label' => 'a pit'],
+        // Braziers (battle map D). A lit one is an iron bowl on legs: you
+        // cannot stand in it, you can crouch behind it, and you can see past
+        // it. Tipped over it is the same lump of iron on its side. The coals it
+        // spills are walkable — at double cost, because nobody strolls across
+        // a fire — and hurt whoever stands in them; CombatEngine owns that
+        // half, and burns them out to rough ground after two rounds.
+        'b' => ['cost' => null, 'opaque' => false, 'cover' => 2, 'label' => 'a lit brazier'],
+        'u' => ['cost' => null, 'opaque' => false, 'cover' => 2, 'label' => 'an overturned brazier'],
+        'f' => ['cost' => 10,   'opaque' => false, 'cover' => 0, 'label' => 'burning coals'],
     ];
 
     /** Anything not in TERRAIN, and anything off the board, reads as this. */

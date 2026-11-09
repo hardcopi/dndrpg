@@ -5714,6 +5714,12 @@ body.bm-pan-ready .battlemap { cursor: grab; }
 .bm-decal { pointer-events: none; }
 .bm-decal.is-rough { opacity: 0.92; }
 .bm-decal.is-floor { opacity: 0.38; }
+/* Battle map D: spilled coals. The decal is the fire; the cell under it only
+   warms the floor so a burning square reads from across the board, and the
+   glow over it (lightHtml) gutters faster than a torch. */
+.bm-decal.is-fire { opacity: 1; }
+.bm-cell.is-fire  { fill: rgba(255, 110, 20, 0.32); stroke: rgba(255, 140, 40, 0.45); stroke-width: 0.03; }
+.bm-glow.is-coals { opacity: 0.85; }
 
 /* Cover, shown on hover: a shield with the AC it is worth. On an obstacle it
    is the most that obstacle gives; on a target it is what this shot is
