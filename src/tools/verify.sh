@@ -156,6 +156,7 @@ if [ "$PHP_MODE" != none ]; then
     run "test_same_mark_autostart" phprun test_same_mark_autostart.php
     run "test_tutorial"       phprun test_tutorial.php
     run "test_act_two"        phprun test_act_two.php
+    run "test_ending_reactions" phprun test_ending_reactions.php
     run "test_visemes"        phprun test_visemes.php
     run "test_watch"          phprun test_watch.php
     run "test_dialogue_once"  phprun test_dialogue_once.php

@@ -93,6 +93,81 @@
             {
                 "conditions": [
                     {
+                        "flag": "fen_root_fate",
+                        "equals": "cut"
+                    }
+                ],
+                "once": true,
+                "text": "Osric turns the bundle over twice and smells the cut end. \"Cut well,\" he says, surprised. \"Dried badly, but cut well.\" He weighs it. \"You were watched, I expect. People who cut that root are always watched.\" He pays above market, exactly as promised, and does not ask by whom.",
+                "choices": [
+                    {
+                        "label": "Show me your remedies.",
+                        "effects": [
+                            {
+                                "open_shop": "osric_apothecary"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "fen_root_fate",
+                        "equals": "paid"
+                    }
+                ],
+                "once": true,
+                "text": "\"Eighteen,\" Osric says, when you tell him what the wardens took. \"For two bundles. That is robbery.\" He weighs the root, and his face changes. \"It is also very good root.\" He pays you above market and then a little more, muttering, which you gather is how he apologises to the price.",
+                "choices": [
+                    {
+                        "label": "Show me your remedies.",
+                        "effects": [
+                            {
+                                "open_shop": "osric_apothecary"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "fen_root_fate",
+                        "equals": "season"
+                    }
+                ],
+                "once": true,
+                "text": "Osric reads the paper twice: the whole of the second bed, the season, both marks at the foot of it. \"A supply,\" he says, as if the word is new. \"I have never had a supply. I have had luck and I have had favours.\" He folds it into the drawer with the money dish. \"And they have a customer on paper now. I hope nobody ever asks to see it.\"",
+                "choices": [
+                    {
+                        "label": "Show me your remedies.",
+                        "effects": [
+                            {
+                                "open_shop": "osric_apothecary"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "quest": "root_and_ash",
                         "stage": "the_quay_dealer"
                     }
@@ -162,6 +237,30 @@
                     {
                         "label": "What's the money for?",
                         "next": "the_dish"
+                    },
+                    {
+                        "label": "Do you buy fen-root?",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "quest": "fen_root",
+                                    "status": "active"
+                                }
+                            },
+                            {
+                                "not": {
+                                    "quest": "fen_root",
+                                    "status": "completed"
+                                }
+                            },
+                            {
+                                "not": {
+                                    "quest": "root_and_ash",
+                                    "status": "active"
+                                }
+                            }
+                        ],
+                        "next": "fen_root_offer"
                     },
                     {
                         "label": "Another time.",
@@ -361,6 +460,26 @@
                     {
                         "label": "Another time.",
                         "end": true
+                    }
+                ]
+            }
+        ],
+        "fen_root_offer": [
+            {
+                "text": "\"Above market,\" Osric says at once. \"Well above. Cut in the water, dried out of the sun, or it is worth nothing to me.\" He wipes his hands. \"It grows in one place within forty miles: the beds two hours west of the causeway. Beds, mind. Somebody planted them. The watch has a word for the people who work them, and I would rather you did not use it in my shop.\"",
+                "choices": [
+                    {
+                        "label": "I'll bring you some.",
+                        "effects": [
+                            {
+                                "start_quest": "fen_root"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "Not today.",
+                        "next": "greeting"
                     }
                 ]
             }

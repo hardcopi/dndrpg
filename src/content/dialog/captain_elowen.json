@@ -129,6 +129,38 @@
             {
                 "conditions": [
                     {
+                        "flag": "children_fate",
+                        "equals": "told"
+                    }
+                ],
+                "once": true,
+                "text": "Reed has a single sheet pinned under the inkwell, face down. \"The galleries,\" she says, when she sees you look. \"I have them. I've not done anything with them, and I've not decided not to.\" She turns the sheet over and back. \"You were certain about the second column. I wish you'd been less certain.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "children_fate",
+                        "equals": "moved"
+                    }
+                ],
+                "once": true,
+                "text": "\"I didn't post the north ford,\" Reed says. \"I said I wouldn't and I didn't. I'd like it understood that I didn't help, either.\" She signs something. \"Drovers say there's goblin smoke three valleys north and no trouble with it. I've written that down too. It's the only good line in the book this month.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "quest": "the_watch_payroll",
                         "stage": "the_standing_order"
                     }

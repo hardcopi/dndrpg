@@ -4,22 +4,53 @@
         "hail": [
             {
                 "conditions": [
-                    { "quest": "fp_watch_stayed", "status": "active" },
-                    { "flag": "watch_done:fp_watch_stayed" }
+                    {
+                        "quest": "fp_watch_cousin",
+                        "resolution": "note"
+                    }
+                ],
+                "once": true,
+                "text": "Brenna has the scrap in her belt still; you can see the corner of it. \"Went further,\" she says. \"I've read it a hundred times. It's his hand and it's not his words.\" She drinks. \"I'm not satisfied. I'm not going down. Both of those are true and I'm living with both of them.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "fp_watch_stayed",
+                        "status": "active"
+                    },
+                    {
+                        "flag": "watch_done:fp_watch_stayed"
+                    }
                 ],
                 "text": "She already knows. She has known since you came up.\n\n\"He stayed.\"\n\nShe turns the cup.\n\n\"This house is the last watch. We used to work down there, and worship, and we called it that. Then we stopped calling it anything and kept the sand and the slate.\"\n\n\"You've done the work. The hole is yours now. Go down if you want gold. Don't ask me to come.\"",
                 "choices": [
                     {
                         "label": "I told him you'd want him up.",
                         "effects": [
-                            { "quest_stage": { "quest": "fp_watch_stayed", "stage": "returned" } }
+                            {
+                                "quest_stage": {
+                                    "quest": "fp_watch_stayed",
+                                    "stage": "returned"
+                                }
+                            }
                         ],
                         "next": "stayed_done"
                     },
                     {
                         "label": "He stayed.",
                         "effects": [
-                            { "quest_stage": { "quest": "fp_watch_stayed", "stage": "returned" } }
+                            {
+                                "quest_stage": {
+                                    "quest": "fp_watch_stayed",
+                                    "stage": "returned"
+                                }
+                            }
                         ],
                         "next": "stayed_done"
                     }
@@ -27,16 +58,28 @@
             },
             {
                 "conditions": [
-                    { "quest": "fp_watch_cousin", "status": "active" },
-                    { "has_item": "fp_cousin_note" }
+                    {
+                        "quest": "fp_watch_cousin",
+                        "status": "active"
+                    },
+                    {
+                        "has_item": "fp_cousin_note"
+                    }
                 ],
                 "text": "She takes the scrap, reads it once, and folds it into her belt.\n\n\"Went further. That's not him. That's a note.\"",
                 "choices": [
                     {
                         "label": "It's what was there.",
                         "effects": [
-                            { "take_item": "fp_cousin_note" },
-                            { "quest_stage": { "quest": "fp_watch_cousin", "stage": "returned" } }
+                            {
+                                "take_item": "fp_cousin_note"
+                            },
+                            {
+                                "quest_stage": {
+                                    "quest": "fp_watch_cousin",
+                                    "stage": "returned"
+                                }
+                            }
                         ],
                         "next": "cousin_done"
                     },
@@ -48,10 +91,18 @@
             },
             {
                 "conditions": [
-                    { "any": [
-                        { "quest": "fp_watch_cousin", "status": "active" },
-                        { "quest": "fp_watch_stayed", "status": "active" }
-                    ] }
+                    {
+                        "any": [
+                            {
+                                "quest": "fp_watch_cousin",
+                                "status": "active"
+                            },
+                            {
+                                "quest": "fp_watch_stayed",
+                                "status": "active"
+                            }
+                        ]
+                    }
                 ],
                 "text": "\"Arch past the sand. That's the job. I don't want a theory. I want you to go.\"",
                 "choices": [
@@ -71,16 +122,30 @@
                     {
                         "label": "You have work.",
                         "conditions": [
-                            { "quest": "fp_watch_crate", "status": "completed" },
-                            { "not": { "quest": "fp_watch_cousin" } }
+                            {
+                                "quest": "fp_watch_crate",
+                                "status": "completed"
+                            },
+                            {
+                                "not": {
+                                    "quest": "fp_watch_cousin"
+                                }
+                            }
                         ],
                         "next": "notice_cousin"
                     },
                     {
                         "label": "You have work.",
                         "conditions": [
-                            { "quest": "fp_watch_name", "status": "completed" },
-                            { "not": { "quest": "fp_watch_stayed" } }
+                            {
+                                "quest": "fp_watch_name",
+                                "status": "completed"
+                            },
+                            {
+                                "not": {
+                                    "quest": "fp_watch_stayed"
+                                }
+                            }
                         ],
                         "next": "notice_stayed"
                     },
@@ -105,7 +170,11 @@
                 "choices": [
                     {
                         "label": "I'll look.",
-                        "effects": [ { "start_quest": "fp_watch_cousin" } ],
+                        "effects": [
+                            {
+                                "start_quest": "fp_watch_cousin"
+                            }
+                        ],
                         "next": "cousin_taken"
                     },
                     {
@@ -143,7 +212,11 @@
                 "choices": [
                     {
                         "label": "I'll go again.",
-                        "effects": [ { "start_quest": "fp_watch_stayed" } ],
+                        "effects": [
+                            {
+                                "start_quest": "fp_watch_stayed"
+                            }
+                        ],
                         "next": "stayed_taken"
                     },
                     {

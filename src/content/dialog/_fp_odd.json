@@ -4,16 +4,60 @@
         "hail": [
             {
                 "conditions": [
-                    { "quest": "fp_watch_crate", "status": "active" },
-                    { "has_item": "holy_symbol" }
+                    {
+                        "quest": "fp_watch_crate",
+                        "resolution": "returned"
+                    }
+                ],
+                "once": true,
+                "text": "The pewter sun-disc is on the shelf behind Oddvar now, between the tallow and the rope, not for sale. \"Haven't found the line for it yet,\" he says. \"When I do I'll want more. Don't go getting ideas about the crate.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "fp_watch_wine",
+                        "resolution": "bottled"
+                    }
+                ],
+                "once": true,
+                "text": "The green bottle is still behind Oddvar, cork in. \"Not drinking it,\" he says, before you ask. \"Smelled it. That's enough. Some things you buy to know you've got them.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "fp_watch_crate",
+                        "status": "active"
+                    },
+                    {
+                        "has_item": "holy_symbol"
+                    }
                 ],
                 "text": "He sees it before you have it out.\n\n\"Pewter. Figures. I'll take it off your hands.\"",
                 "choices": [
                     {
                         "label": "Here.",
                         "effects": [
-                            { "take_item": "holy_symbol" },
-                            { "quest_stage": { "quest": "fp_watch_crate", "stage": "returned" } }
+                            {
+                                "take_item": "holy_symbol"
+                            },
+                            {
+                                "quest_stage": {
+                                    "quest": "fp_watch_crate",
+                                    "stage": "returned"
+                                }
+                            }
                         ],
                         "next": "crate_done"
                     },
@@ -25,16 +69,28 @@
             },
             {
                 "conditions": [
-                    { "quest": "fp_watch_wine", "status": "active" },
-                    { "has_item": "fp_sour_wine" }
+                    {
+                        "quest": "fp_watch_wine",
+                        "status": "active"
+                    },
+                    {
+                        "has_item": "fp_sour_wine"
+                    }
                 ],
                 "text": "He takes the bottle without asking, sniffs the cork, and sets it behind him unopened.\n\n\"That's the one. Don't drink it. I won't.\"",
                 "choices": [
                     {
                         "label": "Yours.",
                         "effects": [
-                            { "take_item": "fp_sour_wine" },
-                            { "quest_stage": { "quest": "fp_watch_wine", "stage": "returned" } }
+                            {
+                                "take_item": "fp_sour_wine"
+                            },
+                            {
+                                "quest_stage": {
+                                    "quest": "fp_watch_wine",
+                                    "stage": "returned"
+                                }
+                            }
                         ],
                         "next": "wine_done"
                     },
@@ -46,13 +102,20 @@
             },
             {
                 "conditions": [
-                    { "quest": "fp_watch_crate", "status": "active" }
+                    {
+                        "quest": "fp_watch_crate",
+                        "status": "active"
+                    }
                 ],
                 "text": "\"Stair's the arch at the far end of the sand. Crate went down it. I want what was in it, not a story about the box.\"",
                 "choices": [
                     {
                         "label": "Let me see what you've got.",
-                        "effects": [ { "open_shop": "_fp_odd" } ]
+                        "effects": [
+                            {
+                                "open_shop": "_fp_odd"
+                            }
+                        ]
                     },
                     {
                         "label": "Right.",
@@ -62,13 +125,20 @@
             },
             {
                 "conditions": [
-                    { "quest": "fp_watch_wine", "status": "active" }
+                    {
+                        "quest": "fp_watch_wine",
+                        "status": "active"
+                    }
                 ],
                 "text": "\"Rack's down there. Green glass. Bring me a bottle if there's one left. Don't taste it on the way.\"",
                 "choices": [
                     {
                         "label": "Let me see what you've got.",
-                        "effects": [ { "open_shop": "_fp_odd" } ]
+                        "effects": [
+                            {
+                                "open_shop": "_fp_odd"
+                            }
+                        ]
                     },
                     {
                         "label": "Right.",
@@ -82,21 +152,36 @@
                     {
                         "label": "Need anything from below?",
                         "conditions": [
-                            { "not": { "quest": "fp_watch_crate" } }
+                            {
+                                "not": {
+                                    "quest": "fp_watch_crate"
+                                }
+                            }
                         ],
                         "next": "notice_crate"
                     },
                     {
                         "label": "There's more, if you want it.",
                         "conditions": [
-                            { "quest": "fp_watch_shrine", "status": "completed" },
-                            { "not": { "quest": "fp_watch_wine" } }
+                            {
+                                "quest": "fp_watch_shrine",
+                                "status": "completed"
+                            },
+                            {
+                                "not": {
+                                    "quest": "fp_watch_wine"
+                                }
+                            }
                         ],
                         "next": "notice_wine"
                     },
                     {
                         "label": "Let me see what you've got.",
-                        "effects": [ { "open_shop": "_fp_odd" } ]
+                        "effects": [
+                            {
+                                "open_shop": "_fp_odd"
+                            }
+                        ]
                     },
                     {
                         "label": "What sells fastest?",
@@ -115,7 +200,11 @@
                 "choices": [
                     {
                         "label": "I'll bring it up.",
-                        "effects": [ { "start_quest": "fp_watch_crate" } ],
+                        "effects": [
+                            {
+                                "start_quest": "fp_watch_crate"
+                            }
+                        ],
                         "next": "crate_taken"
                     },
                     {
@@ -153,7 +242,11 @@
                 "choices": [
                     {
                         "label": "I'll fetch one.",
-                        "effects": [ { "start_quest": "fp_watch_wine" } ],
+                        "effects": [
+                            {
+                                "start_quest": "fp_watch_wine"
+                            }
+                        ],
                         "next": "wine_taken"
                     },
                     {
@@ -191,7 +284,11 @@
                 "choices": [
                     {
                         "label": "Show me the shelves.",
-                        "effects": [ { "open_shop": "_fp_odd" } ]
+                        "effects": [
+                            {
+                                "open_shop": "_fp_odd"
+                            }
+                        ]
                     },
                     {
                         "label": "Another time.",

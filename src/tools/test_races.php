@@ -173,8 +173,12 @@ $heldGround = function (array $raceFeatures) use ($invoke, $shoveState): int {
     }
     return $held;
 };
+// Seeded: 300 contests each way is a statistical claim, and unseeded it failed
+// CI about one run in a few dozen (9 Nov 2026). The seed makes it a fixed fact.
+Dice::seed(1);
 $plainHeld = $heldGround(['quarry_built']);
 $stoneHeld = $heldGround(['quarry_built', 'set_fast']);
+Dice::useGenerator(null);
 ok('a Sarsen keeps their feet far more often than the same body without the trait',
     $stoneHeld > $plainHeld + 30,
     "without set fast {$plainHeld}, with it {$stoneHeld}, of 300");
