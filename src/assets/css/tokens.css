@@ -446,12 +446,16 @@
   --font-ui: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --mono: "Cascadia Code", "Consolas", ui-monospace, monospace;
 
-  --fs-2xs: 0.75rem;            /* 12px — the floor. Nothing smaller ships. */
-  --fs-xs: 0.8125rem;           /* 13 */
-  --fs-sm: 0.875rem;            /* 14 */
-  --fs-md: 1rem;                /* 16 — body */
-  --fs-lg: 1.125rem;            /* 18 */
-  --fs-xl: 1.375rem;            /* 22 */
+  /* The player's text size (the Aa button in the game's top bar), as a
+     multiplier on the running-text steps below. Headings (2xl and up) keep
+     their own clamps: they are already large, and they set the layout. */
+  --text-scale: 1;
+  --fs-2xs: calc(0.75rem * var(--text-scale));     /* 12px — the floor. Nothing smaller ships. */
+  --fs-xs: calc(0.8125rem * var(--text-scale));    /* 13 */
+  --fs-sm: calc(0.875rem * var(--text-scale));     /* 14 */
+  --fs-md: calc(1rem * var(--text-scale));         /* 16 — body */
+  --fs-lg: calc(1.125rem * var(--text-scale));     /* 18 */
+  --fs-xl: calc(1.375rem * var(--text-scale));     /* 22 */
   --fs-2xl: clamp(1.5rem, 1.2rem + 1.5vw, 1.75rem);
   --fs-3xl: clamp(1.75rem, 1.3rem + 2.2vw, 2.25rem);
   /*
@@ -886,3 +890,9 @@
  * dice3d.js and ui-battlemap.js. A checker that does not know the difference
  * reports six false alarms, so tools/token_check.py knows.
  */
+
+/* Text size, set on <html data-text> from localStorage `rm-text` before the
+   page paints (game.php) and by the Aa button (game.js). Redeclared on the
+   same element as the --fs steps, so they recompute with it. */
+:root[data-text="large"]  { --text-scale: 1.125; }
+:root[data-text="larger"] { --text-scale: 1.25; }

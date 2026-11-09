@@ -30,6 +30,10 @@
 
   /** Log categories the filter chips select between. */
   let logFilter = 'all';
+  // Whether the filter on screen was picked by the game (a fight switching
+  // "All" to "Combat") rather than by the player. Only a filter the game picked
+  // is put back when the fight ends; a chip the player pressed stays pressed.
+  let logFilterAuto = false;
 
   // =========================================================================
   // Overlays: one Escape key, one focus trap, one idea of what is on top
@@ -260,9 +264,8 @@
   function initLogControls() {
     $$('.log-filters .chip').forEach((chip) => {
       chip.addEventListener('click', () => {
-        logFilter = chip.dataset.filter;
-        $$('.log-filters .chip').forEach((c) => c.classList.toggle('on', c === chip));
-        redrawLog();
+        logFilterAuto = false;
+        showLogFilter(chip.dataset.filter);
       });
     });
 
@@ -338,6 +341,34 @@
       { slot: 'rolls', label: 'Recent rolls' }
     );
     refreshRolls();
+  }
+
+  function showLogFilter(name) {
+    logFilter = name;
+    $$('.log-filters .chip').forEach((c) => {
+      const on = c.dataset.filter === name;
+      c.classList.toggle('on', on);
+      c.setAttribute('aria-pressed', String(on));
+    });
+    redrawLog();
+  }
+
+  /**
+   * Called by game.js's render() with whether a fight is on screen.
+   *
+   * On "All", the log of a fight opened on the place's prose (the Golden
+   * Flagon's description sat above the first attack), so a fight shows
+   * "Combat" until it ends, then goes back to "All". A filter the player chose
+   * themselves is left alone either way.
+   */
+  function logFilterForCombat(inCombat) {
+    if (inCombat && logFilter === 'all') {
+      logFilterAuto = true;
+      showLogFilter('combat');
+    } else if (!inCombat && logFilterAuto) {
+      logFilterAuto = false;
+      showLogFilter('all');
+    }
   }
 
   function lineMatchesFilter(line) {
@@ -2027,6 +2058,7 @@
   }
 
   window.UI = {
+    logFilterForCombat,
     init,
     // overlays
     pushOverlay, overlayOpen,

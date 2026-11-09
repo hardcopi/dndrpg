@@ -13,6 +13,10 @@ if (!session_character_id()) {
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <?= csrf_meta() ?>
   <title>Adventure — Rivermark Chronicles</title>
+  <script>
+    // The player's text size, before the first paint so nothing jumps.
+    try { var t = localStorage.getItem('rm-text'); if (t === 'large' || t === 'larger') document.documentElement.dataset.text = t; } catch (e) {}
+  </script>
   <link rel="stylesheet" href="<?= asset('assets/css/style.css') ?>">
   <!-- The Amiga window skin. Scoped to this page; see the file header. -->
   <link rel="stylesheet" href="<?= asset('assets/css/game-amiga.css') ?>">
@@ -111,6 +115,9 @@ if (!session_character_id()) {
             <svg aria-hidden="true"><use href="#i-refresh"></use></svg>
           </button>
           <span class="icon-sep" aria-hidden="true"></span>
+          <button type="button" class="icon-btn" id="btn-text-size" title="Text size: normal" aria-label="Text size: normal">
+            <span class="icon-text" aria-hidden="true">Aa</span>
+          </button>
           <button type="button" class="icon-btn" id="btn-fullscreen" title="Fullscreen" aria-label="Toggle fullscreen">
             <svg aria-hidden="true"><use href="#i-expand"></use></svg>
           </button>
