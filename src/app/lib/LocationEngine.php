@@ -1595,7 +1595,7 @@ class LocationEngine
         $leader = $this->getFullCharacter($characterId);
         $passive = 10 + Rules::skillCheck($leader, 'perception')['total'];
         if ($passive >= (int) $trap['dc']) {
-            $world->set($partyId, $flag, 'found');
+            TrapState::apply($world, $partyId, $flag, 'spot');
             return [
                 'event'    => null,
                 'messages' => [$trap['found_text'] ?? "You spot it before it spots you: {$trap['name']}."],
@@ -1609,7 +1609,7 @@ class LocationEngine
         }
         $victim = $victims[random_int(0, count($victims) - 1)];
 
-        $world->set($partyId, $flag, 'sprung');
+        TrapState::apply($world, $partyId, $flag, 'fire');
 
         return [
             'event'    => $this->fireTrapOn($partyId, $trap, $victim),
@@ -1821,7 +1821,7 @@ class LocationEngine
                     // search is strictly better than walking through, without
                     // being a guarantee.
                     if ($total >= (int) $trap['dc']) {
-                        $world->set($partyId, $flag, 'found');
+                        TrapState::apply($world, $partyId, $flag, 'spot');
                         $messages[] = $trap['found_text'] ?? "You find it before it finds you: {$trap['name']}.";
                     } else {
                         $messages[] = 'The floor and the frame look honest enough. You are fairly sure.';

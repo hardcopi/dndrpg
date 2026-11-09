@@ -52,12 +52,14 @@ Audited 9 Nov 2026. Each entry covers where the state lives, its states, who wri
 
 ---
 
-## 6. Trap state (doors and furnishings): DOCUMENTED. Recommended next.
+## 6. Trap state (doors and furnishings): MADE EXPLICIT (`trap_state`, Nov 9 follow-up)
+- **Done:** `src/app/lib/TrapState.php` is the table and the one writer (`TrapState::apply`). DoorEngine, FurnishingEngine and LocationEngine no longer write raw values; `tools/test_trap_state.php` checks the table and that no raw write is left. Stored values unchanged (`found`, `sprung`), so existing saves read the same.
 - **Stored:** `world_flags` under `DelveEngine::trapFlag(key)`, with values (unset), `found`, `sprung` (disarmed also writes `sprung`).
 - **Writers:** `DoorEngine` (lines ~174, 233, 236) and `FurnishingEngine` (~227, 379, 382, 424) duplicate the same lifecycle.
 - **Recommendation:** a `TrapState` table (hidden → found → disarmed|sprung) and one writer. Keep the stored value `sprung` for "disarmed" for back-compat, or add `disarmed` as a new value. Medium value, low risk.
 
-## 7. Content "fate" flags (`survey_fate`, `kessa_debt_fate`, `tutorial_fate`, `act_two_open`, `found_exit_*`): DOCUMENTED
+## 7. Content "fate" flags (`survey_fate`, `kessa_debt_fate`, `tutorial_fate`, `act_two_open`, `found_exit_*`): LINTED (Nov 9 follow-up)
+- **Done:** `trace_content.py` reports `flag_value` when a condition's `equals` matches no value any `set_flag` writes (flags written by the engine or incremented are skipped). Zero today; a typo now fails `verify.sh` via `--check`.
 - **Stored:** `world_flags` strings set and read only by content JSON (`set_flag` + `value`, `flag` + `equals`). Examples:
   - `survey_fate`: took, burned, sold, warned.
   - `kessa_debt_fate`: fought, paid, sold.

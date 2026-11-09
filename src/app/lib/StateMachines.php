@@ -21,6 +21,7 @@ final class StateMachines
             QuestStatus::machine(),
             CombatStatus::machine(),
             UiMode::machine(),
+            TrapState::machine(),
         ] as $m) {
             $out[$m->name] = $m;
         }
