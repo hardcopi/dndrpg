@@ -263,7 +263,7 @@
         ],
         "filed": [
             {
-                "text": "She takes the nine sheets and writes them into the day book in a round hand: *Survey, Rivermark, nine sheets, fair copy, deposited by the bearer.* A penny a page. \"Anybody can read it now,\" she says, \"for a penny. Most won't. Some will. That's all a record ever does.\"",
+                "text": "She takes the nine sheets and writes them into the day book in a round hand: Survey, Rivermark, nine sheets, fair copy, deposited by the bearer. A penny a page. \"Anybody can read it now,\" she says, \"for a penny. Most won't. Some will. That's all a record ever does.\"",
                 "choices": [
                     {
                         "label": "Leave.",
@@ -332,7 +332,7 @@
         ],
         "fenmoor_return": [
             {
-                "text": "She comes down with a thin bound book and opens it on the long table without looking for the page.\n\n*Lot 41. Sundry armour, the Fenmoor stock, the property of the house. To T. Vass, dealer in second goods, Greyhythe. 31 gp. Duty paid.*\n\n\"Vass files as well,\" Dorcas Fenn says. \"Dealers must, for the duty, and he is a careful man, which is to say a frightened one.\" Another book, another page that she does not look for.\n\n*Plate, three suits and pieces, as bought. To Brindle & Daughter, chandlers, Brackwater wharf. 40 gp.*\n\n\"Tuppence,\" she says. \"Two pages.\"",
+                "text": "She comes down with a thin bound book and opens it on the long table without looking for the page.\n\nLot 41. Sundry armour, the Fenmoor stock, the property of the house. To T. Vass, dealer in second goods, Greyhythe. 31 gp. Duty paid.\n\n\"Vass files as well,\" Dorcas Fenn says. \"Dealers must, for the duty, and he is a careful man, which is to say a frightened one.\" Another book, another page that she does not look for.\n\nPlate, three suits and pieces, as bought. To Brindle & Daughter, chandlers, Brackwater wharf. 40 gp.\n\n\"Tuppence,\" she says. \"Two pages.\"",
                 "interjections": [
                     {
                         "companion": "sera",

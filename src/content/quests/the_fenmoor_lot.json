@@ -37,8 +37,8 @@
         },
         "the_day_book": {
             "title": "The day-book",
-            "objective": "Darrow sold the crate at the Weir to a carter, Wat Fenner, who is dead. His widow lives on the hulk with the blue rail.",
-            "journal": "Darrow sold the crate at Weir Landing to Wat Fenner, a carter who said he had somebody up the east road who would take it. Four names, and the fourth is dead: the fever at the Weir, two winters ago. Corse said a carter who is dead. He was right about that as well. Fenner's widow is on the mudside, and she kept his book.",
+            "objective": "Darrow sold the crate at the Weir to a carter, Abe Treen, who is dead. His widow lives on the hulk with the blue rail.",
+            "journal": "Darrow sold the crate at Weir Landing to Abe Treen, a carter who said he had somebody up the east road who would take it. Four names, and the fourth is dead: the fever at the Weir, two winters ago. Corse said a carter who is dead. He was right about that as well. Treen's widow is on the mudside, and she kept his book.",
             "target": {
                 "location": "the_mudside"
             }
@@ -48,7 +48,7 @@
             "resolution": "kept_the_book",
             "outcome": "success",
             "title": "As asked",
-            "journal": "Lise Fenner let me take Wat's day-book, because she said a book is only worth keeping if somebody reads it, and she cannot. One crate left at the hill store, as asked. Paid. Somebody asked. Nobody wrote down who, and everybody who could say is dead, or a goblin, or does not know. It is the end of the trail and it is not an answer. I am carrying it anyway.",
+            "journal": "Lise Treen let me take Abe's day-book, because she said a book is only worth keeping if somebody reads it, and she cannot. One crate left at the hill store, as asked. Paid. Somebody asked. Nobody wrote down who, and everybody who could say is dead, or a goblin, or does not know. It is the end of the trail and it is not an answer. I am carrying it anyway.",
             "effects": [
                 {
                     "set_flag": "armour_chain_fate",
@@ -75,7 +75,7 @@
             "resolution": "left_the_book",
             "outcome": "neutral",
             "title": "His hand in it",
-            "journal": "I gave Lise Fenner back her husband's book. It is the only thing of his with his hand in it, and the line I wanted is one line in twenty years of loads. One crate left at the hill store, as asked. I know where the plate went now. I do not know why, and the only man who did is buried at the Weir. That is where the trail goes. Corse told me so before I started.",
+            "journal": "I gave Lise Treen back her husband's book. It is the only thing of his with his hand in it, and the line I wanted is one line in twenty years of loads. One crate left at the hill store, as asked. I know where the plate went now. I do not know why, and the only man who did is buried at the Weir. That is where the trail goes. Corse told me so before I started.",
             "effects": [
                 {
                     "set_flag": "armour_chain_fate",
@@ -98,7 +98,7 @@
             "resolution": "paid_the_burying",
             "outcome": "success",
             "title": "The burying",
-            "journal": "Wat Fenner's burying cost twenty gold and his widow had paid six of it back to Jory Kemp at a shilling a week. I paid the fourteen. It has nothing to do with the plate, or the mark, or who asked for a crate to be left at a goblin store. It was the only debt anywhere on this trail that anybody could actually settle.",
+            "journal": "Abe Treen's burying cost twenty gold and his widow had paid six of it back to Jory Kemp at a shilling a week. I paid the fourteen. It has nothing to do with the plate, or the mark, or who asked for a crate to be left at a goblin store. It was the only debt anywhere on this trail that anybody could actually settle.",
             "effects": [
                 {
                     "set_flag": "armour_chain_fate",

@@ -66,7 +66,7 @@
         ],
         "the_price": [
             {
-                "text": "\"Eleven gold,\" Darrow says at once, and then looks annoyed with himself. \"At the Weir. Weir Landing, two days above Greyhythe, where the carters meet the boats for the east road. Sold the crate to Wat Fenner for eleven, which was a loss, and brought Hester back twenty, which was a bigger one, and nobody's ever thanked me for it.\" He sniffs. \"Wat said he'd somebody up the east road who'd take it. I didn't ask who. You don't ask a carter his buyers, same as you don't ask a packman his.\"",
+                "text": "\"Eleven gold,\" Darrow says at once, and then looks annoyed with himself. \"At the Weir. Weir Landing, two days above Greyhythe, where the carters meet the boats for the east road. Sold the crate to Abe Treen for eleven, which was a loss, and brought Hester back twenty, which was a bigger one, and nobody's ever thanked me for it.\" He sniffs. \"Abe said he'd somebody up the east road who'd take it. I didn't ask who. You don't ask a carter his buyers, same as you don't ask a packman his.\"",
                 "interjections": [
                     {
                         "companion": "sera",
@@ -75,7 +75,7 @@
                 ],
                 "choices": [
                     {
-                        "label": "Wat Fenner. Where is he now?",
+                        "label": "Abe Treen. Where is he now?",
                         "next": "wat"
                     },
                     {
@@ -87,7 +87,7 @@
         ],
         "asked_for": [
             {
-                "text": "Darrow looks at you for a while over the bucket. \"All right,\" he says. \"Wat said, 'It's been asked for.' That's all. That's all he said.\" He shrugs, carefully, so as not to spill the water. \"Carters say it. I say it. It means somebody wanted a thing and you're not going to tell anybody who. It doesn't mean anything else. Mostly.\"",
+                "text": "Darrow looks at you for a while over the bucket. \"All right,\" he says. \"Abe said, 'It's been asked for.' That's all. That's all he said.\" He shrugs, carefully, so as not to spill the water. \"Carters say it. I say it. It means somebody wanted a thing and you're not going to tell anybody who. It doesn't mean anything else. Mostly.\"",
                 "on_enter": [
                     {
                         "set_flag": "fenmoor_asked_for"
@@ -101,7 +101,7 @@
                 ],
                 "choices": [
                     {
-                        "label": "Wat Fenner. Where is he now?",
+                        "label": "Abe Treen. Where is he now?",
                         "next": "wat"
                     },
                     {
@@ -113,10 +113,10 @@
         ],
         "flat": [
             {
-                "text": "Darrow looks at you flatly over the bucket, an old man who has been told he is holding something back by better liars than you. \"Eleven gold,\" he says, as if that settles it. \"At the Weir. To Wat Fenner, who said he had a buyer up the east road. That's the whole of it.\"",
+                "text": "Darrow looks at you flatly over the bucket, an old man who has been told he is holding something back by better liars than you. \"Eleven gold,\" he says, as if that settles it. \"At the Weir. To Abe Treen, who said he had a buyer up the east road. That's the whole of it.\"",
                 "choices": [
                     {
-                        "label": "Wat Fenner. Where is he now?",
+                        "label": "Abe Treen. Where is he now?",
                         "next": "wat"
                     },
                     {
@@ -128,7 +128,7 @@
         ],
         "wat": [
             {
-                "text": "\"Dead.\" Darrow takes his feet out of the bucket and looks at them. \"Two winters back. The fever at the Weir took eleven that year and Wat was one, and they buried him up there because it was cheaper than bringing him down.\" He points along the mud with his chin. \"His wife's on the hulk with the blue rail. Lise. She kept his book. Carters keep books, if they can write. Wat could. Big careful hand.\"",
+                "text": "\"Dead.\" Darrow takes his feet out of the bucket and looks at them. \"Two winters back. The fever at the Weir took eleven that year and Abe was one, and they buried him up there because it was cheaper than bringing him down.\" He points along the mud with his chin. \"His wife's on the hulk with the blue rail. Lise. She kept his book. Carters keep books, if they can write. Abe could. Big careful hand.\"",
                 "interjections": [
                     {
                         "companion": "aldric",

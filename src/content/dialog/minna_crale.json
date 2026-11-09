@@ -173,7 +173,7 @@
                         "stage": "the_instruction"
                     }
                 ],
-                "text": "Minna Crale takes a folded paper from a pigeonhole that has your name on a card, in her hand. \"Your first instruction under the articles,\" she says. \"It's quite short.\" It is. It says: *Attend the quarterly meeting. If asked, say whether the valley is quiet.* It is initialled by somebody, and countersigned by somebody else.",
+                "text": "Minna Crale takes a folded paper from a pigeonhole that has your name on a card, in her hand. \"Your first instruction under the articles,\" she says. \"It's quite short.\" It is. It says: Attend the quarterly meeting. If asked, say whether the valley is quiet. It is initialled by somebody, and countersigned by somebody else.",
                 "interjections": [
                     {
                         "companion": "aldric",
@@ -273,7 +273,7 @@
                         }
                     }
                 ],
-                "text": "Minna Crale has a slip of paper ready, which means she has had it ready for some time. \"Before you go,\" she says. \"The Greyhythe office has a line in its book against your party. *Service given: a list of forty-one names, copied. Service owed:* and then a blank, where the day would be.\" She lays the slip on the desk. \"The house would like the day to be today. It is a very small service. I would not want you to think otherwise.\"",
+                "text": "Minna Crale has a slip of paper ready, which means she has had it ready for some time. \"Before you go,\" she says. \"The Greyhythe office has a line in its book against your party. Service given: a list of forty-one names, copied. Service owed: and then a blank, where the day would be.\" She lays the slip on the desk. \"The house would like the day to be today. It is a very small service. I would not want you to think otherwise.\"",
                 "interjections": [
                     {
                         "companion": "kessa",
@@ -389,7 +389,7 @@
         ],
         "sold_serving": [
             {
-                "text": "\"Thank you,\" Minna Crale says, and writes *will attend* against your name, and then counts forty gold onto the desk. \"The second quarter. In advance; I find it saves a letter.\" She does not wait to see what your face does. \"Mr Sare will ask you. He always asks.\"",
+                "text": "\"Thank you,\" Minna Crale says, and writes will attend against your name, and then counts forty gold onto the desk. \"The second quarter. In advance; I find it saves a letter.\" She does not wait to see what your face does. \"Mr Sare will ask you. He always asks.\"",
                 "choices": [
                     {
                         "label": "Leave.",
