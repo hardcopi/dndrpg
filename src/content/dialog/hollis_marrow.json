@@ -66,6 +66,110 @@
             {
                 "conditions": [
                     {
+                        "flag": "meeting_fate",
+                        "equals": "costed"
+                    },
+                    {
+                        "not": {
+                            "flag": "quarry_fate",
+                            "equals": "pact"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "Marrow is not weighing. He has the counting house's copy of something in his hand and he is reading it the way he reads grain, letting it fall through his fingers. \"Held,\" he says. \"Granary Row, held for the quarter. Do you know what held does to a price? Nobody buys on a street that is held. Nobody sells on one either.\" He folds it into his good coat. \"You asked them what it costs. I have spent thirty years making sure nobody in this town asked me that. I find I admire it, and I would like you to leave my floor.\"",
+                "choices": [
+                    {
+                        "label": "What does a reeve actually do?",
+                        "next": "the_price_of_bread"
+                    },
+                    {
+                        "label": "Nothing. Sorry.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "minuted"
+                    },
+                    {
+                        "not": {
+                            "flag": "quarry_fate",
+                            "equals": "pact"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"You went all the way downriver,\" Marrow says pleasantly, weighing, \"and came back up it with an objection in a minute book.\" He lets the grain run. \"No, I mean it. A thing written down is a thing somebody can find later. I have a loft full of them. I simply never thought of you as people who keep paper.\"",
+                "choices": [
+                    {
+                        "label": "What does a reeve actually do?",
+                        "next": "the_price_of_bread"
+                    },
+                    {
+                        "label": "Nothing. Sorry.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "subscribed"
+                    },
+                    {
+                        "not": {
+                            "flag": "quarry_fate",
+                            "equals": "pact"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "Marrow puts the ladle down and comes across the floor with his hand out, which he has not done before. \"Owners,\" he says warmly, so the carters hear it. \"In the house. Well. We are in the same trade now, you and I, whether either of us likes the smell of it.\" He does not let go of your hand quite soon enough. \"Come to me if you ever want to know what your share is worth. I will tell you a lower figure, and it will be the true one.\"",
+                "choices": [
+                    {
+                        "label": "What does a reeve actually do?",
+                        "next": "the_price_of_bread"
+                    },
+                    {
+                        "label": "Nothing. Sorry.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "walked"
+                    },
+                    {
+                        "not": {
+                            "flag": "quarry_fate",
+                            "equals": "pact"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"Walked out,\" Marrow says, without turning round. \"Of a room with eleven people and their money in it, under any other business.\" The grain runs through his fingers. \"I have never understood people who do that. I have done very well out of never understanding them.\"",
+                "choices": [
+                    {
+                        "label": "What does a reeve actually do?",
+                        "next": "the_price_of_bread"
+                    },
+                    {
+                        "label": "Nothing. Sorry.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "hollis_coin_taken"
                     }
                 ],

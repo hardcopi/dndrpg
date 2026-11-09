@@ -1,7 +1,7 @@
 <?php
 /**
  * Act II aftermath: companions read meeting_fate; Minna Crale calls in Kessa's favour;
- * Reed hears the outcome in Rivermark; Sera is offered the second desk at Number Nine.
+ * Reed, Ashe, Marrow, Finch and Mott Wenn hear the outcome in Rivermark; Sera is offered the second desk at Number Nine.
  * Below is the harness shared with test_act_two.php; the original notes follow.
  *
  * Act II, "The Quarterly Meeting", can be played through on all four branches.
@@ -130,6 +130,28 @@ try {
         ok("Reed says it once ($fate)", (function () use ($db, $p, $needle) {
             talk($db, $p, 'captain_elowen', ['']); return stripos(greet($db, $p, 'captain_elowen'), $needle) === false; })());
     }
+
+    echo "== the rest of Rivermark hears ==\n";
+    $heard = [
+        'tibald_ashe'   => ['costed' => 'held for the quarter', 'minuted' => 'looked twice', 'subscribed' => 'For information', 'walked' => 'close of business'],
+        'hollis_marrow' => ['costed' => 'what held does to a price', 'minuted' => 'keep paper', 'subscribed' => 'same trade now', 'walked' => 'never understanding them'],
+        'garrow_finch'  => ['costed' => 'held debt is still a debt', 'minuted' => 'They keep beautifully', 'subscribed' => 'buy at a discount', 'walked' => 'a line lower'],
+        'mott_wenn'     => ['costed' => 'Carried a letter up', 'minuted' => 'He won', 'subscribed' => 'one name', 'walked' => 'different on Tuesday'],
+    ];
+    foreach ($heard as $npc => $lines) {
+        foreach ($lines as $fate => $needle) {
+            $p = party($db, $base); ended($db, $p, $fate);
+            $t = greet($db, $p, $npc);
+            ok("$npc hears $fate", stripos($t, $needle) !== false, substr($t, 0, 100));
+            talk($db, $p, $npc, ['']);
+            ok("$npc says it once ($fate)", stripos(greet($db, $p, $npc), $needle) === false);
+        }
+    }
+    $p = party($db, $base + ['quarry_fate' => 'pact']); ended($db, $p, 'subscribed');
+    ok('Marrow in the lockup is not on the floor shaking hands', !str_contains(greet($db, $p, 'hollis_marrow'), 'same trade now'));
+    $p = party($db, $base); ended($db, $p, 'costed');
+    (new Effects($db))->apply($p, [['start_quest' => 'the_watch_payroll'], ['quest_stage' => ['quest' => 'the_watch_payroll', 'stage' => 'ask_the_clerk']]]);
+    ok('a quest at the second desk still comes first', str_contains(greet($db, $p, 'tibald_ashe'), 'watch roll'));
 
     echo "== Sera's second offer ==\n";
     $sera = function (array $flags, int $approval) use ($db, $base) {

@@ -111,6 +111,86 @@
             {
                 "conditions": [
                     {
+                        "flag": "meeting_fate",
+                        "equals": "costed"
+                    }
+                ],
+                "once": true,
+                "text": "\"Carried a letter up for the counting house,\" Mott says, from the bollard. \"Last week. Sealed, with the house's mark on it, the one from downriver. I don't read them.\" He chews. \"Ashe came down the stair himself to take it off me, which he has never done in nine years. Then the captain went up to him the same afternoon. I don't read them. I can count who goes up a stair.\"",
+                "choices": [
+                    {
+                        "label": "What comes up this stair?",
+                        "next": "what_comes_up"
+                    },
+                    {
+                        "label": "Nothing today.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "minuted"
+                    }
+                ],
+                "once": true,
+                "text": "\"Nothing came up about you,\" Mott says. \"I'd know. Everything comes up this stair.\" He watches the water a while. \"Boatmen say you sat in that room at Brackwater and had something written down and came home. Boatmen think that's very funny. I don't. My father had a thing written down once, about the landing fees. Took eleven years. He won.\"",
+                "choices": [
+                    {
+                        "label": "What comes up this stair?",
+                        "next": "what_comes_up"
+                    },
+                    {
+                        "label": "Nothing today.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "subscribed"
+                    }
+                ],
+                "once": true,
+                "text": "\"Boatmen are saying you've bought into the house downriver,\" Mott says, and does not get off the bollard. \"Owners.\" He turns the cloth over on his knee. \"I've carried their crates up this stair nine years. Never knew whose they were. Now I suppose I know one name.\"",
+                "choices": [
+                    {
+                        "label": "What comes up this stair?",
+                        "next": "what_comes_up"
+                    },
+                    {
+                        "label": "Nothing today.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "walked"
+                    }
+                ],
+                "once": true,
+                "text": "\"Walked out on them,\" Mott says. \"The boatmen had it before you did, near enough. In the middle, they're saying, under the last business.\" He almost smiles at the river. \"Nobody walks out of anything at Brackwater. That's what the boatmen say about Brackwater. They were saying it different on Tuesday.\"",
+                "choices": [
+                    {
+                        "label": "What comes up this stair?",
+                        "next": "what_comes_up"
+                    },
+                    {
+                        "label": "Nothing today.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "tobin_named"
                     }
                 ],

@@ -106,6 +106,22 @@ Wat. Test: `tools/test_fenmoor_lot.php`.
   quarter (`costed`), nothing at all (`minuted`), cold suspicion of a party now on
   the house's books (`subscribed`), and dry approval (`walked`). Held, not
   stopped: the Row is not saved.
+- **The rest of Rivermark hears.** Four more once-only greetings per
+  `meeting_fate`, after any quest that has them busy and before the Concern
+  pressure lines:
+  - **Tibald Ashe** copied the held letter (`costed`) and finds nothing to file
+    (`minuted`). For `subscribed` he gets the subscriber list "for information",
+    and for `walked` one line, "left before the close of business", in the hand
+    he has never met.
+  - **Hollis Marrow** knows what held does to a price on his own street. He
+    shakes a subscriber's hand. He is skipped while in the lockup (`quarry_fate`
+    = `pact`).
+  - **Garrow Finch:** a held debt still grows; objections keep; he buys shares
+    at a discount; he writes a party that walked out a line lower in the front
+    of his book.
+  - **Mott Wenn** carried the sealed letter up the stair and counts who climbed
+    it after. The boatmen carry the rest.
+  - None of them knows who asked for the Fenmoor crate. That thread stays open.
 - **Sera's second offer.** If Sera turned Corse down (`sera_post_fate` =
   `stayed`) and is in the party, Minna Crale offers her the empty second desk at
   Number Nine (sixty a year, rooms on House Street, read anything filed).
