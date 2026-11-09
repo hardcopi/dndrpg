@@ -151,7 +151,6 @@ final class BattleGrid
      */
     private static array $rayCache = [];
     private static array $rayCacheFor = [];
-    private static array $rayCacheAlt = [];
 
     // -----------------------------------------------------------------------
     // Cells and distance
@@ -386,22 +385,19 @@ final class BattleGrid
      *
      * @return array{opaque:int, corners:array<int, array{blocked:int, cap:int, steps:array<int, string[]>}>}
      */
-    private static function rays(array $terrain, int $ax, int $ay, int $bx, int $by): array
+    private static function rays(array $terrain, int $ax, int $ay, int $bx, int $by, bool $cache = true): array
     {
-        // Keyed by the board AND by which version of it: high ground asks
-        // about the board with its low cover flattened (seenFromAbove), and
-        // one cache slot swapped between the two would be thrown away on
-        // every other question.
+        // A board seen from above (seenFromAbove) is asked about once per
+        // shot and never cached: holding it in the one slot would throw the
+        // real board's rays away on every high-ground question, and a second
+        // slot doubles the memory of a cache that is already the heaviest
+        // thing in a request.
+        if (!$cache) {
+            return self::traceRays($terrain, $ax, $ay, $bx, $by);
+        }
         if (self::$rayCacheFor !== $terrain) {
-            $alt = self::$rayCacheAlt;
-            self::$rayCacheAlt = ['for' => self::$rayCacheFor, 'cache' => self::$rayCache];
-            if (($alt['for'] ?? null) === $terrain) {
-                self::$rayCacheFor = $terrain;
-                self::$rayCache = $alt['cache'];
-            } else {
-                self::$rayCacheFor = $terrain;
-                self::$rayCache = [];
-            }
+            self::$rayCacheFor = $terrain;
+            self::$rayCache = [];
         }
         $memo = $ax . ',' . $ay . '>' . $bx . ',' . $by;
         if (isset(self::$rayCache[$memo])) {
@@ -414,6 +410,14 @@ final class BattleGrid
             self::$rayCache = [];
         }
 
+        $result = self::traceRays($terrain, $ax, $ay, $bx, $by);
+        self::$rayCache[$memo] = $result;
+        return $result;
+    }
+
+    /** The uncached half of rays(). */
+    private static function traceRays(array $terrain, int $ax, int $ay, int $bx, int $by): array
+    {
         // Neither end blocks itself: you get no cover from your own square, and
         // a target does not hide behind the ground it stands on.
         $skip = [self::keyOf($ax, $ay) => true, self::keyOf($bx, $by) => true];
@@ -485,9 +489,7 @@ final class BattleGrid
             $perCorner[] = ['blocked' => $blocked, 'cap' => $cap, 'steps' => $steps];
         }
 
-        $result = ['opaque' => $minOpaque, 'corners' => $perCorner];
-        self::$rayCache[$memo] = $result;
-        return $result;
+        return ['opaque' => $minOpaque, 'corners' => $perCorner];
     }
 
     // -----------------------------------------------------------------------
@@ -568,11 +570,9 @@ final class BattleGrid
         // From high ground a low wall, a table or a brazier between you and
         // somebody below hides nothing: you are looking down past it. Tall
         // cover and walls still stand, and so do bodies.
-        if (self::above($terrain, $ax, $ay, $tx, $ty)) {
-            $terrain = self::seenFromAbove($terrain);
-        }
-
-        $r = self::rays($terrain, $ax, $ay, $tx, $ty);
+        $r = self::above($terrain, $ax, $ay, $tx, $ty)
+            ? self::rays(self::seenFromAbove($terrain), $ax, $ay, $tx, $ty, false)
+            : self::rays($terrain, $ax, $ay, $tx, $ty);
 
         $selfCid = (string) ($attacker['cid'] ?? '');
         $targetCid = (string) ($target['cid'] ?? '');
