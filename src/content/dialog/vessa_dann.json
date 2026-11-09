@@ -7,6 +7,34 @@
                 "conditions": [
                     {
                         "flag": "pit_fate",
+                        "equals": "belt"
+                    }
+                ],
+                "once": true,
+                "text": "\"Champion,\" Vessa says, and chalks your name at the top of the board where his used to be. \"Twelve names on that belt now, and yours is the one they shout.\" She taps the chalk on the board. \"Somebody will want to be thirteen. Somebody always does. You'll want to think about that before they do.\"",
+                "choices": [
+                    {
+                        "label": "Who's your draw?",
+                        "next": "the_draw"
+                    },
+                    {
+                        "label": "What's behind the gate?",
+                        "next": "behind_the_gate"
+                    },
+                    {
+                        "label": "Give me a bout.",
+                        "next": "the_warmup_offer"
+                    },
+                    {
+                        "label": "I'll watch.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "pit_fate",
                         "equals": "broken"
                     }
                 ],

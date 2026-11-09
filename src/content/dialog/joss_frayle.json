@@ -6,6 +6,46 @@
             {
                 "conditions": [
                     {
+                        "flag": "ford_fate",
+                        "equals": "named"
+                    }
+                ],
+                "once": true,
+                "text": "Joss is at the flat stone with his cart standing in the road behind him. \"I read them over before I cross now,\" he says. \"All nineteen. Takes a minute.\" He puts a river-stone down with the others. \"Horses don't mind. Horses never minded anything about this ford but the timbers.\"",
+                "choices": [
+                    {
+                        "label": "What's the stone for?",
+                        "next": "the_four"
+                    },
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "ford_fate",
+                        "equals": "left"
+                    }
+                ],
+                "once": true,
+                "text": "The pile of river-stones at the foot of the flat stone is one stone bigger. Joss Frayle crosses at a trot, the way everybody does, and lifts a hand from the reins without looking round.",
+                "choices": [
+                    {
+                        "label": "What's the stone for?",
+                        "next": "the_four"
+                    },
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "ford_dead_named"
                     }
                 ],
