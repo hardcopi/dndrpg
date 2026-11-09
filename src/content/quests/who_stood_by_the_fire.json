@@ -1,0 +1,95 @@
+{
+    "quest_key": "who_stood_by_the_fire",
+    "title": "Who Stood by the Fire",
+    "act": 2,
+    "description": "Corse said a man who is not a factor would come up the river. He went up, asked his questions, and came back down on your boat. He is in the Fortieth, and his answers do not agree with each other.",
+    "giver": "mr_pellow",
+    "on_job_board": false,
+    "required_level": 5,
+    "rewards": {
+        "xp": 500
+    },
+    "stages": {
+        "the_questions": {
+            "title": "Mr Pellow's questions",
+            "objective": "A mild man in a brown coat is waiting in the Fortieth with a case of papers. Hear him out.",
+            "journal": "Minna Crale says my matter cannot go before the meeting while there is an open return against it, and that the gentleman who has the return is at the Fortieth. She said 'gentleman' with great care.",
+            "target": {
+                "location": "the_fortieth"
+            }
+        },
+        "three_names": {
+            "title": "Three names",
+            "objective": "Pellow paid three people for the name of whoever stood by the fire, and got three different names. One of them is a drover called Cass Hobley who was nowhere near it. Decide what Pellow files.",
+            "journal": "Pellow did it all with wages and questions. Three people in the valley took his shilling and each gave him a different name. One was a drover, Cass Hobley, who was in the Flagon that night and drunk by nine. Pellow does not much care which name it is. He needs one, because a return marked 'not ascertained' is a return he will be asked about.",
+            "target": {
+                "location": "the_fortieth"
+            }
+        },
+        "told_him": {
+            "terminal": true,
+            "resolution": "told_him",
+            "outcome": "success",
+            "title": "It was us",
+            "journal": "I told Pellow it was us. He wrote it down without looking up and thanked me, sincerely, because it closed his file. Hobley will never know he was nearly a line in a return. The house knows exactly who burned the survey now, and that is worth what it is worth.",
+            "effects": [
+                {
+                    "set_flag": "fire_named",
+                    "value": "us"
+                },
+                {
+                    "pressure": 2
+                },
+                {
+                    "approval": {
+                        "ilse": 8,
+                        "aldric": 8,
+                        "kessa": -6
+                    }
+                }
+            ]
+        },
+        "hobley": {
+            "terminal": true,
+            "resolution": "let_hobley_carry_it",
+            "outcome": "neutral",
+            "title": "Cass Hobley",
+            "journal": "I said nothing, and Pellow wrote 'Hobley, C., drover' on the return, and blotted it. Nothing will happen to Hobley that anybody could point at. He will find work harder to get for a few years, and never know why, the way Pyke never quite knew why either.",
+            "effects": [
+                {
+                    "set_flag": "fire_named",
+                    "value": "hobley"
+                },
+                {
+                    "approval": {
+                        "kessa": 4,
+                        "aldric": -14,
+                        "ilse": -10
+                    }
+                }
+            ]
+        },
+        "not_ascertained": {
+            "terminal": true,
+            "resolution": "buried_it_in_paper",
+            "outcome": "success",
+            "title": "Not ascertained",
+            "journal": "I showed Pellow that his three statements could not all be true and that two of them put people in two places at once, which is a thing a return must not do. He agreed, with some relief, and filed it 'not ascertained, statements inconsistent', which is true and which nobody will read. The house is still looking. It is looking slower.",
+            "effects": [
+                {
+                    "set_flag": "fire_named",
+                    "value": "none"
+                },
+                {
+                    "pressure": 1
+                },
+                {
+                    "approval": {
+                        "sera": 8,
+                        "kessa": 6
+                    }
+                }
+            ]
+        }
+    }
+}

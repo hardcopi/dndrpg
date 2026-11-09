@@ -1,5 +1,5 @@
 /* Scene records use scene-box percentages; drop an image and add an entry to add a scene.
- * Act I path: 51 painted scenes across six regions (see images/scenes/README.md). */
+ * Act I path: 51 painted scenes across six regions; Act II adds Brackwater (7) (see images/scenes/README.md). */
 window.RIVERMARK_SCENES = {
   // ── Rivermark ──
   market_square: {
@@ -400,7 +400,8 @@ window.RIVERMARK_SCENES = {
     image: 'assets/images/scenes/packet_stair.jpg',
     exits: {
       the_hythe: {x: 95, y: 60, icon: "→"},
-      salt_house: {x: 27, y: 44, icon: "↑"}
+      salt_house: {x: 27, y: 44, icon: "↑"},
+      brackwater_wharf: {x: 62, y: 80, icon: "↓"}
     },
     npcs: {
       osgar_tull: {x: 28, y: 66}
@@ -1107,6 +1108,139 @@ window.RIVERMARK_SCENES = {
       {type: "fog", x: 0, y: 18, w: 100, h: 22, intensity: 0.7, wind: 0.2},
       {type: "water", x: 0, y: 38, w: 80, h: 45, intensity: 0.7, count: 30, clip: [[0, 42], [12, 40], [25, 60], [40, 50], [70, 40], [80, 50], [60, 60], [40, 68], [20, 78], [0, 80]]},
       {type: "birds", x: 30, y: 5, w: 50, h: 15, intensity: 0.4}
+    ]
+  },
+  // ── Brackwater (Act II) ──
+  brackwater_wharf: {
+    image: 'assets/images/scenes/brackwater_wharf.jpg',
+    subtitle: 'four days below Greyhythe',
+    exits: {
+      the_yard: {x: 6, y: 50, icon: "←"},
+      house_street: {x: 30, y: 24, icon: "↑"},
+      the_fortieth: {x: 56, y: 30, icon: "⌂"},
+      the_mudside: {x: 90, y: 86, icon: "↓"},
+      packet_stair: {x: 47, y: 80, icon: "↩"}
+    },
+    npcs: {},
+    objects: [
+      {label: "The grain hulk", x: 36, y: 44, act: "search"},
+      {label: "A crane and its net", x: 22, y: 30, act: "search"}
+    ],
+    fx: [
+      {type: "water", x: 0, y: 62, w: 100, h: 38, intensity: 0.8, count: 34},
+      {type: "birds", x: 50, y: 4, w: 45, h: 20, intensity: 0.7},
+      {type: "smoke", x: 2, y: 0, w: 5, h: 10, intensity: 0.35, wind: 0.5}
+    ]
+  },
+  the_yard: {
+    image: 'assets/images/scenes/the_yard.jpg',
+    subtitle: 'every manifest goes through the window',
+    exits: {
+      brackwater_wharf: {x: 50, y: 90, icon: "↓"}
+    },
+    npcs: {
+      abel_moss: {x: 44, y: 62}
+    },
+    objects: [
+      {label: "The mark over the gate", x: 50, y: 12, act: "search"},
+      {label: "Greyhythe grain sacks", x: 62, y: 76, act: "search"}
+    ],
+    fx: [
+      {type: "dust", x: 35, y: 55, w: 30, h: 30, intensity: 0.25, count: 8}
+    ]
+  },
+  house_street: {
+    image: 'assets/images/scenes/house_street.jpg',
+    subtitle: 'thirty doors, one with no plate',
+    exits: {
+      brackwater_wharf: {x: 18, y: 90, icon: "↓"},
+      number_nine: {x: 63, y: 44, icon: "↑"},
+      record_office: {x: 88, y: 56, icon: "⌂"}
+    },
+    npcs: {},
+    objects: [
+      {label: "A brass plate", x: 7, y: 40, act: "search"},
+      {label: "The pump", x: 62, y: 56, act: "search"}
+    ],
+    fx: [
+      {type: "smoke", x: 35, y: 0, w: 5, h: 10, intensity: 0.3, wind: 0.4},
+      {type: "birds", x: 50, y: 2, w: 30, h: 15, intensity: 0.4}
+    ]
+  },
+  number_nine: {
+    image: 'assets/images/scenes/number_nine.jpg',
+    subtitle: 'eleven chairs',
+    exits: {
+      house_street: {x: 31, y: 44, icon: "↓"}
+    },
+    npcs: {
+      minna_crale: {x: 18, y: 78},
+      hollin_sare: {x: 50, y: 50}
+    },
+    objects: [
+      {label: "The clock", x: 50, y: 24, act: "search"},
+      {label: "The articles, framed", x: 62, y: 32, act: "search"},
+      {label: "Spectacles on the minutes", x: 60, y: 62, act: "search"}
+    ],
+    fx: [
+      {type: "hearth", x: 10, y: 58, w: 9, h: 16, intensity: 1},
+      {type: "dust", x: 80, y: 20, w: 18, h: 40, intensity: 0.25, count: 8}
+    ]
+  },
+  record_office: {
+    image: 'assets/images/scenes/record_office.jpg',
+    subtitle: 'a penny a page',
+    exits: {
+      house_street: {x: 5, y: 62, icon: "←"}
+    },
+    npcs: {
+      dorcas_fenn: {x: 64, y: 58}
+    },
+    objects: [
+      {label: "Field books in green cloth", x: 42, y: 66, act: "search"},
+      {label: "The ladder on its rail", x: 63, y: 32, act: "search"}
+    ],
+    fx: [
+      {type: "dust", x: 25, y: 5, w: 25, h: 55, intensity: 0.5, count: 16},
+      {type: "hearth", x: 8, y: 80, w: 6, h: 10, intensity: 0.7}
+    ]
+  },
+  the_fortieth: {
+    image: 'assets/images/scenes/the_fortieth.jpg',
+    subtitle: 'a fire at each end',
+    exits: {
+      brackwater_wharf: {x: 30, y: 40, icon: "↩"}
+    },
+    npcs: {
+      jory_kemp: {x: 60, y: 40},
+      mr_pellow: {x: 18, y: 58},
+      pyke_downriver: {x: 86, y: 58}
+    },
+    objects: [
+      {label: "The tide board", x: 63, y: 24, act: "search"}
+    ],
+    fx: [
+      {type: "hearth", x: 11, y: 46, w: 9, h: 16, intensity: 1},
+      {type: "hearth", x: 84, y: 48, w: 9, h: 15, intensity: 1},
+      {type: "candle", x: 34, y: 30, w: 4, h: 8, intensity: 0.6}
+    ]
+  },
+  the_mudside: {
+    image: 'assets/images/scenes/the_mudside.jpg',
+    subtitle: 'where the stones stop',
+    exits: {
+      brackwater_wharf: {x: 14, y: 76, icon: "↑"}
+    },
+    npcs: {},
+    objects: [
+      {label: "A woman mending a net", x: 41, y: 55, act: "search"},
+      {label: "A hulk, slowly becoming mud", x: 57, y: 41, act: "search"}
+    ],
+    fx: [
+      {type: "fire", x: 26, y: 56, w: 4, h: 8, intensity: 0.8},
+      {type: "fire", x: 82, y: 45, w: 3, h: 6, intensity: 0.6},
+      {type: "smoke", x: 25, y: 35, w: 5, h: 20, intensity: 0.4, wind: 0.5},
+      {type: "water", x: 50, y: 55, w: 50, h: 40, intensity: 0.5, count: 18}
     ]
   }
 };

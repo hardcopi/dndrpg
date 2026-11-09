@@ -1,0 +1,137 @@
+{
+    "quest_key": "the_quarterly_meeting",
+    "title": "The Quarterly Meeting",
+    "act": 2,
+    "description": "Eleven people in three towns have money in the house, and once a quarter they meet in a room at Number Nine, House Street. Ludo Corse is not invited. You are going anyway.",
+    "giver": "abel_moss",
+    "on_job_board": false,
+    "required_level": 5,
+    "rewards": {
+        "xp": 900,
+        "gold": 0
+    },
+    "stages": {
+        "four_days_flat": {
+            "title": "Four days flat",
+            "objective": "The house's yard is along the wharf. Ask the clerk at the window where the house actually is.",
+            "journal": "Four days of flat water below Greyhythe, and then Brackwater: more people on one wharf than in the whole valley. Tull says every manifest he carries goes through a window in the house's yard. That seems the place to start.",
+            "target": {
+                "location": "the_yard"
+            }
+        },
+        "the_secretary": {
+            "title": "Number Nine",
+            "objective": "The meeting sits at Number Nine, House Street. Its secretary, Minna Crale, keeps the agenda. Put your business on it.",
+            "journal": "The clerk at the window is called Abel Moss. He says the house is not a building, it is a meeting, and the meeting sits at Number Nine on the quarter-day. Its secretary keeps the agenda and the door. Anybody with business may put it down. Nobody ever does.",
+            "target": {
+                "location": "number_nine"
+            }
+        },
+        "your_matter": {
+            "title": "Your matter",
+            "objective": "Minna Crale will not put an item on the agenda until it is in order. Settle the matter you brought downriver, then go back to her.",
+            "journal": "Minna Crale has written my name in the agenda in pencil. She will ink it when my business is in order, which she says is a kindness: the meeting does not hear things twice.",
+            "target": {
+                "location": "number_nine"
+            }
+        },
+        "the_meeting": {
+            "title": "Item seven",
+            "objective": "The meeting is sitting. Go up to the long room at Number Nine and speak to the chair, Hollin Sare.",
+            "journal": "My matter is item seven, after the dividend and before any other business. Minna Crale says the meeting will be very glad to see me, and I believe she means it exactly.",
+            "target": {
+                "location": "number_nine"
+            }
+        },
+        "costed": {
+            "terminal": true,
+            "resolution": "asked_for_the_costing",
+            "outcome": "success",
+            "title": "End of Act II: Costed",
+            "journal": "I asked where a cleared town goes. Nobody at the table had ever asked, so nobody had costed it, and Hollin Sare said that if it was to be costed it would be costed properly: carts, roofs, wages, a year's bread, the burying ground moved. The clerk wrote it down. On the way out Minna Crale told me, as a matter of record, that the figure on sheet six will have to go up. It is not a victory. It is a price, and it has been made more expensive to clear Rivermark than it was this morning.",
+            "effects": [
+                {
+                    "set_flag": "meeting_fate",
+                    "value": "costed"
+                },
+                {
+                    "set_flag": "clearance_costed"
+                },
+                {
+                    "pressure": 3
+                },
+                {
+                    "approval": {
+                        "aldric": 10,
+                        "ilse": 8,
+                        "sera": 6
+                    }
+                }
+            ]
+        },
+        "minuted": {
+            "terminal": true,
+            "resolution": "entered_an_objection",
+            "outcome": "success",
+            "title": "End of Act II: Minuted",
+            "journal": "I asked for my objection to be minuted, word for word, and it was. Minna Crale read it back to me and it was exactly what I had said. It will be bound with the quarter's minutes and kept in the Record Office for as long as there is a Record Office. Nothing else about the quarter has changed. Aldric says that is not nothing. I am trying to believe him.",
+            "effects": [
+                {
+                    "set_flag": "meeting_fate",
+                    "value": "minuted"
+                },
+                {
+                    "approval": {
+                        "aldric": 14,
+                        "kessa": -4
+                    }
+                }
+            ]
+        },
+        "subscribed": {
+            "terminal": true,
+            "resolution": "took_a_share",
+            "outcome": "success",
+            "title": "End of Act II: The twelfth chair",
+            "journal": "There was a lapsed share, a widow's, and the articles allow it to be taken up by anybody who pays the call. I paid it. There are twelve chairs at Number Nine now and one of them is mine, and next quarter I will have a vote on Rivermark like everybody else at the table: one vote in twelve. Sera looked at me as if I had finally said something in her language.",
+            "effects": [
+                {
+                    "set_flag": "meeting_fate",
+                    "value": "subscribed"
+                },
+                {
+                    "set_flag": "we_are_subscribers"
+                },
+                {
+                    "take_gold": 300
+                },
+                {
+                    "approval": {
+                        "sera": 12,
+                        "aldric": -15,
+                        "ilse": -8
+                    }
+                }
+            ]
+        },
+        "walked": {
+            "terminal": true,
+            "resolution": "walked_out",
+            "outcome": "neutral",
+            "title": "End of Act II: Any other business",
+            "journal": "I stood up in the middle of item seven and walked out, and nobody stopped me, and on the stairs I heard Hollin Sare say 'Any other business?' in exactly the same voice. The meeting does not need me to be there. It never did. I know now what the house is, and it is eleven people being reasonable in a warm room.",
+            "effects": [
+                {
+                    "set_flag": "meeting_fate",
+                    "value": "walked"
+                },
+                {
+                    "approval": {
+                        "kessa": 8,
+                        "sera": -4
+                    }
+                }
+            ]
+        }
+    }
+}

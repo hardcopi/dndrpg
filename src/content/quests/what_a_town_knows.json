@@ -1,0 +1,92 @@
+{
+    "quest_key": "what_a_town_knows",
+    "title": "What a Town Knows",
+    "act": 2,
+    "description": "Alder Pyke read the survey out on the granary steps and has not been hired since. He came down on your boat, two benches back, and is sitting in the Fortieth with his chain in a bag.",
+    "giver": "pyke_downriver",
+    "on_job_board": false,
+    "required_level": 5,
+    "rewards": {
+        "xp": 500
+    },
+    "stages": {
+        "two_benches_back": {
+            "title": "Two benches back",
+            "objective": "Alder Pyke is in the Fortieth. Minna Crale says your matter concerns him. Go and find out how.",
+            "journal": "Minna Crale says a matter from Rivermark cannot go before the meeting without the name of whoever read the survey out, and that she has the name already, and that he is at the Fortieth. Pyke came down on our boat and never said.",
+            "target": {
+                "location": "the_fortieth"
+            }
+        },
+        "a_character": {
+            "title": "A character for the yard",
+            "objective": "The house's yard hires chainmen for work upriver of other valleys. Pyke needs somebody to speak for him at Abel Moss's window, or he needs to be told not to.",
+            "journal": "Pyke wants chain work and the only chain work on the river is the house's. Abel Moss hires at the yard window and wants a character from somebody who has seen the man work. That is me. Pyke knows what he is asking.",
+            "target": {
+                "location": "the_yard"
+            }
+        },
+        "hired": {
+            "terminal": true,
+            "resolution": "spoke_for_him",
+            "outcome": "success",
+            "title": "Chain is chain",
+            "journal": "I spoke for Pyke at the window. Abel Moss wrote him down for a survey party going up a river I have never heard of, at the usual rate, starting Monday. Pyke said chain does not care whose it is. Somewhere upriver of somewhere else, there will be a sheet six, and Pyke will be the one who knows how to read it.",
+            "effects": [
+                {
+                    "set_flag": "pyke_fate",
+                    "value": "hired"
+                },
+                {
+                    "approval": {
+                        "sera": 6,
+                        "aldric": -6,
+                        "ilse": 4
+                    }
+                }
+            ]
+        },
+        "home": {
+            "terminal": true,
+            "resolution": "paid_his_passage_home",
+            "outcome": "success",
+            "title": "Home on the fifth",
+            "journal": "I gave Pyke sixty gold for Tull's boat and told him Rivermark owes him and might, in time, remember. He took it because he had to. He will be sitting on the granary steps when I get back, I think, waiting for the valley to need somebody who can read.",
+            "effects": [
+                {
+                    "set_flag": "pyke_fate",
+                    "value": "home"
+                },
+                {
+                    "take_gold": 60
+                },
+                {
+                    "approval": {
+                        "aldric": 10,
+                        "ilse": 6,
+                        "kessa": -4
+                    }
+                }
+            ]
+        },
+        "gone": {
+            "terminal": true,
+            "resolution": "he_went_on",
+            "outcome": "neutral",
+            "title": "On his own",
+            "journal": "I would not speak for him at the house's window and would not tell him not to go. Pyke said that was fair, packed his chain, and went along the wharf asking the colliers if anybody wanted a man who could measure. I do not know where he went. The price was paid by somebody else, again.",
+            "effects": [
+                {
+                    "set_flag": "pyke_fate",
+                    "value": "gone"
+                },
+                {
+                    "approval": {
+                        "kessa": 4,
+                        "aldric": -4
+                    }
+                }
+            ]
+        }
+    }
+}

@@ -1,0 +1,116 @@
+{
+    "npc_key": "jory_kemp",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "quest": "the_quarterly_meeting",
+                        "status": "completed"
+                    }
+                ],
+                "pool": "idle",
+                "text": "\"Heard you were up at Number Nine,\" Jory Kemp says. \"Everybody heard. Nobody heard what. That's Brackwater.\" He pulls you something without asking.",
+                "choices": [
+                    {
+                        "label": "A room.",
+                        "effects": [
+                            {
+                                "rest": "inn"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "Why the Fortieth?",
+                        "next": "the_name"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_quarterly_meeting",
+                        "status": "completed"
+                    }
+                ],
+                "pool": "idle",
+                "text": "Jory chalks the tide on the board. \"Tull's in on the fifth if you want the valley again,\" he says. \"Or there's plenty of river the other way.\"",
+                "choices": [
+                    {
+                        "label": "A room.",
+                        "effects": [
+                            {
+                                "rest": "inn"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "\"Off Tull's boat,\" says the broad man behind the bar, who has clearly said it to everyone off Tull's boat for twenty years. \"Jory Kemp. Eight a night, a fire at each end, and the board'll tell you what the tide's doing, which is more than the river ever did for you up there.\"",
+                "choices": [
+                    {
+                        "label": "A room.",
+                        "effects": [
+                            {
+                                "rest": "inn"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "Why the Fortieth?",
+                        "next": "the_name"
+                    },
+                    {
+                        "label": "What do people here say about the house?",
+                        "next": "the_house"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_name": [
+            {
+                "text": "\"The house takes a fortieth off everything that goes through the yard,\" Jory says. \"So I named it the Fortieth, as a joke. Twenty years ago.\" He looks at the letters over the door, painted over something else. \"It was funnier then. Not because anything changed. Just because it's been twenty years.\"",
+                "choices": [
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ]
+            }
+        ],
+        "the_house": [
+            {
+                "text": "\"Nothing much. Pays its bills on the day. Never shouts. Bought the wharf in my father's time and the rent's gone up about as you'd expect.\" He wipes the bar. \"People who come down from up a valley always want it to be something. It's a lot of clerks. The clerks drink at that end. Ask them. They're lovely.\"",
+                "interjections": [
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa looks down the bar at the clerks' end for a long moment and decides against it."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ]
+            }
+        ]
+    }
+}

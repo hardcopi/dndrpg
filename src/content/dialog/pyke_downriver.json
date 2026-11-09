@@ -1,0 +1,143 @@
+{
+    "npc_key": "pyke_downriver",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "quest": "what_a_town_knows",
+                        "stage": "two_benches_back"
+                    }
+                ],
+                "text": "Alder Pyke is at the far end with his chain in a canvas bag at his feet and a half-pint he has made last since noon. He sees you and does not pretend not to. \"Two benches back,\" he says. \"Four days. I thought you'd turn round once. You didn't.\" He moves the bag so you can sit. \"Nobody up the valley will hire a chainman who reads the work out. I'm not complaining. I'd do it again. I'd just like to be paid for something.\"",
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric sits down next to him and for a while that is all he does."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "What do you need?",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "what_a_town_knows",
+                                    "stage": "a_character"
+                                }
+                            }
+                        ],
+                        "next": "the_ask"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "what_a_town_knows",
+                        "stage": "a_character"
+                    }
+                ],
+                "text": "\"Moss at the yard,\" Pyke says. \"He wants a character. You've seen me work.\" He looks at his half-pint. \"Or don't. I'll not hold it against you either way. I've held enough.\"",
+                "choices": [
+                    {
+                        "label": "Here's sixty for Tull's boat. Go home. Rivermark owes you.",
+                        "conditions": [
+                            {
+                                "gold_at_least": 60
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "what_a_town_knows",
+                                    "stage": "home"
+                                }
+                            }
+                        ],
+                        "next": "home"
+                    },
+                    {
+                        "label": "I'll go to the yard.",
+                        "end": true
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "pyke_fate",
+                        "equals": "hired"
+                    }
+                ],
+                "text": "\"Monday,\" Pyke says. \"The Lenning. Never heard of it.\" He hefts the bag. \"Chain's chain. It doesn't care whose. That's always been the trouble with it.\""
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "pyke_fate",
+                        "equals": "home"
+                    }
+                ],
+                "text": "\"The fifth,\" Pyke says, with the sixty in his fist. \"I'll sit on the granary steps. Somebody'll need a thing measured.\""
+            },
+            {
+                "text": "Pyke's bench is empty except for a ring where his pint stood."
+            }
+        ],
+        "the_ask": [
+            {
+                "text": "\"There's work,\" he says. \"Only one kind on this river. The house's.\" He laughs, once, without much in it. \"Moss at the yard hires chain for a survey going up somebody else's valley. He wants a character from somebody who's seen me work. That's you.\" He looks at you straight. \"I know what I'm asking. I'm asking it anyway. I'm forty-eight, and chain is what I know.\"",
+                "choices": [
+                    {
+                        "label": "Here's sixty for Tull's boat. Go home. Rivermark owes you.",
+                        "conditions": [
+                            {
+                                "gold_at_least": 60
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "what_a_town_knows",
+                                    "stage": "home"
+                                }
+                            }
+                        ],
+                        "next": "home"
+                    },
+                    {
+                        "label": "I'll go to the yard.",
+                        "end": true
+                    },
+                    {
+                        "label": "Let me think.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "home": [
+            {
+                "text": "He looks at the coins for a long time before he takes them. \"Owes,\" he says. \"That's a word you could read out on some steps.\" He puts them in his coat. \"All right. The fifth.\"",
+                "interjections": [
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa, to nobody: \"Sixty gold to send a man back to a town that won't feed him.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

@@ -6,6 +6,60 @@
             {
                 "conditions": [
                     {
+                        "flag": "clearance_costed"
+                    }
+                ],
+                "once": true,
+                "text": "Corse has a letter open on the desk and he does not hide it. \"I am instructed to cost the removal of Rivermark under a new head,\" he says. \"Carts, roofs, a year's bread, the burying ground. Nobody has ever asked me to cost the other half of a figure before.\" He looks at you with something that is very nearly pleasure. \"It is going to be a large number. I intend to be exact.\"",
+                "choices": [
+                    {
+                        "label": "Good.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "we_are_subscribers"
+                    }
+                ],
+                "once": true,
+                "text": "Corse stands when you come in, which he has never done. \"Mrs Orme's share,\" he says. \"I had the letter.\" He pulls out the chair on your side of the desk. \"You understand that I now take instruction from you. One twelfth of it.\" A pause, perfectly courteous. \"What would you like me to do?\"",
+                "choices": [
+                    {
+                        "label": "Nothing yet.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "any": [
+                            {
+                                "flag": "meeting_fate",
+                                "equals": "minuted"
+                            },
+                            {
+                                "flag": "meeting_fate",
+                                "equals": "walked"
+                            }
+                        ]
+                    }
+                ],
+                "once": true,
+                "text": "\"You went to Number Nine,\" Corse says. \"I have been factor for nineteen years and I have never been up those stairs.\" He considers you. \"Was it what I said it would be?\" You tell him it was. He nods, and does not look as if being right has given him anything at all.",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "survey_fate",
                         "equals": "sold"
                     }

@@ -1,0 +1,465 @@
+{
+    "npc_key": "hollin_sare",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "quest": "the_quarterly_meeting",
+                        "stage": "the_meeting"
+                    },
+                    {
+                        "flag": "field_books_fate",
+                        "equals": "filed"
+                    }
+                ],
+                "text": "Eight of the eleven chairs are filled. A ship-owner, two bankers' men, a clergyman with a cold, three widows sitting together, and at the head of the table a grey, courteous man with his good ear turned toward you. The fire is made up. Somebody has been reading the water rights aloud and stops, mid-sentence, and makes a mark so as to know where. \"Item seven,\" says Hollin Sare. \"From the valley. Thank you for coming so far. Do sit.\" \"Mrs Fenn tells us you have filed a survey. Very proper. We have the field books, of course, but it is good to know somebody else has looked.\"",
+                "choices": [
+                    {
+                        "label": "Go on.",
+                        "next": "item_seven"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_quarterly_meeting",
+                        "stage": "the_meeting"
+                    },
+                    {
+                        "flag": "field_books_fate",
+                        "equals": "compared"
+                    }
+                ],
+                "text": "Eight of the eleven chairs are filled. A ship-owner, two bankers' men, a clergyman with a cold, three widows sitting together, and at the head of the table a grey, courteous man with his good ear turned toward you. The fire is made up. Somebody has been reading the water rights aloud and stops, mid-sentence, and makes a mark so as to know where. \"Item seven,\" says Hollin Sare. \"From the valley. Thank you for coming so far. Do sit.\" \"You have been to Mrs Fenn and seen that the field books agree with your copy. They usually do. Mr Pyke is very careful.\"",
+                "choices": [
+                    {
+                        "label": "Go on.",
+                        "next": "item_seven"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_quarterly_meeting",
+                        "stage": "the_meeting"
+                    },
+                    {
+                        "flag": "fire_named",
+                        "equals": "us"
+                    }
+                ],
+                "text": "Eight of the eleven chairs are filled. A ship-owner, two bankers' men, a clergyman with a cold, three widows sitting together, and at the head of the table a grey, courteous man with his good ear turned toward you. The fire is made up. Somebody has been reading the water rights aloud and stops, mid-sentence, and makes a mark so as to know where. \"Item seven,\" says Hollin Sare. \"From the valley. Thank you for coming so far. Do sit.\" \"Mr Pellow's return says that it was you who burned the survey. Thank you for being frank with him. It saves a great deal of correspondence.\"",
+                "choices": [
+                    {
+                        "label": "Go on.",
+                        "next": "item_seven"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_quarterly_meeting",
+                        "stage": "the_meeting"
+                    },
+                    {
+                        "flag": "fire_named",
+                        "equals": "hobley"
+                    }
+                ],
+                "text": "Eight of the eleven chairs are filled. A ship-owner, two bankers' men, a clergyman with a cold, three widows sitting together, and at the head of the table a grey, courteous man with his good ear turned toward you. The fire is made up. Somebody has been reading the water rights aloud and stops, mid-sentence, and makes a mark so as to know where. \"Item seven,\" says Hollin Sare. \"From the valley. Thank you for coming so far. Do sit.\" \"Mr Pellow's return names a drover. We shan't do anything about it. One never does. It is simply that the file is closed.\"",
+                "choices": [
+                    {
+                        "label": "Go on.",
+                        "next": "item_seven"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_quarterly_meeting",
+                        "stage": "the_meeting"
+                    },
+                    {
+                        "flag": "fire_named",
+                        "equals": "none"
+                    }
+                ],
+                "text": "Eight of the eleven chairs are filled. A ship-owner, two bankers' men, a clergyman with a cold, three widows sitting together, and at the head of the table a grey, courteous man with his good ear turned toward you. The fire is made up. Somebody has been reading the water rights aloud and stops, mid-sentence, and makes a mark so as to know where. \"Item seven,\" says Hollin Sare. \"From the valley. Thank you for coming so far. Do sit.\" \"Mr Pellow's return is marked 'not ascertained'. Quite right, if it isn't. We will start the chain again in the spring; Mr Pyke has kindly agreed to carry it.\"",
+                "choices": [
+                    {
+                        "label": "Go on.",
+                        "next": "item_seven"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_quarterly_meeting",
+                        "stage": "the_meeting"
+                    },
+                    {
+                        "flag": "retainer_fate",
+                        "equals": "serving"
+                    }
+                ],
+                "text": "Eight of the eleven chairs are filled. A ship-owner, two bankers' men, a clergyman with a cold, three widows sitting together, and at the head of the table a grey, courteous man with his good ear turned toward you. The fire is made up. Somebody has been reading the water rights aloud and stops, mid-sentence, and makes a mark so as to know where. \"Item seven,\" says Hollin Sare. \"From the valley. Thank you for coming so far. Do sit.\" \"And you are with us under the articles, I see. Is the valley quiet?\" He waits, genuinely, for the answer.",
+                "choices": [
+                    {
+                        "label": "Go on.",
+                        "next": "item_seven"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_quarterly_meeting",
+                        "stage": "the_meeting"
+                    },
+                    {
+                        "flag": "retainer_fate",
+                        "equals": "clause"
+                    }
+                ],
+                "text": "Eight of the eleven chairs are filled. A ship-owner, two bankers' men, a clergyman with a cold, three widows sitting together, and at the head of the table a grey, courteous man with his good ear turned toward you. The fire is made up. Somebody has been reading the water rights aloud and stops, mid-sentence, and makes a mark so as to know where. \"Item seven,\" says Hollin Sare. \"From the valley. Thank you for coming so far. Do sit.\" \"And you are with us under the articles, with a clause. Mrs Crale tells me it is the first. I thought it rather a good clause.\"",
+                "choices": [
+                    {
+                        "label": "Go on.",
+                        "next": "item_seven"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_quarterly_meeting",
+                        "stage": "the_meeting"
+                    },
+                    {
+                        "flag": "retainer_fate",
+                        "equals": "returned"
+                    }
+                ],
+                "text": "Eight of the eleven chairs are filled. A ship-owner, two bankers' men, a clergyman with a cold, three widows sitting together, and at the head of the table a grey, courteous man with his good ear turned toward you. The fire is made up. Somebody has been reading the water rights aloud and stops, mid-sentence, and makes a mark so as to know where. \"Item seven,\" says Hollin Sare. \"From the valley. Thank you for coming so far. Do sit.\" \"Mrs Crale tells me you returned your quarter. That is minuted. It is unusual, and I think rather to your credit.\"",
+                "choices": [
+                    {
+                        "label": "Go on.",
+                        "next": "item_seven"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_quarterly_meeting",
+                        "stage": "the_meeting"
+                    },
+                    {
+                        "flag": "pyke_fate"
+                    }
+                ],
+                "text": "Eight of the eleven chairs are filled. A ship-owner, two bankers' men, a clergyman with a cold, three widows sitting together, and at the head of the table a grey, courteous man with his good ear turned toward you. The fire is made up. Somebody has been reading the water rights aloud and stops, mid-sentence, and makes a mark so as to know where. \"Item seven,\" says Hollin Sare. \"From the valley. Thank you for coming so far. Do sit.\" \"Mr Pyke's name is in the minute, as the reader. I gather he has been seen to. Good. One wouldn't want a man out of work for being accurate.\"",
+                "choices": [
+                    {
+                        "label": "Go on.",
+                        "next": "item_seven"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_quarterly_meeting",
+                        "stage": "the_meeting"
+                    }
+                ],
+                "text": "Eight of the eleven chairs are filled. A ship-owner, two bankers' men, a clergyman with a cold, three widows sitting together, and at the head of the table a grey, courteous man with his good ear turned toward you. The fire is made up. Somebody has been reading the water rights aloud and stops, mid-sentence, and makes a mark so as to know where. \"Item seven,\" says Hollin Sare. \"From the valley. Thank you for coming so far. Do sit.\" ",
+                "choices": [
+                    {
+                        "label": "Go on.",
+                        "next": "item_seven"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "subscribed"
+                    }
+                ],
+                "text": "Hollin Sare inclines his head to you as to a colleague, which is what you are. \"Next quarter, then,\" he says. \"Mrs Crale will send the papers. They are very long. One does read them.\"",
+                "choices": [
+                    {
+                        "label": "What's on the next agenda?",
+                        "next": "next_agenda"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "costed"
+                    }
+                ],
+                "text": "\"The costing is in hand,\" Hollin Sare says, with something like approval. \"Carts, roofs, a year's bread, the burying ground. It is going to be a large figure. Mrs Crale thinks you meant it to be.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "minuted"
+                    }
+                ],
+                "text": "Hollin Sare looks up from the minutes and finds your line in them with one finger, as if to show you it is still there. \"Bound on Friday,\" he says. \"Mrs Fenn has it.\""
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "walked"
+                    }
+                ],
+                "text": "Hollin Sare glances up as you come in, with no reproach in it at all. \"Ah. Item seven,\" he says. \"You left before any other business. There wasn't any, as it turned out.\""
+            },
+            {
+                "text": "Hollin Sare is reading a figure aloud to a room that is listening to it. He gives you a small, courteous nod, as to somebody who has been minuted, and goes on reading."
+            }
+        ],
+        "item_seven": [
+            {
+                "text": "\"The valley,\" Hollin Sare says, and a clerk turns a page. \"Mr Corse's return. Grain forward, debt paper, the quarry writs, the water. The works at the head of the valley, which do not pay, and which we continue. And the town, Rivermark, on sheet six, under clearance, at a figure twice revised.\" He looks at you, and there is nothing in his face but attention. \"You have come a long way to say something about it. Please say it. We will minute it exactly.\"",
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera, very low: \"I could do his job. I could do it better. That's what's frightening.\""
+                    },
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse is counting the chairs. She gets eleven, and then twelve with the empty one by the window."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Who decided to clear Rivermark?",
+                        "next": "who_decided"
+                    },
+                    {
+                        "label": "What is under the quarry?",
+                        "next": "the_quarry"
+                    },
+                    {
+                        "label": "Where does a cleared town go?",
+                        "next": "where_it_goes"
+                    },
+                    {
+                        "label": "I want an objection minuted, word for word.",
+                        "next": "objection"
+                    },
+                    {
+                        "label": "Whose is the empty chair?",
+                        "next": "the_chair"
+                    },
+                    {
+                        "label": "I've heard enough.",
+                        "next": "walk_out"
+                    }
+                ]
+            }
+        ],
+        "who_decided": [
+            {
+                "text": "\"Nobody, I'm afraid,\" he says, and it is clearly not the first time he has had to say it, though it is the first time to somebody from the town. \"The figure was put to the spring meeting by Mr Corse's office, and accepted, as figures are. Accepting a figure is not the same thing as deciding. If you asked each of us, we would each say we had read it and found it correct.\" He spreads his hands a little. \"It was correct. That is rather the difficulty.\"",
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric: \"Then which of you will stand in the square and say it?\" Sare, gently: \"None of us, brother. We have never been to the square. That is why there is a Mr Corse.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Back.",
+                        "next": "item_seven"
+                    }
+                ]
+            }
+        ],
+        "the_quarry": [
+            {
+                "text": "A small silence goes round the table, the first that has not been deliberate. \"We were rather hoping,\" says one of the widows, \"that you might tell us.\" Hollin Sare nods. \"Mr Corse has written twice. We sent him a revised figure each time, because the question was not one we could answer and the figure was. We continue the works because the subscription for them was taken up before any of us joined. It would cost more to stop than to go on.\" He looks at the fire. \"I do sometimes wonder.\"",
+                "choices": [
+                    {
+                        "label": "Back.",
+                        "next": "item_seven"
+                    }
+                ]
+            }
+        ],
+        "where_it_goes": [
+            {
+                "text": "Hollin Sare opens his mouth, and closes it, and looks down the table. The ship-owner looks at the bankers' men. A clerk turns back three pages and then forward again. \"I believe,\" Sare says at last, \"that would come under a different head.\" Minna Crale, from her corner: \"It has not been costed, Mr Sare. Nobody has asked.\" \"No,\" he says slowly. \"No, I don't suppose anybody has.\" He looks at you. \"Are you asking?\"",
+                "interjections": [
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa, who has not said a word since the stairs: \"Ask.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "I'm asking. Cost it. Carts, roofs, a year's bread, the burying ground. All of it.",
+                        "next": "costed"
+                    },
+                    {
+                        "label": "Back.",
+                        "next": "item_seven"
+                    }
+                ]
+            }
+        ],
+        "costed": [
+            {
+                "text": "\"Then it shall be costed,\" Hollin Sare says, \"and costed properly, because if this meeting does a thing it does not do it badly.\" He counts on his fingers, in the air, and the clerk writes as he counts: carts, roofs, wages for the moving, a year's bread, the burying ground lifted and laid again somewhere that will have it. The figure grows on the page in front of eleven people who have never once been asked to look at it. One of the widows takes off her spectacles. Minna Crale says, to the room, in the voice of the minutes: \"The figure on sheet six will have to be revised. Upward.\"",
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric takes his hat off, and this time he knows exactly why."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Thank you, Mr Sare.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_quarterly_meeting",
+                                    "stage": "costed"
+                                }
+                            }
+                        ],
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "objection": [
+            {
+                "text": "\"Of course,\" Hollin Sare says, and nods to the clerk, who dips a pen. You say it. All of it, the town and the steps and the rain and the figure twice revised. The clerk writes every word without hurrying and without stopping, and when you have finished Minna Crale reads it back, and it is exactly what you said. \"Minuted,\" says Hollin Sare. \"It will be bound with the quarter and kept for as long as there is a Record Office. Thank you. I don't think anybody has ever said that in this room.\"",
+                "choices": [
+                    {
+                        "label": "That's all.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_quarterly_meeting",
+                                    "stage": "minuted"
+                                }
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "And another thing.",
+                        "next": "item_seven"
+                    }
+                ]
+            }
+        ],
+        "the_chair": [
+            {
+                "text": "\"Mrs Orme's,\" says Hollin Sare. \"She died at the autumn quarter. The share is lapsed and may be taken up on payment of the call, which is three hundred. By anybody. The articles are very clear.\" He considers you with mild interest. \"It would carry a vote. One in twelve. On everything, including the valley. People never think of it.\"",
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera has gone very still, the way she goes still at a ledger that adds up."
+                    },
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric: \"Don't.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Then I'll pay the call. Three hundred.",
+                        "conditions": [
+                            {
+                                "gold_at_least": 300
+                            }
+                        ],
+                        "next": "subscribed"
+                    },
+                    {
+                        "label": "Back.",
+                        "next": "item_seven"
+                    }
+                ]
+            }
+        ],
+        "subscribed": [
+            {
+                "text": "Minna Crale counts three hundred gold onto the corner of the table and writes a receipt and then, below the eleven names on the framed list, in a hand exactly matching the others, a twelfth. Hollin Sare stands, and so does the rest of the table, which takes some time, and they shake your hand one after the other, warmly, the clergyman apologising for his cold. \"Welcome,\" Sare says. \"Next quarter, then. The papers are very long. One does read them.\"",
+                "choices": [
+                    {
+                        "label": "Sit down in Mrs Orme's chair.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_quarterly_meeting",
+                                    "stage": "subscribed"
+                                }
+                            }
+                        ],
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "walk_out": [
+            {
+                "text": "You stand. Nobody stops you; nobody even looks surprised. Hollin Sare inclines his head as though you have made a fair point and says \"Thank you,\" and as you reach the stairs you hear him say, in exactly the same voice, \"Any other business?\" and the clerk turning a page.",
+                "choices": [
+                    {
+                        "label": "Go down the stairs.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_quarterly_meeting",
+                                    "stage": "walked"
+                                }
+                            }
+                        ],
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "next_agenda": [
+            {
+                "text": "\"The dividend,\" he says. \"The Greyhythe return. The water. The valley, I expect, again.\" He smiles. \"And any other business. You may put anything you like under any other business. That's what it's for.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

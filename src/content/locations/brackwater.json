@@ -1,0 +1,185 @@
+{
+    "region_key": "brackwater",
+    "module": "rivermark",
+    "name": "Brackwater",
+    "region_type": "town",
+    "description": "Four days below Greyhythe, where the hills have given out and the river has stopped being a river and started being a tide. More people on one wharf than in the whole valley, and a street of offices that owns a good part of it.",
+    "sort_order": 70,
+    "locations": {
+        "brackwater_wharf": {
+            "name": "Brackwater Wharf",
+            "type": "site",
+            "map_pos": [
+                30,
+                50
+            ],
+            "first_visit": "Four days of water as flat as a table, and then this. Tull puts the packet against the stones without looking at them, the way you would put a cup down in your own kitchen, and the noise of the place comes aboard before you have stepped off.",
+            "description": "A wharf a quarter of a mile long, and every yard of it in use. Lighters, colliers, salt boats, a grain hulk being emptied by forty men with baskets. Nobody here has heard of Rivermark, and when you say the name they repeat it politely, the way you would repeat the name of somebody's dog. Up the slope behind the cranes is a street of plain brick offices with brass plates by the doors.",
+            "ambience": [
+                "A crane groans round with a net of barrels and nobody looks up.",
+                "Somebody is shouting a figure, and somebody else is shouting it back lower.",
+                "The water smells of salt and tar and, faintly, of somewhere a long way off.",
+                "Tull's packet sits among the bigger boats like a dog among horses."
+            ],
+            "exits": [
+                {
+                    "to": "the_yard",
+                    "label": "Along to the house's yard"
+                },
+                {
+                    "to": "house_street",
+                    "label": "Up the slope to House Street"
+                },
+                {
+                    "to": "the_fortieth",
+                    "label": "Into the Fortieth"
+                },
+                {
+                    "to": "the_mudside",
+                    "label": "Down the end steps to the mudside"
+                },
+                {
+                    "to": "packet_stair",
+                    "label": "Take Tull's packet back upriver"
+                }
+            ]
+        },
+        "the_yard": {
+            "name": "The House Yard",
+            "type": "site",
+            "map_pos": [
+                14,
+                36
+            ],
+            "description": "A walled yard with a painted gate, and over the gate the mark: a plumb-bob inside a square, freshly done, the size of a cartwheel. Inside are stacked barrels, Greyhythe grain sacks, quarry writs in oilcloth, and a clerk's hut with a window that slides. Every manifest that comes down the river goes through that window. Nothing about it is hidden. It is the most ordinary place in Brackwater.",
+            "ambience": [
+                "The window slides open, takes a paper and slides shut.",
+                "A carter waits with his hat in his hands, being patient for money.",
+                "The mark over the gate has been repainted so often it stands proud of the wood.",
+                "Somebody has chalked a tally on the gatepost and somebody else has corrected it."
+            ],
+            "exits": [
+                {
+                    "to": "brackwater_wharf",
+                    "label": "Back to the wharf"
+                }
+            ]
+        },
+        "house_street": {
+            "name": "House Street",
+            "type": "street",
+            "map_pos": [
+                48,
+                30
+            ],
+            "description": "Thirty doors in plain brick, each with a brass plate and a scraper for boots. The plates name shipping lines, a bank, two insurers and a dozen houses that sound like families. Clerks go up and down with leather cases. Nobody runs. At the top end the street turns into a square with a pump, and the door to Number Nine is the one with no plate at all.",
+            "ambience": [
+                "A boy goes past with a case bigger than he is, running without seeming to.",
+                "Somebody is polishing a brass plate that did not need it.",
+                "The pump at the top of the street has a queue of clerks with jugs.",
+                "Two men in good coats agree about something without saying what."
+            ],
+            "exits": [
+                {
+                    "to": "brackwater_wharf",
+                    "label": "Down the slope to the wharf"
+                },
+                {
+                    "to": "number_nine",
+                    "label": "In at Number Nine"
+                },
+                {
+                    "to": "record_office",
+                    "label": "Into the Record Office"
+                }
+            ]
+        },
+        "number_nine": {
+            "name": "Number Nine",
+            "type": "building",
+            "map_pos": [
+                66,
+                18
+            ],
+            "description": "Up one flight of stairs, a long room with a long table, a good fire, and eleven chairs. The chairs are not grand. There is a carafe of water, a jar of pens, and a clock that is right. On the wall is a framed copy of the articles of association, written small, and under it a list of eleven names. The room has been used for exactly this every quarter for longer than anyone in it has been alive.",
+            "ambience": [
+                "The clock ticks, and is right.",
+                "Somebody has left a pair of spectacles folded on the minutes.",
+                "The fire has been made up by someone who knew it would be needed until four.",
+                "Eleven chairs. You count them again anyway."
+            ],
+            "exits": [
+                {
+                    "to": "house_street",
+                    "label": "Down the stairs to House Street"
+                }
+            ]
+        },
+        "record_office": {
+            "name": "The Record Office",
+            "type": "building",
+            "map_pos": [
+                34,
+                20
+            ],
+            "description": "Shelves to the ceiling and a ladder on a rail. The building keeps every deed, conveyance, writ, field book and assignment that the house or anybody else cares to file, for a penny a page to read and a penny a page to copy. The windows are high and small so nothing fades. It is quiet in the way only rooms full of paper are.",
+            "ambience": [
+                "The ladder rolls a yard on its rail and stops.",
+                "A clerk turns a page and the sound fills the room.",
+                "Somewhere a drawer is shut very gently.",
+                "Dust in the light from the high windows, going nowhere."
+            ],
+            "exits": [
+                {
+                    "to": "house_street",
+                    "label": "Out to House Street"
+                }
+            ]
+        },
+        "the_fortieth": {
+            "name": "The Fortieth",
+            "type": "building",
+            "map_pos": [
+                36,
+                64
+            ],
+            "inn_cost": 8,
+            "description": "A long low wharf inn with a sanded floor, a fire at each end and a board over the bar listing what the tide is doing. Clerks drink at one end and lightermen at the other, and the middle is for people waiting for boats. The name is painted over the door in letters that have been painted over something else.",
+            "ambience": [
+                "A lighterman chalks the tide on the board and rubs out the last one with his sleeve.",
+                "The clerks' end laughs at something about an insurer.",
+                "Somebody asks Jory for credit, and Jory looks at the board as if it will tell him.",
+                "The fire at the far end is better. Everyone knows it and nobody moves."
+            ],
+            "exits": [
+                {
+                    "to": "brackwater_wharf",
+                    "label": "Out onto the wharf"
+                }
+            ]
+        },
+        "the_mudside": {
+            "name": "The Mudside",
+            "type": "camp",
+            "map_pos": [
+                10,
+                70
+            ],
+            "allow_camp": true,
+            "random_encounter_pct": 30,
+            "description": "Below the end of the wharf the stones stop and the mud starts: a shelf of grey flats the tide comes over twice a day, with hulks drawn up on it that people live in. Fires in buckets. Nets. It is where you sleep if the Fortieth is eight gold you have not got, and the people who sleep here are polite to strangers in the careful way of people who know how quickly a stranger becomes a problem.",
+            "ambience": [
+                "The tide is coming in across the flats faster than it looks.",
+                "A woman on a hulk is mending a net and watching you mend nothing.",
+                "A bucket fire spits as the wind changes.",
+                "Out on the mud, something that was a boat is slowly becoming the mud."
+            ],
+            "exits": [
+                {
+                    "to": "brackwater_wharf",
+                    "label": "Up the end steps to the wharf"
+                }
+            ]
+        }
+    }
+}

@@ -6,6 +6,48 @@
             {
                 "conditions": [
                     {
+                        "flag": "passage_booked"
+                    },
+                    {
+                        "flag": "act_two_open"
+                    },
+                    {
+                        "not": {
+                            "quest": "the_quarterly_meeting",
+                            "status": "active"
+                        }
+                    },
+                    {
+                        "not": {
+                            "quest": "the_quarterly_meeting",
+                            "status": "completed"
+                        }
+                    }
+                ],
+                "text": "Tull is on his feet for once, with the rope actually doing something. \"It's the fifth,\" he says, \"or near enough that I'll call it the fifth. You're in the book. Four days flat, and Brackwater at the end of it.\" He looks downstream, where the hills give out. \"Get aboard or don't. I go either way.\"",
+                "choices": [
+                    {
+                        "label": "Go aboard.",
+                        "effects": [
+                            {
+                                "start_quest": "the_quarterly_meeting"
+                            },
+                            {
+                                "travel": {
+                                    "location": "brackwater_wharf"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Not yet.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "passage_fate",
                         "equals": "booked"
                     }

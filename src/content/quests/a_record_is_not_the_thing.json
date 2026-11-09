@@ -1,0 +1,66 @@
+{
+    "quest_key": "a_record_is_not_the_thing",
+    "title": "A Record Is Not the Thing",
+    "act": 2,
+    "description": "You carried nine sheets four days downriver. Minna Crale says the meeting does not read surveys. It reads field books, and the field books are in the Record Office.",
+    "giver": "minna_crale",
+    "on_job_board": false,
+    "required_level": 5,
+    "rewards": {
+        "xp": 500
+    },
+    "stages": {
+        "the_field_books": {
+            "title": "The field books",
+            "objective": "Go to the Record Office on House Street and ask Dorcas Fenn for the Rivermark field books.",
+            "journal": "Minna Crale was polite about my survey, the way you are polite about a child's drawing of your house. The meeting reads from the field books, she says, and the field books are filed. Corse said it before I left: a record is not the thing recorded, and the field books still exist.",
+            "target": {
+                "location": "record_office"
+            }
+        },
+        "compared": {
+            "terminal": true,
+            "resolution": "laid_it_beside",
+            "outcome": "success",
+            "title": "Laid side by side",
+            "journal": "I laid the nine sheets beside the field books on Dorcas Fenn's table. They agree, line for line, in Pyke's hand and two others. My survey is a fair copy of something that was never missing. I am keeping it anyway, because a copy you are holding is still a thing somebody has to ask you for.",
+            "effects": [
+                {
+                    "set_flag": "field_books_fate",
+                    "value": "compared"
+                },
+                {
+                    "approval": {
+                        "aldric": 6,
+                        "ilse": 4
+                    }
+                }
+            ]
+        },
+        "filed": {
+            "terminal": true,
+            "resolution": "filed_it",
+            "outcome": "success",
+            "title": "Filed",
+            "journal": "I gave the survey to Dorcas Fenn and paid the penny a page to have it filed under my own name, beside the field books, as a record that somebody outside the house had held it. It cannot be unfiled. Anybody in Brackwater can now read sheet six for a penny, and the meeting knows it.",
+            "effects": [
+                {
+                    "set_flag": "field_books_fate",
+                    "value": "filed"
+                },
+                {
+                    "take_gold": 9
+                },
+                {
+                    "pressure": 2
+                },
+                {
+                    "approval": {
+                        "aldric": 10,
+                        "sera": -6
+                    }
+                }
+            ]
+        }
+    }
+}

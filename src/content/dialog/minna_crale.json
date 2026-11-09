@@ -1,0 +1,405 @@
+{
+    "npc_key": "minna_crale",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "quest": "the_quarterly_meeting",
+                        "stage": "the_secretary"
+                    }
+                ],
+                "text": "The woman at the small desk inside the door of Number Nine finishes the line she is writing before she looks up, and then gives you her whole attention, which is considerable. \"Minna Crale. I keep the book.\" She turns the agenda round so you can read it: the dividend; the Greyhythe return; the water rights; any other business. \"You've come down from the valley. You'll have business. The meeting will be very glad to hear it, if it's in order. What is it?\"",
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera reads the agenda upside down, faster than you read it the right way up."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "I have the survey. All nine sheets.",
+                        "conditions": [
+                            {
+                                "flag": "survey_fate",
+                                "equals": "took"
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "start_quest": "a_record_is_not_the_thing"
+                            },
+                            {
+                                "quest_stage": {
+                                    "quest": "the_quarterly_meeting",
+                                    "stage": "your_matter"
+                                }
+                            }
+                        ],
+                        "reoffer": true,
+                        "next": "matter_took"
+                    },
+                    {
+                        "label": "I'm here about the survey that burned.",
+                        "conditions": [
+                            {
+                                "flag": "survey_fate",
+                                "equals": "burned"
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "start_quest": "who_stood_by_the_fire"
+                            },
+                            {
+                                "quest_stage": {
+                                    "quest": "the_quarterly_meeting",
+                                    "stage": "your_matter"
+                                }
+                            }
+                        ],
+                        "reoffer": true,
+                        "next": "matter_burned"
+                    },
+                    {
+                        "label": "I'm on the house's books. Corse retains us.",
+                        "conditions": [
+                            {
+                                "flag": "survey_fate",
+                                "equals": "sold"
+                            },
+                            {
+                                "flag": "corse_retains_us"
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "start_quest": "services_not_further_described"
+                            },
+                            {
+                                "quest_stage": {
+                                    "quest": "the_quarterly_meeting",
+                                    "stage": "your_matter"
+                                }
+                            }
+                        ],
+                        "reoffer": true,
+                        "next": "matter_sold"
+                    },
+                    {
+                        "label": "Rivermark heard sheet six read aloud. I've come about that.",
+                        "conditions": [
+                            {
+                                "flag": "survey_fate",
+                                "equals": "warned"
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "start_quest": "what_a_town_knows"
+                            },
+                            {
+                                "quest_stage": {
+                                    "quest": "the_quarterly_meeting",
+                                    "stage": "your_matter"
+                                }
+                            }
+                        ],
+                        "reoffer": true,
+                        "next": "matter_warned"
+                    },
+                    {
+                        "label": "Who are the eleven?",
+                        "next": "the_eleven"
+                    },
+                    {
+                        "label": "Not yet.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_quarterly_meeting",
+                        "stage": "your_matter"
+                    },
+                    {
+                        "any": [
+                            {
+                                "quest": "a_record_is_not_the_thing",
+                                "status": "completed"
+                            },
+                            {
+                                "quest": "who_stood_by_the_fire",
+                                "status": "completed"
+                            },
+                            {
+                                "quest": "services_not_further_described",
+                                "status": "completed"
+                            },
+                            {
+                                "quest": "what_a_town_knows",
+                                "status": "completed"
+                            }
+                        ]
+                    }
+                ],
+                "text": "Minna Crale reads something on a slip of paper that came up the stairs before you did, and inks your name on the agenda, over the pencil. \"In order,\" she says. \"Item seven, after the water rights. They're sitting now. Go up, and speak when Mr Sare looks at you. He will.\"",
+                "choices": [
+                    {
+                        "label": "Go up.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_quarterly_meeting",
+                                    "stage": "the_meeting"
+                                }
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "In a moment.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "services_not_further_described",
+                        "stage": "the_instruction"
+                    }
+                ],
+                "text": "Minna Crale takes a folded paper from a pigeonhole that has your name on a card, in her hand. \"Your first instruction under the articles,\" she says. \"It's quite short.\" It is. It says: *Attend the quarterly meeting. If asked, say whether the valley is quiet.* It is initialled by somebody, and countersigned by somebody else.",
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric reads it twice and gives it back to you as though it were wet."
+                    },
+                    {
+                        "companion": "sera",
+                        "text": "Sera: \"That's the whole service. They're paying for the sentence.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Then I'll say it. The valley is quiet.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "services_not_further_described",
+                                    "stage": "serving"
+                                }
+                            }
+                        ],
+                        "next": "sold_serving"
+                    },
+                    {
+                        "label": "Where's the clause for ending it?",
+                        "next": "sold_clause"
+                    },
+                    {
+                        "label": "Here's your forty back. The articles are void.",
+                        "conditions": [
+                            {
+                                "gold_at_least": 40
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "services_not_further_described",
+                                    "stage": "returned"
+                                }
+                            }
+                        ],
+                        "next": "sold_returned"
+                    },
+                    {
+                        "label": "Let me think.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_quarterly_meeting",
+                        "stage": "your_matter"
+                    }
+                ],
+                "text": "\"Still in pencil,\" Minna Crale says, not unkindly, tapping your line on the agenda. \"I'll ink it when it's in order. The meeting does not hear things twice, so it's a kindness to hear them once, properly.\"",
+                "choices": [
+                    {
+                        "label": "Who are the eleven?",
+                        "next": "the_eleven"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_quarterly_meeting",
+                        "stage": "the_meeting"
+                    }
+                ],
+                "text": "\"They're sitting,\" Minna Crale says, and nods at the stair. \"Item seven. Go up.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_quarterly_meeting",
+                        "status": "completed"
+                    }
+                ],
+                "text": "Minna Crale looks up, and something that is not quite a smile happens and is filed. \"It's in the minutes,\" she says. \"Whatever you said. Everything is. That's what I'm for.\"",
+                "choices": [
+                    {
+                        "label": "Who are the eleven?",
+                        "next": "the_eleven"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "\"Number Nine,\" Minna Crale says. \"If you've business with the meeting, Mr Moss at the yard will tell you how it's done. It isn't difficult. That's rather the point of it.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_eleven": [
+            {
+                "text": "\"Subscribers,\" she says. \"The articles allow twelve. There have been eleven since Mrs Orme died; the twelfth share is lapsed and may be taken up on payment of the call. Two banks, a ship-owner, a man who makes rope, three widows, a clergyman, a family that has been in it since the beginning, and two I've never met, who vote by letter.\" She considers. \"They're not wicked. I've sat in the corner for eleven years and they're not. They read the figures. They ask whether the figures are right. They usually are.\"",
+                "interjections": [
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa: \"A man who makes rope.\" Minna Crale: \"Very good rope.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    }
+                ]
+            }
+        ],
+        "matter_took": [
+            {
+                "text": "Minna Crale looks at the oilcloth packet without reaching for it. \"That's a survey,\" she says. \"A fair copy. The meeting won't read it, I'm afraid. It reads the field books, and the field books are in the Record Office, three doors down, filed. Corse would have told you.\" She makes a pencil note. \"Have Mrs Fenn put them beside your sheets. Then come back, and I'll know what your matter actually is.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "matter_burned": [
+            {
+                "text": "\"Ah,\" Minna Crale says, and her pencil stops. \"Then there's an open return against it. A gentleman came back down this morning with it, on your boat. He's at the Fortieth, being unwell.\" She chooses the next words. \"The meeting can't hear a matter while a return is open on it. Mr Pellow would very much like to close it. You might help each other.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "matter_sold": [
+            {
+                "text": "\"You are,\" Minna Crale says, and she does not look anything up. \"Forty a quarter, the first lodged. There's an instruction for you; it came down with you. I'll fetch it.\" She is already standing. \"It's the first one. They're always short.\"",
+                "choices": [
+                    {
+                        "label": "Let me see it.",
+                        "next": "greeting"
+                    }
+                ]
+            }
+        ],
+        "matter_warned": [
+            {
+                "text": "\"Yes,\" she says. \"We had the return from Greyhythe. Three conveyances on Granary Row since the reading, at the old figure, and the rest asking.\" She says it the way she said the agenda. \"The meeting will want the name of whoever read it out, for the minute. I have the name. He came down on your boat. He's at the Fortieth. I thought you might want to see him before he's minuted.\"",
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric takes his hat off, and then seems not to know why, and puts it back on."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "sold_serving": [
+            {
+                "text": "\"Thank you,\" Minna Crale says, and writes *will attend* against your name, and then counts forty gold onto the desk. \"The second quarter. In advance; I find it saves a letter.\" She does not wait to see what your face does. \"Mr Sare will ask you. He always asks.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "sold_clause": [
+            {
+                "text": "Minna Crale puts her pen down. You get the impression this happens about once a year. \"There isn't one,\" she says. \"Nobody has ever asked.\" She looks at the articles for a long moment, then takes a fresh sheet. \"Either party. A quarter's notice. In writing, to Number Nine.\" She writes it out, fair, signs it as secretary, and pins it to your articles. \"There. Now there is.\"",
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse lets out a breath she has been holding since Greyhythe."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Thank you.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "services_not_further_described",
+                                    "stage": "clause"
+                                }
+                            }
+                        ],
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "sold_returned": [
+            {
+                "text": "Minna Crale counts the forty, twice, and writes you a receipt in the same hand as the articles, and then files the receipt with the articles, so that they sit together in the same pigeonhole. \"Mr Corse will be told,\" she says. \"He won't be surprised. He's never been surprised by anybody, as far as I know. It must be very restful.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}
