@@ -322,5 +322,26 @@ $check(
     'an empty choice should grant nothing'
 );
 
+// -------------------------------------------------------------------------
+echo "\nA new party in the Flagon starts First Night (no \"Nothing on the go\")\n";
+
+$fn = $sandboxed(function () use ($make, $db) {
+    $c = $make(['module' => 'rivermark']);
+    $pid = (int) $c['party_id'];
+    $q = $db->prepare(
+        "SELECT pq.status, s.stage_key FROM party_quests pq
+           JOIN quests q ON q.id = pq.quest_id
+           LEFT JOIN quest_stages s ON s.id = pq.current_stage_id
+          WHERE pq.party_id = ? AND q.quest_key = 'first_night'");
+    $q->execute([$pid]);
+    $row = $q->fetch(PDO::FETCH_ASSOC) ?: [];
+    $flag = (new WorldState($db))->get($pid, 'tutorial_fate');
+    return [$row, $flag, $c];
+});
+[$row, $flag, $c] = $fn;
+$check(($row['status'] ?? null) === 'active', 'first_night is active straight after creation');
+$check(($row['stage_key'] ?? null) === 'talk', 'and it is on its first stage, "Hear Mara out"');
+$check($flag === 'taken', 'tutorial_fate reads taken, as the old greeting reply set it');
+
 echo "\n{$pass} passed, {$fail} failed\n";
 exit($fail === 0 ? 0 : 1);

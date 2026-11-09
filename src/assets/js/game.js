@@ -409,6 +409,7 @@
       window.UI.renderPartyRail();
       window.UI.renderQuestTracker();
       window.UI.renderActionBar();
+      if (window.UI.applyTutorialHints) window.UI.applyTutorialHints();
     }
   }
 

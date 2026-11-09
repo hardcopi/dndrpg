@@ -1061,6 +1061,30 @@
             {
                 "conditions": [
                     {
+                        "quest": "first_night",
+                        "stage": "talk"
+                    },
+                    {
+                        "not": {
+                            "quest": "cellar_rats"
+                        }
+                    }
+                ],
+                "text": "Mara catches your eye across the room and crooks a finger at the bar. \"First time in Rivermark? You've the look of it. Come here. I've a job that suits a first night.\"",
+                "choices": [
+                    {
+                        "label": "What's the job?",
+                        "next": "fn_rats_offer"
+                    },
+                    {
+                        "label": "Later.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "not": {
                             "flag": "tutorial_fate"
                         }

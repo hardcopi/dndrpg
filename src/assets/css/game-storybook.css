@@ -681,3 +681,17 @@ body.game-page .loc-inner.is-chart .loc-foot .loc-ways { margin: 0; padding: 0; 
   body.in-combat .cbt-actions.is-stack .act-slot .act-desc { display: none; }
   body.in-combat .cbt-actions.is-stack .act-slot .act-name { font-size: 14px; }
 }
+
+/* First Night's hint ring (ui-panels.js applyTutorialHints): the control the
+   current tutorial stage is about. A ring and a slow pulse, nothing that moves
+   layout; static under reduced motion. */
+body.game-page .tut-hint {
+  outline: 2px solid #e8b44a; outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(232, 180, 74, .25), 0 0 14px rgba(232, 180, 74, .55);
+  animation: tut-pulse 1.8s ease-in-out infinite;
+}
+@keyframes tut-pulse {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(232, 180, 74, .18), 0 0 8px rgba(232, 180, 74, .35); }
+  50%      { box-shadow: 0 0 0 6px rgba(232, 180, 74, .32), 0 0 18px rgba(232, 180, 74, .7); }
+}
+@media (prefers-reduced-motion: reduce) { body.game-page .tut-hint { animation: none; } }
