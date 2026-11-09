@@ -245,6 +245,11 @@ body.game-page .paint-hotspot.npc.has-work .paint-dot { width: 13px; height: 13p
 body.game-page .scene-chip { min-height: 0; text-transform: none; }
 /* On a phone the scene is small: tools move to the bottom corner so they do not sit on the exit labels along the top. */
 @media (max-width: 720px) { body.game-page .scene-tools { top: auto; bottom: 4px; } }
+/* Five or more ways out on a phone: arrows only (each keeps its aria-label; the Ways out line names them). */
+@media (max-width: 720px) {
+  body.game-page .paint-hotspots.many-exits .paint-hotspot.exit .paint-label { font-size: 0; padding: 2px 6px; }
+  body.game-page .paint-hotspots.many-exits .paint-hotspot.exit .paint-label b { font-size: 13px; margin: 0; }
+}
 
 /* ------------------------------------------------------------------ *
    Two-column play screen (exploration only).

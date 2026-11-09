@@ -1242,5 +1242,2317 @@ window.RIVERMARK_SCENES = {
       {type: "smoke", x: 25, y: 35, w: 5, h: 20, intensity: 0.4, wind: 0.5},
       {type: "water", x: 50, y: 55, w: 50, h: 40, intensity: 0.5, count: 18}
     ]
+  },
+  uv_camp: {
+    "image": "assets/images/scenes/uv_camp.jpg",
+    "subtitle": "the fire that never goes out",
+    "exits": {
+      "uv_spoil": {
+        "x": 14,
+        "y": 90,
+        "icon": "↑"
+      },
+      "uv_bunkhouse": {
+        "x": 50,
+        "y": 90,
+        "icon": "⌂"
+      },
+      "uv_mouth": {
+        "x": 86,
+        "y": 90,
+        "icon": "→"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The communal fire",
+        "x": 50,
+        "y": 62,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "birds",
+        "x": 40,
+        "y": 3,
+        "w": 45,
+        "h": 18,
+        "intensity": 0.5
+      },
+      {
+        "type": "smoke",
+        "x": 10,
+        "y": 0,
+        "w": 12,
+        "h": 20,
+        "intensity": 0.35,
+        "wind": 0.5
+      }
+    ]
+  },
+  uv_bunkhouse: {
+    "image": "assets/images/scenes/uv_bunkhouse.jpg",
+    "subtitle": "three coppers a bunk",
+    "exits": {
+      "uv_camp": {
+        "x": 50,
+        "y": 90,
+        "icon": "↓"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The stove at the end",
+        "x": 50,
+        "y": 50,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "dust",
+        "x": 25,
+        "y": 20,
+        "w": 50,
+        "h": 50,
+        "intensity": 0.25,
+        "count": 8
+      }
+    ]
+  },
+  uv_spoil: {
+    "image": "assets/images/scenes/uv_spoil.jpg",
+    "subtitle": "everything the dark gave back",
+    "exits": {
+      "uv_camp": {
+        "x": 50,
+        "y": 90,
+        "icon": "↩"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "Fresh spoil",
+        "x": 45,
+        "y": 60,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "birds",
+        "x": 40,
+        "y": 3,
+        "w": 45,
+        "h": 18,
+        "intensity": 0.5
+      }
+    ]
+  },
+  uv_mouth: {
+    "image": "assets/images/scenes/uv_mouth.jpg",
+    "subtitle": "cut, not natural",
+    "exits": {
+      "uv_camp": {
+        "x": 50,
+        "y": 90,
+        "icon": "↩"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The lintel",
+        "x": 50,
+        "y": 22,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "drip",
+        "x": 20,
+        "y": 0,
+        "w": 60,
+        "h": 70,
+        "intensity": 0.4
+      },
+      {
+        "type": "fog",
+        "x": 0,
+        "y": 60,
+        "w": 100,
+        "h": 40,
+        "intensity": 0.25
+      }
+    ]
+  },
+  waermans_rest: {
+    "image": "assets/images/scenes/waermans_rest.jpg",
+    "subtitle": "news arrives here first",
+    "exits": {
+      "hallowmarket": {
+        "x": 14,
+        "y": 90,
+        "icon": "⌂"
+      },
+      "the_rest_cellar": {
+        "x": 50,
+        "y": 90,
+        "icon": "↓"
+      },
+      "the_hallowgate": {
+        "x": 86,
+        "y": 90,
+        "icon": "→"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The ox teams",
+        "x": 60,
+        "y": 72,
+        "act": "search"
+      },
+      {
+        "label": "The inn sign",
+        "x": 30,
+        "y": 26,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "birds",
+        "x": 40,
+        "y": 3,
+        "w": 45,
+        "h": 18,
+        "intensity": 0.5
+      },
+      {
+        "type": "smoke",
+        "x": 10,
+        "y": 0,
+        "w": 12,
+        "h": 20,
+        "intensity": 0.35,
+        "wind": 0.5
+      }
+    ]
+  },
+  the_rest_cellar: {
+    "image": "assets/images/scenes/the_rest_cellar.jpg",
+    "subtitle": "the grate has been moved",
+    "exits": {
+      "waermans_rest": {
+        "x": 25,
+        "y": 90,
+        "icon": "↑"
+      },
+      "underquay_stair": {
+        "x": 75,
+        "y": 90,
+        "icon": "⌂"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The drain grate",
+        "x": 75,
+        "y": 82,
+        "act": "search"
+      },
+      {
+        "label": "The barrels",
+        "x": 44,
+        "y": 60,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "drip",
+        "x": 20,
+        "y": 0,
+        "w": 60,
+        "h": 70,
+        "intensity": 0.4
+      },
+      {
+        "type": "fog",
+        "x": 0,
+        "y": 60,
+        "w": 100,
+        "h": 40,
+        "intensity": 0.25
+      }
+    ]
+  },
+  hallowmarket: {
+    "image": "assets/images/scenes/hallowmarket.jpg",
+    "subtitle": "anything but a straight answer",
+    "exits": {
+      "boomhead": {
+        "x": 14,
+        "y": 64,
+        "icon": "←"
+      },
+      "waermans_rest": {
+        "x": 50,
+        "y": 64,
+        "icon": "⌂"
+      },
+      "halvards_ironmongery": {
+        "x": 86,
+        "y": 64,
+        "icon": "⌂"
+      },
+      "the_hallowgate": {
+        "x": 14,
+        "y": 77,
+        "icon": "↓"
+      },
+      "the_great_slip": {
+        "x": 50,
+        "y": 77,
+        "icon": "↓"
+      },
+      "hallowgate_keep": {
+        "x": 86,
+        "y": 77,
+        "icon": "→"
+      },
+      "the_weigh_house": {
+        "x": 14,
+        "y": 90,
+        "icon": "←"
+      },
+      "league_granary": {
+        "x": 50,
+        "y": 90,
+        "icon": "↓"
+      },
+      "the_tar_steps": {
+        "x": 86,
+        "y": 90,
+        "icon": "→"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The rope stall",
+        "x": 14,
+        "y": 62,
+        "act": "search"
+      },
+      {
+        "label": "A cart of goods",
+        "x": 66,
+        "y": 72,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "birds",
+        "x": 40,
+        "y": 3,
+        "w": 45,
+        "h": 18,
+        "intensity": 0.5
+      }
+    ]
+  },
+  the_hallowgate: {
+    "image": "assets/images/scenes/the_hallowgate.jpg",
+    "subtitle": "there is no road north",
+    "exits": {
+      "hallowgate_keep": {
+        "x": 14,
+        "y": 77,
+        "icon": "↑"
+      },
+      "hallowmarket": {
+        "x": 50,
+        "y": 77,
+        "icon": "⌂"
+      },
+      "wardens_road": {
+        "x": 86,
+        "y": 77,
+        "icon": "⌂"
+      },
+      "waermans_rest": {
+        "x": 14,
+        "y": 90,
+        "icon": "←"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The tally-clerk's hut",
+        "x": 62,
+        "y": 30,
+        "act": "search"
+      },
+      {
+        "label": "The portcullis",
+        "x": 64,
+        "y": 42,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "birds",
+        "x": 40,
+        "y": 3,
+        "w": 45,
+        "h": 18,
+        "intensity": 0.5
+      }
+    ]
+  },
+  hallowgate_keep: {
+    "image": "assets/images/scenes/hallowgate_keep.jpg",
+    "subtitle": "forty on the roll, four here",
+    "exits": {
+      "hallowmarket": {
+        "x": 25,
+        "y": 90,
+        "icon": "⌂"
+      },
+      "the_hallowgate": {
+        "x": 75,
+        "y": 90,
+        "icon": "↓"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The duty board",
+        "x": 21,
+        "y": 45,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "birds",
+        "x": 40,
+        "y": 3,
+        "w": 45,
+        "h": 18,
+        "intensity": 0.5
+      }
+    ]
+  },
+  league_granary: {
+    "image": "assets/images/scenes/league_granary.jpg",
+    "subtitle": "full from the doorway",
+    "exits": {
+      "hallowmarket": {
+        "x": 25,
+        "y": 90,
+        "icon": "↓"
+      },
+      "the_weigh_house": {
+        "x": 75,
+        "y": 90,
+        "icon": "→"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The far bays",
+        "x": 52,
+        "y": 45,
+        "act": "search"
+      },
+      {
+        "label": "The League seals",
+        "x": 6,
+        "y": 48,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "dust",
+        "x": 25,
+        "y": 20,
+        "w": 50,
+        "h": 50,
+        "intensity": 0.25,
+        "count": 8
+      }
+    ]
+  },
+  the_weigh_house: {
+    "image": "assets/images/scenes/the_weigh_house.jpg",
+    "subtitle": "ninety years of ledgers",
+    "exits": {
+      "hallowmarket": {
+        "x": 25,
+        "y": 90,
+        "icon": "↓"
+      },
+      "league_granary": {
+        "x": 75,
+        "y": 90,
+        "icon": "→"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The box on the shelf",
+        "x": 87,
+        "y": 15,
+        "act": "search"
+      },
+      {
+        "label": "The beam-scale",
+        "x": 48,
+        "y": 25,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "dust",
+        "x": 25,
+        "y": 20,
+        "w": 50,
+        "h": 50,
+        "intensity": 0.25,
+        "count": 8
+      }
+    ]
+  },
+  halvards_ironmongery: {
+    "image": "assets/images/scenes/halvards_ironmongery.jpg",
+    "subtitle": "every fastening in the city",
+    "exits": {
+      "hallowmarket": {
+        "x": 50,
+        "y": 90,
+        "icon": "↓"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The bundle of letters",
+        "x": 27,
+        "y": 28,
+        "act": "search"
+      },
+      {
+        "label": "Nails in ninety sizes",
+        "x": 52,
+        "y": 82,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "dust",
+        "x": 25,
+        "y": 20,
+        "w": 50,
+        "h": 50,
+        "intensity": 0.25,
+        "count": 8
+      }
+    ]
+  },
+  moot_yard: {
+    "image": "assets/images/scenes/moot_yard.jpg",
+    "subtitle": "everyone is seen coming up",
+    "exits": {
+      "boomhead": {
+        "x": 14,
+        "y": 64,
+        "icon": "←"
+      },
+      "the_factors_house": {
+        "x": 50,
+        "y": 64,
+        "icon": "↑"
+      },
+      "shipwrights_moot": {
+        "x": 86,
+        "y": 64,
+        "icon": "⌂"
+      },
+      "venniks": {
+        "x": 14,
+        "y": 77,
+        "icon": "⌂"
+      },
+      "the_sounding_line": {
+        "x": 50,
+        "y": 77,
+        "icon": "⌂"
+      },
+      "old_waer_square": {
+        "x": 86,
+        "y": 77,
+        "icon": "⌂"
+      },
+      "the_wet_hall": {
+        "x": 14,
+        "y": 90,
+        "icon": "↓"
+      },
+      "the_charthouse": {
+        "x": 50,
+        "y": 90,
+        "icon": "↓"
+      },
+      "the_tar_steps": {
+        "x": 86,
+        "y": 90,
+        "icon": "→"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The parapet",
+        "x": 22,
+        "y": 52,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "birds",
+        "x": 40,
+        "y": 3,
+        "w": 45,
+        "h": 18,
+        "intensity": 0.5
+      }
+    ]
+  },
+  shipwrights_moot: {
+    "image": "assets/images/scenes/shipwrights_moot.jpg",
+    "subtitle": "the hull that is never finished",
+    "exits": {
+      "moot_yard": {
+        "x": 50,
+        "y": 90,
+        "icon": "⌂"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The hull frame",
+        "x": 55,
+        "y": 42,
+        "act": "search"
+      },
+      {
+        "label": "The worn benches",
+        "x": 80,
+        "y": 72,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "dust",
+        "x": 25,
+        "y": 20,
+        "w": 50,
+        "h": 50,
+        "intensity": 0.25,
+        "count": 8
+      }
+    ]
+  },
+  the_factors_house: {
+    "image": "assets/images/scenes/the_factors_house.jpg",
+    "subtitle": "imported stone, local staff",
+    "exits": {
+      "moot_yard": {
+        "x": 50,
+        "y": 90,
+        "icon": "↓"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The strongroom door",
+        "x": 10,
+        "y": 50,
+        "act": "search"
+      },
+      {
+        "label": "The ledger on the desk",
+        "x": 59,
+        "y": 62,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "dust",
+        "x": 25,
+        "y": 20,
+        "w": 50,
+        "h": 50,
+        "intensity": 0.25,
+        "count": 8
+      }
+    ]
+  },
+  the_wet_hall: {
+    "image": "assets/images/scenes/the_wet_hall.jpg",
+    "subtitle": "floods twice a day",
+    "exits": {
+      "moot_yard": {
+        "x": 50,
+        "y": 90,
+        "icon": "↑"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The balcony over the water",
+        "x": 56,
+        "y": 42,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "birds",
+        "x": 40,
+        "y": 3,
+        "w": 45,
+        "h": 18,
+        "intensity": 0.5
+      },
+      {
+        "type": "water",
+        "x": 0,
+        "y": 70,
+        "w": 100,
+        "h": 30,
+        "intensity": 0.5,
+        "count": 20
+      }
+    ]
+  },
+  the_charthouse: {
+    "image": "assets/images/scenes/the_charthouse.jpg",
+    "subtitle": "the presses nobody opens",
+    "exits": {
+      "moot_yard": {
+        "x": 50,
+        "y": 90,
+        "icon": "↓"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "A drawer that shuts too easily",
+        "x": 58,
+        "y": 52,
+        "act": "search"
+      },
+      {
+        "label": "The chart table",
+        "x": 34,
+        "y": 78,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "dust",
+        "x": 25,
+        "y": 20,
+        "w": 50,
+        "h": 50,
+        "intensity": 0.25,
+        "count": 8
+      }
+    ]
+  },
+  the_sounding_line: {
+    "image": "assets/images/scenes/the_sounding_line.jpg",
+    "subtitle": "charts change hands upstairs",
+    "exits": {
+      "moot_yard": {
+        "x": 50,
+        "y": 90,
+        "icon": "↓"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The stair to the upper rooms",
+        "x": 52,
+        "y": 30,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "dust",
+        "x": 25,
+        "y": 20,
+        "w": 50,
+        "h": 50,
+        "intensity": 0.25,
+        "count": 8
+      }
+    ]
+  },
+  boomhead: {
+    "image": "assets/images/scenes/boomhead.jpg",
+    "subtitle": "every cargo is set down here",
+    "exits": {
+      "old_waer_square": {
+        "x": 14,
+        "y": 64,
+        "icon": "↑"
+      },
+      "ilbers_chandlery": {
+        "x": 50,
+        "y": 64,
+        "icon": "⌂"
+      },
+      "the_drowned_jarl": {
+        "x": 86,
+        "y": 64,
+        "icon": "⌂"
+      },
+      "the_great_crane": {
+        "x": 14,
+        "y": 77,
+        "icon": "↓"
+      },
+      "hallowmarket": {
+        "x": 50,
+        "y": 77,
+        "icon": "↓"
+      },
+      "the_great_slip": {
+        "x": 86,
+        "y": 77,
+        "icon": "↓"
+      },
+      "the_counting_boom": {
+        "x": 14,
+        "y": 90,
+        "icon": "←"
+      },
+      "the_chain_winch": {
+        "x": 50,
+        "y": 90,
+        "icon": "↓"
+      },
+      "moot_yard": {
+        "x": 86,
+        "y": 90,
+        "icon": "→"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The chain across the mouth",
+        "x": 48,
+        "y": 36,
+        "act": "search"
+      },
+      {
+        "label": "Barrels nobody counted",
+        "x": 70,
+        "y": 84,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "birds",
+        "x": 40,
+        "y": 3,
+        "w": 45,
+        "h": 18,
+        "intensity": 0.5
+      },
+      {
+        "type": "water",
+        "x": 0,
+        "y": 70,
+        "w": 100,
+        "h": 30,
+        "intensity": 0.5,
+        "count": 20
+      }
+    ]
+  },
+  venniks: {
+    "image": "assets/images/scenes/venniks.jpg",
+    "subtitle": "he has begun leaving things out",
+    "exits": {
+      "moot_yard": {
+        "x": 50,
+        "y": 90,
+        "icon": "↓"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The letter being sealed",
+        "x": 45,
+        "y": 63,
+        "act": "search"
+      },
+      {
+        "label": "The little balance",
+        "x": 90,
+        "y": 70,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "dust",
+        "x": 25,
+        "y": 20,
+        "w": 50,
+        "h": 50,
+        "intensity": 0.25,
+        "count": 8
+      }
+    ]
+  },
+  the_counting_boom: {
+    "image": "assets/images/scenes/the_counting_boom.jpg",
+    "subtitle": "three locks, three keys",
+    "exits": {
+      "boomhead": {
+        "x": 50,
+        "y": 90,
+        "icon": "↓"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The iron box",
+        "x": 93,
+        "y": 40,
+        "act": "search"
+      },
+      {
+        "label": "The weighing plate",
+        "x": 50,
+        "y": 58,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "dust",
+        "x": 25,
+        "y": 20,
+        "w": 50,
+        "h": 50,
+        "intensity": 0.25,
+        "count": 8
+      }
+    ]
+  },
+  the_chain_winch: {
+    "image": "assets/images/scenes/the_chain_winch.jpg",
+    "subtitle": "eleven men, four minutes",
+    "exits": {
+      "boomhead": {
+        "x": 50,
+        "y": 90,
+        "icon": "↩"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The ratchet",
+        "x": 50,
+        "y": 48,
+        "act": "search"
+      },
+      {
+        "label": "The bell rope",
+        "x": 67,
+        "y": 25,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "water",
+        "x": 0,
+        "y": 72,
+        "w": 100,
+        "h": 28,
+        "intensity": 0.4,
+        "count": 14
+      },
+      {
+        "type": "drip",
+        "x": 20,
+        "y": 0,
+        "w": 60,
+        "h": 70,
+        "intensity": 0.4
+      },
+      {
+        "type": "fog",
+        "x": 0,
+        "y": 60,
+        "w": 100,
+        "h": 40,
+        "intensity": 0.25
+      }
+    ]
+  },
+  ilbers_chandlery: {
+    "image": "assets/images/scenes/ilbers_chandlery.jpg",
+    "subtitle": "credit, sold on",
+    "exits": {
+      "boomhead": {
+        "x": 50,
+        "y": 90,
+        "icon": "↓"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "Ilber's ledger",
+        "x": 44,
+        "y": 52,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "dust",
+        "x": 25,
+        "y": 20,
+        "w": 50,
+        "h": 50,
+        "intensity": 0.25,
+        "count": 8
+      }
+    ]
+  },
+  the_drowned_jarl: {
+    "image": "assets/images/scenes/the_drowned_jarl.jpg",
+    "subtitle": "no questions asked",
+    "exits": {
+      "boomhead": {
+        "x": 50,
+        "y": 90,
+        "icon": "↓"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The fire trench",
+        "x": 50,
+        "y": 72,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "dust",
+        "x": 25,
+        "y": 20,
+        "w": 50,
+        "h": 50,
+        "intensity": 0.25,
+        "count": 8
+      }
+    ]
+  },
+  the_great_crane: {
+    "image": "assets/images/scenes/the_great_crane.jpg",
+    "subtitle": "in the air a long time",
+    "exits": {
+      "boomhead": {
+        "x": 14,
+        "y": 90,
+        "icon": "↩"
+      },
+      "the_quiet_charter": {
+        "x": 50,
+        "y": 90,
+        "icon": "↩"
+      },
+      "underquay_stair": {
+        "x": 86,
+        "y": 90,
+        "icon": "↓"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The treadwheel",
+        "x": 77,
+        "y": 40,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "birds",
+        "x": 40,
+        "y": 3,
+        "w": 45,
+        "h": 18,
+        "intensity": 0.5
+      },
+      {
+        "type": "water",
+        "x": 0,
+        "y": 70,
+        "w": 100,
+        "h": 30,
+        "intensity": 0.5,
+        "count": 20
+      }
+    ]
+  },
+  the_quiet_charter: {
+    "image": "assets/images/scenes/the_quiet_charter.jpg",
+    "subtitle": "not a guild, an arrangement",
+    "exits": {
+      "the_great_crane": {
+        "x": 50,
+        "y": 90,
+        "icon": "↓"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The ledger",
+        "x": 40,
+        "y": 56,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "dust",
+        "x": 25,
+        "y": 20,
+        "w": 50,
+        "h": 50,
+        "intensity": 0.25,
+        "count": 8
+      }
+    ]
+  },
+  the_tar_steps: {
+    "image": "assets/images/scenes/the_tar_steps.jpg",
+    "subtitle": "black underfoot all the way",
+    "exits": {
+      "moot_yard": {
+        "x": 14,
+        "y": 64,
+        "icon": "↑"
+      },
+      "the_pitch_yards": {
+        "x": 50,
+        "y": 64,
+        "icon": "⌂"
+      },
+      "the_pitch_and_pot": {
+        "x": 86,
+        "y": 64,
+        "icon": "⌂"
+      },
+      "hallowmarket": {
+        "x": 14,
+        "y": 77,
+        "icon": "↓"
+      },
+      "the_oakum_house": {
+        "x": 50,
+        "y": 77,
+        "icon": "↓"
+      },
+      "the_boom_forge": {
+        "x": 86,
+        "y": 77,
+        "icon": "→"
+      },
+      "the_tar_gaol": {
+        "x": 14,
+        "y": 90,
+        "icon": "←"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The smoke below",
+        "x": 18,
+        "y": 50,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "birds",
+        "x": 40,
+        "y": 3,
+        "w": 45,
+        "h": 18,
+        "intensity": 0.5
+      },
+      {
+        "type": "smoke",
+        "x": 10,
+        "y": 0,
+        "w": 12,
+        "h": 20,
+        "intensity": 0.35,
+        "wind": 0.5
+      }
+    ]
+  },
+  the_boom_forge: {
+    "image": "assets/images/scenes/the_boom_forge.jpg",
+    "subtitle": "what is behind the screen",
+    "exits": {
+      "the_tar_steps": {
+        "x": 50,
+        "y": 90,
+        "icon": "↓"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The canvas screen",
+        "x": 70,
+        "y": 45,
+        "act": "search"
+      },
+      {
+        "label": "The chain links",
+        "x": 30,
+        "y": 72,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "dust",
+        "x": 25,
+        "y": 20,
+        "w": 50,
+        "h": 50,
+        "intensity": 0.25,
+        "count": 8
+      },
+      {
+        "type": "glow",
+        "x": 0,
+        "y": 40,
+        "w": 25,
+        "h": 30,
+        "intensity": 0.5
+      }
+    ]
+  },
+  the_oakum_house: {
+    "image": "assets/images/scenes/the_oakum_house.jpg",
+    "subtitle": "paid in bread",
+    "exits": {
+      "the_tar_steps": {
+        "x": 50,
+        "y": 90,
+        "icon": "↑"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The long bench",
+        "x": 50,
+        "y": 60,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "dust",
+        "x": 25,
+        "y": 20,
+        "w": 50,
+        "h": 50,
+        "intensity": 0.25,
+        "count": 8
+      }
+    ]
+  },
+  the_pitch_yards: {
+    "image": "assets/images/scenes/the_pitch_yards.jpg",
+    "subtitle": "a closed shop",
+    "exits": {
+      "the_tar_steps": {
+        "x": 50,
+        "y": 90,
+        "icon": "↓"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "A cauldron of pitch",
+        "x": 27,
+        "y": 68,
+        "act": "search"
+      },
+      {
+        "label": "The kilns",
+        "x": 88,
+        "y": 60,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "birds",
+        "x": 40,
+        "y": 3,
+        "w": 45,
+        "h": 18,
+        "intensity": 0.5
+      },
+      {
+        "type": "smoke",
+        "x": 10,
+        "y": 0,
+        "w": 12,
+        "h": 20,
+        "intensity": 0.35,
+        "wind": 0.5
+      }
+    ]
+  },
+  the_pitch_and_pot: {
+    "image": "assets/images/scenes/the_pitch_and_pot.jpg",
+    "subtitle": "name the thing at the bar",
+    "exits": {
+      "the_tar_steps": {
+        "x": 50,
+        "y": 90,
+        "icon": "↓"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The bar",
+        "x": 80,
+        "y": 60,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "dust",
+        "x": 25,
+        "y": 20,
+        "w": 50,
+        "h": 50,
+        "intensity": 0.25,
+        "count": 8
+      }
+    ]
+  },
+  the_tar_gaol: {
+    "image": "assets/images/scenes/the_tar_gaol.jpg",
+    "subtitle": "on an authority nobody has produced",
+    "exits": {
+      "the_tar_steps": {
+        "x": 50,
+        "y": 90,
+        "icon": "↓"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The cells",
+        "x": 80,
+        "y": 45,
+        "act": "search"
+      },
+      {
+        "label": "The barred window",
+        "x": 35,
+        "y": 36,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "dust",
+        "x": 25,
+        "y": 20,
+        "w": 50,
+        "h": 50,
+        "intensity": 0.25,
+        "count": 8
+      }
+    ]
+  },
+  the_great_slip: {
+    "image": "assets/images/scenes/the_great_slip.jpg",
+    "subtitle": "every hull a little wrong",
+    "exits": {
+      "the_sailmakers_loft": {
+        "x": 14,
+        "y": 64,
+        "icon": "↑"
+      },
+      "boomhead": {
+        "x": 50,
+        "y": 64,
+        "icon": "↑"
+      },
+      "the_nine_masts": {
+        "x": 86,
+        "y": 64,
+        "icon": "⌂"
+      },
+      "the_dry_dock": {
+        "x": 14,
+        "y": 77,
+        "icon": "↓"
+      },
+      "the_mast_pond": {
+        "x": 50,
+        "y": 77,
+        "icon": "↓"
+      },
+      "the_ropehouse": {
+        "x": 86,
+        "y": 77,
+        "icon": "→"
+      },
+      "hallowmarket": {
+        "x": 14,
+        "y": 90,
+        "icon": "→"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The chalked gable",
+        "x": 15,
+        "y": 35,
+        "act": "search"
+      },
+      {
+        "label": "A hull on the ways",
+        "x": 30,
+        "y": 62,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "birds",
+        "x": 40,
+        "y": 3,
+        "w": 45,
+        "h": 18,
+        "intensity": 0.5
+      },
+      {
+        "type": "smoke",
+        "x": 10,
+        "y": 0,
+        "w": 12,
+        "h": 20,
+        "intensity": 0.35,
+        "wind": 0.5
+      }
+    ]
+  },
+  the_nine_masts: {
+    "image": "assets/images/scenes/the_nine_masts.jpg",
+    "subtitle": "count the masts on the beam",
+    "exits": {
+      "the_great_slip": {
+        "x": 50,
+        "y": 90,
+        "icon": "↓"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The masts on the beam",
+        "x": 50,
+        "y": 16,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "dust",
+        "x": 25,
+        "y": 20,
+        "w": 50,
+        "h": 50,
+        "intensity": 0.25,
+        "count": 8
+      }
+    ]
+  },
+  the_mast_pond: {
+    "image": "assets/images/scenes/the_mast_pond.jpg",
+    "subtitle": "nine short",
+    "exits": {
+      "the_great_slip": {
+        "x": 50,
+        "y": 90,
+        "icon": "↩"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The tally-board",
+        "x": 34,
+        "y": 60,
+        "act": "search"
+      },
+      {
+        "label": "Seasoning pines",
+        "x": 60,
+        "y": 72,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "birds",
+        "x": 40,
+        "y": 3,
+        "w": 45,
+        "h": 18,
+        "intensity": 0.5
+      },
+      {
+        "type": "water",
+        "x": 0,
+        "y": 70,
+        "w": 100,
+        "h": 30,
+        "intensity": 0.5,
+        "count": 20
+      }
+    ]
+  },
+  the_ropehouse: {
+    "image": "assets/images/scenes/the_ropehouse.jpg",
+    "subtitle": "nobody can overhear",
+    "exits": {
+      "the_great_slip": {
+        "x": 50,
+        "y": 90,
+        "icon": "↓"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The far end of the walk",
+        "x": 62,
+        "y": 36,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "dust",
+        "x": 25,
+        "y": 20,
+        "w": 50,
+        "h": 50,
+        "intensity": 0.25,
+        "count": 8
+      }
+    ]
+  },
+  the_sailmakers_loft: {
+    "image": "assets/images/scenes/the_sailmakers_loft.jpg",
+    "subtitle": "they miss nothing",
+    "exits": {
+      "the_great_slip": {
+        "x": 50,
+        "y": 90,
+        "icon": "↓"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The quay below",
+        "x": 20,
+        "y": 60,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "dust",
+        "x": 25,
+        "y": 20,
+        "w": 50,
+        "h": 50,
+        "intensity": 0.25,
+        "count": 8
+      }
+    ]
+  },
+  the_dry_dock: {
+    "image": "assets/images/scenes/the_dry_dock.jpg",
+    "subtitle": "made good by nobody's order",
+    "exits": {
+      "the_great_slip": {
+        "x": 50,
+        "y": 90,
+        "icon": "↑"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The Drennmark boat",
+        "x": 40,
+        "y": 68,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "birds",
+        "x": 40,
+        "y": 3,
+        "w": 45,
+        "h": 18,
+        "intensity": 0.5
+      }
+    ]
+  },
+  old_waer_square: {
+    "image": "assets/images/scenes/old_waer_square.jpg",
+    "subtitle": "six houses that matter",
+    "exits": {
+      "the_waer_light": {
+        "x": 14,
+        "y": 77,
+        "icon": "↑"
+      },
+      "the_cold_anchor": {
+        "x": 50,
+        "y": 77,
+        "icon": "⌂"
+      },
+      "temple_of_the_deep_mere": {
+        "x": 86,
+        "y": 77,
+        "icon": "↓"
+      },
+      "moot_yard": {
+        "x": 14,
+        "y": 90,
+        "icon": "↓"
+      },
+      "boomhead": {
+        "x": 50,
+        "y": 90,
+        "icon": "↓"
+      },
+      "the_fish_hall": {
+        "x": 86,
+        "y": 90,
+        "icon": "→"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The well",
+        "x": 48,
+        "y": 62,
+        "act": "search"
+      },
+      {
+        "label": "A family mark",
+        "x": 15,
+        "y": 72,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "birds",
+        "x": 40,
+        "y": 3,
+        "w": 45,
+        "h": 18,
+        "intensity": 0.5
+      }
+    ]
+  },
+  the_cold_anchor: {
+    "image": "assets/images/scenes/the_cold_anchor.jpg",
+    "subtitle": "Waerfolk only, in practice",
+    "exits": {
+      "old_waer_square": {
+        "x": 50,
+        "y": 90,
+        "icon": "↓"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The anchor stock",
+        "x": 68,
+        "y": 30,
+        "act": "search"
+      },
+      {
+        "label": "The oldest woman",
+        "x": 42,
+        "y": 58,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "dust",
+        "x": 25,
+        "y": 20,
+        "w": 50,
+        "h": 50,
+        "intensity": 0.25,
+        "count": 8
+      }
+    ]
+  },
+  the_fish_hall: {
+    "image": "assets/images/scenes/the_fish_hall.jpg",
+    "subtitle": "settled before noon, loudly",
+    "exits": {
+      "old_waer_square": {
+        "x": 50,
+        "y": 90,
+        "icon": "↓"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The night's catch",
+        "x": 57,
+        "y": 62,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "birds",
+        "x": 40,
+        "y": 3,
+        "w": 45,
+        "h": 18,
+        "intensity": 0.5
+      },
+      {
+        "type": "water",
+        "x": 0,
+        "y": 70,
+        "w": 100,
+        "h": 30,
+        "intensity": 0.5,
+        "count": 20
+      }
+    ]
+  },
+  temple_of_the_deep_mere: {
+    "image": "assets/images/scenes/temple_of_the_deep_mere.jpg",
+    "subtitle": "offerings are not expected back",
+    "exits": {
+      "old_waer_square": {
+        "x": 50,
+        "y": 90,
+        "icon": "↑"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The rail over the water",
+        "x": 68,
+        "y": 58,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "birds",
+        "x": 40,
+        "y": 3,
+        "w": 45,
+        "h": 18,
+        "intensity": 0.5
+      },
+      {
+        "type": "water",
+        "x": 0,
+        "y": 70,
+        "w": 100,
+        "h": 30,
+        "intensity": 0.5,
+        "count": 20
+      }
+    ]
+  },
+  the_waer_light: {
+    "image": "assets/images/scenes/the_waer_light.jpg",
+    "subtitle": "four dark nights this spring",
+    "exits": {
+      "old_waer_square": {
+        "x": 50,
+        "y": 90,
+        "icon": "↩"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The lantern",
+        "x": 43,
+        "y": 30,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "birds",
+        "x": 40,
+        "y": 3,
+        "w": 45,
+        "h": 18,
+        "intensity": 0.5
+      },
+      {
+        "type": "water",
+        "x": 0,
+        "y": 70,
+        "w": 100,
+        "h": 30,
+        "intensity": 0.5,
+        "count": 20
+      }
+    ]
+  },
+  underquay_stair: {
+    "image": "assets/images/scenes/underquay_stair.jpg",
+    "subtitle": "two tide-marks",
+    "exits": {
+      "the_great_crane": {
+        "x": 14,
+        "y": 90,
+        "icon": "↑"
+      },
+      "the_rest_cellar": {
+        "x": 50,
+        "y": 90,
+        "icon": "⌂"
+      },
+      "the_low_cellars": {
+        "x": 86,
+        "y": 90,
+        "icon": "⌂"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The new iron rings",
+        "x": 80,
+        "y": 48,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "water",
+        "x": 0,
+        "y": 72,
+        "w": 100,
+        "h": 28,
+        "intensity": 0.4,
+        "count": 14
+      },
+      {
+        "type": "drip",
+        "x": 20,
+        "y": 0,
+        "w": 60,
+        "h": 70,
+        "intensity": 0.4
+      },
+      {
+        "type": "fog",
+        "x": 0,
+        "y": 60,
+        "w": 100,
+        "h": 40,
+        "intensity": 0.25
+      }
+    ]
+  },
+  the_low_cellars: {
+    "image": "assets/images/scenes/the_low_cellars.jpg",
+    "subtitle": "what is under the tarpaulins",
+    "exits": {
+      "the_tide_gate": {
+        "x": 14,
+        "y": 90,
+        "icon": "←"
+      },
+      "the_deep_store": {
+        "x": 50,
+        "y": 90,
+        "icon": "⌂"
+      },
+      "underquay_stair": {
+        "x": 86,
+        "y": 90,
+        "icon": "↩"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "A covered stack",
+        "x": 54,
+        "y": 50,
+        "act": "search"
+      },
+      {
+        "label": "The brick plinths",
+        "x": 80,
+        "y": 72,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "water",
+        "x": 0,
+        "y": 72,
+        "w": 100,
+        "h": 28,
+        "intensity": 0.4,
+        "count": 14
+      },
+      {
+        "type": "drip",
+        "x": 20,
+        "y": 0,
+        "w": 60,
+        "h": 70,
+        "intensity": 0.4
+      },
+      {
+        "type": "fog",
+        "x": 0,
+        "y": 60,
+        "w": 100,
+        "h": 40,
+        "intensity": 0.25
+      }
+    ]
+  },
+  the_tide_gate: {
+    "image": "assets/images/scenes/the_tide_gate.jpg",
+    "subtitle": "cut exactly wide enough",
+    "exits": {
+      "the_low_cellars": {
+        "x": 25,
+        "y": 90,
+        "icon": "⌂"
+      },
+      "the_drowned_room": {
+        "x": 75,
+        "y": 90,
+        "icon": "⌂"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The cut bars",
+        "x": 68,
+        "y": 72,
+        "act": "search"
+      },
+      {
+        "label": "The crane's legs",
+        "x": 72,
+        "y": 40,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "water",
+        "x": 0,
+        "y": 72,
+        "w": 100,
+        "h": 28,
+        "intensity": 0.4,
+        "count": 14
+      },
+      {
+        "type": "drip",
+        "x": 20,
+        "y": 0,
+        "w": 60,
+        "h": 70,
+        "intensity": 0.4
+      },
+      {
+        "type": "fog",
+        "x": 0,
+        "y": 60,
+        "w": 100,
+        "h": 40,
+        "intensity": 0.25
+      }
+    ]
+  },
+  the_drowned_room: {
+    "image": "assets/images/scenes/the_drowned_room.jpg",
+    "subtitle": "a name used once a generation",
+    "exits": {
+      "the_tide_gate": {
+        "x": 50,
+        "y": 90,
+        "icon": "↩"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "Shapes on the bottom",
+        "x": 50,
+        "y": 78,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "water",
+        "x": 0,
+        "y": 72,
+        "w": 100,
+        "h": 28,
+        "intensity": 0.4,
+        "count": 14
+      },
+      {
+        "type": "drip",
+        "x": 20,
+        "y": 0,
+        "w": 60,
+        "h": 70,
+        "intensity": 0.4
+      },
+      {
+        "type": "fog",
+        "x": 0,
+        "y": 60,
+        "w": 100,
+        "h": 40,
+        "intensity": 0.25
+      }
+    ]
+  },
+  the_deep_store: {
+    "image": "assets/images/scenes/the_deep_store.jpg",
+    "subtitle": "League grain, in League sacking",
+    "exits": {
+      "the_low_cellars": {
+        "x": 50,
+        "y": 90,
+        "icon": "⌂"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The sacks",
+        "x": 60,
+        "y": 48,
+        "act": "search"
+      },
+      {
+        "label": "The air shaft",
+        "x": 50,
+        "y": 8,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "dust",
+        "x": 25,
+        "y": 20,
+        "w": 50,
+        "h": 50,
+        "intensity": 0.25,
+        "count": 8
+      }
+    ]
+  },
+  wardens_road: {
+    "image": "assets/images/scenes/wardens_road.jpg",
+    "subtitle": "a street nobody decided on",
+    "exits": {
+      "the_hallowgate": {
+        "x": 14,
+        "y": 77,
+        "icon": "↑"
+      },
+      "the_green_bough": {
+        "x": 50,
+        "y": 77,
+        "icon": "⌂"
+      },
+      "the_lazar_house": {
+        "x": 86,
+        "y": 77,
+        "icon": "↓"
+      },
+      "the_grey_hall": {
+        "x": 14,
+        "y": 90,
+        "icon": "←"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The graded ditch",
+        "x": 58,
+        "y": 72,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "birds",
+        "x": 40,
+        "y": 3,
+        "w": 45,
+        "h": 18,
+        "intensity": 0.5
+      },
+      {
+        "type": "smoke",
+        "x": 10,
+        "y": 0,
+        "w": 12,
+        "h": 20,
+        "intensity": 0.35,
+        "wind": 0.5
+      }
+    ]
+  },
+  the_grey_hall: {
+    "image": "assets/images/scenes/the_grey_hall.jpg",
+    "subtitle": "an embassy nobody received",
+    "exits": {
+      "chapel_of_the_grey_road": {
+        "x": 25,
+        "y": 90,
+        "icon": "↩"
+      },
+      "wardens_road": {
+        "x": 75,
+        "y": 90,
+        "icon": "↓"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The map of the Wyrdpines",
+        "x": 68,
+        "y": 40,
+        "act": "search"
+      },
+      {
+        "label": "The record books",
+        "x": 30,
+        "y": 52,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "dust",
+        "x": 25,
+        "y": 20,
+        "w": 50,
+        "h": 50,
+        "intensity": 0.25,
+        "count": 8
+      }
+    ]
+  },
+  chapel_of_the_grey_road: {
+    "image": "assets/images/scenes/chapel_of_the_grey_road.jpg",
+    "subtitle": "asked for a road home",
+    "exits": {
+      "the_grey_hall": {
+        "x": 50,
+        "y": 90,
+        "icon": "↩"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The painted door",
+        "x": 31,
+        "y": 40,
+        "act": "search"
+      },
+      {
+        "label": "The candles",
+        "x": 63,
+        "y": 74,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "birds",
+        "x": 40,
+        "y": 3,
+        "w": 45,
+        "h": 18,
+        "intensity": 0.5
+      }
+    ]
+  },
+  the_green_bough: {
+    "image": "assets/images/scenes/the_green_bough.jpg",
+    "subtitle": "everyone in it left somewhere",
+    "exits": {
+      "wardens_road": {
+        "x": 50,
+        "y": 90,
+        "icon": "↓"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The green bough",
+        "x": 58,
+        "y": 30,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "dust",
+        "x": 25,
+        "y": 20,
+        "w": 50,
+        "h": 50,
+        "intensity": 0.25,
+        "count": 8
+      }
+    ]
+  },
+  the_lazar_house: {
+    "image": "assets/images/scenes/the_lazar_house.jpg",
+    "subtitle": "not sure what with",
+    "exits": {
+      "wardens_road": {
+        "x": 50,
+        "y": 90,
+        "icon": "↩"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The long room",
+        "x": 50,
+        "y": 50,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "dust",
+        "x": 25,
+        "y": 20,
+        "w": 50,
+        "h": 50,
+        "intensity": 0.25,
+        "count": 8
+      }
+    ]
   }
 };
