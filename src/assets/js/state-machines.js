@@ -337,6 +337,48 @@
             }
         ],
         "notes": "Sub-views (scene / map / first-person, sheet and camp overlays, spell aiming) are audited in docs/STATE_MACHINES_AUDIT.md and left implicit for now."
+    },
+    "trap_state": {
+        "name": "trap_state",
+        "title": "Trap state (per party, per trap)",
+        "storage": "world_flags[DelveEngine::trapFlag(key)] / furnishingTrapFlag(key): unset | 'found' | 'sprung'",
+        "initial": "hidden",
+        "states": {
+            "hidden": "Not yet noticed. No world_flags row.",
+            "found": "Spotted, by a passive look on the way in or by Search. Can be disarmed.",
+            "sprung": "Spent: disarmed, or set off on somebody. Never fires again."
+        },
+        "terminal": [
+            "sprung"
+        ],
+        "transitions": [
+            {
+                "from": "hidden",
+                "event": "spot",
+                "to": "found"
+            },
+            {
+                "from": "found",
+                "event": "spot",
+                "to": "found"
+            },
+            {
+                "from": "hidden",
+                "event": "fire",
+                "to": "sprung"
+            },
+            {
+                "from": "found",
+                "event": "fire",
+                "to": "sprung"
+            },
+            {
+                "from": "found",
+                "event": "disarm",
+                "to": "sprung"
+            }
+        ],
+        "notes": "Disarming needs the trap found first (DoorEngine/FurnishingEngine::disarm refuse otherwise). Disarmed is stored as `sprung` for back-compat with existing saves."
     }
 };
   const S = {};

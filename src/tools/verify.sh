@@ -134,6 +134,7 @@ if [ "$PHP_MODE" != none ]; then
     run "test_quest_marks"    phprun test_quest_marks.php
     run "test_companions"     phprun test_companions.php
     run "test_state_machines" phprun test_state_machines.php
+    run "test_trap_state"     phprun test_trap_state.php
     # These 20 harnesses existed but verify.sh never ran them (all passed on
     # main, 9 Nov 2026). test_smite was ~7% flaky until its hit was scripted.
     run "test_smite"          phprun test_smite.php

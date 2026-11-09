@@ -579,3 +579,82 @@ Sub-views (scene / map / first-person, sheet and camp overlays, spell aiming) ar
 
 </details>
 
+## Trap state (per party, per trap) (`trap_state`)
+
+Stored in: world_flags[DelveEngine::trapFlag(key)] / furnishingTrapFlag(key): unset | 'found' | 'sprung'
+
+```mermaid
+stateDiagram-v2
+    [*] --> hidden
+    hidden --> found : spot
+    found --> found : spot
+    hidden --> sprung : fire
+    found --> sprung : fire / disarm
+    sprung --> [*]
+```
+
+| State | Meaning |
+|---|---|
+| `hidden` (initial) | Not yet noticed. No world_flags row. |
+| `found` | Spotted, by a passive look on the way in or by Search. Can be disarmed. |
+| `sprung` (terminal) | Spent: disarmed, or set off on somebody. Never fires again. |
+
+| From | Event | To |
+|---|---|---|
+| `hidden` | spot | `found` |
+| `found` | spot | `found` |
+| `hidden` | fire | `sprung` |
+| `found` | fire | `sprung` |
+| `found` | disarm | `sprung` |
+
+Disarming needs the trap found first (DoorEngine/FurnishingEngine::disarm refuse otherwise). Disarmed is stored as `sprung` for back-compat with existing saves.
+
+<details><summary>JSON</summary>
+
+```json
+{
+    "name": "trap_state",
+    "title": "Trap state (per party, per trap)",
+    "storage": "world_flags[DelveEngine::trapFlag(key)] / furnishingTrapFlag(key): unset | 'found' | 'sprung'",
+    "initial": "hidden",
+    "states": {
+        "hidden": "Not yet noticed. No world_flags row.",
+        "found": "Spotted, by a passive look on the way in or by Search. Can be disarmed.",
+        "sprung": "Spent: disarmed, or set off on somebody. Never fires again."
+    },
+    "terminal": [
+        "sprung"
+    ],
+    "transitions": [
+        {
+            "from": "hidden",
+            "event": "spot",
+            "to": "found"
+        },
+        {
+            "from": "found",
+            "event": "spot",
+            "to": "found"
+        },
+        {
+            "from": "hidden",
+            "event": "fire",
+            "to": "sprung"
+        },
+        {
+            "from": "found",
+            "event": "fire",
+            "to": "sprung"
+        },
+        {
+            "from": "found",
+            "event": "disarm",
+            "to": "sprung"
+        }
+    ],
+    "notes": "Disarming needs the trap found first (DoorEngine/FurnishingEngine::disarm refuse otherwise). Disarmed is stored as `sprung` for back-compat with existing saves."
+}
+```
+
+</details>
+

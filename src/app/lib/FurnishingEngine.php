@@ -224,7 +224,7 @@ final class FurnishingEngine
             return ['ok' => true, 'found' => true, 'messages' => $messages];
         }
         if ($total >= (int) $furn['trap']['dc']) {
-            $world->set($partyId, $flag, 'found');
+            TrapState::apply($world, $partyId, $flag, 'spot');
             $messages[] = (string) ($furn['trap']['found_text']
                 ?? 'There is something in it: ' . $furn['trap']['name'] . '.');
             return ['ok' => true, 'found' => true, 'messages' => $messages];
@@ -376,10 +376,10 @@ final class FurnishingEngine
 
         $events = [];
         if ($ok) {
-            $world->set($partyId, $flag, 'sprung');   // spent: it can never fire
+            TrapState::apply($world, $partyId, $flag, 'disarm');   // spent: it can never fire
             $messages = ['The mechanism comes out from under the lid in one piece. It will not trouble anyone again.'];
         } elseif ($sprung) {
-            $world->set($partyId, $flag, 'sprung');
+            TrapState::apply($world, $partyId, $flag, 'fire');
             $messages = ['Your hand slips, and it answers.'];
             $victim = $this->victimFor($result, $partyId);
             $trap = $found['furnishing']['trap'] ?? null;
@@ -419,9 +419,9 @@ final class FurnishingEngine
         $trap = $furn['trap'] ?? null;
 
         if (!empty($furn['trapped']) && is_array($trap)
-            && $world->get($partyId, $trapFlag) !== 'sprung') {
+            && !TrapState::isSpent($world, $partyId, $trapFlag)) {
             $sprung = true;
-            $world->set($partyId, $trapFlag, 'sprung');
+            TrapState::apply($world, $partyId, $trapFlag, 'fire');
             $events[] = (new LocationEngine($this->db))->fireTrapOn($partyId, $trap, $char);
         }
 

@@ -171,7 +171,7 @@ final class DoorEngine
             return ['ok' => true, 'found' => true, 'messages' => $messages];
         }
         if ($total >= (int) $trap['dc']) {
-            $world->set($partyId, $flag, 'found');
+            TrapState::apply($world, $partyId, $flag, 'spot');
             $messages[] = $trap['found_text'] ?? "There is something in it: {$trap['name']}.";
             return ['ok' => true, 'found' => true, 'messages' => $messages];
         }
@@ -230,10 +230,10 @@ final class DoorEngine
 
         $events = [];
         if ($ok) {
-            $world->set($partyId, $flag, 'sprung');   // spent: it can never fire
+            TrapState::apply($world, $partyId, $flag, 'disarm');   // spent: it can never fire
             $messages = ['The mechanism comes out of the frame in one piece. It will not trouble anyone again.'];
         } elseif ($sprung) {
-            $world->set($partyId, $flag, 'sprung');
+            TrapState::apply($world, $partyId, $flag, 'fire');
             $messages = ['Your hand slips, and the door answers.'];
             // And it actually goes off, on the person who had their hands in
             // it — not on a random walker, the way walking into one picks its

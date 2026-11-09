@@ -362,6 +362,45 @@ def flag_ledger(tree, effects, conditions):
     return setters, readers
 
 
+def flag_values_set(effects, setters):
+    """
+    flag -> set of values content writes, or None when some writer's value is
+    not knowable from content (engine flags, increment_flag).
+    """
+    values = defaultdict(set)
+    opaque = set()
+    for eff, (_where, _live) in effects:
+        if isinstance(eff.get("set_flag"), str):
+            values[eff["set_flag"]].add(str(eff.get("value", "1")))
+        if isinstance(eff.get("increment_flag"), str):
+            opaque.add(eff["increment_flag"])
+    for flag, rows in setters.items():
+        for _where, _live, how in rows:
+            if how in ("victory_flag", "defeat_flag"):
+                values[flag].add("1")
+            elif how == "engine":
+                opaque.add(flag)
+    return {f: (None if f in opaque else v) for f, v in values.items()}
+
+
+def flag_value_problems(effects, conditions, setters):
+    """flag -> {value read: (times read, values set)} for reads no write can satisfy."""
+    known = flag_values_set(effects, setters)
+    out = defaultdict(dict)
+    for cond, (_where, _live) in conditions:
+        flag = cond.get("flag")
+        if not isinstance(flag, str) or "equals" not in cond:
+            continue
+        vals = known.get(flag)
+        if not vals:          # never set (reported above) or opaque
+            continue
+        want = str(cond["equals"])
+        if want not in vals:
+            n, _ = out[flag].get(want, (0, vals))
+            out[flag][want] = (n + 1, vals)
+    return out
+
+
 # ---------------------------------------------------------------------------
 # Openings
 # ---------------------------------------------------------------------------
@@ -880,6 +919,20 @@ def main():
         if not r and flag not in private:
             rep.find("flag", f"{flag!r} is set in {len(s)} place(s) and read nowhere — "
                              f"nothing in the act changes because of it")
+
+    # --- flag values (audit #7) -------------------------------------------
+    # A condition `{"flag": k, "equals": v}` can only ever be true if some
+    # set_flag writes exactly v to k. A typo ("burnt" for "burned") is silent:
+    # the variant just never wins. Checked only for flags whose every writer
+    # is a set_flag (value, default "1") or an encounter's victory/defeat
+    # flag ("1"); a flag the engine writes or increments has values content
+    # cannot see, so it is left alone.
+    for flag, cv in sorted(flag_value_problems(effects, conditions, setters).items()):
+        for value, (count, known) in sorted(cv.items()):
+            rep.find("flag_value",
+                     f"{flag!r} is read as equals {value!r} in {count} place(s) but only ever set to "
+                     + ", ".join(repr(k) for k in sorted(known))
+                     + " — that variant can never be chosen")
 
     # --- openings ---------------------------------------------------------
     openings(tree, rep, full or args.openings)
