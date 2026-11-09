@@ -4,7 +4,6 @@
 flag: 'black_pools_cleared' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'broken_floor_held' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'broken_floor_shored' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
-flag: 'children_fate' is set in 3 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'commons_question_raised' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'corse_declined_one' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'corse_doubts_the_dig' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
@@ -25,7 +24,6 @@ flag: 'fen_draining' is set in 1 place(s) and read nowhere — nothing in the ac
 flag: 'fen_road_closing' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'fen_road_known' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'fen_road_open_paid' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
-flag: 'fen_root_fate' is set in 3 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'fen_trade_on_paper' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'fen_water_rising' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'floats_fate' is set in 3 place(s) and read nowhere — nothing in the act changes because of it
@@ -83,7 +81,6 @@ flag: 'oldcity_trove' is set in 2 place(s) and read nowhere — nothing in the a
 flag: 'petch_decided' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'pit_closed' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'pit_gate_beaten' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
-flag: 'plate_fate' is set in 3 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'pool_dead_named' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'priory_account_accepted' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'priory_paper_kept' is set in 2 place(s) and read nowhere — nothing in the act changes because of it
@@ -123,39 +120,13 @@ flag: 'warren_numbers_known' is set in 2 place(s) and read nowhere — nothing i
 flag: 'watch_beaten' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'watch_sandbox' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'writ_changed_hands' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
-opening: children_fate: no dialogue greeting reads 'fed', 'moved', 'told' (0 of 3 values are read) — the ending happens and nobody looks up
-opening: fen_root_fate: no dialogue greeting reads 'cut', 'paid', 'season' (0 of 3 values are read) — the ending happens and nobody looks up
 opening: floats_fate: no dialogue greeting reads 'buried', 'left', 'named' (0 of 3 values are read) — the ending happens and nobody looks up
 opening: ford_fate: no dialogue greeting reads 'left', 'named' (1 of 3 values are read) — the ending happens and nobody looks up
-opening: fp_watch_cousin/note: no dialogue greeting reacts to this ending
-opening: fp_watch_crate/returned: no dialogue greeting reacts to this ending
-opening: fp_watch_name/read: no dialogue greeting reacts to this ending
-opening: fp_watch_shrine/seen: no dialogue greeting reacts to this ending
-opening: fp_watch_wine/bottled: no dialogue greeting reacts to this ending
 opening: harrow_fate: no dialogue greeting reads 'brokered', 'sold' (1 of 3 values are read) — the ending happens and nobody looks up
-opening: jimmy_able: finishing jimmy_the_ninth_man as 'kept_it_quiet' does not change how they greet the party — their own opening never reads it
-opening: jimmy_able: finishing jimmy_the_ninth_man as 'made_him_say_it' does not change how they greet the party — their own opening never reads it
-opening: jimmy_able: finishing jimmy_the_ninth_man as 'told_them_myself' does not change how they greet the party — their own opening never reads it
-opening: jimmy_fate: no dialogue greeting reads 'confessed', 'exposed', 'quiet' (0 of 3 values are read) — the ending happens and nobody looks up
-opening: jimmy_the_ninth_man/kept_it_quiet: no dialogue greeting reacts to this ending — a greeting could read {"flag": "jimmy_fate", "equals": "quiet"}
-opening: jimmy_the_ninth_man/made_him_say_it: no dialogue greeting reacts to this ending — a greeting could read {"flag": "jimmy_fate", "equals": "confessed"}
-opening: jimmy_the_ninth_man/told_them_myself: no dialogue greeting reacts to this ending — a greeting could read {"flag": "jimmy_fate", "equals": "exposed"}
 opening: mill_fate: no dialogue greeting reads 'cause', 'left', 'shelter' (0 of 3 values are read) — the ending happens and nobody looks up
 opening: miller_fate: no dialogue greeting reads 'in' (2 of 3 values are read) — the ending happens and nobody looks up
-opening: nakkas_plate/let_it_be: no dialogue greeting reacts to this ending — a greeting could read {"flag": "plate_fate", "equals": "unasked"}
-opening: nakkas_plate/she_took_it_off: no dialogue greeting reacts to this ending — a greeting could read {"flag": "plate_fate", "equals": "given"} or {"flag": "mark_seen_plate", "equals": "1"}
-opening: nakkas_plate/traced_the_crate: no dialogue greeting reacts to this ending — a greeting could read {"flag": "plate_fate", "equals": "traced"} or {"flag": "mark_seen_plate", "equals": "1"} or {"flag": "crate_came_downriver", "equals": "1"}
 opening: pit_fate: no dialogue greeting reads 'belt' (2 of 3 values are read) — the ending happens and nobody looks up
-opening: plate_fate: no dialogue greeting reads 'given', 'traced', 'unasked' (0 of 3 values are read) — the ending happens and nobody looks up
 opening: priory_fate: no dialogue greeting reads 'unentered' (2 of 3 values are read) — the ending happens and nobody looks up
 opening: quarry_writ_fate: no dialogue greeting reads 'filed', 'sold', 'stone' (0 of 3 values are read) — the ending happens and nobody looks up
 opening: reliquary_fate: no dialogue greeting reads 'paper', 'sold' (1 of 3 values are read) — the ending happens and nobody looks up
 opening: sealed_arch_fate: no dialogue greeting reads 'left' (2 of 3 values are read) — the ending happens and nobody looks up
-opening: the_bottom_of_the_warren/let_it_go: no dialogue greeting reacts to this ending — a greeting could read {"flag": "warren_floor_fate", "equals": "abandoned"} or {"flag": "deepworks_found", "equals": "1"}
-opening: the_bottom_of_the_warren/shored_it: no dialogue greeting reacts to this ending — a greeting could read {"flag": "warren_floor_fate", "equals": "shored"} or {"flag": "deepworks_found", "equals": "1"} or {"flag": "broken_floor_shored", "equals": "1"}
-opening: the_bottom_of_the_warren/sounded_the_floor: no dialogue greeting reacts to this ending — a greeting could read {"flag": "warren_floor_fate", "equals": "sounded"} or {"flag": "deepworks_found", "equals": "1"} or {"flag": "deep_known", "equals": "1"}
-opening: the_warrens_children/fed_them_through: no dialogue greeting reacts to this ending — a greeting could read {"flag": "children_fate", "equals": "fed"} or {"flag": "warren_fed", "equals": "1"}
-opening: the_warrens_children/moved_them_north: no dialogue greeting reacts to this ending — a greeting could read {"flag": "children_fate", "equals": "moved"} or {"flag": "north_ford_open", "equals": "1"}
-opening: the_warrens_children/told_the_watch: no dialogue greeting reacts to this ending — a greeting could read {"flag": "children_fate", "equals": "told"} or {"flag": "warren_nests_known_to_watch", "equals": "1"}
-opening: warren_floor_fate: no dialogue greeting reads 'abandoned', 'shored', 'sounded' (0 of 3 values are read) — the ending happens and nobody looks up
-quest: fen_root: no start_quest effect anywhere enters it

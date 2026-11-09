@@ -74,6 +74,150 @@
             {
                 "conditions": [
                     {
+                        "flag": "plate_fate",
+                        "equals": "given"
+                    }
+                ],
+                "once": true,
+                "text": "Nakka Skarn has the left pauldron back on, and the straps have been let out a hole, which you notice because she wants you to. \"Plumb-line and a square,\" she says. \"I asked the old ones. None of them know it. One of them said it looked like a thing that measures, and I said yes, and she said then it was put there by somebody who measures, and that was the end of what anyone knew.\" She taps the plate. \"I'm keeping it. It fits better than it did.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "plate_fate",
+                        "equals": "traced"
+                    }
+                ],
+                "once": true,
+                "text": "\"A river landing that isn't yours,\" Nakka says, before you have said anything, because one of hers has told her where you went asking. \"And two men who stopped talking.\" She turns the helm in her hands. \"I didn't know the crate was a road. I thought it was a gift. Somebody said it was a gift.\" The slate on the wall has today's mark on it. \"I'll know the next one.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "plate_fate",
+                        "equals": "unasked"
+                    }
+                ],
+                "once": true,
+                "text": "Nakka looks at you a moment longer than she needs to, the way she did when you let the plate be. \"Most people from the valley ask,\" she says. \"Then they tell me what they think the answer is. You didn't.\" She sets the helm down on the slate-table. \"I've not decided yet whether that was manners.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "warren_floor_fate",
+                        "equals": "sounded"
+                    }
+                ],
+                "once": true,
+                "text": "\"Swept,\" Nakka says. \"You said the stair was swept.\" She has clearly been saying it to herself. \"Nobody sweeps a stair they don't use. My lot have been going down the rope since you came up, one at a time, as far as the landing and no further. The air's warm. It smells of lamps.\" She makes a mark on the slate that is not a day. \"I've told them it's not ours. I'm not sure that's true any more.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "warren_floor_fate",
+                        "equals": "shored"
+                    }
+                ],
+                "once": true,
+                "text": "The props you set are still there, and somebody has chalked a small neat tally on the third one, which you work out is the number of days the gallery has held. \"Winter,\" Nakka says, and that is the whole of her thanks, and it is a great deal. \"Nothing's come up. The rope's on our side.\" She looks at the floor as if she can see through it. \"Something's still down there. I'd rather it stayed down there with the rope on our side.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "warren_floor_fate",
+                        "equals": "abandoned"
+                    }
+                ],
+                "once": true,
+                "text": "Nakka is counting days on the slate when you come in, as she was when you left. \"The edge was cut square,\" she says, without turning round. \"You told me. I've been thinking about square edges.\" She makes the day's mark. \"Nothing falls square. I said that. I'll say it to whoever comes up the hole, if anybody does.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "children_fate",
+                        "equals": "moved"
+                    }
+                ],
+                "once": true,
+                "text": "\"A hundred and ten,\" Nakka says. \"Over the north ford in three nights, and none of them in the water, and none of them seen.\" She has not sat down since you came in and does not now. \"I didn't thank anybody. I'm not going to.\" A pause. \"Some of mine went with them. They send word back by the drovers' road. It's mostly about the cold. It's the best news I've had in four years.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "children_fate",
+                        "equals": "fed"
+                    }
+                ],
+                "once": true,
+                "text": "There is a sack of pease by the hall door with the Rivermark miller's mark on it, and nobody has hidden it. \"Your town thinks you're feeding an army,\" Nakka says. \"You're feeding a nursery. I've told them that at the gate. They don't hear it.\" She looks at the sack. \"Spring, the same problem. Bigger. You know that.\" Then, gruffly: \"They're fat. Fatter. I'd not seen it before.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "children_fate",
+                        "equals": "told"
+                    }
+                ],
+                "once": true,
+                "text": "Nakka knows. You can tell from the bugbear at the door, who does not move out of your way until she says so. \"You gave the captain the galleries,\" she says. \"Both columns. You were certain about the second, I hear.\" She does not raise her voice. \"She hasn't come. She's got it, and she'll have it in the spring.\" She lets that sit. \"So will I. Remember that I know you did it.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "quarry_fate",
                         "equals": "pact"
                     }

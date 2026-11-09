@@ -4,6 +4,90 @@
     "nodes": {
         "hail": [
             {
+                "conditions": [
+                    {
+                        "flag": "jimmy_fate",
+                        "equals": "confessed"
+                    },
+                    {
+                        "not": {
+                            "companion": "jimmy_able",
+                            "status": "active"
+                        }
+                    },
+                    {
+                        "not": {
+                            "companion": "jimmy_able",
+                            "status": "camp"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "Jimmy is in the chair in the doorway, as always, but sitting forward in it, which is new. \"Seven,\" he says, before you ask. \"The gang. Seven now. Two went that night and I don't blame them.\" He turns his hand over. \"Turns out you can say the true thing and go on sitting in the same chair. Nobody told me that. Eleven years I'd have liked to know it.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "jimmy_fate",
+                        "equals": "quiet"
+                    },
+                    {
+                        "not": {
+                            "companion": "jimmy_able",
+                            "status": "active"
+                        }
+                    },
+                    {
+                        "not": {
+                            "companion": "jimmy_able",
+                            "status": "camp"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"Still breathing,\" Jimmy says, easily, and then the ease goes out of it for a moment and you both know why. \"Still nine,\" he adds. \"Thanks to you.\" He says it lightly. It is the least light thing you have ever heard him say.",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "jimmy_fate",
+                        "equals": "exposed"
+                    },
+                    {
+                        "not": {
+                            "companion": "jimmy_able",
+                            "status": "active"
+                        }
+                    },
+                    {
+                        "not": {
+                            "companion": "jimmy_able",
+                            "status": "camp"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "The chair in the doorway has somebody else in it now, one of the eight, who watches you come in and does not get up. Jimmy is further back, against the wall, with no coat on. He looks at you and does not say anything at all, which for Jimmy Able is the loudest thing in the block.",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
                 "once": true,
                 "text": "The block has one way in and a man sitting comfortably in it, which is not an accident. He has a good coat, a better knife laid across his knee where you can see it, and he stands up as if you were expected.\n\n\"Jimmy Able,\" he says, and does not offer a hand. \"You'll be the ones the Watch let through the door. That's fine. We're all down here for the same three reasons and none of them is each other.\"",
                 "choices": [

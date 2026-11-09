@@ -4,7 +4,42 @@
         "hail": [
             {
                 "conditions": [
-                    { "quest": "fp_watch_stayed", "status": "completed" }
+                    {
+                        "quest": "fp_watch_name",
+                        "resolution": "read"
+                    }
+                ],
+                "once": true,
+                "text": "\"Calder,\" Hessa says, when you come to the counter. \"Twice. I knew.\" She writes something on the slate and rubs it out. \"Knowing it and having it read where it was cut aren't the same. Now they're both true.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "fp_watch_shrine",
+                        "resolution": "seen"
+                    }
+                ],
+                "once": true,
+                "text": "\"Slept through,\" Hessa says. \"First time in a month, the whole house.\" She does not say thank you. She pushes the bed-key across the counter without asking for the coin, which is the same thing.",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "fp_watch_stayed",
+                        "status": "completed"
+                    }
                 ],
                 "text": "She has already heard. She does not look surprised.\n\n\"This house is the last watch. We stopped saying it because saying it didn't keep anyone. Now you've seen why.\"\n\nShe wipes the counter. \"Bed's still three.\"",
                 "choices": [
@@ -20,8 +55,13 @@
             },
             {
                 "conditions": [
-                    { "quest": "fp_watch_stayed", "status": "active" },
-                    { "flag": "watch_done:fp_watch_stayed" }
+                    {
+                        "quest": "fp_watch_stayed",
+                        "status": "active"
+                    },
+                    {
+                        "flag": "watch_done:fp_watch_stayed"
+                    }
                 ],
                 "text": "\"You found him. Talk to Brenna. She asked. I keep the slate.\"\n\nA pause.\n\n\"Tell her the watch held. She already knows. She needs to hear it anyway.\"",
                 "choices": [
@@ -33,15 +73,25 @@
             },
             {
                 "conditions": [
-                    { "quest": "fp_watch_name", "status": "active" },
-                    { "flag": "watch_done:fp_watch_name" }
+                    {
+                        "quest": "fp_watch_name",
+                        "status": "active"
+                    },
+                    {
+                        "flag": "watch_done:fp_watch_name"
+                    }
                 ],
                 "text": "\"You read it.\"\n\nShe does not ask what it said.\n\n\"That's all I wanted. A name that came up should be read where it was cut.\"",
                 "choices": [
                     {
                         "label": "It said Calder.",
                         "effects": [
-                            { "quest_stage": { "quest": "fp_watch_name", "stage": "returned" } }
+                            {
+                                "quest_stage": {
+                                    "quest": "fp_watch_name",
+                                    "stage": "returned"
+                                }
+                            }
                         ],
                         "next": "name_done"
                     },
@@ -53,15 +103,25 @@
             },
             {
                 "conditions": [
-                    { "quest": "fp_watch_shrine", "status": "active" },
-                    { "flag": "watch_done:fp_watch_shrine" }
+                    {
+                        "quest": "fp_watch_shrine",
+                        "status": "active"
+                    },
+                    {
+                        "flag": "watch_done:fp_watch_shrine"
+                    }
                 ],
                 "text": "\"You stood in it. I can tell. The floor's been quieter since you came up.\"",
                 "choices": [
                     {
                         "label": "It's done.",
                         "effects": [
-                            { "quest_stage": { "quest": "fp_watch_shrine", "stage": "returned" } }
+                            {
+                                "quest_stage": {
+                                    "quest": "fp_watch_shrine",
+                                    "stage": "returned"
+                                }
+                            }
                         ],
                         "next": "shrine_done"
                     },
@@ -73,10 +133,18 @@
             },
             {
                 "conditions": [
-                    { "any": [
-                        { "quest": "fp_watch_shrine", "status": "active" },
-                        { "quest": "fp_watch_name", "status": "active" }
-                    ] }
+                    {
+                        "any": [
+                            {
+                                "quest": "fp_watch_shrine",
+                                "status": "active"
+                            },
+                            {
+                                "quest": "fp_watch_name",
+                                "status": "active"
+                            }
+                        ]
+                    }
                 ],
                 "text": "\"Arch at the far end of the sand. That's the job. I don't need a report until you've been.\"",
                 "choices": [
@@ -96,16 +164,30 @@
                     {
                         "label": "Anything I can take on?",
                         "conditions": [
-                            { "quest": "fp_watch_cousin", "status": "completed" },
-                            { "not": { "quest": "fp_watch_shrine" } }
+                            {
+                                "quest": "fp_watch_cousin",
+                                "status": "completed"
+                            },
+                            {
+                                "not": {
+                                    "quest": "fp_watch_shrine"
+                                }
+                            }
                         ],
                         "next": "notice_shrine"
                     },
                     {
                         "label": "Anything I can take on?",
                         "conditions": [
-                            { "quest": "fp_watch_wine", "status": "completed" },
-                            { "not": { "quest": "fp_watch_name" } }
+                            {
+                                "quest": "fp_watch_wine",
+                                "status": "completed"
+                            },
+                            {
+                                "not": {
+                                    "quest": "fp_watch_name"
+                                }
+                            }
                         ],
                         "next": "notice_name"
                     },
@@ -130,7 +212,11 @@
                 "choices": [
                     {
                         "label": "I'll see to it.",
-                        "effects": [ { "start_quest": "fp_watch_shrine" } ],
+                        "effects": [
+                            {
+                                "start_quest": "fp_watch_shrine"
+                            }
+                        ],
                         "next": "shrine_taken"
                     },
                     {
@@ -168,7 +254,11 @@
                 "choices": [
                     {
                         "label": "I'll read it.",
-                        "effects": [ { "start_quest": "fp_watch_name" } ],
+                        "effects": [
+                            {
+                                "start_quest": "fp_watch_name"
+                            }
+                        ],
                         "next": "name_taken"
                     },
                     {
