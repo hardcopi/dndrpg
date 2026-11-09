@@ -588,3 +588,96 @@ body.game-page .loc-inner.is-chart .loc-foot .loc-ways { margin: 0; padding: 0; 
   body.game-page:not(.in-combat) .loc-inner.is-chart.has-dock.has-ways .loc-ways { align-self: stretch; }
   body.game-page:not(.in-combat) .loc-inner.is-chart .loc-read .loc-prose p { font-size: 16px; line-height: 1.28; }
 }
+
+/* Phone (<=600px): the party and the six verbs live in a dock pinned to the
+   bottom of the screen, so they are always in reach without scrolling past
+   the painting and the prose. At 390px the rail used to start at y=969 of an
+   844px screen: neither the party nor a single verb was visible on arrival.
+   The dock is two short rows: a strip of party faces with their HP, then the
+   six verbs as icon-over-label buttons. The rest of the rail (Tasks / Log /
+   People) stays in the page flow under the scene. Not in a fight: the board
+   draws its own controls. */
+@media (max-width: 600px) {
+  body.game-page:not(.in-combat) { --dock-h: 128px; }
+  body.game-page:not(.in-combat) .gw-window { padding-bottom: calc(var(--dock-h) + env(safe-area-inset-bottom, 0px)); }
+  body.game-page:not(.in-combat) .rail-right .rail-party,
+  body.game-page:not(.in-combat) .rail-right .gw-actions {
+    position: fixed; left: 0; right: 0; z-index: 60; margin: 0;
+    background: linear-gradient(#2a1d31, #1d1423); border: 0; border-radius: 0;
+  }
+  body.game-page:not(.in-combat) .rail-right .gw-actions {
+    bottom: 0; padding: 4px 6px calc(5px + env(safe-area-inset-bottom, 0px));
+    box-shadow: none;
+  }
+  body.game-page:not(.in-combat) .rail-right .rail-party {
+    bottom: calc(60px + env(safe-area-inset-bottom, 0px)); height: 66px;
+    padding: 6px 6px 2px; border-top: 2px solid #a8742a;
+    box-shadow: 0 -6px 14px rgba(0,0,0,.45);
+  }
+  body.game-page:not(.in-combat) .rail-right .rail-party .rail-pane-head,
+  body.game-page:not(.in-combat) .rail-right .gw-actions .rail-pane-head { display: none; }
+  body.game-page:not(.in-combat) .rail-right .hud-party {
+    display: flex; flex-direction: row; flex-wrap: nowrap; gap: 6px;
+    overflow-x: auto; overflow-y: hidden; scrollbar-width: none; height: 100%;
+  }
+  body.game-page:not(.in-combat) .rail-right .hud-party .party-card {
+    flex: 0 0 auto; display: grid; grid-template-columns: 34px auto; grid-template-rows: auto auto;
+    column-gap: 6px; row-gap: 3px; align-items: center; align-content: center;
+    min-width: 0; width: auto; max-width: 150px; height: 52px; padding: 2px 8px 2px 3px; text-align: left; overflow: hidden;
+  }
+  body.game-page:not(.in-combat) .rail-right .hud-party .party-face { grid-row: 1 / span 2; width: 34px; height: 34px; margin: 0; }
+  body.game-page:not(.in-combat) .rail-right .hud-party .party-name {
+    font-size: 12px; line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 96px;
+  }
+  body.game-page:not(.in-combat) .rail-right .hud-party .hp-bar { grid-column: 2; width: 72px; margin: 0; }
+  body.game-page:not(.in-combat) .rail-right .hud-party .party-class,
+  body.game-page:not(.in-combat) .rail-right .hud-party .rail-xp,
+  body.game-page:not(.in-combat) .rail-right .hud-party .party-stats { display: none; }
+  body.game-page:not(.in-combat) .rail-right .hud-party .cond-pips { position: absolute; top: 2px; right: 3px; }
+  body.game-page:not(.in-combat) .rail-right .hud-party .party-card { position: relative; }
+  body.game-page:not(.in-combat) .rail-right .hud-party .party-add { grid-template-columns: auto; justify-items: center; font-size: 11px; padding: 3px 10px; }
+  body.game-page:not(.in-combat) .rail-right .gw-actions .action-bar {
+    display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 4px;
+  }
+  body.game-page:not(.in-combat) .rail-right .gw-actions .action-btn {
+    flex-direction: column; justify-content: center; gap: 2px;
+    min-height: 50px; height: 50px; padding: 4px 1px; font-size: 9.5px; letter-spacing: -.2px; line-height: 1;
+  }
+  body.game-page:not(.in-combat) .rail-right .gw-actions .action-btn .act-icon { width: 20px; height: 20px; margin: 0; }
+  body.game-page:not(.in-combat) .rail-right .gw-actions .action-btn span {
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%;
+  }
+  body.game-page:not(.in-combat) .rail-right .gw-actions .action-btn kbd,
+  body.game-page:not(.in-combat) .rail-right .gw-actions .action-btn .key-hint { display: none; }
+}
+
+/* Phone (<=600px) in a fight: the board was a ~270px strip under a 123px
+   initiative block and an empty "Conditions" box, with the zoom buttons laid
+   over its top row, and every verb was a full-width two-line card, so Attack
+   and End turn were never on screen together. Here: the initiative is one
+   scrolling row, the effects box hides while nothing is on anyone, the board
+   gets more of the screen, the zoom buttons shrink into its bottom corner, and
+   the verbs are a two-column grid of name-only buttons (the description is
+   still the button's tooltip and its aria-label). */
+@media (max-width: 600px) {
+  body.in-combat .cbt-board-fx:has(.cbt-fx-empty) { display: none; }
+  body.in-combat .cbt-init { padding-bottom: 4px; }
+  body.in-combat .cbt-init-list { display: flex; flex-wrap: nowrap; gap: 6px; overflow-x: auto; scrollbar-width: none; }
+  body.in-combat .cbt-init-list .cbt-card { flex: 0 0 auto; width: auto; min-width: 150px; min-height: 0; padding: 4px 8px; }
+  /* The 16x12 board is contained by width, so a row taller than ~0.8 of the
+     width is empty space; size the row to the board. */
+  body.in-combat .cbt-field { grid-template-rows: auto calc((100vw - 16px) * .8) auto; }
+  /* There is no hover on a phone, so the cluster's quiet 45% never lifted. */
+  body.in-combat .map-zoom.bm-zoom {
+    top: auto; bottom: 2px; right: 2px; left: auto;
+    transform: scale(.7); transform-origin: bottom right; opacity: .92;
+  }
+  body.in-combat .cbt-panel { position: static; }
+  body.in-combat .cbt-actions.is-stack .cbt-act-group {
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px;
+  }
+  body.in-combat .cbt-actions.is-stack .cbt-act-label { grid-column: 1 / -1; margin: 6px 0 0; }
+  body.in-combat .cbt-actions.is-stack .act-slot { min-height: 46px; padding: 6px 8px; margin: 0; }
+  body.in-combat .cbt-actions.is-stack .act-slot .act-desc { display: none; }
+  body.in-combat .cbt-actions.is-stack .act-slot .act-name { font-size: 14px; }
+}
