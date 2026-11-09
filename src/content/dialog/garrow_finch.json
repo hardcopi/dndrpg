@@ -125,6 +125,86 @@
             {
                 "conditions": [
                     {
+                        "flag": "meeting_fate",
+                        "equals": "costed"
+                    }
+                ],
+                "once": true,
+                "text": "\"Held,\" Finch says, before you have sat down, and turns his cup a quarter. \"Granary Row and the Steps, for a quarter. Half the paper in my book is on those two streets.\" He considers it. \"In my trade a held debt is still a debt. It simply waits, and while it waits it grows. I would not want you to think you had done anybody on Granary Row a kindness. You have done them a quarter. That is not nothing. It is a quarter.\"",
+                "choices": [
+                    {
+                        "label": "Whose debt?",
+                        "next": "the_paper"
+                    },
+                    {
+                        "label": "Not interested.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "minuted"
+                    }
+                ],
+                "once": true,
+                "text": "\"You entered an objection,\" Finch says. \"I heard. It is a very small room, downriver, and very little gets out of it, so that was quick.\" He drinks. \"I have collected on objections, you know. Years after. They keep beautifully. Nobody ever thinks to throw one away.\"",
+                "choices": [
+                    {
+                        "label": "Whose debt?",
+                        "next": "the_paper"
+                    },
+                    {
+                        "label": "Not interested.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "subscribed"
+                    }
+                ],
+                "once": true,
+                "text": "\"You have bought a share,\" Finch says, delighted, \"which means that you now hold paper, and paper is the whole of my trade.\" He takes out his book and does not open it. \"If you ever wish to be rid of it, I buy at a discount and I am discreet about the discount. I should tell you, as a courtesy, that I already know three people who would like to buy it from me.\"",
+                "choices": [
+                    {
+                        "label": "Whose debt?",
+                        "next": "the_paper"
+                    },
+                    {
+                        "label": "Not interested.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "walked"
+                    }
+                ],
+                "once": true,
+                "text": "Finch has the book open at the front, where the names are, and he does not close it this time. \"Walked out,\" he says. \"Under any other business. I have written you in here again, a line lower than last time.\" He blots it. \"Not with any malice. A man who walks out of that room is a man somebody will ask me about later, and I like to have the answer ready.\"",
+                "choices": [
+                    {
+                        "label": "Whose debt?",
+                        "next": "the_paper"
+                    },
+                    {
+                        "label": "Not interested.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "concern_answering"
                     }
                 ],

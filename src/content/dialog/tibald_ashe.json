@@ -63,6 +63,86 @@
             {
                 "conditions": [
                     {
+                        "flag": "meeting_fate",
+                        "equals": "costed"
+                    }
+                ],
+                "once": true,
+                "text": "Ashe has a fair copy of something on the blotter beside him, and he does not hide it. \"Captain Reed has the other one,\" he says. \"It came up the river to this house, and I copied it because a thing that comes to this house is copied. Purchases on Granary Row and the Tannery Steps, held for the quarter, pending a costing of removal.\" He touches the word with the dry end of the pen. \"I have four years of standing orders in that press. Held is not a word in any of them. I have written the date in my own book.\"",
+                "choices": [
+                    {
+                        "label": "What is on the town's account?",
+                        "next": "the_town_account"
+                    },
+                    {
+                        "label": "Nothing today.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "minuted"
+                    }
+                ],
+                "once": true,
+                "text": "\"Nothing came down with the quarter's corrections,\" Ashe says, writing. \"I looked. I looked twice, which I do not do.\" He blots the line. \"An objection entered in Brackwater is a line in a minute book in a room I shall never see. I expect it is a very good line. I should simply like to have been able to file it somewhere.\"",
+                "choices": [
+                    {
+                        "label": "What is on the town's account?",
+                        "next": "the_town_account"
+                    },
+                    {
+                        "label": "Nothing today.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "subscribed"
+                    }
+                ],
+                "once": true,
+                "text": "\"A line came down with the corrections,\" Ashe says. \"Your names, on a list of the house's subscribers. For information.\" He turns the page so you can see it, then turns it back. \"Not for action. For information. I have kept this account for four years and the house has never once told me anything for information. I do not know what I am supposed to do with it, and I suspect that is the point.\"",
+                "choices": [
+                    {
+                        "label": "What is on the town's account?",
+                        "next": "the_town_account"
+                    },
+                    {
+                        "label": "Nothing today.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "walked"
+                    }
+                ],
+                "once": true,
+                "text": "\"One line came down with the quarter's post,\" Ashe says, without looking up. \"In the hand I have read for four years and never met. Your names, and after them: left before the close of business.\" He finishes his figure. \"It is filed under nothing. I do not have a heading for it. I have been trying for some days to decide whether that is a good sign, and I find I cannot.\"",
+                "choices": [
+                    {
+                        "label": "What is on the town's account?",
+                        "next": "the_town_account"
+                    },
+                    {
+                        "label": "Nothing today.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "concern_answering"
                     }
                 ],
