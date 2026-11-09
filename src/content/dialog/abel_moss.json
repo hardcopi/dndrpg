@@ -216,19 +216,7 @@
                             {
                                 "not": {
                                     "quest": "the_quarterly_meeting",
-                                    "stage": "the_secretary"
-                                }
-                            },
-                            {
-                                "not": {
-                                    "quest": "the_quarterly_meeting",
-                                    "stage": "your_matter"
-                                }
-                            },
-                            {
-                                "not": {
-                                    "quest": "the_quarterly_meeting",
-                                    "stage": "the_meeting"
+                                    "status": "active"
                                 }
                             },
                             {
@@ -250,6 +238,24 @@
                             }
                         ],
                         "reoffer": true,
+                        "end": true
+                    },
+                    {
+                        "label": "Number Nine. Thank you, Mr Moss.",
+                        "conditions": [
+                            {
+                                "quest": "the_quarterly_meeting",
+                                "stage": "four_days_flat"
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_quarterly_meeting",
+                                    "stage": "the_secretary"
+                                }
+                            }
+                        ],
                         "end": true
                     },
                     {
