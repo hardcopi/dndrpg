@@ -3,7 +3,7 @@
     "name": "Jory Kemp",
     "role": "Landlord of the Fortieth",
     "description": "A broad, cheerful man who named his inn after what the house takes off everything, as a joke, and has spent twenty years finding it slightly less funny every quarter.",
-    "sprite_key": "innkeeper",
+    "sprite_key": "jory_kemp",
     "is_quest_giver": true,
     "dialog": "jory_kemp",
     "place": {

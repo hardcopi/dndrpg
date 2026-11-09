@@ -3,7 +3,7 @@
     "name": "Mr Pellow",
     "role": "Not a factor",
     "description": "A mild man in a brown coat with a case of papers and a cold. He came up the river asking questions and has come back down with the answers, which do not agree with each other. He would like them to.",
-    "sprite_key": "skulker",
+    "sprite_key": "mr_pellow",
     "is_quest_giver": true,
     "dialog": "mr_pellow",
     "place": {

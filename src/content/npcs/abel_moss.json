@@ -3,7 +3,7 @@
     "name": "Abel Moss",
     "role": "Yard clerk",
     "description": "A narrow, tidy man behind a sliding window who has taken the manifests off Osgar Tull for nineteen years. He is perfectly pleasant. His name has never come up.",
-    "sprite_key": "scribe",
+    "sprite_key": "abel_moss",
     "is_quest_giver": true,
     "dialog": "abel_moss",
     "place": {

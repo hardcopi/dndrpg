@@ -3,7 +3,7 @@
     "name": "Hollin Sare",
     "role": "Chair of the Meeting",
     "description": "One of eleven subscribers to the house, and the one Ludo Corse has met. Grey, courteous, a little deaf in one ear and too well mannered to say which. He chairs because it is his turn.",
-    "sprite_key": "merchant",
+    "sprite_key": "hollin_sare",
     "is_quest_giver": true,
     "dialog": "hollin_sare",
     "place": {
