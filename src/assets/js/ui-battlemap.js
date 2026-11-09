@@ -384,7 +384,7 @@
       }</g>
       <g class="bm-props">${propsHtml(grid, deck)}</g>${deck ? `
       <g class="bm-shadows" pointer-events="none">${deck.shadows}</g>` : ''}
-      <g class="bm-light" pointer-events="none">${lightHtml(grid, deck)}</g>
+      <g class="bm-light" pointer-events="none">${lightHtml(grid, deck)}${carriedHtml(state, grid)}</g>
       <g class="bm-zones">${zonesHtml(grid, state)}</g>
       <g class="bm-reach">${reachHtml(ui)}</g>
       <g class="bm-threat">${threatHtml(ui)}</g>
@@ -629,6 +629,13 @@
       }
     }
     return out;
+  }
+  /** A warm pool round anybody carrying a lit light, on a dark board. */
+  function carriedHtml(state, grid) {
+    if (!grid.dark) return '';
+    return (state.combatants || []).filter((c) => c.alive && c.light_lit && c.light && c.x != null)
+      .map((c) => `<circle class="bm-glow is-carried" cx="${c.x + 0.5}" cy="${c.y + 0.5}"
+        r="${((Number(c.light.bright) || 20) / 5 + 0.5).toFixed(1)}" fill="url(#bm-glow-grad)"/>`).join('');
   }
   /** How much of a figure's light the dark leaves it, at board cell (x, y). */
   function shadeAt(state, x, y) {

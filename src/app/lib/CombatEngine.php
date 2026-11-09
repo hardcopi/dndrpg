@@ -281,12 +281,26 @@ class CombatEngine
      *
      * @return array{0:bool,1:bool}
      */
-    public static function sightBetween(array $grid, array $attacker, array $target): array
+    public static function sightBetween(array $grid, array $attacker, array $target, array $combatants = []): array
     {
         return [
-            !BattleGrid::canSee($grid, $attacker, $target),
-            !BattleGrid::canSee($grid, $target, $attacker),
+            !BattleGrid::canSee($grid, $attacker, $target, $combatants),
+            !BattleGrid::canSee($grid, $target, $attacker, $combatants),
         ];
+    }
+
+    /** The SRD's light sources a character might be carrying, as [bright, dim] feet. */
+    public const TORCH = ['name' => 'torch', 'bright' => 20, 'dim' => 20];
+    public const LANTERN = ['bright' => 30, 'dim' => 30];
+
+    /**
+     * Does this spell's card ask for a target the caster can see? Read off the
+     * SRD wording itself ("a creature you can see", "that you can see"), so a
+     * spell added to the table brings its own answer.
+     */
+    public static function needsSight(array $spell): bool
+    {
+        return stripos((string) ($spell['description'] ?? ''), 'you can see') !== false;
     }
 
     public static function shotsFrom(array $grid, array $combatants, array $actor, array $range): array
@@ -334,7 +348,7 @@ class CombatEngine
                 continue;
             }
 
-            [$unseen, $hidden] = self::sightBetween($grid, $actor, $target);
+            [$unseen, $hidden] = self::sightBetween($grid, $actor, $target, $combatants);
             $out[(string) $target['cid']] = [
                 'c'       => $target,
                 'dist'    => $dist,
@@ -735,6 +749,53 @@ class CombatEngine
             }
         }
         return $out;
+    }
+
+    /**
+     * The light a character carries: their best lamp, or else a torch.
+     *
+     * Every SRD equipment pack a starting character takes (the explorer's,
+     * the dungeoneer's) has ten torches and a tinderbox in it, and this game
+     * does not keep the pack's mundane contents, so a torch is assumed rather
+     * than tracked. An item whose properties say `light` beats it: a pair of
+     * numbers is its own radius, and `true` on a lamp or lantern is the SRD
+     * lantern (30 and 30).
+     *
+     * @return array{name:string, bright:int, dim:int}
+     */
+    private function carriedLight(int $characterId): array
+    {
+        $best = self::TORCH;
+        try {
+            $stmt = $this->db->prepare(
+                'SELECT i.name, i.properties FROM character_inventory ci
+                 INNER JOIN items i ON i.id = ci.item_id
+                 WHERE ci.character_id = ?'
+            );
+            $stmt->execute([$characterId]);
+            $rows = $stmt->fetchAll();
+        } catch (Throwable $e) {
+            return $best;
+        }
+        foreach ($rows as $row) {
+            $props = json_decode((string) ($row['properties'] ?? ''), true) ?: [];
+            $light = $props['light'] ?? null;
+            if (empty($light) || ($props['damage_dice'] ?? null) !== null) {
+                continue;
+            }
+            $name = (string) $row['name'];
+            if (is_array($light) && count($light) === 2) {
+                $pick = ['bright' => (int) $light[0], 'dim' => (int) $light[1]];
+            } elseif (preg_match('/lantern|lamp/i', $name)) {
+                $pick = self::LANTERN;
+            } else {
+                $pick = ['bright' => self::TORCH['bright'], 'dim' => self::TORCH['dim']];
+            }
+            if ($pick['bright'] + $pick['dim'] > $best['bright'] + $best['dim']) {
+                $best = ['name' => $name] + $pick;
+            }
+        }
+        return $best;
     }
 
     private function relentlessUsesLeft(array $party): array
@@ -1579,6 +1640,12 @@ class CombatEngine
                 'race_features' => $raceFeatures,
                 // Darkvision, in feet, for BattleGrid::canSee on a dark board.
                 'dark_sight'   => Rules::darkSightFt($raceFeatures),
+                // What they would light the dark with: the best lamp in the
+                // pack, or a torch. Lit from the start on a dark board for
+                // anybody who cannot see in it, because nobody walks into a
+                // cave and only then goes looking for the tinderbox.
+                'light'        => $this->carriedLight((int) $pc['id']),
+                'light_lit'    => !empty($grid['dark']) && Rules::darkSightFt($raceFeatures) === 0,
                 'resistances'  => array_values(array_unique(array_merge(
                     Rules::raceResistances($raceFeatures),
                     $equipment['resistances']
@@ -2004,6 +2071,12 @@ class CombatEngine
             case 'dodge':
                 $state = $this->doDodge($state);
                 break;
+            case 'douse':
+                $state = $this->doDouse($state);
+                break;
+            case 'kindle':
+                $state = $this->doKindle($state);
+                break;
             case 'tip':
                 $state = $this->doTip(
                     $state,
@@ -2116,7 +2189,7 @@ class CombatEngine
         // The light on a dark board, for the board to paint. Worked out here
         // and nowhere in the client, so the shading is the rule.
         $state['light'] = !empty($state['grid']['dark'])
-            ? BattleGrid::lightRows($state['grid']['terrain'] ?? [])
+            ? BattleGrid::lightRows($state['grid']['terrain'] ?? [], BattleGrid::carriedLights($state['combatants'] ?? []))
             : null;
         $actor = $this->currentActor($state);
         if (!$actor || ($actor['type'] ?? '') !== 'pc' || !self::isTargetable($actor)) {
@@ -2202,6 +2275,14 @@ class CombatEngine
             'ready'  => empty($actor['readied']) && empty($actor['action_used']),
             // Lit braziers within arm's length, which is what doTip() accepts.
             'tip'    => self::tippable($terrain, $actor),
+            // Their own light, only on a dark board, where it matters.
+            'carry'  => empty($state['grid']['dark']) || empty($actor['light']) ? null : [
+                'name'   => (string) ($actor['light']['name'] ?? 'torch'),
+                'lit'    => !empty($actor['light_lit']),
+                'douse'  => !empty($actor['light_lit']) && empty($actor['interacted']),
+                'kindle' => empty($actor['light_lit']) && empty($actor['light']['spell'])
+                    && empty($actor['action_used']),
+            ],
             'actions' => self::actionOffers($actor),
             'spells'  => $this->castableSpells($actor),
         ];
@@ -2238,7 +2319,7 @@ class CombatEngine
         $stmt = $this->db->prepare(
             'SELECT s.id, s.spell_key, s.name, s.level, s.school, s.damage_dice, s.damage_type,
                     s.casting_time, s.range_text, s.target_kind, s.concentration,
-                    s.reaches_back_rank
+                    s.reaches_back_rank, s.description
                FROM spells s
                INNER JOIN character_spells cs ON cs.spell_id = s.id
               WHERE cs.character_id = ?
@@ -2271,6 +2352,8 @@ class CombatEngine
                 // Cantrips cost nothing; everything else needs a slot at least
                 // its own level, which is what the picker offers.
                 'needs_slot'  => ((int) $spell['level']) > 0,
+                // "A creature you can see": darkness narrows who it can name.
+                'sight'       => self::needsSight($spell),
             ];
         }
         return $out;
@@ -2578,6 +2661,8 @@ class CombatEngine
                 // comes round again.
                 'reaction_used' => false,
                 'dodging'       => false,
+                // The one free object interaction of the turn (dousing a light).
+                'interacted'    => false,
                 // Disengage lasts until your next turn, like Dodge, and is
                 // cleared in the same breath for the same reason. A readied
                 // swing goes the same way: you cannot hold one across your own
@@ -2858,7 +2943,7 @@ class CombatEngine
         $actorCopy = $actor;
         $actorCopy['attack_kind'] = !empty($shot['melee']) ? 'melee' : 'ranged';
         $ctx = Conditions::attackContext($actorCopy, $target);
-        [$unseen, $hidden] = self::sightBetween($state['grid'] ?? [], $actor, $target);
+        [$unseen, $hidden] = self::sightBetween($state['grid'] ?? [], $actor, $target, $state['combatants'] ?? []);
         $extraAdv = !empty($actor['helped'])
             || !empty($shot['flank'])
             || $hidden
@@ -3032,7 +3117,7 @@ class CombatEngine
         // Darkness. Read off the board here rather than off the shot, so a
         // spell attack and an opportunity attack see in the dark the same way
         // a weapon attack does.
-        [$unseen, $hidden] = self::sightBetween($state['grid'] ?? [], $actor, $target);
+        [$unseen, $hidden] = self::sightBetween($state['grid'] ?? [], $actor, $target, $state['combatants'] ?? []);
         if ($unseen) {
             $extraDis = true;
         }
@@ -5336,6 +5421,47 @@ class CombatEngine
      * or starts a turn there takes 1d6 fire. The brazier stays where it was,
      * on its side, still half cover, and no longer lit.
      */
+    /**
+     * Put your light out. Dropping or shuttering it is the turn's one free
+     * object interaction, so it costs nothing else and can be done once.
+     */
+    private function doDouse(array $state): array
+    {
+        $actor = $this->acting($state);
+        if (empty($actor['light']) || empty($actor['light_lit'])) {
+            throw new InvalidArgumentException('You have no light burning.');
+        }
+        if (!empty($actor['interacted'])) {
+            throw new InvalidArgumentException('You have already handled something this turn.');
+        }
+        $name = (string) ($actor['light']['name'] ?? 'light');
+        $state = $this->updateCombatant($state, (string) $actor['cid'], ['light_lit' => false, 'interacted' => true]);
+        $state['log'][] = "{$actor['name']} puts out the {$name}.";
+        return $this->emit($state, ['type' => 'terrain', 'actor' => (string) $actor['cid'], 'what' => 'douse']);
+    }
+
+    /**
+     * Light it again. The SRD's tinderbox: lighting a torch takes an action.
+     * A Light spell that has been put out is gone; that is a new casting.
+     */
+    private function doKindle(array $state): array
+    {
+        $actor = $this->acting($state);
+        if (empty($actor['light']) || !empty($actor['light_lit'])) {
+            throw new InvalidArgumentException('There is nothing of yours to light.');
+        }
+        if (!empty($actor['light']['spell'])) {
+            throw new InvalidArgumentException('A Light spell does not come back with a tinderbox.');
+        }
+        if (!empty($actor['action_used'])) {
+            throw new InvalidArgumentException('Already acted this turn.');
+        }
+        $name = (string) ($actor['light']['name'] ?? 'torch');
+        $state = $this->updateCombatant($state, (string) $actor['cid'], ['light_lit' => true, 'action_used' => true]);
+        $state['log'][] = "{$actor['name']} strikes a light and the {$name} catches.";
+        return $this->emit($state, ['type' => 'terrain', 'actor' => (string) $actor['cid'], 'what' => 'kindle']);
+    }
+
     private function doTip(array $state, ?int $x, ?int $y): array
     {
         $actor = $this->acting($state);
@@ -5997,6 +6123,7 @@ class CombatEngine
             if (!isset($near[(string) $target['cid']])) {
                 throw new InvalidArgumentException(self::outOfReach($actor, $target, $reach));
             }
+            $this->mustSee($state, $actor, $target, $spell);
             return [$target];
         }
 
@@ -6009,7 +6136,22 @@ class CombatEngine
         if (!self::canReach($state['grid'], $state['combatants'], $actor, (string) $target['cid'], $reach)) {
             throw new InvalidArgumentException(self::outOfReach($actor, $target, $reach));
         }
+        $this->mustSee($state, $actor, $target, $spell);
         return [$target];
+    }
+
+    /**
+     * A spell that names "a creature you can see" cannot be pointed into the
+     * dark at somebody the caster cannot see.
+     */
+    private function mustSee(array $state, array $actor, array $target, array $spell): void
+    {
+        if (self::needsSight($spell)
+            && !BattleGrid::canSee($state['grid'] ?? [], $actor, $target, $state['combatants'] ?? [])) {
+            throw new InvalidArgumentException(
+                "{$spell['name']} needs a creature you can see, and {$target['name']} is lost in the dark."
+            );
+        }
     }
 
     /** Why a named target is not one a spell can reach, in the words the board prints. */
@@ -6236,6 +6378,15 @@ class CombatEngine
                 $targets[(string) $cid] = ['dist' => (int) $shot['dist'], 'cover' => (int) $shot['cover']];
             }
         }
+        if (!empty($spell['sight']) || self::needsSight($spell)) {
+            foreach (array_keys($targets) as $cid) {
+                $who = $this->getCombatant($state, (string) $cid);
+                if ($who && (string) $cid !== (string) $actor['cid']
+                    && !BattleGrid::canSee($state['grid'], $actor, $who, $state['combatants'])) {
+                    unset($targets[$cid]);
+                }
+            }
+        }
         return ['mode' => $kind === 'ally' || $kind === 'any' ? $kind : 'enemy', 'targets' => $targets];
     }
 
@@ -6432,6 +6583,15 @@ class CombatEngine
 
         // --- a buff: a condition, a cure, a boon, or any mix of the three ---
         if ($resolution === 'buff') {
+            // Light: the target shines like a torch until it is put out
+            // (the hour it lasts is longer than any fight here).
+            if (($spell['spell_key'] ?? '') === 'light') {
+                $state = $this->updateCombatant($state, $targetCid, [
+                    'light' => ['name' => 'Light spell', 'bright' => 20, 'dim' => 20, 'spell' => true],
+                    'light_lit' => true,
+                ]);
+                $state['log'][] = "{$target['name']} shines with a steady white light.";
+            }
             if ($condition !== null) {
                 $state = $this->addCondition($state, $targetCid, [
                     'key' => $condition, 'rounds' => $rounds > 0 ? $rounds : null, 'source_cid' => $casterCid,
