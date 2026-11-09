@@ -1,0 +1,13 @@
+{
+    "item_key": "wat_fenners_day_book",
+    "name": "Wat Fenner's Day-Book",
+    "description": "A carter's day-book, swollen with weather, twenty years of loads and tolls in a big careful hand. Four winters back: four crates off Darrow at the Weir, eleven gold, east road. Under it: one crate left at the hill store, as asked. Paid. No name.",
+    "item_type": "misc",
+    "rarity": "common",
+    "weight": 1,
+    "value_gp": 0,
+    "properties": {
+        "quest_item": true
+    },
+    "icon": "book"
+}

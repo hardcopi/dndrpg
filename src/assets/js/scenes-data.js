@@ -1119,6 +1119,7 @@ window.RIVERMARK_SCENES = {
       house_street: {x: 30, y: 24, icon: "↑"},
       the_fortieth: {x: 56, y: 30, icon: "⌂"},
       the_mudside: {x: 90, y: 86, icon: "↓"},
+      brindles_chandlery: {x: 72, y: 56, icon: "⌂"},
       packet_stair: {x: 47, y: 80, icon: "↩"}
     },
     npcs: {},
@@ -1231,7 +1232,10 @@ window.RIVERMARK_SCENES = {
     exits: {
       brackwater_wharf: {x: 14, y: 76, icon: "↑"}
     },
-    npcs: {},
+    npcs: {
+      coll_darrow: {x: 60, y: 52},
+      lise_fenner: {x: 78, y: 58}
+    },
     objects: [
       {label: "A woman mending a net", x: 41, y: 55, act: "search"},
       {label: "A hulk, slowly becoming mud", x: 57, y: 41, act: "search"}
@@ -3553,6 +3557,23 @@ window.RIVERMARK_SCENES = {
         "intensity": 0.25,
         "count": 8
       }
+    ]
+  },
+  brindles_chandlery: {
+    image: 'assets/images/scenes/brindles_chandlery.jpg',
+    subtitle: 'anything a boat runs out of',
+    exits: {
+      brackwater_wharf: {x: 30, y: 62, icon: "↩"}
+    },
+    npcs: {
+      hester_brindle: {x: 66, y: 50}
+    },
+    objects: [
+      {label: "The ledger", x: 66, y: 66, act: "search"},
+      {label: "Second-hand sea chests", x: 86, y: 30, act: "search"}
+    ],
+    fx: [
+      {type: "dust", x: 20, y: 25, w: 45, h: 45, intensity: 0.3, count: 10}
     ]
   }
 };

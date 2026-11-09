@@ -1,0 +1,123 @@
+{
+    "npc_key": "hester_brindle",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "quest": "the_fenmoor_lot",
+                        "stage": "brindle_and_daughter"
+                    }
+                ],
+                "text": "\"Plate,\" Hester Brindle says, and turns the ledger back four years without counting the pages. \"Father bought it. Forty gold off Vass.\" She puts her finger on the line. \"Nobody on a wharf wants plate. You can't make a boat-hook out of a breastplate. He sold the mail to the lightermen by the pound and the plate sat in the back for a season in its crate, and then Coll Darrow took it upriver on spec.\"",
+                "choices": [
+                    {
+                        "label": "On spec?",
+                        "next": "on_spec"
+                    },
+                    {
+                        "label": "Where do I find Coll Darrow?",
+                        "next": "where_darrow"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "armour_chain_ended"
+                    }
+                ],
+                "text": "\"Did you find where it went?\" Hester Brindle asks, weighing nails. She listens to the answer, nods, and writes something in the ledger that is not about you. \"That's usually where things go,\" she says.",
+                "choices": [
+                    {
+                        "label": "What do you sell?",
+                        "next": "trade"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "\"If a boat runs out of it, I've got it,\" says the woman behind the counter, without looking up from the scale. \"If a boat's got too much of it, I'll buy it. Hester Brindle. The Daughter.\" The scale settles. \"Father was the Brindle. Now I'm both.\"",
+                "choices": [
+                    {
+                        "label": "What do you sell?",
+                        "next": "trade"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "on_spec": [
+            {
+                "text": "\"A packman takes your goods up a river and sells them wherever they fetch something,\" Hester Brindle says, \"and brings you back what they fetched, less his share, less what he says the tolls were. You never see the buyer. That's the point of a packman.\" She shrugs. \"Darrow fetched us twenty for it. A loss. Father said it was worth it to have the back room again.\"",
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"So nobody on this wharf knew where it ended up.\" Hester Brindle: \"Nobody on this wharf ever knows where anything ends up, love. That's why it's a wharf.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Where do I find Coll Darrow?",
+                        "next": "where_darrow"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "where_darrow": [
+            {
+                "text": "\"On the mud. He's retired.\" She says it the way you say somebody has a cold. \"The hulk with the stovepipe. He'll tell you he doesn't remember, and then he'll tell you the price to the penny.\"",
+                "choices": [
+                    {
+                        "label": "Thank you, Miss Brindle.",
+                        "conditions": [
+                            {
+                                "quest": "the_fenmoor_lot",
+                                "stage": "brindle_and_daughter"
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_fenmoor_lot",
+                                    "stage": "the_packman"
+                                }
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "trade": [
+            {
+                "text": "\"Cordage, pitch, oil, cloth, biscuit, nails by weight,\" she says. \"And second-hand anything. People die on boats the same as anywhere and their boxes come to me.\" She closes the ledger on a finger. \"I don't ask whose. You'd never sell a thing if you asked whose.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}
