@@ -1,0 +1,107 @@
+# Deploy to Hermes (https://rpg.five-star.com) without Thor.
+#
+#   push to main      -> CI, then (only if repo variable DEPLOY_ENABLED is 'true')
+#                        backup -> migration check -> deploy.sh dry run -> deploy.sh --apply -> smoke
+#   Run workflow      -> CI, then backup -> migration check -> dry run; the
+#   (workflow_dispatch)  "apply" box decides whether deploy.sh --apply runs.
+#
+# Ships with deploy.sh itself (same rsync, same rsync-excludes, same chown), never
+# a second path. Setup and rollback: docs/ops/GITHUB_ACTIONS.md.
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      apply:
+        description: "Push to the LIVE site. Unchecked = backup + migration check + dry run only."
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    uses: ./.github/workflows/ci.yml
+
+  deploy:
+    name: Deploy to Hermes
+    needs: ci
+    # Official repo only (never a fork). A push deploys only once Rich has set
+    # the DEPLOY_ENABLED variable; a manual run always may (it starts as a dry run).
+    if: >-
+      github.repository == 'hardcopi/dndrpg' &&
+      (github.event_name == 'workflow_dispatch' || vars.DEPLOY_ENABLED == 'true')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    environment:
+      name: production          # add required reviewers here if wanted (optional)
+      url: https://rpg.five-star.com
+    concurrency:
+      group: hermes-deploy      # one deploy at a time, never cancel one halfway
+      cancel-in-progress: false
+    env:
+      APPLY: ${{ github.event_name == 'push' || inputs.apply == true }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install age (backup encryption)
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends age
+
+      - name: SSH key + pinned Hermes host key
+        env:
+          HERMES_SSH_KEY: ${{ secrets.HERMES_SSH_KEY }}
+          HERMES_KNOWN_HOSTS: ${{ secrets.HERMES_KNOWN_HOSTS }}
+        run: .github/scripts/hermes-ssh-setup.sh
+
+      - name: Back up the live database first
+        id: backup
+        env:
+          BACKUP_AGE_RECIPIENT: ${{ vars.BACKUP_AGE_RECIPIENT }}
+        run: |
+          f=$(.github/scripts/hermes-backup.sh "pre-deploy-${GITHUB_SHA::7}" backups | tail -n 1)
+          echo "file=$f" >> "$GITHUB_OUTPUT"
+
+      - name: Keep the backup (encrypted)
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: db-pre-deploy-${{ github.run_id }}
+          path: ${{ steps.backup.outputs.file }}
+          retention-days: 30
+          if-no-files-found: error
+          compression-level: 0   # already gzip + age
+
+      - name: Migrations pending on Hermes? (read-only; stops the deploy if so)
+        run: .github/scripts/hermes-migrations-check.sh
+
+      - name: deploy.sh dry run (what would change on production)
+        env:
+          DEPLOY_COMPARE: checksum
+        run: ./deploy.sh
+
+      - name: deploy.sh --apply
+        if: env.APPLY == 'true'
+        env:
+          DEPLOY_COMPARE: checksum
+        run: echo deploy | ./deploy.sh --apply
+
+      - name: Smoke check https://rpg.five-star.com
+        run: .github/scripts/smoke.sh https://rpg.five-star.com
+
+      - name: Summary
+        if: always()
+        run: |
+          {
+            echo "### Deploy ${GITHUB_SHA::7}"
+            echo "- applied: ${APPLY}"
+            echo "- backup artifact: db-pre-deploy-${{ github.run_id }} (age-encrypted, 30 days)"
+            echo "- rollback: docs/ops/GITHUB_ACTIONS.md#rolling-back"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Remove the key from the runner
+        if: always()
+        run: rm -f ~/.ssh/id_ed25519

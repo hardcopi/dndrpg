@@ -17,11 +17,25 @@ SSH="ssh -o BatchMode=yes -i ${HOME}/.ssh/id_ed25519"
 # with --delete would otherwise remove from the local copy.
 EXCLUDES=(--exclude-from "$(dirname "${LOCAL%/}")/rsync-excludes")
 
+# How a file is judged "changed". Default (-a): size + mtime, exactly as this
+# script always worked from Thor. DEPLOY_COMPARE=checksum is what
+# .github/workflows/deploy.yml sets: a fresh CI checkout gives every file a new
+# mtime and the runner's owner/permissions, so -a would list (and touch) every
+# file on every run, and asset()'s ?v=<filemtime> would bust every player's
+# cache on every deploy. Comparing by content, and leaving times/perms/owner to
+# the receiving side, means only files whose bytes changed are sent and listed,
+# and only those get a new mtime (so only their ?v= changes). Ownership is set
+# by the chown below either way.
+RSYNC_MODE=(-a)
+if [[ "${DEPLOY_COMPARE:-}" == "checksum" ]]; then
+    RSYNC_MODE=(-rlD --checksum)
+fi
+
 # NOTE: no --delete. A stray local deletion should not remove live files.
 echo "DEPLOY  ${LOCAL}  ->  hermes:/home/www/rpg  (LIVE SITE)"
 echo
 echo "--- changes that would be made on production ---"
-rsync -a --itemize-changes --dry-run "${EXCLUDES[@]}" -e "$SSH" "$LOCAL" "$REMOTE"
+rsync "${RSYNC_MODE[@]}" --itemize-changes --dry-run "${EXCLUDES[@]}" -e "$SSH" "$LOCAL" "$REMOTE"
 echo
 
 if [[ "${1:-}" != "--apply" ]]; then
@@ -35,7 +49,7 @@ if [[ "$reply" != "deploy" ]]; then
     exit 1
 fi
 
-rsync -a --info=stats2 "${EXCLUDES[@]}" -e "$SSH" "$LOCAL" "$REMOTE"
+rsync "${RSYNC_MODE[@]}" --info=stats2 "${EXCLUDES[@]}" -e "$SSH" "$LOCAL" "$REMOTE"
 
 # Files land as root:root over SSH; the site runs as www-data.
 echo "Fixing ownership on hermes..."

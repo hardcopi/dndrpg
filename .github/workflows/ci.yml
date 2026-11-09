@@ -1,0 +1,86 @@
+# CI: verify.sh against a throwaway PHP 8.4 + MySQL 8.0 stack on a GitHub runner.
+#
+# Same interpreter and extension set as docker/php/Dockerfile (and Hermes), same
+# MySQL major as Hermes (8.0), same DB build as docker/initdb/00-load.sh. No
+# secrets: the database exists only for the life of the job.
+#
+# Runs on every pull request, and on every push to main as the first job of
+# deploy.yml (which calls this file), so main is tested exactly once per push.
+name: CI
+
+on:
+  pull_request:
+  workflow_call:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  verify:
+    name: verify.sh
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    services:
+      db:
+        image: mysql:8.0            # Hermes runs MySQL 8.0
+        env:
+          # Throwaway service credentials, the same ones docker-compose.yml uses.
+          MYSQL_ROOT_PASSWORD: ci-root-throwaway
+          MYSQL_DATABASE: rpg_5e
+          MYSQL_USER: web
+          MYSQL_PASSWORD: devpassword
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd "mysqladmin ping -h 127.0.0.1 -uroot -pci-root-throwaway"
+          --health-interval 5s --health-timeout 5s --health-retries 30
+    env:
+      DB_HOST: 127.0.0.1
+      DB_PORT: "3306"
+      DB_NAME: rpg_5e
+      DB_USERNAME: web
+      DB_PASSWORD: devpassword
+      DB_USER: web          # verify.sh's own names for the same thing
+      DB_PASS: devpassword
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
+        with:
+          php-version: "8.4"
+          extensions: pdo_mysql, mysqli, gd, zip, exif, xsl, sockets, opcache
+          coverage: none
+          tools: none
+
+      - name: Toolchain
+        run: |
+          php -v | head -n 1
+          python3 --version
+          mysql --version
+
+      - name: Build the throwaway database (as docker/initdb does)
+        env:
+          MYSQL_ROOT_PASSWORD: ci-root-throwaway
+        run: .github/scripts/ci-load-db.sh
+
+      - name: App config + the /var/www/html path the harnesses use
+        run: |
+          .github/scripts/ci-db-config.sh
+          # 26 harnesses require '/var/www/html/app/bootstrap.php' (the
+          # container path). Point it at this checkout.
+          sudo mkdir -p /var/www
+          sudo rm -rf /var/www/html
+          sudo ln -s "$GITHUB_WORKSPACE/src" /var/www/html
+
+      - name: Seed one player (some harnesses borrow an existing party)
+        run: .github/scripts/ci-seed-player.sh
+
+      - name: verify.sh (includes test_state_machines)
+        run: bash src/tools/verify.sh

@@ -1,0 +1,63 @@
+# Nightly backup of the live rpg_5e, 2:17 AM America/Indianapolis.
+#
+# mysqldump over SSH as root on Hermes (the route CLAUDE.md uses), gzip, then
+# age-encrypted to BACKUP_AGE_RECIPIENT and kept as an Actions artifact for
+# 14 days. The repo is public, so nothing unencrypted is ever uploaded.
+# Restore steps: docs/ops/GITHUB_ACTIONS.md#restoring-a-backup.
+name: Nightly DB backup
+
+on:
+  schedule:
+    - cron: "17 2 * * *"
+      timezone: "America/Indianapolis"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: hermes-backup
+  cancel-in-progress: false
+
+jobs:
+  backup:
+    # Official repo only. The schedule waits for BACKUP_ENABLED so nights before
+    # setup don't fail; a manual run always tries.
+    if: >-
+      github.repository == 'hardcopi/dndrpg' &&
+      (github.event_name == 'workflow_dispatch' || vars.BACKUP_ENABLED == 'true')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install age
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends age
+
+      - name: SSH key + pinned Hermes host key
+        env:
+          HERMES_SSH_KEY: ${{ secrets.HERMES_SSH_KEY }}
+          HERMES_KNOWN_HOSTS: ${{ secrets.HERMES_KNOWN_HOSTS }}
+        run: .github/scripts/hermes-ssh-setup.sh
+
+      - name: mysqldump rpg_5e (encrypted)
+        id: backup
+        env:
+          BACKUP_AGE_RECIPIENT: ${{ vars.BACKUP_AGE_RECIPIENT }}
+        run: |
+          f=$(.github/scripts/hermes-backup.sh nightly backups | tail -n 1)
+          echo "file=$f" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: db-nightly-${{ github.run_id }}
+          path: ${{ steps.backup.outputs.file }}
+          retention-days: 14
+          if-no-files-found: error
+          compression-level: 0
+
+      - name: Remove the key from the runner
+        if: always()
+        run: rm -f ~/.ssh/id_ed25519
