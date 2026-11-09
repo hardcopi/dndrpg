@@ -3,7 +3,7 @@
     "name": "Goodwife Ellsa Waer",
     "role": "Goodwife of Old Waer",
     "description": "Eighty-one, holds no office of any kind, and settles most disputes in this city before they reach anybody who does. She says the Mere has gone quiet in the wrong way. She is not being poetic and she does not appreciate being told that she is.",
-    "sprite_key": "ottilie_hale",
+    "sprite_key": "ellsa_waer",
     "is_quest_giver": true,
     "dialog": "ellsa_waer",
     "place": {

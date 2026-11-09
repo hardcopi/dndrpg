@@ -3,7 +3,7 @@
     "name": "Halvard Stonecut",
     "role": "Ironmonger",
     "description": "A dwarf of Karrun-Deep, forty years out of the holds, who has sold this city every fastening in it. His letters home stopped being answered eight months ago. He has written eleven more since and sent them anyway, and he does not mention it, and the bundle on the hook behind the counter gets longer.",
-    "sprite_key": "smith",
+    "sprite_key": "halvard_stonecut",
     "is_merchant": true,
     "is_quest_giver": true,
     "dialog": "halvard_stonecut",

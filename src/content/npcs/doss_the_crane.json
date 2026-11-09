@@ -3,7 +3,7 @@
     "name": "Doss the Crane",
     "role": "Crane-master",
     "description": "Walks in the drum with three others and has seen every cargo that has come out of the water in this harbour for nineteen years. Says nothing, and charges accordingly, and has never once been caught, because being caught would require somebody to have looked.",
-    "sprite_key": "barbarian",
+    "sprite_key": "doss_the_crane",
     "is_quest_giver": true,
     "dialog": "doss_the_crane",
     "place": {

@@ -3,7 +3,7 @@
     "name": "Warden Aske Vorn",
     "role": "Grey Warden of Drennmark",
     "description": "Came south four years ago out of the Wyrdpines with sixty people and arrived at the Hallowgate with forty-one. She keeps the list. She keeps it accurate, in her own hand, with the villages and the dates, and she has never shown it to anyone, and she will not discuss the nineteen.",
-    "sprite_key": "elowen",
+    "sprite_key": "aske_vorn",
     "is_quest_giver": true,
     "dialog": "aske_vorn",
     "place": {
