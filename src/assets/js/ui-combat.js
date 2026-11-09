@@ -82,7 +82,7 @@
    * Attack is deliberately NOT here — it is the verb the bar exists for, and
    * making the common case cost two clicks to save the rare one is a bad trade.
    */
-  const ARM_FIRST = new Set(['dash', 'dodge', 'disengage', 'channel', 'tip']);
+  const ARM_FIRST = new Set(['dash', 'dodge', 'disengage', 'channel', 'tip', 'kindle']);
 
   /** How long an armed slot waits for its second click before forgetting. */
   const ARM_MS = 3000;
@@ -1774,6 +1774,21 @@
         extra: { x: uiFor(actor).tip[0][0], y: uiFor(actor).tip[0][1] },
         why: actor.action_used ? 'Action already spent this turn'
           : 'Push it over: the coals land on the far side — DEX save or 2d6 fire, then the floor burns for two rounds',
+      }] : []),
+      // Your own light, on a dark board only (`ui.carry`). Putting it out is
+      // the turn's free object interaction; lighting it is an action, as the
+      // SRD's tinderbox says.
+      ...(uiFor(actor)?.carry ? [uiFor(actor).carry.lit ? {
+        key: 'douse', label: `Douse ${uiFor(actor).carry.name}`, icon: 'i-fire',
+        ok: !!uiFor(actor).carry.douse,
+        why: uiFor(actor).carry.douse
+          ? 'Free: put your light out. Harder to see you, harder for you to see'
+          : 'You have already handled something this turn',
+      } : {
+        key: 'kindle', label: `Light ${uiFor(actor).carry.name}`, icon: 'i-fire',
+        ok: !!uiFor(actor).carry.kindle,
+        why: uiFor(actor).carry.kindle ? 'Strike a light: bright light around you, and everyone sees you'
+          : actor.action_used ? 'Action already spent this turn' : 'That light will not come back',
       }] : []),
       // Grapple and Shove are special melee attacks: they replace one attack of
       // the Attack action, so they spend an attack rather than the action, and

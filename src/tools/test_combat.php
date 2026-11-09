@@ -1660,6 +1660,62 @@ ok('tunnels are dark', !empty(BattleMapGen::generate(7, 'tunnel')['dark']));
 ok('streets are not', empty(BattleMapGen::generate(7, 'street')['dark']));
 ok('a board saved before darkness stays lit', BattleGrid::lightAt(gridOf($cave), 15, 11) === 'bright');
 
+section('Carried light and sight-gated spells (battle map D)');
+
+$black = gridOf(board()) + ['dark' => true];
+$torchbearer = at('tb', 'party', 2, 5, ['alive' => true, 'light' => CombatEngine::TORCH, 'light_lit' => true]);
+$goblin = at('gob', 'foe', 7, 5, ['alive' => true, 'dark_sight' => 60]);
+$rat = at('rat', 'foe', 12, 5, ['alive' => true]);
+$all = [$torchbearer, $goblin, $rat];
+same('a torch is carried light', [[2, 5, 20, 20]], BattleGrid::carriedLights($all));
+same('it lights its bearer', 'bright', BattleGrid::lightAt($black, 2, 5, $all));
+same('and twenty-five feet off is dim', 'dim', BattleGrid::lightAt($black, 7, 5, $all));
+same('and fifty is dark', 'dark', BattleGrid::lightAt($black, 12, 5, $all));
+ok('the torchbearer sees the goblin in the dim', BattleGrid::canSee($black, $torchbearer, $goblin, $all));
+ok('but not the rat past the torch', !BattleGrid::canSee($black, $torchbearer, $rat, $all));
+ok('and everybody sees the torch', BattleGrid::canSee($black, $rat, $torchbearer, $all));
+$doused = $all;
+$doused[0]['light_lit'] = false;
+ok('put out, the dark has them again', !BattleGrid::canSee($black, $torchbearer, $goblin, $doused));
+ok('a goblin still sees in it', BattleGrid::canSee($black, $goblin, $doused[0], $doused));
+$dead = $all;
+$dead[0]['alive'] = false;
+same('the dead carry no light', [], BattleGrid::carriedLights($dead));
+
+// Douse is free once a turn; lighting takes the action.
+$torchEngine = (new ReflectionClass(CombatEngine::class))->newInstanceWithoutConstructor();
+$douse = new ReflectionMethod(CombatEngine::class, 'doDouse');
+$kindle = new ReflectionMethod(CombatEngine::class, 'doKindle');
+$douse->setAccessible(true);
+$kindle->setAccessible(true);
+$torchState = ['round' => 1, 'turn_index' => 0, 'order' => ['tb', 'gob'], 'status' => 'active',
+    'grid' => $black, 'log' => [], 'events' => [],
+    'combatants' => [$torchbearer + ['type' => 'pc', 'hp' => 10, 'action_used' => false], $goblin + ['type' => 'monster', 'hp' => 7]]];
+$out = $douse->invoke($torchEngine, $torchState);
+ok('dousing puts it out without the action', empty($out['combatants'][0]['light_lit']) && empty($out['combatants'][0]['action_used']));
+$threw = false;
+try { $douse->invoke($torchEngine, $out); } catch (InvalidArgumentException $e) { $threw = true; }
+ok('and there is nothing left to douse', $threw);
+$lit = $kindle->invoke($torchEngine, $out);
+ok('lighting it again takes the action', !empty($lit['combatants'][0]['light_lit']) && !empty($lit['combatants'][0]['action_used']));
+
+// A spell that names "a creature you can see".
+ok('Hold Person needs sight', CombatEngine::needsSight(['description' => 'Choose a humanoid that you can see within range.']));
+ok('Fire Bolt does not', !CombatEngine::needsSight(['description' => 'You hurl a mote of fire at a creature or object within range.']));
+$mustSee = new ReflectionMethod(CombatEngine::class, 'mustSee');
+$mustSee->setAccessible(true);
+$seeState = ['grid' => $black, 'combatants' => $all];
+$threw = '';
+try {
+    $mustSee->invoke($torchEngine, $seeState, $torchbearer, $rat, ['name' => 'Hold Person', 'description' => 'a humanoid that you can see']);
+} catch (InvalidArgumentException $e) { $threw = $e->getMessage(); }
+ok('it cannot be cast at the rat in the dark', str_contains($threw, 'lost in the dark'), $threw);
+$threw = '';
+try {
+    $mustSee->invoke($torchEngine, $seeState, $torchbearer, $goblin, ['name' => 'Hold Person', 'description' => 'a humanoid that you can see']);
+} catch (InvalidArgumentException $e) { $threw = $e->getMessage(); }
+same('but can at the goblin in the torchlight', '', $threw);
+
 // ---------------------------------------------------------------------------
 echo PHP_EOL . str_repeat('-', 52) . PHP_EOL;
 printf("%d passed, %d failed%s", $RESULTS['pass'], $RESULTS['fail'], PHP_EOL);

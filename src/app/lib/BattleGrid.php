@@ -1279,16 +1279,23 @@ final class BattleGrid
      * `D` dim, `X` dark. Light runs in straight lines, so a wall or anything
      * else opaque between a flame and a cell leaves that cell in the dark.
      *
+     * `$carried` is what people are holding: [x, y, bright ft, dim ft] each,
+     * from carriedLights(). A torch walks with whoever has it.
+     *
      * @param string[] $terrain
+     * @param array<int, array{0:int,1:int,2:int,3:int}> $carried
      * @return string[]
      */
-    public static function lightRows(array $terrain): array
+    public static function lightRows(array $terrain, array $carried = []): array
     {
-        $key = implode('|', $terrain);
+        $key = implode('|', $terrain) . '#' . json_encode($carried);
         if (self::$lightCache !== null && self::$lightCache['key'] === $key) {
             return self::$lightCache['rows'];
         }
         $sources = [];
+        foreach ($carried as [$cx, $cy, $cb, $cd]) {
+            $sources[] = [(int) $cx, (int) $cy, [(int) $cb, (int) $cd]];
+        }
         foreach ($terrain as $y => $row) {
             $row = (string) $row;
             for ($x = 0, $n = strlen($row); $x < $n; $x++) {
@@ -1324,13 +1331,34 @@ final class BattleGrid
         return $rows;
     }
 
+    /**
+     * The lights people are carrying, in the shape lightRows() wants: anybody
+     * standing with a lit `light` ([bright, dim] feet — a torch, a lantern, a
+     * Light spell on their shield).
+     *
+     * @return array<int, array{0:int,1:int,2:int,3:int}>
+     */
+    public static function carriedLights(array $combatants): array
+    {
+        $out = [];
+        foreach ($combatants as $c) {
+            if (empty($c['light_lit']) || empty($c['light']) || empty($c['alive'])
+                || !isset($c['x'], $c['y'])) {
+                continue;
+            }
+            $out[] = [(int) $c['x'], (int) $c['y'],
+                (int) ($c['light']['bright'] ?? 20), (int) ($c['light']['dim'] ?? 20)];
+        }
+        return $out;
+    }
+
     /** 'bright', 'dim' or 'dark' at (x, y). A board not marked dark is bright everywhere. */
-    public static function lightAt(array $grid, int $x, int $y): string
+    public static function lightAt(array $grid, int $x, int $y, array $combatants = []): string
     {
         if (empty($grid['dark'])) {
             return 'bright';
         }
-        $ch = (self::lightRows($grid['terrain'] ?? [])[$y] ?? '')[$x] ?? 'X';
+        $ch = (self::lightRows($grid['terrain'] ?? [], self::carriedLights($combatants))[$y] ?? '')[$x] ?? 'X';
         return $ch === 'B' ? 'bright' : ($ch === 'D' ? 'dim' : 'dark');
     }
 
@@ -1341,14 +1369,14 @@ final class BattleGrid
      * darkness hides anybody, and darkvision (`dark_sight`, in feet) sees
      * through it out to its range.
      */
-    public static function canSee(array $grid, array $viewer, array $target): bool
+    public static function canSee(array $grid, array $viewer, array $target, array $combatants = []): bool
     {
         if (empty($grid['dark'])) {
             return true;
         }
         $tx = (int) ($target['x'] ?? 0);
         $ty = (int) ($target['y'] ?? 0);
-        if (self::lightAt($grid, $tx, $ty) !== 'dark') {
+        if (self::lightAt($grid, $tx, $ty, $combatants) !== 'dark') {
             return true;
         }
         $ft = (int) ($viewer['dark_sight'] ?? 0);

@@ -104,8 +104,25 @@ named here instead of being filled with something invented.
 - **The view.** The engine sends `state.light`, a row of `B`, `D` or `X` per
   cell, and the board shades dim and dark cells from it. Figures standing in
   the dark are drawn darker, so what looks black is what hides you.
-- **Not done:**
-  - Spells that need a target you can see still ignore darkness.
-  - Monsters do not move to stay in the dark.
-  - The party carries no torch of its own.
+- **Carried light.** Every SRD equipment pack has torches and a tinderbox, and
+  this game does not track a pack's mundane contents, so each character is
+  assumed to carry a torch (bright 20 ft, dim 20 ft).
+  - A lamp or lantern in the inventory (`properties.light`) replaces it: the
+    SRD lantern gives 30 ft and 30 ft, and a `[bright, dim]` pair sets its own.
+  - On a dark board, anyone without darkvision starts with it lit
+    (`CombatEngine::carriedLight`, `light` and `light_lit`).
+  - The light moves with its bearer (`BattleGrid::carriedLights`). A lit torch
+    lets everybody see you, too.
+  - **Douse** is the turn's free object interaction. **Light** takes an action,
+    as with the SRD tinderbox. Both appear on the bar only on a dark board
+    (`ui.carry`).
+  - The **Light** cantrip makes its target shine 20 ft and 20 ft for the rest of
+    the fight. Once doused, it needs a new casting.
+  - Not modelled: the hand a torch occupies.
+- **Spells that need sight.** A spell whose card says "you can see" cannot name
+  a creature the caster cannot see (`CombatEngine::needsSight`, `mustSee`), and
+  the board's targeting leaves such creatures out. Area spells are placed on
+  cells and are not gated.
+- **Not done:** monsters do not move to stay in the dark, and they carry no
+  lights.
 - Tests: `tools/test_combat.php`, section "Darkness (battle map D)".
