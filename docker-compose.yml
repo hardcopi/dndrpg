@@ -10,6 +10,9 @@ services:
       - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
       # Mounted at the path hermes keeps it at, so one include line serves both.
       - ./docker/nginx/deny-private.conf:/etc/nginx/snippets/rpg-deny-private.conf:ro
+      - ./docker/nginx/rpg-perf.conf:/etc/nginx/snippets/rpg-perf.conf:ro
+      # http-level maps; conf.d/ is read at http level, ahead of default.conf.
+      - ./docker/nginx/rpg-maps.conf:/etc/nginx/conf.d/00-rpg-maps.conf:ro
     depends_on:
       - php
     restart: unless-stopped
