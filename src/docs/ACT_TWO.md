@@ -65,6 +65,32 @@ Mara, Corse, Hollin Sare and Jory Kemp read the endings.
   armour chain; the Deepworks dead; whether the Concern is wrong — no crime is
   discovered anywhere in the act.
 
+## Side quest: `the_fenmoor_lot` (the armour chain)
+
+Answers hook item 4 the way the hook asked: four names and a dead carter, and
+no conspiracy that anybody can prove. Offered by Dorcas Fenn to any party with
+`mark_seen_plate` (from `nakkas_plate`).
+
+`lot_forty_one` (Record Office: the house → T. Vass, Greyhythe, 31 gp → Brindle
+& Daughter, 40 gp) → `brindle_and_daughter` (Hester Brindle, new location
+`brindles_chandlery` off the wharf; plate went upriver on spec) →
+`the_packman` (Coll Darrow, the mudside; sold at Weir Landing to Wat Fenner for
+11 gp; Insight DC 13 sets `fenmoor_asked_for`) → `the_day_book` (Lise Fenner,
+the mudside, only once the trail reaches her). Wat's day-book: *one crate left
+at the hill store, as asked. Paid.* Investigation DC 15 sets `fenmoor_no_name`:
+39 of 40 "as asked" entries name a buyer in the margin; this one does not.
+
+| Stage | `armour_chain_fate` | Also |
+|---|---|---|
+| `kept_the_book` | `kept` | item `wat_fenners_day_book` |
+| `left_the_book` | `left` | |
+| `paid_the_burying` | `paid` | −14 gp (needs 14) |
+
+All three set `armour_chain_ended`. Dorcas Fenn, Hester Brindle and Lise Fenner
+read the endings back. Still open on purpose: who asked. Nakka was "told to take
+it" by somebody who was not a goblin; that was Wat, and nobody knows who asked
+Wat. Test: `tools/test_fenmoor_lot.php`.
+
 ## Tests
 
 `tools/test_act_two.php` (in `verify.sh`) plays all four branches to an ending

@@ -1,0 +1,123 @@
+{
+    "quest_key": "the_fenmoor_lot",
+    "title": "The Fenmoor Lot",
+    "act": 2,
+    "description": "Ludo Corse said it plainly: the house bought a bankrupt armourer's stock, sold it at Greyhythe, and did not ask where it went. A man who sold to another man, four or five names, and then a carter who is dead. Brackwater files everything. You can follow it, if you would rather not spend the winter on something else.",
+    "giver": "dorcas_fenn",
+    "on_job_board": false,
+    "required_level": 5,
+    "rewards": {
+        "xp": 600,
+        "gold": 0
+    },
+    "stages": {
+        "lot_forty_one": {
+            "title": "Lot forty-one",
+            "objective": "The Record Office keeps the Greyhythe sale returns. Have Dorcas Fenn find the Fenmoor lot.",
+            "journal": "The mark inside Nakka's pauldron is the house's mark, and the house says it sold the stock on at Greyhythe because arms are not its trade. Every sale on the river is filed somewhere, for the duty. Brackwater's Record Office keeps the Greyhythe returns.",
+            "target": {
+                "location": "record_office"
+            }
+        },
+        "brindle_and_daughter": {
+            "title": "Brindle & Daughter",
+            "objective": "The Greyhythe dealer sold the plate on to a chandler's under the wharf arches. Ask at Brindle's.",
+            "journal": "Lot forty-one: sundry armour, the Fenmoor stock, the property of the house, knocked down at Greyhythe to T. Vass, dealer, for thirty-one gold. Vass files too. His return says three suits of plate and pieces went to Brindle & Daughter, chandlers, Brackwater wharf, for forty. Two names, two pages, tuppence.",
+            "target": {
+                "location": "brindles_chandlery"
+            }
+        },
+        "the_packman": {
+            "title": "On spec",
+            "objective": "Hester Brindle sold the plate to a packman, Coll Darrow, who took it upriver on spec. He lives on the mudside now.",
+            "journal": "Hester Brindle's father bought the plate because it was cheap and nobody on a wharf wants plate. The mail went to the lightermen. The plate went upriver on spec with Coll Darrow, a packman who would take anything anywhere. Three names. Darrow is on the mudside.",
+            "target": {
+                "location": "the_mudside"
+            }
+        },
+        "the_day_book": {
+            "title": "The day-book",
+            "objective": "Darrow sold the crate at the Weir to a carter, Wat Fenner, who is dead. His widow lives on the hulk with the blue rail.",
+            "journal": "Darrow sold the crate at Weir Landing to Wat Fenner, a carter who said he had somebody up the east road who would take it. Four names, and the fourth is dead: the fever at the Weir, two winters ago. Corse said a carter who is dead. He was right about that as well. Fenner's widow is on the mudside, and she kept his book.",
+            "target": {
+                "location": "the_mudside"
+            }
+        },
+        "kept_the_book": {
+            "terminal": true,
+            "resolution": "kept_the_book",
+            "outcome": "success",
+            "title": "As asked",
+            "journal": "Lise Fenner let me take Wat's day-book, because she said a book is only worth keeping if somebody reads it, and she cannot. One crate left at the hill store, as asked. Paid. Somebody asked. Nobody wrote down who, and everybody who could say is dead, or a goblin, or does not know. It is the end of the trail and it is not an answer. I am carrying it anyway.",
+            "effects": [
+                {
+                    "set_flag": "armour_chain_fate",
+                    "value": "kept"
+                },
+                {
+                    "set_flag": "armour_chain_ended"
+                },
+                {
+                    "give_item": "wat_fenners_day_book",
+                    "quantity": 1
+                },
+                {
+                    "approval": {
+                        "sera": 8,
+                        "ilse": 6,
+                        "aldric": -2
+                    }
+                }
+            ]
+        },
+        "left_the_book": {
+            "terminal": true,
+            "resolution": "left_the_book",
+            "outcome": "neutral",
+            "title": "His hand in it",
+            "journal": "I gave Lise Fenner back her husband's book. It is the only thing of his with his hand in it, and the line I wanted is one line in twenty years of loads. One crate left at the hill store, as asked. I know where the plate went now. I do not know why, and the only man who did is buried at the Weir. That is where the trail goes. Corse told me so before I started.",
+            "effects": [
+                {
+                    "set_flag": "armour_chain_fate",
+                    "value": "left"
+                },
+                {
+                    "set_flag": "armour_chain_ended"
+                },
+                {
+                    "approval": {
+                        "aldric": 10,
+                        "kessa": 2,
+                        "sera": -4
+                    }
+                }
+            ]
+        },
+        "paid_the_burying": {
+            "terminal": true,
+            "resolution": "paid_the_burying",
+            "outcome": "success",
+            "title": "The burying",
+            "journal": "Wat Fenner's burying cost twenty gold and his widow had paid six of it back to Jory Kemp at a shilling a week. I paid the fourteen. It has nothing to do with the plate, or the mark, or who asked for a crate to be left at a goblin store. It was the only debt anywhere on this trail that anybody could actually settle.",
+            "effects": [
+                {
+                    "set_flag": "armour_chain_fate",
+                    "value": "paid"
+                },
+                {
+                    "set_flag": "armour_chain_ended"
+                },
+                {
+                    "take_gold": 14
+                },
+                {
+                    "approval": {
+                        "aldric": 12,
+                        "kessa": 8,
+                        "ilse": 4
+                    }
+                }
+            ]
+        }
+    }
+}

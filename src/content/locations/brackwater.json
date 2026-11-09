@@ -35,6 +35,10 @@
                     "label": "Into the Fortieth"
                 },
                 {
+                    "to": "brindles_chandlery",
+                    "label": "Under the arches to Brindle's"
+                },
+                {
                     "to": "the_mudside",
                     "label": "Down the end steps to the mudside"
                 },
@@ -178,6 +182,27 @@
                 {
                     "to": "brackwater_wharf",
                     "label": "Up the end steps to the wharf"
+                }
+            ]
+        },
+        "brindles_chandlery": {
+            "name": "Brindle & Daughter, Chandlers",
+            "type": "building",
+            "map_pos": [
+                52,
+                62
+            ],
+            "description": "A narrow shop under the wharf arches that sells everything a boat runs out of: cordage, pitch, lamp oil, sailcloth by the ell, biscuit, nails by weight and second-hand anything. The ceiling is hung so thick with blocks and lanterns that the daylight comes in green. Behind the counter is a ledger the size of a door, and a woman who knows what is on every page of it.",
+            "ambience": [
+                "A block swings on its hook as somebody brushes past it, and three others swing with it.",
+                "The scale on the counter is weighing nails for a lighterman who is watching it very closely.",
+                "Somewhere in the back a cat knocks something off something.",
+                "The ledger is open at today, and today is already half a page."
+            ],
+            "exits": [
+                {
+                    "to": "brackwater_wharf",
+                    "label": "Out under the arches to the wharf"
                 }
             ]
         }

@@ -1,0 +1,487 @@
+{
+    "npc_key": "lise_fenner",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "quest": "the_fenmoor_lot",
+                        "stage": "the_day_book"
+                    }
+                ],
+                "text": "The hulk with the blue rail is the tidiest thing on the mud. A woman of about fifty is scrubbing a pot on the deck, and when you say Wat's name she stops, and dries her hands, and goes below without a word, and comes back up with a book bound in oilcloth.\n\n\"Twenty years,\" Lise Fenner says. \"Loads and tolls. I can't read it. I know it's his because it's his hand.\" She opens it on the rail where the light is. \"You'll want four winters back. People who come asking always want one particular page.\"",
+                "choices": [
+                    {
+                        "label": "Read four winters back.",
+                        "next": "the_page"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "armour_chain_fate",
+                        "equals": "paid"
+                    }
+                ],
+                "text": "Lise Fenner nods to you from the deck of the blue-rail hulk. \"Jory crossed it out,\" she says. \"Drew a line through it in front of me. I've never seen him do that for anybody.\" She goes back to her pot.",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "Lise Fenner is scrubbing the same pot, or another one. \"Did it help?\" she asks, and then, before you can answer: \"No. It never does. Go on.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_page": [
+            {
+                "text": "The hand is big and careful and it does not change in twenty years.\n\n*Weir. 4 crates plate &c. off Darrow, 11 gp. East road.*\n\n*Fold. Salt, 2 sacks, Hobb's farm, as asked. Paid.*\n\n*Hill store. 1 crate left, as asked. Paid.*\n\n*Ford. Toll 3d.*\n\nThat is all. A carter's week. The crate that Nakka wore for four years is one line between a farmer's salt and a toll.",
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"The hill store. That's the warren's dry store. He left it at their door, and he was paid, and he went on to the ford.\""
+                    },
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa: \"Paid by who? It doesn't say by who.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "'As asked.' Who asked him?",
+                        "next": "as_asked"
+                    },
+                    {
+                        "label": "Go through every 'as asked' in the book.",
+                        "check": {
+                            "skill": "investigation",
+                            "dc": 15,
+                            "on_success": "every_one",
+                            "on_failure": "blur"
+                        }
+                    },
+                    {
+                        "label": "May I take the book?",
+                        "conditions": [
+                            {
+                                "quest": "the_fenmoor_lot",
+                                "stage": "the_day_book"
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_fenmoor_lot",
+                                    "stage": "kept_the_book"
+                                }
+                            }
+                        ],
+                        "next": "kept"
+                    },
+                    {
+                        "label": "Keep it. It's his.",
+                        "conditions": [
+                            {
+                                "quest": "the_fenmoor_lot",
+                                "stage": "the_day_book"
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_fenmoor_lot",
+                                    "stage": "left_the_book"
+                                }
+                            }
+                        ],
+                        "next": "left"
+                    },
+                    {
+                        "label": "Let me pay what's owed on the burying.",
+                        "conditions": [
+                            {
+                                "quest": "the_fenmoor_lot",
+                                "stage": "the_day_book"
+                            },
+                            {
+                                "gold_at_least": 14
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_fenmoor_lot",
+                                    "stage": "paid_the_burying"
+                                }
+                            }
+                        ],
+                        "next": "paid"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "as_asked": [
+            {
+                "conditions": [
+                    {
+                        "flag": "fenmoor_asked_for"
+                    }
+                ],
+                "text": "\"Coll told you Wat said 'it's been asked for',\" Lise Fenner says, before you can. \"Coll would. He's been telling people that for two winters, so it'd sound like something.\" She looks at the line she cannot read. \"Wat said it about everything. A cheese had been asked for. I'd been asked for, once, by his mother.\" A pause. \"I don't know. I never asked him what he carried. You don't, if you want him to keep coming home.\"",
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera: \"It's the same sentence either way. That's what's clever about it. Nobody had to be clever.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "May I take the book?",
+                        "conditions": [
+                            {
+                                "quest": "the_fenmoor_lot",
+                                "stage": "the_day_book"
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_fenmoor_lot",
+                                    "stage": "kept_the_book"
+                                }
+                            }
+                        ],
+                        "next": "kept"
+                    },
+                    {
+                        "label": "Keep it. It's his.",
+                        "conditions": [
+                            {
+                                "quest": "the_fenmoor_lot",
+                                "stage": "the_day_book"
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_fenmoor_lot",
+                                    "stage": "left_the_book"
+                                }
+                            }
+                        ],
+                        "next": "left"
+                    },
+                    {
+                        "label": "Let me pay what's owed on the burying.",
+                        "conditions": [
+                            {
+                                "quest": "the_fenmoor_lot",
+                                "stage": "the_day_book"
+                            },
+                            {
+                                "gold_at_least": 14
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_fenmoor_lot",
+                                    "stage": "paid_the_burying"
+                                }
+                            }
+                        ],
+                        "next": "paid"
+                    },
+                    {
+                        "label": "Back to the page.",
+                        "next": "the_page"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "\"He wrote that all the time,\" Lise Fenner says. \"It means somebody ordered it. A farm wants salt, a chapel wants nails, he takes them, he writes *as asked*.\" She looks at the line for a long time, though she cannot read it. \"Or it means he'd been told not to write the name. I don't know. I never asked him what he carried. You don't, if you want him to keep coming home.\"",
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera: \"It's the same sentence either way. That's what's clever about it. Nobody had to be clever.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "May I take the book?",
+                        "conditions": [
+                            {
+                                "quest": "the_fenmoor_lot",
+                                "stage": "the_day_book"
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_fenmoor_lot",
+                                    "stage": "kept_the_book"
+                                }
+                            }
+                        ],
+                        "next": "kept"
+                    },
+                    {
+                        "label": "Keep it. It's his.",
+                        "conditions": [
+                            {
+                                "quest": "the_fenmoor_lot",
+                                "stage": "the_day_book"
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_fenmoor_lot",
+                                    "stage": "left_the_book"
+                                }
+                            }
+                        ],
+                        "next": "left"
+                    },
+                    {
+                        "label": "Let me pay what's owed on the burying.",
+                        "conditions": [
+                            {
+                                "quest": "the_fenmoor_lot",
+                                "stage": "the_day_book"
+                            },
+                            {
+                                "gold_at_least": 14
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_fenmoor_lot",
+                                    "stage": "paid_the_burying"
+                                }
+                            }
+                        ],
+                        "next": "paid"
+                    },
+                    {
+                        "label": "Back to the page.",
+                        "next": "the_page"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "every_one": [
+            {
+                "text": "It takes most of an hour, with Lise Fenner scrubbing the pot beside you and not asking. *As asked* comes up forty times in twenty years. Thirty-nine of them have a name in the margin, in the same hand, a little smaller: *Hobb. The chapel. Mrs Tey. Marrow.*\n\nThe hill store has no name in the margin.\n\nThat is either the most important line in the book or a carter who was tired that day. There is nobody left alive who can tell you which, and the book does not care.",
+                "on_enter": [
+                    {
+                        "set_flag": "fenmoor_no_name"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric: \"One in forty. A man forgets one in forty. I forget more than that.\" He does not sound as if he believes it either."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "May I take the book?",
+                        "conditions": [
+                            {
+                                "quest": "the_fenmoor_lot",
+                                "stage": "the_day_book"
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_fenmoor_lot",
+                                    "stage": "kept_the_book"
+                                }
+                            }
+                        ],
+                        "next": "kept"
+                    },
+                    {
+                        "label": "Keep it. It's his.",
+                        "conditions": [
+                            {
+                                "quest": "the_fenmoor_lot",
+                                "stage": "the_day_book"
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_fenmoor_lot",
+                                    "stage": "left_the_book"
+                                }
+                            }
+                        ],
+                        "next": "left"
+                    },
+                    {
+                        "label": "Let me pay what's owed on the burying.",
+                        "conditions": [
+                            {
+                                "quest": "the_fenmoor_lot",
+                                "stage": "the_day_book"
+                            },
+                            {
+                                "gold_at_least": 14
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_fenmoor_lot",
+                                    "stage": "paid_the_burying"
+                                }
+                            }
+                        ],
+                        "next": "paid"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "blur": [
+            {
+                "text": "You go through it for most of an hour. Salt, nails, a cheese, a coffin, a crate, and *as asked* so often that by the end the words stop meaning anything at all, which is perhaps what they were for. Lise Fenner scrubs the pot and does not ask.",
+                "choices": [
+                    {
+                        "label": "May I take the book?",
+                        "conditions": [
+                            {
+                                "quest": "the_fenmoor_lot",
+                                "stage": "the_day_book"
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_fenmoor_lot",
+                                    "stage": "kept_the_book"
+                                }
+                            }
+                        ],
+                        "next": "kept"
+                    },
+                    {
+                        "label": "Keep it. It's his.",
+                        "conditions": [
+                            {
+                                "quest": "the_fenmoor_lot",
+                                "stage": "the_day_book"
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_fenmoor_lot",
+                                    "stage": "left_the_book"
+                                }
+                            }
+                        ],
+                        "next": "left"
+                    },
+                    {
+                        "label": "Let me pay what's owed on the burying.",
+                        "conditions": [
+                            {
+                                "quest": "the_fenmoor_lot",
+                                "stage": "the_day_book"
+                            },
+                            {
+                                "gold_at_least": 14
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_fenmoor_lot",
+                                    "stage": "paid_the_burying"
+                                }
+                            }
+                        ],
+                        "next": "paid"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "kept": [
+            {
+                "text": "\"Take it,\" Lise Fenner says. \"A book's only worth keeping if somebody reads it.\" She wraps it back in its oilcloth with more care than she has used on anything else and puts it in your hands. \"If you find out who asked, don't come and tell me. I'd rather think he was tired.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "left": [
+            {
+                "text": "She takes the book back, and holds it a moment, and goes below with it. When she comes up again her hands are empty and she picks up the pot. \"That's the end of it, then,\" she says. \"It usually is, with Wat. He went up the road and he came back down it and you never knew what was on the cart.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "paid": [
+            {
+                "text": "\"That's for the burying,\" she says, looking at the coins. \"That's not for the book.\" You say you know. She counts it twice, the way people count money they did not expect, and puts it in her apron. \"Jory'll cross it out,\" she says. \"He's been good. Six gold in two winters, a shilling a week, and he never once asked me for it.\" She does not thank you, and you understand that she cannot quite, yet.",
+                "interjections": [
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa, low: \"That's the only thing on this whole trail anybody could pay off.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

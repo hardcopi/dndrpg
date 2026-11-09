@@ -1,0 +1,12 @@
+{
+    "npc_key": "coll_darrow",
+    "name": "Coll Darrow",
+    "role": "Packman, retired",
+    "description": "Took goods up any river on spec for thirty years and came back with whatever they fetched. Lives on a hulk on the mudside now and says he has retired, in the tone of a man who means his knees have.",
+    "sprite_key": "coll_darrow",
+    "is_quest_giver": false,
+    "dialog": "coll_darrow",
+    "place": {
+        "location": "the_mudside"
+    }
+}

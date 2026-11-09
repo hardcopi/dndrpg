@@ -21,6 +21,25 @@
             {
                 "conditions": [
                     {
+                        "quest": "the_fenmoor_lot",
+                        "stage": "lot_forty_one"
+                    }
+                ],
+                "text": "\"The Fenmoor lot,\" Dorcas Fenn says from the ladder. \"Greyhythe returns, four years back.\" The ladder rolls along the rail, three yards, five, and stops. \"Here.\"",
+                "choices": [
+                    {
+                        "label": "Read the return.",
+                        "next": "fenmoor_return"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "survey_fate",
                         "equals": "warned"
                     }
@@ -28,6 +47,38 @@
                 "once": true,
                 "text": "\"You're from up the valley,\" Dorcas Fenn says, without looking round from the shelf. \"We've had three conveyances in from Granary Row this fortnight. People sell quicker once they know. I don't think that's anybody's fault. I just thought somebody from there ought to be told it was filed.\"",
                 "choices": [
+                    {
+                        "label": "I'm after a Greyhythe sale. An armourer's stock. The Fenmoor lot.",
+                        "conditions": [
+                            {
+                                "flag": "mark_seen_plate"
+                            },
+                            {
+                                "not": {
+                                    "quest": "the_fenmoor_lot",
+                                    "status": "active"
+                                }
+                            },
+                            {
+                                "not": {
+                                    "quest": "the_fenmoor_lot",
+                                    "status": "completed"
+                                }
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "start_quest": "the_fenmoor_lot"
+                            },
+                            {
+                                "quest_stage": {
+                                    "quest": "the_fenmoor_lot",
+                                    "stage": "lot_forty_one"
+                                }
+                            }
+                        ],
+                        "next": "fenmoor_return"
+                    },
                     {
                         "label": "Can I read them?",
                         "next": "read_anything"
@@ -39,8 +90,109 @@
                 ]
             },
             {
+                "conditions": [
+                    {
+                        "quest": "the_fenmoor_lot",
+                        "status": "completed"
+                    },
+                    {
+                        "flag": "fenmoor_no_name"
+                    }
+                ],
+                "once": true,
+                "text": "\"One in forty,\" Dorcas Fenn says, when you tell her about the margin. She thinks about it at the top of the ladder for some time. \"I've had clerks forget a name one time in four. I've had a clerk forget his own.\" The ladder rolls a yard. \"That's not me telling you it means nothing. It's me telling you this room can't tell you whether it does.\"",
+                "choices": [
+                    {
+                        "label": "Anything?",
+                        "next": "read_anything"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_fenmoor_lot",
+                        "status": "completed"
+                    },
+                    {
+                        "flag": "armour_chain_fate",
+                        "equals": "kept"
+                    }
+                ],
+                "text": "Dorcas Fenn looks at the oilcloth bundle you are carrying and does not ask. \"Carters' books are never filed,\" she says. \"Twenty years of the river and none of it in here.\" She very nearly smiles. \"Don't let it get damp. That's all I ask of anybody.\"",
+                "choices": [
+                    {
+                        "label": "Anything?",
+                        "next": "read_anything"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_fenmoor_lot",
+                        "status": "completed"
+                    },
+                    {
+                        "flag": "armour_chain_fate",
+                        "equals": "left"
+                    }
+                ],
+                "text": "\"You left it with her,\" Dorcas Fenn says. It is not a question; somebody on the mud will have mentioned it, because somebody on the mud mentions everything. \"Good. Some paper's better where it is.\" She goes back up the ladder. \"Not much. Some.\"",
+                "choices": [
+                    {
+                        "label": "Anything?",
+                        "next": "read_anything"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
                 "text": "\"Read anything,\" Dorcas Fenn says from the ladder. \"Take nothing. Penny a page.\" The ladder rolls a yard and stops.",
                 "choices": [
+                    {
+                        "label": "I'm after a Greyhythe sale. An armourer's stock. The Fenmoor lot.",
+                        "conditions": [
+                            {
+                                "flag": "mark_seen_plate"
+                            },
+                            {
+                                "not": {
+                                    "quest": "the_fenmoor_lot",
+                                    "status": "active"
+                                }
+                            },
+                            {
+                                "not": {
+                                    "quest": "the_fenmoor_lot",
+                                    "status": "completed"
+                                }
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "start_quest": "the_fenmoor_lot"
+                            },
+                            {
+                                "quest_stage": {
+                                    "quest": "the_fenmoor_lot",
+                                    "stage": "lot_forty_one"
+                                }
+                            }
+                        ],
+                        "next": "fenmoor_return"
+                    },
                     {
                         "label": "Anything?",
                         "next": "read_anything"
@@ -125,6 +277,38 @@
                 "text": "\"Anything filed,\" she says. \"Deeds, conveyances, writs, field books, assignments, the bound minutes of the meeting back to the beginning. Nobody reads the minutes. They're very dull. That isn't an accident, but it isn't a plot either. Most important things are dull, and most dull things are important to somebody.\"",
                 "choices": [
                     {
+                        "label": "I'm after a Greyhythe sale. An armourer's stock. The Fenmoor lot.",
+                        "conditions": [
+                            {
+                                "flag": "mark_seen_plate"
+                            },
+                            {
+                                "not": {
+                                    "quest": "the_fenmoor_lot",
+                                    "status": "active"
+                                }
+                            },
+                            {
+                                "not": {
+                                    "quest": "the_fenmoor_lot",
+                                    "status": "completed"
+                                }
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "start_quest": "the_fenmoor_lot"
+                            },
+                            {
+                                "quest_stage": {
+                                    "quest": "the_fenmoor_lot",
+                                    "stage": "lot_forty_one"
+                                }
+                            }
+                        ],
+                        "next": "fenmoor_return"
+                    },
+                    {
                         "label": "Is there anything about what's under the quarry?",
                         "next": "the_quarry"
                     },
@@ -139,6 +323,78 @@
             {
                 "text": "Dorcas Fenn goes up the ladder and comes back down with one thin file and opens it. Two letters from Mr Corse, asking what the works at the head of the valley are for. Two replies, each a revised figure and a request for a fuller return. Nothing else. \"That's all there is,\" she says. \"If anybody knew, it'd be here. Somebody would have had to write it down.\"",
                 "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "fenmoor_return": [
+            {
+                "text": "She comes down with a thin bound book and opens it on the long table without looking for the page.\n\n*Lot 41. Sundry armour, the Fenmoor stock, the property of the house. To T. Vass, dealer in second goods, Greyhythe. 31 gp. Duty paid.*\n\n\"Vass files as well,\" Dorcas Fenn says. \"Dealers must, for the duty, and he is a careful man, which is to say a frightened one.\" Another book, another page that she does not look for.\n\n*Plate, three suits and pieces, as bought. To Brindle & Daughter, chandlers, Brackwater wharf. 40 gp.*\n\n\"Tuppence,\" she says. \"Two pages.\"",
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera, reading upside down: \"Thirty-one, then forty. Everybody made nine gold off it and nobody made a decision.\""
+                    },
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa: \"Brindle's. That's under the arches. I bought a knife there.\" A pause. \"Second-hand.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Pay the tuppence. Brindle & Daughter, then.",
+                        "conditions": [
+                            {
+                                "quest": "the_fenmoor_lot",
+                                "stage": "lot_forty_one"
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_fenmoor_lot",
+                                    "stage": "brindle_and_daughter"
+                                }
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "Do people often come asking where a thing went?",
+                        "next": "fenmoor_often"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "fenmoor_often": [
+            {
+                "text": "\"Every week,\" Dorcas Fenn says. \"Widows, mostly, and heirs, and once a man looking for a horse.\" She closes the book. \"They want the last page. There isn't a last page. There's only the page where it stopped being anybody's business to write it down.\"",
+                "choices": [
+                    {
+                        "label": "Brindle & Daughter, then.",
+                        "conditions": [
+                            {
+                                "quest": "the_fenmoor_lot",
+                                "stage": "lot_forty_one"
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_fenmoor_lot",
+                                    "stage": "brindle_and_daughter"
+                                }
+                            }
+                        ],
+                        "end": true
+                    },
                     {
                         "label": "Leave.",
                         "end": true

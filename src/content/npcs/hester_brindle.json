@@ -1,0 +1,12 @@
+{
+    "npc_key": "hester_brindle",
+    "name": "Hester Brindle",
+    "role": "Chandler",
+    "description": "The Daughter of Brindle & Daughter, and these days the Brindle as well. Sells anything a boat runs out of and buys anything a boat has too much of, and has never in her life been surprised by what that turns out to be.",
+    "sprite_key": "hester_brindle",
+    "is_quest_giver": false,
+    "dialog": "hester_brindle",
+    "place": {
+        "location": "brindles_chandlery"
+    }
+}
