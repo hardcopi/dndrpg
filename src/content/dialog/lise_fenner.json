@@ -10,7 +10,7 @@
                         "stage": "the_day_book"
                     }
                 ],
-                "text": "The hulk with the blue rail is the tidiest thing on the mud. A woman of about fifty is scrubbing a pot on the deck, and when you say Wat's name she stops, and dries her hands, and goes below without a word, and comes back up with a book bound in oilcloth.\n\n\"Twenty years,\" Lise Fenner says. \"Loads and tolls. I can't read it. I know it's his because it's his hand.\" She opens it on the rail where the light is. \"You'll want four winters back. People who come asking always want one particular page.\"",
+                "text": "The hulk with the blue rail is the tidiest thing on the mud. A woman of about fifty is scrubbing a pot on the deck, and when you say Abe's name she stops, and dries her hands, and goes below without a word, and comes back up with a book bound in oilcloth.\n\n\"Twenty years,\" Lise Treen says. \"Loads and tolls. I can't read it. I know it's his because it's his hand.\" She opens it on the rail where the light is. \"You'll want four winters back. People who come asking always want one particular page.\"",
                 "choices": [
                     {
                         "label": "Read four winters back.",
@@ -29,7 +29,7 @@
                         "equals": "paid"
                     }
                 ],
-                "text": "Lise Fenner nods to you from the deck of the blue-rail hulk. \"Jory crossed it out,\" she says. \"Drew a line through it in front of me. I've never seen him do that for anybody.\" She goes back to her pot.",
+                "text": "Lise Treen nods to you from the deck of the blue-rail hulk. \"Jory crossed it out,\" she says. \"Drew a line through it in front of me. I've never seen him do that for anybody.\" She goes back to her pot.",
                 "choices": [
                     {
                         "label": "Leave.",
@@ -38,7 +38,7 @@
                 ]
             },
             {
-                "text": "Lise Fenner is scrubbing the same pot, or another one. \"Did it help?\" she asks, and then, before you can answer: \"No. It never does. Go on.\"",
+                "text": "Lise Treen is scrubbing the same pot, or another one. \"Did it help?\" she asks, and then, before you can answer: \"No. It never does. Go on.\"",
                 "choices": [
                     {
                         "label": "Leave.",
@@ -49,7 +49,7 @@
         ],
         "the_page": [
             {
-                "text": "The hand is big and careful and it does not change in twenty years.\n\n*Weir. 4 crates plate &c. off Darrow, 11 gp. East road.*\n\n*Fold. Salt, 2 sacks, Hobb's farm, as asked. Paid.*\n\n*Hill store. 1 crate left, as asked. Paid.*\n\n*Ford. Toll 3d.*\n\nThat is all. A carter's week. The crate that Nakka wore for four years is one line between a farmer's salt and a toll.",
+                "text": "The hand is big and careful and it does not change in twenty years.\n\nWeir. 4 crates plate &c. off Darrow, 11 gp. East road.\n\nFold. Salt, 2 sacks, Hobb's farm, as asked. Paid.\n\nHill store. 1 crate left, as asked. Paid.\n\nFord. Toll 3d.\n\nThat is all. A carter's week. The crate that Nakka wore for four years is one line between a farmer's salt and a toll.",
                 "interjections": [
                     {
                         "companion": "ilse",
@@ -145,7 +145,7 @@
                         "flag": "fenmoor_asked_for"
                     }
                 ],
-                "text": "\"Coll told you Wat said 'it's been asked for',\" Lise Fenner says, before you can. \"Coll would. He's been telling people that for two winters, so it'd sound like something.\" She looks at the line she cannot read. \"Wat said it about everything. A cheese had been asked for. I'd been asked for, once, by his mother.\" A pause. \"I don't know. I never asked him what he carried. You don't, if you want him to keep coming home.\"",
+                "text": "\"Coll told you Abe said 'it's been asked for',\" Lise Treen says, before you can. \"Coll would. He's been telling people that for two winters, so it'd sound like something.\" She looks at the line she cannot read. \"Abe said it about everything. A cheese had been asked for. I'd been asked for, once, by his mother.\" A pause. \"I don't know. I never asked him what he carried. You don't, if you want him to keep coming home.\"",
                 "interjections": [
                     {
                         "companion": "sera",
@@ -221,7 +221,7 @@
                 ]
             },
             {
-                "text": "\"He wrote that all the time,\" Lise Fenner says. \"It means somebody ordered it. A farm wants salt, a chapel wants nails, he takes them, he writes *as asked*.\" She looks at the line for a long time, though she cannot read it. \"Or it means he'd been told not to write the name. I don't know. I never asked him what he carried. You don't, if you want him to keep coming home.\"",
+                "text": "\"He wrote that all the time,\" Lise Treen says. \"It means somebody ordered it. A farm wants salt, a chapel wants nails, he takes them, he writes as asked.\" She looks at the line for a long time, though she cannot read it. \"Or it means he'd been told not to write the name. I don't know. I never asked him what he carried. You don't, if you want him to keep coming home.\"",
                 "interjections": [
                     {
                         "companion": "sera",
@@ -299,7 +299,7 @@
         ],
         "every_one": [
             {
-                "text": "It takes most of an hour, with Lise Fenner scrubbing the pot beside you and not asking. *As asked* comes up forty times in twenty years. Thirty-nine of them have a name in the margin, in the same hand, a little smaller: *Hobb. The chapel. Mrs Tey. Marrow.*\n\nThe hill store has no name in the margin.\n\nThat is either the most important line in the book or a carter who was tired that day. There is nobody left alive who can tell you which, and the book does not care.",
+                "text": "It takes most of an hour, with Lise Treen scrubbing the pot beside you and not asking. As asked comes up forty times in twenty years. Thirty-nine of them have a name in the margin, in the same hand, a little smaller: Hobb. The chapel. Mrs Tey. Marrow.\n\nThe hill store has no name in the margin.\n\nThat is either the most important line in the book or a carter who was tired that day. There is nobody left alive who can tell you which, and the book does not care.",
                 "on_enter": [
                     {
                         "set_flag": "fenmoor_no_name"
@@ -378,7 +378,7 @@
         ],
         "blur": [
             {
-                "text": "You go through it for most of an hour. Salt, nails, a cheese, a coffin, a crate, and *as asked* so often that by the end the words stop meaning anything at all, which is perhaps what they were for. Lise Fenner scrubs the pot and does not ask.",
+                "text": "You go through it for most of an hour. Salt, nails, a cheese, a coffin, a crate, and as asked so often that by the end the words stop meaning anything at all, which is perhaps what they were for. Lise Treen scrubs the pot and does not ask.",
                 "choices": [
                     {
                         "label": "May I take the book?",
@@ -446,7 +446,7 @@
         ],
         "kept": [
             {
-                "text": "\"Take it,\" Lise Fenner says. \"A book's only worth keeping if somebody reads it.\" She wraps it back in its oilcloth with more care than she has used on anything else and puts it in your hands. \"If you find out who asked, don't come and tell me. I'd rather think he was tired.\"",
+                "text": "\"Take it,\" Lise Treen says. \"A book's only worth keeping if somebody reads it.\" She wraps it back in its oilcloth with more care than she has used on anything else and puts it in your hands. \"If you find out who asked, don't come and tell me. I'd rather think he was tired.\"",
                 "choices": [
                     {
                         "label": "Leave.",
@@ -457,7 +457,7 @@
         ],
         "left": [
             {
-                "text": "She takes the book back, and holds it a moment, and goes below with it. When she comes up again her hands are empty and she picks up the pot. \"That's the end of it, then,\" she says. \"It usually is, with Wat. He went up the road and he came back down it and you never knew what was on the cart.\"",
+                "text": "She takes the book back, and holds it a moment, and goes below with it. When she comes up again her hands are empty and she picks up the pot. \"That's the end of it, then,\" she says. \"It usually is, with Abe. He went up the road and he came back down it and you never knew what was on the cart.\"",
                 "choices": [
                     {
                         "label": "Leave.",

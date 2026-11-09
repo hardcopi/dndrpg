@@ -127,7 +127,7 @@
         ],
         "unpicked": [
             {
-                "text": "You lay the times side by side: the carter puts the fire at dusk, the miller's woman at midnight, and the man at the Flagon has Hobley under a bench through both. Pellow reads them three times and something in him unclenches. \"They can't all be true,\" he says. \"A return mustn't put a man in two places.\" He writes: *Not ascertained. Statements inconsistent.* \"That's true. They'll ask me. I'll show them this. They'll accept it; they always accept what's true.\"",
+                "text": "You lay the times side by side: the carter puts the fire at dusk, the miller's woman at midnight, and the man at the Flagon has Hobley under a bench through both. Pellow reads them three times and something in him unclenches. \"They can't all be true,\" he says. \"A return mustn't put a man in two places.\" He writes: Not ascertained. Statements inconsistent. \"That's true. They'll ask me. I'll show them this. They'll accept it; they always accept what's true.\"",
                 "choices": [
                     {
                         "label": "Good.",
@@ -177,7 +177,7 @@
         ],
         "hobley": [
             {
-                "text": "Pellow waits a decent interval, then writes *Hobley, C., drover* on the return and blots it. \"It'll come to nothing,\" he says, and believes it. \"He'll find work a little harder to get for a while, and nobody will be able to say why. That's all that ever happens.\"",
+                "text": "Pellow waits a decent interval, then writes Hobley, C., drover on the return and blots it. \"It'll come to nothing,\" he says, and believes it. \"He'll find work a little harder to get for a while, and nobody will be able to say why. That's all that ever happens.\"",
                 "choices": [
                     {
                         "label": "Leave.",

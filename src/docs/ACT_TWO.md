@@ -108,3 +108,9 @@ Wat. Test: `tools/test_fenmoor_lot.php`.
 `tools/test_act_two.php` (in `verify.sh`) plays all four branches to an ending
 by choosing replies by their words, and checks the wrong branch's replies are
 never offered.
+
+> Naming note: the dead carter is **Abe Treen** (widow **Lise Treen**). The
+> first cut called him Wat Fenner, which is the flood-gate keeper's name in
+> Act I; the internal keys `lise_fenner` and `wat_fenners_day_book` were kept
+> so live saves holding the book are untouched. Dialogue text renders plain:
+> no `*emphasis*` markup.
