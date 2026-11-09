@@ -49,7 +49,7 @@ printf 'python: %s\n' "$(python3 --version 2>/dev/null | sed 's/Python //' || ec
 run "lint_php"        python3 tools/lint_php.py
 run "lint_js"         python3 tools/lint_js.py
 run "content_valid"   python3 tools/load_content.py --check
-run "content_trace"   python3 tools/trace_content.py
+run "content_trace"   python3 tools/trace_content.py --check
 # Proves the icosahedron and cube geometry, and that the generated files on disk
 # match what the generator would produce now. The browser's agreement with those
 # numbers is a separate claim and needs a browser: /tools/dice_preview.html.
@@ -92,6 +92,7 @@ if [ "$PHP_MODE" != none ]; then
 
     # Statics next: pure arithmetic over the rules tables, no PDO behind them.
     run "test_rules"          phprun test_rules.php
+    run "test_dice"           phprun test_dice.php
     run "test_checks"         phprun test_checks.php
     run "test_combat"         phprun test_combat.php
     run "test_token_art"      phprun test_token_art.php
@@ -133,6 +134,28 @@ if [ "$PHP_MODE" != none ]; then
     run "test_quest_marks"    phprun test_quest_marks.php
     run "test_companions"     phprun test_companions.php
     run "test_state_machines" phprun test_state_machines.php
+    # These 20 harnesses existed but verify.sh never ran them (all passed on
+    # main, 9 Nov 2026). test_smite was ~7% flaky until its hit was scripted.
+    run "test_smite"          phprun test_smite.php
+    run "test_budget"         phprun test_budget.php
+    run "test_channel"        phprun test_channel.php
+    run "test_class_abilities" phprun test_class_abilities.php
+    run "test_delve"          phprun test_delve.php
+    run "test_delve_mouth"    phprun test_delve_mouth.php
+    run "test_delve_quest"    phprun test_delve_quest.php
+    run "test_dungeon"        phprun test_dungeon.php
+    run "test_freeplay_road"  phprun test_freeplay_road.php
+    run "test_furnishing"     phprun test_furnishing.php
+    run "test_login_safety"   phprun test_login_safety.php
+    run "test_look_tokens"    phprun test_look_tokens.php
+    run "test_mapgen"         phprun test_mapgen.php
+    run "test_names"          phprun test_names.php
+    run "test_quest_advance_level" phprun test_quest_advance_level.php
+    run "test_region_map_art" phprun test_region_map_art.php
+    run "test_same_mark_autostart" phprun test_same_mark_autostart.php
+    run "test_tutorial"       phprun test_tutorial.php
+    run "test_visemes"        phprun test_visemes.php
+    run "test_watch"          phprun test_watch.php
     run "test_dialogue_once"  phprun test_dialogue_once.php
     run "test_dialogue_lint"  phprun test_dialogue_lint.php
     run "test_content_export" phprun test_content_export.php

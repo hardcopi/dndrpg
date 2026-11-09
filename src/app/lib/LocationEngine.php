@@ -1638,7 +1638,9 @@ class LocationEngine
     public function fireTrapOn(int $partyId, array $trap, array $victim): array
     {
         $save = Rules::savingThrow($victim, (string) $trap['save']);
-        $die = random_int(1, 20);
+        // Through Dice so a test can script the save (Dice::script); in play it
+        // is the same random_int it always was.
+        $die = (int) Dice::d20()['natural'];
         $total = $die + (int) $save['total'];
         $dc = (int) $trap['dc'];
         $saved = $total >= $dc;
@@ -1751,7 +1753,7 @@ class LocationEngine
         // here fails for all of it, and the party has to come back — which is
         // what makes a second look cost something.
         $look = Rules::skillCheck($char, 'investigation');
-        $roll = random_int(1, 20);
+        $roll = (int) Dice::d20()['natural'];   // via Dice so tests can script it
         $total = $roll + (int) $look['total'];
         $messages[] = "You search the place. Investigation — {$roll} + " . (int) $look['total'] . " = {$total}.";
 

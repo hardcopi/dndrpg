@@ -127,8 +127,13 @@ threw('and a fighter cannot hold one', fn() => $invoke('doSmite', $notPaladin, 1
 
 echo "\n== spending it ==\n";
 $reset();
+// The swing is scripted to a plain hit (a natural 15: not a 1, which always
+// misses, and not a 20, whose doubled dice overshoot the range below). Left to
+// random_int this block failed about one run in fifteen.
+Dice::script([15]);
 $hit = $invoke('resolveAttack', board($cid, ['smite' => 1]), 'pc_1', 'mon_1', $SWORD, null,
     $shot(board($cid)));
+Dice::useGenerator(null);
 same('a landed blow burns the slot', ['1' => 1], $slots());
 same('and the hold is cleared', 0, (int) $hit['combatants'][0]['smite']);
 $dealt = 400 - (int) $hit['combatants'][1]['hp'];
@@ -140,8 +145,12 @@ ok('and the log says so',
 // A miss must cost nothing. Forced by an armour class nothing can beat.
 $reset();
 $missBoard = board($cid, ['smite' => 2], ['ac' => 99]);
+// A natural 20 hits whatever the armour class, so this swing is scripted to a
+// natural 2 as well; unscripted, this block failed about one run in twenty.
+Dice::script([2]);
 $missed = $invoke('resolveAttack', $missBoard, 'pc_1', 'mon_1',
     array_merge($SWORD, ['bonus' => -99]), null, $shot($missBoard));
+Dice::useGenerator(null);
 same('a miss spends no slot', [], $slots());
 same('and the smite is still held', 2, (int) $missed['combatants'][0]['smite']);
 

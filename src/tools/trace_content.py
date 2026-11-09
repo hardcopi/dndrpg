@@ -11,6 +11,16 @@ that one: "can a *player* get there, and does anything ever read what we wrote?"
     python3 tools/trace_content.py --flags      # just the flag ledger
     python3 tools/trace_content.py --openings   # just what greetings notice
     python3 tools/trace_content.py --economy    # just the approval economy
+    python3 tools/trace_content.py --check      # fail only on NEW findings
+    python3 tools/trace_content.py --write-baseline   # accept today's list
+
+The findings are mostly writing to-dos (an ending nobody greets, a flag set
+and never read). Failing on all of them kept verify.sh red forever, which hid
+real regressions behind a known failure. So the known list is checked in as
+tools/trace_content.baseline.txt: --check (what verify.sh runs) still prints
+every finding, but exits non-zero only for one that is not in the baseline,
+and names baseline entries that have since been fixed so the file can shrink.
+Add to the baseline only on purpose, with --write-baseline, in its own commit.
 
 Five things it looks for that a loader cannot:
 
@@ -59,6 +69,20 @@ import load_content
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CONTENT = os.path.join(ROOT, "content")
+BASELINE = os.path.join(ROOT, "tools", "trace_content.baseline.txt")
+BASELINE_HEADER = (
+    "# Known trace_content.py findings, accepted as writing to-dos.\n"
+    "# `--check` (verify.sh) fails only on a finding NOT listed here.\n"
+    "# Regenerate with `python3 tools/trace_content.py --write-baseline`, on purpose.\n"
+)
+
+
+def read_baseline():
+    try:
+        with open(BASELINE, encoding="utf-8") as fh:
+            return {l.rstrip("\n") for l in fh if l.strip() and not l.startswith("#")}
+    except FileNotFoundError:
+        return set()
 
 KINDS = ("items", "monsters", "spells", "npcs", "dialog",
          "encounters", "quests", "companions")
@@ -755,7 +779,13 @@ def main():
                     help="only what greetings notice")
     ap.add_argument("--economy", action="store_true",
                     help="only the approval economy, dialogue against quests")
+    ap.add_argument("--check", action="store_true",
+                    help="exit 1 only for findings not in the baseline file")
+    ap.add_argument("--write-baseline", action="store_true",
+                    help="write today's findings as the accepted baseline")
     args = ap.parse_args()
+    if args.check or args.write_baseline:
+        args.quiet = True
 
     tree = load()
     graphs = {dk: Graph(dk, obj) for dk, obj in tree["dialog"].items()}
@@ -906,8 +936,17 @@ def main():
 
     # --- findings ---------------------------------------------------------
     rule("Findings")
+    if args.write_baseline:
+        lines = sorted(f"{kind}: {msg}" for kind, msg in rep.findings)
+        with open(BASELINE, "w", encoding="utf-8") as fh:
+            fh.write(BASELINE_HEADER)
+            fh.write("\n".join(lines) + ("\n" if lines else ""))
+        print(f"  wrote {len(lines)} finding(s) to {os.path.relpath(BASELINE, ROOT)}")
+        return 0
     if not rep.findings:
         print("  none — every ending is reachable and every flag is both set and read.")
+        if args.check and read_baseline():
+            print("  the baseline still lists findings: run --write-baseline to empty it")
         return 0
     by_kind = defaultdict(list)
     for kind, msg in rep.findings:
@@ -917,7 +956,21 @@ def main():
         for msg in sorted(by_kind[kind]):
             print(f"    - {msg}")
     print(f"\n  {len(rep.findings)} finding(s)")
-    return 1
+    if not args.check:
+        return 1
+    known = read_baseline()
+    now = {f"{kind}: {msg}" for kind, msg in rep.findings}
+    new = sorted(now - known)
+    fixed = sorted(known - now)
+    print(f"  {len(now) - len(new)} known (in {os.path.relpath(BASELINE, ROOT)}), "
+          f"{len(new)} new, {len(fixed)} fixed since the baseline")
+    for line in fixed:
+        print(f"  fixed: {line}")
+    if fixed:
+        print("  (run --write-baseline to drop the fixed ones)")
+    for line in new:
+        print(f"  NEW:   {line}")
+    return 1 if new else 0
 
 
 if __name__ == "__main__":

@@ -649,7 +649,11 @@ $hpBefore = array_sum(array_map(
     fn ($id) => (int) $db->query("SELECT current_hp FROM characters WHERE id = {$id}")->fetchColumn(),
     $charIds
 ));
+// The save is scripted to a natural 20. Left to chance, a failed save on a
+// walker already at the 1 HP floor took no damage and failed this check.
+Dice::script([20]);
 $walk = $loc3->travel($leader, $rigPassage);
+Dice::useGenerator(null);   // drop anything the script did not use
 $trapEvents = array_values(array_filter($walk['events'] ?? [], fn ($e) => $e['type'] === 'trap'));
 same('walking in springs it', 1, count($trapEvents));
 $hpAfter = array_sum(array_map(
@@ -894,7 +898,11 @@ $stuckRoomA = (int) $db->query(
 $db->prepare('UPDATE characters c INNER JOIN character_party cp ON cp.character_id = c.id
               SET c.current_location_id = ? WHERE cp.party_id = ?')
     ->execute([$stuckRoomA, $partyId]);
+// A natural 20 on the Investigation roll: this checks that a found door reaches
+// the map, not how often a level-1 party finds it.
+Dice::script([20]);
 $loc3->search($leader);
+Dice::useGenerator(null);
 $pm2 = $delves->planFor($dressedRegion);
 foreach ($pm2['corridors'] as $c) {
     if ($c['id'] === $stuckIdx) {
