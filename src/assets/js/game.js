@@ -38,6 +38,10 @@
   const TILE_CACHE_VER = 'pv12';   // pv12: Sib Marrell redrawn — he was in mail
 
   const DEFAULT_SPRITE_KEY = 'fighter';
+  // Screen modes, from the generated state-machines.js (ui_mode). The literal
+  // fallback keeps preview pages that do not load it working.
+  const MODE = (window.RivermarkStates && window.RivermarkStates.S.ui_mode)
+    || { LOCATION: 'location', COMBAT: 'combat' };
 
   /** How long a travel narration line waits before the next, in ms. */
   const STEP_PACE = 260;
@@ -66,7 +70,7 @@
   const ARRIVAL_HOLD = 200;
 
   const state = {
-    mode: 'location',        // 'location' | 'combat'
+    mode: MODE.LOCATION,      // ui_mode machine: LOCATION | COMBAT
     character: null,
     party: [],
     partyId: null,
@@ -307,7 +311,7 @@
     state.regionMap = data.region_map || null;
     state.combat = data.combat || null;
     state.knownNpcIds = data.known_npc_ids || [];
-    state.mode = state.combat && state.combat.is_active ? 'combat' : 'location';
+    state.mode = state.combat && state.combat.is_active ? MODE.COMBAT : MODE.LOCATION;
 
     await loadParty();
     await loadQuests();
@@ -365,7 +369,7 @@
   function render() {
     const locRoot = $('#location-root');
     const combatRoot = $('#combat-root');
-    const inCombat = state.mode === 'combat';
+    const inCombat = state.mode === MODE.COMBAT;
     if (inCombat) clearPaintedScene();
 
     if (locRoot) locRoot.classList.toggle('hidden', inCombat);
@@ -420,7 +424,7 @@
     const root = $('#location-root');
     if (!root) return;
     const loc = state.location;
-    const painted = state.mode !== 'combat' && !fpOn() ? sceneConfig(loc) : null;
+    const painted = state.mode !== MODE.COMBAT && !fpOn() ? sceneConfig(loc) : null;
     if (!painted || paintedSceneKey !== painted.key) clearPaintedScene();
     if (!loc) {
       root.innerHTML = '<p class="help-hint">Loading…</p>';
@@ -689,7 +693,7 @@
 
   /** Whether this place has a painting with a chart behind it (the Map verb). */
   function hasSceneMap() {
-    return state.mode !== 'combat' && !fpOn() && !!sceneConfig(state.location);
+    return state.mode !== MODE.COMBAT && !fpOn() && !!sceneConfig(state.location);
   }
 
   function toggleSceneMap() {
@@ -2250,7 +2254,7 @@
     try {
       const r = await API.post('combat/start', payload);
       state.combat = r.combat;
-      state.mode = 'combat';
+      state.mode = MODE.COMBAT;
       render();
     } catch (e) {
       showError(e.message);
@@ -2268,7 +2272,7 @@
     try {
       const r = await API.post('combat/pit', { tier });
       state.combat = r.combat;
-      state.mode = 'combat';
+      state.mode = MODE.COMBAT;
       render();
     } catch (e) {
       showError(e.message);
@@ -2287,7 +2291,7 @@
     document.addEventListener('keydown', (e) => {
       if (isTypingTarget(e.target)) return;
       if (e.ctrlKey || e.metaKey || e.altKey) return;
-      if (state.mode === 'combat') return;
+      if (state.mode === MODE.COMBAT) return;
       // A conversation, a die prompt or a modal owns the keyboard while it is
       // open; the scene underneath must not also answer.
       if (document.querySelector('#dialogue-root:not(.hidden)')) return;

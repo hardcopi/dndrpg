@@ -1449,3 +1449,15 @@ database somebody is playing on.
   throw. It predates the delve being freed from the Undervault. "searching puts
   the found secret on the map" (expected `'stuck'`, got NULL) also fails
   intermittently, before and after the same change; its cause is not pinned down.
+
+## State machines
+
+Lifecycles (companion roster, life state up/dying/stable/dead, quest status,
+combat status, client screen mode) are declared once as tables in
+`src/app/lib/{CompanionRoster,LifeState,QuestStatus,CombatStatus,UiMode}.php`
+and registered in `StateMachines.php`. Write a status only through the
+machine (`guard()` / `allows()` / `CombatStatus::transition()`); never with a
+raw string UPDATE. After editing a table run `php src/tools/gen_state_machines.php`
+to regenerate `docs/STATE_MACHINES.md` and `src/assets/js/state-machines.js`
+(verify.sh checks they are current). `--json` prints every machine for agents.
+Audited-but-implicit machines and recommendations: `docs/STATE_MACHINES_AUDIT.md`.

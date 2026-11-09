@@ -72,9 +72,9 @@ elif [ -f ../docker-compose.yml ] && command -v docker >/dev/null 2>&1 \
 fi
 phprun() {
     if [ "$PHP_MODE" = host ]; then
-        php "tools/$1"
+        php "tools/$1" "${@:2}"
     else
-        docker compose --project-directory .. exec -T php php "/var/www/html/tools/$1"
+        docker compose --project-directory .. exec -T php php "/var/www/html/tools/$1" "${@:2}"
     fi
 }
 
@@ -109,6 +109,9 @@ if [ "$PHP_MODE" != none ]; then
     run "test_focus"          phprun test_focus.php
     run "test_paperdoll"      phprun test_paperdoll.php
     run "test_character_look" phprun test_character_look.php
+    # The machine tables are the source of the docs and the JS mirror; a
+    # table edited without regenerating them fails here.
+    run "state_machines_gen"  phprun gen_state_machines.php --check
 
     # DB-backed. Every one of these is safe against a database somebody is
     # playing on: scratch rows inside a transaction they roll back, or a
@@ -129,6 +132,7 @@ if [ "$PHP_MODE" != none ]; then
     run "test_quest_module"   phprun test_quest_module.php
     run "test_quest_marks"    phprun test_quest_marks.php
     run "test_companions"     phprun test_companions.php
+    run "test_state_machines" phprun test_state_machines.php
     run "test_dialogue_once"  phprun test_dialogue_once.php
     run "test_dialogue_lint"  phprun test_dialogue_lint.php
     run "test_content_export" phprun test_content_export.php
