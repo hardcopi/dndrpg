@@ -1,0 +1,339 @@
+{
+    "npc_key": "abel_moss",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "flag": "yard_gate_forced"
+                    }
+                ],
+                "once": true,
+                "text": "The window slides open exactly six inches, as it always does. \"The wardens are being seen to,\" Abel Moss says. \"There'll be a return. I've put down that you were provoked, which I think you were. By the gate.\" He takes a manifest off a carter. \"Is there anything the yard can do for you?\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "yard_gate_thrown_out"
+                    }
+                ],
+                "once": true,
+                "text": "\"You're up,\" Abel Moss says, with what sounds like real relief. \"They're not unkind, the wardens. They're thorough. It's not the same.\" The window slides a little further open than usual. \"The gate's the gate. I did say.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "any": [
+                            {
+                                "quest": "the_quarterly_meeting",
+                                "stage": "four_days_flat"
+                            },
+                            {
+                                "not": {
+                                    "quest": "the_quarterly_meeting",
+                                    "status": "active"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "not": {
+                            "quest": "the_quarterly_meeting",
+                            "status": "completed"
+                        }
+                    }
+                ],
+                "text": "The window slides open six inches. A narrow, tidy man looks out at you, then past you for the manifest you are not carrying. \"Tull's boat,\" he says. \"You came down on Tull's boat and you haven't a manifest. That's all right. People do. What can the yard do for you?\"",
+                "choices": [
+                    {
+                        "label": "I'm looking for the house. The Corse Concern.",
+                        "next": "the_house"
+                    },
+                    {
+                        "label": "Tull says he's never known your name.",
+                        "next": "his_name"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "what_a_town_knows",
+                        "stage": "a_character"
+                    }
+                ],
+                "text": "\"You'll be here about Mr Pyke,\" Abel Moss says, before you have opened your mouth. \"He's been along the wharf asking. I've a survey party going up the Lenning on Monday, short a chainman. I'd want a character from somebody who'd seen him work. That's the form. It isn't a hard form.\"",
+                "choices": [
+                    {
+                        "label": "I've seen him work. He's the best chain in the valley.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "what_a_town_knows",
+                                    "stage": "hired"
+                                }
+                            }
+                        ],
+                        "next": "pyke_hired"
+                    },
+                    {
+                        "label": "I'll not speak for him. Not to the house.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "what_a_town_knows",
+                                    "stage": "gone"
+                                }
+                            }
+                        ],
+                        "next": "pyke_not"
+                    },
+                    {
+                        "label": "Let me think about it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "pyke_fate",
+                        "equals": "hired"
+                    }
+                ],
+                "pool": "after",
+                "text": "\"Mr Pyke went up on Monday,\" Abel Moss says. \"Wrote a very good hand on the muster. You can always tell.\" The window slides a little further shut, companionably."
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_quarterly_meeting",
+                        "status": "active"
+                    }
+                ],
+                "pool": "after",
+                "text": "\"Number Nine,\" Abel Moss says, before you ask. \"Top of House Street, the door with no plate. Mrs Crale keeps the book.\" He takes a paper off a carter without looking and slides the window three inches shut.",
+                "choices": [
+                    {
+                        "label": "What goes through this window?",
+                        "next": "the_window"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_quarterly_meeting",
+                        "status": "active"
+                    }
+                ],
+                "pool": "after",
+                "text": "\"Busy quarter,\" Abel Moss says, and initials something. \"They always are, just before the meeting. Everybody wants their figure in by the Thursday.\"",
+                "choices": [
+                    {
+                        "label": "What goes through this window?",
+                        "next": "the_window"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "Abel Moss slides the window open, sees it's you, and nods as if a manifest he had been expecting has arrived. \"Back again,\" he says. \"The yard's the yard.\"",
+                "choices": [
+                    {
+                        "label": "What goes through this window?",
+                        "next": "the_window"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "his_name": [
+            {
+                "text": "\"Doesn't he?\" The man looks honestly surprised, and then pleased. \"Abel Moss. Nineteen years.\" He thinks about it. \"I suppose it never came up. He hands me the paper and I hand him the chit. You don't need a name for that. You'll tell him, will you? No, don't. He'd only feel he ought to say something.\"",
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric, quietly: \"Nineteen years and a window.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "I'm looking for the house.",
+                        "next": "the_house"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_house": [
+            {
+                "text": "Abel Moss considers the question as if it is a better one than he usually gets. \"There isn't one, not the way you mean. This is the yard. The offices are up House Street, but they're only offices: clerks, cases, Mrs Crale. The house is a meeting.\" He points up the slope with his pen. \"Number Nine, the door with no plate. They sit on the quarter-day, which is Thursday. If you've business, Mrs Crale will put it on the agenda. Anybody may. Nobody does.\"",
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera, under her breath: \"A meeting. Of course it's a meeting.\""
+                    },
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa: \"So who do we hit?\" Abel Moss, kindly: \"I really couldn't say, miss.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Number Nine. Thank you, Mr Moss.",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "quest": "the_quarterly_meeting",
+                                    "stage": "the_secretary"
+                                }
+                            },
+                            {
+                                "not": {
+                                    "quest": "the_quarterly_meeting",
+                                    "stage": "your_matter"
+                                }
+                            },
+                            {
+                                "not": {
+                                    "quest": "the_quarterly_meeting",
+                                    "stage": "the_meeting"
+                                }
+                            },
+                            {
+                                "not": {
+                                    "quest": "the_quarterly_meeting",
+                                    "status": "completed"
+                                }
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "start_quest": "the_quarterly_meeting"
+                            },
+                            {
+                                "quest_stage": {
+                                    "quest": "the_quarterly_meeting",
+                                    "stage": "the_secretary"
+                                }
+                            }
+                        ],
+                        "reoffer": true,
+                        "end": true
+                    },
+                    {
+                        "label": "What goes through this window?",
+                        "next": "the_window"
+                    },
+                    {
+                        "label": "What if I went through the gate without a manifest?",
+                        "next": "the_gate"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_window": [
+            {
+                "text": "\"Everything that comes down the river for the house,\" he says. \"Grain forward, quarry writs, the Greyhythe returns, the timekeeper's books from the works.\" He says the last as he says the others. \"I read the totals. I don't read the rest. It's not my department, and the department it is has never once asked me to.\"",
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"The timekeeper's books. Who reads those?\" Abel Moss: \"Somebody upstairs, miss. They come back initialled.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Back.",
+                        "next": "greeting"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_gate": [
+            {
+                "text": "Abel Moss looks at the gate, then at you, then at the barrels, between which you now notice there are men in good boots who have been there the whole time. \"Then I'd shut the window,\" he says, \"and they'd explain the gate. I'd rather not. It spoils the afternoon for everybody.\"",
+                "choices": [
+                    {
+                        "label": "Then shut the window.",
+                        "effects": [
+                            {
+                                "start_combat": "the_yard_gate"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Never mind the gate.",
+                        "next": "greeting"
+                    }
+                ]
+            }
+        ],
+        "pyke_hired": [
+            {
+                "text": "Abel Moss writes. \"Pyke, A., chain. The Lenning party, Monday, the usual rate.\" He blots it and slides the window shut and open again, which is as near as the yard comes to ceremony. \"He'll do well. Men who can read the work always do. Tell him seven o'clock and to bring his own chain; the house's are short.\"",
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric says nothing at all, which from Aldric is a sentence."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "pyke_not": [
+            {
+                "text": "\"That's quite all right,\" Abel Moss says, and means it. \"It's only a form.\" He crosses something out with one neat line. \"Somebody else will be along. Somebody always is.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

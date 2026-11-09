@@ -1,0 +1,12 @@
+{
+    "npc_key": "minna_crale",
+    "name": "Minna Crale",
+    "role": "Secretary to the Meeting",
+    "description": "Keeps the minutes, the agenda and the door at Number Nine. She is precise without being cold and has the air of somebody who has never once lost a piece of paper.",
+    "sprite_key": "scribe",
+    "is_quest_giver": true,
+    "dialog": "minna_crale",
+    "place": {
+        "location": "number_nine"
+    }
+}

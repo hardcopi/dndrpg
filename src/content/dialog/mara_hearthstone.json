@@ -6,6 +6,70 @@
             {
                 "conditions": [
                     {
+                        "flag": "meeting_fate",
+                        "equals": "costed"
+                    }
+                ],
+                "once": true,
+                "text": "Mara listens to the whole of it with a cloth in one hand and a cup in the other and does not dry either. \"Carts,\" she says at the end. \"Roofs. A year's bread. The burying ground.\" She sets the cup down. \"So now it costs them something to move us. That's not the same as them not doing it.\" Then, quieter: \"It's more than anybody else ever got out of them. Sit down. It's on the house. This house.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "minuted"
+                    }
+                ],
+                "once": true,
+                "text": "\"Word for word?\" Mara asks. You tell her: word for word, bound with the quarter, kept as long as there's a Record Office. She thinks about that for longer than you expect. \"My grandmother used to say the dead don't mind what's written about them as long as somebody wrote it,\" she says. \"I never knew what she meant. Sit down.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "subscribed"
+                    }
+                ],
+                "once": true,
+                "text": "Mara looks at you differently, and it takes you a moment to understand that it is the way she looks at the grain factor's man when he comes in for the quarter. Then it's gone, mostly. \"One vote in twelve,\" she says. \"On us.\" She pours. \"Use it, then. Don't you dare not use it.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "walked"
+                    }
+                ],
+                "once": true,
+                "text": "\"Any other business,\" Mara repeats, flatly, when you have told her. She leans on the bar. \"Well. At least now somebody in this town has seen their faces.\" She slides a cup across. \"What were they like?\" You tell her. They were like anybody. That is the worst thing you have to tell her, and she knew it before you said it.",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "quarry_fate",
                         "equals": "ash"
                     }

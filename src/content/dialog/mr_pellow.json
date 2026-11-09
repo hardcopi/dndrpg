@@ -1,0 +1,190 @@
+{
+    "npc_key": "mr_pellow",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "quest": "who_stood_by_the_fire",
+                        "stage": "the_questions"
+                    }
+                ],
+                "text": "A mild man in a brown coat at the good fire, with a case of papers on his knee and a handkerchief in his hand. He sees you and half-rises, politely. \"You were on the boat. I thought you might be.\" He sneezes. \"Pellow. I'm not a factor, I'm told I should say. I go up and ask questions for the house when something has been lost. Something was lost. Three years of chain-work, in the rain. You'll have heard.\"",
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse sits down across from him without being asked and puts her hands where he can see them, which is a warden's courtesy."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "I heard.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "who_stood_by_the_fire",
+                                    "stage": "three_names"
+                                }
+                            }
+                        ],
+                        "next": "three_names"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "who_stood_by_the_fire",
+                        "stage": "three_names"
+                    }
+                ],
+                "text": "Pellow has the three statements laid out on the table like a hand of cards. \"I do need to file something,\" he says, apologetic. \"The meeting reads every return. A return with nothing in it is a return they ask me about.\"",
+                "choices": [
+                    {
+                        "label": "Go over the names again.",
+                        "next": "three_names"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "who_stood_by_the_fire",
+                        "status": "completed"
+                    }
+                ],
+                "text": "Pellow has a fresh handkerchief and looks a good deal better. \"Filed,\" he says. \"Thank you. I mean that. Most people up a valley look at me as if I'm going to do something. I never do anything. I write it down.\""
+            },
+            {
+                "text": "A mild man in a brown coat sneezes into a handkerchief by the good fire and goes back to his papers."
+            }
+        ],
+        "three_names": [
+            {
+                "text": "\"It's all wages and questions,\" he says. \"I don't break doors. I go to the inn and buy a drink and ask who was about, and I pay a shilling for an answer, and people answer.\" He turns the three papers round. Three names in three hands, none of them yours. \"A carter says a goblin did it. A woman at the mill says it was the wardens. And a man at the Flagon says it was a drover called Cass Hobley, who I'm told was drunk by nine and asleep under a bench by ten.\" He sneezes. \"I'll file the one with a name. Unless somebody gives me a better one.\"",
+                "interjections": [
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa, very quietly: \"Say nothing. Hobley's a drover. Drovers move on.\""
+                    },
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric: \"There is a man under a bench in Rivermark who does not know he is in this conversation.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "It was us. Write that.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "who_stood_by_the_fire",
+                                    "stage": "told_him"
+                                }
+                            }
+                        ],
+                        "next": "told"
+                    },
+                    {
+                        "label": "Your statements can't all be true. Look at the times.",
+                        "check": {
+                            "skill": "investigation",
+                            "dc": 14,
+                            "on_success": "unpicked",
+                            "on_failure": "not_unpicked"
+                        }
+                    },
+                    {
+                        "label": "Say nothing.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "who_stood_by_the_fire",
+                                    "stage": "hobley"
+                                }
+                            }
+                        ],
+                        "next": "hobley"
+                    }
+                ]
+            }
+        ],
+        "told": [
+            {
+                "text": "Pellow writes it down without looking up, in a clean hand, and blots it, and then he does look up, and he looks grateful. \"Thank you,\" he says. \"Truly. It closes the file.\" He puts the paper in the case. \"Nothing will happen, you know. Not from this. It's only that now somebody knows.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "unpicked": [
+            {
+                "text": "You lay the times side by side: the carter puts the fire at dusk, the miller's woman at midnight, and the man at the Flagon has Hobley under a bench through both. Pellow reads them three times and something in him unclenches. \"They can't all be true,\" he says. \"A return mustn't put a man in two places.\" He writes: *Not ascertained. Statements inconsistent.* \"That's true. They'll ask me. I'll show them this. They'll accept it; they always accept what's true.\"",
+                "choices": [
+                    {
+                        "label": "Good.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "who_stood_by_the_fire",
+                                    "stage": "not_ascertained"
+                                }
+                            }
+                        ],
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "not_unpicked": [
+            {
+                "text": "You try to set the three statements against each other and they will not quite come apart; the carter was vague and the miller's woman was vaguer. Pellow watches you with genuine sympathy. \"I did try that,\" he says. \"On the boat. They're too ordinary to contradict each other properly.\"",
+                "choices": [
+                    {
+                        "label": "It was us. Write that.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "who_stood_by_the_fire",
+                                    "stage": "told_him"
+                                }
+                            }
+                        ],
+                        "next": "told"
+                    },
+                    {
+                        "label": "Say nothing.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "who_stood_by_the_fire",
+                                    "stage": "hobley"
+                                }
+                            }
+                        ],
+                        "next": "hobley"
+                    }
+                ]
+            }
+        ],
+        "hobley": [
+            {
+                "text": "Pellow waits a decent interval, then writes *Hobley, C., drover* on the return and blots it. \"It'll come to nothing,\" he says, and believes it. \"He'll find work a little harder to get for a while, and nobody will be able to say why. That's all that ever happens.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}

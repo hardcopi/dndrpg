@@ -1,0 +1,21 @@
+{
+    "encounter_key": "the_yard_gate",
+    "name": "The Yard Gate",
+    "description": "Abel Moss slides his window shut without a word, and the house's wardens come out from between the barrels to explain the gate to you.",
+    "difficulty": "hard",
+    "monsters": [
+        {
+            "monster": "warden_serjeant",
+            "quantity": 1,
+            "rank": "front"
+        },
+        {
+            "monster": "concern_warden",
+            "quantity": 2
+        }
+    ],
+    "allow_flee": true,
+    "allow_parley": false,
+    "victory_flag": "yard_gate_forced",
+    "defeat_flag": "yard_gate_thrown_out"
+}

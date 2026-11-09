@@ -106,7 +106,8 @@
             ],
             "exits": [
                 {"to": "the_hythe", "label": "Back along the bank"},
-                {"to": "salt_house", "label": "Up the back lane to the Salt House", "conditions": [{"not":{"flag":"concern_answering"}}]}
+                {"to": "salt_house", "label": "Up the back lane to the Salt House", "conditions": [{"not":{"flag":"concern_answering"}}]},
+                {"to": "brackwater_wharf", "label": "Board Tull's packet downriver", "conditions": [{"flag":"passage_booked"},{"flag":"act_two_open"}]}
             ]
         },
         "factors_house": {

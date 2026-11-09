@@ -1,0 +1,18 @@
+{
+    "npc_key": "pyke_downriver",
+    "name": "Alder Pyke",
+    "role": "Chainman, out of work",
+    "description": "The surveyor who read sheet six aloud on the granary steps in the rain. Rivermark thanked him, and then nobody in the valley would hire a chainman who reads the work out. He came down on the same boat as you, two benches back, and did not say so.",
+    "sprite_key": "alder_pyke",
+    "is_quest_giver": true,
+    "dialog": "pyke_downriver",
+    "place": {
+        "location": "the_fortieth",
+        "conditions": [
+            {
+                "flag": "survey_fate",
+                "equals": "warned"
+            }
+        ]
+    }
+}

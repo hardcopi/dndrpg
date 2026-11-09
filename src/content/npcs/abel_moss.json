@@ -1,0 +1,12 @@
+{
+    "npc_key": "abel_moss",
+    "name": "Abel Moss",
+    "role": "Yard clerk",
+    "description": "A narrow, tidy man behind a sliding window who has taken the manifests off Osgar Tull for nineteen years. He is perfectly pleasant. His name has never come up.",
+    "sprite_key": "scribe",
+    "is_quest_giver": true,
+    "dialog": "abel_moss",
+    "place": {
+        "location": "the_yard"
+    }
+}

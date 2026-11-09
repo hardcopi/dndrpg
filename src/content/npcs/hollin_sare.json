@@ -1,0 +1,26 @@
+{
+    "npc_key": "hollin_sare",
+    "name": "Hollin Sare",
+    "role": "Chair of the Meeting",
+    "description": "One of eleven subscribers to the house, and the one Ludo Corse has met. Grey, courteous, a little deaf in one ear and too well mannered to say which. He chairs because it is his turn.",
+    "sprite_key": "merchant",
+    "is_quest_giver": true,
+    "dialog": "hollin_sare",
+    "place": {
+        "location": "number_nine",
+        "conditions": [
+            {
+                "any": [
+                    {
+                        "quest": "the_quarterly_meeting",
+                        "stage": "the_meeting"
+                    },
+                    {
+                        "quest": "the_quarterly_meeting",
+                        "status": "completed"
+                    }
+                ]
+            }
+        ]
+    }
+}

@@ -1,0 +1,22 @@
+{
+    "encounter_key": "mudside_knives",
+    "name": "The Mudside Takes an Interest",
+    "description": "Three people off the hulks decide that whatever you are carrying downriver is theirs now, and say so with knives.",
+    "difficulty": "medium",
+    "region": "brackwater",
+    "is_random": true,
+    "monsters": [
+        {
+            "monster": "bandit",
+            "quantity": 3,
+            "rank": "front"
+        },
+        {
+            "monster": "thief_captain",
+            "quantity": 1,
+            "rank": "back"
+        }
+    ],
+    "allow_flee": true,
+    "allow_parley": false
+}

@@ -1,0 +1,91 @@
+{
+    "quest_key": "services_not_further_described",
+    "title": "Services Not Further Described",
+    "act": 2,
+    "description": "You are on the house's books at forty a quarter. Down here, the books have a page with your name on it, and the page has an instruction.",
+    "giver": "minna_crale",
+    "on_job_board": false,
+    "required_level": 5,
+    "rewards": {
+        "xp": 500
+    },
+    "stages": {
+        "the_instruction": {
+            "title": "The first instruction",
+            "objective": "Minna Crale has your first instruction under the house's retainer. Read it, and tell her what you mean to do about it.",
+            "journal": "Minna Crale found my name without looking, which tells me how often she has looked at it. There is an instruction for me. It came down on the same boat I did.",
+            "target": {
+                "location": "number_nine"
+            }
+        },
+        "serving": {
+            "terminal": true,
+            "resolution": "will_say_it",
+            "outcome": "success",
+            "title": "The valley is quiet",
+            "journal": "The instruction was to attend the meeting and, if asked, say that the valley is quiet. That is the service. It is true, and they are paying me forty a quarter to say it in a warm room. I said I would. Minna Crale paid the second quarter in advance, which nobody asked her to do.",
+            "effects": [
+                {
+                    "set_flag": "retainer_fate",
+                    "value": "serving"
+                },
+                {
+                    "give_gold": 40
+                },
+                {
+                    "approval": {
+                        "sera": 6,
+                        "aldric": -10,
+                        "ilse": -8
+                    }
+                }
+            ]
+        },
+        "clause": {
+            "terminal": true,
+            "resolution": "asked_for_a_clause",
+            "outcome": "success",
+            "title": "A clause",
+            "journal": "I asked for a clause about ending it. Minna Crale put her pen down, which I think she does about once a year, and said nobody had ever asked. Then she wrote one: either party, a quarter's notice, in writing, to Number Nine. It is the first ending the house's articles have ever had, and I am the one who has it.",
+            "effects": [
+                {
+                    "set_flag": "retainer_fate",
+                    "value": "clause"
+                },
+                {
+                    "approval": {
+                        "aldric": 8,
+                        "ilse": 6,
+                        "sera": 4
+                    }
+                }
+            ]
+        },
+        "returned": {
+            "terminal": true,
+            "resolution": "returned_the_quarter",
+            "outcome": "success",
+            "title": "Returned",
+            "journal": "I put forty gold on her table and said the articles were void. Minna Crale counted it, wrote me a receipt, and filed the receipt with the articles, so that the house now has a record of me taking its money and a record of me giving it back, and both of them are true. Mr Corse will be told. She says he will not be surprised.",
+            "effects": [
+                {
+                    "set_flag": "retainer_fate",
+                    "value": "returned"
+                },
+                {
+                    "clear_flag": "corse_retains_us"
+                },
+                {
+                    "take_gold": 40
+                },
+                {
+                    "approval": {
+                        "aldric": 12,
+                        "ilse": 10,
+                        "sera": -6
+                    }
+                }
+            ]
+        }
+    }
+}

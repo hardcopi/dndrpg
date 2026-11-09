@@ -1,0 +1,12 @@
+{
+    "npc_key": "dorcas_fenn",
+    "name": "Dorcas Fenn",
+    "role": "Keeper of Records",
+    "description": "Has the Record Office, a ladder on a rail and a penny a page. She will let anybody read anything filed, which she considers the whole point, and will let nobody take anything away, which she considers the rest of it.",
+    "sprite_key": "wizard",
+    "is_quest_giver": true,
+    "dialog": "dorcas_fenn",
+    "place": {
+        "location": "record_office"
+    }
+}
