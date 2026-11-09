@@ -2,7 +2,7 @@
     "npc_key": "tar_gaol_prisoner",
     "name": "A prisoner",
     "role": "Prisoner",
-    "sprite_key": "prisoner_1",
+    "sprite_key": "tar_gaol_prisoner",
     "is_ambient": true,
     "dialog": "tar_gaol_prisoner",
     "place": {

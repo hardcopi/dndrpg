@@ -2,7 +2,7 @@
     "npc_key": "hallow_carter",
     "name": "A carter",
     "role": "Carter",
-    "sprite_key": "farmer",
+    "sprite_key": "hallow_carter",
     "is_ambient": true,
     "dialog": "hallow_carter",
     "place": {
