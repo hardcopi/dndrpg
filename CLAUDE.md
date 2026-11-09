@@ -681,9 +681,11 @@ back — so **a row is a playable race and no code has to change to add one**.
 What code decides is which of a race's traits the game actually enforces.
 
 - **`Rules::RACE_FEATURES` is an honesty rule, not a lookup table.** Only
-  implemented traits go in it. `races.traits` stays prose, and the SRD races'
-  Darkvision is the standing example of the gap: there is no light or darkness
-  anywhere in the engine, so a key for it would be a lie in either direction.
+  implemented traits go in it. `races.traits` stays prose, and Load-Bearing is
+  the standing example of the gap. (Darkvision used to be; since battle map D
+  the cavern and tunnel boards are dark, and `darkvision` and
+  `superior_darkvision` are applied through `BattleGrid::canSee`. See
+  `src/docs/BATTLEMAP_D.md`.)
 - **The sheet says which is which.** `CharacterSheet::traitImplemented()` prints
   "Applied by the game." against a trait it can find a feature key for, and
   finds that key by lowercasing the printed name and turning spaces and hyphens
@@ -726,7 +728,7 @@ Two of their three traits are enforced, and the third deliberately is not:
   rolled. Defensive only — the attacking half of that contest is an Athletics
   check, and `quarry_built` is already in it.
 - Load-Bearing — printed, unenforced. Nothing in this game weighs a pack
-  against a limit, so it sits where Darkvision sits.
+  against a limit, so it is printed and not applied.
 
 `tools/test_races.php` covers the table, both actor shapes, and every hook.
 The Set Fast test drives `doContest()` itself rather than re-rolling its dice

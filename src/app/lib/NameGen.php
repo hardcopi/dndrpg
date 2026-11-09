@@ -32,7 +32,7 @@
  * inventing something out of the nearest list, and `meta/races` ships
  * `races()` so the creator can hide the offer. That is the honesty rule
  * `Rules::RACE_FEATURES` states for traits, applied to names — but names,
- * unlike Darkvision, are a gap somebody can close by writing a list, so
+ * unlike Load-Bearing, are a gap somebody can close by writing a list, so
  * tools/test_names.php asserts every row in the `races` table has one. Adding
  * a race fails a test rather than quietly losing a feature.
  */

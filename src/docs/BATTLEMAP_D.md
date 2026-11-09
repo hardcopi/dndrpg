@@ -70,14 +70,42 @@ named here instead of being filled with something invented.
 - **Monsters** do not seek out high ground yet.
 - Tests: `tools/test_combat.php`, section "High ground (battle map D)".
 
-## 3. Darkness (after that)
+## 3. Darkness (shipped)
 
-Uses the SRD's light levels (bright, dim, darkness) and the unseen-attacker
-rules:
-
-- an attack against a target the attacker cannot see has disadvantage;
-- an attack by an attacker the target cannot see has advantage.
-
-Cavern and tunnel boards are dark apart from their braziers and coals.
-Darkvision then becomes a trait the game actually applies; until then it is
-the standing example in `CLAUDE.md` of a trait the engine does not enforce.
+- **Which boards are dark.** Generated cavern and tunnel boards
+  (`BattleMapGen::DARK`) carry `grid.dark`. Their only light is the braziers
+  and coals, and the painted wall torches are gone from them. Everywhere else,
+  including drawn boards and delve rooms, is lit as before. A fight saved before
+  this shipped keeps the light it started with.
+- **Light.** The SRD has no brazier, so a lit brazier sheds light like a torch:
+  bright to 20 ft, dim for 20 ft more. A burning coal cell is a candle (5 and 5).
+  An overturned brazier is out. Light travels in straight lines, so walls and
+  other opaque terrain throw shadows (`BattleGrid::lightRows`, `BattleGrid::LIGHTS`).
+- **Seeing.** Only darkness hides anyone. Dim light is lightly obscured, which
+  in the SRD affects Perception and nothing in a fight. You can see a creature
+  standing in light from anywhere you have line of sight; one standing in
+  darkness only if you have darkvision and it is within range (`BattleGrid::canSee`).
+- **Attacks** (SRD unseen attackers and targets): attacking a creature you
+  cannot see has disadvantage. Attacking one that cannot see you has advantage.
+  When both apply they cancel out. This applies to weapon, spell and
+  opportunity attacks alike, worked out in `resolveAttack` and
+  `suspendForAttackRoll` (`CombatEngine::sightBetween`). The shot's reason says
+  "you cannot see them" or "they cannot see you", and the log says so.
+- **Darkvision is now applied.**
+  - Dwarves, elves, gnomes, half-elves, half-orcs and tieflings: 60 ft.
+  - Dark elves: 120 ft.
+  - These are the `darkvision` and `superior_darkvision` race features, so the
+    sheet now prints "Applied by the game" against them.
+  - Monsters have no senses column, so `CombatEngine::MONSTER_DARK_SIGHT` lists
+    them by key. Each value is the SRD figure: the longest of darkvision,
+    blindsight and truesight.
+  - Rivermark monsters are included only where their own traits say so; the
+    bog crawler's Peat-Blind is the only one so far.
+- **The view.** The engine sends `state.light`, a row of `B`, `D` or `X` per
+  cell, and the board shades dim and dark cells from it. Figures standing in
+  the dark are drawn darker, so what looks black is what hides you.
+- **Not done:**
+  - Spells that need a target you can see still ignore darkness.
+  - Monsters do not move to stay in the dark.
+  - The party carries no torch of its own.
+- Tests: `tools/test_combat.php`, section "Darkness (battle map D)".

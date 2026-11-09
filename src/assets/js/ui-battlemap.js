@@ -388,6 +388,7 @@
       <g class="bm-zones">${zonesHtml(grid, state)}</g>
       <g class="bm-reach">${reachHtml(ui)}</g>
       <g class="bm-threat">${threatHtml(ui)}</g>
+      <g class="bm-dark" pointer-events="none">${darkHtml(state)}</g>
       <g class="bm-aoe"></g>
       <g class="bm-path"></g>
       <g class="bm-cells">${cellsHtml(terrain)}</g>
@@ -570,6 +571,9 @@
    */
   function torchPlan(grid) {
     if (grid.image && !Array.isArray(grid.lights) && grid.palette !== 'fixed') return null;
+    // A dark board has no torches on its walls: its only light is the
+    // braziers and coals in firePlan(), and the shade is the rule's.
+    if (grid.dark) return [];
     const rnd = seeded((Number(grid.seed) || 0) ^ 0x51ed);
     return torchSpots(grid, rnd).map(([x, y]) => ({
       x,
@@ -599,6 +603,39 @@
       }
     }
     return out;
+  }
+
+  /**
+   * The dark, cell by cell, from `state.light` — the engine's own answer
+   * (BattleGrid::lightRows), so what looks black is what hides you. A dark
+   * cell beside a lit one is shaded a touch lighter, so the edge of a
+   * brazier's reach reads as a falloff and not a chessboard. (No SVG blur:
+   * Chrome tiles a filtered group on the tilted 3-D plane and drops tiles.)
+   */
+  const SHADE = { X: 0.56, D: 0.28 };
+  function darkHtml(state) {
+    const rows = Array.isArray(state && state.light) ? state.light : null;
+    if (!rows) return '';
+    let out = '';
+    for (let y = 0; y < H; y++) {
+      const row = String(rows[y] || '');
+      for (let x = 0; x < W; x++) {
+        let a = SHADE[row[x]];
+        if (a && row[x] === 'X' && [[1, 0], [-1, 0], [0, 1], [0, -1]].some(([dx, dy]) => {
+          const n = String(rows[y + dy] || '')[x + dx];
+          return n === 'B' || n === 'D';
+        })) a = (a + SHADE.D) / 2;
+        if (a) out += `<rect class="bm-shade" x="${x - 0.02}" y="${y - 0.02}" width="1.04" height="1.04" fill="#05060c" fill-opacity="${a}"/>`;
+      }
+    }
+    return out;
+  }
+  /** How much of a figure's light the dark leaves it, at board cell (x, y). */
+  function shadeAt(state, x, y) {
+    const rows = Array.isArray(state && state.light) ? state.light : null;
+    if (!rows) return 1;
+    const ch = String(rows[Math.floor(y)] || '')[Math.floor(x)];
+    return ch === 'X' ? 0.45 : ch === 'D' ? 0.75 : 1;
   }
 
   /** Is this torch on the board's back or front rim, where the diorama has a wall or a lip? */
@@ -1136,13 +1173,14 @@
     // room does not stand there at full daylight. Asked in the plane's frame,
     // answered in the board's, where the torches are.
     const litAt = (vx, vy) => {
-      if (!torches.length) return '';
       const [fx, fy] = toBoard(vx, vy, turned);
+      const shade = shadeAt(state, fx, fy);
+      if (!torches.length) return shade < 1 ? `;--lit:${shade.toFixed(2)}` : '';
       // A rim torch every four or five cells along both long edges puts most
       // of a 16×12 floor within reach of two of them, so the falloff is short
       // or everybody stands in the same full light.
       const sum = torches.reduce((a, t) => a + Math.max(0, 1 - Math.hypot(fx - t.x, fy - t.y) / (t.fall || 4.5)), 0);
-      return `;--lit:${(0.72 + 0.38 * Math.min(1, sum)).toFixed(2)}`;
+      return `;--lit:${((0.72 + 0.38 * Math.min(1, sum)) * shade).toFixed(2)}`;
     };
     const ui = state.ui || null;
     const targets = o.aim ? (o.aim.targets || {})
