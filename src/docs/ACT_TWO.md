@@ -101,6 +101,20 @@ Wat. Test: `tools/test_fenmoor_lot.php`.
   signed by mark were read aloud to the sellers. They were. `kessa_favour_fate`
   = `signed` (clears the favour) · `read_again` (she reads all forty-one aloud
   first; clears it) · `refused` (the blank stays open). Kessa reads all three.
+- **Rivermark hears.** Captain Reed has a once-only `briefing` line per
+  `meeting_fate`: a letter saying purchases on Granary Row are *held* for the
+  quarter (`costed`), nothing at all (`minuted`), cold suspicion of a party now on
+  the house's books (`subscribed`), and dry approval (`walked`). Held, not
+  stopped: the Row is not saved.
+- **Sera's second offer.** If Sera turned Corse down (`sera_post_fate` =
+  `stayed`) and is in the party, Minna Crale offers her the empty second desk at
+  Number Nine (sixty a year, rooms on House Street, read anything filed).
+  "That's Sera's to answer": at approval 40+ she declines (+6); below it she takes
+  the desk and leaves the party (`sera_second_offer` = `declined` / `took`;
+  Dorcas Fenn then mentions her downstairs). "She isn't for hire" answers for
+  her (`spoken_for`, -10). Sera reads `declined` and `spoken_for`.
+- **Sera's eight lines.** If Sera kept the retainer (`retained`), Minna Crale
+  shows the party her year of monthly reports, read and initialled by four people.
 - Test: `tools/test_act_two_aftermath.php`.
 
 ## Tests

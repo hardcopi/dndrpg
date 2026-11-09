@@ -6,6 +6,138 @@
             {
                 "conditions": [
                     {
+                        "flag": "meeting_fate",
+                        "equals": "costed"
+                    }
+                ],
+                "once": true,
+                "text": "Reed has a letter flat on the desk under the inkwell, and she turns it round so you can read it. It is from the counting house, copied from something that came up the river. Purchases on Granary Row and the Tannery Steps are held for the quarter, pending a costing of removal. \"Held,\" Reed says. \"Six years I've read what comes up that river. First time any of it has said held.\" She does not smile. \"It isn't stopped. I know it isn't stopped. But I've a quarter, and I didn't have one before.\"",
+                "choices": [
+                    {
+                        "label": "The quiet one first.",
+                        "next": "the_ledger_offer"
+                    },
+                    {
+                        "label": "What's the loud one?",
+                        "next": "the_raids"
+                    },
+                    {
+                        "label": "You have been holding a piece of paper this whole conversation.",
+                        "conditions": [
+                            {
+                                "level_at_least": 2
+                            }
+                        ],
+                        "next": "the_watch_roll"
+                    },
+                    {
+                        "label": "Not interested.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "minuted"
+                    }
+                ],
+                "once": true,
+                "text": "\"You got it written down,\" Reed says. \"Good. I've had things written down.\" She signs a chit and does not look at it. \"Nothing came up the river about it. Nothing at the counting house, nothing on the Row. If I didn't know you'd been, I'd not know anything had happened.\" A pause. \"I do know. That's worth something to me. I don't know what.\"",
+                "choices": [
+                    {
+                        "label": "The quiet one first.",
+                        "next": "the_ledger_offer"
+                    },
+                    {
+                        "label": "What's the loud one?",
+                        "next": "the_raids"
+                    },
+                    {
+                        "label": "You have been holding a piece of paper this whole conversation.",
+                        "conditions": [
+                            {
+                                "level_at_least": 2
+                            }
+                        ],
+                        "next": "the_watch_roll"
+                    },
+                    {
+                        "label": "Not interested.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "subscribed"
+                    }
+                ],
+                "once": true,
+                "text": "Reed stays standing when you come in, which she has not done since the first week. \"Word is you're on their books now,\" she says. \"Owners. A share in the house.\" She looks at you for a while, and you can see her decide not to say three different things. \"Your money's your business. Don't bring it into my watch house. And if they send me a letter that says held, I'll want to know if you asked for it.\"",
+                "choices": [
+                    {
+                        "label": "The quiet one first.",
+                        "next": "the_ledger_offer"
+                    },
+                    {
+                        "label": "What's the loud one?",
+                        "next": "the_raids"
+                    },
+                    {
+                        "label": "You have been holding a piece of paper this whole conversation.",
+                        "conditions": [
+                            {
+                                "level_at_least": 2
+                            }
+                        ],
+                        "next": "the_watch_roll"
+                    },
+                    {
+                        "label": "Not interested.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "walked"
+                    }
+                ],
+                "once": true,
+                "text": "\"You walked out on them,\" Reed says, and nods slowly, as if confirming a report. \"Halfway through, I'm told. Any other business.\" She almost smiles. \"I'd have liked to see their faces.\" Then she doesn't. \"They won't have had any, will they. They'll have minuted it and moved on to item eight.\"",
+                "choices": [
+                    {
+                        "label": "The quiet one first.",
+                        "next": "the_ledger_offer"
+                    },
+                    {
+                        "label": "What's the loud one?",
+                        "next": "the_raids"
+                    },
+                    {
+                        "label": "You have been holding a piece of paper this whole conversation.",
+                        "conditions": [
+                            {
+                                "level_at_least": 2
+                            }
+                        ],
+                        "next": "the_watch_roll"
+                    },
+                    {
+                        "label": "Not interested.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "survey_fate",
                         "equals": "took"
                     }

@@ -159,6 +159,26 @@
                 ]
             },
             {
+                "conditions": [
+                    {
+                        "flag": "sera_second_offer",
+                        "equals": "took"
+                    }
+                ],
+                "once": true,
+                "text": "\"Miss Vance was down this morning,\" Dorcas Fenn says from the ladder. \"Second desk. She asked for the Greyhythe returns for the last six years and sat with them until the lamps.\" The ladder rolls a yard. \"She found two errors. Nobody has found an error in here since I was a girl. I have never been so pleased to be wrong.\"",
+                "choices": [
+                    {
+                        "label": "Anything?",
+                        "next": "read_anything"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
                 "text": "\"Read anything,\" Dorcas Fenn says from the ladder. \"Take nothing. Penny a page.\" The ladder rolls a yard and stops.",
                 "choices": [
                     {
