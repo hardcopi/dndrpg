@@ -2,7 +2,7 @@
     "npc_key": "slip_sawyer",
     "name": "A pit-sawyer",
     "role": "Sawyer",
-    "sprite_key": "miner",
+    "sprite_key": "slip_sawyer",
     "is_ambient": true,
     "dialog": "slip_sawyer",
     "place": {

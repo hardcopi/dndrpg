@@ -2,7 +2,7 @@
     "npc_key": "boom_drillman",
     "name": "A boom hand",
     "role": "Boom Watch",
-    "sprite_key": "paladin",
+    "sprite_key": "boom_drillman",
     "is_ambient": true,
     "dialog": "boom_drillman",
     "place": {
