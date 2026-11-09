@@ -21,6 +21,40 @@ if (PHP_SAPI !== 'cli') {
     set_exception_handler('page_exception_handler');
 }
 
+/*
+ * Security headers on every PHP response: pages, the API, the editors.
+ *
+ * Sent here rather than from nginx so they ship with deploy.sh and are the
+ * same on hermes and in docker, and so they reach every page (all of them,
+ * including the public ones through inc/public_page.php, load this file).
+ * Static files are nginx's business; see docs/ops/HERMES_SECURITY.md.
+ *
+ * - nosniff: a JSON reply or an upload is never re-read as script.
+ * - frame-ancestors (CSP): the game may be framed by itself and by
+ *   five-star.com sites, nobody else. Used instead of X-Frame-Options, which
+ *   cannot name a second origin. This is the only CSP directive on purpose: a
+ *   script/style policy needs testing against inline handlers first.
+ * - Referrer-Policy: other sites see the origin, never a path or ?query.
+ * - Permissions-Policy: nothing here uses the camera, microphone, location
+ *   or payment APIs, so embedded content can't ask for them either.
+ * - HSTS only over HTTPS, without includeSubDomains (other five-star.com
+ *   hosts are not ours to force onto HTTPS).
+ */
+function send_security_headers(): void
+{
+    if (PHP_SAPI === 'cli' || headers_sent()) {
+        return;
+    }
+    header('X-Content-Type-Options: nosniff');
+    header("Content-Security-Policy: frame-ancestors 'self' https://five-star.com https://*.five-star.com");
+    header('Referrer-Policy: strict-origin-when-cross-origin');
+    header('Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()');
+    if (request_is_https()) {
+        header('Strict-Transport-Security: max-age=15552000');
+    }
+}
+send_security_headers();
+
 /**
  * Whether an exception's message was written for the player to read.
  *

@@ -154,6 +154,8 @@ if [ "$PHP_MODE" != none ]; then
     if [ "$PHP_MODE" = docker ] \
             && curl -s -o /dev/null "${BASE:-http://localhost:8081}/api/?r=session/status"; then
         run "test_char_delete" bash tools/test_char_delete.sh
+        # GETs only: headers on PHP responses, and the nginx private-path fence.
+        run "test_security_headers" bash tools/test_security_headers.sh
     fi
 else
     printf '\n\033[33mSKIPPED the PHP harnesses — no php on PATH and no compose\n'
