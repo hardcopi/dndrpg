@@ -2,5 +2,12 @@
 # The Actions twin of ~/rivermark/bin/hermes-mysql on Thor: the mysql client,
 # run on Hermes as root (socket auth, so no database password exists anywhere
 # in GitHub). src/sql/migrate.sh is written to be driven through exactly this.
+#
+# ssh joins its arguments with spaces and hands the result to the remote shell,
+# so an argument like `-e "SELECT a, b FROM t WHERE x IN (1)"` would be split
+# and its parentheses parsed by bash. Each argument is shell-quoted here so the
+# remote mysql receives exactly what the caller passed.
+args=""
+for a in "$@"; do args+=" $(printf '%q' "$a")"; done
 exec ssh -o BatchMode=yes -o ServerAliveInterval=15 -i "${HOME}/.ssh/id_ed25519" \
-    root@hermes.five-star.com mysql "$@"
+    root@hermes.five-star.com "mysql${args}"
