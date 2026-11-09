@@ -68,7 +68,7 @@ class QuestService
         $quest = $this->questByKey($questKey);
         $existing = $this->partyQuest($partyId, (int) $quest['id']);
 
-        if ($existing && in_array($existing['status'], ['active', 'completed', 'failed'], true)) {
+        if ($existing && ($existing['status'] === QuestStatus::ACTIVE || QuestStatus::isOver($existing['status']))) {
             // Two NPCs may both offer the same job. The second offer is a note,
             // not an error, because refusing it would end the conversation.
             $r = Effects::blank();
@@ -103,6 +103,12 @@ class QuestService
             throw new InvalidArgumentException('You do not meet the required level.');
         }
 
+        QuestStatus::machine()->guard(
+            (string) ($existing['status'] ?? QuestStatus::AVAILABLE),
+            QuestStatus::ACTIVE,
+            'start',
+            ['party' => $partyId, 'quest' => $questKey]
+        );
         $this->db->prepare(
             'INSERT INTO party_quests (party_id, quest_id, status, started_at)
              VALUES (?,?,\'active\',NOW())
@@ -135,7 +141,7 @@ class QuestService
         $stage = $this->stage((int) $quest['id'], $stageKey);
         $row = $this->partyQuest($partyId, (int) $quest['id']);
 
-        if ($row && in_array($row['status'], ['completed', 'failed'], true)) {
+        if ($row && QuestStatus::isOver($row['status'])) {
             $r = Effects::blank();
             $r['notes'][] = "Quest already {$row['status']}, cannot advance: {$quest['title']}";
             return $r + ['ok' => true, 'quest' => $quest];
@@ -233,10 +239,11 @@ class QuestService
             $r['notes'][] = "Cannot fail a quest the party never took: {$questKey}";
             return $r + ['ok' => true, 'quest' => $quest];
         }
-        if (in_array($row['status'], ['completed', 'failed'], true)) {
+        if (QuestStatus::isOver($row['status'])) {
             $r['notes'][] = "Quest already {$row['status']}: {$quest['title']}";
             return $r + ['ok' => true, 'quest' => $quest];
         }
+        QuestStatus::machine()->guard((string) $row['status'], QuestStatus::FAILED, 'fail', ['party' => $partyId, 'quest' => $questKey]);
 
         $this->db->prepare(
             'UPDATE party_quests SET status = \'failed\', ended_at = NOW(), is_tracked = 0
@@ -261,6 +268,16 @@ class QuestService
     {
         $questId = (int) $quest['id'];
         $stageId = (int) $stage['id'];
+
+        // Every caller has already refused a finished quest; this is the table
+        // saying so too, so a new caller cannot reopen one by accident.
+        $current = $this->partyQuest($partyId, $questId);
+        QuestStatus::machine()->guard(
+            (string) ($current['status'] ?? QuestStatus::AVAILABLE),
+            QuestStatus::ACTIVE,
+            'advance',
+            ['party' => $partyId, 'quest' => (string) $quest['quest_key'], 'stage' => (string) $stage['stage_key']]
+        );
 
         $this->db->prepare(
             'UPDATE party_quests SET current_stage_id = ?, status = \'active\'
@@ -313,6 +330,17 @@ class QuestService
         $alreadyEnded = $before && $before['ended_at'] !== null;
 
         $failed = ($stage['outcome'] ?? 'success') === 'failure';
+        // A stage whose own effects already ended the quest (it advanced to
+        // another terminal stage) must not have its ending overwritten: the
+        // first ending stands. Logged, not thrown — we are mid-effects.
+        if (!QuestStatus::machine()->allows(
+            (string) ($before['status'] ?? QuestStatus::ACTIVE),
+            $failed ? QuestStatus::FAILED : QuestStatus::COMPLETED,
+            $failed ? 'finish_failure' : 'finish_success',
+            ['party' => $partyId, 'quest' => (string) $quest['quest_key'], 'stage' => (string) $stage['stage_key']]
+        )) {
+            return Effects::blank();
+        }
         $this->db->prepare(
             'UPDATE party_quests SET status = ?, resolution = ?, ended_at = NOW(), is_tracked = 0
              WHERE party_id = ? AND quest_id = ?'

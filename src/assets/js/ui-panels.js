@@ -21,6 +21,12 @@
   /* How many march, counting the character you play. Mirrors
      CompanionService::PARTY_CAP, which is the one that actually refuses. */
   const PARTY_CAP = 4;
+  // Generated from app/lib (state-machines.js). Literal fallbacks keep the
+  // preview pages, which do not load it, working.
+  const RS = window.RivermarkStates;
+  const MODE = (RS && RS.S.ui_mode) || { LOCATION: 'location', COMBAT: 'combat' };
+  const LIFE = (RS && RS.S.life_state)
+    || { CONSCIOUS: 'conscious', DYING: 'dying', STABLE: 'stable', DEAD: 'dead' };
 
   /** Log categories the filter chips select between. */
   let logFilter = 'all';
@@ -694,7 +700,7 @@
   /** The combatant a party member is, while a fight is running. */
   function combatantFor(pc) {
     const st = G().state;
-    if (st.mode !== 'combat' || !st.combat?.state) return null;
+    if (st.mode !== MODE.COMBAT || !st.combat?.state) return null;
     return (st.combat.state.combatants || []).find((k) => k.character_id == pc.id) || null;
   }
 
@@ -823,7 +829,7 @@
 
     // Combat draws its own action bar inside the board, where the action
     // economy it belongs to is visible.
-    if (st.mode === 'combat') {
+    if (st.mode === MODE.COMBAT) {
       bar.innerHTML = '';
       bar.classList.add('hidden');
       return;
@@ -1097,6 +1103,17 @@
 
     const seat = (c) => {
       const ap = approvalBand(c.approval, c);
+      // LifeState, from the server (CompanionService::forParty). Somebody on
+      // 0 HP is unconscious: they keep their seat, but nobody can sit down
+      // with them and there is no Talk button until healing or a long rest
+      // wakes them. The server refuses the conversation too (dialogue/node,
+      // 409), so this is the screen telling the truth, not the only guard.
+      const life = c.life_state || LIFE.CONSCIOUS;
+      const awake = c.can_talk !== undefined ? !!c.can_talk : life === LIFE.CONSCIOUS;
+      const talkable = awake && !!c.npc_key;
+      const seatTitle = awake
+        ? `Sit with ${c.name}`
+        : `${c.name} is unconscious — they wake with healing or a long rest`;
       // The camp art is optional and generated separately; until a companion
       // has one the seat falls back to their portrait, which is why the <img>
       // carries both and swaps on error rather than the JS probing for files.
@@ -1107,7 +1124,7 @@
       return `<div class="camp-seat-wrap">
         <button type="button" class="camp-seat" data-talk="${esc(c.npc_key || '')}"
                       data-name="${esc(c.name)}" data-key="${esc(c.companion_key)}"
-                      title="Sit with ${esc(c.name)}"${c.npc_key ? '' : ' disabled'}>
+                      title="${esc(seatTitle)}"${talkable ? '' : ' disabled'}>
         <img class="camp-seat-art" src="${esc(scene)}" alt=""
              onerror="this.onerror=null;this.src='${esc(face)}';this.classList.add('is-portrait')">
         <span class="camp-seat-body">
@@ -1117,11 +1134,13 @@
             ${approvalPill(c)}
             ${heartPill(c)}
             ${c.status === 'camp' ? '<span class="camp-waiting">waiting here</span>' : ''}
+            ${awake ? '' : '<span class="camp-down">Unconscious</span>'}
           </span>
+          ${awake ? '' : `<span class="camp-seat-down">Out cold at ${esc(c.current_hp ?? 0)}/${esc(c.max_hp ?? '?')} HP. Healing or a long rest will bring them round.</span>`}
           ${ap.risk ? `<span class="camp-seat-risk">${esc(riskLine(c, ap))}</span>` : ''}
         </span>
         </button>
-        ${c.npc_key ? `<button type="button" class="btn btn-small camp-talk"
+        ${talkable ? `<button type="button" class="btn btn-small camp-talk"
               data-talk-start="${esc(c.npc_key)}" data-name="${esc(c.name)}"
               title="Draw them aside — the whole of what they have to say, not just the fireside">Talk</button>` : ''}
         ${marchButton(c)}
@@ -1549,7 +1568,7 @@
     //
     // Healing spells get a Cast row outside combat — character/cast is the
     // campfire door, and it only opens for a mending, so only heals offer it.
-    const castable = G().state.mode !== 'combat';
+    const castable = G().state.mode !== MODE.COMBAT;
     const party = G().state.party || [];
     const castRow = (sp) => {
       if (!castable || sp.resolution !== 'heal') return '';

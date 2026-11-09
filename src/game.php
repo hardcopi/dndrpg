@@ -231,6 +231,8 @@ if (!session_character_id()) {
   <script src="<?= asset('assets/js/ui-firstperson.js') ?>"></script>
   <script src="<?= asset('assets/js/ui-scenefx.js') ?>"></script>
   <script src="<?= asset('assets/js/scenes-data.js') ?>"></script>
+  <!-- Generated from app/lib/StateMachines.php: the lifecycles as data. -->
+  <script src="<?= asset('assets/js/state-machines.js') ?>"></script>
   <script src="<?= asset('assets/js/game.js') ?>"></script>
   <script src="<?= asset('assets/js/ui-panels.js') ?>"></script>
   <script src="<?= asset('assets/js/dice-geometry.js') ?>"></script>

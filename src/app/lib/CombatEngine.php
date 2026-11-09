@@ -1079,7 +1079,7 @@ class CombatEngine
     /** Retire a session this engine cannot resolve. One row, no awards. */
     private function closeStaleSession(int $sessionId, array $state): void
     {
-        $state['status'] = 'ended';
+        $state = CombatStatus::transition($state, CombatStatus::ENDED, 'reset');
         $state['events'] = [];
         $state['log'][] = 'The ground shifts underfoot — this encounter has been reset.';
         $this->saveState($sessionId, $state);
@@ -5351,7 +5351,7 @@ class CombatEngine
         ]);
 
         if ($passed) {
-            $state['status'] = 'fled';
+            $state = CombatStatus::transition($state, CombatStatus::FLED, 'flee_succeeds');
             $state['log'][] = "The party breaks off and runs ({$roll['total']} vs DC {$dc}).";
             return $state;
         }
@@ -5371,7 +5371,7 @@ class CombatEngine
         if (empty($state['allow_parley'])) {
             throw new InvalidArgumentException('There is no talking to these.');
         }
-        $state['status'] = 'parley';
+        $state = CombatStatus::transition($state, CombatStatus::PARLEY, 'parley');
         $state['log'][] = 'Weapons lower. There is something to say after all.';
         return $this->emit($state, ['type' => 'parley', 'node' => $state['parley_node'] ?? null]);
     }
@@ -6564,6 +6564,14 @@ class CombatEngine
         if (!$target || $amount <= 0) {
             return $state;
         }
+        // The dead are out for the fight (DEATH_IS_PERMANENT): healing that
+        // reached one used to lift their hit points and strip Unconscious while
+        // `alive` stayed false — a body on its feet that could not act.
+        if ($target['type'] === 'pc' && LifeState::of($target) === LifeState::DEAD) {
+            LifeState::machine()->allows(LifeState::DEAD, LifeState::CONSCIOUS, 'heal', ['cid' => $cid]);
+            $state['log'][] = "{$target['name']} is beyond healing now.";
+            return $state;
+        }
         $newHp = min((int) $target['max_hp'], (int) $target['hp'] + $amount);
         $state = $this->updateCombatant($state, $cid, ['hp' => $newHp]);
         if ($target['type'] === 'pc') {
@@ -6616,6 +6624,34 @@ class CombatEngine
      */
     private const DEATH_IS_PERMANENT = false;
 
+    /**
+     * Whether a COMPANION who bleeds out stays dead after the fight
+     * (party_companions.status = 'dead', CompanionRoster::DEAD).
+     *
+     * FALSE until Rich decides: it is a story choice, not a rules one. Off,
+     * the bled-out are carried off the field unconscious (LifeState::STABLE,
+     * 0 HP) and wake with healing or a long rest. On, a companion who fails
+     * three saves is gone; the camp lists them among the dead and nothing
+     * can talk to them. Player-made characters are never affected.
+     */
+    public const COMPANION_PERMADEATH = false;
+
+    /**
+     * Ask LifeState's table whether a player character may make this move.
+     * Monsters are alive or dead and nothing else, so they always may. A
+     * refused move is logged by the machine and the caller leaves the
+     * combatant as it was — a 500 mid-turn would be worse than a no-op.
+     */
+    private function lifeMove(array $c, string $to, string $event): bool
+    {
+        if (($c['type'] ?? '') !== 'pc') {
+            return true;
+        }
+        return LifeState::machine()->allows(LifeState::of($c), $to, $event, [
+            'cid' => $c['cid'] ?? null, 'name' => $c['name'] ?? null,
+        ]);
+    }
+
     /** At zero, not yet stable, and not yet gone. */
     public static function isDying(array $c): bool
     {
@@ -6650,7 +6686,7 @@ class CombatEngine
         $roll = Dice::d20(0);
         $natural = (int) $roll['natural'];
 
-        if ($natural === 20) {
+        if ($natural === 20 && $this->lifeMove($c, LifeState::CONSCIOUS, 'natural_20')) {
             $state['log'][] = "{$c['name']} comes round — a hit point, and back in the fight.";
             $state = $this->emit($state, [
                 'type' => 'death_save', 'target' => $cid, 'natural' => $natural,
@@ -6685,9 +6721,9 @@ class CombatEngine
         ]);
 
         if ($outcome === 'died') {
-            return $this->killOutright($state, $cid, 'bleeds out');
+            return $this->killOutright($state, $cid, 'bleeds out', 'three_failures');
         }
-        if ($outcome === 'stable') {
+        if ($outcome === 'stable' && $this->lifeMove($c, LifeState::STABLE, 'three_successes')) {
             $state['log'][] = "{$c['name']} is stable — still down, but no longer slipping.";
             return $this->updateCombatant($state, $cid, ['stable' => true]);
         }
@@ -6722,7 +6758,7 @@ class CombatEngine
         ]);
 
         return $saves['fail'] >= self::DEATH_SAVE_TARGET
-            ? $this->killOutright($state, $cid, 'does not get up')
+            ? $this->killOutright($state, $cid, 'does not get up', 'three_failures')
             : $state;
     }
 
@@ -6739,7 +6775,7 @@ class CombatEngine
         if (!$c) {
             return $state;
         }
-        if (!self::isDying($c)) {
+        if (!self::isDying($c) || !$this->lifeMove($c, LifeState::STABLE, 'stabilise')) {
             $state['log'][] = "{$c['name']} is not dying — nothing to hold together.";
             return $state;
         }
@@ -6768,10 +6804,10 @@ class CombatEngine
     }
 
     /** The end of it, for a player character. */
-    private function killOutright(array $state, string $cid, string $how): array
+    private function killOutright(array $state, string $cid, string $how, string $event = 'massive_damage'): array
     {
         $c = $this->getCombatant($state, $cid);
-        if (!$c) {
+        if (!$c || !$this->lifeMove($c, LifeState::DEAD, $event)) {
             return $state;
         }
         $state = $this->updateCombatant($state, $cid, [
@@ -6805,7 +6841,12 @@ class CombatEngine
 
         if ($c['type'] === 'pc') {
             if ($overkill >= (int) $c['max_hp'] && (int) $c['max_hp'] > 0) {
-                return $this->killOutright($state, $cid, 'is killed outright');
+                return $this->killOutright($state, $cid, 'is killed outright', 'massive_damage');
+            }
+            // Up and falling, or stable and hit again: both land on DYING.
+            $event = LifeState::of($c) === LifeState::STABLE ? 'damaged' : 'drop_to_zero';
+            if (!$this->lifeMove($c, LifeState::DYING, $event)) {
+                return $state;
             }
             // addCondition() writes the log line; `death` is emitted for the
             // client's benefit with dead => false, because the animation for
@@ -7545,7 +7586,7 @@ class CombatEngine
 
     private function checkEnd(array $state, int $characterId): array
     {
-        if (($state['status'] ?? '') !== 'active') {
+        if (($state['status'] ?? '') !== CombatStatus::ACTIVE) {
             return $state;
         }
 
@@ -7568,7 +7609,7 @@ class CombatEngine
         }
 
         if (!$foesUp && $partyUp) {
-            $state['status'] = 'victory';
+            $state = CombatStatus::transition($state, CombatStatus::VICTORY, 'last_foe_falls');
             $state['xp_award'] = $xp;
             $state['gold_award'] = max(5, (int) floor($xp / 5)) + $loot['gold'];
             // Names resolved here so the outcome bar can print them without a
@@ -7580,7 +7621,7 @@ class CombatEngine
                     . ($drop['qty'] > 1 ? " ×{$drop['qty']}" : '') . '.';
             }
         } elseif (!$partyUp) {
-            $state['status'] = 'defeat';
+            $state = CombatStatus::transition($state, CombatStatus::DEFEAT, 'last_ally_falls');
             $state['log'][] = 'Your party has fallen...';
         }
         return $state;
@@ -7611,6 +7652,19 @@ class CombatEngine
         return $out;
     }
 
+    /** COMPANION_PERMADEATH: record a bled-out companion as dead, via CompanionRoster. */
+    private function companionDies(int $characterId): void
+    {
+        $stmt = $this->db->prepare(
+            'SELECT pc.party_id, pc.companion_key FROM party_companions pc WHERE pc.character_id = ? LIMIT 1'
+        );
+        $stmt->execute([$characterId]);
+        $row = $stmt->fetch();
+        if ($row) {
+            (new CompanionService($this->db))->markDead((int) $row['party_id'], (string) $row['companion_key']);
+        }
+    }
+
     private function finalizeCombat(int $sessionId, int $characterId, array $state): void
     {
         $status = (string) ($state['status'] ?? 'ended');
@@ -7624,12 +7678,22 @@ class CombatEngine
                 continue;
             }
             $hp = max(0, (int) $c['hp']);
-            // Somebody who bled out is carried off the field rather than left
-            // on it. DEATH_IS_PERMANENT explains why that is the policy and
-            // what real permadeath would need first; the three rounds still
-            // mattered, because nothing could bring them back during the fight.
-            if (empty($c['alive']) && !self::DEATH_IS_PERMANENT) {
-                $hp = max($hp, 1);
+            // Leaving the fight, by LifeState's table:
+            //   DYING  -> STABLE  (combat_ends): the survivors bind them up.
+            //   DEAD   -> STABLE  (carried_off): carried off the field
+            //            unconscious, unless COMPANION_PERMADEATH says a
+            //            companion stays dead.
+            // Both leave current_hp at 0, which IS the stored form of
+            // "unconscious" outside a fight (LifeState::ofCharacter): the camp
+            // greys them out and no conversation opens until healing or a long
+            // rest lifts them. This used to put the bled-out back on 1 HP —
+            // awake and chatting at the fire (playtest note, Nov 1).
+            $life = LifeState::of($c);
+            if ($life === LifeState::DEAD || $life === LifeState::DYING) {
+                $hp = 0;
+                if ($life === LifeState::DEAD && self::COMPANION_PERMADEATH && !self::DEATH_IS_PERMANENT) {
+                    $this->companionDies((int) $c['character_id']);
+                }
             }
             $this->db->prepare('UPDATE characters SET current_hp = ? WHERE id = ?')
                 ->execute([$hp, (int) $c['character_id']]);

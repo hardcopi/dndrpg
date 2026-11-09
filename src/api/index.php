@@ -2766,6 +2766,15 @@ function handle_dialogue(string $action): void
         if ($npcKey === '') {
             json_error('npc_key required', 400);
         }
+        // A companion who is down or dead cannot hold a conversation. The
+        // camp screen already greys them out; this is the server saying the
+        // same thing, so no other door into the dialogue can get round it.
+        // LifeState is the table; 409 because the request is fine and the
+        // world is not in a state to answer it.
+        $life = (new CompanionService($db))->lifeByNpcKey($partyId, $npcKey);
+        if ($life !== null && !LifeState::canTalk($life['life_state'])) {
+            json_error("{$life['name']} is " . LifeState::describe($life['life_state']) . '.', 409);
+        }
         // Meeting someone is what puts their name on the map, and it happens
         // by talking to them rather than by walking past.
         $npcId = (int) (db()->query(

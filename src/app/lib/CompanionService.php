@@ -33,8 +33,11 @@ class CompanionService
      */
     public const PARTY_CAP = 4;
 
-    /** Statuses that mean "this companion is ours", for approval and romance. */
-    private const RECRUITED = ['active', 'camp'];
+    /**
+     * Statuses that mean "this companion is ours", for approval and romance.
+     * The lifecycle itself is the table in CompanionRoster::machine().
+     */
+    private const RECRUITED = CompanionRoster::RECRUITED;
 
     /**
      * The romance stage at which the party has chosen, and every other arc
@@ -108,6 +111,14 @@ class CompanionService
             $row['romance_stage']  = (int) $row['romance_stage'];
             $row['romance_locked'] = (bool) $row['romance_locked'];
             $row['character_id']   = $row['character_id'] === null ? null : (int) $row['character_id'];
+            // Up, unconscious or dead (LifeState). Derived from the hit points
+            // so it can never disagree with them; the camp screen greys out the
+            // seat and the Talk button of anybody who cannot talk.
+            $row['life_state'] = LifeState::ofCharacter(
+                $row['current_hp'] === null ? 1 : (int) $row['current_hp'],
+                (string) $row['status']
+            );
+            $row['can_talk'] = LifeState::canTalk($row['life_state']);
             return $row;
         }, $stmt->fetchAll());
     }
@@ -127,10 +138,11 @@ class CompanionService
         $state = $this->state($partyId, $key);
 
         $r = Effects::blank();
-        if ($state && $state['status'] !== 'unmet') {
+        if ($state && $state['status'] !== CompanionRoster::UNMET) {
             $r['notes'][] = "{$companion['name']} has already been met.";
             return $r;
         }
+        CompanionRoster::machine()->guard(CompanionRoster::UNMET, CompanionRoster::MET, 'meet', ['party' => $partyId, 'companion' => $key]);
 
         $this->db->prepare(
             'INSERT INTO party_companions (party_id, companion_key, status) VALUES (?,?,\'met\')
@@ -161,6 +173,14 @@ class CompanionService
 
         if ($state && in_array($state['status'], self::RECRUITED, true)) {
             $r['notes'][] = "{$companion['name']} is already with the party.";
+            return $r;
+        }
+        // The dead stay dead. A note rather than a throw, like the line above:
+        // the scene that tried to recruit them has already played.
+        $from = $state ? (string) $state['status'] : CompanionRoster::UNMET;
+        if (CompanionRoster::machine()->isTerminal($from)) {
+            CompanionRoster::machine()->allows($from, CompanionRoster::ACTIVE, 'recruit', ['party' => $partyId, 'companion' => $key]);
+            $r['notes'][] = "{$companion['name']} is dead.";
             return $r;
         }
 
@@ -207,13 +227,19 @@ class CompanionService
         }
 
         $hasRoom = $this->marchingCount($partyId) < self::PARTY_CAP;
+        CompanionRoster::machine()->guard(
+            $from,
+            $hasRoom ? CompanionRoster::ACTIVE : CompanionRoster::CAMP,
+            $hasRoom ? 'recruit' : 'recruit_full',
+            ['party' => $partyId, 'companion' => $key]
+        );
         $this->db->prepare(
             'INSERT INTO party_companions (party_id, companion_key, character_id, status, recruited_at)
              VALUES (?,?,?,?,NOW())
              ON DUPLICATE KEY UPDATE character_id = VALUES(character_id),
                                      status = VALUES(status),
                                      recruited_at = COALESCE(recruited_at, NOW())'
-        )->execute([$partyId, $key, $characterId, $hasRoom ? 'active' : 'camp']);
+        )->execute([$partyId, $key, $characterId, $hasRoom ? CompanionRoster::ACTIVE : CompanionRoster::CAMP]);
 
         if ($hasRoom) {
             $this->joinParty($partyId, $characterId);
@@ -281,14 +307,12 @@ class CompanionService
         $state = $this->requireState($partyId, $key);
         $r = Effects::blank();
 
-        if ($state['status'] !== 'active') {
+        if ($state['status'] !== CompanionRoster::ACTIVE) {
             $r['notes'][] = "{$companion['name']} is not travelling with you.";
             return $r;
         }
 
-        $this->db->prepare(
-            'UPDATE party_companions SET status = \'camp\' WHERE party_id = ? AND companion_key = ?'
-        )->execute([$partyId, $key]);
+        $this->setStatus($partyId, $key, $state['status'], CompanionRoster::CAMP, 'dismiss');
         if ($state['character_id']) {
             $this->leaveParty((int) $state['character_id']);
         }
@@ -310,11 +334,11 @@ class CompanionService
         $state = $this->requireState($partyId, $key);
         $r = Effects::blank();
 
-        if ($state['status'] === 'active') {
+        if ($state['status'] === CompanionRoster::ACTIVE) {
             $r['notes'][] = "{$companion['name']} is already with you.";
             return $r;
         }
-        if ($state['status'] !== 'camp') {
+        if ($state['status'] !== CompanionRoster::CAMP) {
             throw new InvalidArgumentException("{$companion['name']} is not at camp.");
         }
         if ($this->marchingCount($partyId) >= self::PARTY_CAP) {
@@ -329,9 +353,7 @@ class CompanionService
             )->execute([$characterId, $partyId, $key]);
         }
 
-        $this->db->prepare(
-            'UPDATE party_companions SET status = \'active\' WHERE party_id = ? AND companion_key = ?'
-        )->execute([$partyId, $key]);
+        $this->setStatus($partyId, $key, CompanionRoster::CAMP, CompanionRoster::ACTIVE, 'activate');
         $this->joinParty($partyId, $characterId);
         $this->moveToLeader($partyId, $characterId);
 
@@ -572,9 +594,7 @@ class CompanionService
             return $r;
         }
 
-        $this->db->prepare(
-            'UPDATE party_companions SET status = \'left\' WHERE party_id = ? AND companion_key = ?'
-        )->execute([$partyId, $key]);
+        $this->setStatus($partyId, $key, (string) $state['status'], CompanionRoster::LEFT, 'leave');
         if ($state['character_id']) {
             $this->leaveParty((int) $state['character_id']);
         }
@@ -598,14 +618,13 @@ class CompanionService
         $state = $this->state($partyId, $key);
         $r = Effects::blank();
 
-        if (!$state || $state['status'] === 'hostile') {
+        if (!$state || !CompanionRoster::machine()->can((string) $state['status'], CompanionRoster::HOSTILE, 'turn_hostile')) {
+            // Already hostile, or dead: nobody left to turn.
             $r['notes'][] = "{$companion['name']} is not with the party.";
             return $r;
         }
 
-        $this->db->prepare(
-            'UPDATE party_companions SET status = \'hostile\' WHERE party_id = ? AND companion_key = ?'
-        )->execute([$partyId, $key]);
+        $this->setStatus($partyId, $key, (string) $state['status'], CompanionRoster::HOSTILE, 'turn_hostile');
         if ($state['character_id']) {
             $this->leaveParty((int) $state['character_id']);
         }
@@ -817,6 +836,77 @@ class CompanionService
             throw new RuntimeException("No imported companion with key: {$key}");
         }
         return $row;
+    }
+
+    /**
+     * The one place party_companions.status changes after first contact.
+     *
+     * Guarded by CompanionRoster::machine(); an illegal move is logged and
+     * thrown (IllegalTransition is an InvalidArgumentException, so the API
+     * answers 400 with the sentence). The WHERE carries the expected `from`
+     * so two requests racing cannot both apply.
+     */
+    private function setStatus(int $partyId, string $key, string $from, string $to, string $event): void
+    {
+        CompanionRoster::machine()->guard($from, $to, $event, ['party' => $partyId, 'companion' => $key]);
+        $this->db->prepare(
+            'UPDATE party_companions SET status = ? WHERE party_id = ? AND companion_key = ? AND status = ?'
+        )->execute([$to, $partyId, $key, $from]);
+    }
+
+    /**
+     * A recruited companion dies for good. Only CombatEngine calls this, and
+     * only when COMPANION_PERMADEATH is on. Their character row is kept (and
+     * leaves the marching party) so the camp can still name them.
+     */
+    public function markDead(int $partyId, string $key): array
+    {
+        $companion = $this->template($key);
+        $state = $this->state($partyId, $key);
+        $r = Effects::blank();
+        if (!$state || !CompanionRoster::machine()->can((string) $state['status'], CompanionRoster::DEAD, 'die')) {
+            $r['notes'][] = "{$companion['name']} is not in the party.";
+            return $r;
+        }
+        $this->setStatus($partyId, $key, (string) $state['status'], CompanionRoster::DEAD, 'die');
+        if ($state['character_id']) {
+            $this->leaveParty((int) $state['character_id']);
+        }
+        $r['messages'][] = "{$companion['name']} is dead.";
+        return $r;
+    }
+
+    /**
+     * Whether this party's companion `$npcKey` (their conversation key) is in
+     * a state to talk. Null when the NPC is not a recruited/dead companion of
+     * this party — ordinary NPCs are not this machine's business.
+     *
+     * @return ?array{companion_key:string, name:string, life_state:string}
+     */
+    public function lifeByNpcKey(int $partyId, string $npcKey): ?array
+    {
+        $stmt = $this->db->prepare(
+            'SELECT c.companion_key, c.name, pc.status, ch.current_hp
+               FROM companions c
+               INNER JOIN party_companions pc
+                       ON pc.companion_key = c.companion_key AND pc.party_id = ?
+               LEFT JOIN characters ch ON ch.id = pc.character_id
+              WHERE c.npc_key = ? AND pc.status IN (?, ?, ?)
+              LIMIT 1'
+        );
+        $stmt->execute([$partyId, $npcKey, CompanionRoster::ACTIVE, CompanionRoster::CAMP, CompanionRoster::DEAD]);
+        $row = $stmt->fetch();
+        if (!$row) {
+            return null;
+        }
+        return [
+            'companion_key' => (string) $row['companion_key'],
+            'name'          => (string) $row['name'],
+            'life_state'    => LifeState::ofCharacter(
+                $row['current_hp'] === null ? 1 : (int) $row['current_hp'],
+                (string) $row['status']
+            ),
+        ];
     }
 
     private function state(int $partyId, string $key): ?array

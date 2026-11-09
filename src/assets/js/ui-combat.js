@@ -2357,7 +2357,9 @@
     }
 
     close();
-    G().state.mode = 'explore';
+    // ui_mode's LOCATION. This wrote 'explore' — a state game.js never
+    // declared, which only worked because every reader compared to 'combat'.
+    G().state.mode = (window.RivermarkStates && window.RivermarkStates.S.ui_mode.LOCATION) || 'location';
     G().state.combat = null;
     ui.selected = null;
     ui.hovered = null;

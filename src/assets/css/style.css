@@ -4621,6 +4621,23 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   font-size: var(--fs-sm);
 }
 .camp-waiting { font-size: var(--fs-2xs); color: var(--text-faint); font-style: italic; }
+/* LifeState STABLE at the fire: 0 HP, out cold. Same weight as the risk line
+   so it reads as a state, not decoration. */
+.camp-down {
+  font-size: var(--fs-2xs);
+  color: var(--danger, #b3412f);
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  padding: 0 var(--sp-6);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.camp-seat-down {
+  display: block;
+  margin-top: var(--sp-4);
+  color: var(--danger, #b3412f);
+  font-size: var(--fs-2xs);
+}
 
 /* A row at the fire who is not a companion with controls: a party member, or
    somebody who has gone. Had no layout rule at all — the face and the name
