@@ -20,6 +20,78 @@
             {
                 "conditions": [
                     {
+                        "flag": "mill_fate",
+                        "equals": "cause"
+                    }
+                ],
+                "once": true,
+                "text": "\"Counting loft,\" Wick says, without looking up from the race. \"River side. Where nobody ever struck a light.\" The weed-hook goes along and comes back. \"Four years I told myself it was a spark off the stones. I'd have liked it to be the stones.\"",
+                "choices": [
+                    {
+                        "label": "You live here.",
+                        "next": "which_year"
+                    },
+                    {
+                        "label": "Why keep the race clear?",
+                        "next": "why_the_race"
+                    },
+                    {
+                        "label": "The road, then.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "mill_fate",
+                        "equals": "shelter"
+                    }
+                ],
+                "once": true,
+                "text": "There are drovers' blankets drying over the hurdles at the south end. \"They come in most nights now,\" Wick says. \"Leave the place tidier than I do.\" He nearly smiles. \"One of them brought me a cheese. I didn't know what to do with my face.\"",
+                "choices": [
+                    {
+                        "label": "You live here.",
+                        "next": "which_year"
+                    },
+                    {
+                        "label": "Why keep the race clear?",
+                        "next": "why_the_race"
+                    },
+                    {
+                        "label": "The road, then.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "mill_fate",
+                        "equals": "left"
+                    }
+                ],
+                "once": true,
+                "text": "\"You came, you looked,\" Wick says from the wheel-pit. \"Everybody does that, sooner or later. Then they go back and say it burned.\" He doesn't sound bitter. \"It did. Road's downstream.\"",
+                "choices": [
+                    {
+                        "label": "You live here.",
+                        "next": "which_year"
+                    },
+                    {
+                        "label": "Why keep the race clear?",
+                        "next": "why_the_race"
+                    },
+                    {
+                        "label": "The road, then.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "miller_fate",
                         "equals": "stayed"
                     }

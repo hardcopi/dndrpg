@@ -6,6 +6,78 @@
             {
                 "conditions": [
                     {
+                        "flag": "floats_fate",
+                        "equals": "named"
+                    }
+                ],
+                "once": true,
+                "text": "Cully brings the punt in and does not name a price. \"Two names,\" he says. \"A stone-cutter and a married man.\" He looks off toward the black pools. \"I've been saying them when I pole past. Out loud. Feels daft.\" He pushes off. \"Feels less daft than not.\"",
+                "choices": [
+                    {
+                        "label": "What are the roofs out there?",
+                        "next": "who_lived_there"
+                    },
+                    {
+                        "label": "What are the three places?",
+                        "next": "three_places"
+                    },
+                    {
+                        "label": "Nothing yet.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "floats_fate",
+                        "equals": "buried"
+                    }
+                ],
+                "once": true,
+                "text": "\"Chapel floor's still dry,\" Cully says, before you ask. \"Highest stone in the fen.\" He shifts the pole to the other hand. \"My mother's started taking a candle up on a Sunday. For seven men none of us ever met. She says somebody ought to and it might as well be somebody with a candle.\"",
+                "choices": [
+                    {
+                        "label": "What are the roofs out there?",
+                        "next": "who_lived_there"
+                    },
+                    {
+                        "label": "What are the three places?",
+                        "next": "three_places"
+                    },
+                    {
+                        "label": "Nothing yet.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "floats_fate",
+                        "equals": "left"
+                    }
+                ],
+                "once": true,
+                "text": "Cully poles past the turning for the black pools without looking at it, the way everybody on the fen does. \"Still lying the same way,\" he says, to nobody in particular. \"They'll be lying that way when I'm old.\" Then, to you, brighter: \"Where to?\"",
+                "choices": [
+                    {
+                        "label": "What are the roofs out there?",
+                        "next": "who_lived_there"
+                    },
+                    {
+                        "label": "What are the three places?",
+                        "next": "three_places"
+                    },
+                    {
+                        "label": "Nothing yet.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "ashlade_named"
                     }
                 ],

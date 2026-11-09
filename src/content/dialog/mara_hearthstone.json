@@ -70,6 +70,68 @@
             {
                 "conditions": [
                     {
+                        "flag": "miller_fate",
+                        "equals": "in"
+                    }
+                ],
+                "once": true,
+                "text": "\"Your miller's in my back room,\" Mara says. \"Eats like a bird and mends like a carpenter. He's done the cellar hatch, the pump handle and every shutter on the street side, and I never asked him for one of them.\" She wipes the bar. \"He goes and stands at the river in the mornings. I let him. It's on the way to nowhere.\"",
+                "choices": [
+                    {
+                        "label": "What problem?",
+                        "next": "cellar_terms"
+                    },
+                    {
+                        "label": "There's a man asleep at your corner table.",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "quest": "a_room_for_the_night"
+                                }
+                            }
+                        ],
+                        "next": "the_corner_table"
+                    },
+                    {
+                        "label": "Tell me about this town.",
+                        "next": "about_town"
+                    },
+                    {
+                        "label": "Who else drinks here?",
+                        "next": "who_drinks_here"
+                    },
+                    {
+                        "label": "A room, please.",
+                        "effects": [
+                            {
+                                "rest": "inn"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    },
+                    {
+                        "label": "You wanted a word, Mara.",
+                        "conditions": [
+                            {
+                                "flag": "act_two_open"
+                            },
+                            {
+                                "not": {
+                                    "quest": "act_one_epilogue",
+                                    "status": "completed"
+                                }
+                            }
+                        ],
+                        "next": "after_the_survey"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "quarry_fate",
                         "equals": "ash"
                     }

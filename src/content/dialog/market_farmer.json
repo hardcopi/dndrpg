@@ -4,6 +4,38 @@
     "nodes": {
         "hail": [
             {
+                "conditions": [
+                    {
+                        "flag": "harrow_fate",
+                        "equals": "sold"
+                    }
+                ],
+                "once": true,
+                "text": "\"Harrow's place went, then,\" the farmer says, weighing nothing in particular. \"Good price, they say. Hired cart, downriver, never looked back.\" He looks east instead, at his own ditches. \"Letter came to me Tuesday. My first. Very civil. No name on it.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "harrow_fate",
+                        "equals": "brokered"
+                    }
+                ],
+                "once": true,
+                "text": "\"You're the one took the fee for Harrow's,\" the farmer says, not loudly. \"Word gets round a market.\" He turns his back to sort sacks that do not need sorting, and he is still sorting them when you go.",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
                 "text": "Grain's weighed at the granary, not here. Reeve's rules, not mine.",
                 "choices": [
                     {
