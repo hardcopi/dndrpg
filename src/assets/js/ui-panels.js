@@ -476,6 +476,55 @@
    * are here too, clickable, because switching which job you are following is
    * the thing you actually want from this panel.
    */
+  /**
+   * First Night's hint ring: the control the current tutorial stage is about
+   * wears a pulsing gold ring, so "press Search" or "open the journal" points
+   * at something on screen instead of being prose in the Tasks panel. The
+   * stage objectives in content/quests/first_night.json are unchanged; this
+   * only reads `current_stage_key` from quest/list, and does nothing once the
+   * quest is done, skipped, or not taken. When the stage's place is somewhere
+   * else (the marker's route has not arrived), it points at the ways out and
+   * the map instead of a verb that would do nothing here.
+   */
+  const TUTORIAL_TARGETS = {
+    talk:     { verbs: ['Talk'], text: 'Talk to Mara at the bar' },
+    journal:  { verbs: ['Journal'], top: '#btn-journal', text: 'Open the journal (J)' },
+    errand:   { verbs: ['Talk'], text: 'Talk to Tobin' },
+    the_rats: { ways: true, text: 'Take the way down to the cellar' },
+    loot:     { verbs: ['Search'], text: 'Press Search' },
+    search:   { verbs: ['Search'], text: 'Press Search again' },
+    rest:     { verbs: ['Talk'], text: 'Talk to Mara' },
+  };
+  function applyTutorialHints() {
+    document.querySelectorAll('.tut-hint').forEach((e) => {
+      e.classList.remove('tut-hint');
+      e.removeAttribute('data-tut');
+    });
+    if (document.body.classList.contains('in-combat')) return;
+    const st = G().state || {};
+    const q = (st.quests || []).find((x) => x.quest_key === 'first_night' && x.status === 'active');
+    if (!q) return;
+    const t = TUTORIAL_TARGETS[q.current_stage_key];
+    if (!t) return;
+    const marker = (st.questMarkers || []).find((m) => m.quest === 'first_night');
+    const away = marker && marker.route && marker.route.reachable && !marker.route.arrived;
+    const mark = (el, text) => {
+      if (!el) return;
+      el.classList.add('tut-hint');
+      el.setAttribute('data-tut', text);
+    };
+    const verb = (name) => Array.from(document.querySelectorAll('#action-bar .action-btn'))
+      .filter((b) => (b.textContent || '').trim() === name);
+    if (away || t.ways) {
+      const text = away ? 'Follow the ways out (or open the Map)' : t.text;
+      mark(document.querySelector('.loc-ways'), text);
+      if (away) verb('Map').forEach((b) => mark(b, text));
+      return;
+    }
+    (t.verbs || []).forEach((v) => verb(v).forEach((b) => mark(b, t.text)));
+    if (t.top) mark(document.querySelector(t.top), t.text);
+  }
+
   function renderQuestTracker() {
     const box = $('#quest-tracker');
     if (!box) return;
@@ -2064,7 +2113,7 @@
     pushOverlay, overlayOpen,
     showModal, closeTopModal, closeAllModals, confirm,
     // rails
-    renderPartyRail, renderQuestTracker, renderActionBar,
+    renderPartyRail, renderQuestTracker, renderActionBar, applyTutorialHints,
     appendLogLine, redrawLog, refreshRolls, selectRailTab,
     // panels
     openCharacterSheet, openJournal, openCamp, openShop, openRolls,

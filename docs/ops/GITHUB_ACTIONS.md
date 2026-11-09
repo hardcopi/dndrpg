@@ -166,7 +166,18 @@ deploys.
 4. **Migrations** — `migrate.sh --status` against Hermes. Any pending = stop.
 5. **Dry run** — `./deploy.sh` (lists only content changes).
 6. **Apply** — `echo deploy | ./deploy.sh --apply` (push, or manual with apply checked).
-7. **Smoke** — `/`, `style.css`, `api.js` (checked by content type, since a
+7. **Content** — dialogue, quests and places live in the database, so a
+   changed `src/sql/content.sql` is loaded with `tools/apply_content_safely.py`
+   (player progress carried across in one transaction). Skipped when the
+   sha256 recorded on Hermes in `/root/.rpg-content.sha256` matches. First,
+   `.github/scripts/content-drift.py` refuses the load if any NPC, quest,
+   place, item, monster, spell, encounter, region or module exists **only** in
+   the live database (made in `/content.php` and never exported), because the
+   load would delete it. It cannot see a live *edit* to a row the files also
+   have: export before editing live. The tool's progress snapshot is
+   age-encrypted and kept 30 days as `content-progress-<run id>`. On a dry run
+   this step only reports whether a load is due.
+8. **Smoke** — `/`, `style.css`, `api.js` (checked by content type, since a
    missing file is a 200 with the homepage), `/api/?r=session/status` as JSON;
    `/sql/content.sql` must not be served; a body from
    `/app/config/database.php` fails the run. Warnings (not failures) say whether

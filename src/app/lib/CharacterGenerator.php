@@ -350,6 +350,7 @@ class CharacterGenerator
             (new LevelUpService($this->db))->grantFeat($characterId, $featKey);
         }
 
+        $newParty = $partyId === null;
         if ($partyId === null) {
             $p = $this->db->prepare(
                 'INSERT INTO parties (user_id, module_id, name, leader_character_id)
@@ -378,7 +379,45 @@ class CharacterGenerator
             'UPDATE characters SET current_location_id=? WHERE id=?'
         )->execute([$startLocationId, $characterId]);
 
+        if ($newParty) {
+            $this->openTutorial($partyId, $startLocationId);
+        }
+
         return $this->getCharacter($characterId) + ['party_id' => $partyId];
+    }
+
+    /**
+     * A new party that wakes up in the Golden Flagon starts First Night.
+     *
+     * Before this, `first_night` began only from one reply in Mara's
+     * greeting, so a fresh character arrived to a Tasks panel reading
+     * "Nothing on the go" and could walk out of the Flagon without ever
+     * meeting the tutorial. Now the quest is on the board from the first
+     * screen (stage `talk`: "Talk to Mara at the bar"), and her greeting has a
+     * matching beat that leads straight into the job offer. Skipping is
+     * unchanged: "I've got it from here" in that offer, as before.
+     *
+     * Same effects as the old reply ("Show me how things go here"), so every
+     * later check of `tutorial_fate` and the quest reads the same. Only a new
+     * party in a module that opens in the Flagon and has the quest loaded; a
+     * character joining an existing party joins its story where it is.
+     */
+    private function openTutorial(int $partyId, int $startLocationId): void
+    {
+        $loc = $this->db->prepare('SELECT location_key FROM locations WHERE id = ?');
+        $loc->execute([$startLocationId]);
+        if ((string) $loc->fetchColumn() !== 'flagon_common_room') {
+            return;
+        }
+        $q = $this->db->prepare("SELECT COUNT(*) FROM quests WHERE quest_key = 'first_night'");
+        $q->execute();
+        if (!(int) $q->fetchColumn()) {
+            return;
+        }
+        (new Effects($this->db))->apply($partyId, [
+            ['start_quest' => 'first_night'],
+            ['set_flag' => 'tutorial_fate', 'value' => 'taken'],
+        ]);
     }
 
     /**
