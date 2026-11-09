@@ -46,15 +46,29 @@ named here instead of being filled with something invented.
   clear of coals beyond the doubled movement cost.
 - Tests: `tools/test_combat.php`, section "Braziers (battle map D)".
 
-## 2. High ground and ledges (next)
+## 2. High ground and ledges (shipped)
 
-The SRD has no high-ground attack bonus, so this part adds none. What it does
-add, both grounded in the SRD:
+| Terrain | Char | Move | Sight | Cover |
+|---|---|---|---|---|
+| high ground | `^` | 5 ft on top, **10 ft to climb up** | clear | none |
 
-- climbing onto a ledge costs extra movement (climbing);
-- a shooter on a ledge sees over **low** cover (`o`, `b`, `u`), which then
-  gives no cover against a ranged attack from above. Tall cover and walls
-  still block.
+- **Where it appears.** Layout letter `H`, in a new layout each for the arena
+  (a dais with braziers at its foot), cavern (a rock shelf), street (raised
+  walks), forest (a knoll) and camp (a bank).
+- **Climbing.** Stepping from lower ground onto `^` costs 5 ft more
+  (`BattleGrid::stepCost`, `CLIMB_FT`). Walking along the top and coming down
+  cost nothing extra. The pathfinder, the move preview and `stepMove` all
+  charge the same price.
+- **Looking down.** When the attacker stands on `^` and the target does not,
+  low cover (`o`, `b`, `u`) between them gives the target no cover
+  (`BattleGrid::seenFromAbove`). That covers attacks and the cover bonus to
+  Dexterity saves alike. Tall cover, walls and bodies in the way still count.
+  The shot's reason says "from high ground".
+- **No to-hit bonus.** The SRD has none, so there isn't one.
+- **The view.** A raised cell is a paler slab with a lit lip on its upper
+  edges and a shadowed drop on its lower ones.
+- **Monsters** do not seek out high ground yet.
+- Tests: `tools/test_combat.php`, section "High ground (battle map D)".
 
 ## 3. Darkness (after that)
 

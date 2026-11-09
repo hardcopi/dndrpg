@@ -303,6 +303,9 @@ class CombatEngine
                 'long'    => !$inMelee && $normalFt !== null && $dist > $normalFt,
                 'crowded' => !$inMelee && $crowded,
                 'flank'   => $inMelee && BattleGrid::flanking($terrain, $actor, $allies, $target),
+                // Shooting down from high ground: low cover is no cover. The
+                // number is already in `cover`; this is so the board can say why.
+                'high'    => BattleGrid::above($terrain, $ax, $ay, $tx, $ty),
             ];
         }
         return $out;
@@ -2100,6 +2103,9 @@ class CombatEngine
             }
             if ((int) $shot['cover'] > 0) {
                 $why[] = 'in cover (+' . (int) $shot['cover'] . ')';
+            }
+            if (!empty($shot['high'])) {
+                $why[] = 'from high ground';
             }
             $targets[$cid] = [
                 'dist'  => $shot['dist'],
@@ -4252,7 +4258,7 @@ class CombatEngine
                 break;
             }
 
-            $step = BattleGrid::enterCost($terrain, $nx, $ny) ?? 0;
+            $step = BattleGrid::stepCost($terrain, $cx, $cy, $nx, $ny) ?? 0;
             $spent += $step;
             $state = $this->updateCombatant($state, $cid, [
                 'x'         => $nx,

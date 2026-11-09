@@ -87,7 +87,18 @@ final class BattleGrid
         'b' => ['cost' => null, 'opaque' => false, 'cover' => 2, 'label' => 'a lit brazier'],
         'u' => ['cost' => null, 'opaque' => false, 'cover' => 2, 'label' => 'an overturned brazier'],
         'f' => ['cost' => 10,   'opaque' => false, 'cover' => 0, 'label' => 'burning coals'],
+        // High ground (battle map D, part 2): a dais, a rock shelf, a rise.
+        // Walking about on top is ordinary ground; getting up onto it is a
+        // climb and costs five feet more (stepCost). From up there a shooter
+        // sees over low cover — see coverBetween().
+        '^' => ['cost' => 5,    'opaque' => false, 'cover' => 0, 'label' => 'high ground'],
     ];
+
+    /** Low obstacles that hide nobody from somebody standing above them. */
+    public const LOW_COVER = ['o', 'b', 'u'];
+
+    /** The extra feet it takes to climb from lower ground onto high ground. */
+    public const CLIMB_FT = 5;
 
     /** Anything not in TERRAIN, and anything off the board, reads as this. */
     private const UNKNOWN = ['cost' => null, 'opaque' => true, 'cover' => 5, 'label' => 'solid rock'];
@@ -221,6 +232,38 @@ final class BattleGrid
         return self::info($terrain, $x, $y)['cost'];
     }
 
+    /**
+     * Feet to step from one cell into a neighbour: the price of the ground,
+     * plus a climb when the step goes up onto high ground. Coming down is free,
+     * which is the SRD (nobody charges you for a drop of a few feet).
+     */
+    public static function stepCost(array $terrain, int $fx, int $fy, int $x, int $y): ?int
+    {
+        $cost = self::enterCost($terrain, $x, $y);
+        if ($cost === null) {
+            return null;
+        }
+        if (self::at($terrain, $x, $y) === '^' && self::at($terrain, $fx, $fy) !== '^') {
+            $cost += self::CLIMB_FT;
+        }
+        return $cost;
+    }
+
+    /** Is (ax, ay) high ground and (bx, by) not? */
+    public static function above(array $terrain, int $ax, int $ay, int $bx, int $by): bool
+    {
+        return self::at($terrain, $ax, $ay) === '^' && self::at($terrain, $bx, $by) !== '^';
+    }
+
+    /** The board as somebody on high ground sees it: low cover flattened. */
+    public static function seenFromAbove(array $terrain): array
+    {
+        foreach ($terrain as $y => $row) {
+            $terrain[$y] = str_replace(self::LOW_COVER, '.', (string) $row);
+        }
+        return $terrain;
+    }
+
     public static function passable(array $terrain, int $x, int $y): bool
     {
         return self::enterCost($terrain, $x, $y) !== null;
@@ -342,8 +385,16 @@ final class BattleGrid
      *
      * @return array{opaque:int, corners:array<int, array{blocked:int, cap:int, steps:array<int, string[]>}>}
      */
-    private static function rays(array $terrain, int $ax, int $ay, int $bx, int $by): array
+    private static function rays(array $terrain, int $ax, int $ay, int $bx, int $by, bool $cache = true): array
     {
+        // A board seen from above (seenFromAbove) is asked about once per
+        // shot and never cached: holding it in the one slot would throw the
+        // real board's rays away on every high-ground question, and a second
+        // slot doubles the memory of a cache that is already the heaviest
+        // thing in a request.
+        if (!$cache) {
+            return self::traceRays($terrain, $ax, $ay, $bx, $by);
+        }
         if (self::$rayCacheFor !== $terrain) {
             self::$rayCacheFor = $terrain;
             self::$rayCache = [];
@@ -359,6 +410,14 @@ final class BattleGrid
             self::$rayCache = [];
         }
 
+        $result = self::traceRays($terrain, $ax, $ay, $bx, $by);
+        self::$rayCache[$memo] = $result;
+        return $result;
+    }
+
+    /** The uncached half of rays(). */
+    private static function traceRays(array $terrain, int $ax, int $ay, int $bx, int $by): array
+    {
         // Neither end blocks itself: you get no cover from your own square, and
         // a target does not hide behind the ground it stands on.
         $skip = [self::keyOf($ax, $ay) => true, self::keyOf($bx, $by) => true];
@@ -430,9 +489,7 @@ final class BattleGrid
             $perCorner[] = ['blocked' => $blocked, 'cap' => $cap, 'steps' => $steps];
         }
 
-        $result = ['opaque' => $minOpaque, 'corners' => $perCorner];
-        self::$rayCache[$memo] = $result;
-        return $result;
+        return ['opaque' => $minOpaque, 'corners' => $perCorner];
     }
 
     // -----------------------------------------------------------------------
@@ -510,7 +567,12 @@ final class BattleGrid
         $tx = (int) ($target['x'] ?? 0);
         $ty = (int) ($target['y'] ?? 0);
 
-        $r = self::rays($terrain, $ax, $ay, $tx, $ty);
+        // From high ground a low wall, a table or a brazier between you and
+        // somebody below hides nothing: you are looking down past it. Tall
+        // cover and walls still stand, and so do bodies.
+        $r = self::above($terrain, $ax, $ay, $tx, $ty)
+            ? self::rays(self::seenFromAbove($terrain), $ax, $ay, $tx, $ty, false)
+            : self::rays($terrain, $ax, $ay, $tx, $ty);
 
         $selfCid = (string) ($attacker['cid'] ?? '');
         $targetCid = (string) ($target['cid'] ?? '');
@@ -699,7 +761,7 @@ final class BattleGrid
                     if (!self::inBounds($terrain, $nx, $ny)) {
                         continue;
                     }
-                    $step = self::enterCost($terrain, $nx, $ny);
+                    $step = self::stepCost($terrain, $cx, $cy, $nx, $ny);
                     if ($step === null) {
                         continue;
                     }

@@ -1535,6 +1535,41 @@ same('and no flames standing', 0, count(array_filter($cool['grid']['props'], fn 
 same('three flames stood while it burned', 3, count(array_filter($after['grid']['props'], fn ($p) => !empty($p['fire']))));
 
 // ---------------------------------------------------------------------------
+section('High ground (battle map D)');
+
+// Climbing up costs five feet more; walking about on top and coming down do not.
+$hill = board(['', '', '', '', '', '.....^^^']);
+same('climbing onto high ground is ten feet', 10, BattleGrid::stepCost($hill, 4, 5, 5, 5));
+same('walking along the top is five', 5, BattleGrid::stepCost($hill, 5, 5, 6, 5));
+same('coming down is five', 5, BattleGrid::stepCost($hill, 7, 5, 8, 5));
+$climber = at('c', 'party', 3, 5);
+$reach = BattleGrid::reachable($hill, [$climber], $climber, 30);
+same('the search charges the climb', 15, $reach['5,5']['cost'] ?? null);
+same('and then the ground', 20, $reach['6,5']['cost'] ?? null);
+
+// From above, low cover hides nobody below; tall cover still does.
+$ledge = board(['', '', '', '', '', '^...o...']);
+$archer = at('archer', 'party', 0, 5);
+$crouch = at('crouch', 'foe', 6, 5);
+same('low cover counts from level ground', 2, BattleGrid::coverBetween(paint($ledge, 0, 5, '.'), [], $archer, $crouch));
+same('but not from the ledge above', 0, BattleGrid::coverBetween($ledge, [], $archer, $crouch));
+same('a brazier is low cover too', 0, BattleGrid::coverBetween(paint($ledge, 4, 5, 'b'), [], $archer, $crouch));
+ok('tall cover still hides them', BattleGrid::coverBetween(paint($ledge, 4, 5, 'n'), [], $archer, $crouch) > 0);
+same('and it does not work upward: the one below still sees the wall', 2,
+    BattleGrid::coverBetween(paint(paint($ledge, 0, 5, '.'), 7, 5, '^'), [], $archer, at('t', 'foe', 7, 5)));
+$shots = CombatEngine::shotsFrom(gridOf($ledge), [$archer, $crouch], $archer, ['reach' => null, 'normal' => 80, 'long' => 320]);
+ok('the shot says it is from high ground', !empty($shots['crouch']['high']) && $shots['crouch']['cover'] === 0);
+
+// The generator: high ground turns up, and the boards stay walkable.
+foreach (['arena', 'cavern', 'street', 'forest', 'camp'] as $pal) {
+    $raised = 0;
+    for ($seed = 1; $seed <= 160; $seed++) {
+        $raised += substr_count(implode('', BattleMapGen::generate($seed * 104729, $pal)['terrain']), '^');
+    }
+    ok("$pal boards sometimes carry high ground", $raised > 0, "$raised cells");
+}
+
+// ---------------------------------------------------------------------------
 echo PHP_EOL . str_repeat('-', 52) . PHP_EOL;
 printf("%d passed, %d failed%s", $RESULTS['pass'], $RESULTS['fail'], PHP_EOL);
 

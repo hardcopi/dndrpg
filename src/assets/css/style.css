@@ -5720,6 +5720,12 @@ body.bm-pan-ready .battlemap { cursor: grab; }
 .bm-decal.is-fire { opacity: 1; }
 .bm-cell.is-fire  { fill: rgba(255, 110, 20, 0.32); stroke: rgba(255, 140, 40, 0.45); stroke-width: 0.03; }
 .bm-glow.is-coals { opacity: 0.85; }
+/* Battle map D, part 2: high ground. A paler slab with a lit lip and a
+   shadowed drop (terrainHtml draws the edges). */
+.bm-cell.is-raised { fill: rgba(255, 236, 200, 0.2); stroke: rgba(60, 40, 20, 0.25); stroke-width: 0.02; }
+.bm-ledge { pointer-events: none; }
+.bm-ledge.is-lip  { fill: rgba(255, 240, 210, 0.45); }
+.bm-ledge.is-drop { fill: rgba(20, 12, 4, 0.55); }
 
 /* Cover, shown on hover: a shield with the AC it is worth. On an obstacle it
    is the most that obstacle gives; on a target it is what this shot is
