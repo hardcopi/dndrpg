@@ -3,7 +3,7 @@
     "name": "Vennik Tallowglass",
     "role": "Instrument-maker",
     "description": "A gnome of Lathmere, nine years resident, who sells glasses and compasses and dividers and reports everything he hears to the League. He has lately begun leaving things out of his reports, because he has grown fond of the place, and he is aware of exactly what that is called.",
-    "sprite_key": "wizard",
+    "sprite_key": "vennik_tallowglass",
     "is_merchant": true,
     "is_quest_giver": true,
     "dialog": "vennik_tallowglass",

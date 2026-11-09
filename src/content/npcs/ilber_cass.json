@@ -3,7 +3,7 @@
     "name": "Ilber Cass",
     "role": "Chandler and moneylender",
     "description": "Sells a captain everything he needs to leave the quay, on credit, and sells the credit onward to somebody less pleasant before the month is out. He tells you that first, every time, and believes it makes him honest. He has been buying grain by the Counting Boom's weight for six years and has begun to suspect what that has cost him.",
-    "sprite_key": "merchant",
+    "sprite_key": "ilber_cass",
     "is_merchant": true,
     "is_quest_giver": true,
     "dialog": "ilber_cass",
