@@ -296,6 +296,72 @@
                     {
                         "quest": "the_quarterly_meeting",
                         "status": "completed"
+                    },
+                    {
+                        "companion": "sera",
+                        "status": "active"
+                    },
+                    {
+                        "flag": "sera_post_fate",
+                        "equals": "retained"
+                    }
+                ],
+                "once": true,
+                "text": "Minna Crale takes a thin folder from the pigeonholes without being asked and opens it on the desk. Eight lines to a sheet, a sheet a month, in a small exact hand you know very well. Where the party went. What it was paid. Who it spoke to. Every one is initialled in the corner, and the initials are not Sera's.\n\n\"Very good accounts,\" Minna Crale says. \"I read them at the meeting. They are the only thing on the agenda that is always on time.\"",
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera reads the top sheet upside down, and then the second, and then she stops reading. \"They are good,\" she says. \"I would have hired me.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Who initials them?",
+                        "next": "eight_lines_initials"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_quarterly_meeting",
+                        "status": "completed"
+                    },
+                    {
+                        "companion": "sera",
+                        "status": "active"
+                    },
+                    {
+                        "flag": "sera_post_fate",
+                        "equals": "stayed"
+                    },
+                    {
+                        "not": {
+                            "flag": "sera_second_offer"
+                        }
+                    }
+                ],
+                "text": "\"One more matter,\" Minna Crale says, and this time she looks past you. \"Miss Vance.\" Sera goes very still. \"The Greyhythe office wrote to me that you had declined a post at the landing. Mr Corse was sorry. So was I, when I read the dockets.\" She lays a card on the desk. \"The meeting has a second desk at Number Nine that has been empty for six years. Sixty a year, rooms on House Street, and the right to read anything that is filed. Nobody would ever ask you for a false entry. Nobody here would know how.\"",
+                "choices": [
+                    {
+                        "label": "That's Sera's to answer.",
+                        "next": "second_offer_answer"
+                    },
+                    {
+                        "label": "She isn't for hire.",
+                        "next": "second_offer_spoken_for"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_quarterly_meeting",
+                        "status": "completed"
                     }
                 ],
                 "text": "Minna Crale looks up, and something that is not quite a smile happens and is filed. \"It's in the minutes,\" she says. \"Whatever you said. Everything is. That's what I'm for.\"",
@@ -531,6 +597,91 @@
         "favour_refused": [
             {
                 "text": "\"It will keep,\" Minna Crale says, and puts the slip back in its pigeonhole, under your name. \"Favours do. That is rather the point of them.\" She is not offended. She is never offended. Somewhere a line in a book in Greyhythe stays open, with a blank where the day would be.",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "eight_lines_initials": [
+            {
+                "text": "\"Mine,\" Minna Crale says. \"For the minutes. And then Mr Sare's, because he reads them after me, and then they go downstairs to the Record Office and Mrs Fenn initials the docket.\" She closes the folder. \"Four people have read every month of your year, and all of them were glad to. I thought you would want to know that it was read. People generally do.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "second_offer_answer": [
+            {
+                "conditions": [
+                    {
+                        "companion": "sera",
+                        "approval_at_least": 40
+                    }
+                ],
+                "on_enter": [
+                    {
+                        "set_flag": "sera_second_offer",
+                        "value": "declined"
+                    },
+                    {
+                        "approval": {
+                            "sera": 6
+                        }
+                    }
+                ],
+                "text": "Sera picks up the card and reads it twice, the way she reads everything. Then she puts it down square to the edge of the desk.\n\n\"I turned down forty a year and a bond,\" she says. \"This is twenty more and the same thing. You are offering me the right to read everything, Mrs Crale, in a building where nothing that is filed is ever wrong.\" She very nearly smiles. \"I have found I prefer the other kind of book. Thank you. Truly.\"\n\nMinna Crale writes declined in pencil, and then, unusually, rubs it out and writes it again in ink.",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "on_enter": [
+                    {
+                        "set_flag": "sera_second_offer",
+                        "value": "took"
+                    },
+                    {
+                        "companion_leaves": "sera"
+                    },
+                    {
+                        "approval": {
+                            "aldric": 4,
+                            "kessa": -4
+                        }
+                    }
+                ],
+                "text": "Sera picks up the card and reads it twice. She does not look at you, which is how you know.\n\n\"Sixty,\" she says. \"Rooms. Everything filed.\" She puts the card in her sleeve. \"It is the best offer I have ever had, and it is the one that is best for me, and I have costed the alternative.\" Now she looks at you. \"You can say the cheap thing if you like. You have earned it. I would rather you didn't.\"\n\nShe signs where Minna Crale shows her. Then she goes downstairs to see the second desk, and does not come back up.",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "second_offer_spoken_for": [
+            {
+                "on_enter": [
+                    {
+                        "set_flag": "sera_second_offer",
+                        "value": "spoken_for"
+                    },
+                    {
+                        "approval": {
+                            "sera": -10
+                        }
+                    }
+                ],
+                "text": "\"I am standing right here,\" Sera says, quite quietly. Minna Crale picks the card up again without comment, as if it had never been put down. \"I would have said no,\" Sera tells you afterwards, on the stair. \"That is not the point. Nobody has ever answered for me who was not about to sell me.\" She goes down ahead of you.",
                 "choices": [
                     {
                         "label": "Leave.",

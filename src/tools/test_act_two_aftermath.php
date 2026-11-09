@@ -1,6 +1,7 @@
 <?php
 /**
- * Act II aftermath: companions read meeting_fate; Minna Crale calls in Kessa's favour.
+ * Act II aftermath: companions read meeting_fate; Minna Crale calls in Kessa's favour;
+ * Reed hears the outcome in Rivermark; Sera is offered the second desk at Number Nine.
  * Below is the harness shared with test_act_two.php; the original notes follow.
  *
  * Act II, "The Quarterly Meeting", can be played through on all four branches.
@@ -120,6 +121,47 @@ try {
     $p = party($db, $base);
     ended($db, $p, 'costed');
     ok('no favour, no call', !str_contains(greet($db, $p, 'minna_crale'), 'blank'));
+
+    echo "== Rivermark hears about the meeting ==\n";
+    foreach (['costed' => 'held', 'minuted' => 'written down', 'subscribed' => 'Owners', 'walked' => 'walked out'] as $fate => $needle) {
+        $p = party($db, $base); ended($db, $p, $fate);
+        $t = greet($db, $p, 'captain_elowen');
+        ok("Reed hears $fate", stripos($t, $needle) !== false, substr($t, 0, 100));
+        ok("Reed says it once ($fate)", (function () use ($db, $p, $needle) {
+            talk($db, $p, 'captain_elowen', ['']); return stripos(greet($db, $p, 'captain_elowen'), $needle) === false; })());
+    }
+
+    echo "== Sera's second offer ==\n";
+    $sera = function (array $flags, int $approval) use ($db, $base) {
+        $p = party($db, $base + $flags); ended($db, $p, 'minuted');
+        $cs = new CompanionService($db); $cs->meet($p, 'sera'); $cs->recruit($p, 'sera');
+        $now = (int) ($db->query("SELECT approval FROM party_companions pc WHERE pc.party_id=$p AND pc.companion_key='sera'")->fetchColumn());
+        $cs->adjustApproval($p, 'sera', $approval - $now);
+        return $p;
+    };
+    $status = fn ($p) => (string) $db->query("SELECT pc.status FROM party_companions pc WHERE pc.party_id=$p AND pc.companion_key='sera'")->fetchColumn();
+    $p = $sera(['sera_post_fate' => 'stayed'], 80);
+    ok('Minna offers the second desk', str_contains(greet($db, $p, 'minna_crale'), 'second desk'));
+    talk($db, $p, 'minna_crale', ["Sera's to answer"]);
+    ok('a trusted Sera declines', flag($db, $p, 'sera_second_offer') === 'declined' && $status($p) === 'active', $status($p));
+    ok('and says so on the road', str_contains(greet($db, $p, 'sera'), 'Sixty a year'));
+    ok('offer not repeated', !str_contains(greet($db, $p, 'minna_crale'), 'second desk'));
+
+    $p = $sera(['sera_post_fate' => 'stayed'], 20);
+    talk($db, $p, 'minna_crale', ["Sera's to answer"]);
+    ok('a doubtful Sera takes the desk', flag($db, $p, 'sera_second_offer') === 'took' && $status($p) !== 'active', $status($p));
+    ok('Dorcas Fenn has her downstairs', str_contains(greet($db, $p, 'dorcas_fenn'), 'Second desk'));
+
+    $p = $sera(['sera_post_fate' => 'stayed'], 80);
+    talk($db, $p, 'minna_crale', ["isn't for hire"]);
+    ok('answering for her costs approval', flag($db, $p, 'sera_second_offer') === 'spoken_for');
+    ok('and she says so', str_contains(greet($db, $p, 'sera'), 'stand beside me'));
+
+    $p = $sera(['sera_post_fate' => 'retained'], 50);
+    ok('retained: Minna has the eight lines', str_contains(greet($db, $p, 'minna_crale'), 'Eight lines'));
+    $p = $sera(['sera_post_fate' => 'retained'], 50);
+    talk($db, $p, 'minna_crale', ['Who initials']);
+    ok('four people read every month', !str_contains(greet($db, $p, 'minna_crale'), 'Eight lines'));
 } catch (Throwable $e) {
     ok('played without a dead end', false, $e->getMessage());
 } finally {

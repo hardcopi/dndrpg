@@ -10,6 +10,70 @@
                         "status": "active"
                     },
                     {
+                        "flag": "sera_second_offer",
+                        "equals": "declined"
+                    }
+                ],
+                "once": true,
+                "text": "\"Sixty a year,\" Sera says, apropos of nothing, somewhere on the road. \"I worked out what it comes to by the day. I am not going to tell you.\" She walks on a little. \"It is a great deal less than I thought I would mind.\"",
+                "choices": [
+                    {
+                        "label": "What did Marrow have on you?",
+                        "next": "the_leash_offer"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit down a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "sera",
+                        "status": "active"
+                    },
+                    {
+                        "flag": "sera_second_offer",
+                        "equals": "spoken_for"
+                    }
+                ],
+                "once": true,
+                "text": "\"I know why you did it,\" Sera says, without being asked. \"You thought you were standing between me and them.\" She adjusts her satchel. \"Next time stand beside me. It is a very small difference and it is the whole of it.\"",
+                "choices": [
+                    {
+                        "label": "What did Marrow have on you?",
+                        "next": "the_leash_offer"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit down a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "sera",
+                        "status": "active"
+                    },
+                    {
                         "flag": "meeting_fate",
                         "equals": "costed"
                     }
