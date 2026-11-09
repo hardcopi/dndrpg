@@ -39,7 +39,7 @@ final class CompanionRoster
                 self::CAMP    => 'Recruited, waiting at camp (not in character_party).',
                 self::LEFT    => 'Walked out over approval; can be won back where you met them.',
                 self::HOSTILE => 'Turned on the party.',
-                self::DEAD    => 'Gone for good. Only reachable when CombatEngine::COMPANION_PERMADEATH is on.',
+                self::DEAD    => 'Gone for good: bled out or killed outright in a fight (CombatEngine::COMPANION_PERMADEATH, on).',
             ],
             self::UNMET,
             [

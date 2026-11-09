@@ -19,7 +19,7 @@
  * saves — the survivors bind them up — so a character on 0 HP outside combat
  * is `stable`, and any healing that lifts current_hp above 0 is the wake-up.
  * `dead` outside a fight is party_companions.status = 'dead', which only
- * CombatEngine::COMPANION_PERMADEATH ever writes.
+ * CombatEngine::COMPANION_PERMADEATH (on) writes when a companion dies.
  */
 
 declare(strict_types=1);
@@ -44,7 +44,7 @@ final class LifeState
                 self::DYING     => '0 HP, unconscious, rolling death saves (combat only).',
                 self::STABLE    => '0 HP, unconscious, no longer rolling. Cannot act or talk. '
                     . 'Wakes with any healing or a long rest.',
-                self::DEAD      => 'Gone. In combat: out for the fight. Outside: only with permadeath on.',
+                self::DEAD      => 'Gone. In combat: out for the fight. After it: a companion stays dead (permadeath on); a player-made character is carried off STABLE.',
             ],
             self::CONSCIOUS,
             [
@@ -60,15 +60,15 @@ final class LifeState
                 [self::STABLE, 'damaged', self::DYING],
                 [self::STABLE, 'massive_damage', self::DEAD],
                 // Leaving a fight: anyone still dying is bound up by the
-                // survivors; the bled-out are carried off unconscious unless
-                // permadeath is on.
+                // survivors; a bled-out player-made character is carried off
+                // unconscious (a companion stays dead: permadeath is on).
                 [self::DYING, 'combat_ends', self::STABLE],
                 [self::DEAD, 'carried_off', self::STABLE],
             ],
             [],
-            'DEAD is terminal outside combat when permadeath is on (no revivify yet). '
-            . 'With permadeath off (the default) `carried_off` brings the bled-out '
-            . 'back to STABLE after the fight.'
+            'Companions: DEAD is final after the fight (CombatEngine::COMPANION_PERMADEATH '
+            . 'is on; party_companions.status = dead, no revivify yet). Player-made '
+            . 'characters: `carried_off` brings the bled-out back to STABLE after the fight.'
         );
     }
 

@@ -50,7 +50,7 @@ stateDiagram-v2
 | `camp` | Recruited, waiting at camp (not in character_party). |
 | `left` | Walked out over approval; can be won back where you met them. |
 | `hostile` | Turned on the party. |
-| `dead` (terminal) | Gone for good. Only reachable when CombatEngine::COMPANION_PERMADEATH is on. |
+| `dead` (terminal) | Gone for good: bled out or killed outright in a fight (CombatEngine::COMPANION_PERMADEATH, on). |
 
 | From | Event | To |
 |---|---|---|
@@ -92,7 +92,7 @@ A missing party_companions row reads as `unmet`. The out-of-combat life state (c
         "camp": "Recruited, waiting at camp (not in character_party).",
         "left": "Walked out over approval; can be won back where you met them.",
         "hostile": "Turned on the party.",
-        "dead": "Gone for good. Only reachable when CombatEngine::COMPANION_PERMADEATH is on."
+        "dead": "Gone for good: bled out or killed outright in a fight (CombatEngine::COMPANION_PERMADEATH, on)."
     },
     "terminal": [
         "dead"
@@ -228,7 +228,7 @@ stateDiagram-v2
 | `conscious` (initial) | Above 0 HP. Can act, travel and talk. |
 | `dying` | 0 HP, unconscious, rolling death saves (combat only). |
 | `stable` | 0 HP, unconscious, no longer rolling. Cannot act or talk. Wakes with any healing or a long rest. |
-| `dead` | Gone. In combat: out for the fight. Outside: only with permadeath on. |
+| `dead` | Gone. In combat: out for the fight. After it: a companion stays dead (permadeath on); a player-made character is carried off STABLE. |
 
 | From | Event | To |
 |---|---|---|
@@ -246,7 +246,7 @@ stateDiagram-v2
 | `dying` | combat_ends | `stable` |
 | `dead` | carried_off | `stable` |
 
-DEAD is terminal outside combat when permadeath is on (no revivify yet). With permadeath off (the default) `carried_off` brings the bled-out back to STABLE after the fight.
+Companions: DEAD is final after the fight (CombatEngine::COMPANION_PERMADEATH is on; party_companions.status = dead, no revivify yet). Player-made characters: `carried_off` brings the bled-out back to STABLE after the fight.
 
 <details><summary>JSON</summary>
 
@@ -260,7 +260,7 @@ DEAD is terminal outside combat when permadeath is on (no revivify yet). With pe
         "conscious": "Above 0 HP. Can act, travel and talk.",
         "dying": "0 HP, unconscious, rolling death saves (combat only).",
         "stable": "0 HP, unconscious, no longer rolling. Cannot act or talk. Wakes with any healing or a long rest.",
-        "dead": "Gone. In combat: out for the fight. Outside: only with permadeath on."
+        "dead": "Gone. In combat: out for the fight. After it: a companion stays dead (permadeath on); a player-made character is carried off STABLE."
     },
     "terminal": [],
     "transitions": [
@@ -330,7 +330,7 @@ DEAD is terminal outside combat when permadeath is on (no revivify yet). With pe
             "to": "stable"
         }
     ],
-    "notes": "DEAD is terminal outside combat when permadeath is on (no revivify yet). With permadeath off (the default) `carried_off` brings the bled-out back to STABLE after the fight."
+    "notes": "Companions: DEAD is final after the fight (CombatEngine::COMPANION_PERMADEATH is on; party_companions.status = dead, no revivify yet). Player-made characters: `carried_off` brings the bled-out back to STABLE after the fight."
 }
 ```
 

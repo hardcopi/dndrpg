@@ -298,9 +298,16 @@ try {
     same('after the fight the dying companion is on 0 HP', 0, $hpOf($kessaChar));
     same('so camp reads her as unconscious', 'stable', $row('kessa')['life_state']);
     same('and the bled-out companion is carried off on 0 HP, not 1', 0, $hpOf($ilseChar));
-    same('so camp reads her as unconscious too', 'stable', $row('ilse')['life_state']);
+    if (CombatEngine::COMPANION_PERMADEATH) {
+        same('permadeath on: camp reads the bled-out companion as dead', 'dead', $row('ilse')['life_state']);
+    } else {
+        same('permadeath off: camp reads her as unconscious too', 'stable', $row('ilse')['life_state']);
+    }
     same('neither can talk', [false, false], [$row('kessa')['can_talk'], $row('ilse')['can_talk']]);
-    if (!CombatEngine::COMPANION_PERMADEATH) {
+    if (CombatEngine::COMPANION_PERMADEATH) {
+        $marching = (int) $db->query('SELECT COUNT(*) FROM character_party WHERE character_id = ' . $ilseChar)->fetchColumn();
+        same('permadeath on: Ilse is dead on the roster and no longer marching', ['dead', 0], [$status('ilse'), $marching]);
+    } else {
         same('permadeath off: Ilse is still on the roster', 'active', $status('ilse'));
     }
     same('the standing leader keeps their hit points', 20, $hpOf($leader));
@@ -310,7 +317,11 @@ try {
         ->execute([$leader]);
     (new LocationEngine($db))->longRest($leader, 0, 'camp');
     same('Kessa awake after a long rest', 'conscious', $row('kessa')['life_state']);
-    same('Ilse awake after a long rest', 'conscious', $row('ilse')['life_state']);
+    if (CombatEngine::COMPANION_PERMADEATH) {
+        same('Ilse stays dead after a long rest', 'dead', $row('ilse')['life_state']);
+    } else {
+        same('Ilse awake after a long rest', 'conscious', $row('ilse')['life_state']);
+    }
 } finally {
     $db->rollBack();
 }

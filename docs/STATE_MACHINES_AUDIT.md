@@ -15,18 +15,18 @@ Audited 9 Nov 2026. Each entry covers where the state lives, its states, who wri
   - `heal()` on a dead PC took away Unconscious and raised their HP while `alive` stayed false. The result was a body standing up that could not act.
 - **What players saw:** the Nov 1 playtest note. You could sit with and talk to companions who had "died" or were down at camp (camp seats and the Talk button ignored HP), and the server answered with dialogue.
 - **Fix:** an explicit table. State is derived, not stored in a new column: `LifeState::of()` works on combatants and `ofCharacter()` on rows. Out of combat, 0 HP means unconscious (stable), and healing or a long rest wakes them.
-  - At the end of a fight, the dying and the bled-out are carried off unconscious on 0 HP.
+  - At the end of a fight, the dying (and bled-out player-made characters) are carried off unconscious on 0 HP.
   - Camp greys out their seat and hides Talk.
   - `dialogue/node` returns a 409 for a companion who is down.
   - Healing the dead is refused and logged.
-  - Permadeath (status `dead`) is built and tested but switched **off**, behind `CombatEngine::COMPANION_PERMADEATH`. It is Rich's story call.
+  - Permadeath is **on** (`CombatEngine::COMPANION_PERMADEATH = true`, Rich's call, 9 Nov). A companion who bleeds out or is killed outright becomes roster `dead`, leaves the party, is listed under "No longer with you" at camp, and can't be talked to or recruited back. A player-made character who bleeds out is still carried off unconscious.
 - **Risk:** medium. The change touches combat and camp. It is covered by the new tests plus test_dying, test_combat, test_grid_combat and test_skirmish, all unchanged.
 
 ## 2. Companion roster status: MADE EXPLICIT (`companion_roster`)
 - **Stored:** `party_companions.status` ENUM, with values unmet, met, active, camp, left, hostile, dead.
 - **Writers:** `CompanionService::meet/recruit/dismiss/activate/leave/turnHostile`, each with its own `in_array` check and raw UPDATE.
 - **Illegal moves that were possible:** `recruit()` from `dead`, `turnHostile()` from `dead`, and `leave()` racing `dismiss()` (no expected-from in the WHERE). The `dead` value was in the ENUM but nothing wrote it.
-- **Fix:** a table, plus one `setStatus()` that guards each change and puts the expected `from` in the WHERE. Recruiting the dead becomes a note instead of a resurrection. `markDead()` was added for the permadeath option.
+- **Fix:** a table, plus one `setStatus()` that guards each change and puts the expected `from` in the WHERE. Recruiting the dead becomes a note instead of a resurrection. `markDead()` was added for permadeath (now on).
 - **Risk:** low. test_companions and test_romance are unchanged.
 
 ## 3. Quest status: MADE EXPLICIT (`quest_status`)

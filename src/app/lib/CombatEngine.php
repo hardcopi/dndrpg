@@ -6628,13 +6628,16 @@ class CombatEngine
      * Whether a COMPANION who bleeds out stays dead after the fight
      * (party_companions.status = 'dead', CompanionRoster::DEAD).
      *
-     * FALSE until Rich decides: it is a story choice, not a rules one. Off,
-     * the bled-out are carried off the field unconscious (LifeState::STABLE,
-     * 0 HP) and wake with healing or a long rest. On, a companion who fails
-     * three saves is gone; the camp lists them among the dead and nothing
-     * can talk to them. Player-made characters are never affected.
+     * ON — Rich's call (9 Nov 2026). A companion who fails three saves (or
+     * is killed outright) is gone: CompanionService::markDead() moves them to
+     * CompanionRoster::DEAD, they leave the marching party, the camp lists
+     * them under "No longer with you", and nothing can talk to them or
+     * recruit them back. Off, the bled-out would instead be carried off
+     * unconscious (LifeState::STABLE, 0 HP) and wake with healing or a long
+     * rest. Player-made characters are never affected: a PC who bleeds out
+     * is carried off unconscious either way.
      */
-    public const COMPANION_PERMADEATH = false;
+    public const COMPANION_PERMADEATH = true;
 
     /**
      * Ask LifeState's table whether a player character may make this move.
@@ -7680,9 +7683,9 @@ class CombatEngine
             $hp = max(0, (int) $c['hp']);
             // Leaving the fight, by LifeState's table:
             //   DYING  -> STABLE  (combat_ends): the survivors bind them up.
-            //   DEAD   -> STABLE  (carried_off): carried off the field
-            //            unconscious, unless COMPANION_PERMADEATH says a
-            //            companion stays dead.
+            //   DEAD   -> STABLE  (carried_off): a player-made character is
+            //            carried off the field unconscious; a companion
+            //            stays dead (COMPANION_PERMADEATH, on).
             // Both leave current_hp at 0, which IS the stored form of
             // "unconscious" outside a fight (LifeState::ofCharacter): the camp
             // greys them out and no conversation opens until healing or a long
