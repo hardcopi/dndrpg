@@ -11,6 +11,9 @@ which runs in production at https://rpg.five-star.com on the host `hermes`.
   generator under `src/dungeon/` — see **The map service**.
 - `pull.sh` / `deploy.sh` — sync with production. `deploy.sh` sends `src/` only,
   so the mapgen container is a **local** thing; production runs the fallback.
+- `.github/workflows/` — CI (verify.sh on every PR), Deploy (backup, migration
+  check, then `deploy.sh` from Actions) and the nightly encrypted DB backup.
+  Setup, secrets, restore and rollback: `docs/ops/GITHUB_ACTIONS.md`.
 
 ## Accessing the nginx and MySQL servers
 
