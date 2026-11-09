@@ -751,6 +751,9 @@ final class BattleMapGen
         ],
     ];
 
+    /** Palettes whose boards are dark (see BattleGrid::lightRows). */
+    public const DARK = ['cavern', 'tunnel'];
+
     /**
      * Which palette a location fights on.
      *
@@ -838,6 +841,10 @@ final class BattleMapGen
             'cell_ft' => BattleGrid::CELL_FT,
             'seed'    => $seed,
             'palette' => $palette,
+            // Underground boards are dark apart from their braziers and coals
+            // (battle map D, part 3). A flag rather than a palette test so a
+            // fight saved before this shipped keeps the light it started in.
+            'dark'    => in_array($palette, self::DARK, true),
             'terrain' => $terrain,
             'floor'   => self::FLOORS[$palette] ?? 'tiles/floor_stone.png',
             'wall'    => self::WALLS[$palette] ?? 'tiles/wall_stone.png',

@@ -1569,6 +1569,97 @@ foreach (['arena', 'cavern', 'street', 'forest', 'camp'] as $pal) {
     ok("$pal boards sometimes carry high ground", $raised > 0, "$raised cells");
 }
 
+section('Darkness (battle map D)');
+
+// The light: a brazier is a torch, coals a candle, walls stop both.
+$cave = board(['', '', '', '', '', '...b............']);
+$lit = BattleGrid::lightRows($cave);
+same('beside the brazier is bright', 'B', $lit[5][4]);
+same('twenty feet off is still bright', 'B', $lit[5][7]);
+same('twenty-five feet off is dim', 'D', $lit[5][8]);
+same('forty feet off is the edge of the dim', 'D', $lit[5][11]);
+same('forty-five feet off is dark', 'X', $lit[5][12]);
+$walled = paint(paint(paint($cave, 5, 4, '#'), 5, 5, '#'), 5, 6, '#');
+same('a wall puts the far side in the dark', 'X', BattleGrid::lightRows($walled)[5][6]);
+same('tipped, it gives no light at all', 'X', BattleGrid::lightRows(paint($cave, 3, 5, 'u'))[5][4]);
+$coals = BattleGrid::lightRows(paint(board(), 8, 8, 'f'));
+ok('coals light their own cell and the next', $coals[8][8] === 'B' && $coals[8][9] === 'B' && $coals[8][10] === 'D' && $coals[8][11] === 'X');
+
+// Sight: only darkness hides you, and darkvision sees through it to its range.
+$dark = gridOf($cave) + ['dark' => true];
+$human = at('human', 'party', 4, 5);
+$dwarf = at('dwarf', 'party', 4, 5, ['dark_sight' => 60]);
+$lurker = at('lurker', 'foe', 14, 5);
+ok('a lit board hides nobody', BattleGrid::canSee(gridOf($cave), $human, $lurker));
+ok('the human cannot see into the dark', !BattleGrid::canSee($dark, $human, $lurker));
+ok('the dwarf can, at fifty feet', BattleGrid::canSee($dark, $dwarf, $lurker));
+ok('but not past sixty', !BattleGrid::canSee($dark, at('d2', 'party', 0, 0, ['dark_sight' => 60]), at('far', 'foe', 15, 11)));
+ok('and the lurker sees the human in the light', BattleGrid::canSee($dark, $lurker, $human));
+same('dim light hides nobody', 'dim', BattleGrid::lightAt($dark, 9, 5));
+
+[$unseen, $hidden] = CombatEngine::sightBetween($dark, $human, $lurker);
+ok('the human shoots into the dark unseeing, and is seen', $unseen && !$hidden);
+[$unseen, $hidden] = CombatEngine::sightBetween($dark, $lurker, $human);
+ok('the lurker strikes out of the dark unseen', !$unseen && $hidden);
+$shots = CombatEngine::shotsFrom($dark, [$human, $lurker], $human, ['reach' => null, 'normal' => 80, 'long' => 320]);
+ok('the shot says so', !empty($shots['lurker']['unseen']) && empty($shots['lurker']['hidden']));
+$darkDwarf = at('dwarf', 'party', 15, 0, ['dark_sight' => 60]);
+$shots = CombatEngine::shotsFrom($dark, [$darkDwarf, $lurker], $darkDwarf, ['reach' => null, 'normal' => 80, 'long' => 320]);
+ok('a dwarf in the dark sees it and is not seen', empty($shots['lurker']['unseen']) && !empty($shots['lurker']['hidden']));
+
+// The roll: disadvantage at what you cannot see, advantage on what cannot see you.
+$sightEngine = (new ReflectionClass(CombatEngine::class))->newInstanceWithoutConstructor();
+$resolve = new ReflectionMethod(CombatEngine::class, 'resolveAttack');
+$resolve->setAccessible(true);
+$darkState = function (array $a, array $b) use ($dark): array {
+    return ['round' => 1, 'turn_index' => 0, 'order' => [$a['cid'], $b['cid']], 'status' => 'active',
+        'grid' => $dark, 'log' => [], 'events' => [], 'combatants' => [$a, $b]];
+};
+$bow = ['name' => 'Shortbow', 'bonus' => 5, 'damage' => '1d6+3', 'damage_type' => 'piercing',
+    'reach' => 'ranged', 'range' => ['reach' => null, 'normal' => 80, 'long' => 320], 'tags' => ['ranged']];
+$shotOf = fn(array $a, array $b) => ['dist' => BattleGrid::feet($a['x'], $a['y'], $b['x'], $b['y']),
+    'cover' => 0, 'melee' => false, 'long' => false, 'crowded' => false, 'flank' => false];
+$modeOf = function (array $st) {
+    foreach ($st['events'] as $e) {
+        if (($e['type'] ?? '') === 'attack') {
+            return $e['mode'] ?? null;
+        }
+    }
+    return null;
+};
+$body = ['ac' => 12, 'hp' => 20, 'max_hp' => 20, 'alive' => true, 'conditions' => []];
+$h = $human + ['type' => 'monster'] + $body;   // 'pc' would write hp to the database
+$l = $lurker + ['type' => 'monster'] + $body;
+$d = at('dwarf', 'party', 15, 0, ['dark_sight' => 60, 'type' => 'monster']) + $body;
+same('shooting into the dark is at disadvantage', 'disadvantage',
+    $modeOf($resolve->invoke($sightEngine, $darkState($h, $l), 'human', 'lurker', $bow, null, $shotOf($h, $l))));
+same('striking from it is at advantage', 'advantage',
+    $modeOf($resolve->invoke($sightEngine, $darkState($l, $h), 'lurker', 'human', $bow, null, $shotOf($l, $h))));
+same('darkvision turns it round', 'advantage',
+    $modeOf($resolve->invoke($sightEngine, $darkState($d, $l), 'dwarf', 'lurker', $bow, null, $shotOf($d, $l))));
+$both = $l;
+$both['x'] = 14;
+$both['y'] = 11;
+$hb = $h;
+$hb['x'] = 15;
+$hb['y'] = 0;
+same('two in the dark cancel out', 'normal',
+    $modeOf($resolve->invoke($sightEngine, $darkState($hb, $both), 'human', 'lurker', $bow, null, $shotOf($hb, $both))));
+
+// Who sees in the dark.
+same('a dwarf has darkvision', 60, Rules::darkSightFt(Rules::raceFeatures('Dwarf', 'Hill Dwarf')));
+same('a dark elf sees twice as far', 120, Rules::darkSightFt(Rules::raceFeatures('Elf', 'Dark Elf')));
+same('a human needs a light', 0, Rules::darkSightFt(Rules::raceFeatures('Human')));
+same('so does a halfling', 0, Rules::darkSightFt(Rules::raceFeatures('Halfling', 'Lightfoot')));
+same('goblins see in the dark', 60, CombatEngine::MONSTER_DARK_SIGHT['goblin']);
+ok('wolves do not', !isset(CombatEngine::MONSTER_DARK_SIGHT['wolf']));
+
+// The generator: underground is dark, everywhere else is not.
+ok('caverns are dark', !empty(BattleMapGen::generate(7, 'cavern')['dark']));
+ok('tunnels are dark', !empty(BattleMapGen::generate(7, 'tunnel')['dark']));
+ok('streets are not', empty(BattleMapGen::generate(7, 'street')['dark']));
+ok('a board saved before darkness stays lit', BattleGrid::lightAt(gridOf($cave), 15, 11) === 'bright');
+
 // ---------------------------------------------------------------------------
 echo PHP_EOL . str_repeat('-', 52) . PHP_EOL;
 printf("%d passed, %d failed%s", $RESULTS['pass'], $RESULTS['fail'], PHP_EOL);

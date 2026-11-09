@@ -250,6 +250,45 @@ class CombatEngine
      * @return array<string, array{c:array, dist:int, cover:int, long:bool,
      *                             melee:bool, crowded:bool, flank:bool}>
      */
+    /**
+     * How far each monster sees in the dark, in feet, by monster_key.
+     *
+     * `monsters` has no senses column, so this is the list. SRD rows carry the
+     * SRD's own number, taking the longest of darkvision, blindsight and
+     * truesight, since any of them sees a creature standing in darkness.
+     * Tremorsense is not sight and is left out (the purple worm). Rivermark
+     * rows get one only where their own traits say they are not troubled by
+     * darkness; a monster missing from here needs light like anybody else.
+     * The wererat's darkvision is rat form only and it fights as a man here.
+     */
+    public const MONSTER_DARK_SIGHT = [
+        'adult_black_dragon' => 120, 'adult_red_dragon' => 120,
+        'ancient_white_dragon' => 120, 'young_red_dragon' => 120,
+        'balor' => 120, 'lich' => 120, 'iron_golem' => 120, 'stone_golem' => 120,
+        'broodmother_spider' => 60, 'giant_spider' => 60, 'giant_rat' => 60,
+        'stirge' => 60, 'giant_toad' => 30, 'giant_centipede' => 30,
+        'goblin' => 60, 'bugbear' => 60, 'kobold' => 60, 'gnoll' => 60,
+        'ogre' => 60, 'stone_giant' => 60, 'worg' => 60, 'wight' => 60,
+        'carrion_crawler' => 60, 'chimera' => 60, 'grey_ooze' => 60,
+        // Rivermark: "not troubled by darkness or by mist" (Peat-Blind).
+        'bog_crawler' => 60,
+    ];
+
+    /**
+     * Who can see whom, for one attack: [attacker cannot see the target,
+     * target cannot see the attacker]. The SRD's unseen rules turn these into
+     * disadvantage and advantage. Both is both, and they cancel.
+     *
+     * @return array{0:bool,1:bool}
+     */
+    public static function sightBetween(array $grid, array $attacker, array $target): array
+    {
+        return [
+            !BattleGrid::canSee($grid, $attacker, $target),
+            !BattleGrid::canSee($grid, $target, $attacker),
+        ];
+    }
+
     public static function shotsFrom(array $grid, array $combatants, array $actor, array $range): array
     {
         $terrain = $grid['terrain'] ?? [];
@@ -295,6 +334,7 @@ class CombatEngine
                 continue;
             }
 
+            [$unseen, $hidden] = self::sightBetween($grid, $actor, $target);
             $out[(string) $target['cid']] = [
                 'c'       => $target,
                 'dist'    => $dist,
@@ -306,6 +346,10 @@ class CombatEngine
                 // Shooting down from high ground: low cover is no cover. The
                 // number is already in `cover`; this is so the board can say why.
                 'high'    => BattleGrid::above($terrain, $ax, $ay, $tx, $ty),
+                // Darkness (battle map D, part 3): the target is in the dark
+                // and you cannot see it, or you are and it cannot see you.
+                'unseen'  => $unseen,
+                'hidden'  => $hidden,
             ];
         }
         return $out;
@@ -1533,6 +1577,8 @@ class CombatEngine
                 // dwarf halves poison through the same door a skeleton does —
                 // and Rage's snapshot-and-restore merges over it cleanly.
                 'race_features' => $raceFeatures,
+                // Darkvision, in feet, for BattleGrid::canSee on a dark board.
+                'dark_sight'   => Rules::darkSightFt($raceFeatures),
                 'resistances'  => array_values(array_unique(array_merge(
                     Rules::raceResistances($raceFeatures),
                     $equipment['resistances']
@@ -1639,6 +1685,7 @@ class CombatEngine
                 // `monsters.speed` has read "30 ft." since the table was
                 // written and nothing has ever looked at it.
                 'speed'      => Rules::parseSpeedFt($m['speed'] ?? null),
+                'dark_sight' => self::MONSTER_DARK_SIGHT[(string) ($m['monster_key'] ?? '')] ?? 0,
                 'move_left'  => Rules::parseSpeedFt($m['speed'] ?? null),
                 'size'       => (string) ($m['size'] ?? ''),
                 'monster_id' => (int) $m['id'],
@@ -2066,6 +2113,11 @@ class CombatEngine
     private function deriveUi(array $state): array
     {
         unset($state['ui']);
+        // The light on a dark board, for the board to paint. Worked out here
+        // and nowhere in the client, so the shading is the rule.
+        $state['light'] = !empty($state['grid']['dark'])
+            ? BattleGrid::lightRows($state['grid']['terrain'] ?? [])
+            : null;
         $actor = $this->currentActor($state);
         if (!$actor || ($actor['type'] ?? '') !== 'pc' || !self::isTargetable($actor)) {
             return $state;
@@ -2107,15 +2159,23 @@ class CombatEngine
             if (!empty($shot['high'])) {
                 $why[] = 'from high ground';
             }
+            if (!empty($shot['unseen'])) {
+                $why[] = 'you cannot see them';
+            }
+            if (!empty($shot['hidden'])) {
+                $why[] = 'they cannot see you';
+            }
+            $adv = !empty($shot['flank']) || !empty($shot['hidden']);
+            $dis = !empty($shot['long']) || !empty($shot['crowded']) || !empty($shot['unseen']);
             $targets[$cid] = [
                 'dist'  => $shot['dist'],
                 'cover' => $shot['cover'],
                 'long'  => $shot['long'],
                 'melee' => $shot['melee'],
                 'flank' => $shot['flank'],
-                'mode'  => (!empty($shot['long']) || !empty($shot['crowded']))
-                    ? (!empty($shot['flank']) ? 'normal' : 'disadvantage')
-                    : (!empty($shot['flank']) ? 'advantage' : 'normal'),
+                'unseen' => $shot['unseen'],
+                'hidden' => $shot['hidden'],
+                'mode'  => $adv === $dis ? 'normal' : ($adv ? 'advantage' : 'disadvantage'),
                 'why'   => implode(', ', $why),
             ];
         }
@@ -2798,10 +2858,13 @@ class CombatEngine
         $actorCopy = $actor;
         $actorCopy['attack_kind'] = !empty($shot['melee']) ? 'melee' : 'ranged';
         $ctx = Conditions::attackContext($actorCopy, $target);
+        [$unseen, $hidden] = self::sightBetween($state['grid'] ?? [], $actor, $target);
         $extraAdv = !empty($actor['helped'])
             || !empty($shot['flank'])
+            || $hidden
             || (self::hasTrait($actor, 'pack tactics') && $this->packSupport($state, $actor, $target));
-        $extraDis = !empty($target['dodging']) || !empty($shot['long']) || !empty($shot['crowded']);
+        $extraDis = !empty($target['dodging']) || !empty($shot['long']) || !empty($shot['crowded'])
+            || $unseen;
         $mode = self::rollMode($ctx, $extraAdv, $extraDis);
 
         $characterId = (int) ($actor['character_id'] ?? 0);
@@ -2966,6 +3029,21 @@ class CombatEngine
         $extraDis = !empty($target['dodging'])
             || !empty($shot['long'])
             || !empty($shot['crowded']);
+        // Darkness. Read off the board here rather than off the shot, so a
+        // spell attack and an opportunity attack see in the dark the same way
+        // a weapon attack does.
+        [$unseen, $hidden] = self::sightBetween($state['grid'] ?? [], $actor, $target);
+        if ($unseen) {
+            $extraDis = true;
+        }
+        if ($hidden) {
+            $extraAdv = true;
+        }
+        if ($unseen && !$hidden) {
+            $state['log'][] = "{$actor['name']} cannot see {$target['name']} in the dark.";
+        } elseif ($hidden && !$unseen) {
+            $state['log'][] = "{$target['name']} never sees {$actor['name']} coming out of the dark.";
+        }
 
         if (!empty($actor['helped'])) {
             $extraAdv = true;

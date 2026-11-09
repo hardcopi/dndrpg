@@ -100,6 +100,16 @@ final class BattleGrid
     /** The extra feet it takes to climb from lower ground onto high ground. */
     public const CLIMB_FT = 5;
 
+    /**
+     * What gives light on a dark board, as [bright ft, dim ft beyond that].
+     *
+     * The SRD has no brazier and no spilled coals, so each borrows the nearest
+     * thing it does have: a lit brazier sheds light like a torch (bright 20 ft,
+     * dim 20 ft further), a burning cell of coals like a candle (5 and 5). An
+     * overturned brazier gives none; its light went out with it.
+     */
+    public const LIGHTS = ['b' => [20, 20], 'f' => [5, 5]];
+
     /** Anything not in TERRAIN, and anything off the board, reads as this. */
     private const UNKNOWN = ['cost' => null, 'opaque' => true, 'cover' => 5, 'label' => 'solid rock'];
 
@@ -1259,5 +1269,89 @@ final class BattleGrid
             }
         }
         return true;
+    }
+
+    /** @var array{key:string, rows:string[]}|null one board's light, kept */
+    private static ?array $lightCache = null;
+
+    /**
+     * The light on every cell of a dark board: one string per row, `B` bright,
+     * `D` dim, `X` dark. Light runs in straight lines, so a wall or anything
+     * else opaque between a flame and a cell leaves that cell in the dark.
+     *
+     * @param string[] $terrain
+     * @return string[]
+     */
+    public static function lightRows(array $terrain): array
+    {
+        $key = implode('|', $terrain);
+        if (self::$lightCache !== null && self::$lightCache['key'] === $key) {
+            return self::$lightCache['rows'];
+        }
+        $sources = [];
+        foreach ($terrain as $y => $row) {
+            $row = (string) $row;
+            for ($x = 0, $n = strlen($row); $x < $n; $x++) {
+                if (isset(self::LIGHTS[$row[$x]])) {
+                    $sources[] = [$x, (int) $y, self::LIGHTS[$row[$x]]];
+                }
+            }
+        }
+        $rows = [];
+        for ($y = 0; $y < self::H; $y++) {
+            $line = '';
+            for ($x = 0; $x < self::W; $x++) {
+                $level = 'X';
+                foreach ($sources as [$sx, $sy, [$bright, $dim]]) {
+                    $ft = self::feet($sx, $sy, $x, $y);
+                    if ($ft > $bright + $dim) {
+                        continue;
+                    }
+                    if ($ft > 0 && !self::losClear($terrain, $sx, $sy, $x, $y)) {
+                        continue;
+                    }
+                    if ($ft <= $bright) {
+                        $level = 'B';
+                        break;
+                    }
+                    $level = 'D';
+                }
+                $line .= $level;
+            }
+            $rows[] = $line;
+        }
+        self::$lightCache = ['key' => $key, 'rows' => $rows];
+        return $rows;
+    }
+
+    /** 'bright', 'dim' or 'dark' at (x, y). A board not marked dark is bright everywhere. */
+    public static function lightAt(array $grid, int $x, int $y): string
+    {
+        if (empty($grid['dark'])) {
+            return 'bright';
+        }
+        $ch = (self::lightRows($grid['terrain'] ?? [])[$y] ?? '')[$x] ?? 'X';
+        return $ch === 'B' ? 'bright' : ($ch === 'D' ? 'dim' : 'dark');
+    }
+
+    /**
+     * Can $viewer see $target, as far as the light goes? Line of sight is the
+     * caller's business; this answers only the darkness. Dim light is lightly
+     * obscured, which costs Perception and nothing at all in a fight, so only
+     * darkness hides anybody, and darkvision (`dark_sight`, in feet) sees
+     * through it out to its range.
+     */
+    public static function canSee(array $grid, array $viewer, array $target): bool
+    {
+        if (empty($grid['dark'])) {
+            return true;
+        }
+        $tx = (int) ($target['x'] ?? 0);
+        $ty = (int) ($target['y'] ?? 0);
+        if (self::lightAt($grid, $tx, $ty) !== 'dark') {
+            return true;
+        }
+        $ft = (int) ($viewer['dark_sight'] ?? 0);
+        return $ft > 0 && self::feet((int) ($viewer['x'] ?? 0), (int) ($viewer['y'] ?? 0), $tx, $ty) <= $ft;
     }
 }

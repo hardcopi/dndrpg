@@ -561,9 +561,9 @@ class Rules
      * Racial traits, under the same discipline as CLASS_FEATURES: only what is
      * IMPLEMENTED goes in here. `races.traits` — the comma-separated string the
      * sheet prints — remains prose, and anything it promises that this table
-     * does not carry is flavour, deliberately. Darkvision is the loudest
-     * absence: there is no light or darkness anywhere in the engine, so a
-     * trait keyed to it would be a lie in either direction.
+     * does not carry is flavour, deliberately. Darkvision used to be the
+     * loudest absence; since battle map D the cavern and tunnel boards are
+     * dark, and it is applied (see darkSightFt).
      *
      * Keyed by races.name, with subrace-specific grants under 'Name/Subrace'.
      * No level column: every racial trait in the SRD's level range here
@@ -599,24 +599,43 @@ class Rules
      *                        better at moving other people — the offensive
      *                        half of that contest is an Athletics check, and
      *                        quarry_built is already in it.
+     *   darkvision           sees in darkness as if dim light out to 60 ft
+     *   superior_darkvision  the same out to 120 ft (Dark Elf). Both read by
+     *                        BattleGrid::canSee through the combatant's
+     *                        `dark_sight`, stamped from darkSightFt()
      *
      * The Sarsen's third printed trait, Load-Bearing, is deliberately absent:
      * carrying capacity is not a limit anywhere in this game, so a key for it
-     * would be the same lie Darkvision would be. The sheet prints it without
+     * would be a lie. The sheet prints it without
      * "Applied by the game", which is the honest answer.
      */
     public const RACE_FEATURES = [
         'Dragonborn'     => ['draconic_resistance'],
-        'Dwarf'          => ['dwarven_resilience', 'stonecunning'],
-        'Elf'            => ['keen_senses', 'fey_ancestry'],
-        'Gnome'          => ['gnome_cunning'],
-        'Half-Elf'       => ['fey_ancestry'],
-        'Half-Orc'       => ['relentless_endurance', 'savage_attacks'],
+        'Dwarf'          => ['darkvision', 'dwarven_resilience', 'stonecunning'],
+        'Elf'            => ['darkvision', 'keen_senses', 'fey_ancestry'],
+        'Elf/Dark Elf'   => ['superior_darkvision'],
+        'Gnome'          => ['darkvision', 'gnome_cunning'],
+        'Half-Elf'       => ['darkvision', 'fey_ancestry'],
+        'Half-Orc'       => ['darkvision', 'relentless_endurance', 'savage_attacks'],
         'Halfling'       => ['halfling_luck', 'brave'],
         'Halfling/Stout' => ['stout_resilience'],
         'Sarsen'         => ['quarry_built', 'set_fast'],
-        'Tiefling'       => ['hellish_resistance'],
+        'Tiefling'       => ['darkvision', 'hellish_resistance'],
     ];
+
+    /**
+     * How far a set of racial features sees in the dark, in feet. 0 is a
+     * creature that needs a light like anybody else.
+     *
+     * @param string[] $features
+     */
+    public static function darkSightFt(array $features): int
+    {
+        if (in_array('superior_darkvision', $features, true)) {
+            return 120;
+        }
+        return in_array('darkvision', $features, true) ? 60 : 0;
+    }
 
     /** Damage resistances a racial feature carries. */
     private const RACE_FEATURE_RESISTANCES = [
