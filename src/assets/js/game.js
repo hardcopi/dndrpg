@@ -381,6 +381,7 @@
     // the width it needs for four ranks. CSS stands them down off this class;
     // the log stays, because it is the one panel a fight makes MORE useful.
     document.body.classList.toggle('in-combat', inCombat);
+    if (window.UI && window.UI.logFilterForCombat) window.UI.logFilterForCombat(inCombat);
 
     // Where you are, in the bar beside the menu.
     //
@@ -2457,6 +2458,25 @@
     on('#btn-journal', () => window.UI && window.UI.openJournal && window.UI.openJournal());
     on('#btn-rolls', () => window.UI && window.UI.openRolls && window.UI.openRolls());
     on('#btn-camp', () => window.UI && window.UI.openCamp && window.UI.openCamp());
+    // Text size: normal → large → larger → normal. tokens.css scales the
+    // running-text steps off <html data-text>; remembered per browser.
+    const TEXT_SIZES = ['normal', 'large', 'larger'];
+    const textBtn = $('#btn-text-size');
+    const showTextSize = (size) => {
+      if (size === 'normal') delete document.documentElement.dataset.text;
+      else document.documentElement.dataset.text = size;
+      if (textBtn) {
+        textBtn.title = `Text size: ${size}`;
+        textBtn.setAttribute('aria-label', `Text size: ${size}`);
+      }
+    };
+    showTextSize(document.documentElement.dataset.text || 'normal');
+    on('#btn-text-size', () => {
+      const now = document.documentElement.dataset.text || 'normal';
+      const next = TEXT_SIZES[(TEXT_SIZES.indexOf(now) + 1) % TEXT_SIZES.length];
+      showTextSize(next);
+      try { window.localStorage.setItem('rm-text', next); } catch (e) { /* private mode: applied, not kept */ }
+    });
     on('#btn-fullscreen', () => {
       if (document.fullscreenElement) document.exitFullscreen();
       else document.documentElement.requestFullscreen().catch(() => {});

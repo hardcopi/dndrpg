@@ -446,6 +446,15 @@ body.game-page {
   padding: var(--sp-4) var(--sp-6);
 }
 
+.icon-btn .icon-text {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.95rem;   /* fixed: the button that changes text size does not itself move */
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: none;
+  font-variant: normal;
+}
 .icon-btn {
   display: inline-flex;
   align-items: center;

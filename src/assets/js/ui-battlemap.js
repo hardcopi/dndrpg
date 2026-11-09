@@ -728,8 +728,14 @@
       for (let x = 0; x < W; x++) {
         const spec = TERRAIN[row[x]];
         const title = spec ? spec[1] : 'open ground';
+        // Walls and pits are nowhere anybody can step or stand, so they stay
+        // clickable (the pointer still gets their tooltip) but drop out of the
+        // Tab order. They were a third of the stops between one card and the
+        // next, each read aloud as "a wall, button".
+        const inert = row[x] === '#' || row[x] === 'v';
+        const focus = inert ? 'tabindex="-1" aria-hidden="true"' : 'tabindex="0" role="button"';
         out += `<rect class="bm-hit" data-bm-cell="${x},${y}" x="${x}" y="${y}"
-          width="1" height="1" tabindex="0" role="button"><title>${esc(title)}</title></rect>`;
+          width="1" height="1" ${focus}><title>${esc(title)}</title></rect>`;
       }
     }
     return out;
