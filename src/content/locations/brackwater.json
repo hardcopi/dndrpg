@@ -10,8 +10,8 @@
             "name": "Brackwater Wharf",
             "type": "site",
             "map_pos": [
-                30,
-                50
+                38,
+                38
             ],
             "first_visit": "Four days of water as flat as a table, and then this. Tull puts the packet against the stones without looking at them, the way you would put a cup down in your own kitchen, and the noise of the place comes aboard before you have stepped off.",
             "description": "A wharf a quarter of a mile long, and every yard of it in use. Lighters, colliers, salt boats, a grain hulk being emptied by forty men with baskets. Nobody here has heard of Rivermark, and when you say the name they repeat it politely, the way you would repeat the name of somebody's dog. Up the slope behind the cranes is a street of plain brick offices with brass plates by the doors.",
@@ -52,8 +52,8 @@
             "name": "The House Yard",
             "type": "site",
             "map_pos": [
-                14,
-                36
+                28,
+                20
             ],
             "description": "A walled yard with a painted gate, and over the gate the mark: a plumb-bob inside a square, freshly done, the size of a cartwheel. Inside are stacked barrels, Greyhythe grain sacks, quarry writs in oilcloth, and a clerk's hut with a window that slides. Every manifest that comes down the river goes through that window. Nothing about it is hidden. It is the most ordinary place in Brackwater.",
             "ambience": [
@@ -73,8 +73,8 @@
             "name": "House Street",
             "type": "street",
             "map_pos": [
-                48,
-                30
+                55,
+                19
             ],
             "description": "Thirty doors in plain brick, each with a brass plate and a scraper for boots. The plates name shipping lines, a bank, two insurers and a dozen houses that sound like families. Clerks go up and down with leather cases. Nobody runs. At the top end the street turns into a square with a pump, and the door to Number Nine is the one with no plate at all.",
             "ambience": [
@@ -102,8 +102,8 @@
             "name": "Number Nine",
             "type": "building",
             "map_pos": [
-                66,
-                18
+                79,
+                9
             ],
             "description": "Up one flight of stairs, a long room with a long table, a good fire, and eleven chairs. The chairs are not grand. There is a carafe of water, a jar of pens, and a clock that is right. On the wall is a framed copy of the articles of association, written small, and under it a list of eleven names. The room has been used for exactly this every quarter for longer than anyone in it has been alive.",
             "ambience": [
@@ -124,7 +124,7 @@
             "type": "building",
             "map_pos": [
                 34,
-                20
+                7
             ],
             "description": "Shelves to the ceiling and a ladder on a rail. The building keeps every deed, conveyance, writ, field book and assignment that the house or anybody else cares to file, for a penny a page to read and a penny a page to copy. The windows are high and small so nothing fades. It is quiet in the way only rooms full of paper are.",
             "ambience": [
@@ -144,8 +144,8 @@
             "name": "The Fortieth",
             "type": "building",
             "map_pos": [
-                36,
-                64
+                63,
+                39
             ],
             "inn_cost": 8,
             "description": "A long low wharf inn with a sanded floor, a fire at each end and a board over the bar listing what the tide is doing. Clerks drink at one end and lightermen at the other, and the middle is for people waiting for boats. The name is painted over the door in letters that have been painted over something else.",
@@ -166,8 +166,8 @@
             "name": "The Mudside",
             "type": "camp",
             "map_pos": [
-                10,
-                70
+                17,
+                60
             ],
             "allow_camp": true,
             "random_encounter_pct": 30,
@@ -189,8 +189,8 @@
             "name": "Brindle & Daughter, Chandlers",
             "type": "building",
             "map_pos": [
-                52,
-                62
+                47,
+                32
             ],
             "description": "A narrow shop under the wharf arches that sells everything a boat runs out of: cordage, pitch, lamp oil, sailcloth by the ell, biscuit, nails by weight and second-hand anything. The ceiling is hung so thick with blocks and lanterns that the daylight comes in green. Behind the counter is a ledger the size of a door, and a woman who knows what is on every page of it.",
             "ambience": [
