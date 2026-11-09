@@ -237,6 +237,11 @@
     'n': ['is-tall', 'tall cover — +5 AC to anyone behind it; blocks movement and sight'],
     '#': ['is-wall', 'a wall'],
     'v': ['is-pit', 'a pit — nothing walks across it'],
+    // Battle map D. A brazier is low cover that can be pushed over; its coals
+    // are a fire on the floor for two rounds.
+    'b': ['is-low', 'a lit brazier — +2 AC behind it; stand beside it to tip it over'],
+    'u': ['is-low', 'an overturned brazier — +2 AC behind it'],
+    'f': ['is-fire', 'burning coals — 1d6 fire to walk in or start a turn here; costs double'],
   };
 
   const key = (x, y) => `${x},${y}`;
@@ -345,6 +350,11 @@
           <stop offset="0.45" stop-color="#ff9a3c" stop-opacity="0.28"/>
           <stop offset="1" stop-color="#ff8a2a" stop-opacity="0"/>
         </radialGradient>
+        <radialGradient id="bm-fire-grad">
+          <stop offset="0" stop-color="#ffd27a" stop-opacity="0.95"/>
+          <stop offset="0.3" stop-color="#ff8a2a" stop-opacity="0.5"/>
+          <stop offset="1" stop-color="#ff5a10" stop-opacity="0"/>
+        </radialGradient>
         <radialGradient id="bm-flame-grad" cx="0.5" cy="0.65" r="0.6">
           <stop offset="0" stop-color="#fff3c4"/>
           <stop offset="0.5" stop-color="#ffb347"/>
@@ -450,7 +460,7 @@
       const y = Number(d.y) || 0;
       const s = Math.max(0.3, Math.min(1.6, Number(d.s) || 1));
       const rot = Number(d.rot) || 0;
-      const kind = d.kind === 'floor' ? 'is-floor' : 'is-rough';
+      const kind = d.kind === 'floor' ? 'is-floor' : d.kind === 'fire' ? 'is-fire' : 'is-rough';
       return `<image class="bm-decal ${kind}" href="${esc(artUrl(d.src))}"
         x="${(x + 0.5 - s / 2).toFixed(3)}" y="${(y + 0.5 - s / 2).toFixed(3)}"
         width="${s.toFixed(3)}" height="${s.toFixed(3)}"
@@ -473,7 +483,7 @@
       const row = terrain[y] || '';
       for (let x = 0; x < W; x++) {
         const ch = row[x];
-        if (ch !== 'o' && ch !== 'n') continue;
+        if (ch !== 'o' && ch !== 'n' && ch !== 'b' && ch !== 'u') continue;
         out += shieldHtml(x + 0.5, y + 0.5, ch === 'n' ? 5 : 2, 'bm-cover-mark', ` data-cover-at="${x},${y}"`);
       }
     }
@@ -556,12 +566,42 @@
     }));
   }
 
+  /**
+   * Fire on the floor: every lit brazier and every cell of spilled coals, as
+   * lights. Read off the terrain rather than the props, because the terrain is
+   * the rule — tip a brazier and its light goes out in the same redraw that
+   * lays its coals. Timing comes from the cell, so a flame keeps its rhythm.
+   */
+  function firePlan(grid) {
+    const out = [];
+    const t = grid.terrain || [];
+    for (let y = 0; y < H; y++) {
+      const row = t[y] || '';
+      for (let x = 0; x < W; x++) {
+        const ch = row[x];
+        if (ch !== 'b' && ch !== 'f') continue;
+        const n = (x * 31 + y * 17) % 13;
+        out.push({ x: x + 0.5, y: y + 0.5, r: ch === 'b' ? 3.6 : 1.4, fall: ch === 'b' ? 4.5 : 1.8,
+          dur: (1.3 + n * 0.09).toFixed(2), delay: (-n * 0.23).toFixed(2), coals: ch === 'f' });
+      }
+    }
+    return out;
+  }
+
   /** Is this torch on the board's back or front rim, where the diorama has a wall or a lip? */
   const torchOnRim = (t) => t.y < 1.2 || t.y > H - 1.2;
 
   function lightHtml(grid, deck) {
+    const fires = firePlan(grid).map((f) => `<circle class="bm-glow is-fire${f.coals ? ' is-coals' : ''}"
+        cx="${f.x.toFixed(2)}" cy="${f.y.toFixed(2)}" r="${f.r}" fill="url(#bm-fire-grad)"
+        style="animation-duration:${f.dur}s;animation-delay:${f.delay}s"/>${f.coals ? `
+        <g transform="translate(${f.x.toFixed(2)} ${(f.y + 0.1).toFixed(2)})">
+          <ellipse class="bm-flame" cx="-0.18" cy="0" rx="0.09" ry="0.16" fill="url(#bm-flame-grad)"
+            style="animation-duration:${f.dur}s;animation-delay:${f.delay}s"/>
+          <ellipse class="bm-flame" cx="0.16" cy="0.1" rx="0.08" ry="0.14" fill="url(#bm-flame-grad)"
+            style="animation-duration:${(f.dur * 0.8).toFixed(2)}s;animation-delay:${f.delay}s"/></g>` : ''}`).join('');
     const plan = torchPlan(grid);
-    if (!plan) return '';
+    if (!plan) return fires;
     const indoor = INDOOR.has(grid.palette);
     let out = indoor
       ? `<rect class="bm-vignette" x="0" y="0" width="${W}" height="${H}" fill="url(#bm-vignette-grad)"/>`
@@ -584,7 +624,7 @@
       out += `<circle class="bm-glow" cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r="3"
           fill="url(#bm-glow-grad)" ${anim}/>${flame}`;
     }
-    return out;
+    return out + fires;
   }
 
   /**
@@ -1042,6 +1082,9 @@
   upright([1, 2, 3].map((n) => `${PROPS}table_over_${n}.png`), { file: 'table_over.png', tile: true, h: 0.95, end: 'table_over_end.png' });
   upright([1, 2, 3].map((n) => `${PROPS}barricade_${n}.png`), { file: 'barricade.png', long: true, h: 1.0, end: 'barricade_end.png' });
   upright([PROPS + 'stalagmites.png'], { file: 'stalagmites.png', h: 1.5 });
+  upright([PROPS + 'brazier.png'], { file: 'brazier.png', h: 1.25 });
+  upright([PROPS + 'brazier_tipped.png'], { file: 'brazier_tipped.png', h: 0.8 });
+  upright([PROPS + 'coals_fire.png'], { file: 'coals_fire.png', h: 0.7 });
   upright([PROPS + 'boulder.png', 'decor/boulder.png'], { file: 'boulder.png', h: 1.0 });
   upright(['decor/barrel.png'], { file: 'barrel.png', h: 0.95 });
   upright(['decor/keg.png'], { file: 'keg.png', h: 0.85 });
@@ -1073,7 +1116,8 @@
       turned: !!turned,
     };
     const n = (v) => Number(v).toFixed(3);
-    const torches = deck.walled ? (torchPlan(grid) || []) : [];
+    const torches = (deck.walled ? (torchPlan(grid) || []) : [])
+      .map((t) => ({ ...t, fall: 4.5 })).concat(firePlan(grid));
     // Torchlight on a figure: brighter near a flame, never black. The floor
     // glow is the SVG's; this is only so a goblin in the far corner of a lit
     // room does not stand there at full daylight. Asked in the plane's frame,
@@ -1084,7 +1128,7 @@
       // A rim torch every four or five cells along both long edges puts most
       // of a 16×12 floor within reach of two of them, so the falloff is short
       // or everybody stands in the same full light.
-      const sum = torches.reduce((a, t) => a + Math.max(0, 1 - Math.hypot(fx - t.x, fy - t.y) / 4.5), 0);
+      const sum = torches.reduce((a, t) => a + Math.max(0, 1 - Math.hypot(fx - t.x, fy - t.y) / (t.fall || 4.5)), 0);
       return `;--lit:${(0.72 + 0.38 * Math.min(1, sum)).toFixed(2)}`;
     };
     const ui = state.ui || null;

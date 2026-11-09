@@ -129,6 +129,20 @@ final class BattleMapGen
      */
     private const LAYOUTS = [
         'arena' => [
+            [   // the fire court: a brazier either side of the lane, low walls to duck behind
+                '........',
+                '.A......',
+                '......R.',
+                '..Z.....',
+                '........',
+                '...WW...',
+                '...WW...',
+                '........',
+                '.....Z..',
+                '.R......',
+                '......A.',
+                '........',
+            ],
             [   // a pillared floor: two pairs of columns, low walls at the middle
                 '........',
                 '.A....R.',
@@ -187,6 +201,20 @@ final class BattleMapGen
             ],
         ],
         'interior' => [
+            [   // the hall with the braziers lit: tables down one side, the fires in the open
+                '........',
+                '.RR.....',
+                '........',
+                '.oo..Z..',
+                '........',
+                '...n....',
+                '....n...',
+                '........',
+                '..Z..oo.',
+                '........',
+                '.....RR.',
+                '........',
+            ],
             [   // tables in two rows, a pair of posts, stores by the wall
                 '........',
                 '.RR...C.',
@@ -247,6 +275,20 @@ final class BattleMapGen
             ],
         ],
         'cavern' => [
+            [   // the camp in the dark: a brazier on the floor, stalagmites round it
+                '........',
+                '..S.....',
+                '.SS.....',
+                '........',
+                '..Z.....',
+                '......S.',
+                '.S......',
+                '.....Z..',
+                '........',
+                '.....SS.',
+                '......S.',
+                '........',
+            ],
             [   // stalagmite clumps and a sinkhole
                 '........',
                 '..S.....',
@@ -277,6 +319,20 @@ final class BattleMapGen
             ],
         ],
         'tunnel' => [
+            [   // a brazier left burning at the shoring
+                '........',
+                '........',
+                '........',
+                '........',
+                '..rr....',
+                '...Z....',
+                '........',
+                '.....BB.',
+                '........',
+                '........',
+                '........',
+                '........',
+            ],
             [   // a collapsed shoring beam and the rubble it brought down
                 '........',
                 '........',
@@ -307,6 +363,20 @@ final class BattleMapGen
             ],
         ],
         'camp' => [
+            [   // the cookfires: braziers between the stockade and the stores
+                '........',
+                '...C....',
+                '..FFF...',
+                '........',
+                '.Z......',
+                '.....n..',
+                '..n.....',
+                '......Z.',
+                '........',
+                '...FFF..',
+                '....C...',
+                '........',
+            ],
             [   // a stockade line and the stores behind it
                 '........',
                 '...C....',
@@ -410,6 +480,9 @@ final class BattleMapGen
             ['src' => 'battlemap/props/pit.png', 'w' => 2, 'h' => 2],
             ['src' => 'battlemap/props/pit.png', 'w' => 1, 'h' => 1],
         ]],
+        // A lit brazier (battle map D): half cover, and an action away from
+        // being a fire. See BattleGrid::TERRAIN 'b' and CombatEngine::doTip().
+        'Z' => ['t' => 'b', 'art' => [['src' => 'battlemap/props/brazier.png', 'w' => 1, 'h' => 1, 'stand' => true]]],
         'r' => ['t' => ',', 'art' => []],
         '~' => ['t' => '~', 'art' => []],
         'o' => ['t' => 'o', 'art' => []],

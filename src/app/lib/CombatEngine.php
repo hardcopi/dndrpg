@@ -1954,6 +1954,13 @@ class CombatEngine
             case 'dodge':
                 $state = $this->doDodge($state);
                 break;
+            case 'tip':
+                $state = $this->doTip(
+                    $state,
+                    isset($payload['x']) ? (int) $payload['x'] : null,
+                    isset($payload['y']) ? (int) $payload['y'] : null
+                );
+                break;
             case 'help':
                 $state = $this->doHelp($state, (string) ($payload['target_cid'] ?? ''));
                 break;
@@ -2127,6 +2134,8 @@ class CombatEngine
             // a feature changed level or a class gained one.
             'bonus'  => self::bonusOffer($actor),
             'ready'  => empty($actor['readied']) && empty($actor['action_used']),
+            // Lit braziers within arm's length, which is what doTip() accepts.
+            'tip'    => self::tippable($terrain, $actor),
             'actions' => self::actionOffers($actor),
             'spells'  => $this->castableSpells($actor),
         ];
@@ -2460,6 +2469,7 @@ class CombatEngine
             // one round's worth of monsters all choosing the same throat, not
             // to make them ignore somebody for the whole fight.
             $state['focus'] = [];
+            $state = $this->burnDown($state);
         }
         return $state;
     }
@@ -2530,8 +2540,14 @@ class CombatEngine
             $state = $this->tickConditions($state, $actor['cid']);
             $state = $this->tickBoons($state, $actor['cid']);
             $state = $this->tickConcentration($state, $actor['cid']);
+            // Starting a turn in the coals burns, the same as walking into them.
+            $state = $this->burnIfInFire($state, (string) $actor['cid']);
 
             $actor = $this->getCombatant($state, $actor['cid']);
+            if (!$actor || empty($actor['alive'])) {
+                $state = $this->advanceTurn($state);
+                continue;
+            }
             $state['log'][] = "— Round {$state['round']}: {$actor['name']}'s turn —";
 
             // Caught unawares. "You can't move or take an action on your first
@@ -4245,6 +4261,20 @@ class CombatEngine
                 'move_used' => true,
             ]);
             $walked[] = [$nx, $ny];
+
+            // Walking into the coals: the walk so far goes on the board first,
+            // for the same reason as an opportunity attack above — the burn
+            // happens where they stepped, not where they started.
+            if (BattleGrid::at($terrain, $nx, $ny) === 'f') {
+                $state = $this->emitMove($state, $cid, $walked, $spent);
+                $walked = [[$nx, $ny]];
+                $spent = 0;
+                $state = $this->burnIfInFire($state, $cid);
+                $mover = $this->getCombatant($state, $cid);
+                if (!$mover || !self::isTargetable($mover)) {
+                    break;
+                }
+            }
         }
 
         return $this->emitMove($state, $cid, $walked, $spent);
@@ -5148,6 +5178,244 @@ class CombatEngine
         $actor = $this->acting($state);
         $state = $this->updateCombatant($state, $actor['cid'], ['action_used' => true, 'dodging' => true]);
         $state['log'][] = "{$actor['name']} takes the Dodge action.";
+        return $state;
+    }
+
+    // =======================================================================
+    // Braziers (battle map D): things that change mid-fight
+    // =======================================================================
+
+    /** Fire terms, in one place. */
+    public const TIP_SAVE_DC = 12;
+    public const TIP_DAMAGE = '2d6';
+    public const BURN_DAMAGE = '1d6';
+    public const FIRE_ROUNDS = 2;
+
+    /**
+     * Lit braziers the actor could tip from where they stand: any `b` cell
+     * within five feet. A list of [x, y].
+     *
+     * @return array<int, array{0:int,1:int}>
+     */
+    public static function tippable(array $terrain, array $actor): array
+    {
+        $ax = (int) ($actor['x'] ?? -9);
+        $ay = (int) ($actor['y'] ?? -9);
+        $out = [];
+        for ($dy = -1; $dy <= 1; $dy++) {
+            for ($dx = -1; $dx <= 1; $dx++) {
+                if (($dx || $dy) && BattleGrid::at($terrain, $ax + $dx, $ay + $dy) === 'b') {
+                    $out[] = [$ax + $dx, $ay + $dy];
+                }
+            }
+        }
+        return $out;
+    }
+
+    /**
+     * The cells a brazier tipped from (ax, ay) throws its coals over: the three
+     * cells on the far side of it, fanned the way it falls. Pushed straight,
+     * that is the cell beyond and the two beside that one; pushed across a
+     * corner, the cell beyond the corner and the two it touches. Only ground
+     * somebody could stand on catches — coals bounce off a wall and go out in
+     * water.
+     *
+     * @return array<int, array{0:int,1:int}>
+     */
+    public static function spillCells(array $terrain, int $ax, int $ay, int $bx, int $by): array
+    {
+        $dx = $bx <=> $ax;
+        $dy = $by <=> $ay;
+        if ($dx !== 0 && $dy !== 0) {
+            $fan = [[$bx + $dx, $by + $dy], [$bx + $dx, $by], [$bx, $by + $dy]];
+        } elseif ($dx !== 0) {
+            $fan = [[$bx + $dx, $by - 1], [$bx + $dx, $by], [$bx + $dx, $by + 1]];
+        } else {
+            $fan = [[$bx - 1, $by + $dy], [$bx, $by + $dy], [$bx + 1, $by + $dy]];
+        }
+        $out = [];
+        foreach ($fan as [$x, $y]) {
+            $ch = BattleGrid::at($terrain, $x, $y);
+            if ($ch !== '~' && BattleGrid::passable($terrain, $x, $y)) {
+                $out[] = [$x, $y];
+            }
+        }
+        return $out;
+    }
+
+    /**
+     * Tip a lit brazier over: an action, taken from beside it.
+     *
+     * It falls away from whoever pushed it. Anybody standing where the coals
+     * land makes a Dexterity save (DC 12) or takes 2d6 fire, half on a
+     * success; the cells then burn for two rounds, and anybody who walks in
+     * or starts a turn there takes 1d6 fire. The brazier stays where it was,
+     * on its side, still half cover, and no longer lit.
+     */
+    private function doTip(array $state, ?int $x, ?int $y): array
+    {
+        $actor = $this->acting($state);
+        $terrain = $state['grid']['terrain'] ?? [];
+        $near = self::tippable($terrain, $actor);
+        if (!$near) {
+            throw new InvalidArgumentException('There is no lit brazier within reach — get beside one.');
+        }
+        $pick = $near[0];
+        if ($x !== null && $y !== null) {
+            $pick = null;
+            foreach ($near as $cell) {
+                if ($cell[0] === $x && $cell[1] === $y) {
+                    $pick = $cell;
+                }
+            }
+            if ($pick === null) {
+                throw new InvalidArgumentException('That brazier is out of reach.');
+            }
+        }
+        [$bx, $by] = $pick;
+        $spill = self::spillCells($terrain, (int) $actor['x'], (int) $actor['y'], $bx, $by);
+
+        $state = $this->updateCombatant($state, (string) $actor['cid'], ['action_used' => true]);
+        $state['grid']['terrain'] = self::stampTerrain($terrain, [[$bx, $by]], 'u');
+        foreach ($state['grid']['props'] ?? [] as $i => $prop) {
+            if ((int) ($prop['x'] ?? -1) === $bx && (int) ($prop['y'] ?? -1) === $by) {
+                $state['grid']['props'][$i]['src'] = 'battlemap/props/brazier_tipped.png';
+            }
+        }
+        $state['grid']['terrain'] = self::stampTerrain($state['grid']['terrain'], $spill, 'f');
+        foreach ($spill as [$sx, $sy]) {
+            $state['grid']['fires'][BattleGrid::keyOf($sx, $sy)] = self::FIRE_ROUNDS;
+            $state['grid']['decals'][] = [
+                'x' => $sx, 'y' => $sy, 'src' => 'battlemap/decals/coals.png',
+                'kind' => 'fire', 's' => 1, 'rot' => (($sx * 7 + $sy * 13) % 4) * 90,
+            ];
+            // And the flames standing up off them, so a fire reads on the
+            // tilted board where a flat decal hides behind whoever is in front.
+            // Paint only: a prop on walkable ground is never a rule.
+            $state['grid']['props'][] = [
+                'x' => $sx, 'y' => $sy, 'w' => 1, 'h' => 1,
+                'src' => 'battlemap/props/coals_fire.png', 'stand' => true, 'fire' => true,
+            ];
+        }
+        $state['log'][] = "{$actor['name']} tips the brazier over, and burning coals spill across the floor.";
+        $state = $this->emit($state, [
+            'type' => 'terrain', 'what' => 'spill', 'actor' => (string) $actor['cid'],
+            'brazier' => [$bx, $by], 'cells' => $spill,
+        ]);
+
+        $onCells = [];
+        foreach ($spill as [$sx, $sy]) {
+            $onCells[BattleGrid::keyOf($sx, $sy)] = true;
+        }
+        foreach ($state['combatants'] as $c) {
+            if (empty($c['alive']) || !isset($onCells[BattleGrid::keyOf((int) ($c['x'] ?? -1), (int) ($c['y'] ?? -1))])) {
+                continue;
+            }
+            $cid = (string) $c['cid'];
+            $save = $this->rollSave($c, 'dex', self::TIP_SAVE_DC, false, ['damage_type' => 'fire']);
+            $state = $this->emit($state, [
+                'type' => 'save', 'actor' => $cid, 'ability' => 'dex', 'dc' => self::TIP_SAVE_DC,
+                'natural' => $save['natural'], 'total' => $save['total'], 'passed' => $save['passed'],
+            ]);
+            $raw = (int) Dice::roll(self::TIP_DAMAGE)['total'];
+            if ($save['passed']) {
+                $raw = intdiv($raw, 2);
+            }
+            // Caught by the spill counts as this turn's burn: nobody takes the
+            // fall and then the floor for the same coals in the same breath.
+            $state = $this->updateCombatant($state, $cid, ['burned_at' => self::turnStamp($state)]);
+            $state = $this->fireDamage($state, $cid, $raw, $save['passed']
+                ? 'jumps clear of most of the coals'
+                : 'is caught by the coals');
+        }
+        return $state;
+    }
+
+    /** Which turn this is, as a string a combatant can remember. */
+    private static function turnStamp(array $state): string
+    {
+        return (int) ($state['round'] ?? 1) . ':' . (int) ($state['turn_index'] ?? 0);
+    }
+
+    /** @param array<int, array{0:int,1:int}> $cells */
+    private static function stampTerrain(array $terrain, array $cells, string $ch): array
+    {
+        foreach ($cells as [$x, $y]) {
+            if (BattleGrid::inBounds($terrain, $x, $y)) {
+                $terrain[$y][$x] = $ch;
+            }
+        }
+        return $terrain;
+    }
+
+    /** 1d6 fire for standing in the coals, at most once a turn. */
+    private function burnIfInFire(array $state, string $cid): array
+    {
+        $c = $this->getCombatant($state, $cid);
+        if (!$c || empty($c['alive'])
+            || BattleGrid::at($state['grid']['terrain'] ?? [], (int) ($c['x'] ?? -1), (int) ($c['y'] ?? -1)) !== 'f') {
+            return $state;
+        }
+        $stamp = self::turnStamp($state);
+        if (($c['burned_at'] ?? '') === $stamp) {
+            return $state;
+        }
+        $state = $this->updateCombatant($state, $cid, ['burned_at' => $stamp]);
+        return $this->fireDamage($state, $cid, (int) Dice::roll(self::BURN_DAMAGE)['total'], 'is burned by the coals');
+    }
+
+    /** Fire damage from the ground: resistances apply, and the board is told. */
+    private function fireDamage(array $state, string $cid, int $raw, string $verb): array
+    {
+        $c = $this->getCombatant($state, $cid);
+        if (!$c) {
+            return $state;
+        }
+        $after = Rules::damageAfterDefenses($raw, 'fire', $c);
+        $amount = (int) $after['amount'];
+        $note = !empty($after['note']) ? " ({$after['note']})" : '';
+        $state['log'][] = "{$c['name']} {$verb}: {$amount} fire damage{$note}.";
+        $state = $this->takeDamage($state, $cid, $amount);
+        $c = $this->getCombatant($state, $cid) ?? $c;
+        return $this->emit($state, [
+            'type' => 'hazard', 'kind' => 'fire', 'target' => $cid, 'damage' => $amount,
+            'target_hp' => (int) ($c['hp'] ?? 0), 'target_max_hp' => (int) ($c['max_hp'] ?? 0),
+        ]);
+    }
+
+    /** At the top of each round the coals burn lower; spent ones go to ash. */
+    private function burnDown(array $state): array
+    {
+        $fires = $state['grid']['fires'] ?? [];
+        if (!$fires) {
+            return $state;
+        }
+        $out = [];
+        foreach ($fires as $key => $left) {
+            $left = (int) $left - 1;
+            if ($left > 0) {
+                $state['grid']['fires'][$key] = $left;
+                continue;
+            }
+            unset($state['grid']['fires'][$key]);
+            [$x, $y] = BattleGrid::parseKey((string) $key);
+            $out[] = [$x, $y];
+            $state['grid']['terrain'] = self::stampTerrain($state['grid']['terrain'] ?? [], [[$x, $y]], ',');
+            $state['grid']['props'] = array_values(array_filter(
+                $state['grid']['props'] ?? [],
+                static fn ($p) => !(!empty($p['fire']) && (int) $p['x'] === $x && (int) $p['y'] === $y)
+            ));
+            foreach ($state['grid']['decals'] ?? [] as $i => $d) {
+                if ((int) $d['x'] === $x && (int) $d['y'] === $y && ($d['kind'] ?? '') === 'fire') {
+                    $state['grid']['decals'][$i]['src'] = 'battlemap/decals/ash.png';
+                    $state['grid']['decals'][$i]['kind'] = 'rough';
+                }
+            }
+        }
+        if ($out) {
+            $state['log'][] = 'The spilled coals burn down to hot ash.';
+            $state = $this->emit($state, ['type' => 'terrain', 'what' => 'burnout', 'cells' => $out]);
+        }
         return $state;
     }
 

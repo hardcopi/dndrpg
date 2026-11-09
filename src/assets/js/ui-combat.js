@@ -82,7 +82,7 @@
    * Attack is deliberately NOT here — it is the verb the bar exists for, and
    * making the common case cost two clicks to save the rare one is a bad trade.
    */
-  const ARM_FIRST = new Set(['dash', 'dodge', 'disengage', 'channel']);
+  const ARM_FIRST = new Set(['dash', 'dodge', 'disengage', 'channel', 'tip']);
 
   /** How long an armed slot waits for its second click before forgetting. */
   const ARM_MS = 3000;
@@ -1764,6 +1764,17 @@
       // Disengage stopped being a polite no-op the day the floor arrived.
       { key: 'disengage', label: 'Disengage', icon: 'i-disengage', ok: !actor.action_used,
         why: 'Move without giving anybody a free swing at you' },
+      // A lit brazier within arm's length. Hidden on a board without one, like
+      // the class features below: a permanently shut slot would be noise.
+      // `ui.tip` is the server's list, so the bar offers exactly what doTip()
+      // accepts; the brazier falls away from you.
+      ...((uiFor(actor)?.tip || []).length ? [{
+        key: 'tip', label: 'Tip brazier', icon: 'i-fire',
+        ok: !actor.action_used,
+        extra: { x: uiFor(actor).tip[0][0], y: uiFor(actor).tip[0][1] },
+        why: actor.action_used ? 'Action already spent this turn'
+          : 'Push it over: the coals land on the far side — DEX save or 2d6 fire, then the floor burns for two rounds',
+      }] : []),
       // Grapple and Shove are special melee attacks: they replace one attack of
       // the Attack action, so they spend an attack rather than the action, and
       // a fighter with Extra Attack may swing and then shove.
@@ -2588,6 +2599,22 @@
 
         case 'concentration_broken':
           float(ev.actor, `${ev.spell} ends`, 'float-cond');
+          break;
+
+        // Burned by the coals of a tipped brazier: the ground did it, so no
+        // clip on anybody — the flash, the number and the bar.
+        case 'hazard':
+          flash(ev.target, 'hit-flash');
+          boardHit(ev.target, 'hit');
+          float(ev.target, `-${ev.damage} ${ev.kind || ''}`.trim(), 'float-dmg');
+          stepHp(ev.target, ev.target_hp, ev.target_max_hp);
+          wait = 380;
+          break;
+
+        // The floor changed: a brazier went over, or its coals burned out. The
+        // redraw after the events paints it; this is only the beat.
+        case 'terrain':
+          if (ev.what === 'spill') { shake(); wait = 360; }
           break;
 
         case 'death':

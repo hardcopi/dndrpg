@@ -1428,6 +1428,113 @@ $maxX = BattleGrid::W - 2;
 ok('a large mover cannot leave the board', isset($reach[$maxX . ',5']) && !isset($reach[($maxX + 1) . ',5']) && !isset($reach['3,' . (BattleGrid::H - 1)]));
 
 // ---------------------------------------------------------------------------
+section('Braziers (battle map D)');
+
+// The terrain rule: a lit brazier is half cover you can see past and cannot
+// stand in; tipped, the same; its coals are walkable at double cost.
+same('a lit brazier is half cover', 2, BattleGrid::info(board(['..b']), 2, 0)['cover']);
+ok('and blocks movement but not sight', !BattleGrid::passable(board(['..b']), 2, 0)
+    && BattleGrid::losClear(board(['.b..']), 0, 0, 3, 0));
+same('burning coals cost ten feet', 10, BattleGrid::enterCost(board(['f']), 0, 0));
+
+// The generator: braziers turn up on the palettes that get them, always with
+// the picture on the rule, and the board stays walkable.
+$seenB = [];
+foreach (['arena', 'interior', 'cavern', 'camp', 'tunnel'] as $pal) {
+    $lit = 0;
+    for ($seed = 1; $seed <= 160; $seed++) {
+        $g = BattleMapGen::generate($seed * 7919, $pal);
+        $props = [];
+        foreach ($g['props'] as $pr) {
+            $props[$pr['x'] . ',' . $pr['y']] = $pr['src'];
+        }
+        foreach ($g['terrain'] as $y => $row) {
+            for ($x = 0; $x < strlen($row); $x++) {
+                if ($row[$x] === 'b') {
+                    $lit++;
+                    if (($props["$x,$y"] ?? '') !== 'battlemap/props/brazier.png') {
+                        ok("$pal seed $seed: brazier at $x,$y has its picture", false);
+                    }
+                }
+            }
+        }
+    }
+    $seenB[$pal] = $lit;
+    ok("$pal boards sometimes carry a brazier", $lit > 0, "$lit in 160 boards");
+}
+ok('and street boards never do', !str_contains(implode('', BattleMapGen::generate(99, 'street')['terrain']), 'b'));
+
+// Where the coals land: the far side, fanned.
+same('pushed east, the three cells beyond', [[6, 4], [6, 5], [6, 6]], CombatEngine::spillCells(board(), 4, 5, 5, 5));
+same('pushed across a corner, the corner and the two it touches', [[6, 6], [6, 5], [5, 6]], CombatEngine::spillCells(board(), 4, 4, 5, 5));
+same('a wall and water catch nothing', [[6, 4]], CombatEngine::spillCells(
+    board(['', '', '', '', '', '......#', '......~']), 4, 5, 5, 5));
+same('only braziers within five feet can be tipped', [[5, 5]],
+    CombatEngine::tippable(board(['', '', '', '', '', '.....b', '', '........b']), at('a', 'party', 4, 5)));
+
+// Tipping one, by reflection, on a monster-only state (no database).
+$doTip = new ReflectionMethod(CombatEngine::class, 'doTip');
+$doTip->setAccessible(true);
+$burnIf = new ReflectionMethod(CombatEngine::class, 'burnIfInFire');
+$burnIf->setAccessible(true);
+$burnDown = new ReflectionMethod(CombatEngine::class, 'burnDown');
+$burnDown->setAccessible(true);
+$tipState = [
+    'round' => 1, 'turn_index' => 0, 'order' => ['pusher', 'gob', 'ally'], 'log' => [], 'events' => [],
+    'combatants' => [
+        at('pusher', 'party', 4, 5, ['type' => 'monster']),
+        at('gob', 'foe', 6, 5, ['type' => 'monster', 'hp' => 20]),
+        at('far', 'foe', 12, 5, ['type' => 'monster']),
+        at('ally', 'party', 6, 6, ['type' => 'monster', 'resistances' => ['fire']]),
+    ],
+    'grid' => [
+        'terrain' => paint(board(), 5, 5, 'b'),
+        'props' => [['x' => 5, 'y' => 5, 'w' => 1, 'h' => 1, 'src' => 'battlemap/props/brazier.png', 'stand' => true]],
+        'decals' => [],
+    ],
+];
+Dice::script([1, 6, 6, 1, 6, 6]);   // gob: fails, 12. ally: fails, 12, resisted to 6.
+$after = $doTip->invoke($engine, $tipState, null, null);
+$hp = [];
+foreach ($after['combatants'] as $c) {
+    $hp[$c['cid']] = $c['hp'];
+}
+same('the brazier is on its side', 'u', BattleGrid::at($after['grid']['terrain'], 5, 5));
+same('and its picture with it', 'battlemap/props/brazier_tipped.png', $after['grid']['props'][0]['src']);
+same('the far side burns', ['f', 'f', 'f'], [BattleGrid::at($after['grid']['terrain'], 6, 4),
+    BattleGrid::at($after['grid']['terrain'], 6, 5), BattleGrid::at($after['grid']['terrain'], 6, 6)]);
+same('for two rounds', 2, $after['grid']['fires']['6,5'] ?? null);
+same('the goblin in the spill takes 2d6 on a failed save', 8, $hp['gob']);
+same('fire resistance halves it', 14, $hp['ally']);
+same('nobody else is touched', 20, $hp['far']);
+ok('it costs the action', !empty($after['combatants'][0]['action_used']));
+$threw = false;
+try {
+    $doTip->invoke($engine, $after, null, null);
+} catch (Throwable $e) {
+    $threw = true;
+}
+ok('a tipped brazier cannot be tipped again', $threw);
+
+// Standing in it: once a turn, not once a call.
+$after['turn_index'] = 1;
+Dice::script([4]);
+$burnt = $burnIf->invoke($engine, $after, 'gob');
+$burnt = $burnIf->invoke($engine, $burnt, 'gob');
+$gob = array_values(array_filter($burnt['combatants'], fn ($c) => $c['cid'] === 'gob'))[0];
+same('the spill counts as this round for whoever it caught; the next turn burns once', 4, $gob['hp']);
+
+// Burning down: two rounds, then ash.
+$cool = $burnDown->invoke($engine, $after);
+same('one round on, still burning', 'f', BattleGrid::at($cool['grid']['terrain'], 6, 5));
+$cool = $burnDown->invoke($engine, $cool);
+same('two rounds on, rough ash', ',', BattleGrid::at($cool['grid']['terrain'], 6, 5));
+ok('and the coals are drawn as ash', array_reduce($cool['grid']['decals'], fn ($a, $d) => $a && $d['src'] === 'battlemap/decals/ash.png', true));
+same('no fires left', [], $cool['grid']['fires']);
+same('and no flames standing', 0, count(array_filter($cool['grid']['props'], fn ($p) => !empty($p['fire']))));
+same('three flames stood while it burned', 3, count(array_filter($after['grid']['props'], fn ($p) => !empty($p['fire']))));
+
+// ---------------------------------------------------------------------------
 echo PHP_EOL . str_repeat('-', 52) . PHP_EOL;
 printf("%d passed, %d failed%s", $RESULTS['pass'], $RESULTS['fail'], PHP_EOL);
 
