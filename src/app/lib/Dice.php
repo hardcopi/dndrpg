@@ -11,6 +11,60 @@ class Dice
     private const D20 = 20;
 
     /**
+     * Where the numbers come from. null is random_int, which is what play
+     * always uses. Tests (and a future fight replay) swap in a seeded or
+     * scripted source with seed() / useGenerator() and put it back with
+     * useGenerator(null). Every die this class rolls goes through rand().
+     *
+     * @var null|callable(int, int): int
+     */
+    private static $generator = null;
+
+    /** Replace the source of randomness; null restores random_int. */
+    public static function useGenerator(?callable $generator): void
+    {
+        self::$generator = $generator;
+    }
+
+    /** Repeatable rolls from a seed (mt_rand). Test and replay use only. */
+    public static function seed(int $seed): void
+    {
+        mt_srand($seed);
+        self::$generator = static fn (int $lo, int $hi): int => mt_rand($lo, $hi);
+    }
+
+    /**
+     * Rolls taken from a list, in order, then back to random_int. Each value
+     * must fit the die it is used for, or it is refused: a test that scripts a
+     * 20 for a d6 is a broken test, not a lucky one.
+     *
+     * @param int[] $values
+     */
+    public static function script(array $values): void
+    {
+        $queue = array_values($values);
+        self::$generator = static function (int $lo, int $hi) use (&$queue): int {
+            if (!$queue) {
+                self::$generator = null;
+                return random_int($lo, $hi);
+            }
+            $v = (int) array_shift($queue);
+            if ($v < $lo || $v > $hi) {
+                throw new LogicException("Scripted roll {$v} does not fit 1d{$hi}");
+            }
+            if (!$queue) {
+                self::$generator = null;
+            }
+            return $v;
+        };
+    }
+
+    private static function rand(int $lo, int $hi): int
+    {
+        return self::$generator === null ? random_int($lo, $hi) : (int) (self::$generator)($lo, $hi);
+    }
+
+    /**
      * Split "2d6+3" into count, sides and modifier, or throw.
      *
      * Shared by every roller here so they cannot drift apart on what counts as
@@ -53,7 +107,7 @@ class Dice
 
         $rolls = [];
         for ($i = 0; $i < $parts['count']; $i++) {
-            $rolls[] = random_int(1, $parts['sides']);
+            $rolls[] = self::rand(1, $parts['sides']);
         }
 
         return [
@@ -67,7 +121,7 @@ class Dice
     /** 4d6 drop lowest – classic ability score generation */
     public static function abilityScore(): array
     {
-        $rolls = [random_int(1, 6), random_int(1, 6), random_int(1, 6), random_int(1, 6)];
+        $rolls = [self::rand(1, 6), self::rand(1, 6), self::rand(1, 6), self::rand(1, 6)];
         sort($rolls);
         $dropped = array_shift($rolls);
         return [
@@ -79,7 +133,7 @@ class Dice
 
     public static function d20(int $modifier = 0): array
     {
-        $roll = random_int(1, self::D20);
+        $roll = self::rand(1, self::D20);
         return [
             'roll'     => $roll,
             'modifier' => $modifier,
@@ -108,9 +162,9 @@ class Dice
             $mode = 'normal';
         }
 
-        $rolls = [random_int(1, self::D20)];
+        $rolls = [self::rand(1, self::D20)];
         if ($mode !== 'normal') {
-            $rolls[] = random_int(1, self::D20);
+            $rolls[] = self::rand(1, self::D20);
         }
 
         if ($mode === 'advantage') {
@@ -152,7 +206,7 @@ class Dice
 
         $rolls = [];
         for ($i = 0; $i < $count; $i++) {
-            $rolls[] = random_int(1, $parts['sides']);
+            $rolls[] = self::rand(1, $parts['sides']);
         }
         $diceTotal = array_sum($rolls);
 
