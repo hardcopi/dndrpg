@@ -242,6 +242,7 @@
     'b': ['is-low', 'a lit brazier — +2 AC behind it; stand beside it to tip it over'],
     'u': ['is-low', 'an overturned brazier — +2 AC behind it'],
     'f': ['is-fire', 'burning coals — 1d6 fire to walk in or start a turn here; costs double'],
+    '^': ['is-raised', 'high ground — 5 ft extra to climb up; from up here low cover hides nobody below'],
   };
 
   const key = (x, y) => `${x},${y}`;
@@ -425,6 +426,18 @@
         if (ch === '~') {
           out += `<rect class="bm-cell is-water" x="${x}" y="${y}" width="1" height="1"
             style="fill:url(#${tex.waterId})"/>`;
+          continue;
+        }
+        // High ground: a lighter slab, with a lit lip on the edges that face
+        // up the board and a shadowed drop on the ones that face down it, so a
+        // dais reads as standing proud of the floor in both views.
+        if (ch === '^') {
+          const up = (dx, dy) => ((terrain[y + dy] || '')[x + dx]) === '^';
+          out += `<rect class="bm-cell is-raised" x="${x}" y="${y}" width="1" height="1"/>`;
+          if (!up(0, -1)) out += `<rect class="bm-ledge is-lip" x="${x}" y="${y}" width="1" height="0.07"/>`;
+          if (!up(-1, 0)) out += `<rect class="bm-ledge is-lip" x="${x}" y="${y}" width="0.07" height="1"/>`;
+          if (!up(0, 1)) out += `<rect class="bm-ledge is-drop" x="${x}" y="${y + 0.86}" width="1" height="0.14"/>`;
+          if (!up(1, 0)) out += `<rect class="bm-ledge is-drop" x="${x + 0.9}" y="${y}" width="0.1" height="1"/>`;
           continue;
         }
         // A cover cell with furniture drawn on it is the furniture; the grey

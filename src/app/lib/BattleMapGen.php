@@ -129,6 +129,20 @@ final class BattleMapGen
      */
     private const LAYOUTS = [
         'arena' => [
+            [   // the dais: a raised platform mid-floor, braziers at its foot
+                '........',
+                '........',
+                '..A.....',
+                '........',
+                '...HH...',
+                '..ZHHH..',
+                '..HHHZ..',
+                '...HH...',
+                '........',
+                '.....R..',
+                '........',
+                '........',
+            ],
             [   // the fire court: a brazier either side of the lane, low walls to duck behind
                 '........',
                 '.A......',
@@ -245,6 +259,20 @@ final class BattleMapGen
             ],
         ],
         'street' => [
+            [   // the steps: a raised walk with stalls below it
+                '........',
+                '.o....o.',
+                '........',
+                'HHHH....',
+                'HHHH..o.',
+                '........',
+                '........',
+                '....HHHH',
+                '.o..HHHH',
+                '........',
+                '.o....o.',
+                '........',
+            ],
             [   // stalls along the edges, a well in the square
                 '........',
                 '.oo...o.',
@@ -275,6 +303,20 @@ final class BattleMapGen
             ],
         ],
         'cavern' => [
+            [   // the rock shelf: a ledge along one side, stalagmites below it
+                '........',
+                '..HHHH..',
+                '..HHHH..',
+                '........',
+                '.S....S.',
+                '...rr...',
+                '........',
+                '..S.....',
+                '......S.',
+                '.....K..',
+                '........',
+                '........',
+            ],
             [   // the camp in the dark: a brazier on the floor, stalagmites round it
                 '........',
                 '..S.....',
@@ -363,6 +405,20 @@ final class BattleMapGen
             ],
         ],
         'camp' => [
+            [   // the bank: a raised bank behind the stockade
+                '........',
+                '..HHHH..',
+                '..HHHH..',
+                '..FFF...',
+                '........',
+                '.R...C..',
+                '........',
+                '..C...R.',
+                '...FFF..',
+                '..HHHH..',
+                '..HHHH..',
+                '........',
+            ],
             [   // the cookfires: braziers between the stockade and the stores
                 '........',
                 '...C....',
@@ -407,6 +463,20 @@ final class BattleMapGen
             ],
         ],
         'forest' => [
+            [   // the rise: a knoll in the clearing, trees round it
+                '..n.....',
+                '......n.',
+                '.n......',
+                '...HH...',
+                '..HHHH..',
+                '..HHHH.n',
+                'n..HH...',
+                '........',
+                '.n...rr.',
+                '.......n',
+                '..n.....',
+                '........',
+            ],
             [   // a stream through the trees, a fallen log to hide behind
                 '..n.....',
                 '......n.',
@@ -483,6 +553,9 @@ final class BattleMapGen
         // A lit brazier (battle map D): half cover, and an action away from
         // being a fire. See BattleGrid::TERRAIN 'b' and CombatEngine::doTip().
         'Z' => ['t' => 'b', 'art' => [['src' => 'battlemap/props/brazier.png', 'w' => 1, 'h' => 1, 'stand' => true]]],
+        // High ground (battle map D, part 2): a dais, a shelf, a rise. No
+        // picture of its own; the board paints the raised cells.
+        'H' => ['t' => '^', 'art' => []],
         'r' => ['t' => ',', 'art' => []],
         '~' => ['t' => '~', 'art' => []],
         'o' => ['t' => 'o', 'art' => []],
