@@ -10,6 +10,230 @@
                         "status": "active"
                     },
                     {
+                        "flag": "kessa_favour_fate",
+                        "equals": "signed"
+                    }
+                ],
+                "once": true,
+                "text": "\"You signed it.\" Kessa doesn't look up from the whetstone. \"It's all right. It was true. They did read them out.\" The stone goes along the edge, and back. \"That's the trouble with them. It's always true.\"",
+                "choices": [
+                    {
+                        "label": "Tell me about the debt.",
+                        "next": "the_debt_talk"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit down a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "kessa",
+                        "status": "active"
+                    },
+                    {
+                        "flag": "kessa_favour_fate",
+                        "equals": "read_again"
+                    }
+                ],
+                "once": true,
+                "text": "\"Forty-one,\" Kessa says. \"I counted. She read every one and I heard every name, and nine of them I knew.\" She is quiet a moment. \"Nobody ever read mine slow. Thank you. Don't make anything of it.\"",
+                "choices": [
+                    {
+                        "label": "Tell me about the debt.",
+                        "next": "the_debt_talk"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit down a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "kessa",
+                        "status": "active"
+                    },
+                    {
+                        "flag": "kessa_favour_fate",
+                        "equals": "refused"
+                    }
+                ],
+                "once": true,
+                "text": "\"They'll ask again,\" Kessa says. \"Somewhere there's a page with us on it and a gap where the day goes.\" She tests the edge with her thumb. \"Let them have the gap. I know what it's like to owe. It's worse for them, owing nothing and waiting.\"",
+                "choices": [
+                    {
+                        "label": "Tell me about the debt.",
+                        "next": "the_debt_talk"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit down a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "kessa",
+                        "status": "active"
+                    },
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "costed"
+                    }
+                ],
+                "once": true,
+                "text": "\"So now it costs more to throw us out.\" Kessa spins the knife on the table and catches it. \"That's how they talk about people. Carts and roofs. Fine. Make it cost. Make it cost so much they have to write it on two pages.\"",
+                "choices": [
+                    {
+                        "label": "Tell me about the debt.",
+                        "next": "the_debt_talk"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit down a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "kessa",
+                        "status": "active"
+                    },
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "minuted"
+                    }
+                ],
+                "once": true,
+                "text": "\"They wrote down that you were angry.\" Kessa shrugs. \"I've had that done to me. A clerk writes it down very neatly and then it's dealt with, and nothing's different, except now it's dealt with.\" She looks at you sideways. \"It was a good speech, though.\"",
+                "choices": [
+                    {
+                        "label": "Tell me about the debt.",
+                        "next": "the_debt_talk"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit down a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "kessa",
+                        "status": "active"
+                    },
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "subscribed"
+                    }
+                ],
+                "once": true,
+                "text": "\"We own a bit of them.\" Kessa says it slowly, as if tasting it. \"Of the thing that bought my paper with forty others in one week.\" She laughs, once, without much in it. \"I don't know whether that's the best joke I ever heard or the worst. Ask me when the dividend comes.\"",
+                "choices": [
+                    {
+                        "label": "Tell me about the debt.",
+                        "next": "the_debt_talk"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit down a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "kessa",
+                        "status": "active"
+                    },
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "walked"
+                    }
+                ],
+                "once": true,
+                "text": "\"Good,\" Kessa says. \"I'd have walked at item three.\" She puts her feet up. \"Nobody in that room ever had their name bought. You could tell. They sat like people who've never had to stand up quick.\"",
+                "choices": [
+                    {
+                        "label": "Tell me about the debt.",
+                        "next": "the_debt_talk"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit down a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "kessa",
+                        "status": "active"
+                    },
+                    {
                         "flag": "survey_fate",
                         "equals": "took"
                     }

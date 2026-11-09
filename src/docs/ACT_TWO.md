@@ -91,6 +91,18 @@ read the endings back. Still open on purpose: who asked. Nakka was "told to take
 it" by somebody who was not a goblin; that was Wat, and nobody knows who asked
 Wat. Test: `tools/test_fenmoor_lot.php`.
 
+## After the meeting
+
+- **Companions read `meeting_fate`.** Sera, Kessa, Aldric and Ilse each have a
+  once-only greeting for `costed` · `minuted` · `subscribed` · `walked`.
+- **The house calls in Kessa's favour.** If `kessa_the_house_that_bought_her`
+  ended `took_the_favour` (`house_favour_owed`), Minna Crale asks for it the first
+  time she is spoken to after the meeting: witness that forty-one conveyances
+  signed by mark were read aloud to the sellers. They were. `kessa_favour_fate`
+  = `signed` (clears the favour) · `read_again` (she reads all forty-one aloud
+  first; clears it) · `refused` (the blank stays open). Kessa reads all three.
+- Test: `tools/test_act_two_aftermath.php`.
+
 ## Tests
 
 `tools/test_act_two.php` (in `verify.sh`) plays all four branches to an ending

@@ -263,6 +263,39 @@
                     {
                         "quest": "the_quarterly_meeting",
                         "status": "completed"
+                    },
+                    {
+                        "flag": "house_favour_owed"
+                    },
+                    {
+                        "not": {
+                            "flag": "kessa_favour_fate"
+                        }
+                    }
+                ],
+                "text": "Minna Crale has a slip of paper ready, which means she has had it ready for some time. \"Before you go,\" she says. \"The Greyhythe office has a line in its book against your party. *Service given: a list of forty-one names, copied. Service owed:* and then a blank, where the day would be.\" She lays the slip on the desk. \"The house would like the day to be today. It is a very small service. I would not want you to think otherwise.\"",
+                "interjections": [
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa goes very still, the way she does in doorways."
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "What does the house want?",
+                        "next": "favour_what"
+                    },
+                    {
+                        "label": "Not today.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_quarterly_meeting",
+                        "status": "completed"
                     }
                 ],
                 "text": "Minna Crale looks up, and something that is not quite a smile happens and is filed. \"It's in the minutes,\" she says. \"Whatever you said. Everything is. That's what I'm for.\"",
@@ -393,6 +426,111 @@
         "sold_returned": [
             {
                 "text": "Minna Crale counts the forty, twice, and writes you a receipt in the same hand as the articles, and then files the receipt with the articles, so that they sit together in the same pigeonhole. \"Mr Corse will be told,\" she says. \"He won't be surprised. He's never been surprised by anybody, as far as I know. It must be very restful.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "favour_what": [
+            {
+                "text": "\"A witness,\" Minna Crale says. \"Forty-one conveyances from the valley, signed by mark. The law wants it witnessed that each was read aloud to the seller before the mark was made. They were. Mr Corse is scrupulous about it.\" She turns the slip so you can read it. \"The house would like a party who has walked the valley to sign that it has seen the record of the reading. Your name, here. That is all.\"",
+                "interjections": [
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa, flat: \"Read aloud. They read mine aloud too. In a hurry, with a man waiting for the table.\""
+                    },
+                    {
+                        "companion": "sera",
+                        "text": "Sera: \"It is a perfectly ordinary attestation. That is the worst thing I can say about it.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Sign it.",
+                        "effects": [
+                            {
+                                "set_flag": "kessa_favour_fate",
+                                "value": "signed"
+                            },
+                            {
+                                "clear_flag": "house_favour_owed"
+                            },
+                            {
+                                "approval": {
+                                    "kessa": -12,
+                                    "sera": 4
+                                }
+                            }
+                        ],
+                        "next": "favour_signed"
+                    },
+                    {
+                        "label": "Read them aloud again. Here. All forty-one. Then I'll sign.",
+                        "effects": [
+                            {
+                                "set_flag": "kessa_favour_fate",
+                                "value": "read_again"
+                            },
+                            {
+                                "clear_flag": "house_favour_owed"
+                            },
+                            {
+                                "approval": {
+                                    "kessa": 10,
+                                    "aldric": 8,
+                                    "sera": 2
+                                }
+                            }
+                        ],
+                        "next": "favour_read"
+                    },
+                    {
+                        "label": "No. Leave the blank where it is.",
+                        "effects": [
+                            {
+                                "set_flag": "kessa_favour_fate",
+                                "value": "refused"
+                            },
+                            {
+                                "approval": {
+                                    "kessa": 6,
+                                    "sera": -4
+                                }
+                            }
+                        ],
+                        "next": "favour_refused"
+                    }
+                ]
+            }
+        ],
+        "favour_signed": [
+            {
+                "text": "You sign. Minna Crale blots it, and enters a line in a book you have not seen before, and draws a neat rule under the Greyhythe office's blank. \"Discharged,\" she says. \"Thank you. It really was very small.\" It was. That is what it was for.",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "favour_read": [
+            {
+                "text": "Minna Crale looks at you for a moment, and then she gets up and fetches the bundle herself, and reads. All forty-one. It takes the whole of the afternoon and the fire has to be made up twice. Every conveyance is exactly what the seller was told it was. Kessa stands at the window with her back to the room and listens to every name.\n\nWhen it is done you sign. Minna Crale blots it. \"Nobody has ever asked for that,\" she says. \"It was perfectly lawful the first time.\" She draws the rule. \"It was better the second.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "favour_refused": [
+            {
+                "text": "\"It will keep,\" Minna Crale says, and puts the slip back in its pigeonhole, under your name. \"Favours do. That is rather the point of them.\" She is not offended. She is never offended. Somewhere a line in a book in Greyhythe stays open, with a blank where the day would be.",
                 "choices": [
                     {
                         "label": "Leave.",
