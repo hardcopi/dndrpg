@@ -262,6 +262,16 @@
   }
 
   function initWizard() {
+    // Nothing here is kept until Create: Leave threw away a named, rolled,
+    // half-dressed character on one click, a step from Back. Ask first — but
+    // only once there is something to lose.
+    $('[data-wiz-leave]')?.addEventListener('click', (e) => {
+      const named = ($('#name')?.value || '').trim() !== '';
+      if ((state.reached > 0 || named)
+          && !window.confirm('Leave without making this character? Everything chosen so far will be lost.')) {
+        e.preventDefault();
+      }
+    });
     $('#wiz-next').addEventListener('click', wizardNext);
     $('#wiz-back').addEventListener('click', () => goToStep(state.step - 1));
 

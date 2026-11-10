@@ -34,7 +34,7 @@ require_signed_in_page();
         <h1 id="wiz-title">Create a Character</h1>
         <p id="wiz-blurb">Open 5e SRD races and classes.</p>
       </div>
-      <a class="btn btn-small" href="index.php">← Leave</a>
+      <a class="btn btn-small" href="index.php" data-wiz-leave>← Leave</a>
     </header>
 
     <!--
