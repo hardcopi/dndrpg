@@ -295,6 +295,51 @@
             {
                 "conditions": [
                     {
+                        "flag": "fen_trade_on_paper"
+                    }
+                ],
+                "text": "Osric has a folded paper pinned to the shelf above the fen-root jars, with two marks on it, one of them very new. \"Gray's people,\" he says. \"The first thing that camp has ever put its mark to, and it's a season of root for an apothecary.\" He grinds. \"I keep it where I can see it. It's the only contract in this valley I'm certain both sides meant.\"",
+                "choices": [
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "fen_draining"
+                    }
+                ],
+                "text": "\"The beds are drying,\" Osric says. \"Gray's people say two years, and then they don't know whether the root will take.\" He weighs out a dose with great care. \"I'm putting down a stock of it. Dried, it keeps eleven years. After that, somebody will have to find out what we did before the fen, and I hope it isn't me.\"",
+                "choices": [
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "fen_road_open_paid"
+                    }
+                ],
+                "text": "\"Root came in by the causeway on Tuesday,\" Osric says, \"in a fen boat, and nobody at either end asked the boatman a single question.\" He sounds faintly scandalised. \"It's the first thing from that camp that has ever arrived without a story.\"",
+                "choices": [
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "quest": "root_and_ash",
                         "status": "active"
                     }

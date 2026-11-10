@@ -143,6 +143,21 @@
             {
                 "conditions": [
                     {
+                        "flag": "mill_race_right_common"
+                    }
+                ],
+                "text": "\"The Harrow water right,\" Ashe says, still writing. \"Entered as common to three holdings, witnessed.\" He reaches the end of the line. \"A letter came to the second desk asking which of the three it might be bought from. I wrote back that it can't be bought from one, because it is no longer one man's.\" He blots it. \"It was a very good letter. It was answered by a very short one.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "quarry_writ_fate",
                         "equals": "filed"
                     },

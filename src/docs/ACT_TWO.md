@@ -289,6 +289,27 @@ end and names nobody.
   chair: is a sixth head usual (whole), or were five heads all there was
   (given)? If the figure is to be read first, she would like to hear it read
   uninterrupted.
+- **Quarter-day eve** (Mara, the Flagon). This needs the meeting to be over and
+  at least one thing set up: a vote, a minute, an item-seven choice, a
+  circulated or held figure, the Uncounted read or entered, or the cartulary
+  deposited. Mara sits the party down. Three beats then pick the first match:
+  the outcome (the AGAINST — 1 / OF 12 / SO FAR slate, Reed in the good coat,
+  the reader-list under the door copy, a cup raised to the pencil, Reed's
+  twelfth copy open at the bread, Hesper's shut book like a coffin in the next
+  room); then Tull on the Uncounted; then Arden, the filed date, or the stone
+  argument. It ends with "whatever they decide has not been decided yet" and
+  sets `quarter_eve`. The vote is not resolved.
+- **Later visitors** (after `quarter_eve`, once each). A clerk who gave no
+  house reads only the Arden bounds and asks whether a deposit can be withdrawn
+  (it can't). The prior is asked to recall her press and "will consider it". A
+  Ford Road widow reads the Disputed sheet and takes a copy home.
+- **Valley loose ends heard of.** Reed: the causeway under at four points
+  (`fen_road_closing`), the north ford left unposted (`north_ford_open`).
+  Ballow: eleven wagons to the warren (`warren_fed`), wagons over the ford dry
+  to the axle (`ford_road_open`). Osric: the camp's first mark on paper
+  (`fen_trade_on_paper`), the beds drying (`fen_draining`), root by the
+  causeway "without a story" (`fen_road_open_paid`). Ashe: the common water
+  right cannot be bought from one man (`mill_race_right_common`).
 - **Companions place the mark.** Once Act II is open, Ilse (`mark_seen_stone`),
   Kessa (`mark_seen_paper`) and Sera (`mark_seen_book`) each have one greeting
   that recognises the mark they saw in Act I as the house's mark: the ledge cuts,

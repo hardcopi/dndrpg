@@ -42,6 +42,25 @@
             {
                 "conditions": [
                     {
+                        "flag": "quarter_eve"
+                    },
+                    {
+                        "flag": "cartulary_deposited",
+                        "equals": "1"
+                    }
+                ],
+                "once": true,
+                "text": "\"A letter came for the prior,\" Brother Venn says, \"very courteous, asking whether the house would consider recalling its fourth press from Brackwater, for safe keeping.\" He almost smiles. \"She said she would consider it. That is what she says when she won't. It is the first time in four winters I have heard her say it to anybody but us.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "cartulary_held"
                     }
                 ],
