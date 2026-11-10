@@ -68,6 +68,94 @@
                     {
                         "quest": "the_costing",
                         "status": "active"
+                    },
+                    {
+                        "flag": "quarry_writ_fate",
+                        "equals": "filed"
+                    }
+                ],
+                "once": true,
+                "text": "\"Your counting house has a date in its book for the east quarry,\" Hesper Amsel says, ruling a column. \"When it stopped being the town's, with a rubbing pinned to the page.\" She does not look up. \"It is not under any of the five heads. It is the only date in this valley I have not had to ask anybody for, and I have copied it into the margin, because a margin is where a thing goes that the heads did not foresee.\"",
+                "choices": [
+                    {
+                        "label": "Some things aren't under any head.",
+                        "next": "missing"
+                    },
+                    {
+                        "label": "Put down double. Make it too dear to do.",
+                        "next": "padded",
+                        "effects": [
+                            {
+                                "set_flag": "costing_padding_asked"
+                            },
+                            {
+                                "approval": {
+                                    "aldric": -4,
+                                    "sera": -4,
+                                    "kessa": 2
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Count it your way.",
+                        "next": "given"
+                    },
+                    {
+                        "label": "Leave her to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_costing",
+                        "status": "active"
+                    },
+                    {
+                        "flag": "quarry_writ_fate",
+                        "equals": "stone"
+                    }
+                ],
+                "once": true,
+                "text": "\"The stone at the four holdings says one thing,\" Hesper Amsel says, \"and the writ says another.\" She makes a small mark. \"I have written both and put a query against them. It is not mine to settle. I count what is there, and at the moment there are two of it.\"",
+                "choices": [
+                    {
+                        "label": "Some things aren't under any head.",
+                        "next": "missing"
+                    },
+                    {
+                        "label": "Put down double. Make it too dear to do.",
+                        "next": "padded",
+                        "effects": [
+                            {
+                                "set_flag": "costing_padding_asked"
+                            },
+                            {
+                                "approval": {
+                                    "aldric": -4,
+                                    "sera": -4,
+                                    "kessa": 2
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Count it your way.",
+                        "next": "given"
+                    },
+                    {
+                        "label": "Leave her to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_costing",
+                        "status": "active"
                     }
                 ],
                 "text": "Hesper Amsel is on the granary steps with the measuring book open across her knee, ruling a column. \"Roofs,\" she says, without looking up. \"Thirty-eight on the Row, if a lean-to is a roof, and I have decided that a lean-to is a roof.\" She dips the pen. \"You were going to tell me what I am missing. Or not. Either is an answer.\"",

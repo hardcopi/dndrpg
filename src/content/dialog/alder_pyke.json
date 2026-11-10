@@ -90,6 +90,22 @@
             {
                 "conditions": [
                     {
+                        "flag": "quarry_writ_fate",
+                        "equals": "stone"
+                    }
+                ],
+                "once": true,
+                "text": "\"I chained out to the four holdings Thursday,\" Pyke says. \"Somebody's put the old mearing back on the fourth face, and made a pig's ear of it.\" He coils. \"Ground says one thing, the writ says another, and I'm to write down one.\" He looks at you. \"I wrote down both, with a line between. Forty-three years, and that's the first time I've ever handed in a sheet with an argument on it.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "survey_fate",
                         "equals": "warned"
                     }

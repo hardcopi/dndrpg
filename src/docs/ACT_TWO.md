@@ -257,6 +257,17 @@ end and names nobody.
   the party: circulate it to the eleven chairs now (`costing_figure` =
   `circulated`, pressure +1, three chairs write to Corse), or read it first on
   the day (`read_first`). Sera and Aldric disagree. The vote stays open.
+- **The quarry writ is heard of** (`quarry_writ_fate`). Each line plays once.
+  - `filed`: Gest Pyle and Dorn Ackley hear of it. In Act II, Ashe is asked twice
+    this quarter when the east quarry stopped being the town's, and for once has
+    the answer written down. During the costing, Hesper copies the date into the
+    margin, as it falls under no head.
+  - `stone`: drovers argue at the fourth face. Ackley approves. Alder Pyke hands
+    in a sheet with both readings "and a line between". Hesper writes both, with
+    a query.
+  - `sold`: the polite man looked at the stone and at Pyle, and had asked
+    Ackley first.
+  - Nobody says who holds the writ.
 - **Companions place the mark.** Once Act II is open, Ilse (`mark_seen_stone`),
   Kessa (`mark_seen_paper`) and Sera (`mark_seen_book`) each have one greeting
   that recognises the mark they saw in Act I as the house's mark: the ledge cuts,
