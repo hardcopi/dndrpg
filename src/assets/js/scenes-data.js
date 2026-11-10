@@ -3920,5 +3920,371 @@ window.RIVERMARK_SCENES = {
         "count": 10
       }
     ]
+  },
+  fen_causeway: {
+    "image": "assets/images/scenes/fen_causeway.jpg",
+    "exits": {
+      "fen_road_head": {
+        "x": 50,
+        "y": 90,
+        "icon": "↩"
+      },
+      "drowned_village": {
+        "x": 80,
+        "y": 30,
+        "icon": "↑"
+      },
+      "stilt_camp": {
+        "x": 14,
+        "y": 36,
+        "icon": "←"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The withies",
+        "x": 69,
+        "y": 62,
+        "act": "search"
+      },
+      {
+        "label": "The drowned stretch",
+        "x": 27,
+        "y": 30,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "birds",
+        "x": 30,
+        "y": 3,
+        "w": 45,
+        "h": 16,
+        "intensity": 0.4
+      },
+      {
+        "type": "fog",
+        "x": 0,
+        "y": 15,
+        "w": 100,
+        "h": 20,
+        "intensity": 0.25
+      }
+    ]
+  },
+  drowned_village: {
+    "image": "assets/images/scenes/drowned_village.jpg",
+    "exits": {
+      "fen_causeway": {
+        "x": 86,
+        "y": 90,
+        "icon": "↩"
+      },
+      "drowned_chapel": {
+        "x": 30,
+        "y": 25,
+        "icon": "←"
+      },
+      "black_pools": {
+        "x": 10,
+        "y": 86,
+        "icon": "↓"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The street",
+        "x": 55,
+        "y": 45,
+        "act": "search"
+      },
+      {
+        "label": "An open doorway",
+        "x": 32,
+        "y": 72,
+        "act": "search"
+      },
+      {
+        "label": "The rafters",
+        "x": 80,
+        "y": 48,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "birds",
+        "x": 40,
+        "y": 3,
+        "w": 45,
+        "h": 16,
+        "intensity": 0.4
+      },
+      {
+        "type": "fog",
+        "x": 0,
+        "y": 18,
+        "w": 100,
+        "h": 18,
+        "intensity": 0.25
+      }
+    ]
+  },
+  drowned_chapel: {
+    "image": "assets/images/scenes/drowned_chapel.jpg",
+    "exits": {
+      "drowned_village": {
+        "x": 91,
+        "y": 42,
+        "icon": "→"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The chest on the step",
+        "x": 47,
+        "y": 31,
+        "act": "search"
+      },
+      {
+        "label": "The black water",
+        "x": 40,
+        "y": 72,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "drip",
+        "x": 20,
+        "y": 0,
+        "w": 60,
+        "h": 60,
+        "intensity": 0.3
+      },
+      {
+        "type": "fog",
+        "x": 0,
+        "y": 55,
+        "w": 100,
+        "h": 40,
+        "intensity": 0.2
+      }
+    ]
+  },
+  black_pools: {
+    "image": "assets/images/scenes/black_pools.jpg",
+    "exits": {
+      "drowned_village": {
+        "x": 53,
+        "y": 16,
+        "icon": "↑"
+      },
+      "stilt_camp": {
+        "x": 89,
+        "y": 25,
+        "icon": "→"
+      },
+      "sluice_gate": {
+        "x": 14,
+        "y": 30,
+        "icon": "←"
+      },
+      "root_beds": {
+        "x": 4,
+        "y": 62,
+        "icon": "←"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "Floating peat",
+        "x": 45,
+        "y": 78,
+        "act": "search"
+      },
+      {
+        "label": "A sedge island",
+        "x": 52,
+        "y": 40,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "birds",
+        "x": 40,
+        "y": 3,
+        "w": 45,
+        "h": 16,
+        "intensity": 0.3
+      },
+      {
+        "type": "fog",
+        "x": 0,
+        "y": 16,
+        "w": 100,
+        "h": 20,
+        "intensity": 0.3
+      }
+    ]
+  },
+  stilt_camp: {
+    "image": "assets/images/scenes/stilt_camp.jpg",
+    "exits": {
+      "fen_causeway": {
+        "x": 52,
+        "y": 24,
+        "icon": "↑"
+      },
+      "black_pools": {
+        "x": 7,
+        "y": 56,
+        "icon": "←"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The faggot stack",
+        "x": 65,
+        "y": 26,
+        "act": "search"
+      },
+      {
+        "label": "The drying nets",
+        "x": 21,
+        "y": 30,
+        "act": "search"
+      },
+      {
+        "label": "The punts",
+        "x": 36,
+        "y": 82,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "birds",
+        "x": 30,
+        "y": 3,
+        "w": 45,
+        "h": 16,
+        "intensity": 0.4
+      },
+      {
+        "type": "fog",
+        "x": 0,
+        "y": 16,
+        "w": 100,
+        "h": 16,
+        "intensity": 0.25
+      }
+    ]
+  },
+  root_beds: {
+    "image": "assets/images/scenes/root_beds.jpg",
+    "exits": {
+      "black_pools": {
+        "x": 95,
+        "y": 50,
+        "icon": "→"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The uncut bed",
+        "x": 72,
+        "y": 45,
+        "act": "search"
+      },
+      {
+        "label": "The cut beds",
+        "x": 30,
+        "y": 62,
+        "act": "search"
+      },
+      {
+        "label": "The plank stage",
+        "x": 58,
+        "y": 86,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "birds",
+        "x": 30,
+        "y": 3,
+        "w": 45,
+        "h": 16,
+        "intensity": 0.4
+      },
+      {
+        "type": "fog",
+        "x": 0,
+        "y": 18,
+        "w": 100,
+        "h": 16,
+        "intensity": 0.25
+      }
+    ]
+  },
+  sluice_gate: {
+    "image": "assets/images/scenes/sluice_gate.jpg",
+    "exits": {
+      "black_pools": {
+        "x": 86,
+        "y": 44,
+        "icon": "→"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The screw-jack",
+        "x": 39,
+        "y": 15,
+        "act": "search"
+      },
+      {
+        "label": "The gate",
+        "x": 40,
+        "y": 55,
+        "act": "search"
+      },
+      {
+        "label": "The hut on the pier",
+        "x": 11,
+        "y": 25,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "smoke",
+        "x": 4,
+        "y": 0,
+        "w": 6,
+        "h": 10,
+        "intensity": 0.35,
+        "wind": 0.5
+      },
+      {
+        "type": "birds",
+        "x": 50,
+        "y": 3,
+        "w": 40,
+        "h": 16,
+        "intensity": 0.4
+      }
+    ]
   }
 };
