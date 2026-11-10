@@ -4709,5 +4709,1085 @@ window.RIVERMARK_SCENES = {
         "count": 8
       }
     ]
+  },
+  oldcity_stair: {
+    "image": "assets/images/scenes/oldcity_stair.jpg",
+    "exits": {
+      "oldcity_guardhouse": {
+        "x": 33,
+        "y": 52,
+        "icon": "⌂"
+      },
+      "oldcity_west_causeway": {
+        "x": 64,
+        "y": 86,
+        "icon": "↓"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The sign",
+        "x": 33,
+        "y": 41,
+        "act": "search"
+      },
+      {
+        "label": "The stair up",
+        "x": 68,
+        "y": 30,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "drip",
+        "x": 20,
+        "y": 0,
+        "w": 60,
+        "h": 70,
+        "intensity": 0.35
+      },
+      {
+        "type": "fog",
+        "x": 0,
+        "y": 62,
+        "w": 100,
+        "h": 38,
+        "intensity": 0.22
+      }
+    ]
+  },
+  oldcity_guardhouse: {
+    "image": "assets/images/scenes/oldcity_guardhouse.jpg",
+    "exits": {
+      "oldcity_stair": {
+        "x": 16,
+        "y": 40,
+        "icon": "↩"
+      },
+      "oldcity_west_causeway": {
+        "x": 72,
+        "y": 45,
+        "icon": "→"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The duty rosters",
+        "x": 47,
+        "y": 62,
+        "act": "search"
+      },
+      {
+        "label": "The key on the nail",
+        "x": 39,
+        "y": 33,
+        "act": "search"
+      },
+      {
+        "label": "The pot on the coals",
+        "x": 57,
+        "y": 82,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "glow",
+        "x": 2,
+        "y": 70,
+        "w": 14,
+        "h": 22,
+        "intensity": 0.45
+      }
+    ]
+  },
+  oldcity_west_causeway: {
+    "image": "assets/images/scenes/oldcity_west_causeway.jpg",
+    "exits": {
+      "oldcity_stair": {
+        "x": 70,
+        "y": 45,
+        "icon": "↑"
+      },
+      "oldcity_guardhouse": {
+        "x": 16,
+        "y": 46,
+        "icon": "⌂"
+      },
+      "oldcity_north_causeway": {
+        "x": 52,
+        "y": 50,
+        "icon": "↑"
+      },
+      "oldcity_south_causeway": {
+        "x": 50,
+        "y": 92,
+        "icon": "↓"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The grates",
+        "x": 58,
+        "y": 8,
+        "act": "search"
+      },
+      {
+        "label": "The torches",
+        "x": 36,
+        "y": 30,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "drip",
+        "x": 20,
+        "y": 0,
+        "w": 60,
+        "h": 70,
+        "intensity": 0.35
+      },
+      {
+        "type": "fog",
+        "x": 0,
+        "y": 62,
+        "w": 100,
+        "h": 38,
+        "intensity": 0.22
+      },
+      {
+        "type": "water",
+        "x": 20,
+        "y": 65,
+        "w": 60,
+        "h": 35,
+        "intensity": 0.4,
+        "count": 12
+      }
+    ]
+  },
+  oldcity_north_causeway: {
+    "image": "assets/images/scenes/oldcity_north_causeway.jpg",
+    "exits": {
+      "oldcity_west_causeway": {
+        "x": 40,
+        "y": 92,
+        "icon": "↓"
+      },
+      "oldcity_works_depot": {
+        "x": 7,
+        "y": 48,
+        "icon": "←"
+      },
+      "oldcity_thiefs_entry": {
+        "x": 66,
+        "y": 62,
+        "icon": "⌂"
+      },
+      "oldcity_toads_grotto": {
+        "x": 45,
+        "y": 57,
+        "icon": "↑"
+      },
+      "oldcity_tripwire_lane": {
+        "x": 87,
+        "y": 68,
+        "icon": "→"
+      },
+      "oldcity_watch_tower": {
+        "x": 29,
+        "y": 30,
+        "icon": "↑"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The street sign",
+        "x": 75,
+        "y": 40,
+        "act": "search"
+      },
+      {
+        "label": "The filled windows",
+        "x": 84,
+        "y": 22,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "drip",
+        "x": 20,
+        "y": 0,
+        "w": 60,
+        "h": 70,
+        "intensity": 0.35
+      },
+      {
+        "type": "fog",
+        "x": 0,
+        "y": 62,
+        "w": 100,
+        "h": 38,
+        "intensity": 0.22
+      },
+      {
+        "type": "water",
+        "x": 20,
+        "y": 65,
+        "w": 60,
+        "h": 35,
+        "intensity": 0.4,
+        "count": 12
+      }
+    ]
+  },
+  oldcity_works_depot: {
+    "image": "assets/images/scenes/oldcity_works_depot.jpg",
+    "exits": {
+      "oldcity_north_causeway": {
+        "x": 66,
+        "y": 90,
+        "icon": "↓"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The tool shed",
+        "x": 44,
+        "y": 50,
+        "act": "search"
+      },
+      {
+        "label": "The stacked stone",
+        "x": 14,
+        "y": 60,
+        "act": "search"
+      },
+      {
+        "label": "The swept floor",
+        "x": 55,
+        "y": 72,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "dust",
+        "x": 60,
+        "y": 0,
+        "w": 25,
+        "h": 50,
+        "intensity": 0.3,
+        "count": 8
+      }
+    ]
+  },
+  oldcity_thiefs_entry: {
+    "image": "assets/images/scenes/oldcity_thiefs_entry.jpg",
+    "exits": {
+      "oldcity_north_causeway": {
+        "x": 15,
+        "y": 56,
+        "icon": "←"
+      },
+      "oldcity_thieves_den": {
+        "x": 88,
+        "y": 46,
+        "icon": "→"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The grate",
+        "x": 62,
+        "y": 30,
+        "act": "search"
+      },
+      {
+        "label": "The rebuilt stair",
+        "x": 52,
+        "y": 72,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "drip",
+        "x": 20,
+        "y": 0,
+        "w": 60,
+        "h": 70,
+        "intensity": 0.35
+      },
+      {
+        "type": "fog",
+        "x": 0,
+        "y": 62,
+        "w": 100,
+        "h": 38,
+        "intensity": 0.22
+      }
+    ]
+  },
+  oldcity_toads_grotto: {
+    "image": "assets/images/scenes/oldcity_toads_grotto.jpg",
+    "exits": {
+      "oldcity_north_causeway": {
+        "x": 10,
+        "y": 80,
+        "icon": "↩"
+      },
+      "oldcity_goblin_foothold": {
+        "x": 70,
+        "y": 40,
+        "icon": "→"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The boots",
+        "x": 46,
+        "y": 88,
+        "act": "search"
+      },
+      {
+        "label": "The pool",
+        "x": 55,
+        "y": 64,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "drip",
+        "x": 20,
+        "y": 0,
+        "w": 60,
+        "h": 70,
+        "intensity": 0.35
+      },
+      {
+        "type": "fog",
+        "x": 0,
+        "y": 62,
+        "w": 100,
+        "h": 38,
+        "intensity": 0.22
+      }
+    ]
+  },
+  oldcity_tripwire_lane: {
+    "image": "assets/images/scenes/oldcity_tripwire_lane.jpg",
+    "exits": {
+      "oldcity_north_causeway": {
+        "x": 50,
+        "y": 92,
+        "icon": "↓"
+      },
+      "oldcity_thieves_den": {
+        "x": 66,
+        "y": 45,
+        "icon": "↑"
+      },
+      "oldcity_renegades_stash": {
+        "x": 17,
+        "y": 46,
+        "icon": "←"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The copper wire",
+        "x": 50,
+        "y": 67,
+        "act": "search"
+      },
+      {
+        "label": "The stacked stones",
+        "x": 80,
+        "y": 22,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "drip",
+        "x": 20,
+        "y": 0,
+        "w": 60,
+        "h": 70,
+        "intensity": 0.35
+      },
+      {
+        "type": "fog",
+        "x": 0,
+        "y": 62,
+        "w": 100,
+        "h": 38,
+        "intensity": 0.22
+      }
+    ]
+  },
+  oldcity_thieves_den: {
+    "image": "assets/images/scenes/oldcity_thieves_den.jpg",
+    "exits": {
+      "oldcity_tripwire_lane": {
+        "x": 50,
+        "y": 93,
+        "icon": "↓"
+      },
+      "oldcity_thiefs_entry": {
+        "x": 59,
+        "y": 55,
+        "icon": "↑"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The hammocks",
+        "x": 18,
+        "y": 62,
+        "act": "search"
+      },
+      {
+        "label": "The cook-fire",
+        "x": 53,
+        "y": 78,
+        "act": "search"
+      },
+      {
+        "label": "The chimney smoke",
+        "x": 53,
+        "y": 40,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "glow",
+        "x": 46,
+        "y": 70,
+        "w": 14,
+        "h": 16,
+        "intensity": 0.45
+      },
+      {
+        "type": "smoke",
+        "x": 48,
+        "y": 20,
+        "w": 10,
+        "h": 50,
+        "intensity": 0.3,
+        "wind": 0.2
+      }
+    ]
+  },
+  oldcity_renegades_stash: {
+    "image": "assets/images/scenes/oldcity_renegades_stash.jpg",
+    "exits": {
+      "oldcity_tripwire_lane": {
+        "x": 66,
+        "y": 42,
+        "icon": "↩"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The lockbox",
+        "x": 45,
+        "y": 70,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "dust",
+        "x": 55,
+        "y": 10,
+        "w": 25,
+        "h": 50,
+        "intensity": 0.3,
+        "count": 8
+      }
+    ]
+  },
+  oldcity_watch_tower: {
+    "image": "assets/images/scenes/oldcity_watch_tower.jpg",
+    "exits": {
+      "oldcity_north_causeway": {
+        "x": 66,
+        "y": 17,
+        "icon": "↑"
+      },
+      "oldcity_drop_hole": {
+        "x": 15,
+        "y": 56,
+        "icon": "←"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The stair down",
+        "x": 56,
+        "y": 80,
+        "act": "search"
+      },
+      {
+        "label": "The boarded ceiling",
+        "x": 55,
+        "y": 6,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "dust",
+        "x": 40,
+        "y": 10,
+        "w": 40,
+        "h": 50,
+        "intensity": 0.25,
+        "count": 8
+      }
+    ]
+  },
+  oldcity_goblin_foothold: {
+    "image": "assets/images/scenes/oldcity_goblin_foothold.jpg",
+    "exits": {
+      "oldcity_toads_grotto": {
+        "x": 15,
+        "y": 56,
+        "icon": "←"
+      },
+      "oldcity_empty_rooms": {
+        "x": 75,
+        "y": 40,
+        "icon": "→"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The stakes",
+        "x": 18,
+        "y": 40,
+        "act": "search"
+      },
+      {
+        "label": "The cook-fire",
+        "x": 56,
+        "y": 66,
+        "act": "search"
+      },
+      {
+        "label": "The rubble wall",
+        "x": 43,
+        "y": 45,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "glow",
+        "x": 50,
+        "y": 58,
+        "w": 12,
+        "h": 14,
+        "intensity": 0.45
+      },
+      {
+        "type": "smoke",
+        "x": 54,
+        "y": 0,
+        "w": 12,
+        "h": 50,
+        "intensity": 0.3,
+        "wind": 0.2
+      }
+    ]
+  },
+  oldcity_empty_rooms: {
+    "image": "assets/images/scenes/oldcity_empty_rooms.jpg",
+    "exits": {
+      "oldcity_goblin_foothold": {
+        "x": 17,
+        "y": 50,
+        "icon": "←"
+      },
+      "oldcity_crawlway": {
+        "x": 75,
+        "y": 50,
+        "icon": "→"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The stone bench",
+        "x": 42,
+        "y": 72,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "dust",
+        "x": 25,
+        "y": 20,
+        "w": 50,
+        "h": 50,
+        "intensity": 0.25,
+        "count": 8
+      }
+    ]
+  },
+  oldcity_crawlway: {
+    "image": "assets/images/scenes/oldcity_crawlway.jpg",
+    "exits": {
+      "oldcity_empty_rooms": {
+        "x": 50,
+        "y": 93,
+        "icon": "↩"
+      },
+      "oldcity_fugitives_hideout": {
+        "x": 55,
+        "y": 58,
+        "icon": "↑"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The small marks",
+        "x": 46,
+        "y": 88,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "dust",
+        "x": 30,
+        "y": 40,
+        "w": 40,
+        "h": 40,
+        "intensity": 0.25,
+        "count": 8
+      }
+    ]
+  },
+  oldcity_fugitives_hideout: {
+    "image": "assets/images/scenes/oldcity_fugitives_hideout.jpg",
+    "exits": {
+      "oldcity_crawlway": {
+        "x": 17,
+        "y": 60,
+        "icon": "↩"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The blade of light",
+        "x": 56,
+        "y": 78,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "dust",
+        "x": 52,
+        "y": 5,
+        "w": 12,
+        "h": 70,
+        "intensity": 0.35,
+        "count": 10
+      }
+    ]
+  },
+  oldcity_south_causeway: {
+    "image": "assets/images/scenes/oldcity_south_causeway.jpg",
+    "exits": {
+      "oldcity_west_causeway": {
+        "x": 50,
+        "y": 93,
+        "icon": "↩"
+      },
+      "oldcity_spider_ante": {
+        "x": 92,
+        "y": 52,
+        "icon": "→"
+      },
+      "oldcity_submerged_pit": {
+        "x": 52,
+        "y": 52,
+        "icon": "↑"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The old green stone",
+        "x": 30,
+        "y": 70,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "drip",
+        "x": 20,
+        "y": 0,
+        "w": 60,
+        "h": 70,
+        "intensity": 0.35
+      },
+      {
+        "type": "fog",
+        "x": 0,
+        "y": 62,
+        "w": 100,
+        "h": 38,
+        "intensity": 0.22
+      },
+      {
+        "type": "water",
+        "x": 20,
+        "y": 65,
+        "w": 60,
+        "h": 35,
+        "intensity": 0.4,
+        "count": 12
+      }
+    ]
+  },
+  oldcity_submerged_pit: {
+    "image": "assets/images/scenes/oldcity_submerged_pit.jpg",
+    "exits": {
+      "oldcity_south_causeway": {
+        "x": 50,
+        "y": 93,
+        "icon": "↩"
+      },
+      "oldcity_drop_hole": {
+        "x": 58,
+        "y": 45,
+        "icon": "↑"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The stepping stones",
+        "x": 56,
+        "y": 74,
+        "act": "search"
+      },
+      {
+        "label": "The dark water",
+        "x": 76,
+        "y": 86,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "drip",
+        "x": 20,
+        "y": 0,
+        "w": 60,
+        "h": 70,
+        "intensity": 0.35
+      },
+      {
+        "type": "fog",
+        "x": 0,
+        "y": 62,
+        "w": 100,
+        "h": 38,
+        "intensity": 0.22
+      },
+      {
+        "type": "water",
+        "x": 20,
+        "y": 65,
+        "w": 60,
+        "h": 35,
+        "intensity": 0.4,
+        "count": 12
+      }
+    ]
+  },
+  oldcity_spider_ante: {
+    "image": "assets/images/scenes/oldcity_spider_ante.jpg",
+    "exits": {
+      "oldcity_south_causeway": {
+        "x": 50,
+        "y": 93,
+        "icon": "↩"
+      },
+      "oldcity_spider_lair": {
+        "x": 55,
+        "y": 48,
+        "icon": "↑"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The egg-cases",
+        "x": 86,
+        "y": 85,
+        "act": "search"
+      },
+      {
+        "label": "Bones in the web",
+        "x": 58,
+        "y": 22,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "drip",
+        "x": 20,
+        "y": 0,
+        "w": 60,
+        "h": 70,
+        "intensity": 0.35
+      },
+      {
+        "type": "fog",
+        "x": 0,
+        "y": 62,
+        "w": 100,
+        "h": 38,
+        "intensity": 0.22
+      }
+    ]
+  },
+  oldcity_spider_lair: {
+    "image": "assets/images/scenes/oldcity_spider_lair.jpg",
+    "exits": {
+      "oldcity_spider_ante": {
+        "x": 50,
+        "y": 93,
+        "icon": "↩"
+      },
+      "oldcity_gem_cutters": {
+        "x": 42,
+        "y": 55,
+        "icon": "⌂"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The helmet",
+        "x": 12,
+        "y": 38,
+        "act": "search"
+      },
+      {
+        "label": "The wrapped shapes",
+        "x": 76,
+        "y": 45,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "drip",
+        "x": 20,
+        "y": 0,
+        "w": 60,
+        "h": 70,
+        "intensity": 0.35
+      },
+      {
+        "type": "fog",
+        "x": 0,
+        "y": 62,
+        "w": 100,
+        "h": 38,
+        "intensity": 0.22
+      }
+    ]
+  },
+  oldcity_gem_cutters: {
+    "image": "assets/images/scenes/oldcity_gem_cutters.jpg",
+    "exits": {
+      "oldcity_spider_lair": {
+        "x": 84,
+        "y": 40,
+        "icon": "↩"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The cutter's wheels",
+        "x": 73,
+        "y": 50,
+        "act": "search"
+      },
+      {
+        "label": "The trays",
+        "x": 45,
+        "y": 55,
+        "act": "search"
+      },
+      {
+        "label": "The strongbox",
+        "x": 57,
+        "y": 85,
+        "act": "search"
+      },
+      {
+        "label": "Lumps in the plaster",
+        "x": 37,
+        "y": 12,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "glow",
+        "x": 12,
+        "y": 30,
+        "w": 14,
+        "h": 30,
+        "intensity": 0.45
+      },
+      {
+        "type": "dust",
+        "x": 30,
+        "y": 10,
+        "w": 50,
+        "h": 50,
+        "intensity": 0.3,
+        "count": 8
+      }
+    ]
+  },
+  oldcity_drop_hole: {
+    "image": "assets/images/scenes/oldcity_drop_hole.jpg",
+    "exits": {
+      "oldcity_submerged_pit": {
+        "x": 15,
+        "y": 46,
+        "icon": "←"
+      },
+      "oldcity_watch_tower": {
+        "x": 25,
+        "y": 18,
+        "icon": "↑"
+      },
+      "oldcity_ogres_lair": {
+        "x": 87,
+        "y": 40,
+        "icon": "→"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The drop",
+        "x": 55,
+        "y": 66,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "drip",
+        "x": 20,
+        "y": 0,
+        "w": 60,
+        "h": 70,
+        "intensity": 0.35
+      },
+      {
+        "type": "fog",
+        "x": 0,
+        "y": 62,
+        "w": 100,
+        "h": 38,
+        "intensity": 0.22
+      },
+      {
+        "type": "fog",
+        "x": 25,
+        "y": 20,
+        "w": 50,
+        "h": 60,
+        "intensity": 0.3
+      }
+    ]
+  },
+  oldcity_ogres_lair: {
+    "image": "assets/images/scenes/oldcity_ogres_lair.jpg",
+    "exits": {
+      "oldcity_drop_hole": {
+        "x": 10,
+        "y": 12,
+        "icon": "↑"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The cauldron",
+        "x": 42,
+        "y": 30,
+        "act": "search"
+      },
+      {
+        "label": "The shoes",
+        "x": 30,
+        "y": 85,
+        "act": "search"
+      },
+      {
+        "label": "The stake pen",
+        "x": 70,
+        "y": 15,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "glow",
+        "x": 36,
+        "y": 40,
+        "w": 16,
+        "h": 20,
+        "intensity": 0.45
+      },
+      {
+        "type": "smoke",
+        "x": 38,
+        "y": 0,
+        "w": 12,
+        "h": 40,
+        "intensity": 0.35,
+        "wind": 0.2
+      }
+    ]
   }
 };
