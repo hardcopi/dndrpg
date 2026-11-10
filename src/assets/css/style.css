@@ -6184,6 +6184,56 @@ body.bm-pan-ready .battlemap { cursor: grab; }
   perspective-origin: 50% 20%;
 }
 .cbt-map > .bm-stage { inset: var(--sp-4); }
+
+/* The dice tray: a d20 thrown in the board's corner for every
+   attack roll and save, landing on the server's number, the sum under it.
+   (Top-left corner.) The die is the check ceremony's, scaled: 176px at rest, so 0.4 is ~70px. */
+.cbt-dice-tray {
+  position: absolute;
+  /* Top-left: the zoom buttons own the top-right. */
+  top: var(--sp-6);
+  left: var(--sp-6);
+  z-index: 3;
+  display: grid;
+  justify-items: center;
+  gap: var(--sp-2);
+  pointer-events: none;
+  transition: opacity var(--dur-slow) ease;
+}
+.cbt-dice-tray.is-gone { opacity: 0; }
+.cbt-dice-well {
+  position: relative;
+  width: 74px;
+  height: 74px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 45%, var(--bg-panel) 0%, transparent 70%);
+}
+.cbt-dice-well .die-stage {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(0.4);
+}
+.cbt-dice-cap {
+  min-height: 1.3em;
+  padding: 0 var(--sp-4);
+  border-radius: var(--r-md);
+  font-family: var(--mono);
+  font-size: var(--fs-xs);
+  white-space: nowrap;
+  color: var(--text);
+  background: var(--bg-inset);
+}
+.cbt-dice-cap:empty { visibility: hidden; }
+.cbt-dice-tray.is-hit .cbt-dice-cap { color: var(--success-ink); }
+.cbt-dice-tray.is-miss .cbt-dice-cap { color: var(--text-dim); }
+.cbt-dice-tray.is-crit .cbt-dice-cap { color: var(--gold-ink); font-weight: var(--fw-bold); }
+.cbt-dice-tray.is-fumble .cbt-dice-cap { color: var(--danger-ink); }
+.cbt-dice-tray.is-crit .cbt-dice-well { box-shadow: 0 0 18px var(--gold-dim); }
+@media (max-width: 520px) {
+  .cbt-dice-well { width: 56px; height: 56px; }
+  .cbt-dice-well .die-stage { transform: translate(-50%, -50%) scale(0.3); }
+}
 .bm-plane {
   position: relative;
   flex: none;

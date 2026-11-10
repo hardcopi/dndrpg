@@ -2578,7 +2578,7 @@
    * with regexes, so "Name hits Target" had to keep saying exactly that or the
    * hit stopped flashing; nothing here reads a word of prose.
    */
-  async function playEvents(events, log, from) {
+  async function playEvents(events, log, from, opts = {}) {
     // The log is printed as the events play rather than in one batch before
     // them. Each event carries `log_at` — how many lines the server's log held
     // when it happened — so flushing up to that mark lands the line describing
@@ -2601,6 +2601,11 @@
     }
     await loadClips();
     const reduced = G().reducedMotion();
+    // A monster turn of four rats is four throws; quicker dice when the round
+    // is busy, so the tray never becomes the thing the player waits on.
+    const throws = events.filter((e) => (e.type === 'attack' || e.type === 'save') && e.natural > 0).length;
+    const dice = opts.dice !== false;
+    const quick = throws > 3;
 
     for (const ev of events) {
       flushTo(ev.log_at);
@@ -2616,6 +2621,12 @@
             wait = playClip(ev.actor, 'magic');
           } else {
             wait = playClip(ev.actor, 'attack1');
+          }
+          // The d20 first, so the number is on the table before the blow
+          // says what it meant. Magic Missile (natural 0) has no die to show.
+          if (dice && ev.natural > 0) {
+            await trayRoll(ev.natural, `${sumLine(ev.natural, ev.total)} vs AC ${ev.ac}`,
+              ev.crit ? 'is-crit' : ev.natural === 1 ? 'is-fumble' : ev.hit ? 'is-hit' : 'is-miss', quick);
           }
           // A shot crosses the board before it lands. Awaited rather than left
           // to run underneath, so the damage float does not appear over the
@@ -2636,6 +2647,10 @@
           break;
 
         case 'save':
+          if (dice && ev.natural > 0) {
+            await trayRoll(ev.natural, `${String(ev.ability || '').toUpperCase()} ${sumLine(ev.natural, ev.total)} vs DC ${ev.dc}`,
+              ev.passed ? 'is-hit' : 'is-miss', quick);
+          }
           float(ev.actor, `${ev.ability.toUpperCase()} ${ev.total} vs ${ev.dc}`,
             ev.passed ? 'float-save-ok' : 'float-save-bad');
           break;
@@ -2809,7 +2824,8 @@
 
     G().state.combat = finished;
     ui.sheets.clear();
-    await playEvents(st()?.events || []);
+    // The die was just thrown in the check ceremony; no second throw of it.
+    await playEvents(st()?.events || [], undefined, undefined, { dice: false });
     render();
     window.UI.renderPartyRail();
   }
@@ -2916,6 +2932,43 @@
     if (!box || !window.BattleMap || !ev.from || !ev.to) return Promise.resolve();
     const ms = window.BattleMap.shoot(box, ev.from, ev.to, ev.mode === 'auto' ? 'is-spell' : '');
     return new Promise((done) => setTimeout(done, ms || 0));
+  }
+
+  /**
+   * The dice tray: a small d20 in the board's corner, thrown to the number
+   * the server already rolled (Dice3D decides nothing), with the sum under it
+   * once it lands. Decoration — the log says all of it in words — so it is
+   * aria-hidden, and reduced motion skips it entirely rather than showing a
+   * die that does not move.
+   */
+  let trayTimer = null;
+  /** "10+6=16": the face on the die, what was added, and what it came to. */
+  function sumLine(natural, total) {
+    const mod = Number(total) - Number(natural);
+    return mod ? `${natural}${mod > 0 ? '+' : '−'}${Math.abs(mod)}=${total}` : String(total);
+  }
+  async function trayRoll(natural, caption, tone, quick) {
+    const box = $('#cbt-map', root());
+    if (!box || G().reducedMotion() || !window.Dice3D || !window.Dice3D.available()) return;
+    if (!(natural >= 1 && natural <= 20)) return;
+    let tray = box.querySelector('.cbt-dice-tray');
+    if (!tray) {
+      tray = document.createElement('div');
+      tray.setAttribute('aria-hidden', 'true');
+      box.appendChild(tray);
+    }
+    clearTimeout(trayTimer);
+    tray.className = 'cbt-dice-tray is-rolling';
+    tray.innerHTML = '<div class="cbt-dice-well"></div><div class="cbt-dice-cap"></div>';
+    const stage = window.Dice3D.create(20, 1 + Math.floor(Math.random() * 20));
+    tray.firstChild.appendChild(stage);
+    await window.Dice3D.land(stage, natural, { duration: quick ? 420 : 650 });
+    if (!tray.isConnected) return;
+    tray.lastChild.textContent = natural === 20 ? `20! ${caption}` : caption;
+    tray.className = `cbt-dice-tray is-landed ${tone || ''}`;
+    trayTimer = setTimeout(() => tray.classList.add('is-gone'), quick ? 900 : 1400);
+    // A beat to read the sum before the blow lands.
+    await new Promise((r) => setTimeout(r, quick ? 120 : 220));
   }
 
   function shake() {
