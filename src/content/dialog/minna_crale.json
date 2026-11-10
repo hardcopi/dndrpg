@@ -480,6 +480,64 @@
             {
                 "conditions": [
                     {
+                        "quest": "the_costing",
+                        "status": "completed"
+                    },
+                    {
+                        "not": {
+                            "flag": "costing_figure"
+                        }
+                    }
+                ],
+                "text": "\"Mr Corse's figure came down behind Mrs Amsel's count,\" Minna Crale says, \"on the next packet.\" She lays a second, thinner folder on the first. \"He has costed every line she sent. There is no recommendation, which there always is.\" She leaves her hand on it. \"The standing orders put a costing at the head of the agenda. They don't say whether the chairs see it before the day. That has always been the secretary's discretion, and I find I would like to be told.\"",
+                "choices": [
+                    {
+                        "label": "Send it round to all eleven chairs now.",
+                        "effects": [
+                            {
+                                "set_flag": "costing_figure",
+                                "value": "circulated"
+                            },
+                            {
+                                "pressure": 1
+                            },
+                            {
+                                "approval": {
+                                    "aldric": 4,
+                                    "sera": -2
+                                }
+                            }
+                        ],
+                        "next": "figure_circulated"
+                    },
+                    {
+                        "label": "Let it be read first, on the day.",
+                        "effects": [
+                            {
+                                "set_flag": "costing_figure",
+                                "value": "read_first"
+                            },
+                            {
+                                "approval": {
+                                    "sera": 4
+                                }
+                            }
+                        ],
+                        "next": "figure_read_first"
+                    },
+                    {
+                        "label": "What happens when it's read?",
+                        "next": "figure_what_happens"
+                    },
+                    {
+                        "label": "Not yet.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "walked_fate",
                         "equals": "withdrawn"
                     }
@@ -1004,6 +1062,73 @@
         "vote_proxy": [
             {
                 "text": "Minna Crale witnesses the proxy, sands it, and reads the name twice. \"Captain Reed, of Rivermark,\" she says. \"I have never seen a proxy given to the place under discussion.\" She files it with the agenda, not with the correspondence. \"It's in order. She will need to be here, or write.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "figure_what_happens": [
+            {
+                "text": "\"It will be read,\" Minna says, \"at the head of the agenda, before the dividend. Then the meeting will do what it always does with a figure, which is decide whether to accept it.\" She looks at you over the folder. \"Accepting a figure is not the same thing as deciding. You've sat in that room. You know that better than most of the chairs.\"",
+                "choices": [
+                    {
+                        "label": "Send it round to all eleven chairs now.",
+                        "effects": [
+                            {
+                                "set_flag": "costing_figure",
+                                "value": "circulated"
+                            },
+                            {
+                                "pressure": 1
+                            },
+                            {
+                                "approval": {
+                                    "aldric": 4,
+                                    "sera": -2
+                                }
+                            }
+                        ],
+                        "next": "figure_circulated"
+                    },
+                    {
+                        "label": "Let it be read first, on the day.",
+                        "effects": [
+                            {
+                                "set_flag": "costing_figure",
+                                "value": "read_first"
+                            },
+                            {
+                                "approval": {
+                                    "sera": 4
+                                }
+                            }
+                        ],
+                        "next": "figure_read_first"
+                    },
+                    {
+                        "label": "Not yet.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "figure_circulated": [
+            {
+                "text": "\"Eleven fair copies,\" Minna says, and takes out the paper for them there and then. \"They'll go by the morning post to the chairs at their own tables, with a covering line in my hand: for reading before the quarter-day.\" She writes the line once to see it. \"Nobody will be able to say in that room that they are hearing it for the first time.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "figure_read_first": [
+            {
+                "text": "\"Then it stays in the folder until the quarter-day,\" Minna says, \"and I read it aloud at the head of the agenda, from the first line to the last, before anybody has been given the dividend.\" She ties the folder. \"I have a clear reading voice. I've never had a reason to be glad of it before.\"",
                 "choices": [
                     {
                         "label": "Leave.",

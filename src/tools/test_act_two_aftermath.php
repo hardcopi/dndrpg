@@ -500,6 +500,38 @@ try {
     $cs = new CompanionService($db); $cs->meet($p, 'sera'); $cs->recruit($p, 'sera');
     ok('Sera: worse on a canal', str_contains(greet($db, $p, 'sera'), 'canal'));
     ok('Tull will not ask', str_contains(greet($db, $p, 'osgar_tull'), "I'll not ask"));
+    echo "== the house answers the uncounted ==\n";
+    foreach ([['read', 'concern_answering', 'wenna_coyle', 'Place of burial'], ['entered', 'concern_answering', 'wenna_coyle', 'Place of burial'],
+              ['entered', 'concern_answering', 'dorcas_fenn', 'closed to inspection'], ['entered', 'concern_asking', 'dorcas_fenn', 'fee for a correction'],
+              ['read', 'concern_answering', 'ludo_corse', 'unhelpful'], ['entered', 'concern_answering', 'ludo_corse', 'unhelpful'],
+              ['read', 'concern_asking', 'garrow_finch', 'canteen']] as [$fate, $tier, $npc, $needle]) {
+        $fl = $dw + ['uncounted_fate' => $fate, 'concern_noticed' => 1, 'concern_asking' => 1] + ($tier === 'concern_answering' ? ['concern_answering' => 1] : []);
+        $p = party($db, $fl); ended($db, $p, 'walked');
+        for ($k = 0; $k < 3 && stripos(greet($db, $p, $npc), $needle) === false; $k++) {
+            $n = (new DialogEngine($db))->node($p, $npc); talk($db, $p, $npc, [(string) end($n['choices'])['label']]);
+        }
+        ok("$npc answers $fate at $tier", stripos(greet($db, $p, $npc), $needle) !== false, substr(greet($db, $p, $npc), 0, 90));
+        $p = party($db, $dw + ['uncounted_fate' => 'kept', $tier => 1, 'concern_asking' => 1]); ended($db, $p, 'walked');
+        $seen = false;
+        for ($k = 0; $k < 4; $k++) { if (stripos(greet($db, $p, $npc), $needle) !== false) $seen = true; $n = (new DialogEngine($db))->node($p, $npc); talk($db, $p, $npc, [(string) end($n['choices'])['label']]); }
+        ok("but not if the count was kept ($npc)", !$seen);
+    }
+
+    echo "== Corse's figure reaches Minna ==\n";
+    foreach ([['Send it round', 'circulated', 1, 'Three of them', 'sera', 'misprint'], ['read first', 'read_first', 0, 'reading voice', 'sera', 'get used to a number']] as [$pick, $fate, $dp, $corse, $c, $cl]) {
+        $p = party($db, $base + ['clearance_costed' => 1]); ended($db, $p, 'costed');
+        (new Effects($db))->apply($p, [['start_quest' => 'the_costing'], ['quest_stage' => ['quest' => 'the_costing', 'stage' => 'counted_given']]]);
+        $k = 0; while ($k++ < 4 && !str_contains(greet($db, $p, 'minna_crale'), "Mr Corse's figure")) { $n = (new DialogEngine($db))->node($p, 'minna_crale'); talk($db, $p, 'minna_crale', [(string) end($n['choices'])['label']]); }
+        ok("Corse's figure reaches Minna ($fate)", str_contains(greet($db, $p, 'minna_crale'), "Mr Corse's figure"));
+        $before = (int) flag($db, $p, 'concern_pressure');
+        talk($db, $p, 'minna_crale', ['What happens', $pick]);
+        ok("figure $fate", flag($db, $p, 'costing_figure') === $fate && (int) flag($db, $p, 'concern_pressure') === $before + $dp);
+        ok("Minna does not ask twice ($fate)", !str_contains(greet($db, $p, 'minna_crale'), "Mr Corse's figure"));
+        $k = 0; while ($k++ < 4 && !str_contains(greet($db, $p, 'ludo_corse'), $corse)) { $n = (new DialogEngine($db))->node($p, 'ludo_corse'); talk($db, $p, 'ludo_corse', [(string) end($n['choices'])['label']]); }
+        ok("Corse hears ($fate)", str_contains(greet($db, $p, 'ludo_corse'), $corse));
+        $cs = new CompanionService($db); $cs->meet($p, $c); $cs->recruit($p, $c);
+        ok("$c on the figure ($fate)", str_contains(greet($db, $p, $c), $cl), substr(greet($db, $p, $c), 0, 80));
+    }
 } catch (Throwable $e) {
     ok('played without a dead end', false, $e->getMessage());
 } finally {

@@ -10,6 +10,47 @@
                         "status": "active"
                     },
                     {
+                        "flag": "costing_figure",
+                        "equals": "circulated"
+                    }
+                ],
+                "text": "\"Every chair will read it at their own table,\" Aldric says, \"by their own fire, where nobody is watching their face.\" He nods. \"That is where people actually decide things. The room is only where they say so.\"",
+                "once": true,
+                "choices": [
+                    {
+                        "label": "Patch us up.",
+                        "effects": [
+                            {
+                                "heal": 8
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "What order were you in?",
+                        "next": "the_order"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit down a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "aldric",
+                        "status": "active"
+                    },
+                    {
                         "flag": "uncounted_fate",
                         "equals": "entered"
                     }

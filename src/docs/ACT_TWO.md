@@ -242,6 +242,21 @@ end and names nobody.
   Dorcas Fenn as a record, not a finding (pressure +1), or `kept`. Coyle,
   Tull, Dorcas, Corrin Dale, Ilse, Aldric, Sera and Kessa react once. Fessick
   in the undercut still hears nothing.
+- **The house answers the Uncounted.** Only if the count was read or entered
+  (`uncounted_fate`), and only once pressure has crossed a tier:
+  - `concern_asking`: a man from the house reads the Record Office entry and
+    asks about a fee for a correction, and Finch is asked about the canteen
+    reading.
+  - `concern_answering`: Coyle's incident form gains a line, *Place of burial*,
+    "from now on", with nothing said about the fifteen. Dorcas is asked to close
+    the entry and refuses (a record given is open; only the informant may amend
+    it). Corse's letter calls the count "unhelpful", not wrong.
+  - A kept count draws none of this.
+- **Corse's figure reaches Minna.** After `the_costing`, Minna has Corse's
+  costed figure, with no recommendation. She leaves the secretary's discretion to
+  the party: circulate it to the eleven chairs now (`costing_figure` =
+  `circulated`, pressure +1, three chairs write to Corse), or read it first on
+  the day (`read_first`). Sera and Aldric disagree. The vote stays open.
 - **Companions place the mark.** Once Act II is open, Ilse (`mark_seen_stone`),
   Kessa (`mark_seen_paper`) and Sera (`mark_seen_book`) each have one greeting
   that recognises the mark they saw in Act I as the house's mark: the ledge cuts,

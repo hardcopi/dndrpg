@@ -10,6 +10,70 @@
                         "status": "active"
                     },
                     {
+                        "flag": "costing_figure",
+                        "equals": "read_first"
+                    }
+                ],
+                "text": "\"Read first, on the day,\" Sera says, pleased. \"Never give a room a quarter to get used to a number. That's how you make it smaller without anybody changing a line.\"",
+                "once": true,
+                "choices": [
+                    {
+                        "label": "What did Marrow have on you?",
+                        "next": "the_leash_offer"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit down a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "sera",
+                        "status": "active"
+                    },
+                    {
+                        "flag": "costing_figure",
+                        "equals": "circulated"
+                    }
+                ],
+                "text": "\"You sent it round,\" Sera says. \"Eleven tables. Eleven people with a quarter to decide it's a misprint.\" She shrugs. \"Or a quarter to stop pretending it is. I genuinely don't know which, and I'd have bet on the first.\"",
+                "once": true,
+                "choices": [
+                    {
+                        "label": "What did Marrow have on you?",
+                        "next": "the_leash_offer"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit down a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "sera",
+                        "status": "active"
+                    },
+                    {
                         "any": [
                             {
                                 "flag": "uncounted_fate",

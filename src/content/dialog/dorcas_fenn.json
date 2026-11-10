@@ -33,6 +33,44 @@
             {
                 "conditions": [
                     {
+                        "flag": "concern_answering"
+                    },
+                    {
+                        "flag": "uncounted_fate",
+                        "equals": "entered"
+                    }
+                ],
+                "once": true,
+                "text": "Dorcas Fenn has a letter pinned flat under the ledger weight, and she lets you read the top of it. It asks, with every courtesy, that the entry headed The Deepworks be closed to inspection pending correction. \"I have written back,\" she says. \"A record given is open. It can be amended by the informant and by nobody else, and the informant is you.\" She squares the ledger. \"They will have had the right answer. I don't suppose they will like it, and I don't suppose they will write again. They will do something else.\"",
+                "choices": [
+                    {
+                        "label": "Leave it exactly as it is.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "concern_asking"
+                    },
+                    {
+                        "flag": "uncounted_fate",
+                        "equals": "entered"
+                    }
+                ],
+                "once": true,
+                "text": "\"A gentleman from the house asked to read your Deepworks entry,\" Dorcas says. \"He had every right. He read it twice, made no copy, and asked whether there was a fee for a correction.\" She turns a page. \"There isn't. Not for a record given. I told him who the informant was, because he asked, and because it's written at the top.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "uncounted_fate",
                         "equals": "entered"
                     }
