@@ -4015,6 +4015,17 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   color: var(--text-dim);
   font-size: var(--fs-sm);
 }
+/* On a phone the three header blocks cannot share one row: the 150px bust
+   and the buttons left the name a gutter so narrow that it ran under Print
+   and the subtitle broke one word to a line. There the buttons take their own
+   row above, the bust shrinks, and the name gets the rest. */
+@media (max-width: 560px) {
+  .sheet-header { flex-wrap: wrap; gap: var(--sp-12); }
+  .sheet-header-actions { order: -1; flex: 1 0 100%; }
+  .sheet-bust { width: 96px; height: 122px; }
+  .sheet-ident { flex: 1 1 0; min-width: 0; }
+  .sheet-title { overflow-wrap: anywhere; }
+}
 .sheet-combat-row {
   display: flex;
   flex-wrap: wrap;
