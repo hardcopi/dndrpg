@@ -2145,6 +2145,12 @@
 
   function drawShop(npcKey, items, sellables) {
     const gold = G().state.character?.gold ?? 0;
+    // Every button on the shelf says only "Buy", and a screen reader's list of
+    // buttons is five of them with nothing to tell them apart — nor why the
+    // greyed one is greyed, which lived in a tooltip. Name the thing and the price.
+    const buyBlock = (it) => (it.stock !== null && it.stock !== undefined && +it.stock <= 0 ? 'Sold out'
+      : +it.price > gold ? 'Not enough gold' : '');
+    const buyLabel = (it) => `Buy ${it.name} for ${it.price} gp` + (buyBlock(it) ? ` (${buyBlock(it).toLowerCase()})` : '');
     const stockLabel = (it) =>
       it.stock === null || it.stock === undefined ? '' : ` <span class="help-hint">(${esc(it.stock)} left)</span>`;
     const el = showModal(`
@@ -2156,8 +2162,8 @@
             <strong>${esc(it.name)}</strong> — ${esc(it.price)} gp${stockLabel(it)}
             <p>${esc(it.description || it.item_type)}</p>
             <button type="button" class="btn btn-small" data-buy="${esc(it.id)}"
-              ${+it.price > gold ? 'disabled title="Not enough gold"' : ''}
-              ${it.stock !== null && it.stock !== undefined && +it.stock <= 0 ? 'disabled title="Sold out"' : ''}>Buy</button>
+              aria-label="${esc(buyLabel(it))}"
+              ${buyBlock(it) ? `disabled title="${esc(buyBlock(it))}"` : ''}>Buy</button>
           </div>`).join('') : '<p class="help-hint">Nothing on the shelves.</p>'}
         </div>
       </div>
@@ -2166,7 +2172,8 @@
           ${sellables.length ? sellables.map((s) => `<div class="shop-item">
             <strong>${esc(s.name)}</strong>${+s.quantity > 1 ? ` ×${esc(s.quantity)}` : ''}
             — pays ${esc(s.sale_price)} gp
-            <button type="button" class="btn btn-small" data-sell="${esc(s.inventory_id)}">Sell</button>
+            <button type="button" class="btn btn-small" data-sell="${esc(s.inventory_id)}"
+              aria-label="${esc(`Sell ${s.name} for ${s.sale_price} gp`)}">Sell</button>
           </div>`).join('') : '<p class="help-hint">Nothing a merchant would pay for.</p>'}
         </div>
       </div>
