@@ -179,6 +179,58 @@
             {
                 "conditions": [
                     {
+                        "quest": "the_quarterly_meeting",
+                        "status": "completed"
+                    },
+                    {
+                        "not": {
+                            "flag": "quarter_eve"
+                        }
+                    },
+                    {
+                        "any": [
+                            {
+                                "flag": "vote_fate"
+                            },
+                            {
+                                "flag": "minute_fate"
+                            },
+                            {
+                                "flag": "walked_fate"
+                            },
+                            {
+                                "flag": "costing_figure"
+                            },
+                            {
+                                "flag": "uncounted_fate",
+                                "equals": "read"
+                            },
+                            {
+                                "flag": "uncounted_fate",
+                                "equals": "entered"
+                            },
+                            {
+                                "flag": "cartulary_deposited",
+                                "equals": "1"
+                            }
+                        ]
+                    }
+                ],
+                "text": "\"Quarter-day tomorrow,\" Mara says. \"Downriver.\" She sets a cup at your usual table without being asked and does not go back behind the bar. \"Half the town's in tonight and pretending it isn't why. Sit.\"",
+                "choices": [
+                    {
+                        "label": "Sit a while.",
+                        "next": "eve_a"
+                    },
+                    {
+                        "label": "Not tonight.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "miller_fate",
                         "equals": "in"
                     }
@@ -2656,6 +2708,279 @@
                 "choices": [
                     {
                         "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "eve_a": [
+            {
+                "conditions": [
+                    {
+                        "flag": "vote_fate",
+                        "equals": "against"
+                    }
+                ],
+                "text": "Somebody has chalked AGAINST — 1 on the slate under the darts scores, and nobody has rubbed it out. Under it, later, in another hand: OF 12. Under that, in a third: SO FAR.",
+                "choices": [
+                    {
+                        "label": "Go on.",
+                        "next": "eve_b"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "vote_fate",
+                        "equals": "kept"
+                    }
+                ],
+                "text": "Three people in the course of the evening ask you how you'll vote tomorrow. You tell none of them. The third buys you a drink for not telling, which you had not expected, and says he'd have done the same, which you doubt.",
+                "choices": [
+                    {
+                        "label": "Go on.",
+                        "next": "eve_b"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "vote_fate",
+                        "equals": "proxy"
+                    }
+                ],
+                "text": "Reed comes in late, in the good coat, brushed, and does not sit. \"Dawn packet,\" she says, to the room rather than to you, and the room goes quiet the way it goes quiet for the watch. She drinks one cup standing up and leaves, and three people stand when she does without quite knowing why.",
+                "choices": [
+                    {
+                        "label": "Go on.",
+                        "next": "eve_b"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "minute_fate",
+                        "equals": "copied"
+                    }
+                ],
+                "text": "The copy on the door has gone soft at the corners with reading. Somebody has pinned a second sheet under it, and on it are the names of the people who have read it, in eleven hands, with crosses for the ones who can't write. There are more crosses than names. Nobody has made a joke about it.",
+                "choices": [
+                    {
+                        "label": "Go on.",
+                        "next": "eve_b"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "minute_fate",
+                        "equals": "shelved"
+                    }
+                ],
+                "text": "Word has got up the valley that the minute is on a shelf at Brackwater, between the dividend and the drains. Nobody in the room has seen it. Two men at the long table argue for an hour about exactly what it says, and both of them are nearly right.",
+                "choices": [
+                    {
+                        "label": "Go on.",
+                        "next": "eve_b"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "walked_fate",
+                        "equals": "stands"
+                    }
+                ],
+                "text": "Somebody has heard that your name will be read out tomorrow, in pencil, to an empty chair. The table by the window raises a cup to the chair. Then, because it is that kind of table, it raises another to the pencil.",
+                "choices": [
+                    {
+                        "label": "Go on.",
+                        "next": "eve_b"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "walked_fate",
+                        "equals": "reasons"
+                    }
+                ],
+                "text": "Your letter will be read aloud in the room tomorrow. Mara asks you to say it to her first, the way you wrote it. You do. She says nothing for a while, and then she says, \"Good,\" and then, \"They'll hate the bit about the warm room,\" and goes to see to the fire.",
+                "choices": [
+                    {
+                        "label": "Go on.",
+                        "next": "eve_b"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "walked_fate",
+                        "equals": "withdrawn"
+                    }
+                ],
+                "text": "Nobody mentions item seven. It's closed, and the town has the good manners not to ask. The room talks about the weather downriver, which none of them will see.",
+                "choices": [
+                    {
+                        "label": "Go on.",
+                        "next": "eve_b"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "costing_figure",
+                        "equals": "circulated"
+                    }
+                ],
+                "text": "Reed's twelfth copy has made its way to the bar and is lying open at the bread, with a ring from somebody's cup on the roofs. People read a line and pass it on. A carter reads the burying ground twice and puts it down very carefully, as if it were heavier than the rest.",
+                "choices": [
+                    {
+                        "label": "Go on.",
+                        "next": "eve_b"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "costing_figure",
+                        "equals": "read_first"
+                    }
+                ],
+                "text": "Nobody in Rivermark has seen the figure. Hesper Amsel sits in the corner with her measuring book shut on the table, and all evening people glance at it and look away, the way they would at a coffin in the next room.",
+                "choices": [
+                    {
+                        "label": "Go on.",
+                        "next": "eve_b"
+                    }
+                ]
+            },
+            {
+                "text": "The talk is the ordinary talk of an evening before a day that is happening somewhere else: the price of oil, somebody's daughter, the river. Twice it comes round to downriver, and twice somebody steers it off again.",
+                "choices": [
+                    {
+                        "label": "Go on.",
+                        "next": "eve_b"
+                    }
+                ]
+            }
+        ],
+        "eve_b": [
+            {
+                "conditions": [
+                    {
+                        "flag": "uncounted_fate",
+                        "equals": "entered"
+                    }
+                ],
+                "text": "Osgar Tull comes up from the stair, which he never does, and does not drink. He tells the table by the fire that if anybody ever wants to know who he carried up the river, they can ask Mrs Fenn at the Record Office in Brackwater now. Nobody at the table knows what he means. He seems satisfied with that.",
+                "choices": [
+                    {
+                        "label": "Go on.",
+                        "next": "eve_c"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "uncounted_fate",
+                        "equals": "read"
+                    }
+                ],
+                "text": "Osgar Tull comes up from the stair, which he never does, and says to nobody in particular that fifteen names were read out in a canteen this month, by peg. Nobody in the room knows what canteen. He doesn't explain. He sits a while with his hands round a cup he doesn't drink.",
+                "choices": [
+                    {
+                        "label": "Go on.",
+                        "next": "eve_c"
+                    }
+                ]
+            },
+            {
+                "text": "Tull isn't in. Through the window you can see him on the seventh step of the packet stair with the rope across his knees, ready for first light.",
+                "choices": [
+                    {
+                        "label": "Go on.",
+                        "next": "eve_c"
+                    }
+                ]
+            }
+        ],
+        "eve_c": [
+            {
+                "conditions": [
+                    {
+                        "flag": "cartulary_deposited",
+                        "equals": "1"
+                    }
+                ],
+                "text": "A lay brother down from Arden for lamp oil is at the end of the bar, telling anybody who will listen that his house has a book in Brackwater now, on a shelf with its name on, and that anybody may read it. He seems to think this is a great joke. It takes the room a while to understand that it is also good news.",
+                "choices": [
+                    {
+                        "label": "Go on.",
+                        "next": "eve_end"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "quarry_writ_fate",
+                        "equals": "filed"
+                    }
+                ],
+                "text": "Gest Pyle is in, for once, with the satchel on the table. When somebody asks when the quarry stopped being the town's, he tells them the date without looking it up, and the man who asked writes it on the back of his hand.",
+                "choices": [
+                    {
+                        "label": "Go on.",
+                        "next": "eve_end"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "mearing_recut"
+                    }
+                ],
+                "text": "Two drovers at the long table are still arguing about the stone at the four holdings, and which of the stone and the paper is lying. Mara lets them. It is, she says, the best argument she's had in the house in years, because nobody can win it.",
+                "choices": [
+                    {
+                        "label": "Go on.",
+                        "next": "eve_end"
+                    }
+                ]
+            },
+            {
+                "text": "Somebody starts a song and gives it up after a verse. The fire is let down at ten.",
+                "choices": [
+                    {
+                        "label": "Go on.",
+                        "next": "eve_end"
+                    }
+                ]
+            }
+        ],
+        "eve_end": [
+            {
+                "text": "Mara bolts the door at ten and does not throw anybody out. Downriver, eleven chairs and a twelfth will sit tomorrow in a warm room and take up Rivermark under whatever item it has become. Whatever they decide has not been decided yet. For one more night everything this valley has done is written down somewhere, and still its own.",
+                "choices": [
+                    {
+                        "label": "Go up.",
+                        "effects": [
+                            {
+                                "set_flag": "quarter_eve"
+                            }
+                        ],
                         "end": true
                     }
                 ]

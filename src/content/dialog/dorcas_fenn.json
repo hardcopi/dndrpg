@@ -33,6 +33,43 @@
             {
                 "conditions": [
                     {
+                        "flag": "quarter_eve"
+                    },
+                    {
+                        "flag": "cartulary_deposited",
+                        "equals": "1"
+                    }
+                ],
+                "once": true,
+                "text": "\"Somebody came to read the Arden press,\" Dorcas says. \"A clerk, well spoken, who gave no house and didn't have to.\" She squares a ledger that is already square. \"He read only the bounds, the whole decade of them, and asked whether a deposit can be withdrawn by anybody but the depositor's house. It can't. He thanked me and left the volume squared to the edge of the desk, which nobody does. I've had it open since to see what he was looking at. It's only boundaries.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "quarter_eve"
+                    },
+                    {
+                        "flag": "mearing_recut"
+                    }
+                ],
+                "once": true,
+                "text": "\"A widow from the Ford Road came in to read the Disputed shelf about her own hedge,\" Dorcas says, \"and read your chainman's sheet instead. Twice.\" She looks pleased, and then looks as though she would rather not have. \"She said it was the first time she had ever seen anybody write down that they didn't know which was true. She asked for a copy to take home. I made her one.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "mearing_recut"
                     },
                     {

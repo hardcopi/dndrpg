@@ -129,6 +129,44 @@
             {
                 "conditions": [
                     {
+                        "flag": "warren_fed"
+                    }
+                ],
+                "text": "\"Eleven wagons up the warren road in daylight,\" Ballow says, eyes on the road. \"Half the town says you're victualling a siege against us.\" He shifts his weight. \"The other half has stopped saying anything, which is how you know they've thought about it. I counted the wagons. I'd count them again.\"",
+                "choices": [
+                    {
+                        "label": "Quiet posting.",
+                        "end": true
+                    },
+                    {
+                        "label": "Thanks.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "ford_road_open"
+                    }
+                ],
+                "text": "\"West road's taking wagons at night now,\" Ballow says. \"Over the ford, on laid stone, the way my father said it used to.\" He very nearly smiles at the road. \"First time in four years a carter's come through this arch dry to the axle. He asked who'd cleared it. I said somebody with a bad back and no sense.\"",
+                "choices": [
+                    {
+                        "label": "Quiet posting.",
+                        "end": true
+                    },
+                    {
+                        "label": "Thanks.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "watch_knows"
                     }
                 ],

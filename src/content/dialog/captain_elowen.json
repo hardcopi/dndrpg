@@ -170,6 +170,36 @@
             {
                 "conditions": [
                     {
+                        "flag": "fen_road_closing"
+                    }
+                ],
+                "text": "\"The causeway's under at four points,\" Reed says, without looking up from the roll. \"I took that camp clean, with eleven men and two borrowed boats, and I'd do it again.\" She signs something. \"Nobody's spent a penny on the fen road since. The west of the valley is a place you send letters to now, and the letters come back.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "north_ford_open"
+                    }
+                ],
+                "text": "\"I said I wouldn't post the north ford till spring,\" Reed says, \"and I haven't.\" She taps a sheet under the inkwell. \"It's in writing, so if anybody asks me I can show them I said so. Nobody's asked. I find that harder than if they had.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "survey_fate",
                         "equals": "took"
                     }
