@@ -118,7 +118,7 @@ if (!session_character_id()) {
           <button type="button" class="icon-btn" id="btn-text-size" title="Text size: normal" aria-label="Text size: normal">
             <span class="icon-text" aria-hidden="true">Aa</span>
           </button>
-          <button type="button" class="icon-btn" id="btn-fullscreen" title="Fullscreen" aria-label="Toggle fullscreen">
+          <button type="button" class="icon-btn" id="btn-fullscreen" title="Fullscreen" aria-label="Fullscreen" aria-pressed="false">
             <svg aria-hidden="true"><use href="#i-expand"></use></svg>
           </button>
           <a class="icon-btn" href="index.php" title="Main menu" aria-label="Main menu">
