@@ -1987,6 +1987,7 @@
                  data-give-qty></label>` : ''}
         <div class="bag-give-who">
           ${mates.map((p) => `<button type="button" class="btn btn-small" data-give="${esc(p.id)}"
+             aria-label="Give ${esc(it.name)} to ${esc(p.name)}"
              title="Give ${esc(it.name)} to ${esc(p.name)}">${esc(p.name)}</button>`).join('')}
         </div>
       </div>` : ''}`;
