@@ -172,6 +172,16 @@ try {
         'osric_apothecary' => ['costed' => "year's remedies", 'minuted' => 'what went wrong', 'subscribed' => 'fen-root beds', 'walked' => 'other way round'],
         'market_farmer' => ['costed' => 'paying themselves', 'minuted' => 'Lovely hand', 'subscribed' => 'price was poor', 'walked' => "I've looked"],
         'street_minstrel' => ['costed' => 'invoice', 'minuted' => 'exact words kept', 'subscribed' => 'Ballad or comic', 'walked' => 'writes itself'],
+        'market_miner' => ['costed' => 'by the yard', 'minuted' => 'Wages column', 'subscribed' => 'Mind how you dig', 'walked' => 'docked'],
+        'street_drover' => ['costed' => 'by the mile', 'minuted' => "oxen don't read", 'subscribed' => 'not for sale', 'walked' => 'Middle of a furrow'],
+        'street_scholar' => ['costed' => 'what this town is', 'minuted' => 'primary source', 'subscribed' => 'Yes, do', 'walked' => 'records the room'],
+        'street_stranger' => ['costed' => 'already moving', 'minuted' => 'alarming', 'subscribed' => "It's restful", 'walked' => 'most rooms'],
+        'watch_relief' => ['costed' => 'shift held', 'minuted' => 'Our half', 'subscribed' => 'longer shift', 'walked' => 'Walked out halfway'],
+        'watch_square' => ['costed' => 'sold less', 'minuted' => "square's calm", 'subscribed' => 'where to find me', 'walked' => 'what it costs'],
+        'watch_street' => ['costed' => 'good oil', 'minuted' => 'lamp book', 'subscribed' => 'keep these lit', 'walked' => 'shakes his head'],
+        'market_beggar' => ['costed' => 'I come cheap', 'minuted' => 'still waiting', 'subscribed' => 'spare a coin', 'walked' => 'Walk past me'],
+        'market_jester' => ['costed' => 'adding it up', 'minuted' => 'hundred years', 'subscribed' => 'who he works for', 'walked' => 'goat'],
+        'market_sweeper' => ['costed' => 'Put that in', 'minuted' => 'who swept', 'subscribed' => 'your cobbles', 'walked' => 'Horses.'],
         'watch_gate' => ['costed' => 'count roofs', 'minuted' => 'miss it if it stopped', 'subscribed' => 'see your face', 'walked' => 'come up here'],
     ];
     foreach ($more as $who => $lines) {
@@ -182,6 +192,18 @@ try {
             ok("$who says it once", !str_contains(greet($db, $p, $who), $needle));
         }
     }
+    foreach (['costed' => 'one season of water', 'minuted' => 'I never minded', 'subscribed' => 'owner on a boat', 'walked' => 'all there is to do'] as $fate => $needle) {
+        $p = party($db, $base + ['meeting_fate' => $fate, 'room_fate' => 'work']);
+        ok("Corbin, at the kegs, hears $fate", str_contains(greet($db, $p, 'inn_sleeper'), $needle), substr(greet($db, $p, 'inn_sleeper'), 0, 90));
+        talk($db, $p, 'inn_sleeper', ['Leave']);
+        ok('Corbin says it once', !str_contains(greet($db, $p, 'inn_sleeper'), $needle));
+    }
+    foreach (['paid', 'road'] as $gone) {
+        $p = party($db, $base + ['meeting_fate' => 'walked', 'room_fate' => $gone]);
+        ok("Corbin is not there to hear it ($gone)", !str_contains(greet($db, $p, 'inn_sleeper'), 'all there is to do'));
+    }
+    $p = party($db, $base + ['meeting_fate' => 'walked']);
+    ok('Corbin asleep at the table hears nothing', !str_contains(greet($db, $p, 'inn_sleeper'), 'all there is to do'));
     $p = party($db, $base + ['meeting_fate' => 'costed', 'concern_answering' => 1]);
     ok("Pyke's chain is gone once the house is answering", !str_contains(greet($db, $p, 'alder_pyke'), 'same chain'));
 

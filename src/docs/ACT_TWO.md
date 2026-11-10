@@ -144,6 +144,13 @@ Wat. Test: `tools/test_fenmoor_lot.php`.
     - **A market farmer** whose bread was sold forward, **the minstrel** who
       cannot find the next verse, and **the east gate guard** told to write down
       anybody who comes to count roofs.
+    - **Everyone else on the streets** gets one line per outcome: the market miner
+      (costed by the yard all his life; nothing about the quarry, whose ending
+      varies), the drover, the scholar, the stranger, the beggar, the jester, the
+      sweeper, and the three watch posts (relief, square, street).
+    - **Corbin Waite** hears it from the boatmen, but only if he took the work at
+      the Flagon (`room_fate` = `work`). Asleep at the table, or gone, he hears
+      nothing.
   - None of them knows who asked for the Fenmoor crate. That thread stays open.
 - **Companions place the mark.** Once Act II is open, Ilse (`mark_seen_stone`),
   Kessa (`mark_seen_paper`) and Sera (`mark_seen_book`) each have one greeting
