@@ -938,6 +938,34 @@ try {
     ok('keeping it leaves it kept and unentered', flag($db, $p, 'uncounted_entered_late') === null);
     $p = party($db, $base + ['uncounted_fate' => 'kept', 'vote_fate' => 'against']); ended($db, $p, 'subscribed');
     ok('no late entry before the sheet', !$seek($p, 'dorcas_fenn', "today's date"));
+    echo "== the pit, the farm and the warren after the sheet ==\n";
+    $sat = $base + ['vote_fate' => 'against', 'quarter_eve' => 1, 'packet_gone' => 1, 'days_waited' => 1, 'room_sat' => 1];
+    foreach ([['vessa_dann', 'open a book on the minute', [], ['pit_fate' => 'broken']], ['orm_lisser', 'nobody bet', [], ['pit_fate' => 'broken']],
+              ['hesk_dray', 'safe to load', [], ['salt_fate' => 'paid']], ['sten_harrow', 'waiting for paper', [], ['harrow_gone' => 1]],
+              ['nakka', 'opposite of a weapon', [], ['warlord_hall_taken' => 1]]] as [$npc, $nd, $fl, $not]) {
+        $p = party($db, $sat + $fl); ended($db, $p, 'subscribed');
+        ok("after the sheet: $npc", $seek($p, $npc, $nd));
+        $n = (new DialogEngine($db))->node($p, $npc); talk($db, $p, $npc, [(string) end($n['choices'])['label']]);
+        ok("once: $npc", !$seek($p, $npc, $nd));
+        $p = party($db, $sat + $not); ended($db, $p, 'subscribed');
+        ok("not when it can't be: $npc", !$seek($p, $npc, $nd));
+    }
+    echo "== walked out, minuted, once the room has sat ==\n";
+    foreach ([[['walked_fate' => 'stands'], 'walked', 'mara_hearthstone', 'or there isn'], [['walked_fate' => 'withdrawn'], 'walked', 'mara_hearthstone', 'Withdrawn, in their ink'],
+              [['minute_fate' => 'copied'], 'minuted', 'serjeant_ballow', 'like a forecast'], [['minute_fate' => 'shelved'], 'minuted', 'dorcas_fenn', 'shape of the next one']] as [$fl, $fate, $npc, $nd]) {
+        $p = party($db, $sat + $fl); ended($db, $p, $fate);
+        if (isset($fl['walked_fate'])) (new Effects($db))->apply($p, [['start_quest' => 'item_seven_adjourned'], ['quest_stage' => ['quest' => 'item_seven_adjourned', 'stage' => $fl['walked_fate']]]]);
+        ok("$npc after the sheet (" . implode(',', $fl) . ')', $seek($p, $npc, $nd));
+        $p = party($db, $base + $fl + ['vote_fate' => 'against']); ended($db, $p, $fate);
+        ok("not before the sheet (" . implode(',', $fl) . ')', !$seek($p, $npc, $nd));
+    }
+    $p = party($db, $sat + ['walked_fate' => 'reasons']); ended($db, $p, 'walked');
+    $cs = new CompanionService($db); $cs->meet($p, 'kessa'); $cs->recruit($p, 'kessa');
+    ok('Tull has a slip for the letter', $seek($p, 'osgar_tull', 'received, and entered'));
+    talk($db, $p, 'osgar_tull', ['Keep the slip']);
+    ok('the slip is kept', flag($db, $p, 'item_seven_receipt') === '1' && flag($db, $p, 'walked_fate') === 'reasons');
+    ok('Kessa reads the slip', $seek($p, 'kessa', 'Not \'read\''));
+    ok('the slip comes once', !$seek($p, 'osgar_tull', 'received, and entered'));
 } catch (Throwable $e) {
     ok('played without a dead end', false, $e->getMessage());
 } finally {

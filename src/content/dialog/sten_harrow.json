@@ -90,6 +90,31 @@
             {
                 "conditions": [
                     {
+                        "flag": "room_sat"
+                    },
+                    {
+                        "not": {
+                            "flag": "vote_aboard"
+                        }
+                    },
+                    {
+                        "not": {
+                            "flag": "harrow_gone"
+                        }
+                    }
+                ],
+                "text": "\"Nothing's come since the sheet,\" Sten Harrow says. The lamp is on the porch table, lit, though it is not dark yet. \"No letter. Not one.\" He looks at it. \"I keep it lit regardless. A man gets in the habit of waiting for paper, and then the paper stops, and he finds he's still waiting.\"",
+                "choices": [
+                    {
+                        "label": "The road, then.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "harrow_fate",
                         "equals": "held"
                     }

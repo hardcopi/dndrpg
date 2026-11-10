@@ -61,6 +61,30 @@
                         }
                     },
                     {
+                        "flag": "minute_fate",
+                        "equals": "shelved"
+                    }
+                ],
+                "text": "\"Three people this week,\" Dorcas Fenn says, \"have paid a penny a page to read last quarter's minute. The one with your objection in it, between the dividend and the drains.\" She makes a note. \"Mostly nobody does. Since the sheet, somebody does. They're looking for the shape of the next one in the last one.\" She closes the book. \"It isn't there. But that's what it's for.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "room_sat"
+                    },
+                    {
+                        "not": {
+                            "flag": "vote_aboard"
+                        }
+                    },
+                    {
                         "flag": "uncounted_fate",
                         "equals": "kept"
                     },

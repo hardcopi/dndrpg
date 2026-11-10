@@ -475,6 +475,54 @@
             {
                 "conditions": [
                     {
+                        "flag": "room_sat"
+                    },
+                    {
+                        "not": {
+                            "flag": "vote_aboard"
+                        }
+                    },
+                    {
+                        "flag": "walked_fate",
+                        "equals": "stands"
+                    }
+                ],
+                "text": "\"Item seven,\" Mara says, before you've sat down. \"Your name in pencil on their list, and an empty chair.\" She wipes the counter. \"'The business of the day was taken in its order.' Somewhere in that order there's an item seven, or there isn't. The sheet doesn't say.\" She almost smiles. \"If somebody read your name out to a chair, I hope they had to say it twice.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "room_sat"
+                    },
+                    {
+                        "not": {
+                            "flag": "vote_aboard"
+                        }
+                    },
+                    {
+                        "flag": "walked_fate",
+                        "equals": "withdrawn"
+                    }
+                ],
+                "text": "\"You were out of it,\" Mara says. \"Withdrawn, in their ink.\" She sets a cup in front of you without asking. \"Funny thing. You read that sheet the same as the rest of us. Twice. I watched you.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "corse_explained_clearance"
                     }
                 ],
