@@ -133,6 +133,102 @@
                 ]
             },
             {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "costed"
+                    }
+                ],
+                "once": true,
+                "text": "\"There's a costing coming through,\" Petch says, delighted to know something first. \"Carts, roofs, bread. I'm to log the carriers.\" Then she works out what it is a costing of, and stops being delighted.",
+                "choices": [
+                    {
+                        "label": "Why is there a quay this good on a river this small?",
+                        "next": "why_a_quay"
+                    },
+                    {
+                        "label": "Who do you work for?",
+                        "next": "the_house"
+                    },
+                    {
+                        "label": "Nothing. Sorry.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "minuted"
+                    }
+                ],
+                "once": true,
+                "text": "\"A copy came up on the packet for the office file,\" Petch says. \"Your words. I wasn't meant to read it.\" A pause. \"Nobody told me not to.\"",
+                "choices": [
+                    {
+                        "label": "Why is there a quay this good on a river this small?",
+                        "next": "why_a_quay"
+                    },
+                    {
+                        "label": "Who do you work for?",
+                        "next": "the_house"
+                    },
+                    {
+                        "label": "Nothing. Sorry.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "subscribed"
+                    }
+                ],
+                "once": true,
+                "text": "\"You're on the list now,\" Petch says, and turns the book round: a new line under Subscribers, your name, in somebody else's very good hand. \"I've never logged an owner in. Do I curtsey?\" She does not wait for an answer.",
+                "choices": [
+                    {
+                        "label": "Why is there a quay this good on a river this small?",
+                        "next": "why_a_quay"
+                    },
+                    {
+                        "label": "Who do you work for?",
+                        "next": "the_house"
+                    },
+                    {
+                        "label": "Nothing. Sorry.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "walked"
+                    }
+                ],
+                "once": true,
+                "text": "\"Is it true you walked out on Number Nine?\" Petch asks, in a whisper that carries the length of the quay. \"I'm not to have an opinion.\" She very obviously has one.",
+                "choices": [
+                    {
+                        "label": "Why is there a quay this good on a river this small?",
+                        "next": "why_a_quay"
+                    },
+                    {
+                        "label": "Who do you work for?",
+                        "next": "the_house"
+                    },
+                    {
+                        "label": "Nothing. Sorry.",
+                        "end": true
+                    }
+                ]
+            },
+            {
                 "text": "A young woman in a coat that is a size too good for her, going down forty yards of dressed stone quay at a fast walk with a tally board, calling numbers to a crane crew who call them back. She stops when she sees you, entirely pleased to have somebody to explain the quay to. \"Petch,\" she says. \"Landing clerk. You are not carrying anything, so you are either lost or you are here about the crane.\"",
                 "on_enter": [
                     {

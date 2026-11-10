@@ -360,6 +360,86 @@
             {
                 "conditions": [
                     {
+                        "flag": "meeting_fate",
+                        "equals": "costed"
+                    }
+                ],
+                "once": true,
+                "text": "\"The costing is commissioned,\" Minna Crale says. \"Carts, roofs, wages, a year's bread, the burying ground. Mr Sare wrote out the heads himself.\" She files a slip. \"It comes back to the meeting next quarter with a figure, and the figure will be honest. I thought you would want to know that much.\"",
+                "choices": [
+                    {
+                        "label": "Who are the eleven?",
+                        "next": "the_eleven"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "minuted"
+                    }
+                ],
+                "once": true,
+                "text": "\"Your words are in the fair copy,\" Minna Crale says. \"I read them back twice more after you had gone, to be sure of them. They go down to Mrs Fenn at the quarter's end, bound.\" She looks up. \"Nobody has asked me to be sure of anything before. I found I liked it.\"",
+                "choices": [
+                    {
+                        "label": "Who are the eleven?",
+                        "next": "the_eleven"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "subscribed"
+                    }
+                ],
+                "once": true,
+                "text": "Minna Crale slides a card across the desk: your name, the number of the share, and the date of next quarter's call, in her hand. \"Your chair is the one by the window,\" she says. \"It was the widow's. She liked the light.\"",
+                "choices": [
+                    {
+                        "label": "Who are the eleven?",
+                        "next": "the_eleven"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "walked"
+                    }
+                ],
+                "once": true,
+                "text": "\"The meeting minuted your departure,\" Minna Crale says. \"'Left the room during item seven.' Seven words.\" She does not smile. \"I have the item down as concluded. Nobody objected. Nobody was in a position to.\"",
+                "choices": [
+                    {
+                        "label": "Who are the eleven?",
+                        "next": "the_eleven"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "quest": "the_quarterly_meeting",
                         "status": "completed"
                     }

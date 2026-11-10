@@ -152,6 +152,17 @@ Wat. Test: `tools/test_fenmoor_lot.php`.
       the Flagon (`room_fate` = `work`). Asleep at the table, or gone, he hears
       nothing.
   - None of them knows who asked for the Fenmoor crate. That thread stays open.
+- **Brackwater and Greyhythe hear.** One once-only line per `meeting_fate`,
+  after any quest lines and before each NPC's ordinary greeting (for Minna Crale,
+  after the favour and Sera lines and before "It's in the minutes"):
+  - **Minna Crale**: the costing is commissioned and will be honest; she read the
+    objection back twice more; a subscriber's card (the widow's chair by the
+    window); "Left the room during item seven."
+  - **Abel Moss** will see the costing's paper through his window.
+  - **Dorcas Fenn** keeps a shelf space for the bound minute, and owners still pay
+    a penny a page.
+  - **Osgar Tull** will carry the costing up, and has never had an owner aboard.
+  - **Gillian Petch** at the Greyhythe landing logs a subscriber in.
 - **Companions place the mark.** Once Act II is open, Ilse (`mark_seen_stone`),
   Kessa (`mark_seen_paper`) and Sera (`mark_seen_book`) each have one greeting
   that recognises the mark they saw in Act I as the house's mark: the ledge cuts,
