@@ -367,7 +367,12 @@
                 "choices": [
                     {
                         "label": "Another time.",
-                        "end": true
+                        "end": true,
+                        "effects": [
+                            {
+                                "set_flag": "days_waited"
+                            }
+                        ]
                     }
                 ],
                 "once": true

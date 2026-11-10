@@ -216,6 +216,21 @@
                 ]
             },
             {
+                "conditions": [
+                    {
+                        "flag": "fen_water_rising"
+                    }
+                ],
+                "text": "\"Water's no lower on the fen side of the bank,\" Tull Barrow says. \"I walked it this morning. Still on the wrong side.\" He looks over the fold. \"I've stopped asking why. I've moved the beasts up the field a hand's width a week, and I watch the beasts, because they'll know before I do.\"",
+                "choices": [
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
                 "text": "Three fires along the fold wall and none of them talking to each other. The man at the third has four dogs, sixty beasts, and an ash staff across his knees with an iron ferrule on it that has been used for something other than turning cattle.\n\n\"Fold's common,\" he says. \"Fire's mine.\"",
                 "on_enter": [
                     {

@@ -29,6 +29,9 @@
                     {
                         "quest": "aldric_absolution",
                         "status": "active"
+                    },
+                    {
+                        "flag": "room_sat"
                     }
                 ]
             }
