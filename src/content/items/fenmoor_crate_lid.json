@@ -1,0 +1,16 @@
+{
+    "item_key": "fenmoor_crate_lid",
+    "name": "A Crate Lid, Lot 41",
+    "item_type": "misc",
+    "rarity": "common",
+    "weight": 2,
+    "value_gp": 0,
+    "icon": "misc",
+    "description": "A crate lid of planed pine, prised off carefully from the top rather than smashed. Stencilled on the inside face in a sale-room hand: GREYHYTHE. LOT 41. Under the stencil, in a carter's chalk that has nearly rubbed away: 1. as asked. pd. There is no name on it anywhere.",
+    "properties": {
+        "quest_item": true
+    },
+    "place": {
+        "location": "warren_stores"
+    }
+}

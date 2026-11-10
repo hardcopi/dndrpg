@@ -74,6 +74,29 @@
             {
                 "conditions": [
                     {
+                        "has_item": "fenmoor_crate_lid"
+                    },
+                    {
+                        "flag": "armour_chain_ended"
+                    },
+                    {
+                        "not": {
+                            "flag": "warlord_hall_taken"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "Nakka turns the lid over in her big scarred hands and looks at the stencil for a long time, though she cannot read it. \"That came to the door of the stores,\" she says. \"A man with a cart, in the week we came up out of the deep. He said: yours, as asked.\" She hands it back. \"I asked him who asked. He said he was paid not to wonder. I believed him. He had the face for it.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "plate_fate",
                         "equals": "given"
                     }

@@ -34,6 +34,24 @@
             {
                 "conditions": [
                     {
+                        "has_item": "fenmoor_crate_lid"
+                    },
+                    {
+                        "flag": "armour_chain_ended"
+                    }
+                ],
+                "once": true,
+                "text": "Coll Darrow looks at the lid without lifting his feet out of the bucket. \"Four crates at the Weir,\" he says. \"Eleven gold, and I was glad of it. That's one of the four.\" He looks at the river. \"I sold it to a carter who was going east. That's the whole of what I know, and it was the whole of what I wanted to.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "any": [
                             {
                                 "quest": "the_fenmoor_lot",

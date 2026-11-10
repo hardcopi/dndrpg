@@ -91,6 +91,15 @@ read the endings back. Still open on purpose: who asked. Nakka was "told to take
 it" by somebody who was not a goblin; that was Wat, and nobody knows who asked
 Wat. Test: `tools/test_fenmoor_lot.php`.
 
+**The crate lid** (the thread moves on and stays open). Searching the warren
+stores turns up `fenmoor_crate_lid`: planed pine, *GREYHYTHE. LOT 41* stencilled
+inside, and Abe Treen's chalk, *1. as asked. pd.* Once `armour_chain_ended` is
+set, Dorcas Fenn (who pencils *lid seen* in the margin of the return: "the chain
+is whole… it has a hole in the middle where a name would go"), Hester Brindle,
+Lise Treen (who knows Abe's hooked one), Coll Darrow, Nakka ("he said he was
+paid not to wonder") and Ilse each react once. The wood proves the chain end to
+end and names nobody.
+
 ## After the meeting
 
 - **Companions read `meeting_fate`.** Sera, Kessa, Aldric and Ilse each have a

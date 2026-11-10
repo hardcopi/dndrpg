@@ -354,6 +354,21 @@ try {
         ok("Minna on $fate", str_contains(greet($db, $p, 'minna_crale'), $needle), substr(greet($db, $p, 'minna_crale'), 0, 90));
     }
 
+    echo "== the crate lid ==\n";
+    $lid = (int) $db->query("SELECT COUNT(*) FROM location_items li JOIN items i ON i.id = li.item_id JOIN locations l ON l.id = li.location_id WHERE i.item_key = 'fenmoor_crate_lid' AND l.location_key = 'warren_stores'")->fetchColumn();
+    ok('the lid lies in the warren stores, to be found by searching', $lid === 1);
+    $p = party($db, $base + ['armour_chain_ended' => 1, 'armour_chain_fate' => 'left']);
+    ok('nobody mentions a lid you have not found', !str_contains(greet($db, $p, 'lise_fenner'), "That's Abe's"));
+    (new Effects($db))->apply($p, [['give_item' => 'fenmoor_crate_lid']]);
+    foreach (['dorcas_fenn' => 'lid seen', 'hester_brindle' => "sale-room's stencil", 'lise_fenner' => "That's Abe's", 'coll_darrow' => 'one of the four', 'nakka' => 'paid not to wonder'] as $who => $needle) {
+        ok("$who knows the lid", str_contains(greet($db, $p, $who), $needle), substr(greet($db, $p, $who), 0, 90));
+        talk($db, $p, $who, ['Leave']);
+        ok("$who says it once", !str_contains(greet($db, $p, $who), $needle));
+    }
+    $p = party($db, $base);
+    (new Effects($db))->apply($p, [['give_item' => 'fenmoor_crate_lid']]);
+    ok('before the Fenmoor chain the lid is just wood to Dorcas', !str_contains(greet($db, $p, 'dorcas_fenn'), 'lid seen'));
+
     echo "== companions place the mark ==\n";
     $marks = [
         ['ilse', ['mark_seen_stone' => 1], 'only ever a surveyor'],
