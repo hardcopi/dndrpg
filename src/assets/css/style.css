@@ -4227,7 +4227,13 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   cursor: default;
 }
 .bag-slot:not(.is-empty):hover,
-.bag-slot:not(.is-empty):focus-visible { border-color: var(--gold-dim); outline: none; }
+.bag-slot:not(.is-empty):focus-visible {
+  /* --gold-dim is a mark at 2.5:1 and the only change on focus, which is
+     hard to find on a dark tile; the gold ring is the one the rest uses. */
+  border-color: var(--gold);
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
 .bag-slot.is-picked {
   border-color: var(--gold);
   box-shadow: var(--sh-ring-on);
