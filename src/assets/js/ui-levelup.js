@@ -370,6 +370,7 @@
                 <span class="levelup-ability-score" data-base="${score}">${score}</span>
                 <span class="levelup-ability-spent" data-spent="0"></span>
                 <button type="button" class="btn btn-small" data-bump="${key}"
+                        aria-label="Raise ${label}"
                         ${capped ? 'disabled' : ''}>+</button>
               </div>`;
           }).join('')}

@@ -2265,6 +2265,7 @@
           if (left(l) > 0) {
             chips.push(`<button type="button" class="spell-upcast-btn" data-spell="${esc(sp.id)}"
               data-cast-level="${l}" ${area ? `data-area="${esc(JSON.stringify(area))}"` : ''}
+              aria-label="${esc(`${sp.name} at level ${l} · ${left(l)} left`)}"
               >at level ${l} · ${esc(left(l))} left</button>`);
           }
         }
