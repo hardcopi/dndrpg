@@ -206,6 +206,11 @@
                         "not": {
                             "flag": "vote_aboard"
                         }
+                    },
+                    {
+                        "not": {
+                            "flag": "room_sat"
+                        }
                     }
                 ],
                 "text": "Ashe has ruled a fresh page and written nothing on it. \"For whatever comes back up,\" he says. \"I don't know what heading to give it, so I have not given it one.\" He dips the pen, looks at the page, and puts the pen down again, which you have never seen him do.",

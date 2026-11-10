@@ -24,6 +24,12 @@
                             "flag": "office_fate",
                             "equals": "took"
                         }
+                    },
+                    {
+                        "not": {
+                            "quest": "the_costing",
+                            "status": "completed"
+                        }
                     }
                 ],
                 "once": true,

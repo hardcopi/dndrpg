@@ -196,6 +196,11 @@
                     {
                         "flag": "vote_fate",
                         "equals": "proxy"
+                    },
+                    {
+                        "not": {
+                            "flag": "room_sat"
+                        }
                     }
                 ],
                 "text": "\"Captain's downriver,\" Ballow says. \"I've the watch house, and I'm not sitting in her chair.\" He stands a little straighter at the arch than it needs. \"Nine days. I've done longer. I've never done it waiting for paper.\"",
@@ -235,6 +240,11 @@
                         "not": {
                             "flag": "vote_fate",
                             "equals": "proxy"
+                        }
+                    },
+                    {
+                        "not": {
+                            "flag": "room_sat"
                         }
                     }
                 ],
