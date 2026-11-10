@@ -232,6 +232,26 @@
             {
                 "conditions": [
                     {
+                        "flag": "room_sat"
+                    },
+                    {
+                        "not": {
+                            "flag": "vote_aboard"
+                        }
+                    }
+                ],
+                "text": "\"Sheet says they sat,\" Ackley says, on the bench, facing north. \"I sat here the whole of that morning, near enough. Somebody ought to have been facing the quarry while they were sat in theirs.\" He moves along six inches. \"I don't know what they said. I know what the quarry said. It said nothing, all morning. It's good at that.\"",
+                "choices": [
+                    {
+                        "label": "Nothing. Good day.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "met_ackley"
                     }
                 ],

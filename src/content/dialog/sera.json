@@ -10,6 +10,42 @@
                         "status": "active"
                     },
                     {
+                        "flag": "vote_aboard"
+                    },
+                    {
+                        "not": {
+                            "flag": "room_sat"
+                        }
+                    }
+                ],
+                "text": "\"Strange,\" Sera says, looking up House Street at the brass plates. \"All those figures I've had my hands on, and this is where they were going. A street with boot-scrapers.\" She shakes her head. \"I won't tell you what to do in the morning. I want that on the record, since we're in the town that keeps one.\"",
+                "once": true,
+                "choices": [
+                    {
+                        "label": "What did Marrow have on you?",
+                        "next": "the_leash_offer"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit down a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "sera",
+                        "status": "active"
+                    },
+                    {
                         "flag": "room_sat"
                     },
                     {

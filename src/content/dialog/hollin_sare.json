@@ -6,6 +6,25 @@
             {
                 "conditions": [
                     {
+                        "flag": "vote_aboard"
+                    },
+                    {
+                        "not": {
+                            "flag": "room_sat"
+                        }
+                    }
+                ],
+                "text": "The long room is empty except for Hollin Sare, who is going round the table checking the carafes himself, which is apparently what the chair does the night before. The fire is laid and not lit. The chairs are squared to the table.\n\nHe gives you a small, courteous nod. \"In the morning,\" he says. \"Yours is the fourth on the left; Mrs Crale has put a slip on it.\" He sets a carafe straight. \"I shan't ask you anything tonight. Nobody should be asked anything the night before. It is the one courtesy this room has always kept.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "quest": "the_quarterly_meeting",
                         "stage": "the_meeting"
                     },

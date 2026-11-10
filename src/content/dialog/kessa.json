@@ -10,6 +10,42 @@
                         "status": "active"
                     },
                     {
+                        "flag": "vote_aboard"
+                    },
+                    {
+                        "not": {
+                            "flag": "room_sat"
+                        }
+                    }
+                ],
+                "text": "\"I've been in the Fortieth an hour,\" Kessa says, \"and three clerks have bought me a drink and asked me how you'll vote.\" She grins. \"I told all three something different. They're very confused. You're welcome.\"",
+                "once": true,
+                "choices": [
+                    {
+                        "label": "Tell me about the debt.",
+                        "next": "the_debt_talk"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit down a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "kessa",
+                        "status": "active"
+                    },
+                    {
                         "flag": "item_seven_receipt"
                     }
                 ],

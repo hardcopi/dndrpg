@@ -10,6 +10,51 @@
                         "status": "active"
                     },
                     {
+                        "flag": "vote_aboard"
+                    },
+                    {
+                        "not": {
+                            "flag": "room_sat"
+                        }
+                    }
+                ],
+                "text": "\"The night before chapter,\" Aldric says, \"we were told to sleep, and none of us did.\" He looks at the lights along the wharf. \"I expect it is the same here. Try anyway. Whatever you mean to do, do it rested.\"",
+                "once": true,
+                "choices": [
+                    {
+                        "label": "Patch us up.",
+                        "effects": [
+                            {
+                                "heal": 8
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "What order were you in?",
+                        "next": "the_order"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit down a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "aldric",
+                        "status": "active"
+                    },
+                    {
                         "flag": "corse_said_for"
                     }
                 ],

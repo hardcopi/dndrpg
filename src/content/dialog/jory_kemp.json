@@ -6,6 +6,26 @@
             {
                 "conditions": [
                     {
+                        "flag": "vote_aboard"
+                    },
+                    {
+                        "not": {
+                            "flag": "room_sat"
+                        }
+                    }
+                ],
+                "text": "\"Off Tull's boat the night before the quarter-day,\" Jory Kemp says, \"with a chair kept for you up the street.\" He pulls you something and does not chalk it. \"I'll give you the room over the tide board. And a word: drink at the lightermen's end tonight. The clerks' end will want to know how you'll vote, and they'll be very pleasant about asking. The lightermen won't ask. They don't care, and tonight that's a kindness.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "meeting_fate",
                         "equals": "costed"
                     }

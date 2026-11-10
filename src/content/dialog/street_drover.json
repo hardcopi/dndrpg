@@ -85,6 +85,26 @@
             {
                 "conditions": [
                     {
+                        "flag": "room_sat"
+                    },
+                    {
+                        "not": {
+                            "flag": "vote_aboard"
+                        }
+                    }
+                ],
+                "text": "\"Holders on the weighing floor asked the clerk if the sheet settles the common,\" the drover says. \"Clerk said a sheet settles nothing.\" He chews the straw. \"First true thing said on that floor in a month. They wrote it on the board, under the weights.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "commons_question_raised"
                     }
                 ],

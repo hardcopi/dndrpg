@@ -233,6 +233,32 @@
             {
                 "conditions": [
                     {
+                        "flag": "room_sat"
+                    },
+                    {
+                        "not": {
+                            "flag": "vote_aboard"
+                        }
+                    },
+                    {
+                        "not": {
+                            "flag": "drove_fate",
+                            "equals": "out"
+                        }
+                    }
+                ],
+                "text": "\"Beasts don't read,\" Tull Barrow says, over the fold. \"They've had the same week as last week.\" He turns the ash staff in his hands. \"I envy them it. Every man at these three fires has had the sheet read to him twice and argued it three ways. The dogs are the only ones here with any sense.\"",
+                "choices": [
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "met_barrow"
                     }
                 ],
