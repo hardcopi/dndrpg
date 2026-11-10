@@ -447,6 +447,11 @@
 
     if (ui.aiming && (!actor || actor.cid !== ui.aiming.actor || s.status !== 'active')) ui.aiming = null;
 
+    // Every render rebuilds the board and the bar, so whatever had keyboard
+    // focus is thrown away with it. Note what it was, and hand focus back to
+    // its replacement once the new one is drawn.
+    const back = focusKey(document.activeElement, el) || (isLost() ? ui.lostFocus : null);
+
     renderTop(s, actor);
 
     el.innerHTML = `
@@ -480,6 +485,7 @@
     bindMap(s, actor);
     renderInspector();
     renderBar(s, actor);
+    restoreFocus(back, el);
 
     // The spell list, the slots and the potions belong to the acting character
     // and none of them are in combat state, so the sheet is fetched the first
@@ -489,6 +495,55 @@
     if (actor && actor.type === 'pc' && !ui.sheets.has(Number(actor.character_id))) {
       ensureSheet(actor).then(() => render());
     }
+  }
+
+  /** Focus fell off the page: nothing, or an element a render removed. */
+  function isLost() {
+    const a = document.activeElement;
+    return !a || a === document.body || !a.isConnected;
+  }
+
+  /**
+   * A selector for the focused control that survives a redraw: the card or
+   * token by combatant, the square by cell, the slot by verb. Null for
+   * anything outside the fight, so a render never pulls focus off a modal.
+   */
+  function focusKey(a, el) {
+    if (!a || !el || !el.contains(a) || !a.closest) return null;
+    const pick = (sel, attr) => {
+      const hit = a.closest(sel);
+      return hit ? `${sel.split('[')[0]}[${attr}="${cssEscape(hit.getAttribute(attr))}"]` : null;
+    };
+    const slot = a.closest('#cbt-bar [data-act]');
+    if (slot) {
+      const extra = slot.getAttribute('data-extra');
+      return `#cbt-bar [data-act="${cssEscape(slot.dataset.act)}"]`
+        + (extra ? `[data-extra="${cssEscape(extra)}"]` : '');
+    }
+    return pick('.cbt-card[data-cid]', 'data-cid')
+      || pick('.bm-token[data-cid]', 'data-cid')
+      || pick('[data-bm-cell]', 'data-bm-cell')
+      || pick('[data-zoom]', 'data-zoom')
+      || (a.matches('[data-manual]') ? '[data-manual]' : null);
+  }
+
+  /**
+   * Put focus back after a render. Only when it was lost — a render never
+   * takes focus from something the player moved to. A slot that is now closed
+   * (Attack, once the attack is spent) hands focus to the first open slot;
+   * a bar with no slots at all (somebody else's turn) keeps the wish for the
+   * next render that has them.
+   */
+  function restoreFocus(key, el) {
+    ui.lostFocus = null;
+    if (!key || !isLost()) return;
+    const open = (n) => n && !n.disabled && n.getClientRects().length;
+    let target = el.querySelector(key);
+    if (!open(target) && key.startsWith('#cbt-bar')) {
+      target = [...el.querySelectorAll('#cbt-bar [data-act]')].find(open) || null;
+    }
+    if (open(target)) target.focus({ preventScroll: true });
+    else ui.lostFocus = key;
   }
 
   /**
