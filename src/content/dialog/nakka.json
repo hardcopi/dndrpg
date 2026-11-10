@@ -74,6 +74,31 @@
             {
                 "conditions": [
                     {
+                        "flag": "room_sat"
+                    },
+                    {
+                        "not": {
+                            "flag": "vote_aboard"
+                        }
+                    },
+                    {
+                        "not": {
+                            "flag": "warlord_hall_taken"
+                        }
+                    }
+                ],
+                "text": "\"My scouts brought me the paper from the river,\" Nakka says, \"the one that says men sat in a room. They carried it up the hill as if it were a weapon.\" She turns it over in her big scarred hands; somebody has copied it badly. \"I told them it is the opposite of a weapon. It is a thing that has not happened yet, written down by people who know how it ended.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "has_item": "fenmoor_crate_lid"
                     },
                     {

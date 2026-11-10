@@ -26,6 +26,35 @@
             {
                 "conditions": [
                     {
+                        "flag": "room_sat"
+                    },
+                    {
+                        "not": {
+                            "flag": "vote_aboard"
+                        }
+                    },
+                    {
+                        "flag": "walked_fate",
+                        "equals": "reasons"
+                    }
+                ],
+                "text": "Tull holds out a slip of paper between two fingers. \"Came up with the sheet,\" he says. \"Moss said it was for you and to give it into your hand.\"\n\nIt is in Minna Crale's hand. *Correspondence under item seven: received, and entered.* Nothing else; not read, not unread, not answered.\n\n\"Weighs the same as the other one,\" Tull says.",
+                "choices": [
+                    {
+                        "label": "Keep the slip.",
+                        "effects": [
+                            {
+                                "set_flag": "item_seven_receipt"
+                            }
+                        ],
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "packet_gone"
                     },
                     {

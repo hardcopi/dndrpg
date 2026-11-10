@@ -10,6 +10,37 @@
                         "status": "active"
                     },
                     {
+                        "flag": "item_seven_receipt"
+                    }
+                ],
+                "text": "Kessa reads the slip over your shoulder. \"'Received, and entered,'\" she says. \"Not 'read'. Not 'ignored'. Received.\" She hands it back, delighted. \"That woman could write a shopping list nobody could ever hold against her.\"",
+                "once": true,
+                "choices": [
+                    {
+                        "label": "Tell me about the debt.",
+                        "next": "the_debt_talk"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit down a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "kessa",
+                        "status": "active"
+                    },
+                    {
                         "flag": "corse_declined_one"
                     }
                 ],

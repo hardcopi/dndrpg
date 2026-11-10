@@ -264,6 +264,30 @@
             {
                 "conditions": [
                     {
+                        "flag": "room_sat"
+                    },
+                    {
+                        "not": {
+                            "flag": "vote_aboard"
+                        }
+                    },
+                    {
+                        "flag": "minute_fate",
+                        "equals": "copied"
+                    }
+                ],
+                "text": "\"Pinned the new sheet up beside your copy of the last minute,\" Ballow says. \"Seemed the place for it.\" He shifts at the arch. \"Folk read the old one now, to guess the shape of the new one. 'The meeting noted the objection. No resolution was moved.' They say it to each other like a forecast.\" He shakes his head. \"It's last quarter's. I've told them. They read it anyway.\"",
+                "choices": [
+                    {
+                        "label": "Quiet posting.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "warren_nests_known_to_watch"
                     }
                 ],

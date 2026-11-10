@@ -70,6 +70,32 @@
             {
                 "conditions": [
                     {
+                        "flag": "room_sat"
+                    },
+                    {
+                        "not": {
+                            "flag": "vote_aboard"
+                        }
+                    },
+                    {
+                        "not": {
+                            "flag": "pit_fate",
+                            "equals": "broken"
+                        }
+                    }
+                ],
+                "text": "\"Vessa read the sheet out on the rim between bouts,\" Orm says. \"Four lines.\" He turns the whetstone over. \"Nobody bet on it. Forty people, and nobody bet.\" He thinks about that. \"First thing I've ever heard read out down here that nobody put money on. Felt like church.\"",
+                "choices": [
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "orm_free"
                     }
                 ],

@@ -70,6 +70,32 @@
             {
                 "conditions": [
                     {
+                        "flag": "room_sat"
+                    },
+                    {
+                        "not": {
+                            "flag": "vote_aboard"
+                        }
+                    },
+                    {
+                        "not": {
+                            "flag": "pit_fate",
+                            "equals": "broken"
+                        }
+                    }
+                ],
+                "text": "\"Man came down the ladder wanting me to open a book on the minute,\" Vessa says, chalking. \"Which way it went. Odds on.\" She does not look up. \"I wouldn't hold it. I hold bouts. A bout ends on the sand, in front of everybody, and I chalk it. That thing's ended already, somewhere I can't see, and nobody here knows how. You don't take money on that. That's not a bet. That's picking pockets in the dark.\"",
+                "choices": [
+                    {
+                        "label": "I'll watch.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "pit_fate",
                         "equals": "belt"
                     }

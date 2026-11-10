@@ -94,6 +94,32 @@
             {
                 "conditions": [
                     {
+                        "flag": "room_sat"
+                    },
+                    {
+                        "not": {
+                            "flag": "vote_aboard"
+                        }
+                    },
+                    {
+                        "not": {
+                            "flag": "salt_fate",
+                            "equals": "paid"
+                        }
+                    }
+                ],
+                "text": "\"Carters keep asking me if it's safe to load for after the quarter,\" Hesk says, greasing by feel. \"Since the sheet.\" He finds the hub and works the grease in. \"I tell them the ground's public and the road's the road, and a sheet that says a room sat hasn't moved either. They load. Somebody has to carry the next thing, whatever it turns out to be.\"",
+                "choices": [
+                    {
+                        "label": "Fair enough.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "salt_fate",
                         "equals": "opened"
                     }
