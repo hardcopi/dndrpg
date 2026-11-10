@@ -208,7 +208,8 @@ window.RIVERMARK_SCENES = {
     npcs: {
       pol_reddick: {x: 88, y: 74},
       hollis_marrow: {x: 58, y: 82},
-      alder_pyke: {x: 22, y: 76}
+      alder_pyke: {x: 22, y: 76},
+      hesper_amsel: {x: 47, y: 62}
     },
     objects: [
       {label: "Beam scale", x: 75, y: 55, act: "search"},
