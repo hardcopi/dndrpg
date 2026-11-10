@@ -785,6 +785,8 @@
     paintedSceneNode.classList.toggle('map-open', paintedMapOpen);
     const map = paintedSceneNode.querySelector('.paint-map');
     if (map) map.classList.toggle('hidden', !paintedMapOpen);
+    // The chip's word does not change, so say whether the chart is out.
+    paintedSceneNode.querySelector('[data-scene-map]')?.setAttribute('aria-expanded', String(paintedMapOpen));
     if (paintedMapOpen && !paintedMapWired) { mountSceneMap(); paintedMapWired = true; }
   }
 

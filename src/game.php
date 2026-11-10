@@ -183,9 +183,9 @@ if (!session_character_id()) {
             <h2 class="rail-pane-head">Log</h2>
             <div class="hud-log-head">
               <div class="log-filters" role="group" aria-label="Filter the log">
-                <button type="button" class="chip on" data-filter="all">All</button>
-                <button type="button" class="chip" data-filter="combat">Combat</button>
-                <button type="button" class="chip" data-filter="story">Story</button>
+                <button type="button" class="chip on" data-filter="all" aria-pressed="true">All</button>
+                <button type="button" class="chip" data-filter="combat" aria-pressed="false">Combat</button>
+                <button type="button" class="chip" data-filter="story" aria-pressed="false">Story</button>
               </div>
               <button type="button" class="icon-btn icon-btn-sm" id="btn-log-collapse"
                       title="Collapse log" aria-label="Collapse log" aria-expanded="true">
