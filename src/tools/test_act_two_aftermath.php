@@ -139,6 +139,11 @@ try {
         'mott_wenn'     => ['costed' => 'Carried a letter up', 'minuted' => 'He won', 'subscribed' => 'one name', 'walked' => 'different on Tuesday'],
         'street_almoner' => ['costed' => 'into pencil', 'minuted' => 'fattest book', 'subscribed' => 'which page', 'walked' => 'room where they decide'],
         'pol_reddick'   => ['costed' => 'thirteen weeks', 'minuted' => 'weigh against it later', 'subscribed' => "It's the job", 'walked' => "couldn't weigh"],
+        'brenna_smith'  => ['costed' => 'costing of removal for a forge', 'minuted' => 'smith win', 'subscribed' => 'buy streets', 'walked' => 'anywhere I owed'],
+        'serjeant_ballow' => ['costed' => 'beds on a cart', 'minuted' => 'very glad it', 'subscribed' => 'gets to the west gate', 'walked' => 'walk out of something'],
+        'tobin'         => ['costed' => 'second letter', 'minuted' => "I've been the somebody", 'subscribed' => 'Shareholders', 'walked' => 'four hundred occasions'],
+        'sib_marrell'   => ['costed' => 'drains the same', 'minuted' => 'one afternoon', 'subscribed' => 'send you the bill', 'walked' => 'open the windows'],
+        'street_seer'   => ['costed' => 'coming up the river', 'minuted' => 'keep it in the deck', 'subscribed' => "didn't see that one", 'walked' => 'pay me for it now'],
         'market_baker'  => ['costed' => 'one word of a song', 'minuted' => 'argues anyway', 'subscribed' => 'full price', 'walked' => 'regretted the walking'],
     ];
     foreach ($heard as $npc => $lines) {
@@ -152,6 +157,8 @@ try {
     }
     $p = party($db, $base + ['quarry_fate' => 'pact']); ended($db, $p, 'subscribed');
     ok('Marrow in the lockup is not on the floor shaking hands', !str_contains(greet($db, $p, 'hollis_marrow'), 'same trade now'));
+    $p = party($db, $base + ['town_standing' => 'fallen']); ended($db, $p, 'walked');
+    ok('Tobin at the milestone with his panniers has no shop talk', !str_contains(greet($db, $p, 'tobin'), 'four hundred occasions'));
     $p = party($db, $base); ended($db, $p, 'walked');
     (new Effects($db))->apply($p, [['start_quest' => 'a_short_measure']]);
     ok('Nell with a short measure open talks about the flour, not the meeting', !str_contains(greet($db, $p, 'market_baker'), 'regretted the walking'));

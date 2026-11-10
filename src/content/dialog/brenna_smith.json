@@ -6,6 +6,162 @@
             {
                 "conditions": [
                     {
+                        "flag": "meeting_fate",
+                        "equals": "costed"
+                    },
+                    {
+                        "not": {
+                            "quest": "the_anvil_debt",
+                            "status": "active"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"Held,\" Brenna says, turning a bar in the fire. \"Ashe's word for the Row and the Steps. The Anvil's on neither.\" The hammer falls twice. \"Somebody will want a costing of removal for a forge one day. When they do, I'd like to be asked. It would be the first time anybody asked me anything about this building.\"",
+                "choices": [
+                    {
+                        "label": "Let's trade.",
+                        "effects": [
+                            {
+                                "open_shop": "brenna_smith"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "Whose forge is this?",
+                        "next": "whose_forge"
+                    },
+                    {
+                        "label": "You look like a woman counting days.",
+                        "next": "counting_days"
+                    },
+                    {
+                        "label": "Just the warmth.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "minuted"
+                    },
+                    {
+                        "not": {
+                            "quest": "the_anvil_debt",
+                            "status": "active"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"Written down, I heard.\" Brenna doesn't stop working. \"Good. Paper's where things go to be argued with. It's slow and it's polite and it's the only argument I've ever seen a smith win.\"",
+                "choices": [
+                    {
+                        "label": "Let's trade.",
+                        "effects": [
+                            {
+                                "open_shop": "brenna_smith"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "Whose forge is this?",
+                        "next": "whose_forge"
+                    },
+                    {
+                        "label": "You look like a woman counting days.",
+                        "next": "counting_days"
+                    },
+                    {
+                        "label": "Just the warmth.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "subscribed"
+                    },
+                    {
+                        "not": {
+                            "quest": "the_anvil_debt",
+                            "status": "active"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "Brenna looks at you for a long moment over the anvil. \"So you own a piece of the people who buy streets,\" she says. \"Forge is hot. My prices are my own.\" She turns the bar. \"They haven't bought those yet. Buying, selling, or warming your hands?\"",
+                "choices": [
+                    {
+                        "label": "Let's trade.",
+                        "effects": [
+                            {
+                                "open_shop": "brenna_smith"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "Whose forge is this?",
+                        "next": "whose_forge"
+                    },
+                    {
+                        "label": "You look like a woman counting days.",
+                        "next": "counting_days"
+                    },
+                    {
+                        "label": "Just the warmth.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "walked"
+                    },
+                    {
+                        "not": {
+                            "quest": "the_anvil_debt",
+                            "status": "active"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"Walked out,\" Brenna says, and the hammer stops halfway. \"Of a room full of people with money.\" She sets it down. \"I've never walked out of anywhere I owed. I'd like to know what it felt like. No. Don't tell me. I'd only want to do it.\"",
+                "choices": [
+                    {
+                        "label": "Let's trade.",
+                        "effects": [
+                            {
+                                "open_shop": "brenna_smith"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "Whose forge is this?",
+                        "next": "whose_forge"
+                    },
+                    {
+                        "label": "You look like a woman counting days.",
+                        "next": "counting_days"
+                    },
+                    {
+                        "label": "Just the warmth.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "anvil_debt_fate",
                         "equals": "bought"
                     }
