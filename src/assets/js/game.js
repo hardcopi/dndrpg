@@ -2584,6 +2584,17 @@
       if (document.fullscreenElement) document.exitFullscreen();
       else document.documentElement.requestFullscreen().catch(() => {});
     });
+    // "Toggle fullscreen" did not say which way it would go. Esc and F11 leave
+    // fullscreen without the button, so follow the document, not the click.
+    const fsBtn = $('#btn-fullscreen');
+    const showFullscreen = () => {
+      if (!fsBtn) return;
+      const full = !!document.fullscreenElement;
+      fsBtn.setAttribute('aria-pressed', String(full));
+      fsBtn.title = full ? 'Leave fullscreen' : 'Fullscreen';
+    };
+    showFullscreen();
+    document.addEventListener('fullscreenchange', showFullscreen);
   }
 
   // =========================================================================
