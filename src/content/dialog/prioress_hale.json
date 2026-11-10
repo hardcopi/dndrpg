@@ -108,6 +108,21 @@
                 ]
             },
             {
+                "conditions": [
+                    {
+                        "flag": "ford_record"
+                    }
+                ],
+                "text": "\"Ovid tells me the fourth winter has been read,\" Ottilie Hale says, \"by you.\" She does not look up from the herb bed. \"She has not told me what you did with it, and I have not asked her. It is the first thing in four winters I have not asked about, and I find I am not able to tell you whether that is trust.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
                 "text": "A square of grass, a covered walk, herb beds weeded to the edge, and eleven men crossing at intervals that have nothing to do with the sun.\n\nThe woman with the basket stops in front of you rather than beside you.\n\n\"Ottilie Hale,\" she says. \"Prior. The gate is open and the bell is answered and nobody here will ask you what you want, so you will have to say it yourself.\"",
                 "on_enter": [
                     {

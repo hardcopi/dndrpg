@@ -435,6 +435,26 @@
             {
                 "conditions": [
                     {
+                        "flag": "packet_gone"
+                    },
+                    {
+                        "not": {
+                            "flag": "vote_aboard"
+                        }
+                    }
+                ],
+                "text": "\"Four days down,\" Mara says, \"a morning in the room, four days back.\" She is polishing a cup that is already clean. \"I've started not looking at the river, which means I look at it all day. Half the town's the same. You can tell who's waiting by who's facing east.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "quest": "rats_and_better",
                         "status": "active"
                     }

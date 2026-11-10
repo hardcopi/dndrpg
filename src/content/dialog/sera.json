@@ -10,6 +10,46 @@
                         "status": "active"
                     },
                     {
+                        "flag": "packet_gone"
+                    },
+                    {
+                        "flag": "vote_fate",
+                        "equals": "kept"
+                    },
+                    {
+                        "not": {
+                            "flag": "vote_aboard"
+                        }
+                    }
+                ],
+                "text": "\"You kept it in your pocket all the way to the plank,\" Sera says, \"and then kept it there.\" She thinks about it honestly. \"A vote you haven't cast can't be counted against you. It can't be counted for you either. I'd have gone. I don't know any more that I'd have been right.\"",
+                "once": true,
+                "choices": [
+                    {
+                        "label": "What did Marrow have on you?",
+                        "next": "the_leash_offer"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit down a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "sera",
+                        "status": "active"
+                    },
+                    {
                         "flag": "sold_to_the_polite_man"
                     }
                 ],

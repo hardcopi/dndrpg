@@ -333,6 +333,7 @@ end and names nobody.
   (`stilt_camp_lost`). `pool_dead_named` is skipped, as it would point at
   where the dead lie. `sluice_wage_intercepted` is skipped, as it would point
   at who pays.
+- **The four days, and the plank.** After `packet_gone` (and not `vote_aboard`) the town waits once each without resolving anything: Mara faces east, Ashe rules a page with no heading, Pyke chains what he already knows, Pyle is asked for news a boat will bring, Osric sells chamomile, Brenna sells no hinges, Ballow watches the west road (or minds the watch house when Reed took the proxy). Reed is off the square while she is downriver with the proxy unless one of her quests is still open; Hesper is off Granary Row if she went down to read the figure first. A kept vote is walked to `the_gangplank` by Tull and stops there: *Step aboard* (`vote_aboard`, travel to Brackwater, Moss and Minna keep the chair and ask nothing) or *Step back* (vote uncast; Reed and Sera remark). Neither sets or casts the vote. Readers added for `mill_pit_cleared`, `root_beds_cleared`, `ford_record` (generic for all three endings), `commons_question_raised`, `pit_closed`, `broken_floor_shored`.
 - **Companions place the mark.** Once Act II is open, Ilse (`mark_seen_stone`),
   Kessa (`mark_seen_paper`) and Sera (`mark_seen_book`) each have one greeting
   that recognises the mark they saw in Act I as the house's mark: the ledge cuts,

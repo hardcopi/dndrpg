@@ -355,6 +355,26 @@
             {
                 "conditions": [
                     {
+                        "flag": "packet_gone"
+                    },
+                    {
+                        "not": {
+                            "flag": "vote_aboard"
+                        }
+                    }
+                ],
+                "text": "\"Three people this week for something to help them sleep,\" Osric says. \"I gave them chamomile.\" He weighs out a dose without looking at the scale. \"It doesn't help. But you do something with your hands while you wait for a boat, and grinding is a thing to do.\"",
+                "choices": [
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "quest": "root_and_ash",
                         "status": "active"
                     }

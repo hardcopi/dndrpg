@@ -3,8 +3,6 @@
 # Regenerate with `python3 tools/trace_content.py --write-baseline`, on purpose.
 flag: 'black_pools_cleared' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'broken_floor_held' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
-flag: 'broken_floor_shored' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
-flag: 'commons_question_raised' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'corse_declined_one' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'corse_doubts_the_dig' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'corse_explained_clearance' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
@@ -24,7 +22,6 @@ flag: 'fen_road_known' is set in 1 place(s) and read nowhere — nothing in the 
 flag: 'fen_water_rising' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'ford_ground_seen' is set in 3 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'ford_huts_known' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
-flag: 'ford_record' is set in 3 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'grazing_bought_known' is set in 5 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'growth_drove_us_out' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'hills_raiders_beaten' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
@@ -59,7 +56,6 @@ flag: 'met_wick' is set in 2 place(s) and read nowhere — nothing in the act ch
 flag: 'met_wrayne' is set in 2 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'mill_fire_was_set' is set in 2 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'mill_loft_scorch' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
-flag: 'mill_pit_cleared' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'mill_race_letter_filed' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'mill_race_letter_seen' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'mill_race_right_known' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
@@ -68,7 +64,6 @@ flag: 'oldcity_goblins_broken' is set in 1 place(s) and read nowhere — nothing
 flag: 'oldcity_tally' is set in 2 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'oldcity_trove' is set in 2 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'petch_decided' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
-flag: 'pit_closed' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'pit_gate_beaten' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'pool_dead_named' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'priory_account_accepted' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
@@ -85,7 +80,6 @@ flag: 'quarry_fell_upward' is set in 2 place(s) and read nowhere — nothing in 
 flag: 'reliquary_agents_beaten' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'rivermark_valued' is set in 2 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'rivermark_warned' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
-flag: 'root_beds_cleared' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'rourke_named_the_point' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'salt_iron_exposed' is set in 2 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'salt_wagons_taken' is set in 1 place(s) and read nowhere — nothing in the act changes because of it

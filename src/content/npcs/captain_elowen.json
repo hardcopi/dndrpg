@@ -7,6 +7,31 @@
     "is_quest_giver": true,
     "dialog": "captain_elowen",
     "place": {
-        "location": "market_square"
+        "location": "market_square",
+        "conditions": [
+            {
+                "any": [
+                    {
+                        "not": {
+                            "flag": "packet_gone"
+                        }
+                    },
+                    {
+                        "not": {
+                            "flag": "vote_fate",
+                            "equals": "proxy"
+                        }
+                    },
+                    {
+                        "quest": "the_watch_payroll",
+                        "status": "active"
+                    },
+                    {
+                        "quest": "aldric_absolution",
+                        "status": "active"
+                    }
+                ]
+            }
+        ]
     }
 }

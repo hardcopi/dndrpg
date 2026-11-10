@@ -83,6 +83,21 @@
                 "once": true
             },
             {
+                "conditions": [
+                    {
+                        "flag": "commons_question_raised"
+                    }
+                ],
+                "text": "\"They're still at it on the weighing floor,\" the drover says. \"Three holders and a clerk, every market day, asking who bought the common and when.\" He chews the straw. \"Nobody's answered. But it's on the floor now, where the weights are, and you can't unsay a thing on a weighing floor.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
                 "text": "Wagons won't run the east road till it's safe. My oxen agree with the wagons.",
                 "choices": [
                     {

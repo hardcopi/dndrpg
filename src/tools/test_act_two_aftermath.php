@@ -676,7 +676,7 @@ try {
         ok('the packet goes once', !$seek($p, 'osgar_tull', 'makes the quarter-day'));
     }
     $p = party($db, $base + ['vote_fate' => 'kept', 'quarter_eve' => 1]); ended($db, $p, 'subscribed');
-    ok('a kept vote does not watch the packet go without it', !$seek($p, 'osgar_tull', 'makes the quarter-day'));
+    ok('a kept vote is taken to the plank, not past it', $seek($p, 'osgar_tull', 'I go at the bell') && flag($db, $p, 'packet_gone') === null);
     $p = party($db, $base + ['vote_fate' => 'against']); ended($db, $p, 'subscribed');
     ok('no packet before the eve', !$seek($p, 'osgar_tull', 'makes the quarter-day'));
 
@@ -688,6 +688,84 @@ try {
         $n = (new DialogEngine($db))->node($p, $npc); talk($db, $p, $npc, [(string) end($n['choices'])['label']]);
         ok("once ($fl)", !$seek($p, $npc, $needle));
     }
+    echo "== the four days ==\n";
+    $placed = function (int $p, string $npc) use ($db): bool {
+        $w = $db->query("SELECT place_conditions_json FROM npcs WHERE npc_key=" . $db->quote($npc))->fetchColumn();
+        $c = (new WorldState($db))->context($p, (int) $db->query("SELECT character_id FROM character_party WHERE party_id=$p LIMIT 1")->fetchColumn());
+        return $w === null || $w === false || Requirements::pass(json_decode((string) $w, true), $c);
+    };
+    foreach ([['mara_hearthstone', 'facing east'], ['tibald_ashe', 'not given it one'], ['alder_pyke', 'already know the length'],
+              ['gest_pyle', 'comes up on a boat'], ['osric_apothecary', 'chamomile'], ['brenna_smith', 'hinges for a door'],
+              ['serjeant_ballow', 'looking the other way']] as [$npc, $needle]) {
+        $p = party($db, $base + ['vote_fate' => 'against', 'quarter_eve' => 1, 'packet_gone' => 1]); ended($db, $p, 'subscribed');
+        ok("waiting: $npc", $seek($p, $npc, $needle));
+        $n = (new DialogEngine($db))->node($p, $npc); talk($db, $p, $npc, [(string) end($n['choices'])['label']]);
+        ok("waiting once: $npc", !$seek($p, $npc, $needle));
+        $p = party($db, $base + ['vote_fate' => 'against', 'quarter_eve' => 1]); ended($db, $p, 'subscribed');
+        ok("not before the packet goes: $npc", !$seek($p, $npc, $needle));
+    }
+    $waitAll = ['facing east', 'not given it one', 'already know the length', 'comes up on a boat', 'chamomile', 'hinges for a door', 'looking the other way', 'Captain\'s downriver', 'You stayed'];
+    $p = party($db, $base + ['vote_fate' => 'proxy', 'quarter_eve' => 1, 'packet_gone' => 1]); ended($db, $p, 'subscribed');
+    ok('Ballow minds the watch house while Reed is downriver', $seek($p, 'serjeant_ballow', "Captain's downriver"));
+    ok('Reed is not on the square while she is downriver', !$placed($p, 'captain_elowen'));
+    (new Effects($db))->apply($p, [['start_quest' => 'the_watch_payroll']]);
+    ok('unless a quest of hers is still open', qstatus($db, $p, 'the_watch_payroll') === 'active' && $placed($p, 'captain_elowen'), (string) qstatus($db, $p, 'the_watch_payroll'));
+    $p = party($db, $base + ['vote_fate' => 'against', 'packet_gone' => 1]); ended($db, $p, 'subscribed');
+    ok('Reed stays for any other vote', $placed($p, 'captain_elowen'));
+    $p = party($db, $base + ['costing_figure' => 'read_first', 'clearance_costed' => 1, 'packet_gone' => 1]); ended($db, $p, 'costed');
+    ok('Hesper went down to read it first', !$placed($p, 'hesper_amsel'));
+    $p = party($db, $base + ['costing_figure' => 'read_first', 'clearance_costed' => 1]); ended($db, $p, 'costed');
+    ok('Hesper is on Granary Row until the packet goes', $placed($p, 'hesper_amsel'));
+    $p = party($db, $base + ['costing_figure' => 'circulated', 'clearance_costed' => 1, 'packet_gone' => 1]); ended($db, $p, 'costed');
+    ok('Hesper stays if she did not go', $placed($p, 'hesper_amsel'));
+
+    echo "== the kept vote at the gangplank ==\n";
+    $gang = function (array $cs) use ($db, $base, $seek) {
+        $p = party($db, $base + ['vote_fate' => 'kept', 'quarter_eve' => 1]); ended($db, $p, 'subscribed');
+        $c = new CompanionService($db); foreach ($cs as $k) { $c->meet($p, $k); $c->recruit($p, $k); }
+        $seek($p, 'osgar_tull', 'I go at the bell');
+        return $p;
+    };
+    $p = $gang(['sera', 'kessa']);
+    $n = talk($db, $p, 'osgar_tull', ['Walk down to the plank']);
+    $ij = implode(' ', array_map(fn ($i) => $i['text'], $n['interjections'] ?? []));
+    ok('the plank: the bell has not gone', str_contains((string) $n['text'], 'The bell has not gone yet'));
+    ok('the plank: no choice is made for you', flag($db, $p, 'packet_gone') === null && flag($db, $p, 'vote_aboard') === null);
+    ok('the plank: Sera and Kessa, not Aldric', str_contains($ij, "I'm not going to tell you which") && str_contains($ij, 'somebody in that room') && !str_contains($ij, 'takes his hat off'), $ij);
+    $labels = array_map(fn ($c) => $c['label'], $n['choices'] ?? []);
+    ok('the plank offers both', in_array('Step aboard.', $labels) && in_array('Step back onto the stair.', $labels));
+    $n = talk($db, $p, 'osgar_tull', ['Walk down to the plank', 'Step back']);
+    ok('stepping back leaves the vote uncast', str_contains((string) ($n['text'] ?? ''), 'uncast') && flag($db, $p, 'packet_gone') === '1' && flag($db, $p, 'vote_aboard') === null);
+    ok('…and nothing about the vote is set', flag($db, $p, 'vote_fate') === 'kept' && qstatus($db, $p, 'one_vote_in_twelve') !== 'completed');
+    ok('Sera on the stair', $seek($p, 'sera', 'kept it there'));
+    ok('Reed: you stayed', $seek($p, 'captain_elowen', 'You stayed'));
+    ok('the town waits for a kept vote too', $seek($p, 'mara_hearthstone', 'facing east'));
+    ok('Tull goes once', !$seek($p, 'osgar_tull', 'I go at the bell'));
+
+    $p = $gang(['aldric']);
+    talk($db, $p, 'osgar_tull', ['Walk down to the plank', 'Step aboard', 'Go below']);
+    ok('aboard: the packet goes with you', flag($db, $p, 'vote_aboard') === '1' && flag($db, $p, 'packet_gone') === '1' && here($db, $p) === 'brackwater_wharf', here($db, $p));
+    ok('aboard: the vote is still yours', flag($db, $p, 'vote_fate') === 'kept');
+    ok('Moss writes it in', $seek($p, 'abel_moss', 'Good luck'));
+    ok('Minna keeps the chair and asks nothing', $seek($p, 'minna_crale', "I'll not ask how you mean to vote"));
+    talk($db, $p, 'minna_crale', ['Leave']);
+    ok('Minna says it once', !$seek($p, 'minna_crale', "I'll not ask how you mean to vote"));
+    foreach ($waitAll as $nd) {
+        foreach (['mara_hearthstone', 'serjeant_ballow', 'captain_elowen'] as $npc) if ($seek($p, $npc, $nd)) { ok("no waiting line aboard ($npc: $nd)", false); }
+    }
+    ok('nobody in Rivermark waits for you when you went', true);
+
+    echo "== still more of the valley ==\n";
+    foreach ([['mill_pit_cleared', 'wick_lorrimer', 'only water'], ['root_beds_cleared', 'nesh_gray', 'we cut it'],
+              ['ford_record', 'prioress_hale', 'fourth winter has been read'], ['commons_question_raised', 'street_drover', 'weighing floor'],
+              ['pit_closed', 'vessa_dann', 'did the arithmetic'], ['broken_floor_shored', 'nakka', 'gallery holds']] as [$fl, $npc, $needle]) {
+        $p = party($db, $base + [$fl => 1]); ended($db, $p, 'walked');
+        ok("$npc reads $fl", $seek($p, $npc, $needle));
+        $n = (new DialogEngine($db))->node($p, $npc); talk($db, $p, $npc, [(string) end($n['choices'])['label']]);
+        ok("once ($fl)", !$seek($p, $npc, $needle));
+    }
+    $p = party($db, $base + ['root_beds_cleared' => 1, 'wardens_fate' => 'turned']); ended($db, $p, 'walked');
+    ok('no beds line when the camp is gone', !$seek($p, 'nesh_gray', 'we cut it'));
 } catch (Throwable $e) {
     ok('played without a dead end', false, $e->getMessage());
 } finally {

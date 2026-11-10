@@ -9,6 +9,33 @@
                         "flag": "quarter_eve"
                     },
                     {
+                        "flag": "vote_fate",
+                        "equals": "kept"
+                    },
+                    {
+                        "not": {
+                            "flag": "packet_gone"
+                        }
+                    }
+                ],
+                "text": "It is not quite light. Tull is on the seventh step with the rope actually doing something, and the packet is low in the water with paper. \"Last one that makes the quarter-day,\" he says, and turns the book round so you can see the owners' page. Your name is on it, with a place kept. \"I go at the bell,\" he says. \"Either way.\"",
+                "choices": [
+                    {
+                        "label": "Walk down to the plank.",
+                        "next": "the_gangplank"
+                    },
+                    {
+                        "label": "Not yet.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "quarter_eve"
+                    },
+                    {
                         "not": {
                             "flag": "packet_gone"
                         }
@@ -701,6 +728,85 @@
                         "companion": "ilse",
                         "text": "Ilse: \"Five days, then.\" She does not say until what.",
                         "once": true
+                    }
+                ]
+            }
+        ],
+        "the_gangplank": [
+            {
+                "text": "The gangplank is a single board with cleats nailed across it, wet at the bottom and dry at the top. You stand at the foot of it with your vote in your coat. It weighs nothing; Tull has said so about every paper he has ever carried. He does not hurry you. Nobody on the stair says anything. Somewhere up the town a door opens and shuts. The bell has not gone yet.",
+                "choices": [
+                    {
+                        "label": "Step aboard.",
+                        "effects": [
+                            {
+                                "set_flag": "vote_aboard"
+                            },
+                            {
+                                "set_flag": "packet_gone"
+                            }
+                        ],
+                        "next": "aboard"
+                    },
+                    {
+                        "label": "Step back onto the stair.",
+                        "effects": [
+                            {
+                                "set_flag": "packet_gone"
+                            }
+                        ],
+                        "next": "stayed_on_the_stair"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "once": true,
+                        "text": "Sera, at your shoulder: \"I'm not going to tell you which. I'd only be telling you what I'd do.\""
+                    },
+                    {
+                        "companion": "aldric",
+                        "once": true,
+                        "text": "Aldric says nothing at all, and takes his hat off, and holds it."
+                    },
+                    {
+                        "companion": "kessa",
+                        "once": true,
+                        "text": "Kessa, cheerfully: \"Either way, somebody in that room is going to be annoyed.\""
+                    },
+                    {
+                        "companion": "ilse",
+                        "once": true,
+                        "text": "Ilse looks at the plank, and then at you, and waits, which she is better at than anybody."
+                    }
+                ]
+            }
+        ],
+        "aboard": [
+            {
+                "text": "You go up the plank, and Tull pulls it in after you and casts off, and the packet slides out past the green steps and round the second bend. Four days down. A morning in a warm room, with a chair kept for you and a vote in your coat. What you do with it there, you have not done yet.",
+                "choices": [
+                    {
+                        "label": "Go below.",
+                        "effects": [
+                            {
+                                "travel": {
+                                    "location": "brackwater_wharf"
+                                }
+                            }
+                        ],
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "stayed_on_the_stair": [
+            {
+                "text": "You step back onto the seventh step. Tull looks at you for exactly as long as he looks at anybody, nods, pulls the plank in and casts off. The packet goes round the second bend without you. Your vote is still in your coat, uncast. The room will sit without it, and it will still be yours.",
+                "choices": [
+                    {
+                        "label": "Watch it out of sight.",
+                        "end": true
                     }
                 ]
             }

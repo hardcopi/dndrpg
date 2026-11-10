@@ -6,6 +6,21 @@
             {
                 "conditions": [
                     {
+                        "flag": "vote_aboard"
+                    }
+                ],
+                "text": "The window slides open six inches. \"An owner, on the packet, on the morning,\" Abel Moss says. \"I'll write it in. Nobody's done that in my time.\" The window slides almost shut, and then open an inch again. \"Good luck,\" he says, which he has plainly never said through it before.",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "yard_gate_forced"
                     }
                 ],

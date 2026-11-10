@@ -352,6 +352,26 @@
                 ]
             },
             {
+                "conditions": [
+                    {
+                        "flag": "packet_gone"
+                    },
+                    {
+                        "not": {
+                            "flag": "vote_aboard"
+                        }
+                    }
+                ],
+                "text": "\"Nobody's ordered anything for after the quarter-day,\" Brenna says, turning a bar she has no order for. \"Not a hinge. Not a latch.\" She puts it back in the fire. \"Folk don't buy hinges for a door they mightn't have. Come back in nine days and I'll tell you what the town thinks happened.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
                 "text": "\"Forge's hot and the guild's far away, so my prices are my own.\" Brenna Coalwright turns a bar over in the fire without looking at it. \"Buying, selling, or warming your hands?\"",
                 "choices": [
                     {
