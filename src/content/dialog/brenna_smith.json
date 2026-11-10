@@ -377,6 +377,26 @@
                 "once": true
             },
             {
+                "conditions": [
+                    {
+                        "flag": "room_sat"
+                    },
+                    {
+                        "not": {
+                            "flag": "vote_aboard"
+                        }
+                    }
+                ],
+                "text": "\"I said I'd tell you what the town thinks happened,\" Brenna says. \"Town thinks four things, and three of them can't all be true, and the fourth is that Mara's beer's gone up.\" She turns the bar. \"Somebody ordered a hinge yesterday. First since the packet went. I'm not saying that means anything. I'm saying I made the hinge.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
                 "text": "\"Forge's hot and the guild's far away, so my prices are my own.\" Brenna Coalwright turns a bar over in the fire without looking at it. \"Buying, selling, or warming your hands?\"",
                 "choices": [
                     {

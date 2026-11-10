@@ -16,10 +16,7 @@ flag: 'crate_came_downriver' is set in 1 place(s) and read nowhere — nothing i
 flag: 'dale_did_the_sum' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'deepworks_found' is set in 3 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'diggers_told' is set in 2 place(s) and read nowhere — nothing in the act changes because of it
-flag: 'fen_road_known' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'ford_ground_seen' is set in 3 place(s) and read nowhere — nothing in the act changes because of it
-flag: 'ford_huts_known' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
-flag: 'grazing_bought_known' is set in 5 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'growth_drove_us_out' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'hills_raiders_beaten' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'knows_corse_name' is set in 2 place(s) and read nowhere — nothing in the act changes because of it
@@ -55,7 +52,6 @@ flag: 'mill_fire_was_set' is set in 2 place(s) and read nowhere — nothing in t
 flag: 'mill_loft_scorch' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'mill_race_letter_filed' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'mill_race_letter_seen' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
-flag: 'mill_race_right_known' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'office_thrown_out' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'oldcity_tally' is set in 2 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'oldcity_trove' is set in 2 place(s) and read nowhere — nothing in the act changes because of it
@@ -85,8 +81,6 @@ flag: 'teodor_gave_the_order' is set in 1 place(s) and read nowhere — nothing 
 flag: 'tull_counted_the_men' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'tull_told_us_straight' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'wardens_crossed' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
-flag: 'warren_nests_known_to_watch' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
-flag: 'warren_numbers_known' is set in 2 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'watch_beaten' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'watch_sandbox' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'writ_changed_hands' is set in 1 place(s) and read nowhere — nothing in the act changes because of it

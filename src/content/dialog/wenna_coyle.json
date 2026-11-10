@@ -305,6 +305,26 @@
             {
                 "conditions": [
                     {
+                        "flag": "room_sat"
+                    },
+                    {
+                        "not": {
+                            "flag": "vote_aboard"
+                        }
+                    }
+                ],
+                "text": "\"They come to the window and ask if the sheet changes the pegs,\" Mrs Coyle says. \"It doesn't.\" She moves one anyway, because it is the hour. \"A sheet that says a room sat is a sheet. The pegs move for a minute, or an instruction, or the bell. I tell them that. They go away and come back and ask again.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "concern_answering"
                     }
                 ],

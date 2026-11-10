@@ -6,6 +6,26 @@
             {
                 "conditions": [
                     {
+                        "flag": "room_sat"
+                    },
+                    {
+                        "not": {
+                            "flag": "vote_aboard"
+                        }
+                    }
+                ],
+                "text": "\"Minute?\" Tull says, before you've asked, because everyone has. \"Not on this boat. Moss says it's being fair-copied.\" He coils. \"When it's copied, it's paper. When it's paper, I carry it. That's the whole of what I know, and I've said it forty times this week.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "packet_gone"
                     },
                     {

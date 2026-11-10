@@ -10,6 +10,46 @@
                         "status": "active"
                     },
                     {
+                        "flag": "room_sat"
+                    },
+                    {
+                        "not": {
+                            "flag": "vote_aboard"
+                        }
+                    }
+                ],
+                "text": "Ilse watches the river for a while. \"In the hills you wait for weather,\" she says. \"You can't hurry it and you can't ask it. You watch the sky and get on with what's in front of you.\" She shrugs. \"This is weather with a seal on it.\"",
+                "once": true,
+                "choices": [
+                    {
+                        "label": "Goblins.",
+                        "next": "the_count"
+                    },
+                    {
+                        "label": "Tell me about the deep warren.",
+                        "next": "the_deep"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit at the fire a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "ilse",
+                        "status": "active"
+                    },
+                    {
                         "any": [
                             {
                                 "flag": "uncounted_fate",

@@ -20,6 +20,26 @@
             {
                 "conditions": [
                     {
+                        "flag": "room_sat"
+                    },
+                    {
+                        "not": {
+                            "flag": "vote_aboard"
+                        }
+                    }
+                ],
+                "text": "\"Two men in front of me this week for fighting over what 'in its order' meant,\" Aggie Slate says from the bench. \"I fined them the same, a copper each.\" She writes it down. \"I didn't say which of them was right. Neither of them had read the minute, and nor have I, and nor has anybody, because it isn't here.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "quest": "rats_and_better",
                         "stage": "the_grain_stair"
                     }
