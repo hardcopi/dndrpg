@@ -375,6 +375,25 @@
             {
                 "conditions": [
                     {
+                        "flag": "room_sat"
+                    },
+                    {
+                        "not": {
+                            "flag": "vote_aboard"
+                        }
+                    }
+                ],
+                "text": "\"The minute is in fair copy,\" Minna Crale says, and does not lift her pen from the page she is writing. \"It goes up when it is finished, and not a line before. You have had the sheet. That is everything the house has said.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "meeting_fate",
                         "equals": "costed"
                     },
@@ -406,7 +425,7 @@
                     }
                 ],
                 "once": true,
-                "text": "\"Your words are in the fair copy,\" Minna Crale says. \"I read them back twice more after you had gone, to be sure of them. They go down to Mrs Fenn at the quarter's end, bound.\" She looks up. \"Nobody has asked me to be sure of anything before. I found I liked it.\"",
+                "text": "\"Your words are in the fair copy,\" Minna Crale says. \"I read them back twice more after you had gone, to be sure of them. They have gone down to Mrs Fenn, bound with the quarter's.\" She looks up. \"Nobody has asked me to be sure of anything before. I found I liked it.\"",
                 "choices": [
                     {
                         "label": "Who are the eleven?",
