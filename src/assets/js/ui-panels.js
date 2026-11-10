@@ -1985,7 +1985,7 @@
       if (r.character?.id == G().state.character?.id) G().state.inventory = r.inventory;
       G().log(`${r.recipient.name} takes ${r.item}${r.moved > 1 ? ' ×' + r.moved : ''}.`, 'success');
       renderPartyRail();
-      await reopenSheet();
+      await reopenSheet(inventoryId);
     } catch (e) {
       G().showError(e.message);
     }
@@ -2006,11 +2006,25 @@
    * outgoing sheet closes. What was wrong was reading a field across a call
    * that is entitled to clear it.
    */
-  async function reopenSheet() {
+  async function reopenSheet(invId) {
     const id = sheetCharacterId;
     if (!id) return;
     closeTopModal();
     await openCharacterSheet(id);
+    if (invId == null) return;
+    // The sheet comes back with focus on its first control (Print), so equipping
+    // the sword from the bag threw a keyboard player out of the bag. Pick the
+    // same item again and land on what you can do to it now (Unequip after
+    // Equip); an item that is gone (drunk, handed over) leaves focus on the bag.
+    const m = modals[modals.length - 1]?.el;
+    if (!m) return;
+    const tile = m.querySelector(`.bag-slot[data-inv-id="${CSS.escape(String(invId))}"]`);
+    if (tile) {
+      tile.click();
+      (m.querySelector('#bag-detail [data-equip], #bag-detail [data-use]') || tile).focus();
+    } else {
+      m.querySelector('.bag-slot[data-inv-id]')?.focus();
+    }
   }
 
   async function equipItem(inventoryId, equip, characterId) {
@@ -2024,7 +2038,7 @@
       if (r.character?.id == G().state.character?.id) G().state.inventory = r.inventory;
       G().log(equip ? 'Equipped item.' : 'Unequipped item.');
       renderPartyRail();
-      await reopenSheet();
+      await reopenSheet(inventoryId);
     } catch (e) {
       G().showError(e.message);
     }
@@ -2040,7 +2054,7 @@
       if (r.character?.id == G().state.character?.id) G().state.inventory = r.inventory;
       G().log(r.message, 'success');
       renderPartyRail();
-      await reopenSheet();
+      await reopenSheet(inventoryId);
     } catch (e) {
       G().showError(e.message);
     }
