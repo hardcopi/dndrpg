@@ -10,6 +10,44 @@
                         "status": "active"
                     },
                     {
+                        "flag": "mark_seen_stone"
+                    },
+                    {
+                        "flag": "act_two_open"
+                    }
+                ],
+                "once": true,
+                "text": "\"The cuts on the ledge,\" Ilse says. \"Square and recent, with the mark at the end of the run. I wrote not goblin work in the tally and nobody asked me what it was instead.\" She looks east, toward the ridge. \"I have stood in the thing that made them now. Six faces, three shifts, a canteen. It was a surveyor's mark. It was only ever a surveyor's mark, and I find that is worse than if it had been a sign.\"",
+                "choices": [
+                    {
+                        "label": "Goblins.",
+                        "next": "the_count"
+                    },
+                    {
+                        "label": "Tell me about the deep warren.",
+                        "next": "the_deep"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit at the fire a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "ilse",
+                        "status": "active"
+                    },
+                    {
                         "flag": "meeting_fate",
                         "equals": "costed"
                     }

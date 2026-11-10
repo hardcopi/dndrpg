@@ -10,6 +10,40 @@
                         "status": "active"
                     },
                     {
+                        "flag": "mark_seen_book"
+                    },
+                    {
+                        "flag": "act_two_open"
+                    }
+                ],
+                "once": true,
+                "text": "\"The stamp in the corner of every page,\" Sera says. \"I asked once what it was and was told to get on.\" She straightens a strap that is already straight. \"The survey was nine sheets in an unlocked rack, entered and revised, and I knew the house before I had read a word of it. Same corners. Same habits.\" A pause. \"I could have kept those books too. I'd have kept them well. That's the part I keep turning over.\"",
+                "choices": [
+                    {
+                        "label": "What did Marrow have on you?",
+                        "next": "the_leash_offer"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit down a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "sera",
+                        "status": "active"
+                    },
+                    {
                         "flag": "sera_second_offer",
                         "equals": "declined"
                     }

@@ -210,8 +210,20 @@ Flagged rather than owned, because these belong to other authors:
 ## Companion dialogue hooks left for the companion author
 
 The spine sets its flags from **quest stages**, never from a companion's
-dialogue file, so nothing here has been edited. Each of these is a place where a
-companion greeting could now react, and none of them exist yet:
+dialogue file. These were the places a companion greeting could react. Each now
+has a once-only greeting (Ilse, Kessa and Sera need `act_two_open` as well, so
+they have stood in the Deepworks before they place the mark). The lines only
+recognise the mark as the house's; none of them says who asked for anything.
+Nakka's was already covered by `nakkas_plate` (`plate_fate`).
+
+| Companion | Reads | Greeting starts |
+|---|---|---|
+| `ilse` | `mark_seen_stone` + `act_two_open` | "The cuts on the ledge…" — it was only ever a surveyor's mark, and that is worse |
+| `kessa` | `mark_seen_paper` + `act_two_open` | "Black wax…" — the same mark heads the against-wages column on the canteen board |
+| `sera` | `mark_seen_book` + `act_two_open` | "The stamp in the corner of every page…" — she knew the house's habits in the survey |
+| `aldric` | `indentured_fate` (bought / read / left) | one line per ending of `the_indentured` |
+
+The original notes:
 
 | Companion | Could read | Line that is missing |
 |---|---|---|

@@ -166,6 +166,26 @@ try {
     (new Effects($db))->apply($p, [['start_quest' => 'the_watch_payroll'], ['quest_stage' => ['quest' => 'the_watch_payroll', 'stage' => 'ask_the_clerk']]]);
     ok('a quest at the second desk still comes first', str_contains(greet($db, $p, 'tibald_ashe'), 'watch roll'));
 
+    echo "== companions place the mark ==\n";
+    $marks = [
+        ['ilse', ['mark_seen_stone' => 1], 'only ever a surveyor'],
+        ['kessa', ['mark_seen_paper' => 1], 'Black wax'],
+        ['sera', ['mark_seen_book' => 1], 'kept them well'],
+        ['aldric', ['indentured_fate' => 'bought'], 'harder prayer'],
+        ['aldric', ['indentured_fate' => 'read'], 'Sixty men'],
+        ['aldric', ['indentured_fate' => 'left'], 'only one saying it'],
+    ];
+    foreach ($marks as [$who, $flags, $needle]) {
+        $p = party($db, $base + $flags);
+        $cs = new CompanionService($db); $cs->meet($p, $who); $cs->recruit($p, $who);
+        ok("$who: $needle", str_contains(greet($db, $p, $who), $needle), substr(greet($db, $p, $who), 0, 90));
+        talk($db, $p, $who, ['Nothing']);
+        ok("$who says it once", !str_contains(greet($db, $p, $who), $needle));
+    }
+    $p = party($db, ['mark_seen_paper' => 1]);
+    $cs = new CompanionService($db); $cs->meet($p, 'kessa'); $cs->recruit($p, 'kessa');
+    ok('before the Deepworks Kessa has nothing to place it against', !str_contains(greet($db, $p, 'kessa'), 'Black wax'));
+
     echo "== Sera's second offer ==\n";
     $sera = function (array $flags, int $approval) use ($db, $base) {
         $p = party($db, $base + $flags); ended($db, $p, 'minuted');
