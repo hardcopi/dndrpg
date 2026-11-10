@@ -106,7 +106,12 @@
         label: 'Level up',
         slot: 'levelup',
       });
-      await steps(el, ceremony, opts);
+      const keeper = keepFocus(el);
+      try {
+        await steps(el, ceremony, opts);
+      } finally {
+        keeper.disconnect();
+      }
     } catch (e) {
       console.error('level-up ceremony failed', e);
     } finally {
@@ -153,6 +158,54 @@
 
   function body(el) {
     return $('.levelup-body', el);
+  }
+
+  /**
+   * Put the keyboard back somewhere after every step.
+   *
+   * Each step replaces the panel's markup, and the button that was just
+   * pressed goes with it (Roll the die is also disabled while it rolls, which
+   * drops focus on its own). Focus fell to <body>: a keyboard player had to
+   * Tab back in after every press, and a screen reader lost its place. After
+   * any change that leaves nothing inside the panel focused, focus goes to the
+   * step's enabled main button, or failing that to its heading. A control the
+   * player is using (a spell checkbox, a feat radio) still holds focus, so
+   * this never pulls it away from them.
+   */
+  function keepFocus(el) {
+    let queued = false;
+    const land = () => {
+      queued = false;
+      // A button disabled under the focus (Roll the die while it rolls, the
+      // last + once the points are spent) can still be activeElement for a
+      // moment before the browser lets go of it; it is lost all the same.
+      const held = document.activeElement;
+      const now = held && (held.disabled || !held.isConnected) ? document.body : held;
+      // The heading only ever holds focus because this put it there while
+      // there was no button to take it, so a button arriving takes it back.
+      // The dialog itself counts too: that is where the overlay puts focus
+      // when the panel opens before its first step has drawn.
+      const parked = now === el || (now && now.matches && now.matches('.levelup-step h3'));
+      if (now && now !== document.body && el.contains(now) && !parked) return;
+      if (now && now !== document.body && !el.contains(now) && now.isConnected) return;
+      const btn = $('.levelup-actions .btn-primary:not([disabled])', el);
+      if (btn) {
+        btn.focus();
+        return;
+      }
+      const head = $('.levelup-step h3', el);
+      if (head && head !== now) {
+        head.setAttribute('tabindex', '-1');
+        head.focus();
+      }
+    };
+    const mo = new MutationObserver(() => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(land);
+    });
+    mo.observe(el, { childList: true, subtree: true, attributes: true, attributeFilter: ['disabled'] });
+    return mo;
   }
 
   // =========================================================================
