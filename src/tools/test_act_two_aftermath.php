@@ -213,6 +213,7 @@ try {
         'abel_moss' => ['costed' => "I'll see it's right", 'minuted' => 'particular about that', 'subscribed' => 'Same as ever', 'walked' => 'point of it'],
         'dorcas_fenn' => ['costed' => 'up the valley will ask', 'minuted' => 'kept a space on the shelf', 'subscribed' => "I've decided", 'walked' => 'short ones'],
         'osgar_tull' => ['costed' => 'I carry everything', 'minuted' => 'weighs the same', 'subscribed' => 'owner aboard', 'walked' => 'dropped his pen'],
+        'jory_kemp' => ['costed' => 'named the place for that', 'minuted' => 'hoping for shouting', 'subscribed' => 'twelfth of it', 'walked' => "Don't tell Mrs Crale"],
         'gillian_petch' => ['costed' => 'stops being delighted', 'minuted' => 'Nobody told me not to', 'subscribed' => 'Do I curtsey', 'walked' => 'obviously has one'],
     ];
     foreach ($river as $who => $lines) {
@@ -223,6 +224,57 @@ try {
             talk($db, $p, $who, [$who === 'gillian_petch' ? 'Nothing. Sorry' : 'Leave']);
             ok("$who says it once", !str_contains(greet($db, $p, $who), $needle));
         }
+    }
+
+    $p = party($db, $base + ['meeting_fate' => 'walked']);
+    $db->prepare("INSERT INTO party_quests (party_id, quest_id, status) SELECT ?, id, 'completed' FROM quests WHERE quest_key='the_quarterly_meeting'")->execute([$p]);
+    talk($db, $p, 'jory_kemp', ['Leave']);
+    $after = greet($db, $p, 'jory_kemp');
+    ok('Jory, after, no longer says nobody heard what', str_contains($after, 'no two of them the same') && !str_contains($after, 'Nobody heard what'), substr($after, 0, 90));
+
+    echo "== the valley roads hear ==\n";
+    $roads = [
+        'joss_frayle' => ['Leave', ['costed' => 'more than mine', 'minuted' => "I'd have cut it", 'subscribed' => 'so much the ton', 'walked' => 'carry it anyway']],
+        'sten_harrow' => ['The road', ['costed' => 'let alone', 'minuted' => 'written down at them', 'subscribed' => 'partly from you', 'walked' => 'only slower']],
+        'tull_barrow' => ['Nothing', ['costed' => 'costed the grazing', 'minuted' => 'The price does', 'subscribed' => 'get used to it', 'walked' => 'better price']],
+        'wick_lorrimer' => ['The road', ['costed' => 'goes on longer', 'minuted' => 'It still runs', 'subscribed' => 'for the water', 'walked' => 'ones who go']],
+        'dorn_ackley' => ['Leave', ['costed' => 'see the figure', 'minuted' => 'eleven years ago', 'subscribed' => "I'd not want it", 'walked' => 'stays with you']],
+        'gest_pyle' => ['Goodbye', ['costed' => "can't read", 'minuted' => 'The carrying', 'subscribed' => "Whoever's it is", 'walked' => 'the nerve']],
+        'hesk_dray' => ['Fair enough', ['costed' => 'Six of mine', 'minuted' => 'under the sheets', 'subscribed' => 'start with you', 'walked' => 'another wagon']],
+        'orm_lisser' => ['Nothing', ['costed' => 'by their sums', 'minuted' => 'wrote those down', 'subscribed' => 'share in somebody', 'walked' => 'keep forgetting']],
+        'vessa_dann' => ["I'll watch", ['costed' => 'got a number', 'minuted' => 'pays out on', 'subscribed' => 'send someone', 'walked' => 'a forfeit']],
+    ];
+    foreach ($roads as $who => [$bye, $lines]) {
+        foreach ($lines as $fate => $needle) {
+            $p = party($db, $base + ['meeting_fate' => $fate]);
+            ok("$who: $fate", str_contains(greet($db, $p, $who), $needle), substr(greet($db, $p, $who), 0, 90));
+            talk($db, $p, $who, [$bye]);
+            ok("$who says it once", !str_contains(greet($db, $p, $who), $needle));
+        }
+    }
+    foreach ([['sten_harrow', ['harrow_gone' => 1], 'let alone'], ['wick_lorrimer', ['wick_in_town' => 1], 'goes on longer'], ['hesk_dray', ['salt_fate' => 'paid'], 'Six of mine']] as [$who, $gone, $needle]) {
+        $p = party($db, $base + ['meeting_fate' => 'costed'] + $gone);
+        ok("$who is not there to say it", !str_contains(greet($db, $p, $who), $needle));
+    }
+
+    echo "== the Deepworks hears ==\n";
+    $works = [
+        'bael_rourke' => ['costed' => 'It wasn\'t meant to', 'minuted' => 'every shift', 'subscribed' => 'wherever paper goes', 'walked' => 'coming down the stair'],
+        'wenna_coyle' => ['costed' => 'a sheet for everything', 'minuted' => 'Welcome to it', 'subscribed' => "It's a short one", 'walked' => 'without one'],
+        'corrin_dale' => ['costed' => 'halfpenny', 'minuted' => 'never been the trouble', 'subscribed' => 'Eat something', 'walked' => "That's the part"],
+    ];
+    foreach ($works as $who => $lines) {
+        foreach ($lines as $fate => $needle) {
+            $p = party($db, $base + ['meeting_fate' => $fate]);
+            ok("$who: $fate", str_contains(greet($db, $p, $who), $needle), substr(greet($db, $p, $who), 0, 90));
+            talk($db, $p, $who, ['Leave']);
+            ok("$who says it once", !str_contains(greet($db, $p, $who), $needle));
+        }
+    }
+    foreach ([['bael_rourke', ['office_taken' => 1], 'every shift'], ['bael_rourke', ['works_alarmed' => 1], 'every shift'], ['bael_rourke', ['office_fate' => 'took'], 'every shift'],
+              ['wenna_coyle', ['works_alarmed' => 1], 'Welcome to it'], ['corrin_dale', ['indentured_fate' => 'bought'], 'never been the trouble']] as [$who, $gone, $needle]) {
+        $p = party($db, $base + ['meeting_fate' => 'minuted'] + $gone);
+        ok("$who stays quiet when not at his post (" . implode(',', array_keys($gone)) . ")", !str_contains(greet($db, $p, $who), $needle));
     }
 
     echo "== companions place the mark ==\n";

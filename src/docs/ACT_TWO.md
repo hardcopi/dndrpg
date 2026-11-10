@@ -163,6 +163,21 @@ Wat. Test: `tools/test_fenmoor_lot.php`.
     a penny a page.
   - **Osgar Tull** will carry the costing up, and has never had an owner aboard.
   - **Gillian Petch** at the Greyhythe landing logs a subscriber in.
+- **Jory Kemp** has a line for each outcome. His ordinary post-meeting greeting now
+  reads "By the second pint they'd all heard what, and no two of them the same"
+  instead of "Nobody heard what", so it no longer contradicts them.
+- **The valley roads hear** (Ford Road and the quarry wilds), one line per
+  outcome: Joss Frayle, Sten Harrow (not once `harrow_gone`), Tull Barrow, Wick
+  Lorrimer (not while `wick_in_town`), Dorn Ackley, Gest Pyle, Hesk Dray (not
+  after `salt_fate` = `paid`, when his wagons have gone), Orm Lisser and Vessa
+  Dann. Tarrow is in the Waerhaven module and does not hear of a Rivermark
+  meeting.
+- **The Deepworks hears.** The works can still be reached after Act II (the
+  broken-floor stair has no Act II gate), and the house's word comes down with
+  the carriers. Rourke (not if his office was taken, the works are alarmed, or
+  `office_fate` = `took`), Wenna Coyle (not while the works are alarmed) and
+  Corrin Dale (not once he was bought out) each have a line per outcome.
+  Fessick in the undercut hears nothing.
 - **Companions place the mark.** Once Act II is open, Ilse (`mark_seen_stone`),
   Kessa (`mark_seen_paper`) and Sera (`mark_seen_book`) each have one greeting
   that recognises the mark they saw in Act I as the house's mark: the ledge cuts,

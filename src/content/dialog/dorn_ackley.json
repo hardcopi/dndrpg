@@ -6,6 +6,70 @@
             {
                 "conditions": [
                     {
+                        "flag": "meeting_fate",
+                        "equals": "costed"
+                    }
+                ],
+                "once": true,
+                "text": "\"Costing the town,\" Ackley says, facing north. \"Nobody costed us when the quarry went. They counted the stone they'd lost.\" He does not turn round. \"I'd like to see the figure.\"",
+                "choices": [
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "minuted"
+                    }
+                ],
+                "once": true,
+                "text": "\"Written down.\" The blanket shifts. \"Good. Somebody should have written something down eleven years ago.\"",
+                "choices": [
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "subscribed"
+                    }
+                ],
+                "once": true,
+                "text": "\"An owner.\" He still does not turn round. \"Then you own a piece of whatever they're after under there.\" A long pause. \"I'd not want it.\"",
+                "choices": [
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "walked"
+                    }
+                ],
+                "once": true,
+                "text": "\"Walked out.\" Ackley nods at the north. \"I walked out of somewhere once. You'll find it's not the walking out that stays with you.\"",
+                "choices": [
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "quarryman_fate",
                         "equals": "went"
                     }

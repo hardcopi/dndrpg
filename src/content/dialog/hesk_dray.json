@@ -6,6 +6,94 @@
             {
                 "conditions": [
                     {
+                        "flag": "meeting_fate",
+                        "equals": "costed"
+                    },
+                    {
+                        "not": {
+                            "flag": "salt_fate",
+                            "equals": "paid"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"Carts,\" Hesk says, greasing by feel. \"They'll want carts to shift Rivermark, if it comes to that. Six of mine.\" He wipes his hands. \"I've been paid in advance for a great many things lately. I'll not be paid in advance for that.\"",
+                "choices": [
+                    {
+                        "label": "Fair enough.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "minuted"
+                    },
+                    {
+                        "not": {
+                            "flag": "salt_fate",
+                            "equals": "paid"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"Written down.\" He snorts. \"So's every load I've carried. Not one of those papers ever said what was under the sheets.\"",
+                "choices": [
+                    {
+                        "label": "Fair enough.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "subscribed"
+                    },
+                    {
+                        "not": {
+                            "flag": "salt_fate",
+                            "equals": "paid"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"An owner.\" Hesk goes back to the wheel. \"Twenty years without a complaint. I'll not start with you.\"",
+                "choices": [
+                    {
+                        "label": "Fair enough.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "walked"
+                    },
+                    {
+                        "not": {
+                            "flag": "salt_fate",
+                            "equals": "paid"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"Walked out on them.\" Hesk nods. \"I've thought of walking off a load. Never have. They'd only send another wagon.\"",
+                "choices": [
+                    {
+                        "label": "Fair enough.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "salt_fate",
                         "equals": "opened"
                     }

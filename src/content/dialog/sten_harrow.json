@@ -6,6 +6,90 @@
             {
                 "conditions": [
                     {
+                        "flag": "meeting_fate",
+                        "equals": "costed"
+                    },
+                    {
+                        "not": {
+                            "flag": "harrow_gone"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"Held,\" Harrow says. \"That's what they're saying in town. Held for the quarter.\" He squares the letters on the lamp table. \"I've been held three years out here. It doesn't feel like being let alone.\"",
+                "choices": [
+                    {
+                        "label": "The road, then.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "minuted"
+                    },
+                    {
+                        "not": {
+                            "flag": "harrow_gone"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"Wrote it down, did they.\" He looks at the letters. \"I've had a great deal written down at me. I've never had a word of mine written down at them. I'd have liked to see it.\"",
+                "choices": [
+                    {
+                        "label": "The road, then.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "subscribed"
+                    },
+                    {
+                        "not": {
+                            "flag": "harrow_gone"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"One of them now,\" Harrow says, and it is not a question. The dog watches you. \"Then the next letter's partly from you.\" He folds his hands. \"I'll read it the same as the others.\"",
+                "choices": [
+                    {
+                        "label": "The road, then.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "walked"
+                    },
+                    {
+                        "not": {
+                            "flag": "harrow_gone"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"Walked out.\" Harrow nods at the lamp. \"I've never once answered one of these letters. Same thing, I suppose, only slower.\"",
+                "choices": [
+                    {
+                        "label": "The road, then.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "harrow_fate",
                         "equals": "held"
                     }

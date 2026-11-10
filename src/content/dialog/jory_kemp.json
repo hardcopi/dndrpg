@@ -6,12 +6,128 @@
             {
                 "conditions": [
                     {
+                        "flag": "meeting_fate",
+                        "equals": "costed"
+                    }
+                ],
+                "once": true,
+                "text": "\"Costed, they're saying,\" Jory says, pulling you something. \"Carts and roofs and bread. Half the bar's working out what it'd come to, and the other half's working out the house's fortieth on it.\" He laughs. \"I named the place for that.\"",
+                "choices": [
+                    {
+                        "label": "A room.",
+                        "effects": [
+                            {
+                                "rest": "inn"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "Why the Fortieth?",
+                        "next": "the_name"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "minuted"
+                    }
+                ],
+                "once": true,
+                "text": "\"Minuted, word for word,\" Jory says. \"Mrs Crale's good for that. My regulars were disappointed. They'd been hoping for shouting.\"",
+                "choices": [
+                    {
+                        "label": "A room.",
+                        "effects": [
+                            {
+                                "rest": "inn"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "Why the Fortieth?",
+                        "next": "the_name"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "subscribed"
+                    }
+                ],
+                "once": true,
+                "text": "\"Bought a chair!\" Jory says, loud enough for the whole bar, which turns round to look. \"Room's still eight a night, owner. I've never given the house a discount and I'll not start with a twelfth of it.\"",
+                "choices": [
+                    {
+                        "label": "A room.",
+                        "effects": [
+                            {
+                                "rest": "inn"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "Why the Fortieth?",
+                        "next": "the_name"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "walked"
+                    }
+                ],
+                "once": true,
+                "text": "\"Walked out!\" Jory says. \"In the middle! Somebody stood up at Number Nine.\" He pulls you something without asking and won't take for it. \"That one's for that. Don't tell Mrs Crale.\"",
+                "choices": [
+                    {
+                        "label": "A room.",
+                        "effects": [
+                            {
+                                "rest": "inn"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "Why the Fortieth?",
+                        "next": "the_name"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "quest": "the_quarterly_meeting",
                         "status": "completed"
                     }
                 ],
                 "pool": "idle",
-                "text": "\"Heard you were up at Number Nine,\" Jory Kemp says. \"Everybody heard. Nobody heard what. That's Brackwater.\" He pulls you something without asking.",
+                "text": "\"Heard you were up at Number Nine,\" Jory Kemp says. \"Everybody heard. By the second pint they'd all heard what, and no two of them the same. That's Brackwater.\" He pulls you something without asking.",
                 "choices": [
                     {
                         "label": "A room.",
