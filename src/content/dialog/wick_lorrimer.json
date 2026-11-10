@@ -314,6 +314,31 @@
             {
                 "conditions": [
                     {
+                        "flag": "room_sat"
+                    },
+                    {
+                        "not": {
+                            "flag": "vote_aboard"
+                        }
+                    },
+                    {
+                        "not": {
+                            "flag": "wick_in_town"
+                        }
+                    }
+                ],
+                "text": "\"Race doesn't care,\" Wick says from the wheel-pit, before you've asked. \"Same water went through it this morning as the morning before the sheet.\" He hooks out a weed. \"Folk came out from town to ask me what I thought it meant. Me. In a wheel-pit.\" He leans on the pole. \"I told them I think it means somebody should keep the race clear. That's all I've ever thought anything meant.\"",
+                "choices": [
+                    {
+                        "label": "The road, then.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "met_wick"
                     }
                 ],

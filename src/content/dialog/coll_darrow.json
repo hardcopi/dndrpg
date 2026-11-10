@@ -73,6 +73,26 @@
                 ]
             },
             {
+                "conditions": [
+                    {
+                        "flag": "vote_aboard"
+                    },
+                    {
+                        "not": {
+                            "flag": "room_sat"
+                        }
+                    }
+                ],
+                "text": "\"Up for the morning,\" Coll Darrow says, feet in the bucket. \"Valley, by the boots.\" He nods at the end of the stones, where the wharf gives out into mud and river. \"Go and stand there first, before you go in. I did it before every sale I ever walked into. Thirty years.\" He considers. \"Never helped. Passed the time. Sometimes that's the same thing.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
                 "text": "An old man on the rail of a hulk with a stovepipe, his feet in a bucket. \"Retired,\" he says, to a question you have not asked. \"Thirty years up every river there is. Now I go up and down these steps and that's my river.\"",
                 "choices": [
                     {

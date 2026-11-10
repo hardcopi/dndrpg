@@ -10,6 +10,46 @@
                         "status": "active"
                     },
                     {
+                        "flag": "vote_aboard"
+                    },
+                    {
+                        "not": {
+                            "flag": "room_sat"
+                        }
+                    }
+                ],
+                "text": "Ilse stands at the end of the stones, where the wharf gives out into mud, and looks at the river going away from the valley. \"It all comes down here,\" she says. \"Water, wagons, paper.\" She is quiet a while. \"Tomorrow, one thing goes the other way. Up.\"",
+                "once": true,
+                "choices": [
+                    {
+                        "label": "Goblins.",
+                        "next": "the_count"
+                    },
+                    {
+                        "label": "Tell me about the deep warren.",
+                        "next": "the_deep"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit at the fire a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "ilse",
+                        "status": "active"
+                    },
+                    {
                         "flag": "room_sat"
                     },
                     {

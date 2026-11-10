@@ -36,7 +36,7 @@ function party(PDO $db, array $flags, int $gold = 500): int {
             proficiency_bonus, is_active, gold, current_location_id)
         VALUES (?, 'Human', 'Fighter', 5, 6500, 14, 12, 14, 12, 12, 12, 44, 44, 16, 3, 1, ?,
                 (SELECT id FROM locations WHERE location_key='packet_stair'))")
-        ->execute(['_aftermath_probe_' . bin2hex(random_bytes(3)), $gold]);
+        ->execute(['_aftermath_probe_' . bin2hex(random_bytes(6)), $gold]);
     $cid = (int) $db->lastInsertId();
     $db->prepare('INSERT INTO character_party (party_id, character_id, slot) VALUES (?,?,1)')->execute([$pid, $cid]);
     $db->prepare('UPDATE parties SET leader_character_id = ? WHERE id = ?')->execute([$cid, $pid]);
@@ -966,6 +966,36 @@ try {
     ok('the slip is kept', flag($db, $p, 'item_seven_receipt') === '1' && flag($db, $p, 'walked_fate') === 'reasons');
     ok('Kessa reads the slip', $seek($p, 'kessa', 'Not \'read\''));
     ok('the slip comes once', !$seek($p, 'osgar_tull', 'received, and entered'));
+    echo "== Brackwater, the night before ==\n";
+    $ab = $base + ['vote_fate' => 'kept', 'quarter_eve' => 1, 'packet_gone' => 1, 'vote_aboard' => 1];
+    foreach ([['jory_kemp', "lightermen's end"], ['hester_brindle', 'Everybody buys ink'], ['coll_darrow', 'end of the stones'],
+              ['hollin_sare', 'fourth on the left'], ['dorcas_fenn', 'only surprise']] as [$npc, $nd]) {
+        $p = party($db, $ab); ended($db, $p, 'subscribed');
+        ok("night before: $npc", $seek($p, $npc, $nd));
+        $n = (new DialogEngine($db))->node($p, $npc); talk($db, $p, $npc, [(string) end($n['choices'])['label']]);
+        if ($npc === 'hollin_sare') ok('the chair says it every time until the morning', str_contains(greet($db, $p, $npc), $nd));
+        else ok("once: $npc", !$seek($p, $npc, $nd));
+        $p = party($db, $base + ['vote_fate' => 'kept', 'quarter_eve' => 1, 'packet_gone' => 1]); ended($db, $p, 'subscribed');
+        ok("not if you stayed: $npc", !$seek($p, $npc, $nd));
+    }
+    $p = party($db, $ab); ended($db, $p, 'subscribed');
+    $g = greet($db, $p, 'hollin_sare');
+    ok('the chair asks nothing the night before', str_contains($g, "shan't ask you anything") && !str_contains($g, 'Next quarter'));
+    foreach ([['sera', 'boot-scrapers'], ['aldric', 'do it rested'], ['kessa', 'something different'], ['ilse', 'goes the other way']] as [$c, $nd]) {
+        $p = party($db, $ab); ended($db, $p, 'subscribed');
+        $cs = new CompanionService($db); $cs->meet($p, $c); $cs->recruit($p, $c);
+        ok("$c the night before", $seek($p, $c, $nd));
+    }
+    echo "== the rest of the valley after the sheet ==\n";
+    $sat = $base + ['vote_fate' => 'against', 'quarter_eve' => 1, 'packet_gone' => 1, 'days_waited' => 1, 'room_sat' => 1];
+    foreach ([['wick_lorrimer', 'keep the race clear', ['wick_in_town' => 1]], ['dorn_ackley', 'facing the quarry', []],
+              ['street_drover', 'settles nothing', []], ['tull_barrow', "Beasts don't read", ['drove_fate' => 'out']]] as [$npc, $nd, $not]) {
+        $p = party($db, $sat); ended($db, $p, 'subscribed');
+        ok("after the sheet: $npc", $seek($p, $npc, $nd));
+        $n = (new DialogEngine($db))->node($p, $npc); talk($db, $p, $npc, [(string) end($n['choices'])['label']]);
+        ok("once: $npc", !$seek($p, $npc, $nd));
+        if ($not) { $p = party($db, $sat + $not); ended($db, $p, 'subscribed'); ok("not when gone: $npc", !$seek($p, $npc, $nd)); }
+    }
 } catch (Throwable $e) {
     ok('played without a dead end', false, $e->getMessage());
 } finally {

@@ -63,6 +63,26 @@
                 ]
             },
             {
+                "conditions": [
+                    {
+                        "flag": "vote_aboard"
+                    },
+                    {
+                        "not": {
+                            "flag": "room_sat"
+                        }
+                    }
+                ],
+                "text": "\"Ink?\" Hester Brindle says, before you've asked for anything. \"Everybody buys ink the night before.\" She weighs out nails for someone else without looking at the scale. \"Eleven pots this week. I'd wager not one of them's been opened. People like to have something in their pocket going into a room.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
                 "text": "\"If a boat runs out of it, I've got it,\" says the woman behind the counter, without looking up from the scale. \"If a boat's got too much of it, I'll buy it. Hester Brindle. The Daughter.\" The scale settles. \"Father was the Brindle. Now I'm both.\"",
                 "choices": [
                     {

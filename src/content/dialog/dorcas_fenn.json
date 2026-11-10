@@ -6,6 +6,26 @@
             {
                 "conditions": [
                     {
+                        "flag": "vote_aboard"
+                    },
+                    {
+                        "not": {
+                            "flag": "room_sat"
+                        }
+                    }
+                ],
+                "text": "\"You'll be up the street in the morning,\" Dorcas Fenn says. \"I'll be here.\" She runs a finger along a shelf. \"Whatever's done in that room comes down to me in the end, bound. Every quarter since I've had the keys. I have never once known what it would be before it arrived.\" She takes a volume down. \"I've never minded. It's the only surprise this building gets.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "quest": "the_uncounted",
                         "stage": "to_the_record"
                     }
