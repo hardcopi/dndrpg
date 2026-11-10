@@ -26,6 +26,22 @@
             {
                 "conditions": [
                     {
+                        "flag": "cartulary_deposited",
+                        "equals": "1"
+                    }
+                ],
+                "once": true,
+                "text": "\"A letter came up from Brackwater,\" Brother Venn says, \"from a Record Office I did not know we had any business with. Our fourth press is on its shelf, entered as Arden's, open to anybody, and ours to ask back.\" He turns the letter over as if there might be more on the back. \"The prior read it twice and put it in the chapter book. I think it is the first good letter this house has had in four winters.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "cartulary_held"
                     }
                 ],

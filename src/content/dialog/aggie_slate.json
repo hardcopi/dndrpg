@@ -121,6 +121,22 @@
             {
                 "conditions": [
                     {
+                        "flag": "sealed_arch_fate",
+                        "equals": "left"
+                    }
+                ],
+                "once": true,
+                "text": "\"You still have your two counts?\" says Aggie Slate. \"From the weir and from the Low Court stair.\" You do. She nods, and does not ask to see them. \"Keep them somewhere dry. A wall that nobody looks at is a wall that can be moved, and then all anybody has is what they wrote down.\" She turns her hands over on her knees. \"I have mine. Now there are two.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "undertown_court_fate",
                         "equals": "bench"
                     }

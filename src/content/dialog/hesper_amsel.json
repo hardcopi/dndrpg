@@ -6,6 +6,62 @@
             {
                 "conditions": [
                     {
+                        "flag": "costing_figure",
+                        "equals": "circulated"
+                    },
+                    {
+                        "flag": "costing_fate",
+                        "equals": "whole"
+                    }
+                ],
+                "once": true,
+                "text": "\"Mrs Crale writes that the figure has gone round to the chairs,\" Hesper Amsel says. \"One of them has written to me, care of the packet, asking whether a sixth head is a usual head.\" She squares the letter against the book. \"I have written back that it is not usual. I have written that it was there.\"",
+                "choices": [
+                    {
+                        "label": "Leave her to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "costing_figure",
+                        "equals": "circulated"
+                    },
+                    {
+                        "flag": "costing_fate",
+                        "equals": "given"
+                    }
+                ],
+                "once": true,
+                "text": "\"Mrs Crale writes that the figure has gone round to the chairs,\" Hesper Amsel says. \"One of them has written to me, asking whether five heads were all there was.\" She squares the letter against the book. \"I have written back that five heads were all I was given. I have not been asked anything else.\"",
+                "choices": [
+                    {
+                        "label": "Leave her to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "costing_figure",
+                        "equals": "read_first"
+                    }
+                ],
+                "once": true,
+                "text": "\"It's to be read first, on the day,\" Hesper Amsel says. \"Mrs Crale writes that she will read every line.\" She thinks about the length of it. \"It will take her the better part of an hour. I should like, once in my life, to be in a room while somebody reads my count aloud and nobody is allowed to interrupt.\"",
+                "choices": [
+                    {
+                        "label": "Leave her to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "costing_fate"
                     },
                     {

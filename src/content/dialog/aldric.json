@@ -10,6 +10,129 @@
                         "status": "active"
                     },
                     {
+                        "flag": "priory_fate",
+                        "equals": "unentered"
+                    }
+                ],
+                "text": "\"You did not ask her,\" Aldric says. He is not looking at you. \"About the ford.\" A long breath. \"I have spent four winters wanting somebody to ask, and I find that I am grateful it was not you. I will have to think about what that says.\"",
+                "once": true,
+                "choices": [
+                    {
+                        "label": "Patch us up.",
+                        "effects": [
+                            {
+                                "heal": 8
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "What order were you in?",
+                        "next": "the_order"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit down a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "aldric",
+                        "status": "active"
+                    },
+                    {
+                        "flag": "reliquary_fate",
+                        "equals": "sold"
+                    }
+                ],
+                "text": "\"Three more reliquaries and the fourth press,\" Aldric says. \"For linen and lamp oil.\" He turns his hat. \"When I was there they sold the second press for a roof. It is a small house. It has been eating its own memory a shelf at a time for longer than I was in it, and it has always been for something good.\"",
+                "once": true,
+                "choices": [
+                    {
+                        "label": "Patch us up.",
+                        "effects": [
+                            {
+                                "heal": 8
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "What order were you in?",
+                        "next": "the_order"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit down a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "aldric",
+                        "status": "active"
+                    },
+                    {
+                        "flag": "reliquary_fate",
+                        "equals": "paper"
+                    }
+                ],
+                "text": "\"You own a decade of Arden,\" Aldric says, with something close to amusement. \"Leases, bounds and accounts. I have read some of those pages, by a bad lamp, a long time ago.\" He sobers. \"Keep it dry. Whatever else, keep it dry.\"",
+                "once": true,
+                "choices": [
+                    {
+                        "label": "Patch us up.",
+                        "effects": [
+                            {
+                                "heal": 8
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "What order were you in?",
+                        "next": "the_order"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit down a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "aldric",
+                        "status": "active"
+                    },
+                    {
                         "flag": "costing_figure",
                         "equals": "circulated"
                     }

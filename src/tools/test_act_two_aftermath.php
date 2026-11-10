@@ -551,6 +551,50 @@ try {
         talk($db, $p, 'hesper_amsel', ['Count it your way', 'Leave her to it']);
         ok("and the costing still goes on ($fate)", flag($db, $p, 'costing_fate') === 'given');
     }
+    echo "== the priory, the reliquary and the arch ==\n";
+    $seek = function (int $p, string $npc, string $needle) use ($db): bool {
+        for ($k = 0; $k < 5; $k++) { if (stripos(greet($db, $p, $npc), $needle) !== false) return true; $n = (new DialogEngine($db))->node($p, $npc); talk($db, $p, $npc, [(string) end($n['choices'])['label']]); }
+        return false;
+    };
+    $p = party($db, $base + ['priory_fate' => 'unentered']);
+    ok('the prior noticed nobody asked', $seek($p, 'prioress_hale', 'without asking'));
+    talk($db, $p, 'prioress_hale', ['Goodbye']);
+    ok('the prior says it once', !$seek($p, 'prioress_hale', 'without asking'));
+    $p = party($db, $base + ['sealed_arch_fate' => 'left']);
+    ok('Aggie: now there are two', $seek($p, 'aggie_slate', 'Now there are two'));
+    foreach (['priory_fate' => ['unentered', 'did not ask her'], 'reliquary_fate' => ['sold', 'own memory'], 'reliquary_fate ' => ['paper', 'decade of Arden']] as $k => [$v, $needle]) {
+        $p = party($db, $base + [trim($k) => $v]); ended($db, $p, 'walked');
+        $cs = new CompanionService($db); $cs->meet($p, 'aldric'); $cs->recruit($p, 'aldric');
+        ok("Aldric on $k=$v", str_contains(greet($db, $p, 'aldric'), $needle), substr(greet($db, $p, 'aldric'), 0, 80));
+    }
+    $p = party($db, $base + ['sold_to_the_polite_man' => 1]); ended($db, $p, 'walked');
+    $cs = new CompanionService($db); $cs->meet($p, 'sera'); $cs->recruit($p, 'sera');
+    ok("Sera on the man who doesn't haggle", str_contains(greet($db, $p, 'sera'), "doesn't haggle"));
+    $p = party($db, $base + ['mearing_recut' => 1, 'quarry_writ_fate' => 'stone']); ended($db, $p, 'walked');
+    ok('the disputed sheet reaches Dorcas', $seek($p, 'dorcas_fenn', 'Disputed'));
+
+    $p = party($db, $base + ['reliquary_fate' => 'paper', 'cartulary_held' => 1, 'priory_paper_kept' => 1]); ended($db, $p, 'walked');
+    (new Effects($db))->apply($p, [['give_item' => 'priory_cartulary', 'quantity' => 1]]);
+    ok('Dorcas offers to take a deposit', $seek($p, 'dorcas_fenn', 'takes deposits'));
+    talk($db, $p, 'dorcas_fenn', ['Enter it as']);
+    $has = (int) $db->query("SELECT COUNT(*) FROM character_inventory ci JOIN items i ON i.id=ci.item_id JOIN character_party cp ON cp.character_id=ci.character_id WHERE cp.party_id=$p AND i.item_key='priory_cartulary'")->fetchColumn();
+    ok('deposited: the press leaves the pack', flag($db, $p, 'cartulary_deposited') === '1' && $has === 0, "has=$has");
+    ok('Venn has the letter', $seek($p, 'almoner_venn', 'first good letter'));
+    $p = party($db, $base + ['reliquary_fate' => 'paper', 'cartulary_held' => 1]); ended($db, $p, 'walked');
+    (new Effects($db))->apply($p, [['give_item' => 'priory_cartulary', 'quantity' => 1]]);
+    $seek($p, 'dorcas_fenn', 'takes deposits'); talk($db, $p, 'dorcas_fenn', ["I'll keep it"]);
+    ok('kept: asked once', flag($db, $p, 'cartulary_deposited') === 'kept' && !$seek($p, 'dorcas_fenn', 'takes deposits'));
+
+    echo "== the circulated figure goes up the valley ==\n";
+    foreach ([[['costing_figure' => 'circulated', 'costing_fate' => 'whole'], 'captain_elowen', 'read them the bread'],
+              [['costing_figure' => 'circulated', 'costing_fate' => 'whole'], 'hesper_amsel', 'usual head'],
+              [['costing_figure' => 'circulated', 'costing_fate' => 'given'], 'hesper_amsel', 'all I was given'],
+              [['costing_figure' => 'read_first', 'costing_fate' => 'given'], 'hesper_amsel', 'interrupt'],
+              [['costing_figure' => 'read_first', 'costing_fate' => 'given'], 'captain_elowen', '__never__']] as [$fl, $npc, $needle]) {
+        $p = party($db, $base + $fl + ['clearance_costed' => 1]); ended($db, $p, 'costed');
+        $got = $seek($p, $npc, $needle);
+        ok("$npc / " . implode(',', $fl), $needle === '__never__' ? !$got : $got);
+    }
 } catch (Throwable $e) {
     ok('played without a dead end', false, $e->getMessage());
 } finally {

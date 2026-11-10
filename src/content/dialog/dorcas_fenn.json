@@ -33,6 +33,70 @@
             {
                 "conditions": [
                     {
+                        "flag": "mearing_recut"
+                    },
+                    {
+                        "flag": "act_two_open"
+                    }
+                ],
+                "once": true,
+                "text": "\"A surveyor's sheet came down from your valley,\" Dorcas says, \"an old chainman's hand, with two readings for one stone and a line ruled between them.\" She almost smiles. \"I have filed it under Disputed. It's a shelf nobody likes. Everything on it will be argued about for a hundred years, and at least now the argument is written down.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "has_item": "priory_cartulary"
+                    },
+                    {
+                        "flag": "act_two_open"
+                    },
+                    {
+                        "not": {
+                            "flag": "cartulary_deposited"
+                        }
+                    }
+                ],
+                "text": "Dorcas Fenn sees the binding before she sees you. \"That's a fourth press,\" she says. \"Arden's, by the tooling. A decade of deeds and bounds.\" She does not reach for it. \"A Record Office takes deposits. It would be kept dry, entered, and open to anybody who asks, and it would still be the priory's to ask back. Very little has come to us from up your valley that the house didn't send.\"",
+                "choices": [
+                    {
+                        "label": "Take it. Enter it as Arden's.",
+                        "effects": [
+                            {
+                                "take_item": "priory_cartulary"
+                            },
+                            {
+                                "set_flag": "cartulary_deposited"
+                            },
+                            {
+                                "approval": {
+                                    "aldric": 4,
+                                    "sera": -2
+                                }
+                            }
+                        ],
+                        "next": "cartulary_entered"
+                    },
+                    {
+                        "label": "I'll keep it.",
+                        "effects": [
+                            {
+                                "set_flag": "cartulary_deposited",
+                                "value": "kept"
+                            }
+                        ],
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "concern_answering"
                     },
                     {
@@ -871,6 +935,17 @@
         "uncounted_entered": [
             {
                 "text": "She writes it in her slow clerk's hand: the date, your name as informant, Tull and Coyle as sources, and then fifteen lines, peg, date, face, cause, and the name as given. At the head of the page, where an entry usually has its subject, she writes after a moment: The Deepworks. Dead. She blots it. \"There,\" she says. \"Now anybody can ask.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "cartulary_entered": [
+            {
+                "text": "She enters it in the slow hand: one volume, the fourth press of the cartulary of Arden Priory, deposited by you, the property of the house, open to inspection. Then she puts it on the shelf with that valley's name on it, beside Mr Corse's two letters. \"There,\" she says. \"Now it's two kinds of paper.\"",
                 "choices": [
                     {
                         "label": "Leave.",
