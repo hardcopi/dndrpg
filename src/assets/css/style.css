@@ -45,6 +45,16 @@ button, input, select, textarea { font-family: var(--font-ui); }
 
 a { color: var(--gold); text-decoration: none; }
 a:hover { text-decoration: underline; }
+/* A link in a sentence has to be told apart by more than its colour: gold
+   against the body grey is 1.3:1, which a reader who cannot see the hue does
+   not get at all (WCAG 1.4.1; axe flagged the home, about and tour pages).
+   Only bare links inside running text — buttons, chips and the site bar all
+   carry a class or sit outside a p/li, and keep the hover-only underline. */
+:is(p, li) > a:not([class]) {
+  text-decoration: underline;
+  text-decoration-thickness: from-font;
+  text-underline-offset: 0.15em;
+}
 
 h1, h2, h3 { color: var(--gold); font-weight: var(--fw-semibold); letter-spacing: var(--ls-display); margin: 0 0 var(--sp-8); }
 
