@@ -62,6 +62,32 @@
             {
                 "conditions": [
                     {
+                        "flag": "room_sat"
+                    },
+                    {
+                        "not": {
+                            "flag": "vote_aboard"
+                        }
+                    },
+                    {
+                        "not": {
+                            "flag": "wardens_fate",
+                            "equals": "turned"
+                        }
+                    }
+                ],
+                "text": "\"News comes across the fen last,\" Nesh Gray says from the rail. \"Always has. A sheet that says a room sat.\" She looks at the faggot stack. \"We don't wait on houses out here. Causeway wants mending whatever they wrote. When the minute comes, somebody'll pole it out, and we'll hear it, and then we'll mend the causeway.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "quest": "the_fen_wardens",
                         "stage": "one_run"
                     }

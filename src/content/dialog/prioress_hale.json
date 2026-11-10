@@ -59,6 +59,26 @@
             {
                 "conditions": [
                     {
+                        "flag": "room_sat"
+                    },
+                    {
+                        "not": {
+                            "flag": "vote_aboard"
+                        }
+                    }
+                ],
+                "text": "\"A carter left the sheet at the gate,\" Ottilie Hale says, kneeling at the herb bed. \"The gate is open, so news comes in like everyone else. It was read in chapter, because everything that comes through the gate is read in chapter.\" She pulls a weed. \"Nobody said anything after. That is also usual. We will read the minute the same way, when it comes, and say the same amount.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "quest": "the_order_that_threw_him_out",
                         "stage": "what_the_house_is_for"
                     }

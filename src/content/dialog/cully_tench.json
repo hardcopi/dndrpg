@@ -78,6 +78,56 @@
             {
                 "conditions": [
                     {
+                        "flag": "room_sat"
+                    },
+                    {
+                        "not": {
+                            "flag": "vote_aboard"
+                        }
+                    }
+                ],
+                "text": "\"Man on the causeway wanted me to pole a copy of the sheet out to the stilt camp,\" Cully says. \"Copper and a good reason, I told him.\" He spits over the side. \"He said the reason was the quarter-day. I said four lines isn't a reason, it's a rumour with a seal on. Took his copper anyway. They'd want to know.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "drowned_nave_clear"
+                    }
+                ],
+                "text": "\"I pole past the chapel twice a day now,\" Cully says. \"Door's open and the water's still. I can see the chest on the fourth step from the punt.\" He leans on the pole. \"Nobody's been for it. I keep thinking somebody will, and I keep not knowing who I'd want it to be.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "black_pools_cleared"
+                    }
+                ],
+                "text": "\"Cutters went back to the near cuttings,\" Cully says. \"First time in a year. They take the long poles and they don't go further in than the near ones, but they went.\" He looks at the turning for the pools, which he does now, a little. \"Peat's peat. Somebody has to cut it.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "drowned_nave_clear"
                     }
                 ],

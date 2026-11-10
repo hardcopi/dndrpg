@@ -57,6 +57,21 @@
             {
                 "conditions": [
                     {
+                        "flag": "uncounted_entered_late"
+                    }
+                ],
+                "text": "\"Entered, I hear,\" Mrs Coyle says. \"After the day.\" She does not look at the board, where the fifteen gaps are. \"The date's what they'll look at. Fine. I write dates for a living. A date is the one thing on a page nobody can argue with.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "meeting_fate",
                         "equals": "costed"
                     },

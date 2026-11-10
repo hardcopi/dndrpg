@@ -906,6 +906,38 @@ try {
         $n = (new DialogEngine($db))->node($p, $npc); talk($db, $p, $npc, [(string) end($n['choices'])['label']]);
         ok("once: $npc", !$seek($p, $npc, $nd));
     }
+    echo "== the edges hear the sheet ==\n";
+    $sat = $base + ['vote_fate' => 'against', 'quarter_eve' => 1, 'packet_gone' => 1, 'days_waited' => 1, 'room_sat' => 1];
+    foreach ([['nesh_gray', 'News comes across the fen last', []], ['cully_tench', 'rumour with a seal', []], ['joss_frayle', 'they still stop', []],
+              ['prioress_hale', 'read in chapter', []], ['almoner_venn', 'a shelf is a shelf', ['cartulary_deposited' => '1']],
+              ['corrin_dale', 'same time', ['uncounted_fate' => 'read']]] as [$npc, $nd, $fl]) {
+        $p = party($db, $sat + $fl); ended($db, $p, 'subscribed');
+        ok("after the sheet: $npc", $seek($p, $npc, $nd));
+        $n = (new DialogEngine($db))->node($p, $npc); talk($db, $p, $npc, [(string) end($n['choices'])['label']]);
+        ok("once: $npc", !$seek($p, $npc, $nd));
+        $p = party($db, $base + $fl + ['vote_fate' => 'kept', 'vote_aboard' => 1, 'room_sat' => 1]); ended($db, $p, 'subscribed');
+        ok("not if you went aboard: $npc", !$seek($p, $npc, $nd));
+    }
+    $p = party($db, $sat + ['wardens_fate' => 'turned']); ended($db, $p, 'subscribed');
+    ok('no fen line when the camp is gone', !$seek($p, 'nesh_gray', 'News comes across'));
+
+    echo "== the Uncounted, entered late ==\n";
+    $p = party($db, $sat + ['uncounted_fate' => 'kept']); ended($db, $p, 'subscribed');
+    $cs = new CompanionService($db); $cs->meet($p, 'aldric'); $cs->recruit($p, 'aldric');
+    $pr0 = (int) (flag($db, $p, 'pressure') ?? 0);
+    ok('Dorcas offers to enter it late', $seek($p, 'dorcas_fenn', "today's date"));
+    $n = talk($db, $p, 'dorcas_fenn', ['Enter it now']);
+    $ij = implode(' ', array_map(fn ($i) => $i['text'], $n['interjections'] ?? []));
+    ok('entered after the sitting', str_contains((string) $n['text'], 'Received after the sitting') && flag($db, $p, 'uncounted_entered_late') === '1');
+    ok('the fate stays kept', flag($db, $p, 'uncounted_fate') === 'kept' && flag($db, $p, 'vote_fate') === 'against');
+    ok('Aldric on late', str_contains($ij, 'Late is how'));
+    ok('Coyle reads the date', $seek($p, 'wenna_coyle', 'nobody can argue with'));
+    ok('asked once', !$seek($p, 'dorcas_fenn', "today's date"));
+    $p = party($db, $sat + ['uncounted_fate' => 'kept']); ended($db, $p, 'subscribed');
+    $seek($p, 'dorcas_fenn', "today's date"); talk($db, $p, 'dorcas_fenn', ['Keep it']);
+    ok('keeping it leaves it kept and unentered', flag($db, $p, 'uncounted_entered_late') === null);
+    $p = party($db, $base + ['uncounted_fate' => 'kept', 'vote_fate' => 'against']); ended($db, $p, 'subscribed');
+    ok('no late entry before the sheet', !$seek($p, 'dorcas_fenn', "today's date"));
 } catch (Throwable $e) {
     ok('played without a dead end', false, $e->getMessage());
 } finally {

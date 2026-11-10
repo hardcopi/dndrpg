@@ -6,6 +6,30 @@
             {
                 "conditions": [
                     {
+                        "flag": "room_sat"
+                    },
+                    {
+                        "not": {
+                            "flag": "vote_aboard"
+                        }
+                    },
+                    {
+                        "flag": "cartulary_deposited",
+                        "equals": "1"
+                    }
+                ],
+                "text": "\"The prior asked me whether, now the house has sat, Arden's bounds are safe on Mrs Fenn's shelf,\" Venn says, with the lamp on the empty spaces. \"I told her a shelf is a shelf. It does not know what a room did.\" He moves the lamp. \"It is the first time in my life I have been glad that a thing does not know something.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "reliquary_fate",
                         "equals": "stopped"
                     }
