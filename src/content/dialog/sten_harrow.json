@@ -165,6 +165,24 @@
                 ]
             },
             {
+                "conditions": [
+                    {
+                        "flag": "met_harrow"
+                    }
+                ],
+                "text": "Sten Harrow comes out of the byre and stops in the middle of the yard again, not at the gate. You are beginning to understand it as a courtesy.\n\n\"Road's still east,\" he says.",
+                "choices": [
+                    {
+                        "label": "There's a lamp on your porch table that has been trimmed and not lit.",
+                        "next": "the_lamp"
+                    },
+                    {
+                        "label": "The road, then.",
+                        "end": true
+                    }
+                ]
+            },
+            {
                 "text": "A long low farmhouse, a squared muck-heap, ditches clear, gates hanging true. The man who did all of that comes out of the byre wiping his hands and stops in the middle of the yard rather than at the gate, which is a decision.\n\n\"Sten Harrow. Third of the name on this ground.\" A pause. \"You'll want the road. It's east.\"",
                 "on_enter": [
                     {

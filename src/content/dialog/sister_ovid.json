@@ -83,6 +83,28 @@
                 ]
             },
             {
+                "conditions": [
+                    {
+                        "flag": "met_ovid"
+                    }
+                ],
+                "text": "Ovid finishes the line she is on before she looks up, and when she does she knows you, which in that room is not nothing.\n\n\"Say the decade,\" she says.",
+                "choices": [
+                    {
+                        "label": "The fourth winter back. The ford.",
+                        "next": "the_fourth_press"
+                    },
+                    {
+                        "label": "What's in them?",
+                        "next": "does_anyone_ask"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
                 "text": "The only warm room in the priory, and it is warm because the presses must not damp.\n\nAn old woman at the one clear desk finishes the line she is on before she looks up.\n\n\"Ovid,\" she says. \"Presses. Say the decade.\"",
                 "on_enter": [
                     {

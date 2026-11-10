@@ -10,6 +10,46 @@
                         "status": "active"
                     },
                     {
+                        "flag": "corse_said_for"
+                    }
+                ],
+                "text": "\"'No one sits down and decides to own a valley,'\" Aldric repeats, when you tell him. He is quiet a while. \"I have heard that said before. It is usually true, which is what makes it so useful to the people it is not true of.\"",
+                "once": true,
+                "choices": [
+                    {
+                        "label": "Patch us up.",
+                        "effects": [
+                            {
+                                "heal": 8
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "What order were you in?",
+                        "next": "the_order"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit down a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "aldric",
+                        "status": "active"
+                    },
+                    {
                         "flag": "room_sat"
                     },
                     {

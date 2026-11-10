@@ -844,6 +844,34 @@ try {
         $n = (new DialogEngine($db))->node($p, $npc); talk($db, $p, $npc, [(string) end($n['choices'])['label']]);
         ok("once ($fl)", !$seek($p, $npc, $needle));
     }
+    echo "== people remember you ==\n";
+    foreach (['dorn_ackley' => ['met_ackley', 'still not two'], 'tull_barrow' => ['met_barrow', "Fire's still mine"], 'wenna_coyle' => ['met_coyle', 'Still no peg number'],
+              'cully_tench' => ['met_cully', 'a copper and a reason?'], 'corrin_dale' => ['met_dale', 'Still not on a face'], 'joss_frayle' => ['met_frayle', 'private thing'],
+              'nesh_gray' => ['met_gray', 'planks stay down'], 'prioress_hale' => ['met_hale', 'not changed the arrangement'], 'sten_harrow' => ['met_harrow', "Road's still east"],
+              'hesk_dray' => ['met_hesk', 'Wagons are still mine'], 'orm_lisser' => ['met_orm', 'Back through the gate'], 'sister_ovid' => ['met_ovid', 'she knows you'],
+              'gillian_petch' => ['met_petch', 'Still lost, or still the crane'], 'alder_pyke' => ['met_pyke', 'Still a shilling'], 'bael_rourke' => ['met_rourke', "I'd remember"],
+              'brother_teodor' => ['met_teodor', 'Properly, then'], 'osgar_tull' => ['met_tull', 'Same as when you asked'], 'almoner_venn' => ['met_venn', 'nods without turning'],
+              'vessa_dann' => ['met_vessa', 'changes the number'], 'wick_lorrimer' => ['met_wick', 'from him is hello'], 'gubb_wrayne' => ['met_wrayne', 'Still up']] as $npc => [$fl, $nd]) {
+        $p = party($db, [$fl => 1]);
+        $g = greet($db, $p, $npc);
+        ok("$npc remembers you", str_contains($g, $nd), substr($g, 0, 80));
+        $n = (new DialogEngine($db))->node($p, $npc);
+        ok("$npc: same replies as before", count($n['choices'] ?? []) >= 2);
+        $p = party($db, []);
+        ok("$npc: a stranger still gets the first meeting", !str_contains(greet($db, $p, $npc), $nd));
+    }
+    echo "== what Corse said travels ==\n";
+    foreach ([['corse_said_the_narrow_part', 'alder_pyke', 'forty miles round', []], ['corse_told_the_area', 'gest_pyle', 'Most of the valley', []],
+              ['corse_named_the_works', 'corrin_dale', 'not the comfort', []], ['corse_explained_clearance', 'mara_hearthstone', 'A head in a column', []],
+              ['knows_corse_name', 'alder_pyke', 'for his paper', []], ['corse_declined_one', 'kessa', 'three streets later', ['kessa']],
+              ['corse_said_for', 'aldric', 'decides to own a valley', ['aldric']]] as [$fl, $npc, $nd, $cs]) {
+        $p = party($db, $base + [$fl => 1]); ended($db, $p, 'costed');
+        $c = new CompanionService($db); foreach ($cs as $k) { $c->meet($p, $k); $c->recruit($p, $k); }
+        ok("$npc hears $fl", $seek($p, $npc, $nd));
+        if (!$cs) { $n = (new DialogEngine($db))->node($p, $npc); talk($db, $p, $npc, [(string) end($n['choices'])['label']]); ok("once ($fl)", !$seek($p, $npc, $nd)); }
+    }
+    $p = party($db, $base + ['knows_corse_name' => 1, 'met_corse' => 1]); ended($db, $p, 'costed');
+    ok('Pyke does not wonder about a man you have met', !$seek($p, 'alder_pyke', 'for his paper'));
 } catch (Throwable $e) {
     ok('played without a dead end', false, $e->getMessage());
 } finally {

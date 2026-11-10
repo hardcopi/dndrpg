@@ -543,6 +543,41 @@
             {
                 "conditions": [
                     {
+                        "flag": "corse_said_the_narrow_part"
+                    }
+                ],
+                "text": "\"The narrow part,\" Pyke says, when you tell him. He turns it over like a stone he's been handed. \"Well. He's not wrong. I've chained it. Everything from the head of the valley comes through the Row or goes forty miles round.\" He winds the chain. \"I'd just never heard it said as if it was the only thing about us.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "knows_corse_name"
+                    },
+                    {
+                        "not": {
+                            "flag": "met_corse"
+                        }
+                    }
+                ],
+                "text": "\"Corse,\" Pyke says, as if he has been carrying the name about with the chain. \"I've never chained a yard for a man of that name.\" He breaks the bread. \"I've chained a great deal for his paper, it turns out.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "grazing_bought_known"
                     }
                 ],
@@ -1303,6 +1338,158 @@
                             }
                         ],
                         "next": "whose_wages"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "met_pyke"
+                    }
+                ],
+                "text": "Pyke shifts the chain on his shoulder and moves his bread along the step to make room.\n\n\"Still a shilling,\" he says. \"Still want a boy.\"",
+                "choices": [
+                    {
+                        "label": "What does a chainman do?",
+                        "next": "what_a_chainman_does"
+                    },
+                    {
+                        "label": "I've seen your mark in two places now.",
+                        "conditions": [
+                            {
+                                "any": [
+                                    {
+                                        "not": {
+                                            "quest": "the_same_mark"
+                                        }
+                                    },
+                                    {
+                                        "quest": "the_same_mark",
+                                        "stage": "two_places"
+                                    }
+                                ]
+                            },
+                            {
+                                "any": [
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "grain_stamp_seen"
+                                            },
+                                            {
+                                                "flag": "mark_seen_paper"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "grain_stamp_seen"
+                                            },
+                                            {
+                                                "flag": "mark_seen_book"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "grain_stamp_seen"
+                                            },
+                                            {
+                                                "flag": "mark_seen_plate"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "grain_stamp_seen"
+                                            },
+                                            {
+                                                "flag": "mark_seen_stone"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "mark_seen_paper"
+                                            },
+                                            {
+                                                "flag": "mark_seen_book"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "mark_seen_paper"
+                                            },
+                                            {
+                                                "flag": "mark_seen_plate"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "mark_seen_paper"
+                                            },
+                                            {
+                                                "flag": "mark_seen_stone"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "mark_seen_book"
+                                            },
+                                            {
+                                                "flag": "mark_seen_plate"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "mark_seen_book"
+                                            },
+                                            {
+                                                "flag": "mark_seen_stone"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "all": [
+                                            {
+                                                "flag": "mark_seen_plate"
+                                            },
+                                            {
+                                                "flag": "mark_seen_stone"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "start_quest": "the_same_mark"
+                            },
+                            {
+                                "quest_stage": {
+                                    "quest": "the_same_mark",
+                                    "stage": "asked_the_chainman"
+                                }
+                            }
+                        ],
+                        "next": "the_mark"
+                    },
+                    {
+                        "label": "Nothing. Enjoy your bread.",
+                        "end": true
                     }
                 ]
             },

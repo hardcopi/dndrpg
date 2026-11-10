@@ -196,6 +196,28 @@
                 "once": true
             },
             {
+                "conditions": [
+                    {
+                        "flag": "met_gray"
+                    }
+                ],
+                "text": "The planks stay down when the camp sees it is you, which is as close as the stilt camp comes to saying hello.\n\n\"Back,\" Nesh Gray says from the rail. \"Say what you want while I'm in a mood to hear it.\"",
+                "choices": [
+                    {
+                        "label": "We'll pay the toll.",
+                        "next": "the_causeway"
+                    },
+                    {
+                        "label": "That faggot stack is road-mending. Why?",
+                        "next": "the_causeway"
+                    },
+                    {
+                        "label": "Planks up, then.",
+                        "next": "planks_up"
+                    }
+                ]
+            },
+            {
                 "text": "Six platforms on piles, a stack of new faggot bundles taller than the camp could ever use, and about a dozen people looking down at you off plank walks that can all be pulled up in four seconds.\n\n\"You'll want to say what you are,\" the woman at the rail says, \"while everyone's still holding the planks down.\"",
                 "on_enter": [
                     {

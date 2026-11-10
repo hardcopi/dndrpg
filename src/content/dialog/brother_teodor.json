@@ -99,6 +99,28 @@
                 ]
             },
             {
+                "conditions": [
+                    {
+                        "flag": "met_teodor"
+                    }
+                ],
+                "text": "Teodor is awake, as he was last time, and turns his head on the pillow.\n\n\"Properly, then,\" he says. \"One way or the other.\"",
+                "choices": [
+                    {
+                        "label": "You were infirmarer here.",
+                        "next": "the_letter"
+                    },
+                    {
+                        "label": "What's on the writing-board?",
+                        "next": "the_sheet"
+                    },
+                    {
+                        "label": "Properly out, then.",
+                        "end": true
+                    }
+                ]
+            },
+            {
                 "text": "Off the infirmary, through a door kept shut for quiet: a bed, a stool, a shutter, a shelf, a cup that is filled and not drunk.\n\nThe man in the bed is awake and has been awake for some time.\n\n\"Come in properly,\" he says, \"or go away properly. The half of it in the doorway is what I have had for two years.\"",
                 "on_enter": [
                     {

@@ -103,6 +103,24 @@
                 ]
             },
             {
+                "conditions": [
+                    {
+                        "flag": "met_wrayne"
+                    }
+                ],
+                "text": "Wrayne looks up from the grease-pot.\n\n\"Still up,\" he says.",
+                "choices": [
+                    {
+                        "label": "How long has it been up?",
+                        "next": "how_long"
+                    },
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
                 "text": "Dressed stone, a paved apron, an oak gate in an iron frame, and a screw-jack that has been greased this month. It is the first square corner west of the causeway.\n\nAn old man on the apron looks up from a grease-pot.\n\n\"It's up,\" he says. \"In case that's the question. It's been up.\"",
                 "on_enter": [
                     {
