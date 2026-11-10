@@ -3597,5 +3597,328 @@ window.RIVERMARK_SCENES = {
     fx: [
       {type: "dust", x: 20, y: 25, w: 45, h: 45, intensity: 0.3, count: 10}
     ]
+  },
+  priory_gate: {
+    "image": "assets/images/scenes/priory_gate.jpg",
+    "exits": {
+      "priory_track": {
+        "x": 12,
+        "y": 82,
+        "icon": "↓"
+      },
+      "priory_cloister": {
+        "x": 64,
+        "y": 52,
+        "icon": "⌂"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The bench",
+        "x": 61,
+        "y": 64,
+        "act": "search"
+      },
+      {
+        "label": "The bell-rope",
+        "x": 64,
+        "y": 32,
+        "act": "search"
+      },
+      {
+        "label": "The alms slot",
+        "x": 86,
+        "y": 42,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "birds",
+        "x": 2,
+        "y": 4,
+        "w": 30,
+        "h": 18,
+        "intensity": 0.5
+      }
+    ]
+  },
+  priory_cloister: {
+    "image": "assets/images/scenes/priory_cloister.jpg",
+    "exits": {
+      "priory_chapel": {
+        "x": 57,
+        "y": 52,
+        "icon": "↑"
+      },
+      "priory_scriptorium": {
+        "x": 8,
+        "y": 56,
+        "icon": "←"
+      },
+      "priory_gate": {
+        "x": 95,
+        "y": 56,
+        "icon": "→"
+      },
+      "priory_infirmary": {
+        "x": 50,
+        "y": 92,
+        "icon": "↓"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The glazed arcade",
+        "x": 20,
+        "y": 44,
+        "act": "search"
+      },
+      {
+        "label": "The herb beds",
+        "x": 84,
+        "y": 80,
+        "act": "search"
+      },
+      {
+        "label": "The bell",
+        "x": 59,
+        "y": 22,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "birds",
+        "x": 30,
+        "y": 3,
+        "w": 45,
+        "h": 16,
+        "intensity": 0.4
+      }
+    ]
+  },
+  priory_chapel: {
+    "image": "assets/images/scenes/priory_chapel.jpg",
+    "exits": {
+      "priory_cloister": {
+        "x": 50,
+        "y": 92,
+        "icon": "↓"
+      },
+      "priory_reliquary": {
+        "x": 37,
+        "y": 46,
+        "icon": "⌂"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The sun-disc",
+        "x": 52,
+        "y": 28,
+        "act": "search"
+      },
+      {
+        "label": "The brackets",
+        "x": 15,
+        "y": 26,
+        "act": "search"
+      },
+      {
+        "label": "The worn floor",
+        "x": 50,
+        "y": 76,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "dust",
+        "x": 70,
+        "y": 10,
+        "w": 25,
+        "h": 50,
+        "intensity": 0.25,
+        "count": 8
+      }
+    ]
+  },
+  priory_reliquary: {
+    "image": "assets/images/scenes/priory_reliquary.jpg",
+    "exits": {
+      "priory_chapel": {
+        "x": 30,
+        "y": 70,
+        "icon": "↩"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The cards",
+        "x": 68,
+        "y": 50,
+        "act": "search"
+      },
+      {
+        "label": "The grille",
+        "x": 67,
+        "y": 16,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "dust",
+        "x": 55,
+        "y": 5,
+        "w": 25,
+        "h": 45,
+        "intensity": 0.3,
+        "count": 8
+      }
+    ]
+  },
+  priory_scriptorium: {
+    "image": "assets/images/scenes/priory_scriptorium.jpg",
+    "exits": {
+      "priory_cloister": {
+        "x": 94,
+        "y": 55,
+        "icon": "→"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The clear desk",
+        "x": 38,
+        "y": 54,
+        "act": "search"
+      },
+      {
+        "label": "The cartulary presses",
+        "x": 43,
+        "y": 34,
+        "act": "search"
+      },
+      {
+        "label": "The window",
+        "x": 79,
+        "y": 30,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "dust",
+        "x": 60,
+        "y": 10,
+        "w": 30,
+        "h": 50,
+        "intensity": 0.25,
+        "count": 8
+      }
+    ]
+  },
+  priory_infirmary: {
+    "image": "assets/images/scenes/priory_infirmary.jpg",
+    "exits": {
+      "priory_cloister": {
+        "x": 50,
+        "y": 92,
+        "icon": "↓"
+      },
+      "teodors_cell": {
+        "x": 63,
+        "y": 40,
+        "icon": "⌂"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The made beds",
+        "x": 84,
+        "y": 68,
+        "act": "search"
+      },
+      {
+        "label": "The yard door",
+        "x": 8,
+        "y": 50,
+        "act": "search"
+      },
+      {
+        "label": "The hearth",
+        "x": 50,
+        "y": 44,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "glow",
+        "x": 44,
+        "y": 38,
+        "w": 14,
+        "h": 16,
+        "intensity": 0.4
+      },
+      {
+        "type": "glow",
+        "x": 10,
+        "y": 82,
+        "w": 18,
+        "h": 16,
+        "intensity": 0.4
+      }
+    ]
+  },
+  teodors_cell: {
+    "image": "assets/images/scenes/teodors_cell.jpg",
+    "exits": {
+      "priory_infirmary": {
+        "x": 9,
+        "y": 55,
+        "icon": "↩"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The writing-board",
+        "x": 33,
+        "y": 40,
+        "act": "search"
+      },
+      {
+        "label": "The cup on the shelf",
+        "x": 45,
+        "y": 28,
+        "act": "search"
+      },
+      {
+        "label": "The shutter",
+        "x": 80,
+        "y": 35,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "dust",
+        "x": 55,
+        "y": 15,
+        "w": 35,
+        "h": 55,
+        "intensity": 0.3,
+        "count": 10
+      }
+    ]
   }
 };
