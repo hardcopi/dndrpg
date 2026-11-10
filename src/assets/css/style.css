@@ -4458,7 +4458,9 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   text-align: center;
   line-height: var(--lh-normal);
 }
-.pip-unconscious { border-color: var(--text-faint); background: var(--bg-panel-2); color: var(--text-dim); }
+/* --text, not --text-dim: the pip sits on the downed card, whose greying took
+   the dim grey under 4.5:1. The dim border still says it is not a live state. */
+.pip-unconscious { border-color: var(--text-faint); background: var(--bg-panel-2); color: var(--text); }
 .pip-invisible { border-color: var(--accent-dim); background: var(--accent-well); color: var(--accent); }
 
 /* ====================================================================

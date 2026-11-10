@@ -192,7 +192,8 @@ if (!session_character_id()) {
                 <svg aria-hidden="true"><use href="#i-chevron"></use></svg>
               </button>
             </div>
-            <div class="log" id="game-log" role="log" aria-live="polite" aria-relevant="additions"></div>
+            <div class="log" id="game-log" role="log" aria-live="polite" aria-relevant="additions"
+                 aria-label="Log" tabindex="0"></div>
           </div>
         </div>
 
