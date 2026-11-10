@@ -2026,6 +2026,12 @@
                       && !e.target.closest('[data-npc]'))
         || e.button === 1,
       onApply: (view) => svgEl.classList.toggle('is-zoomed', view.z > 1.001),
+      // The chart's art is drawn past the authoring box; fitting the viewBox
+      // to the panel keeps the edge of the art from showing as a dark strip.
+      fitAspect: true,
+      // Zoomed in on a painted chart, keep to the painting: the label margin
+      // round it is dark, and showing it reads as the art having run out.
+      clamp: () => (svgEl.querySelector('.wm-art') ? { x: 0, y: 0, w: VIEW_W, h: VIEW_H } : null),
     });
     if (!api) return null;
 
