@@ -4,6 +4,70 @@
     "nodes": {
         "hail": [
             {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "costed"
+                    }
+                ],
+                "once": true,
+                "text": "\"They're costing the town, they say. Carts and bread.\" The beggar holds out a hand. \"Nobody's costed me. I come cheap.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "minuted"
+                    }
+                ],
+                "once": true,
+                "text": "\"Written down, is it.\" The hand stays out. \"Somebody wrote my name down once. I'm still waiting on that too.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "subscribed"
+                    }
+                ],
+                "once": true,
+                "text": "\"An owner!\" The beggar's hand is steadier now. \"Owners can spare a coin.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "walked"
+                    }
+                ],
+                "once": true,
+                "text": "\"Walked out on all that money.\" The beggar shakes his head. \"Walk past me next. Everybody does.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
                 "text": "Spare a coin? The granary weighs grain, but nobody weighs luck.",
                 "choices": [
                     {

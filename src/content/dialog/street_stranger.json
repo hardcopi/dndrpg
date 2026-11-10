@@ -4,6 +4,70 @@
     "nodes": {
         "hail": [
             {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "costed"
+                    }
+                ],
+                "once": true,
+                "text": "\"Costing what it would take to move everybody along.\" The stranger smiles thinly. \"I could have told them. Nothing. Everybody here is already moving, slowly.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "minuted"
+                    }
+                ],
+                "once": true,
+                "text": "\"Word for word, they say.\" The stranger shrugs. \"Nobody has written down anything I've said in twenty years. I'd find it alarming.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "subscribed"
+                    }
+                ],
+                "once": true,
+                "text": "\"Bought a seat at the table, they say.\" The stranger looks at you properly, perhaps for the first time. \"Then you're not passing through any more. Pity. It's restful.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "walked"
+                    }
+                ],
+                "once": true,
+                "text": "\"Walked out.\" The stranger nods approval. \"Best thing to do with most rooms.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
                 "text": "I'm just passing through. Everyone in this town is just passing through, slowly.",
                 "choices": [
                     {

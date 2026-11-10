@@ -8,6 +8,86 @@
                     {
                         "flag": "room_fate",
                         "equals": "work"
+                    },
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "costed"
+                    }
+                ],
+                "once": true,
+                "text": "\"Boatmen had it before the carters,\" Corbin says, rolling a keg without looking at it. \"Held, for the quarter. On the river a quarter's one season of water.\" He sets it on the chock. \"It goes by.\"",
+                "choices": [
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "room_fate",
+                        "equals": "work"
+                    },
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "minuted"
+                    }
+                ],
+                "once": true,
+                "text": "\"Word for word, the boatmen say.\" Corbin shrugs at the keg. \"Twenty years on the water and nobody wrote down a word I said. I never minded.\"",
+                "choices": [
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "room_fate",
+                        "equals": "work"
+                    },
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "subscribed"
+                    }
+                ],
+                "once": true,
+                "text": "\"An owner, they're saying.\" Corbin stops rolling. \"They owned the boats I worked, the ones like them. I never once saw an owner on a boat.\"",
+                "choices": [
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "room_fate",
+                        "equals": "work"
+                    },
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "walked"
+                    }
+                ],
+                "once": true,
+                "text": "\"Walked out,\" Corbin says. \"Good.\" He goes back to the kegs. \"Sometimes that's all there is to do with a thing.\"",
+                "choices": [
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "room_fate",
+                        "equals": "work"
                     }
                 ],
                 "once": true,

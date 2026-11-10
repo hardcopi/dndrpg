@@ -4,6 +4,70 @@
     "nodes": {
         "hail": [
             {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "costed"
+                    }
+                ],
+                "once": true,
+                "text": "\"A costing of removal,\" the scholar says, savouring it. \"Which means somebody must now write down, in figures, what this town is. I have wanted to read that document all my life. I would prefer it had been written for some other reason.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "minuted"
+                    }
+                ],
+                "once": true,
+                "text": "\"Minuted, word for word, in a book kept downriver.\" The scholar is delighted and ashamed of being delighted. \"A primary source. In a hundred years someone will read it and know exactly what was said. They will not know what happened.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "subscribed"
+                    }
+                ],
+                "once": true,
+                "text": "\"A share in the house.\" The scholar regards you with real curiosity. \"Then you will see the books. Numbers are the truest gossip, I always say. Tell me what they say. No, don't. Yes, do.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "walked"
+                    }
+                ],
+                "once": true,
+                "text": "\"Walked out in the middle,\" the scholar says. \"History seldom records the people who leave a room. It records the room.\" A note goes into the margin of something. \"I am recording you. Somebody ought to.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
                 "text": "The mill ledger, the granary tallies — numbers are the truest gossip in this town.",
                 "choices": [
                     {

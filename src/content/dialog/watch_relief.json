@@ -4,6 +4,70 @@
     "nodes": {
         "hail": [
             {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "costed"
+                    }
+                ],
+                "once": true,
+                "text": "\"Captain's had a letter. Held, it says.\" The watchman yawns. \"Held's a good word. I'd like my shift held. With me not in it.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "minuted"
+                    }
+                ],
+                "once": true,
+                "text": "\"Written down downriver. That's their half of the work.\" He shifts his weight. \"Our half's standing here.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "subscribed"
+                    }
+                ],
+                "once": true,
+                "text": "\"Part-owner, the captain says.\" He looks at you blearily. \"Of us as well, I expect. Don't ask me for a longer shift.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "walked"
+                    }
+                ],
+                "once": true,
+                "text": "\"Walked out halfway, I heard. Lucky.\" He shifts his weight. \"Half a shift left, me.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
                 "text": "Half a shift left. Then bread, and a chair, and nobody talking to me.",
                 "choices": [
                     {
