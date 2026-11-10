@@ -1420,7 +1420,8 @@
         : '';
       if (isPointBuy) {
         div.innerHTML = `<span>${ABIL_SHORT[a]}${tag}</span>
-          <input type="number" min="8" max="15" value="${state.abilities[a]}" data-ab="${a}">
+          <input type="number" min="8" max="15" value="${state.abilities[a]}" data-ab="${a}"
+            aria-label="${a[0].toUpperCase() + a.slice(1)}">
           <strong class="mod">${modStr(state.abilities[a])}</strong>`;
         div.querySelector('input').addEventListener('change', (e) => {
           let v = parseInt(e.target.value, 10);
@@ -1434,7 +1435,7 @@
         // Standard array and rolled dice are the same interaction: arrange a
         // fixed set of six.
         div.innerHTML = `<span>${ABIL_SHORT[a]}${tag}</span>
-          <select data-ab="${a}"></select>
+          <select data-ab="${a}" aria-label="${a[0].toUpperCase() + a.slice(1)}"></select>
           <strong class="mod">${modStr(state.abilities[a])}</strong>`;
         const sel = div.querySelector('select');
         // Duplicates are possible with dice — two abilities can legitimately both
