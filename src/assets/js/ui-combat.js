@@ -2502,6 +2502,9 @@
     // pays for talking your way out of things.
     await claimLevels(status, true);
     ui.leaving = false;
+    // Continue went with the board, so focus was left on nothing and the next
+    // Tab started at the party rail. Land on the place, as a journey does.
+    if (G().landOnArrival) G().landOnArrival();
   }
 
   /**
