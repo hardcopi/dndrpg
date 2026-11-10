@@ -70,6 +70,26 @@
             {
                 "conditions": [
                     {
+                        "flag": "room_sat"
+                    },
+                    {
+                        "not": {
+                            "flag": "vote_aboard"
+                        }
+                    }
+                ],
+                "text": "Frayle sets his stone down at the foot of the flat grey stone with the others and straightens up slowly.\n\n\"Carters talk of nothing but the sheet,\" he says. \"Four lines. They say it at the crossing the way they used to say the river was up.\" He looks at the stone. \"They still stop here. I watched for that, this week. Whatever's in their mouths, they still stop.\"",
+                "choices": [
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "ford_fate",
                         "equals": "named"
                     }

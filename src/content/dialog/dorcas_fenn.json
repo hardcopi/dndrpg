@@ -53,6 +53,52 @@
             {
                 "conditions": [
                     {
+                        "flag": "room_sat"
+                    },
+                    {
+                        "not": {
+                            "flag": "vote_aboard"
+                        }
+                    },
+                    {
+                        "flag": "uncounted_fate",
+                        "equals": "kept"
+                    },
+                    {
+                        "not": {
+                            "flag": "uncounted_entered_late"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "Dorcas Fenn looks at the journal under your arm, and at the folded page sticking out of the back of it, and does not ask. She waits, which she is good at.\n\n\"The room's sat,\" she says at last. \"Whatever it did, it did it without that.\" She nods at the page. \"I'll still enter it, if you give it me. It will carry today's date. Anybody who reads it will see it came in after the quarter-day, and draw what they like from that. I can't change the date and I wouldn't.\"",
+                "choices": [
+                    {
+                        "label": "Enter it now, with today's date.",
+                        "effects": [
+                            {
+                                "set_flag": "uncounted_entered_late"
+                            },
+                            {
+                                "pressure": 1
+                            },
+                            {
+                                "approval": {
+                                    "aldric": 3
+                                }
+                            }
+                        ],
+                        "next": "entered_late"
+                    },
+                    {
+                        "label": "Keep it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "quarter_eve"
                     },
                     {
@@ -1007,6 +1053,29 @@
                     {
                         "label": "Leave.",
                         "end": true
+                    }
+                ]
+            }
+        ],
+        "entered_late": [
+            {
+                "text": "She copies Tull's page and the fifteen pegs into the book in the same hand she uses for everything, and writes the date beside it, and underlines nothing.\n\n*Entered as given. Received after the sitting of the quarter-day.*\n\n\"There,\" she says. \"It's late. Late is not the same as never. Nobody in this room has ever been able to tell me what the difference is worth, but it's not nothing.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "once": true,
+                        "text": "Aldric, very quietly: \"Late is how most true things get written down.\""
+                    },
+                    {
+                        "companion": "ilse",
+                        "once": true,
+                        "text": "Ilse reads the line over Mrs Fenn's shoulder and nods once."
                     }
                 ]
             }

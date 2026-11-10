@@ -299,6 +299,36 @@
             {
                 "conditions": [
                     {
+                        "flag": "room_sat"
+                    },
+                    {
+                        "not": {
+                            "flag": "vote_aboard"
+                        }
+                    },
+                    {
+                        "flag": "uncounted_fate",
+                        "equals": "read"
+                    },
+                    {
+                        "not": {
+                            "flag": "indentured_fate",
+                            "equals": "bought"
+                        }
+                    }
+                ],
+                "text": "\"Funny thing,\" Dale says. \"You read us fifteen names in here, and then a sheet comes up the river that says a room sat.\" He turns his spoon over. \"Nobody down here thinks the two are the same business. Everybody down here thinks about them at the same time. That's all. I've no point. I just noticed.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "corse_named_the_works"
                     },
                     {
