@@ -6711,13 +6711,6 @@ class CombatEngine
 
             $rolled = $dice === '' ? null : Dice::rollDetailed($dice);
             $raw = $rolled === null ? 0 : (int) $rolled['total'];
-            if ($rolled !== null) {
-                // The damage dice ride on the save event they follow, for the
-                // board's dice tray. Display only; set after the roll so the
-                // dice are drawn in the same order as before.
-                $last = count($state['events']) - 1;
-                $state['events'][$last]['damage_dice'] = self::trayDice($dice, $rolled);
-            }
             $amount = self::saveDamage(
                 $raw,
                 $result['passed'],
@@ -6731,6 +6724,14 @@ class CombatEngine
                 )
             );
 
+            if ($rolled !== null && $amount > 0) {
+                // The damage dice ride on the save event they follow, for the
+                // board's dice tray — only when some of it lands, so a save
+                // that shrugs the spell off does not show dice that did
+                // nothing. Display only; nothing reads it back.
+                $last = count($state['events']) - 1;
+                $state['events'][$last]['damage_dice'] = self::trayDice($dice, $rolled);
+            }
             if ($amount > 0) {
                 $after = Rules::damageAfterDefenses($amount, $damageType, $target);
                 $amount = $after['amount'];
