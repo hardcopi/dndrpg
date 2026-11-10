@@ -6,6 +6,53 @@
             {
                 "conditions": [
                     {
+                        "quest": "in_its_order",
+                        "stage": "to_the_canteen"
+                    }
+                ],
+                "text": "Dale sees the paper in your hand from the far end of the trestle and stands up, which he does not do. The bench nearest goes quiet, and then the next, and by the time you reach him sixty men have stopped eating, which you have never seen happen in this room.\n\n\"Go on, then,\" Dale says. \"We can't. You can.\"",
+                "choices": [
+                    {
+                        "label": "Read it word for word.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "in_its_order",
+                                    "stage": "read_word_for_word"
+                                }
+                            }
+                        ],
+                        "next": "order_read"
+                    },
+                    {
+                        "label": "Tell them what you think it means.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "in_its_order",
+                                    "stage": "told_what_it_means"
+                                }
+                            }
+                        ],
+                        "next": "order_guessed"
+                    },
+                    {
+                        "label": "Tell them the minute's not here yet.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "in_its_order",
+                                    "stage": "not_here_yet"
+                                }
+                            }
+                        ],
+                        "next": "order_not_yet"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "pump_gallery_cleared"
                     },
                     {
@@ -296,6 +343,51 @@
             {
                 "conditions": [
                     {
+                        "flag": "room_sat"
+                    },
+                    {
+                        "not": {
+                            "flag": "vote_aboard"
+                        }
+                    },
+                    {
+                        "not": {
+                            "flag": "order_fate"
+                        }
+                    },
+                    {
+                        "not": {
+                            "quest": "in_its_order",
+                            "status": "active"
+                        }
+                    },
+                    {
+                        "not": {
+                            "flag": "indentured_fate",
+                            "equals": "bought"
+                        }
+                    }
+                ],
+                "text": "\"There's a sheet come up the river, they say,\" Dale says, over his bowl. \"Four lines. The house sat.\" He tears the bread. \"Nobody down here's seen it. If they had, nobody down here could read it.\" He looks at you sidelong. \"Ashe at the counting house will have a copy. He copies everything. Bring it down, and read it to us, and I'll owe you a bowl.\"",
+                "choices": [
+                    {
+                        "label": "I'll bring a copy.",
+                        "effects": [
+                            {
+                                "start_quest": "in_its_order"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "Not today.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "met_dale"
                     }
                 ],
@@ -487,6 +579,70 @@
                     {
                         "label": "Leave.",
                         "end": true
+                    }
+                ]
+            }
+        ],
+        "order_read": [
+            {
+                "text": "You read it as it is written. *The house sat on the quarter-day at ten o'clock. Members present, and proxies, as entered. The business of the day was taken in its order. The minute will follow.*\n\nSomebody at the back says \"Again,\" and you read it again. Nobody asks what it means. Dale takes the paper, folds it along Ashe's crease, and puts it in his shirt with the other one.\n\n\"In its order,\" a man two benches down says to his neighbour, trying it out. By the time you reach the stair it has gone round the whole room.",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "once": true,
+                        "text": "Aldric, quietly: \"That was the right way to do it. They will remember the words. That is worth more than our guess at them.\""
+                    },
+                    {
+                        "companion": "ilse",
+                        "once": true,
+                        "text": "Ilse watches the room listen and says nothing, which is how she approves of things."
+                    }
+                ]
+            }
+        ],
+        "order_guessed": [
+            {
+                "text": "You tell them what you think it means. You say it plainly, and well, and you do not know whether it is true; nobody does, and the minute is still in Brackwater.\n\nSixty men listen to you as if you did know. When you stop, they go back to eating, and the noise that comes back up is a different noise. By the second bell it will be what the works believes, and it will have your voice on it.",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "once": true,
+                        "text": "Sera, on the stair: \"You don't know. You said it like you did. That's how every story I ever had to undo got started.\""
+                    },
+                    {
+                        "companion": "kessa",
+                        "once": true,
+                        "text": "Kessa, cheerfully: \"Well, they liked it.\""
+                    }
+                ]
+            }
+        ],
+        "order_not_yet": [
+            {
+                "text": "You tell them what is true. A sheet came. The room sat. What it did is in a minute that nobody in this valley has seen, and you will not guess at it in front of men who will be held to your guess.\n\nDale nods slowly, and takes Ashe's copy, and folds it into his shirt with his indenture. \"That's the honest one,\" he says. \"I'd have taken the other. I'm glad you didn't give it me.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "once": true,
+                        "text": "Sera lets out a breath. \"Thank you,\" she says, and does not explain what for."
                     }
                 ]
             }

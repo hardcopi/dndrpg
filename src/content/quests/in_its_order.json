@@ -1,0 +1,90 @@
+{
+    "quest_key": "in_its_order",
+    "title": "In Its Order",
+    "act": 2,
+    "description": "A sheet has come up the river that says the house sat on the quarter-day, and nothing else. Nobody in the Deepworks canteen has seen it, and if they had, Corrin Dale says, nobody there could read it.",
+    "giver": "corrin_dale",
+    "on_job_board": false,
+    "required_level": 1,
+    "rewards": {
+        "xp": 200,
+        "gold": 0
+    },
+    "stages": {
+        "a_fair_copy": {
+            "title": "A fair copy",
+            "objective": "Get a copy of the sheet from Tibald Ashe at the counting house.",
+            "journal": "Dale asked me to bring the sheet down to the canteen. Ashe copies everything; he will have it.",
+            "target": {
+                "location": "counting_house"
+            }
+        },
+        "to_the_canteen": {
+            "title": "Four lines, sixty men",
+            "objective": "Take Ashe's copy down to the Deepworks canteen.",
+            "journal": "Ashe copied the four lines out in his best hand, and blotted it, and gave it to me without asking what it was for. It says the house sat, the business was taken in its order, and the minute will follow. That is all it says.",
+            "target": {
+                "location": "deepworks_canteen"
+            }
+        },
+        "read_word_for_word": {
+            "terminal": true,
+            "resolution": "read",
+            "outcome": "success",
+            "title": "Read as written",
+            "journal": "I read it to the canteen word for word, twice, because somebody at the back asked. Four lines. Nobody asked me what it meant, which I think was a courtesy. 'Taken in its order' went round the benches like a coin.",
+            "effects": [
+                {
+                    "set_flag": "order_fate",
+                    "value": "read"
+                },
+                {
+                    "approval": {
+                        "aldric": 3,
+                        "ilse": 3
+                    }
+                }
+            ]
+        },
+        "told_what_it_means": {
+            "terminal": true,
+            "resolution": "guessed",
+            "outcome": "neutral",
+            "title": "What I think it means",
+            "journal": "I told sixty men what I think the sheet means. I do not know what it means. Nobody does; the minute is still in Brackwater. By the second bell it was what the works believed, and it had my voice on it.",
+            "effects": [
+                {
+                    "set_flag": "order_fate",
+                    "value": "guessed"
+                },
+                {
+                    "pressure": 1
+                },
+                {
+                    "approval": {
+                        "kessa": 2,
+                        "sera": -3
+                    }
+                }
+            ]
+        },
+        "not_here_yet": {
+            "terminal": true,
+            "resolution": "not_yet",
+            "outcome": "neutral",
+            "title": "Not here yet",
+            "journal": "I told the canteen what is true: a sheet came, the room sat, and what it did is in a minute nobody has. I folded Ashe's copy and gave it to Dale to keep in his shirt with his indenture.",
+            "effects": [
+                {
+                    "set_flag": "order_fate",
+                    "value": "not_yet"
+                },
+                {
+                    "approval": {
+                        "sera": 3
+                    }
+                }
+            ]
+        }
+    }
+}

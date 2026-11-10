@@ -6,6 +6,29 @@
             {
                 "conditions": [
                     {
+                        "quest": "in_its_order",
+                        "stage": "a_fair_copy"
+                    }
+                ],
+                "text": "\"For the canteen,\" Ashe says, when you tell him, and takes a fresh sheet without being asked twice. He copies the four lines out in his best hand, which is very good, and blots it, and reads it back against the original with a ruler under each line.\n\n\"It says what it says,\" he says, handing it over. \"Read it as it is written, if you'll take advice from a clerk. People will ask you what it means. It does not mean anything yet.\"",
+                "choices": [
+                    {
+                        "label": "Take it down to the canteen.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "in_its_order",
+                                    "stage": "to_the_canteen"
+                                }
+                            }
+                        ],
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "quest": "the_anvil_debt",
                         "stage": "the_assignments"
                     }

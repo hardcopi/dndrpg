@@ -264,6 +264,26 @@
             {
                 "conditions": [
                     {
+                        "flag": "room_sat"
+                    },
+                    {
+                        "not": {
+                            "flag": "vote_aboard"
+                        }
+                    }
+                ],
+                "text": "\"They used to stop me on the ridge to ask if there was news,\" Pyle says. \"Now they stop me to ask if the minute's come.\" He pats the satchel. \"I tell them the same thing. It comes up on a boat. They thank me as if I'd said something.\"",
+                "choices": [
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "corse_told_the_area"
                     }
                 ],
