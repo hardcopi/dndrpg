@@ -215,18 +215,26 @@ ok('an untagged save with no traits stays normal',
 
 echo "\nHalfling Luck\n";
 
-// The reroll is stochastic, so drive it statistically: 400 saves at +0 vs
-// DC 21 can only ever show natural 20s or rerolls; what a halfling must never
-// show is a *kept* natural 1. A plain subject keeps roughly 5% of them.
+// The reroll is stochastic, so drive it statistically: saves at +0 vs DC 21
+// can only ever show natural 20s or rerolls; what a halfling must never show
+// is a natural 1 kept from the first die. The reroll is itself a d20, so a
+// kept 1 still happens 1 time in 400 (1/20 then 1/20 again): over N saves the
+// count is ~Poisson(N/400). A plain subject keeps 1 in 20.
+//
+// The old form (400 saves, at most 4 kept) failed about 1 run in 270 — a
+// coin no deploy should toss. 2000 saves expect 5 kept with the trait and
+// 100 without; the bound of 20 is beyond 6 sigma for the first (a false
+// failure about 1 run in 3 million) and nowhere near the second, so a broken
+// Halfling Luck still fails every time.
+$saves = 2000;
 $kept = 0;
-for ($i = 0; $i < 400; $i++) {
+for ($i = 0; $i < $saves; $i++) {
     $r = $invoke('rollSave', subject(['race_features' => ['halfling_luck']]), 'con', 21);
     if ($r['natural'] === 1) {
         $kept++;
     }
 }
-// A rerolled die may itself land on 1 (1-in-400 per throw), so allow a couple.
-ok('a halfling keeps (almost) no natural 1s over 400 saves', $kept <= 4, "kept {$kept}");
+ok("a halfling keeps (almost) no natural 1s over {$saves} saves", $kept <= 20, "kept {$kept}, expected ~5; ~100 without the trait");
 
 echo "\n" . ($fail === 0 ? "0 failed" : "{$fail} FAILED") . " ({$pass} passed)\n";
 exit($fail === 0 ? 0 : 1);
