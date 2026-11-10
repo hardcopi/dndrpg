@@ -8867,7 +8867,10 @@ body.studio-page > .site-bar {
    that line, and moving them into the corner takes their width out of it. */
 .party-members {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+  /* min() so a column never asks for more than the list has: at 320px the
+     list is narrower than 17rem, and a 17rem track pushed every card out past
+     the party frame's right edge. */
+  grid-template-columns: repeat(auto-fill, minmax(min(17rem, 100%), 1fr));
   gap: var(--sp-10);
 }
 /* The grid's gap spaces them; .char-card's own bottom margin would double it
