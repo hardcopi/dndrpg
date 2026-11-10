@@ -249,6 +249,21 @@
             {
                 "conditions": [
                     {
+                        "flag": "fen_road_known"
+                    }
+                ],
+                "text": "\"I count carts at the fen road head on my round,\" Pyle says. \"Going west. I write them in the back of the satchel book, a stroke each.\" He shows you: a short row of strokes, and a longer one under it. \"Nobody's asked me for the count. I keep it because it's the boundary, and things crossing a boundary is what I'm for.\"",
+                "choices": [
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "not": {
                             "quest": "the_wardens_count",
                             "status": "active"

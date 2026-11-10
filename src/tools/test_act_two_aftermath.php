@@ -817,6 +817,33 @@ try {
         $n = (new DialogEngine($db))->node($p, $npc); talk($db, $p, $npc, [(string) end($n['choices'])['label']]);
         ok("once ($fl)", !$seek($p, $npc, $needle));
     }
+    echo "== between the sheet and the minute ==\n";
+    foreach ([['osgar_tull', 'Not on this boat'], ['dorcas_fenn', 'Quarter-day'], ['brenna_smith', 'I made the hinge'], ['osric_apothecary', 'headaches'],
+              ['wenna_coyle', 'changes the pegs'], ['aggie_slate', 'nor has anybody'], ['mara_hearthstone', 'some people sat in chairs']] as [$npc, $nd]) {
+        $p = party($db, $base + ['vote_fate' => 'against', 'quarter_eve' => 1, 'packet_gone' => 1, 'days_waited' => 1, 'room_sat' => 1]); ended($db, $p, 'subscribed');
+        ok("between: $npc", $seek($p, $npc, $nd));
+        $n = (new DialogEngine($db))->node($p, $npc); talk($db, $p, $npc, [(string) end($n['choices'])['label']]);
+        ok("between once: $npc", !$seek($p, $npc, $nd));
+        $p = party($db, $base + ['vote_fate' => 'against', 'quarter_eve' => 1, 'packet_gone' => 1, 'days_waited' => 1]); ended($db, $p, 'subscribed');
+        ok("not before the sheet: $npc", !$seek($p, $npc, $nd));
+    }
+    $p = party($db, $base + ['vote_fate' => 'kept', 'vote_aboard' => 1, 'packet_gone' => 1, 'room_sat' => 1]); ended($db, $p, 'subscribed');
+    ok('none of it if you went aboard', !$seek($p, 'dorcas_fenn', 'Quarter-day') && !$seek($p, 'osgar_tull', 'Not on this boat'));
+    foreach ([['sera', 'nine times'], ['kessa', 'opposite sides'], ['ilse', 'weather with a seal']] as [$c, $nd]) {
+        $p = party($db, $base + ['vote_fate' => 'against', 'room_sat' => 1, 'packet_gone' => 1]); ended($db, $p, 'subscribed');
+        $cs = new CompanionService($db); $cs->meet($p, $c); $cs->recruit($p, $c);
+        ok("$c between", $seek($p, $c, $nd));
+    }
+    echo "== what the valley knows ==\n";
+    foreach ([['fen_road_known', 'gest_pyle', 'a stroke each'], ['grazing_bought_known', 'alder_pyke', 'Winter Field'],
+              ['warren_numbers_known', 'alder_pyke', 'stand on'], ['mill_race_right_known', 'wick_lorrimer', 'dry August'],
+              ['ford_huts_known', 'mara_hearthstone', 'asking at the ford'], ['warren_nests_known_to_watch', 'serjeant_ballow', 'having it']] as [$fl, $npc, $needle]) {
+        // Mara holds a walked-out party on item seven until it is adjourned, so read her after a costing.
+        $p = party($db, $base + [$fl => 1]); ended($db, $p, $npc === 'mara_hearthstone' ? 'costed' : 'walked');
+        ok("$npc reads $fl", $seek($p, $npc, $needle));
+        $n = (new DialogEngine($db))->node($p, $npc); talk($db, $p, $npc, [(string) end($n['choices'])['label']]);
+        ok("once ($fl)", !$seek($p, $npc, $needle));
+    }
 } catch (Throwable $e) {
     ok('played without a dead end', false, $e->getMessage());
 } finally {

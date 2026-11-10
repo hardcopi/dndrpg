@@ -264,6 +264,21 @@
             {
                 "conditions": [
                     {
+                        "flag": "warren_nests_known_to_watch"
+                    }
+                ],
+                "text": "\"Captain's a paper in the strongbox about the warren galleries,\" Ballow says. \"Where they are and what's in them. I've not read it.\" He looks up the hill. \"She takes it out some evenings and reads it and puts it back. Never gives an order off it. I think having it's the order.\"",
+                "choices": [
+                    {
+                        "label": "Quiet posting.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "room_sat"
                     },
                     {

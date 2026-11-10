@@ -33,6 +33,26 @@
             {
                 "conditions": [
                     {
+                        "flag": "room_sat"
+                    },
+                    {
+                        "not": {
+                            "flag": "vote_aboard"
+                        }
+                    }
+                ],
+                "text": "Dorcas Fenn has cleared a space on the shelf by the door, a hand's width wide, and labelled it with a slip that says only *Quarter-day*. \"For the minute,\" she says. \"When it comes.\" She straightens the slip, which was straight. \"I've cleared it every morning this week. There's never anything on it. I find it keeps me honest about what's not here.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "quarter_eve"
                     },
                     {

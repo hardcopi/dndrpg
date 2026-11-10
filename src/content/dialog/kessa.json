@@ -10,6 +10,42 @@
                         "status": "active"
                     },
                     {
+                        "flag": "room_sat"
+                    },
+                    {
+                        "not": {
+                            "flag": "vote_aboard"
+                        }
+                    }
+                ],
+                "text": "\"I've a bet on with a carter in the Flagon,\" Kessa says, \"about which way it went.\" She grins. \"He's sure. I'm sure. We've picked opposite sides. Whichever of us is wrong buys, and I've already decided I'm going to enjoy it either way.\"",
+                "once": true,
+                "choices": [
+                    {
+                        "label": "Tell me about the debt.",
+                        "next": "the_debt_talk"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit down a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "kessa",
+                        "status": "active"
+                    },
+                    {
                         "flag": "uncounted_fate",
                         "equals": "read"
                     }

@@ -10,6 +10,42 @@
                         "status": "active"
                     },
                     {
+                        "flag": "room_sat"
+                    },
+                    {
+                        "not": {
+                            "flag": "vote_aboard"
+                        }
+                    }
+                ],
+                "text": "\"I keep doing it in my head,\" Sera says. \"Every way it could have gone, and what the town looks like after each one.\" She shakes her head. \"I've done it nine times. The town looks different every time, and the minute's sitting in a drawer in Brackwater looking exactly like itself.\"",
+                "once": true,
+                "choices": [
+                    {
+                        "label": "What did Marrow have on you?",
+                        "next": "the_leash_offer"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit down a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "sera",
+                        "status": "active"
+                    },
+                    {
                         "flag": "packet_gone"
                     },
                     {

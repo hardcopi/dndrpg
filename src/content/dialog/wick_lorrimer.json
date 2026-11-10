@@ -292,6 +292,26 @@
                 "once": true
             },
             {
+                "conditions": [
+                    {
+                        "flag": "mill_race_right_known"
+                    },
+                    {
+                        "not": {
+                            "flag": "wick_in_town"
+                        }
+                    }
+                ],
+                "text": "\"Sten Harrow came down to the race,\" Wick says. \"Stood there an hour. Asked me how much water goes through it in a dry August.\" He hooks out a weed. \"I told him. He wrote it on his hand. Nobody's ever asked me what the race is worth before. They ask about the mill.\"",
+                "choices": [
+                    {
+                        "label": "The road, then.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
                 "text": "There is a man in the wheel-pit, up to his knees in black water, working a weed-hook along a race that runs perfectly well past a building that has not needed it in four years.\n\n\"You'll want the road,\" he says. \"It's downstream.\"",
                 "on_enter": [
                     {

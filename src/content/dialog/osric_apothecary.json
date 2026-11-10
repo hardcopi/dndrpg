@@ -380,6 +380,26 @@
             {
                 "conditions": [
                     {
+                        "flag": "room_sat"
+                    },
+                    {
+                        "not": {
+                            "flag": "vote_aboard"
+                        }
+                    }
+                ],
+                "text": "\"Nobody wants chamomile now,\" Osric says. \"They want something for headaches.\" He weighs out willow bark. \"From arguing. Half the town has decided what the sheet meant and the other half has decided the opposite, and they've all decided it loudly.\"",
+                "choices": [
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "quest": "root_and_ash",
                         "status": "active"
                     }

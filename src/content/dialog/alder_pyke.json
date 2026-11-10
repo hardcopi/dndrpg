@@ -543,6 +543,36 @@
             {
                 "conditions": [
                     {
+                        "flag": "grazing_bought_known"
+                    }
+                ],
+                "text": "\"Winter Field,\" Pyke says. \"Bought in the spring, I hear.\" He winds the chain. \"I'd have been asked to chain it. A sale that size, you chain it, so there's no argument after. Nobody asked me.\" He thinks about that the way he thinks about a bad link. \"Somebody didn't want a line on a map. Or didn't care to have one.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "warren_numbers_known"
+                    }
+                ],
+                "text": "\"Four hundred and six, above ground,\" Pyke says. \"I'd been told thousands, at the Flagon, by men who'd never been up the hill.\" He makes a note on the back of a chain-tally. \"I didn't chain it, so it's not my number. But it's a number. A number you can stand on. A rumour you can only fall through.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "room_sat"
                     },
                     {

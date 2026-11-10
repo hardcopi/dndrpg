@@ -460,6 +460,21 @@
             {
                 "conditions": [
                     {
+                        "flag": "ford_huts_known"
+                    }
+                ],
+                "text": "\"You've been asking at the ford,\" Mara says, not quite a question. She wipes the same ring off the counter twice. \"Folk remember that winter. They don't talk about it in here.\" She puts the cloth down. \"You'll notice I'm not either. Drink?\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "room_sat"
                     },
                     {
