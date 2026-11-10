@@ -6,6 +6,22 @@
             {
                 "conditions": [
                     {
+                        "flag": "vote_fate",
+                        "equals": "proxy"
+                    }
+                ],
+                "once": true,
+                "text": "Reed has the proxy flat on the desk under the inkwell and has plainly read it more than once. \"One vote in twelve,\" she says. \"You've handed a town a twelfth of the people buying it.\" She folds it and puts it in the strongbox with the watch roll. \"I don't know how I'll cast it. I know I'll be in that room on the day, in my good coat, and they will have to look at me while they count.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "meeting_fate",
                         "equals": "costed"
                     }

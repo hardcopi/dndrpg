@@ -1,0 +1,82 @@
+{
+    "quest_key": "one_vote_in_twelve",
+    "title": "One Vote in Twelve",
+    "act": 2,
+    "description": "You took up the widow's share. Next quarter-day the meeting at Number Nine takes up Rivermark, sheet six, and there are twelve chairs and one of them is yours.",
+    "giver": "minna_crale",
+    "on_job_board": false,
+    "required_level": 1,
+    "rewards": {
+        "xp": 200,
+        "gold": 0
+    },
+    "stages": {
+        "the_notice": {
+            "title": "Notice of the quarter-day",
+            "objective": "Decide how your chair's vote on Rivermark is cast.",
+            "journal": "Minna Crale gave me notice of the next quarter-day. Item four: Rivermark, sheet six, clearance, as revised. Every chair has one vote. I may cast mine on the day, lodge it with her in writing now, or name somebody in writing to cast it for me.",
+            "target": {
+                "location": "number_nine"
+            }
+        },
+        "lodged_against": {
+            "terminal": true,
+            "resolution": "lodged_against",
+            "outcome": "success",
+            "title": "Lodged early",
+            "journal": "I lodged my vote with Minna Crale in writing: against. She entered it, dated it and read it back to me. One vote in twelve, cast a quarter early. Whatever the other eleven do on the day, mine is already in the book.",
+            "effects": [
+                {
+                    "set_flag": "vote_fate",
+                    "value": "against"
+                },
+                {
+                    "approval": {
+                        "aldric": 6,
+                        "ilse": 6,
+                        "kessa": 4,
+                        "sera": -4
+                    }
+                }
+            ]
+        },
+        "kept_vote": {
+            "terminal": true,
+            "resolution": "kept_vote",
+            "outcome": "neutral",
+            "title": "Kept for the day",
+            "journal": "I kept my vote, to be cast in person on the quarter-day from the chair by the window. Minna Crale wrote down that I had been given notice, and nothing else, because there was nothing else to write.",
+            "effects": [
+                {
+                    "set_flag": "vote_fate",
+                    "value": "kept"
+                },
+                {
+                    "approval": {
+                        "sera": 4
+                    }
+                }
+            ]
+        },
+        "proxy_to_reed": {
+            "terminal": true,
+            "resolution": "proxy_to_reed",
+            "outcome": "success",
+            "title": "A twelfth of the house, to the town",
+            "journal": "I wrote a proxy: my chair's vote on Rivermark, to be cast by Captain Reed. Minna Crale witnessed it and remarked that it was the first proxy she had ever seen given to the place under discussion. Reed will have to come down the river on the quarter-day, or send word how she casts it. I have not asked her which way.",
+            "effects": [
+                {
+                    "set_flag": "vote_fate",
+                    "value": "proxy"
+                },
+                {
+                    "approval": {
+                        "aldric": 8,
+                        "ilse": 4,
+                        "sera": -6
+                    }
+                }
+            ]
+        }
+    }
+}

@@ -310,6 +310,50 @@ try {
     talk($db, $p, 'minna_crale', ['Leave']);
     ok('Minna Crale: five heads, every line true', str_contains(greet($db, $p, 'minna_crale'), 'every line true'), substr(greet($db, $p, 'minna_crale'), 0, 90));
 
+    echo "== the other three outcomes change things ==\n";
+    $done = function (int $p) use ($db) { $db->prepare("INSERT INTO party_quests (party_id, quest_id, status) SELECT ?, id, 'completed' FROM quests WHERE quest_key='the_quarterly_meeting'")->execute([$p]); };
+    foreach (['against' => ['Lodge it now', 'Entered.'], 'kept' => ["I'll keep it", 'notice was given'], 'proxy' => ['Write a proxy', 'place under discussion']] as $fate => [$label, $needle]) {
+        $p = party($db, $base + ['meeting_fate' => 'subscribed']); $done($p);
+        talk($db, $p, 'minna_crale', ['Leave']);
+        ok("subscribed: Minna has the notice ($fate)", str_contains(greet($db, $p, 'minna_crale'), 'Notice of the quarter-day'), substr(greet($db, $p, 'minna_crale'), 0, 90));
+        $node = talk($db, $p, 'minna_crale', [$label]);
+        ok("vote $fate: $needle", str_contains((string) ($node['text'] ?? ''), $needle) && $flag($p, 'vote_fate') === $fate, substr((string) ($node['text'] ?? ''), 0, 90));
+        ok("no second notice after $fate", !str_contains(greet($db, $p, 'minna_crale'), 'Notice of the quarter-day'));
+    }
+    ok('Reed holds the proxy', str_contains(greet($db, $p, 'captain_elowen'), 'twelfth of the people buying it'));
+    $p = party($db, $base + ['meeting_fate' => 'subscribed']); $done($p);
+    talk($db, $p, 'minna_crale', ['Leave']); talk($db, $p, 'minna_crale', ['Let me think']);
+    ok('thinking about it leaves the vote open', str_contains(greet($db, $p, 'minna_crale'), 'Item four') && $flag($p, 'vote_fate') === '');
+    talk($db, $p, 'minna_crale', ['Lodge it now']);
+    ok('and it can be lodged later', $flag($p, 'vote_fate') === 'against');
+    talk($db, $p, 'mara_hearthstone', ['Leave']);
+    ok('Mara heard it was lodged', str_contains(greet($db, $p, 'mara_hearthstone'), 'Lodged it early'));
+
+    foreach (['copied' => 'Copy it out', 'shelved' => 'Leave it on the shelf'] as $fate => $label) {
+        $p = party($db, $base + ['meeting_fate' => 'minuted']);
+        talk($db, $p, 'dorcas_fenn', ['Leave']);
+        ok("minuted: the bound volume is in ($fate)", str_contains(greet($db, $p, 'dorcas_fenn'), 'Bound this morning'), substr(greet($db, $p, 'dorcas_fenn'), 0, 90));
+        $node = talk($db, $p, 'dorcas_fenn', ['Read it']);
+        ok('the minute reads: noted, no resolution', str_contains((string) ($node['text'] ?? ''), 'No resolution was moved'));
+        talk($db, $p, 'dorcas_fenn', ['Read it', $label]);
+        ok("minute_fate $fate", $flag($p, 'minute_fate') === $fate);
+    }
+    ok('Moss read the shelved minute', str_contains(greet($db, $p, 'dorcas_fenn'), 'dinner hour'), substr(greet($db, $p, 'dorcas_fenn'), 0, 90));
+    $p = party($db, $base + ['meeting_fate' => 'minuted', 'minute_fate' => 'copied']);
+    talk($db, $p, 'mara_hearthstone', ['Leave']);
+    ok('the copy is on the Flagon door', str_contains(greet($db, $p, 'mara_hearthstone'), 'Flagon door'));
+
+    foreach (['withdrawn' => ['Write back: withdrawn', 'inked through'], 'reasons' => ['say why I walked out', 'warm room'], 'stands' => ['Let it stand', 'in pencil, and your name']] as $fate => [$label, $needle]) {
+        $p = party($db, $base + ['meeting_fate' => 'walked']); $done($p);
+        talk($db, $p, 'mara_hearthstone', ['Leave']);
+        ok("walked: a letter care of the Flagon ($fate)", str_contains(greet($db, $p, 'mara_hearthstone'), 'Item seven stands adjourned'), substr(greet($db, $p, 'mara_hearthstone'), 0, 90));
+        talk($db, $p, 'mara_hearthstone', [$label]);
+        ok("walked_fate $fate", $flag($p, 'walked_fate') === $fate);
+        ok('the letter does not come twice', !str_contains(greet($db, $p, 'mara_hearthstone'), 'Item seven stands adjourned'));
+        talk($db, $p, 'minna_crale', ['Leave']);
+        ok("Minna on $fate", str_contains(greet($db, $p, 'minna_crale'), $needle), substr(greet($db, $p, 'minna_crale'), 0, 90));
+    }
+
     echo "== companions place the mark ==\n";
     $marks = [
         ['ilse', ['mark_seen_stone' => 1], 'only ever a surveyor'],

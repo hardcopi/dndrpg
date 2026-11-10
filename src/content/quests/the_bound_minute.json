@@ -1,0 +1,60 @@
+{
+    "quest_key": "the_bound_minute",
+    "title": "The Bound Minute",
+    "act": 2,
+    "description": "You asked for your objection to be minuted word for word, and it was. The quarter's minutes have come down to the Record Office bound, and Dorcas Fenn lets anybody read anything filed.",
+    "giver": "dorcas_fenn",
+    "on_job_board": false,
+    "required_level": 1,
+    "rewards": {
+        "xp": 200,
+        "gold": 0
+    },
+    "stages": {
+        "on_the_shelf": {
+            "title": "On the shelf",
+            "objective": "Read the bound minute in the Record Office.",
+            "journal": "The quarter's minutes have come down to the Record Office bound. My objection is in them, word for word. Dorcas Fenn says anybody may read it at a penny a page, and that mostly nobody does.",
+            "target": {
+                "location": "record_office"
+            }
+        },
+        "copied": {
+            "terminal": true,
+            "resolution": "copied",
+            "outcome": "success",
+            "title": "A copy goes up the valley",
+            "journal": "I paid Dorcas Fenn the pennies and copied the minute out, all of it: the item, my words, The meeting noted the objection, No resolution was moved. It is going up the valley to be pinned where Rivermark can read it. It changes nothing in the room at Number Nine. It means the town can see exactly what was said in it.",
+            "effects": [
+                {
+                    "set_flag": "minute_fate",
+                    "value": "copied"
+                },
+                {
+                    "approval": {
+                        "aldric": 6,
+                        "ilse": 2
+                    }
+                }
+            ]
+        },
+        "shelved": {
+            "terminal": true,
+            "resolution": "shelved",
+            "outcome": "neutral",
+            "title": "Left where anyone can read it",
+            "journal": "I read the minute twice and left it on the shelf, between the dividend and the drains, where anybody may read it for a penny a page. That is what it is for. Dorcas Fenn says mostly nobody does, which is not what it is for.",
+            "effects": [
+                {
+                    "set_flag": "minute_fate",
+                    "value": "shelved"
+                },
+                {
+                    "approval": {
+                        "aldric": 2
+                    }
+                }
+            ]
+        }
+    }
+}
