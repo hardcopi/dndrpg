@@ -1059,7 +1059,8 @@
             ${q.status === 'active' && q.target_location_name
               ? ' · Where: ' + esc(q.target_location_name) : ''}</p>
           ${q.status === 'active' && q.quest_key
-            ? `<button type="button" class="btn btn-small ${+q.is_tracked ? 'btn-primary' : ''}" data-track="${esc(q.quest_key)}">
+            ? `<button type="button" class="btn btn-small ${+q.is_tracked ? 'btn-primary' : ''}" data-track="${esc(q.quest_key)}"
+                aria-label="${esc((+q.is_tracked ? 'Tracking: ' : 'Track this: ') + q.title)}">
                 ${+q.is_tracked ? 'Tracking' : 'Track this'}</button>`
             : ''}
         </div>
@@ -1200,10 +1201,12 @@
           : `Bring ${c.name} along`;
         return `<button type="button" class="btn btn-small camp-march"
                         data-march="${esc(c.companion_key)}" data-to="active"
+                        aria-label="${esc('Bring along ' + c.name)}"
                         title="${esc(why)}"${full ? ' disabled' : ''}>Bring along</button>`;
       }
       return `<button type="button" class="btn btn-small camp-march"
                       data-march="${esc(c.companion_key)}" data-to="camp"
+                      aria-label="${esc('Ask to wait here: ' + c.name)}"
                       title="${esc(c.name + ' stays at camp until you ask for them')}">Ask to wait here</button>`;
     };
 
@@ -1275,6 +1278,7 @@
         </button>
         ${talkable ? `<button type="button" class="btn btn-small camp-talk"
               data-talk-start="${esc(c.npc_key)}" data-name="${esc(c.name)}"
+              aria-label="${esc('Talk to ' + c.name)}"
               title="Draw them aside — the whole of what they have to say, not just the fireside">Talk</button>` : ''}
         ${marchButton(c)}
       </div>`;
@@ -1971,9 +1975,10 @@
       <p class="bag-detail-facts">${facts}</p>
       <p class="inv-desc">${esc(it.description || '')}</p>
       <div class="sheet-item-actions">
-        ${wearable ? `<button type="button" class="btn btn-small" data-equip>${
+        ${wearable ? `<button type="button" class="btn btn-small" data-equip
+          aria-label="${esc((it.is_equipped == 1 ? 'Unequip ' : 'Equip ') + it.name)}">${
           it.is_equipped == 1 ? 'Unequip' : 'Equip'}</button>` : ''}
-        ${usable ? '<button type="button" class="btn btn-small" data-use>Use</button>' : ''}
+        ${usable ? `<button type="button" class="btn btn-small" data-use aria-label="${esc('Use ' + it.name)}">Use</button>` : ''}
       </div>
       ${mates.length ? `<div class="bag-give">
         <span class="bag-give-label">Hand to</span>
@@ -2153,8 +2158,12 @@
     const buyLabel = (it) => `Buy ${it.name} for ${it.price} gp` + (buyBlock(it) ? ` (${buyBlock(it).toLowerCase()})` : '');
     const stockLabel = (it) =>
       it.stock === null || it.stock === undefined ? '' : ` <span class="help-hint">(${esc(it.stock)} left)</span>`;
+    // Who is selling, as the scene names them: the name once you know it, the
+    // role until then — never a name the player has not been told.
+    const who = (G().state.location?.npcs || []).find((n) => n && n.npc_key === npcKey);
+    const title = who && who.known && who.name ? `Trading with ${who.name}` : ((who && who.role) || 'Merchant');
     const el = showModal(`
-      <h2>Merchant</h2>
+      <h2>${esc(title)}</h2>
       <p class="help-hint">Your gold: <strong>${esc(gold)} gp</strong></p>
       <div class="sheet-section"><h3>For sale</h3>
         <div class="shop-list">
@@ -2178,7 +2187,7 @@
         </div>
       </div>
       <div class="modal-actions"><button type="button" class="btn" data-close>Close</button></div>
-    `, { size: 'wide', label: 'Merchant', slot: 'shop' });
+    `, { size: 'wide', label: title, slot: 'shop' });
 
     el.querySelector('[data-close]').onclick = closeTopModal;
     const transact = async (route, payload, btn) => {
