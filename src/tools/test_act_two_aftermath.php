@@ -277,6 +277,39 @@ try {
         ok("$who stays quiet when not at his post (" . implode(',', array_keys($gone)) . ")", !str_contains(greet($db, $p, $who), $needle));
     }
 
+    echo "== the costing ==\n";
+    $flag = fn (int $p, string $k) => (string) ($db->query("SELECT flag_value FROM world_flags WHERE party_id = $p AND flag_key = " . $db->quote($k))->fetchColumn() ?: '');
+    $at = function (int $p, string $locKey) use ($db): array {
+        global $made; $cid = 0; foreach ($made as [$pp, $cc]) { if ($pp === $p) { $cid = $cc; } }
+        $db->prepare("UPDATE characters SET current_location_id = (SELECT id FROM locations WHERE location_key = ?) WHERE id = ?")->execute([$locKey, $cid]);
+        $state = (new LocationEngine($db))->getState($cid, $p)['location'] ?? [];
+        return array_column($state['npcs'] ?? [], 'npc_key');
+    };
+    $p = party($db, $base + ['meeting_fate' => 'minuted']);
+    ok('no assessor on Granary Row unless the meeting costed it', !in_array('hesper_amsel', $at($p, 'granary_row'), true));
+    $p = party($db, $base + ['meeting_fate' => 'costed', 'clearance_costed' => 1]);
+    ok('a costed meeting sends Hesper Amsel to Granary Row', in_array('hesper_amsel', $at($p, 'granary_row'), true));
+    $before = (int) $flag($p, 'concern_pressure');
+    talk($db, $p, 'hesper_amsel', ['What are you counting', 'Some things', 'Leave her to count']);
+    ok('counting the whole of it ends the_costing as counted_whole', $flag($p, 'costing_fate') === 'whole');
+    ok('a sixth head costs the house 2', (int) $flag($p, 'concern_pressure') === $before + 2, "$before -> " . $flag($p, 'concern_pressure'));
+    ok('Hesper afterwards: six heads', str_contains(greet($db, $p, 'hesper_amsel'), 'Six heads'));
+    ok('Osric heard he was written down', str_contains(greet($db, $p, 'osric_apothecary'), 'by weight'));
+    ok('Dagen Wyke has the nine in ink', str_contains(greet($db, $p, 'street_almoner'), 'in ink now'));
+    $db->prepare("INSERT INTO party_quests (party_id, quest_id, status) SELECT ?, id, 'completed' FROM quests WHERE quest_key='the_quarterly_meeting'")->execute([$p]);
+    talk($db, $p, 'minna_crale', ['Leave']);
+    ok('Minna Crale has the six heads', str_contains(greet($db, $p, 'minna_crale'), 'Six heads'), substr(greet($db, $p, 'minna_crale'), 0, 90));
+    $p = party($db, $base + ['meeting_fate' => 'costed', 'clearance_costed' => 1]);
+    $db->prepare("INSERT INTO party_quests (party_id, quest_id, status) SELECT ?, id, 'completed' FROM quests WHERE quest_key='the_quarterly_meeting'")->execute([$p]);
+    talk($db, $p, 'hesper_amsel', ['What are you counting', 'Put down double', 'Count it your way', 'Leave her to it']);
+    ok('asking to pad it is refused and remembered', $flag($p, 'costing_padding_asked') === '1' && $flag($p, 'costing_fate') === 'given');
+    ok('she says so once', str_contains(greet($db, $p, 'hesper_amsel'), 'double it, once'));
+    talk($db, $p, 'hesper_amsel', ['Leave']);
+    ok('then the five-heads ending', str_contains(greet($db, $p, 'hesper_amsel'), 'Nine days'));
+    ok('Dagen: no head for the families', str_contains(greet($db, $p, 'street_almoner'), 'still in pencil'));
+    talk($db, $p, 'minna_crale', ['Leave']);
+    ok('Minna Crale: five heads, every line true', str_contains(greet($db, $p, 'minna_crale'), 'every line true'), substr(greet($db, $p, 'minna_crale'), 0, 90));
+
     echo "== companions place the mark ==\n";
     $marks = [
         ['ilse', ['mark_seen_stone' => 1], 'only ever a surveyor'],

@@ -6,6 +6,31 @@
             {
                 "conditions": [
                     {
+                        "flag": "costing_fate",
+                        "equals": "whole"
+                    }
+                ],
+                "once": true,
+                "text": "\"She asked me for a year's remedies by weight,\" Osric says, \"and I told her, and she wrote it down in ink while I watched.\" He grinds a moment. \"Nobody has ever written down what this shop is for. I did not expect it to be somebody costing how to move it.\"",
+                "choices": [
+                    {
+                        "label": "Show me your remedies.",
+                        "effects": [
+                            {
+                                "open_shop": "osric_apothecary"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "meeting_fate",
                         "equals": "costed"
                     }

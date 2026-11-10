@@ -6,6 +6,38 @@
             {
                 "conditions": [
                     {
+                        "flag": "costing_fate",
+                        "equals": "whole"
+                    }
+                ],
+                "once": true,
+                "text": "Dagen Wyke has the list out, and the nine families on it are in ink now, not pencil. \"She asked for them by name,\" he says. \"Not as a number. By name, and how many in each house, and what they'd carry.\" He folds it. \"I don't know if that's better. It's more true. I keep finding those are different.\"",
+                "choices": [
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "costing_fate",
+                        "equals": "given"
+                    }
+                ],
+                "once": true,
+                "text": "\"The assessor went by twice,\" Dagen Wyke says. \"Counted the roofs. Didn't ask about the families.\" The nine on his list are still in pencil. \"There wasn't a head for them, I expect. There usually isn't.\"",
+                "choices": [
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "meeting_fate",
                         "equals": "costed"
                     },

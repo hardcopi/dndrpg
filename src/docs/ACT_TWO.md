@@ -178,6 +178,21 @@ Wat. Test: `tools/test_fenmoor_lot.php`.
   `office_fate` = `took`), Wenna Coyle (not while the works are alarmed) and
   Corrin Dale (not once he was bought out) each have a line per outcome.
   Fessick in the undercut hears nothing.
+- **The Costing** (`the_costing`, Granary Row). A costed meeting (`clearance_costed`)
+  sends **Hesper Amsel**, assessor to the meeting, up the valley with Hollin
+  Sare's five heads: carts, roofs, wages, a year's bread, the burying ground. She
+  counts what is under each head and nothing else.
+  - **Some things aren't under any head**: the party walks her round Osric's
+    remedies, Dagen Wyke's nine families, Pol's floor and the fen-root beds. She
+    writes a sixth head, *Not otherwise provided for* (`costing_fate` = `whole`,
+    pressure 2).
+  - **Count it your way**: five heads, nine days, every line true
+    (`costing_fate` = `given`).
+  - **Put down double**: she refuses, because a figure she did not count would
+    void the whole costing (`costing_padding_asked`, Aldric and Sera −4,
+    Kessa +2). She mentions it once afterwards.
+  - Osric, Dagen Wyke and Minna Crale read `costing_fate`. The costing goes before
+    the meeting at the next quarter-day; what the meeting decides is left open.
 - **Companions place the mark.** Once Act II is open, Ilse (`mark_seen_stone`),
   Kessa (`mark_seen_paper`) and Sera (`mark_seen_book`) each have one greeting
   that recognises the mark they saw in Act I as the house's mark: the ledge cuts,
