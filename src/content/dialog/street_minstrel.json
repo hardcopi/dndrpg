@@ -4,6 +4,70 @@
     "nodes": {
         "hail": [
             {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "costed"
+                    }
+                ],
+                "once": true,
+                "text": "\"There's a song in it,\" the minstrel says, \"except every verse is a price. Carts. Roofs. A year's bread.\" A sour chord. \"Nobody ever clapped for an invoice.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "minuted"
+                    }
+                ],
+                "once": true,
+                "text": "\"Minuted. Word for word, they say.\" The minstrel tries a chord and doesn't like it. \"First time anybody from this town has had their exact words kept. I'd have charged for that.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "subscribed"
+                    }
+                ],
+                "once": true,
+                "text": "\"Bought a chair at their table, they say.\" The minstrel considers you. \"Ballad or comic song? I can't decide. I don't think you can either.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "walked"
+                    }
+                ],
+                "once": true,
+                "text": "\"Walked out in the middle of their business!\" The minstrel plays a flourish. \"That one writes itself. I've got you down the stairs. I'm stuck on what happens after.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
                 "text": "Requests taken, except the one about the goblin king. Wrote it, regret it.",
                 "choices": [
                     {

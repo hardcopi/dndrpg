@@ -6,6 +6,70 @@
             {
                 "conditions": [
                     {
+                        "flag": "meeting_fate",
+                        "equals": "costed"
+                    }
+                ],
+                "once": true,
+                "text": "\"A year's bread, I heard,\" Osric says, grinding. \"Somebody at a table downriver has costed a year's bread for Rivermark.\" He taps the pestle clean. \"Nobody has costed a year's remedies. I could give them the figure. It is not small, and the people who need them most will be on the last carts out.\"",
+                "choices": [
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "minuted"
+                    }
+                ],
+                "once": true,
+                "text": "\"Written down,\" Osric says. \"Good. I write everything down: the dose, the weight, who it was for.\" He corks a bottle. \"It has never once made a dose work. It does let you know afterwards what went wrong.\"",
+                "choices": [
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "subscribed"
+                    }
+                ],
+                "once": true,
+                "text": "\"An owner,\" Osric says, and looks at you over the scale the way he looks at a root he has not seen before: not unkindly, deciding what it is for. \"Then I will say it once. If they move the town, the fen-root beds do not move with it. Write that down at your table.\"",
+                "choices": [
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "walked"
+                    }
+                ],
+                "once": true,
+                "text": "\"Walked out,\" Osric says. \"In the middle, the carters say.\" He goes back to the mortar. \"When a patient walks out in the middle, they are usually right about the treatment and wrong about the illness. I hope you were the other way round.\"",
+                "choices": [
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "root_and_ash_fate",
                         "equals": "told"
                     }
