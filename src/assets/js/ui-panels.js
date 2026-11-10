@@ -1835,7 +1835,16 @@
         // Reopen so the slot dots and HP bars tell the truth about what the
         // cast just spent.
         closeTopModal();
-        openCharacterSheet(c.id);
+        await openCharacterSheet(c.id);
+        sheetLandOn((m) => {
+          // Back on the same spell: its level's tab first, then its Cast —
+          // or the tab itself when the slots are spent and Cast is closed.
+          const again = m.querySelector(`[data-cast="${CSS.escape(String(spellId))}"]`);
+          const pane = again && again.closest('[data-spell-pane]');
+          const tab = pane && m.querySelector(`[data-spell-tab="${CSS.escape(pane.dataset.spellPane)}"]`);
+          if (tab && pane.hidden) tab.click();
+          return again && !again.disabled ? again : tab;
+        });
       } catch (ex) {
         G().showError(ex.message);
         b.disabled = false;
@@ -1898,6 +1907,7 @@
         G().log(`${r.character.name} will deploy at the ${r.character.combat_rank} of the line.`, 'success');
         closeTopModal();
         await openCharacterSheet(c.id);
+        sheetLandOn((m) => m.querySelector('[data-rank]'));
       } catch (err) {
         G().showError(err.message);
         btn.disabled = false;
@@ -2029,6 +2039,17 @@
    * outgoing sheet closes. What was wrong was reading a field across a call
    * that is entitled to clear it.
    */
+  /**
+   * The sheet is reopened to show what an action changed, and comes back with
+   * focus on Print — so Enter again, meaning "flip it back", opened the
+   * printable sheet instead. Put focus on the control that was used.
+   */
+  function sheetLandOn(find) {
+    const m = modals[modals.length - 1]?.el;
+    const el = m && find(m);
+    if (el) el.focus();
+  }
+
   async function reopenSheet(invId) {
     const id = sheetCharacterId;
     if (!id) return;
