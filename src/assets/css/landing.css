@@ -294,7 +294,10 @@ figure.lp-figure figcaption {
   font-family: var(--mono);
   font-size: var(--fs-2xs);
   letter-spacing: var(--ls-caps);
-  color: var(--gold-dim);
+  /* --gold-dim is a mark, never text (tokens.css): as the level number it
+     read 3.3:1. The ink form clears 4.5; the flavour rows stay grey, so the
+     engine-or-not distinction the legend explains is still there. */
+  color: var(--gold-ink);
 }
 .lp-feats .lp-feat-b { color: var(--text); font-weight: var(--fw-medium); }
 .lp-feats .lp-feat-d { color: var(--text-faint); }
@@ -310,7 +313,7 @@ figure.lp-figure figcaption {
   color: var(--text-faint);
 }
 .lp-legend span { display: inline-flex; align-items: center; gap: var(--sp-6); }
-.lp-swatch { width: 10px; height: 10px; border-radius: 2px; background: var(--gold-dim); }
+.lp-swatch { width: 10px; height: 10px; border-radius: 2px; background: var(--gold-ink); }   /* matches the text it keys */
 .lp-swatch-off { background: var(--text-faint); }
 
 .lp-abil {
@@ -329,7 +332,7 @@ figure.lp-figure figcaption {
   border-radius: var(--r-pill);
   border: 1px solid var(--border);
   background: var(--bg-inset);
-  color: var(--gold-dim);
+  color: var(--gold-ink);   /* was --gold-dim, 3.95:1 — see .lp-feat-n */
 }
 
 /* --- the closing bar ---------------------------------------------------- */
