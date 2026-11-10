@@ -530,6 +530,31 @@
                 "choices": [
                     {
                         "label": "Leave.",
+                        "end": true,
+                        "effects": [
+                            {
+                                "set_flag": "days_waited"
+                            }
+                        ]
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "room_sat"
+                    },
+                    {
+                        "not": {
+                            "flag": "vote_aboard"
+                        }
+                    }
+                ],
+                "text": "\"Sat,\" Pyke says. \"Good.\" He means it as a measurement. \"Now we know they were in the room. Next boat, we'll know what the room did. You chain the bit you can reach first.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
                         "end": true
                     }
                 ],

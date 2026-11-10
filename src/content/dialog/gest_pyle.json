@@ -236,7 +236,12 @@
                 "choices": [
                     {
                         "label": "Leave him to it.",
-                        "end": true
+                        "end": true,
+                        "effects": [
+                            {
+                                "set_flag": "days_waited"
+                            }
+                        ]
                     }
                 ],
                 "once": true

@@ -6,6 +6,27 @@
             {
                 "conditions": [
                     {
+                        "flag": "pump_gallery_cleared"
+                    },
+                    {
+                        "not": {
+                            "flag": "indentured_fate",
+                            "equals": "bought"
+                        }
+                    }
+                ],
+                "text": "\"Pump crew left their sticks by the door this morning,\" Dale says into his bowl. \"Went down without them. Came up again, all of them, and sat where you're sitting and didn't say anything, which is how you know.\" He eats. \"They took the sticks again the next shift. Habit. But they left them once.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "uncounted_fate",
                         "equals": "read"
                     },

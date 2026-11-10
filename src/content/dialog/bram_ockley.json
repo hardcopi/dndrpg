@@ -4,6 +4,21 @@
     "nodes": {
         "hail": [
             {
+                "conditions": [
+                    {
+                        "flag": "oldcity_goblins_broken"
+                    }
+                ],
+                "text": "\"The foothold's gone quiet,\" Bram says. \"No fires east, no shouting at the wrong height.\" He stirs the pot. \"My seven slept a whole watch last night. I didn't. You don't, the first time. You keep listening for the thing that's stopped.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
                 "once": true,
                 "text": "Seven guards, one brazier and a pot of something that has been on the coals since the start of the watch. The officer is the one with the key at his elbow and the look of a man doing sums about you.\n\n\"You're not Works and you're not mine,\" he says. \"So you're down here for the money or you're down here for the children. Which is it, and don't say both, because it's never both.\"",
                 "choices": [

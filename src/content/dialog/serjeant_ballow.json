@@ -202,11 +202,21 @@
                 "choices": [
                     {
                         "label": "Quiet posting.",
-                        "end": true
+                        "end": true,
+                        "effects": [
+                            {
+                                "set_flag": "days_waited"
+                            }
+                        ]
                     },
                     {
                         "label": "Thanks.",
-                        "end": true
+                        "end": true,
+                        "effects": [
+                            {
+                                "set_flag": "days_waited"
+                            }
+                        ]
                     }
                 ],
                 "once": true
@@ -232,10 +242,40 @@
                 "choices": [
                     {
                         "label": "Quiet posting.",
-                        "end": true
+                        "end": true,
+                        "effects": [
+                            {
+                                "set_flag": "days_waited"
+                            }
+                        ]
                     },
                     {
                         "label": "Thanks.",
+                        "end": true,
+                        "effects": [
+                            {
+                                "set_flag": "days_waited"
+                            }
+                        ]
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "room_sat"
+                    },
+                    {
+                        "not": {
+                            "flag": "vote_aboard"
+                        }
+                    }
+                ],
+                "text": "\"Sheet's pinned up at the Commons,\" Ballow says. \"Forty people read it in an hour. It's four lines.\" He shifts his feet at the arch. \"Had to break up an argument about what 'in its order' meant. Two grown men. I told them I'd lock up the first one who said he knew.\"",
+                "choices": [
+                    {
+                        "label": "Quiet posting.",
                         "end": true
                     }
                 ],

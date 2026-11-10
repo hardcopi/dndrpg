@@ -221,6 +221,21 @@
             {
                 "conditions": [
                     {
+                        "flag": "pit_gate_beaten"
+                    }
+                ],
+                "text": "\"They still talk about the gate on the rim,\" Vessa says. \"How it came out already moving, and how it didn't go back in.\" She taps the counterweight rope with her chalk. \"Nobody's asked me to raise it since. I keep the rope oiled. I don't know who for.\"",
+                "choices": [
+                    {
+                        "label": "I'll watch.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "pit_closed"
                     }
                 ],

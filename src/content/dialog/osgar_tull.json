@@ -6,6 +6,37 @@
             {
                 "conditions": [
                     {
+                        "flag": "packet_gone"
+                    },
+                    {
+                        "flag": "days_waited"
+                    },
+                    {
+                        "not": {
+                            "flag": "vote_aboard"
+                        }
+                    },
+                    {
+                        "not": {
+                            "flag": "room_sat"
+                        }
+                    }
+                ],
+                "text": "The packet comes round the second bend low in the water, and there are more people on the green steps than there are steps. Tull ties off, takes the satchel off his shoulder, and hands up one folded sheet before anything else, because he knows what they came down for.\n\nNobody asks him. They know better. Somebody asks him anyway.\n\n\"Paper,\" Tull says. \"I carried it. It weighs the same.\"",
+                "choices": [
+                    {
+                        "label": "Read the sheet.",
+                        "next": "the_room_sat"
+                    },
+                    {
+                        "label": "Let somebody else read it.",
+                        "next": "the_room_sat"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "quarter_eve"
                     },
                     {
@@ -807,6 +838,44 @@
                     {
                         "label": "Watch it out of sight.",
                         "end": true
+                    }
+                ]
+            }
+        ],
+        "the_room_sat": [
+            {
+                "text": "It is in Minna Crale's hand, which you know now, and it is very short.\n\n*The house sat on the quarter-day at ten o'clock. Members present, and proxies, as entered. The business of the day was taken in its order. The minute will follow.*\n\nThat is all of it. Somebody reads it out again from the top of the steps, louder, as if that might make it longer. It does not. The room sat. What it did, sitting, is in a minute that is still in Brackwater.",
+                "choices": [
+                    {
+                        "label": "Go up into the town.",
+                        "effects": [
+                            {
+                                "set_flag": "room_sat"
+                            }
+                        ],
+                        "end": true
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "once": true,
+                        "text": "Sera reads it twice. \"'Taken in its order,'\" she says. \"That's the most they've ever told anybody and it's nothing at all.\""
+                    },
+                    {
+                        "companion": "aldric",
+                        "once": true,
+                        "text": "Aldric: \"'The minute will follow.' They always say it. In my experience it usually does, eventually, and it is never the shape anyone hoped.\""
+                    },
+                    {
+                        "companion": "kessa",
+                        "once": true,
+                        "text": "Kessa, delighted: \"They've sent us a letter that says they've had a meeting.\""
+                    },
+                    {
+                        "companion": "ilse",
+                        "once": true,
+                        "text": "Ilse folds her arms. \"Then we wait for the next boat.\" She does not sound like she minds."
                     }
                 ]
             }

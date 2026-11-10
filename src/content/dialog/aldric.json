@@ -10,6 +10,51 @@
                         "status": "active"
                     },
                     {
+                        "flag": "room_sat"
+                    },
+                    {
+                        "not": {
+                            "flag": "vote_aboard"
+                        }
+                    }
+                ],
+                "text": "\"I used to wait for chapter minutes,\" Aldric says. \"A month, sometimes. Everybody in the house would be very kind to each other for the month, because nobody knew yet who had lost.\" He looks down the hill at the river. \"Rivermark is being very kind to itself this week. I think that's the same thing.\"",
+                "once": true,
+                "choices": [
+                    {
+                        "label": "Patch us up.",
+                        "effects": [
+                            {
+                                "heal": 8
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "What order were you in?",
+                        "next": "the_order"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit down a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "aldric",
+                        "status": "active"
+                    },
+                    {
                         "flag": "priory_fate",
                         "equals": "unentered"
                     }

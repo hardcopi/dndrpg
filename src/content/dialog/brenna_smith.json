@@ -366,7 +366,12 @@
                 "choices": [
                     {
                         "label": "Leave.",
-                        "end": true
+                        "end": true,
+                        "effects": [
+                            {
+                                "set_flag": "days_waited"
+                            }
+                        ]
                     }
                 ],
                 "once": true

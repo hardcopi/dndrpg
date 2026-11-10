@@ -24,6 +24,9 @@
                             "flag": "costing_figure",
                             "equals": "read_first"
                         }
+                    },
+                    {
+                        "flag": "room_sat"
                     }
                 ]
             }

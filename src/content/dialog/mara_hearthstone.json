@@ -447,6 +447,31 @@
                 "choices": [
                     {
                         "label": "Leave.",
+                        "end": true,
+                        "effects": [
+                            {
+                                "set_flag": "days_waited"
+                            }
+                        ]
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "room_sat"
+                    },
+                    {
+                        "not": {
+                            "flag": "vote_aboard"
+                        }
+                    }
+                ],
+                "text": "\"Sat,\" Mara says. \"That's the word that came up the river. Sat.\" She sets a cup down harder than she means to. \"Half the room's decided it means we won and half's decided it means we lost, and I've told them both it means some people sat in chairs in a warm room. The minute'll say. Until then I'm serving whoever's buying.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
                         "end": true
                     }
                 ],

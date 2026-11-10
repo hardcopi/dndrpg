@@ -189,6 +189,46 @@
                 "choices": [
                     {
                         "label": "Leave.",
+                        "end": true,
+                        "effects": [
+                            {
+                                "set_flag": "days_waited"
+                            }
+                        ]
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "room_sat"
+                    },
+                    {
+                        "not": {
+                            "flag": "vote_aboard"
+                        }
+                    }
+                ],
+                "text": "Ashe turns the ruled page round to show you. He has written a heading at last: *The house sat.* Under it, the date, and nothing else.\n\n\"That is what we know,\" he says. \"I enter what we know. When the minute comes up I will enter that under it, and not before, and not my guess at it.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "rivermark_valued"
+                    }
+                ],
+                "text": "\"The column with Rivermark in it,\" Ashe says, still writing. \"Between a weir and a stand of oak. I've heard it's less than the crane.\" He blots the line. \"I've not entered it. It isn't a record. It's a sum, and nobody here was asked to sign it.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
                         "end": true
                     }
                 ],

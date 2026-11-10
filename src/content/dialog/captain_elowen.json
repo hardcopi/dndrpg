@@ -6,6 +6,30 @@
             {
                 "conditions": [
                     {
+                        "flag": "room_sat"
+                    },
+                    {
+                        "not": {
+                            "flag": "vote_aboard"
+                        }
+                    },
+                    {
+                        "flag": "vote_fate",
+                        "equals": "proxy"
+                    }
+                ],
+                "text": "Reed is back at her table on the square with river-mud still on her boots. \"I sat,\" she says, before you can ask, \"and I cast it the way you gave it me, and I'll not tell you what the room did with it, because the minute's the record and I'm not.\" She signs a chit. \"It's in Brackwater. It'll come up on the next boat. I've waited longer for worse paper.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "packet_gone"
                     },
                     {
@@ -22,7 +46,12 @@
                 "choices": [
                     {
                         "label": "Leave.",
-                        "end": true
+                        "end": true,
+                        "effects": [
+                            {
+                                "set_flag": "days_waited"
+                            }
+                        ]
                     }
                 ],
                 "once": true

@@ -6,6 +6,30 @@
             {
                 "conditions": [
                     {
+                        "flag": "room_sat"
+                    },
+                    {
+                        "not": {
+                            "flag": "vote_aboard"
+                        }
+                    },
+                    {
+                        "flag": "costing_figure",
+                        "equals": "read_first"
+                    }
+                ],
+                "text": "Hesper Amsel is back at the row with her ledger, as if she'd never been on a boat. \"I read it,\" she says. \"Before the business. They let me finish.\" She ticks a sack. \"Whether they heard it is a different column, and the minute's got it, not me.\"",
+                "choices": [
+                    {
+                        "label": "Leave her to it.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "costing_figure",
                         "equals": "circulated"
                     },
