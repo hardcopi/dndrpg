@@ -245,6 +245,9 @@ class LocationEngine
             'first_visit_text' => $firstVisit ? $location['first_visit_text'] : null,
             'ambience'     => json_decode($location['ambience_json'] ?? '[]', true) ?: [],
             'npcs'         => $this->npcsAt($locationId, $characterId, $partyId),
+            // Which painting to hang, when the story has changed the view:
+            // null is the location's own scene.
+            'scene'        => $this->sceneFor((string) $location['location_key'], $characterId, $partyId),
             // The furnishing standing here, if this is a generated room with one
             // in it. Null everywhere else, which is everywhere authored.
             'furnishing'   => $furnishing,
@@ -364,6 +367,36 @@ class LocationEngine
             'foes'        => $foes,
             'foes_text'   => $foes ? CombatEngine::describeRoster($foes) : null,
         ];
+    }
+
+    /**
+     * Paintings that swap with the story, by location key, first match wins.
+     *
+     * A scene is one picture of one moment, and a few places change in a way
+     * the eye notices: the packet stair with no packet at it, while Tull is
+     * four days downriver. Kept here rather than in a content column because
+     * it is a handful of entries and each one needs a painting shipped with
+     * the code anyway. The key names an entry in assets/js/scenes-data.js.
+     */
+    private const SCENE_VARIANTS = [
+        'packet_stair' => [
+            // The same rule that takes Tull off the stair and shuts the way aboard.
+            ['scene' => 'packet_stair_away', 'when' => [['flag' => 'packet_gone'], ['not' => ['flag' => 'days_waited']]]],
+        ],
+    ];
+
+    private function sceneFor(string $locationKey, int $characterId, ?int $partyId): ?string
+    {
+        if (!$partyId || empty(self::SCENE_VARIANTS[$locationKey])) {
+            return null;
+        }
+        $ctx = (new WorldState($this->db))->context($partyId, $characterId);
+        foreach (self::SCENE_VARIANTS[$locationKey] as $v) {
+            if (Requirements::pass($v['when'], $ctx)) {
+                return $v['scene'];
+            }
+        }
+        return null;
     }
 
     /**

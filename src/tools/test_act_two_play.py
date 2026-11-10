@@ -309,6 +309,7 @@ def play(client, outcome, vote=None, costing='whole', figure='circulated', minut
     r.travel('flagon_common_room'); r.talk('mara_hearthstone', 'Sit a while', 'Go up')
     ok(f'{label}: the eve', r.flags().get('quarter_eve') == '1')
     ok(f'{label}: the eve does not put the room tomorrow', not r.said('mara_hearthstone', 'tomorrow', mark))
+    ok(f'{label}: nobody calls a vote a costing on the eve', outcome == 'costed' or not r.said('sera@mara_hearthstone', 'costing', mark))
     if outcome != 'costed':
         ok(f'{label}: Sera does not credit the room with our numbers', not r.said('sera@mara_hearthstone', 'your numbers', mark))
     r.travel('packet_stair')
@@ -333,6 +334,8 @@ def play(client, outcome, vote=None, costing='whole', figure='circulated', minut
         # Tull is on the river; the town waits.
         r.travel('packet_stair')
         ok(f'{label}: the stair is empty while the boat is away', 'osgar_tull' not in [n.get('npc_key') for n in r.here().get('npcs', [])])
+        ok(f'{label}: and painted empty', r.here().get('scene') == 'packet_stair_away'
+           and os.path.isfile(os.path.join(SRC, 'assets/images/scenes/packet_stair_away.jpg')), str(r.here().get('scene')))
         ok(f'{label}: and there is no boat to board', all(e.get('locked') for e in r.here().get('exits', []) if e.get('to_key') == 'brackwater_wharf'),
            str([(e.get('label'), e.get('locked')) for e in r.here().get('exits', [])]))
         if outcome == 'costed':
@@ -343,6 +346,7 @@ def play(client, outcome, vote=None, costing='whole', figure='circulated', minut
         ok(f'{label}: waiting at the Flagon passes the days', r.click_until('mara_hearthstone', 'days_waited'))
         r.travel('packet_stair'); r.talk('osgar_tull', 'Read the sheet', 'Go up into the town')
         ok(f'{label}: the room sat', r.flags().get('room_sat') == '1')
+        ok(f'{label}: the packet is back in the painting', r.here().get('scene') is None, str(r.here().get('scene')))
         mark = len(r.lines)
 
         # After the sheet.
