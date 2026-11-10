@@ -6,6 +6,70 @@
             {
                 "conditions": [
                     {
+                        "flag": "meeting_fate",
+                        "equals": "costed"
+                    }
+                ],
+                "once": true,
+                "text": "\"Costing the town,\" Vessa says, chalking. \"I'd have quoted them a number in a minute. Everybody's got a number.\" She does not say what Rivermark's is.",
+                "choices": [
+                    {
+                        "label": "I'll watch.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "minuted"
+                    }
+                ],
+                "once": true,
+                "text": "\"Minuted.\" Vessa shrugs. \"I keep a board. It says who won. It doesn't say what was said. Nobody pays out on what was said.\"",
+                "choices": [
+                    {
+                        "label": "I'll watch.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "subscribed"
+                    }
+                ],
+                "once": true,
+                "text": "\"Owner.\" Vessa considers the board. \"I've had lords down that ladder, and a magistrate once. Never an owner. They tend to send someone.\"",
+                "choices": [
+                    {
+                        "label": "I'll watch.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "walked"
+                    }
+                ],
+                "once": true,
+                "text": "\"Walked out in the middle,\" Vessa says. \"Down here we'd call that a forfeit.\" She chalks something. \"Up there I expect they just carried on.\"",
+                "choices": [
+                    {
+                        "label": "I'll watch.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "pit_fate",
                         "equals": "belt"
                     }

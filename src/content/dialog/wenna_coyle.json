@@ -6,6 +6,90 @@
             {
                 "conditions": [
                     {
+                        "flag": "meeting_fate",
+                        "equals": "costed"
+                    },
+                    {
+                        "not": {
+                            "flag": "works_alarmed"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"A costing,\" Coyle says, and writes the time. \"They'll want hours from me for it. Hours to strike the works, hours to cart. I've started a sheet.\" She does not look up. \"I start a sheet for everything.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "minuted"
+                    },
+                    {
+                        "not": {
+                            "flag": "works_alarmed"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"Minuted,\" Coyle says, writing. \"So there's a second sheet on you at Number Nine as well.\" She very nearly smiles. \"Welcome to it.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "subscribed"
+                    },
+                    {
+                        "not": {
+                            "flag": "works_alarmed"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"A subscriber,\" Coyle says, and turns to a column you have not seen before and writes your name at the top of it. \"Owners go on a different sheet. It's a short one.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "walked"
+                    },
+                    {
+                        "not": {
+                            "flag": "works_alarmed"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"Walked out,\" Coyle says, and writes it down. \"Everybody down here walks out at the bell. You did it without one.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "works_alarmed"
                     },
                     {

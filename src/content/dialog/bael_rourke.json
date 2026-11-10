@@ -6,6 +6,134 @@
             {
                 "conditions": [
                     {
+                        "flag": "meeting_fate",
+                        "equals": "costed"
+                    },
+                    {
+                        "not": {
+                            "flag": "office_taken"
+                        }
+                    },
+                    {
+                        "not": {
+                            "flag": "works_alarmed"
+                        }
+                    },
+                    {
+                        "not": {
+                            "flag": "office_fate",
+                            "equals": "took"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"Word's come down,\" Rourke says, tapping the sill. \"A costing of removal, for the town at the top of the valley.\" He watches a barrow run. \"It doesn't touch the faces. Six faces, three shifts, at the costed rate. It wasn't meant to.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "minuted"
+                    },
+                    {
+                        "not": {
+                            "flag": "office_taken"
+                        }
+                    },
+                    {
+                        "not": {
+                            "flag": "works_alarmed"
+                        }
+                    },
+                    {
+                        "not": {
+                            "flag": "office_fate",
+                            "equals": "took"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"Minuted, I'm told.\" Rourke shrugs at the works. \"I minute every shift. Nobody's read one of mine in four years. The faces don't stop for it.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "subscribed"
+                    },
+                    {
+                        "not": {
+                            "flag": "office_taken"
+                        }
+                    },
+                    {
+                        "not": {
+                            "flag": "works_alarmed"
+                        }
+                    },
+                    {
+                        "not": {
+                            "flag": "office_fate",
+                            "equals": "took"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "Rourke looks at you over the sill for a long moment. \"Owner,\" he says. \"Then you'll want the shift figures. Everybody with a share wants the shift figures.\" He doesn't fetch them. \"I send them up the stair. After that they go wherever paper goes.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "walked"
+                    },
+                    {
+                        "not": {
+                            "flag": "office_taken"
+                        }
+                    },
+                    {
+                        "not": {
+                            "flag": "works_alarmed"
+                        }
+                    },
+                    {
+                        "not": {
+                            "flag": "office_fate",
+                            "equals": "took"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"Walked out of the meeting,\" Rourke says. \"Word came down with the carriers.\" He watches a barrow. \"I'd not know how to walk out of this. There's always another shift coming down the stair.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "office_taken"
                     },
                     {

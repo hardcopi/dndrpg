@@ -6,6 +6,90 @@
             {
                 "conditions": [
                     {
+                        "flag": "meeting_fate",
+                        "equals": "costed"
+                    },
+                    {
+                        "not": {
+                            "flag": "wick_in_town"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"They're costing the clearing,\" Wick says from the wheel-pit. \"I could tell them what a burnt mill costs. Less than you'd think, and it goes on longer.\"",
+                "choices": [
+                    {
+                        "label": "The road, then.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "minuted"
+                    },
+                    {
+                        "not": {
+                            "flag": "wick_in_town"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"Written down.\" He hooks out a weed. \"I keep this race clear and nobody writes that down. It still runs.\"",
+                "choices": [
+                    {
+                        "label": "The road, then.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "subscribed"
+                    },
+                    {
+                        "not": {
+                            "flag": "wick_in_town"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"An owner,\" Wick says, and straightens up in the black water. \"Of the sort who'd buy this mill for the water, if it came to that.\" He bends to the hook again. \"It won't come to that while I'm in the race.\"",
+                "choices": [
+                    {
+                        "label": "The road, then.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "walked"
+                    },
+                    {
+                        "not": {
+                            "flag": "wick_in_town"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"Walked out,\" Wick says. \"I didn't, when the mill went. Everybody asked me why not. Nobody asks the ones who go.\"",
+                "choices": [
+                    {
+                        "label": "The road, then.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "wick_in_town"
                     }
                 ],

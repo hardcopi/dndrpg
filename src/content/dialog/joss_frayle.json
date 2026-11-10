@@ -6,6 +6,70 @@
             {
                 "conditions": [
                     {
+                        "flag": "meeting_fate",
+                        "equals": "costed"
+                    }
+                ],
+                "once": true,
+                "text": "\"Carts,\" Joss says. \"They've costed the carts it'd take to empty Rivermark, I hear. I've a cart.\" He sets a river-stone on the pile. \"They'd want a great many more than mine.\"",
+                "choices": [
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "minuted"
+                    }
+                ],
+                "once": true,
+                "text": "\"Words in a book downriver.\" Joss weighs the river-stone in his hand. \"Stone lasts longer. I'd have cut it.\"",
+                "choices": [
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "subscribed"
+                    }
+                ],
+                "once": true,
+                "text": "\"An owner, they say.\" Joss looks at his cart, then at you. \"I haul their stone at so much the ton. You'd know the figure now. I'll not ask you it.\"",
+                "choices": [
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "walked"
+                    }
+                ],
+                "once": true,
+                "text": "\"Walked out on them.\" Joss nods slowly. \"There's days I'd walk off the west road. Then the stone sits where it is, and somebody has to carry it anyway.\"",
+                "choices": [
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "ford_fate",
                         "equals": "named"
                     }

@@ -6,6 +6,94 @@
             {
                 "conditions": [
                     {
+                        "flag": "meeting_fate",
+                        "equals": "costed"
+                    },
+                    {
+                        "not": {
+                            "flag": "indentured_fate",
+                            "equals": "bought"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"They're costing the town up the top,\" Dale says. \"Carts and roofs.\" He eats. \"The halfpenny's not in it, I'd wager. It never is.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "minuted"
+                    },
+                    {
+                        "not": {
+                            "flag": "indentured_fate",
+                            "equals": "bought"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"Wrote it down at the meeting, they say.\" Dale taps the folded paper in his shirt. \"Everything's written down. That's never been the trouble.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "subscribed"
+                    },
+                    {
+                        "not": {
+                            "flag": "indentured_fate",
+                            "equals": "bought"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"You've a share in it now.\" Dale shifts along the bench for you anyway, because those are the manners here. \"Then you've a share in the second column. Eat something.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "walked"
+                    },
+                    {
+                        "not": {
+                            "flag": "indentured_fate",
+                            "equals": "bought"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"Walked out.\" Dale considers it over his spoon. \"Fourth year, and I've thought about it every day of it.\" He eats. \"Nobody'd stop me either. That's the part.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "indentured_fate",
                         "equals": "bought"
                     }

@@ -6,6 +6,70 @@
             {
                 "conditions": [
                     {
+                        "flag": "meeting_fate",
+                        "equals": "costed"
+                    }
+                ],
+                "once": true,
+                "text": "\"Costing a town,\" Orm says. \"They costed me once, at so much a bout.\" He looks at the belt. \"It came out about right, by their sums.\"",
+                "choices": [
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "minuted"
+                    }
+                ],
+                "once": true,
+                "text": "\"Wrote it down.\" Orm turns his hands over. \"Eleven names on the belt. Somebody wrote those down too.\"",
+                "choices": [
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "subscribed"
+                    }
+                ],
+                "once": true,
+                "text": "\"You bought in.\" Orm looks at you a long while. \"Then you know what it is to have a share in somebody.\"",
+                "choices": [
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "walked"
+                    }
+                ],
+                "once": true,
+                "text": "\"Walked out,\" Orm says, and looks at the gallery door. \"That's a thing people can do. I keep forgetting.\"",
+                "choices": [
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "orm_free"
                     }
                 ],

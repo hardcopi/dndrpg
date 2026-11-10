@@ -6,6 +6,70 @@
             {
                 "conditions": [
                     {
+                        "flag": "meeting_fate",
+                        "equals": "costed"
+                    }
+                ],
+                "once": true,
+                "text": "\"A year's bread, they're costing,\" Tull says. \"Bread's corn, and the corn's off ground my beasts used to graze.\" He whistles a dog in off the edge. \"Nobody costed the grazing.\"",
+                "choices": [
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "minuted"
+                    }
+                ],
+                "once": true,
+                "text": "\"Words in a book.\" Tull shrugs. \"Beasts don't care what's written. The price does.\"",
+                "choices": [
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "subscribed"
+                    }
+                ],
+                "once": true,
+                "text": "\"Own a bit of them, I hear.\" He looks over the fold. \"Then you're on the other side of the price from me now. Mind you don't get used to it.\"",
+                "choices": [
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "walked"
+                    }
+                ],
+                "once": true,
+                "text": "\"Walked out.\" He grins. \"Done that at a market. Sometimes they come after you with a better price. Sometimes they don't.\"",
+                "choices": [
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "drove_fate",
                         "equals": "out"
                     }
