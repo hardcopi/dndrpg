@@ -321,7 +321,7 @@ INSERT INTO location_exits (from_location_id,to_location_id,label,conditions_jso
 ((SELECT id FROM locations WHERE location_key = 'tally_shed'),(SELECT id FROM locations WHERE location_key = 'corse_landing'),'Out onto the quay',NULL,0,0),
 ((SELECT id FROM locations WHERE location_key = 'packet_stair'),(SELECT id FROM locations WHERE location_key = 'the_hythe'),'Back along the bank',NULL,0,0),
 ((SELECT id FROM locations WHERE location_key = 'packet_stair'),(SELECT id FROM locations WHERE location_key = 'salt_house'),'Up the back lane to the Salt House','[{"not":{"flag":"concern_answering"}}]',0,10),
-((SELECT id FROM locations WHERE location_key = 'packet_stair'),(SELECT id FROM locations WHERE location_key = 'brackwater_wharf'),'Board Tull''s packet downriver','[{"flag":"passage_booked"},{"flag":"act_two_open"}]',0,20),
+((SELECT id FROM locations WHERE location_key = 'packet_stair'),(SELECT id FROM locations WHERE location_key = 'brackwater_wharf'),'Board Tull''s packet downriver','[{"flag":"passage_booked"},{"flag":"act_two_open"},{"any":[{"not":{"flag":"packet_gone"}},{"flag":"days_waited"}]}]',0,20),
 ((SELECT id FROM locations WHERE location_key = 'factors_house'),(SELECT id FROM locations WHERE location_key = 'corse_landing'),'Out and down to the quay',NULL,0,0),
 ((SELECT id FROM locations WHERE location_key = 'factors_house'),(SELECT id FROM locations WHERE location_key = 'the_long_room'),'Through to the long room',NULL,0,10),
 ((SELECT id FROM locations WHERE location_key = 'the_long_room'),(SELECT id FROM locations WHERE location_key = 'factors_house'),'Back through to the front room',NULL,0,0),

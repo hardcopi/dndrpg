@@ -310,6 +310,8 @@ def play(client, outcome, vote=None):
         # Tull is on the river; the town waits.
         r.travel('packet_stair')
         ok(f'{label}: the stair is empty while the boat is away', 'osgar_tull' not in [n.get('npc_key') for n in r.here().get('npcs', [])])
+        ok(f'{label}: and there is no boat to board', all(e.get('locked') for e in r.here().get('exits', []) if e.get('to_key') == 'brackwater_wharf'),
+           str([(e.get('label'), e.get('locked')) for e in r.here().get('exits', [])]))
         if outcome == 'costed':
             mark = len(r.lines)
             r.travel('granary_row'); r.open('alder_pyke')
