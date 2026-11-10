@@ -2635,6 +2635,7 @@
           if (ev.kind === 'ranged' && !reduced) {
             await shotFlies(ev);
           }
+          if (ev.hit && dice && !quick && ev.natural > 0) await trayDamage(ev.damage_dice, ev.damage);
           if (ev.hit) {
             flash(ev.target, ev.crit ? 'crit-flash' : 'hit-flash');
             boardHit(ev.target, ev.crit ? 'crit' : 'hit');
@@ -2969,6 +2970,41 @@
     trayTimer = setTimeout(() => tray.classList.add('is-gone'), quick ? 900 : 1400);
     // A beat to read the sum before the blow lands.
     await new Promise((r) => setTimeout(r, quick ? 120 : 220));
+  }
+
+  /**
+   * The damage dice, thrown under the d20 once it has hit. Only the weapon's
+   * own dice (the server leaves Sneak Attack and the like out, since they can
+   * be another die), so the total under them is the damage dealt and need not
+   * be their sum. Dice the geometry has no solid for (a d4) are skipped.
+   */
+  const DAMAGE_SOLIDS = new Set([6, 8, 10, 12]);
+  async function trayDamage(dd, amount) {
+    const box = $('#cbt-map', root());
+    const tray = box && box.querySelector('.cbt-dice-tray');
+    if (!tray || !dd || !DAMAGE_SOLIDS.has(Number(dd.sides))) return;
+    const rolls = (dd.rolls || []).map(Number).filter((n) => n >= 1 && n <= dd.sides);
+    if (!rolls.length || rolls.length > 4) return;
+    clearTimeout(trayTimer);
+    tray.classList.remove('is-gone');
+    const row = document.createElement('div');
+    row.className = 'cbt-dice-dmg';
+    const cap = document.createElement('div');
+    cap.className = 'cbt-dice-cap is-dmg';
+    const stages = rolls.map((n) => {
+      const well = document.createElement('div');
+      well.className = `cbt-dmg-well d${dd.sides}`;
+      const stage = window.Dice3D.create(Number(dd.sides), 1 + Math.floor(Math.random() * dd.sides));
+      well.appendChild(stage);
+      row.appendChild(well);
+      return [stage, n];
+    });
+    tray.append(row, cap);
+    await window.Dice3D.landAll(stages, { duration: 520, stagger: 60 });
+    if (!tray.isConnected) return;
+    cap.textContent = `${amount} damage`;
+    trayTimer = setTimeout(() => tray.classList.add('is-gone'), 1400);
+    await new Promise((r) => setTimeout(r, 160));
   }
 
   function shake() {
