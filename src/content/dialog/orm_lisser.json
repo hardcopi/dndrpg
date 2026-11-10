@@ -176,6 +176,28 @@
                 ]
             },
             {
+                "conditions": [
+                    {
+                        "flag": "met_orm"
+                    }
+                ],
+                "text": "Orm looks up from the whetstone he is still not using.\n\n\"Back through the gate,\" he says. \"Mind the fourth stall.\"",
+                "choices": [
+                    {
+                        "label": "Why do you sleep down here?",
+                        "next": "why_still_here"
+                    },
+                    {
+                        "label": "What's in the fourth stall?",
+                        "next": "fourth_stall"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
                 "text": "A stone gallery with a drain down the middle and six barred stalls off one side. Two of the stalls have beds in them. A big, tired man is sitting on the nearer bed with a whetstone he is not using.\n\n\"Come through the gate, then,\" he says. \"Mind the fourth stall on the way back.\"",
                 "on_enter": [
                     {

@@ -249,6 +249,32 @@
                 "once": true
             },
             {
+                "conditions": [
+                    {
+                        "flag": "met_vessa"
+                    }
+                ],
+                "text": "Vessa sees you on the ladder and changes the number she had for you. She still does not tell you what it is.\n\n\"Back down,\" she says. \"Watching, betting or fighting?\"",
+                "choices": [
+                    {
+                        "label": "Who's your draw?",
+                        "next": "the_draw"
+                    },
+                    {
+                        "label": "What's behind the gate?",
+                        "next": "behind_the_gate"
+                    },
+                    {
+                        "label": "Give me a bout.",
+                        "next": "the_warmup_offer"
+                    },
+                    {
+                        "label": "I'll watch.",
+                        "end": true
+                    }
+                ]
+            },
+            {
                 "text": "A woman with a tally-board at the bottom of a twenty-foot cut, in the middle of forty or fifty people making the noise of three hundred. She looks you over, decides on a number, and does not tell you what it is.\n\n\"Vessa Dann,\" she says. \"I hold the board. You can watch for nothing and bet for anything and fight for what I say you're worth, and I'd think about which of those three you came down the ladder for.\"",
                 "on_enter": [
                     {

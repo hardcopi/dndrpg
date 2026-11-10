@@ -475,6 +475,21 @@
             {
                 "conditions": [
                     {
+                        "flag": "corse_explained_clearance"
+                    }
+                ],
+                "text": "\"A head in a column,\" Mara says slowly, when you've told her. \"A hedge, a weir, a stand of oak.\" She sets the cup down. \"And he said it to your face, and said sorry it wasn't worse.\" She shakes her head. \"I don't know what I'd have done with a man who said it nastily. I'd have known, at least.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "room_sat"
                     },
                     {

@@ -252,6 +252,27 @@
             {
                 "conditions": [
                     {
+                        "flag": "corse_named_the_works"
+                    },
+                    {
+                        "not": {
+                            "flag": "indentured_fate",
+                            "equals": "bought"
+                        }
+                    }
+                ],
+                "text": "\"Lawful,\" Dale says, when you tell him what the factor said. \"On their own ground.\" He wipes the bowl with the bread. \"Course it is. Everything down here's lawful. Nobody thought a permit would be needed.\" He eats. \"That's the trouble with it, not the comfort.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "quest": "the_indentured",
                         "status": "active"
                     }
@@ -268,6 +289,28 @@
                     },
                     {
                         "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "met_dale"
+                    }
+                ],
+                "text": "Dale shifts along the bench before you have reached it.\n\n\"Still not on a face,\" he says, over his bread. \"Sit. Don't stand.\"",
+                "choices": [
+                    {
+                        "label": "What are the two columns on the board?",
+                        "next": "the_two_columns"
+                    },
+                    {
+                        "label": "How long have you been down here?",
+                        "next": "the_fourth_year"
+                    },
+                    {
+                        "label": "Nothing. Sorry.",
                         "end": true
                     }
                 ]

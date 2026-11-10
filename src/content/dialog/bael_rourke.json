@@ -377,6 +377,24 @@
                 ]
             },
             {
+                "conditions": [
+                    {
+                        "flag": "met_rourke"
+                    }
+                ],
+                "text": "The shutter opens. Rourke looks at you a beat longer than he looks at a stranger.\n\n\"Still not mine,\" he says. \"I'd remember.\"",
+                "choices": [
+                    {
+                        "label": "I'm looking at the works.",
+                        "next": "he_is_delighted"
+                    },
+                    {
+                        "label": "Wrong hut. Sorry.",
+                        "end": true
+                    }
+                ]
+            },
+            {
                 "text": "The shutter opens onto the whole works. The overseer leans on the sill with a tally in hand, not looking round. \"Number four's slow,\" he says to no one. Then he turns. \"You're not mine. I know all of mine.\"",
                 "on_enter": [
                     {

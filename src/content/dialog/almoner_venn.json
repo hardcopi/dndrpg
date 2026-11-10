@@ -138,6 +138,24 @@
                 ]
             },
             {
+                "conditions": [
+                    {
+                        "flag": "met_venn"
+                    }
+                ],
+                "text": "Venn is in front of the shelves again with the lamp. He nods without turning round, and moves the lamp a little so that you can see them too.",
+                "choices": [
+                    {
+                        "label": "Eight of them are gone.",
+                        "next": "who_is_buying"
+                    },
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
                 "text": "A stone cupboard of a room with a grille for a window and shelves cut into the wall. Nine reliquaries. Seventeen spaces. Eight small cards.\n\nA man with a lamp is standing in front of them the way other men stand in front of a fire.",
                 "on_enter": [
                     {

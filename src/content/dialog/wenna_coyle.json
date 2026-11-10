@@ -502,6 +502,28 @@
                 ]
             },
             {
+                "conditions": [
+                    {
+                        "flag": "met_coyle"
+                    }
+                ],
+                "text": "Mrs Coyle finishes the line before she looks up, as she did the first time.\n\n\"You,\" she says. \"Still no peg number, I expect.\"",
+                "choices": [
+                    {
+                        "label": "I haven't got a peg number.",
+                        "next": "then_we_shall_see"
+                    },
+                    {
+                        "label": "What is this place?",
+                        "next": "what_this_is"
+                    },
+                    {
+                        "label": "Sorry. Wrong hut.",
+                        "end": true
+                    }
+                ]
+            },
+            {
                 "text": "A plank hut, warm and dry, with a window, a water clock, a bell rope, a rack of tallies and four ledgers. The woman inside writes until she finishes the line. \"Coyle,\" she says. \"Timekeeper. Peg number.\"",
                 "on_enter": [
                     {

@@ -123,6 +123,28 @@
                 "once": true
             },
             {
+                "conditions": [
+                    {
+                        "flag": "met_hale"
+                    }
+                ],
+                "text": "Ottilie Hale looks up from the herb bed and does not get up.\n\n\"The gate is still open,\" she says. \"You will still have to say what you want. I have not changed the arrangement on your account.\"",
+                "choices": [
+                    {
+                        "label": "What is this house for?",
+                        "next": "what_the_house_is_for"
+                    },
+                    {
+                        "label": "The gate door is new pine in an old frame.",
+                        "next": "the_gate_door"
+                    },
+                    {
+                        "label": "Nothing. I'll look.",
+                        "end": true
+                    }
+                ]
+            },
+            {
                 "text": "A square of grass, a covered walk, herb beds weeded to the edge, and eleven men crossing at intervals that have nothing to do with the sun.\n\nThe woman with the basket stops in front of you rather than beside you.\n\n\"Ottilie Hale,\" she says. \"Prior. The gate is open and the bell is answered and nobody here will ask you what you want, so you will have to say it yourself.\"",
                 "on_enter": [
                     {

@@ -312,6 +312,28 @@
                 "once": true
             },
             {
+                "conditions": [
+                    {
+                        "flag": "met_wick"
+                    }
+                ],
+                "text": "Wick is in the wheel-pit with the weed-hook, as if he had not moved since.\n\n\"Road's still downstream,\" he says, which from him is hello.",
+                "choices": [
+                    {
+                        "label": "You live here.",
+                        "next": "which_year"
+                    },
+                    {
+                        "label": "Why keep the race clear?",
+                        "next": "why_the_race"
+                    },
+                    {
+                        "label": "The road, then.",
+                        "end": true
+                    }
+                ]
+            },
+            {
                 "text": "There is a man in the wheel-pit, up to his knees in black water, working a weed-hook along a race that runs perfectly well past a building that has not needed it in four years.\n\n\"You'll want the road,\" he says. \"It's downstream.\"",
                 "on_enter": [
                     {

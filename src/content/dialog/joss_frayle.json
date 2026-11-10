@@ -186,6 +186,24 @@
                 ]
             },
             {
+                "conditions": [
+                    {
+                        "flag": "met_frayle"
+                    }
+                ],
+                "text": "Frayle is down at the flat grey stone again with a river-stone in his fist. He nods to you the way a man nods to somebody who has already seen him do a private thing, and sets it down with the others.",
+                "choices": [
+                    {
+                        "label": "What's the stone for?",
+                        "next": "the_four"
+                    },
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
                 "text": "A carter has stopped on the near bank, which nobody using this crossing does, and gone down to the flat grey stone at the water's edge with a river-stone in his fist.\n\nHe sets it against the foot with the others. There are a great many others.",
                 "on_enter": [
                     {

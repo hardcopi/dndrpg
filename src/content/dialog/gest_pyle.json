@@ -264,6 +264,21 @@
             {
                 "conditions": [
                     {
+                        "flag": "corse_told_the_area"
+                    }
+                ],
+                "text": "\"Most of the valley,\" Pyle says. \"By area. That's what he told you?\" He looks along the ridge he walks, which is the edge of it. \"I've walked the edge of that every fortnight for years. Never once thought of the inside as being somebody's.\" He hitches the satchel. \"Mostly hill, he said? Aye. Hill's what I walk.\"",
+                "choices": [
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "not": {
                             "quest": "the_wardens_count",
                             "status": "active"

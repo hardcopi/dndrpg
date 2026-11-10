@@ -230,6 +230,28 @@
                 ]
             },
             {
+                "conditions": [
+                    {
+                        "flag": "met_ackley"
+                    }
+                ],
+                "text": "Ackley moves along the bench six inches, which on a bench built for one is an invitation. He goes on facing north.\n\n\"You again,\" he says. \"There's still not two.\"",
+                "choices": [
+                    {
+                        "label": "Why does the house face north?",
+                        "next": "about_the_hole"
+                    },
+                    {
+                        "label": "Who owns the quarry now?",
+                        "next": "whose_quarry"
+                    },
+                    {
+                        "label": "Nothing. Good day.",
+                        "end": true
+                    }
+                ]
+            },
+            {
                 "text": "A man on a bench on top of a spoil heap, facing north, with the quarry behind him and the wind going over the roof.\n\n\"There's a bench,\" he says. \"There's not two.\"",
                 "on_enter": [
                     {

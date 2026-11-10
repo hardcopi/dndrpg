@@ -231,6 +231,28 @@
                 "once": true
             },
             {
+                "conditions": [
+                    {
+                        "flag": "met_barrow"
+                    }
+                ],
+                "text": "Tull Barrow lifts the ash staff off the log beside his fire, which is the nearest the fold comes to a welcome.\n\n\"Fire's still mine,\" he says. \"Sit, if you're sitting.\"",
+                "choices": [
+                    {
+                        "label": "You're hiring.",
+                        "next": "why_swords"
+                    },
+                    {
+                        "label": "What's happening on Winter Field?",
+                        "next": "the_field"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
                 "text": "Three fires along the fold wall and none of them talking to each other. The man at the third has four dogs, sixty beasts, and an ash staff across his knees with an iron ferrule on it that has been used for something other than turning cattle.\n\n\"Fold's common,\" he says. \"Fire's mine.\"",
                 "on_enter": [
                     {

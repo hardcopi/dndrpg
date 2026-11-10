@@ -10,6 +10,37 @@
                         "status": "active"
                     },
                     {
+                        "flag": "corse_declined_one"
+                    }
+                ],
+                "text": "\"He didn't answer one,\" Kessa says. \"Corse. Did you notice?\" She looks pleased with herself. \"I didn't, till three streets later. That's how good he is at it. A man who never says no and then says it so softly you've walked off before you hear it.\"",
+                "once": true,
+                "choices": [
+                    {
+                        "label": "Tell me about the debt.",
+                        "next": "the_debt_talk"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit down a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "kessa",
+                        "status": "active"
+                    },
+                    {
                         "flag": "room_sat"
                     },
                     {

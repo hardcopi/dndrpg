@@ -229,6 +229,28 @@
                 ]
             },
             {
+                "conditions": [
+                    {
+                        "flag": "met_petch"
+                    }
+                ],
+                "text": "Petch waves the tally board at you without breaking stride, calling a number back to the crane before she calls to you.\n\n\"Still not carrying anything!\" she says, delighted. \"Still lost, or still the crane?\"",
+                "choices": [
+                    {
+                        "label": "Why is there a quay this good on a river this small?",
+                        "next": "why_a_quay"
+                    },
+                    {
+                        "label": "Who do you work for?",
+                        "next": "the_house"
+                    },
+                    {
+                        "label": "Nothing. Sorry.",
+                        "end": true
+                    }
+                ]
+            },
+            {
                 "text": "A young woman in a coat that is a size too good for her, going down forty yards of dressed stone quay at a fast walk with a tally board, calling numbers to a crane crew who call them back. She stops when she sees you, entirely pleased to have somebody to explain the quay to. \"Petch,\" she says. \"Landing clerk. You are not carrying anything, so you are either lost or you are here about the crane.\"",
                 "on_enter": [
                     {

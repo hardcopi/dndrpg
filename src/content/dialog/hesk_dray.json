@@ -203,6 +203,24 @@
                 ]
             },
             {
+                "conditions": [
+                    {
+                        "flag": "met_hesk"
+                    }
+                ],
+                "text": "Hesk Dray does not look up from the wheel. He knows the step by now.\n\n\"Ground's still public,\" he says. \"Wagons are still mine.\"",
+                "choices": [
+                    {
+                        "label": "Your sheets are laced, not tied.",
+                        "next": "laced_not_tied"
+                    },
+                    {
+                        "label": "Fair enough.",
+                        "end": true
+                    }
+                ]
+            },
+            {
                 "text": "A heavy man in an apron-coat at the near wagon, greasing a wheel in the dark by feel, without a lamp.\n\n\"Ground's public,\" he says. \"Fire's over there. Well's over there. Wagons are mine.\"",
                 "on_enter": [
                     {
