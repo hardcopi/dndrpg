@@ -669,6 +669,19 @@ body.game-page .loc-inner.is-chart .loc-foot .loc-ways { margin: 0; padding: 0; 
   body.in-combat .cbt-init { padding-bottom: 4px; }
   body.in-combat .cbt-init-list { display: flex; flex-wrap: nowrap; gap: 6px; overflow-x: auto; scrollbar-width: none; }
   body.in-combat .cbt-init-list .cbt-card { flex: 0 0 auto; width: auto; min-width: 150px; min-height: 0; padding: 4px 8px; }
+  /* Cards sized off the strip, not off their names: a long name made the
+     first card two thirds of the screen and cut the second in half. Two and
+     a bit fit (the face shrinks and the order number goes — the row's own
+     order says it), so a third is always visibly there to scroll to; with two
+     fighters they grow to share the row. The class tag goes (it is on the
+     sheet and in the inspector) and the name ellipsises. */
+  body.in-combat .cbt-init-list .cbt-card { flex: 1 0 auto; width: calc((100% - 12px) / 2.15); min-width: 0; gap: 6px; }
+  body.in-combat .cbt-init-list .cbt-face { width: 30px; height: 30px; }
+  body.in-combat .cbt-init-list .cbt-init-num { display: none; }
+  body.in-combat .cbt-init-list .cbt-nums { white-space: nowrap; font-size: 11px; }
+  body.in-combat .cbt-init-list .cbt-body { min-width: 0; }
+  body.in-combat .cbt-init-list .cbt-name { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  body.in-combat .cbt-init-list .cbt-klass { display: none; }
   /* The 16x12 board is contained by width, so a row taller than ~0.8 of the
      width is empty space; size the row to the board. */
   body.in-combat .cbt-field { grid-template-rows: auto calc((100vw - 16px) * .8) auto; }
