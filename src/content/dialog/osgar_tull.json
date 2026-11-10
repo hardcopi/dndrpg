@@ -189,6 +189,70 @@
                 ]
             },
             {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "costed"
+                    }
+                ],
+                "once": true,
+                "text": "\"Held for the quarter,\" Tull says, coiling. \"Your Granary Row. I had it off the yard before you'd got your boots dry.\" He spits over the side. \"I'll carry the costing up when it's done. I carry everything.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "minuted"
+                    }
+                ],
+                "once": true,
+                "text": "\"Word for word, Moss says.\" Tull shrugs his enormous shoulders. \"I've carried a great deal of paper with words on it up that river. It all weighs the same.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "subscribed"
+                    }
+                ],
+                "once": true,
+                "text": "Tull looks at you for a long moment. \"Nineteen years carrying for the house,\" he says, \"and I've never had an owner aboard.\" He goes back to the rope. \"You'll sit where everybody sits.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "walked"
+                    }
+                ],
+                "once": true,
+                "text": "\"Walked out on them,\" Tull says, and laughs once, like a door going. \"Moss nearly dropped his pen.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
                 "text": "The packet stair is green below the sixth step and dry above it, and there is a very large man sitting on the seventh with a rope in his hands he is not doing anything with. \"Second and the fifth,\" he says, without being asked. \"That's the sailing. Everyone comes down here to ask and it's chalked on the board behind me and nobody reads a board.\"",
                 "on_enter": [
                     {

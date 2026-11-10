@@ -207,6 +207,24 @@ try {
     $p = party($db, $base + ['meeting_fate' => 'costed', 'concern_answering' => 1]);
     ok("Pyke's chain is gone once the house is answering", !str_contains(greet($db, $p, 'alder_pyke'), 'same chain'));
 
+    echo "== Brackwater and Greyhythe after the meeting ==\n";
+    $river = [
+        'minna_crale' => ['costed' => 'figure will be honest', 'minuted' => 'I found I liked it', 'subscribed' => 'liked the light', 'walked' => 'Seven words'],
+        'abel_moss' => ['costed' => "I'll see it's right", 'minuted' => 'particular about that', 'subscribed' => 'Same as ever', 'walked' => 'point of it'],
+        'dorcas_fenn' => ['costed' => 'up the valley will ask', 'minuted' => 'kept a space on the shelf', 'subscribed' => "I've decided", 'walked' => 'short ones'],
+        'osgar_tull' => ['costed' => 'I carry everything', 'minuted' => 'weighs the same', 'subscribed' => 'owner aboard', 'walked' => 'dropped his pen'],
+        'gillian_petch' => ['costed' => 'stops being delighted', 'minuted' => 'Nobody told me not to', 'subscribed' => 'Do I curtsey', 'walked' => 'obviously has one'],
+    ];
+    foreach ($river as $who => $lines) {
+        foreach ($lines as $fate => $needle) {
+            $p = party($db, $base + ['meeting_fate' => $fate]);
+            $db->prepare("INSERT INTO party_quests (party_id, quest_id, status) SELECT ?, id, 'completed' FROM quests WHERE quest_key='the_quarterly_meeting'")->execute([$p]);
+            ok("$who: $fate", str_contains(greet($db, $p, $who), $needle), substr(greet($db, $p, $who), 0, 90));
+            talk($db, $p, $who, [$who === 'gillian_petch' ? 'Nothing. Sorry' : 'Leave']);
+            ok("$who says it once", !str_contains(greet($db, $p, $who), $needle));
+        }
+    }
+
     echo "== companions place the mark ==\n";
     $marks = [
         ['ilse', ['mark_seen_stone' => 1], 'only ever a surveyor'],

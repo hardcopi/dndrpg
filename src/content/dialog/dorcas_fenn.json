@@ -179,6 +179,214 @@
                 ]
             },
             {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "costed"
+                    }
+                ],
+                "once": true,
+                "text": "\"When the costing's done it comes here,\" Dorcas Fenn says from the ladder. \"Everything does, in the end. I'll have the figure on a shelf at a penny a page for anybody who asks.\" She considers. \"I expect somebody from up the valley will ask.\"",
+                "choices": [
+                    {
+                        "label": "I'm after a Greyhythe sale. An armourer's stock. The Fenmoor lot.",
+                        "conditions": [
+                            {
+                                "flag": "mark_seen_plate"
+                            },
+                            {
+                                "not": {
+                                    "quest": "the_fenmoor_lot",
+                                    "status": "active"
+                                }
+                            },
+                            {
+                                "not": {
+                                    "quest": "the_fenmoor_lot",
+                                    "status": "completed"
+                                }
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "start_quest": "the_fenmoor_lot"
+                            },
+                            {
+                                "quest_stage": {
+                                    "quest": "the_fenmoor_lot",
+                                    "stage": "lot_forty_one"
+                                }
+                            }
+                        ],
+                        "next": "fenmoor_return"
+                    },
+                    {
+                        "label": "Anything?",
+                        "next": "read_anything"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "minuted"
+                    }
+                ],
+                "once": true,
+                "text": "\"Your objection,\" Dorcas Fenn says, coming down two rungs. \"It'll be bound with the quarter's minutes and come to me at the quarter's end. I've kept a space on the shelf.\" She taps it. \"Anybody may read it. That's what it's for. Mostly nobody does, which is not what it's for.\"",
+                "choices": [
+                    {
+                        "label": "I'm after a Greyhythe sale. An armourer's stock. The Fenmoor lot.",
+                        "conditions": [
+                            {
+                                "flag": "mark_seen_plate"
+                            },
+                            {
+                                "not": {
+                                    "quest": "the_fenmoor_lot",
+                                    "status": "active"
+                                }
+                            },
+                            {
+                                "not": {
+                                    "quest": "the_fenmoor_lot",
+                                    "status": "completed"
+                                }
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "start_quest": "the_fenmoor_lot"
+                            },
+                            {
+                                "quest_stage": {
+                                    "quest": "the_fenmoor_lot",
+                                    "stage": "lot_forty_one"
+                                }
+                            }
+                        ],
+                        "next": "fenmoor_return"
+                    },
+                    {
+                        "label": "Anything?",
+                        "next": "read_anything"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "subscribed"
+                    }
+                ],
+                "once": true,
+                "text": "\"A subscriber,\" Dorcas Fenn says. \"Then you'll be able to read the house's own books, not just the ones they send down to me.\" She goes back up the ladder. \"It's still a penny a page in here. I've never had to decide whether owners pay. I've decided.\"",
+                "choices": [
+                    {
+                        "label": "I'm after a Greyhythe sale. An armourer's stock. The Fenmoor lot.",
+                        "conditions": [
+                            {
+                                "flag": "mark_seen_plate"
+                            },
+                            {
+                                "not": {
+                                    "quest": "the_fenmoor_lot",
+                                    "status": "active"
+                                }
+                            },
+                            {
+                                "not": {
+                                    "quest": "the_fenmoor_lot",
+                                    "status": "completed"
+                                }
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "start_quest": "the_fenmoor_lot"
+                            },
+                            {
+                                "quest_stage": {
+                                    "quest": "the_fenmoor_lot",
+                                    "stage": "lot_forty_one"
+                                }
+                            }
+                        ],
+                        "next": "fenmoor_return"
+                    },
+                    {
+                        "label": "Anything?",
+                        "next": "read_anything"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "walked"
+                    }
+                ],
+                "once": true,
+                "text": "\"Walked out,\" Dorcas Fenn says. \"Then there'll be one line about you in the minutes, and I'll shelve it with the rest.\" She rolls the ladder along. \"People do read the short ones.\"",
+                "choices": [
+                    {
+                        "label": "I'm after a Greyhythe sale. An armourer's stock. The Fenmoor lot.",
+                        "conditions": [
+                            {
+                                "flag": "mark_seen_plate"
+                            },
+                            {
+                                "not": {
+                                    "quest": "the_fenmoor_lot",
+                                    "status": "active"
+                                }
+                            },
+                            {
+                                "not": {
+                                    "quest": "the_fenmoor_lot",
+                                    "status": "completed"
+                                }
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "start_quest": "the_fenmoor_lot"
+                            },
+                            {
+                                "quest_stage": {
+                                    "quest": "the_fenmoor_lot",
+                                    "stage": "lot_forty_one"
+                                }
+                            }
+                        ],
+                        "next": "fenmoor_return"
+                    },
+                    {
+                        "label": "Anything?",
+                        "next": "read_anything"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
                 "text": "\"Read anything,\" Dorcas Fenn says from the ladder. \"Take nothing. Penny a page.\" The ladder rolls a yard and stops.",
                 "choices": [
                     {

@@ -162,6 +162,86 @@
                 ]
             },
             {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "costed"
+                    }
+                ],
+                "once": true,
+                "text": "\"A costing,\" Abel Moss says through the six inches. \"There'll be paper on that for a year. Carriers' rates up the valley, bread at Brackwater prices.\" He initials something. \"Most of it will come through this window. I'll see it's right.\"",
+                "choices": [
+                    {
+                        "label": "What goes through this window?",
+                        "next": "the_window"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "minuted"
+                    }
+                ],
+                "once": true,
+                "text": "\"Minuted,\" Abel Moss says. \"Mrs Crale was very particular about it, I'm told. She's particular about everything. She was particular about that.\"",
+                "choices": [
+                    {
+                        "label": "What goes through this window?",
+                        "next": "the_window"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "subscribed"
+                    }
+                ],
+                "once": true,
+                "text": "Abel Moss looks at you through the six inches a little longer than usual, the way a man does when he has to decide whether you are still a passenger off Tull's boat. He decides that you are. \"Manifests,\" he says. \"Same as ever.\"",
+                "choices": [
+                    {
+                        "label": "What goes through this window?",
+                        "next": "the_window"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "walked"
+                    }
+                ],
+                "once": true,
+                "text": "\"Walked out, I heard,\" Abel Moss says. \"Nobody's done that in nineteen years.\" He considers. \"Nobody's done much of anything in nineteen years, up there. That's rather the point of it.\"",
+                "choices": [
+                    {
+                        "label": "What goes through this window?",
+                        "next": "the_window"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
                 "text": "Abel Moss slides the window open, sees it's you, and nods as if a manifest he had been expecting has arrived. \"Back again,\" he says. \"The yard's the yard.\"",
                 "choices": [
                     {
