@@ -53,6 +53,9 @@
 
   function sceneConfig(loc) {
     const scenes = window.RIVERMARK_SCENES || {};
+    // `scene` is the server's pick when the story has changed the view (the
+    // packet stair with the packet away); otherwise the place's own painting.
+    if (loc && loc.scene && scenes[loc.scene]) return { key: loc.scene, config: scenes[loc.scene] };
     const key = loc && (loc.location_key || loc.key || loc.slug);
     if (key && scenes[key]) return { key, config: scenes[key] };
     return null;

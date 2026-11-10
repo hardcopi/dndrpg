@@ -418,6 +418,27 @@ window.RIVERMARK_SCENES = {
       {type: "sway", x: 56.5, y: 11, w: 4, h: 6, amp: 4, period: 2.6, pivot: [0, 50]}
     ]
   },
+  // The same stair while Tull's packet is four days downriver: same camera,
+  // the boat painted out. Chosen by the server (location.scene).
+  packet_stair_away: {
+    image: 'assets/images/scenes/packet_stair_away.jpg',
+    exits: {
+      the_hythe: {x: 95, y: 60, icon: "→"},
+      salt_house: {x: 27, y: 44, icon: "↑"},
+      brackwater_wharf: {x: 62, y: 80, icon: "↓"}
+    },
+    npcs: {},
+    objects: [
+      {label: "Empty berth", x: 62, y: 62, act: "search"},
+      {label: "Coiled rope", x: 64, y: 82, act: "search"},
+      {label: "Green steps", x: 38, y: 66, act: "search"},
+      {label: "Downriver", x: 70, y: 38, act: "search"}
+    ],
+    fx: [
+      {type: "water", x: 36, y: 42, w: 64, h: 40, intensity: 1, count: 50, clip: [[36, 46], [100, 42], [100, 76], [78, 82], [58, 82], [48, 76], [42, 64]]},
+      {type: "birds", x: 25, y: 8, w: 60, h: 20, intensity: 0.8}
+    ]
+  },
   factors_house: {
     image: 'assets/images/scenes/factors_house.jpg',
     exits: {
