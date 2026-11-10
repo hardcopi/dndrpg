@@ -64,8 +64,8 @@
    * close: an overlay that steals focus and does not return it leaves a
    * keyboard user at the top of the document every time they close something.
    */
-  function pushOverlay(el, onEsc) {
-    const entry = { el, onEsc, restore: document.activeElement };
+  function pushOverlay(el, onEsc, restore) {
+    const entry = { el, onEsc, restore: restore || document.activeElement };
     overlays.push(entry);
     document.body.classList.add('overlay-open');
     // Focus the first control, or the panel itself if it has none yet.
@@ -168,7 +168,15 @@
    */
   function showModal(html, opts = {}) {
     const root = $('#modal-root');
-    if (opts.slot && modals[modals.length - 1]?.slot === opts.slot) closeTopModal();
+    // A panel redrawn in its own slot (the shop after every sale) hands back
+    // focus to whatever opened the first copy, not to a button in the copy it
+    // replaced, which is gone the moment this one is drawn.
+    let inherit = null;
+    if (opts.slot && modals[modals.length - 1]?.slot === opts.slot) {
+      const was = modals[modals.length - 1].el;
+      inherit = (overlays.find((o) => o.el === was) || {}).restore || null;
+      closeTopModal();
+    }
     const el = document.createElement('div');
     el.className = 'modal modal-' + (opts.size || 'normal');
     el.setAttribute('role', 'dialog');
@@ -183,7 +191,7 @@
     root.appendChild(el);
     root.classList.remove('hidden');
 
-    const release = pushOverlay(el, () => closeTopModal());
+    const release = pushOverlay(el, () => closeTopModal(), inherit);
     const entry = { el, release, onClose: opts.onClose || null, slot: opts.slot || null };
     modals.push(entry);
 
@@ -2108,7 +2116,13 @@
     `, { size: 'wide', label: 'Merchant', slot: 'shop' });
 
     el.querySelector('[data-close]').onclick = closeTopModal;
-    const transact = async (route, payload) => {
+    const transact = async (route, payload, btn) => {
+      // The shop is redrawn after every trade, and the redraw focuses its first
+      // Buy — so selling from the bottom of the list threw a keyboard player
+      // back to the top. Note which button it was, and its place in its list.
+      const kind = btn && (btn.hasAttribute('data-sell') ? 'data-sell' : 'data-buy');
+      const val = kind && btn.getAttribute(kind);
+      const at = kind ? $$(`[${kind}]`, el).indexOf(btn) : -1;
       try {
         const r = await API.post(route, { ...payload, character_id: G().state.character.id });
         G().log(r.message, 'success');
@@ -2116,15 +2130,26 @@
         G().state.inventory = r.inventory;
         renderPartyRail();
         await refreshShop(npcKey);
+        const now = modals[modals.length - 1]?.el;
+        if (kind && now && now !== el) {
+          // The same button if it is still there (Buy again, a stack still to
+          // sell), else the one that moved up into its place, else the last.
+          const all = $$(`[${kind}]`, now);
+          const open = (n) => n && !n.disabled;
+          const same = now.querySelector(`[${kind}="${CSS.escape(val)}"]`);
+          const next = open(same) ? same
+            : (all.slice(Math.max(0, at)).find(open) || all.slice(0, at).reverse().find(open));
+          if (next) next.focus();
+        }
       } catch (e) {
         G().showError(e.message);
       }
     };
     $$('[data-buy]', el).forEach((b) => {
-      b.onclick = () => transact('inventory/buy', { item_id: +b.dataset.buy, npc_key: npcKey });
+      b.onclick = () => transact('inventory/buy', { item_id: +b.dataset.buy, npc_key: npcKey }, b);
     });
     $$('[data-sell]', el).forEach((b) => {
-      b.onclick = () => transact('inventory/sell', { inventory_id: +b.dataset.sell });
+      b.onclick = () => transact('inventory/sell', { inventory_id: +b.dataset.sell }, b);
     });
   }
 
