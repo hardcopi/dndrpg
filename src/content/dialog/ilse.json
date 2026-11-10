@@ -10,6 +10,28 @@
                         "status": "active"
                     },
                     {
+                        "has_item": "fenmoor_crate_lid"
+                    },
+                    {
+                        "flag": "armour_chain_ended"
+                    }
+                ],
+                "once": true,
+                "text": "\"Salt stacked on battens, iron tied in tens, and a crate from a sale at Greyhythe,\" Ilse says, turning the lid in her hands. \"That store is kept the way a quartermaster keeps one. I told myself for four years it was goblins learning.\" She gives it back. \"Maybe it was. A carter was paid, and he left it, and he went on to the ford. That is all the wood says.\"",
+                "choices": [
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "ilse",
+                        "status": "active"
+                    },
+                    {
                         "flag": "mark_seen_stone"
                     },
                     {

@@ -29,6 +29,24 @@
             {
                 "conditions": [
                     {
+                        "has_item": "fenmoor_crate_lid"
+                    },
+                    {
+                        "flag": "armour_chain_ended"
+                    }
+                ],
+                "once": true,
+                "text": "Hester Brindle turns the lid over twice. \"That's the sale-room's stencil, not ours. Father never re-marked a thing in his life, said it was bad luck and worse book-keeping.\" She hands it back. \"Forty gold for the lot and twenty back off Darrow. I've the page. I never thought I'd see a piece of the wood.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "armour_chain_ended"
                     }
                 ],

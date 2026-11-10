@@ -40,6 +40,24 @@
             {
                 "conditions": [
                     {
+                        "has_item": "fenmoor_crate_lid"
+                    },
+                    {
+                        "flag": "armour_chain_ended"
+                    }
+                ],
+                "once": true,
+                "text": "Dorcas Fenn comes all the way down the ladder for the lid, which she does not do for most things. \"Lot forty-one,\" she says. \"That's the Greyhythe sale's stencil. That's the return I showed you, and that's Darrow's sale at the Weir, and that's Abe Treen's chalk.\" She goes back up for the return and writes in the margin, very small: lid seen. \"The chain is whole,\" she says from the top. \"It has a hole in the middle where a name would go, and the hole is whole as well. I'll file it that way.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "survey_fate",
                         "equals": "warned"
                     }

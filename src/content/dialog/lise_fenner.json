@@ -25,6 +25,24 @@
             {
                 "conditions": [
                     {
+                        "has_item": "fenmoor_crate_lid"
+                    },
+                    {
+                        "flag": "armour_chain_ended"
+                    }
+                ],
+                "once": true,
+                "text": "Lise Treen stops scrubbing. She cannot read the stencil and does not try. She puts one wet finger on the chalk under it, the one, and the little hook after it. \"That's Abe's,\" she says. \"He did his ones with a hook, so nobody'd take them for a seven.\" She takes the finger away. \"As asked. He wrote that forty times. He never once told me who.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "armour_chain_fate",
                         "equals": "paid"
                     }
