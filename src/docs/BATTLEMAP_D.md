@@ -123,6 +123,13 @@ named here instead of being filled with something invented.
   a creature the caster cannot see (`CombatEngine::needsSight`, `mustSee`), and
   the board's targeting leaves such creatures out. Area spells are placed on
   cells and are not gated.
-- **Not done:** monsters do not move to stay in the dark, and they carry no
-  lights.
+- **Hooded lantern** (SRD: 5 gp, 2 lb, 30 ft bright and 30 ft dim). Tobin
+  stocks three.
+- **Monsters keep to the dark.** When a monster that sees in the dark has to
+  move to get its shot, it picks a spot its target cannot see if there is one,
+  and the cheapest such spot (`bestApproach`, ranked by (not hidden, cost)). Its
+  choice of attack weighs the dark like cover (`AI_DARK`): it favours striking
+  unseen and avoids swinging at what it cannot see. A monster already in range
+  does not move away just to reach the dark.
+- **Not done:** monsters carry no lights.
 - Tests: `tools/test_combat.php`, section "Darkness (battle map D)".

@@ -151,6 +151,12 @@ class CombatEngine
     private const AI_PROVOKE = 55.0;
     /** Per point of cover the destination gives, so archers find the pillars. */
     private const AI_COVER = 6.0;
+    /**
+     * Striking out of the dark at somebody who cannot see you is advantage;
+     * swinging at somebody you cannot see is disadvantage. Worth about what
+     * cover is worth, because it is about what cover does to the odds.
+     */
+    private const AI_DARK = 6.0;
     /** Per enemy whose reach the destination sits inside. */
     private const AI_THREATENED = 8.0;
     /**
@@ -1056,6 +1062,12 @@ class CombatEngine
             }
             if (!empty($shot['flank'])) {
                 $score += self::AI_PACK;
+            }
+            if (!empty($shot['hidden'])) {
+                $score += self::AI_DARK;
+            }
+            if (!empty($shot['unseen'])) {
+                $score -= self::AI_DARK;
             }
 
             if ($kind === 'attack') {
@@ -7911,10 +7923,18 @@ class CombatEngine
             }
         }
 
+        // On a dark board a creature that sees in the dark would rather strike
+        // from somewhere its target cannot see it, and will walk further for
+        // that: the ranking is (not hidden, cost), so a hidden spot beats any
+        // lit one and the cheapest wins among equals. Everywhere else nobody
+        // is ever hidden and this is the old cheapest-spot search, early exit
+        // and all.
+        $dark = !empty($state['grid']['dark']) && (int) ($actor['dark_sight'] ?? 0) > 0;
         $best = null;
         foreach ($candidates as $key) {
             [$x, $y] = BattleGrid::parseKey($key);
-            if ($best !== null && $reach[$key]['cost'] >= $best['cost']) {
+            if ($best !== null && $reach[$key]['cost'] >= $best['cost']
+                && (!$dark || !empty($best['shot']['hidden']))) {
                 continue;   // already have somewhere cheaper that works
             }
             $from = $actor;
@@ -7923,6 +7943,13 @@ class CombatEngine
             $shots = self::shotsFrom($state['grid'], $state['combatants'], $from, $range);
             if (!isset($shots[(string) $target['cid']])) {
                 continue;
+            }
+            if ($best !== null) {
+                $mine = [empty($shots[(string) $target['cid']]['hidden']) ? 1 : 0, (int) $reach[$key]['cost']];
+                $theirs = [empty($best['shot']['hidden']) ? 1 : 0, (int) $best['cost']];
+                if ($mine >= $theirs) {
+                    continue;
+                }
             }
             $best = [
                 'dest'        => [$x, $y],
