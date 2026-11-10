@@ -219,6 +219,17 @@ end and names nobody.
   withdraw it, say why they walked out (to be read to the meeting as
   correspondence), or let it stand in pencil on the next agenda (`walked_fate` =
   `withdrawn` / `reasons` / `stands`). Minna reads all three back.
+- **Companions on the three outcomes.** One once-only line each: Sera on
+  `vote_fate` (against, kept, proxy) and on a sixth head (`costing_fate` =
+  `whole`); Aldric on `minute_fate` (copied, shelved) and on `walked_fate` =
+  `reasons`; Kessa on `walked_fate` (withdrawn, stands, reasons) and on Reed's
+  proxy; Ilse on Reed's proxy.
+- **The house hears the costing and the vote.** Concern pressure: a vote lodged
+  against clearance +1, a proxy to Reed +2, the minute copied to the Flagon door
+  +1 (the sixth head was already +2). Keeping the vote and shelving the minute
+  cost nothing. Corse has a once-only line for each `costing_fate` (given, whole)
+  and `vote_fate`. He costs what Mrs Amsel counts, and sends the figure
+  without a recommendation. How the quarter-day vote goes stays open.
 - **Companions place the mark.** Once Act II is open, Ilse (`mark_seen_stone`),
   Kessa (`mark_seen_paper`) and Sera (`mark_seen_book`) each have one greeting
   that recognises the mark they saw in Act I as the house's mark: the ledge cuts,

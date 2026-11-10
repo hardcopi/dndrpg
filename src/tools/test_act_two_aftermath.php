@@ -420,6 +420,41 @@ try {
     $p = $sera(['sera_post_fate' => 'retained'], 50);
     talk($db, $p, 'minna_crale', ['Who initials']);
     ok('four people read every month', !str_contains(greet($db, $p, 'minna_crale'), 'Eight lines'));
+    echo "== companions on the vote, the minute and item seven ==\n";
+    $beats = [
+        ['vote_fate', 'against', 'sera', 'lodged it early'], ['vote_fate', 'kept', 'sera', "I'd have done"],
+        ['vote_fate', 'proxy', 'sera', 'watch captain'], ['costing_fate', 'whole', 'sera', 'sixth head'],
+        ['minute_fate', 'copied', 'aldric', 'Flagon door'], ['minute_fate', 'shelved', 'aldric', 'dividend and the drains'],
+        ['walked_fate', 'reasons', 'aldric', 'said it to them'],
+        ['walked_fate', 'withdrawn', 'kessa', 'clean'], ['walked_fate', 'stands', 'kessa', 'in pencil'],
+        ['walked_fate', 'reasons', 'kessa', 'Explaining'], ['vote_fate', 'proxy', 'kessa', 'Huh'],
+        ['vote_fate', 'proxy', 'ilse', 'good coat'],
+    ];
+    foreach ($beats as [$k, $v, $c, $needle]) {
+        $p = party($db, $base + [$k => $v]); ended($db, $p, 'costed');
+        $cs = new CompanionService($db); $cs->meet($p, $c); $cs->recruit($p, $c);
+        $t = greet($db, $p, $c);
+        ok("$c on $k=$v", stripos($t, $needle) !== false, substr($t, 0, 100));
+        $n = (new DialogEngine($db))->node($p, $c);
+        talk($db, $p, $c, [(string) end($n['choices'])['label']]);
+        ok("$c says it once ($v)", stripos(greet($db, $p, $c), $needle) === false);
+    }
+
+    echo "== the house hears the costing and the vote ==\n";
+    foreach ([['one_vote_in_twelve', 'lodged_against', 1], ['one_vote_in_twelve', 'proxy_to_reed', 2], ['one_vote_in_twelve', 'kept_vote', 0], ['the_bound_minute', 'copied', 1], ['the_bound_minute', 'shelved', 0]] as [$q, $st, $n]) {
+        $p = party($db, $base); ended($db, $p, $q === 'the_bound_minute' ? 'minuted' : 'subscribed');
+        $before = (int) flag($db, $p, 'concern_pressure');
+        (new Effects($db))->apply($p, [['start_quest' => $q], ['quest_stage' => ['quest' => $q, 'stage' => $st]]]);
+        $after = (int) flag($db, $p, 'concern_pressure');
+        ok("$q/$st moves the house by $n", $after === $before + $n, "$before -> $after");
+    }
+    foreach ([['costing_fate', 'whole', 'six heads'], ['costing_fate', 'given', 'Five heads'], ['vote_fate', 'against', 'Against'], ['vote_fate', 'kept', 'not yet spent'], ['vote_fate', 'proxy', 'good coat']] as [$k, $v, $needle]) {
+        $p = party($db, $base + [$k => $v]); ended($db, $p, 'costed');
+        $t = greet($db, $p, 'ludo_corse');
+        ok("Corse hears $k=$v", stripos($t, $needle) !== false, substr($t, 0, 100));
+        talk($db, $p, 'ludo_corse', ['Leave']);
+        ok("Corse says it once ($v)", stripos(greet($db, $p, 'ludo_corse'), $needle) === false);
+    }
 } catch (Throwable $e) {
     ok('played without a dead end', false, $e->getMessage());
 } finally {

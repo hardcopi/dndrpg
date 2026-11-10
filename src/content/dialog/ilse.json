@@ -10,6 +10,42 @@
                         "status": "active"
                     },
                     {
+                        "flag": "vote_fate",
+                        "equals": "proxy"
+                    }
+                ],
+                "text": "\"Reed in that room,\" Ilse says, \"in her good coat, with your proxy. Counting them while they count us.\" It is very nearly a smile. \"That is the first thing I have heard about that room that I would walk downriver to watch.\"",
+                "once": true,
+                "choices": [
+                    {
+                        "label": "Goblins.",
+                        "next": "the_count"
+                    },
+                    {
+                        "label": "Tell me about the deep warren.",
+                        "next": "the_deep"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit at the fire a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "ilse",
+                        "status": "active"
+                    },
+                    {
                         "has_item": "fenmoor_crate_lid"
                     },
                     {

@@ -10,6 +10,134 @@
                         "status": "active"
                     },
                     {
+                        "flag": "walked_fate",
+                        "equals": "withdrawn"
+                    }
+                ],
+                "text": "\"Withdrawn,\" Kessa says. \"Clean. You don't owe them so much as a line on an agenda.\" She spins the knife and catches it. \"I'd not have written the letter, mind. I'd have let it rot. But clean's clean.\"",
+                "once": true,
+                "choices": [
+                    {
+                        "label": "Tell me about the debt.",
+                        "next": "the_debt_talk"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit down a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "kessa",
+                        "status": "active"
+                    },
+                    {
+                        "flag": "walked_fate",
+                        "equals": "stands"
+                    }
+                ],
+                "text": "\"Your name in pencil on their next agenda,\" Kessa says, delighted, \"and an empty chair. Every quarter until somebody gets tired of reading it out.\" She grins. \"That's a debt they owe you now, and they have to look at it.\"",
+                "once": true,
+                "choices": [
+                    {
+                        "label": "Tell me about the debt.",
+                        "next": "the_debt_talk"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit down a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "kessa",
+                        "status": "active"
+                    },
+                    {
+                        "flag": "walked_fate",
+                        "equals": "reasons"
+                    }
+                ],
+                "text": "\"You wrote them a letter,\" Kessa says. \"Explaining.\" She does not approve, and she does not quite disapprove. \"Eleven people being reasonable in a warm room. That's good. I'll give you that's good. They'll still be warm after.\"",
+                "once": true,
+                "choices": [
+                    {
+                        "label": "Tell me about the debt.",
+                        "next": "the_debt_talk"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit down a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "kessa",
+                        "status": "active"
+                    },
+                    {
+                        "flag": "vote_fate",
+                        "equals": "proxy"
+                    }
+                ],
+                "text": "\"Reed,\" Kessa says. \"With a vote on the people who bought my paper.\" She thinks about it for longer than she usually thinks about anything. \"Huh,\" she says finally, and that is all, but she is smiling at the fire.",
+                "once": true,
+                "choices": [
+                    {
+                        "label": "Tell me about the debt.",
+                        "next": "the_debt_talk"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit down a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "kessa",
+                        "status": "active"
+                    },
+                    {
                         "flag": "mark_seen_paper"
                     },
                     {

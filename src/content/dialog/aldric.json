@@ -10,6 +10,129 @@
                         "status": "active"
                     },
                     {
+                        "flag": "minute_fate",
+                        "equals": "copied"
+                    }
+                ],
+                "text": "\"I stood by the Flagon door this morning while a woman read it to her son,\" Aldric says. \"Slowly, every word. The meeting noted the objection.\" He turns his hat in his hands. \"It changes nothing at Number Nine. I said it was not nothing, and I am glad to have been right about the smallest possible thing.\"",
+                "once": true,
+                "choices": [
+                    {
+                        "label": "Patch us up.",
+                        "effects": [
+                            {
+                                "heal": 8
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "What order were you in?",
+                        "next": "the_order"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit down a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "aldric",
+                        "status": "active"
+                    },
+                    {
+                        "flag": "minute_fate",
+                        "equals": "shelved"
+                    }
+                ],
+                "text": "\"Between the dividend and the drains,\" Aldric says. \"It will be there when all of us are dead, and somebody will take it down and know exactly what was said.\" He considers this. \"I find I do not mind that it is only that. I thought I would.\"",
+                "once": true,
+                "choices": [
+                    {
+                        "label": "Patch us up.",
+                        "effects": [
+                            {
+                                "heal": 8
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "What order were you in?",
+                        "next": "the_order"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit down a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "aldric",
+                        "status": "active"
+                    },
+                    {
+                        "flag": "walked_fate",
+                        "equals": "reasons"
+                    }
+                ],
+                "text": "\"You said it to them,\" Aldric says. \"Not by leaving. In words, which they will have to sit and hear read.\" He nods slowly. \"Leaving was honest. This is honest and it costs something. I prefer it, which is presumptuous of me.\"",
+                "once": true,
+                "choices": [
+                    {
+                        "label": "Patch us up.",
+                        "effects": [
+                            {
+                                "heal": 8
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "What order were you in?",
+                        "next": "the_order"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit down a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "aldric",
+                        "status": "active"
+                    },
+                    {
                         "flag": "indentured_fate",
                         "equals": "bought"
                     }

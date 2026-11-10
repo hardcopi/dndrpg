@@ -10,6 +10,134 @@
                         "status": "active"
                     },
                     {
+                        "flag": "vote_fate",
+                        "equals": "against"
+                    }
+                ],
+                "text": "\"You lodged it early,\" Sera says. \"Against. A whole quarter before anybody else has to commit.\" She walks a coin over her knuckles. \"Every chair in that room will have read your vote before they decide theirs. That's either very good or the worst thing you could have done, and I won't know which until the quarter-day. I hate not knowing which.\"",
+                "once": true,
+                "choices": [
+                    {
+                        "label": "What did Marrow have on you?",
+                        "next": "the_leash_offer"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit down a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "sera",
+                        "status": "active"
+                    },
+                    {
+                        "flag": "vote_fate",
+                        "equals": "kept"
+                    }
+                ],
+                "text": "\"Kept it,\" Sera says, approving the way she approves of a column that balances. \"Never commit a figure before you have to. Let them all wonder.\" A small smile. \"That's the first thing you've done at that table that I'd have done.\"",
+                "once": true,
+                "choices": [
+                    {
+                        "label": "What did Marrow have on you?",
+                        "next": "the_leash_offer"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit down a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "sera",
+                        "status": "active"
+                    },
+                    {
+                        "flag": "vote_fate",
+                        "equals": "proxy"
+                    }
+                ],
+                "text": "\"You gave a twelfth of the house to a watch captain,\" Sera says. It is not quite an accusation. \"Reed can't read a balance sheet. She won't need to. She'll sit in that chair and be Rivermark at them.\" She is quiet a while. \"I'd have kept it. I'd have used it better. I'm no longer sure better is the point, and that's annoying.\"",
+                "once": true,
+                "choices": [
+                    {
+                        "label": "What did Marrow have on you?",
+                        "next": "the_leash_offer"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit down a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "sera",
+                        "status": "active"
+                    },
+                    {
+                        "flag": "costing_fate",
+                        "equals": "whole"
+                    }
+                ],
+                "text": "\"A sixth head,\" Sera says, with something close to reverence. \"Not otherwise provided for. Do you know how many ledgers I've seen with that written in them as a head? None. Everybody hides the sundries. She wrote them down and gave them a column.\"",
+                "once": true,
+                "choices": [
+                    {
+                        "label": "What did Marrow have on you?",
+                        "next": "the_leash_offer"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit down a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "sera",
+                        "status": "active"
+                    },
+                    {
                         "flag": "mark_seen_book"
                     },
                     {
