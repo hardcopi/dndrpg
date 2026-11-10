@@ -91,7 +91,9 @@
       return done; // A level owed is not worth interrupting play with an error.
     }
     if (!pending.length) return done;
-    await runCeremony(pending[0].id, opts);
+    // Put aside by the player: leave the rest for the next refresh rather than
+    // opening it again under their hand.
+    if (await runCeremony(pending[0].id, opts) === 'dismissed') return done;
     // A big award can owe two levels. Come back for the next one.
     return checkPending(opts, done + 1);
   }
@@ -101,14 +103,34 @@
     open = true;
     try {
       let ceremony = (await API.get('levelup/ceremony', { pending_id: pendingId })).ceremony;
+      // Escape and the backdrop close any modal, this one included, and the
+      // step underneath was left waiting on a click that could never come —
+      // so `open` stayed true and nothing could claim the level again until
+      // a reload. Closing is "later" now: the ceremony is let go, and the next
+      // checkPending (every refresh calls it) brings it back where it stopped.
+      let dismissed;
+      const gone = new Promise((resolve) => { dismissed = resolve; });
       const el = UI().showModal(shell(ceremony), {
         size: 'wide',
         label: 'Level up',
         slot: 'levelup',
+        onClose: () => { if (!el.dataset.closing) dismissed(); },
       });
       const keeper = keepFocus(el);
       try {
-        await steps(el, ceremony, opts);
+        const how = await Promise.race([
+          steps(el, ceremony, opts).then(() => 'done'),
+          gone.then(() => 'dismissed'),
+        ]);
+        if (how === 'dismissed') {
+          // Closed on the summary: the level is already taken, so this is
+          // Onward without the button — the world still needs its refresh.
+          const taken = !!el.querySelector('[data-act="close"]');
+          if (!taken) G().log('Level-up put aside — it opens again when the world next refreshes.', 'important');
+          else if ((!opts || opts.refresh !== false) && G().refreshAll) await G().refreshAll();
+          return taken ? 'done' : 'dismissed';
+        }
+        return 'done';
       } finally {
         keeper.disconnect();
       }
@@ -592,6 +614,7 @@
     await new Promise((resolve) => {
       $('[data-act="close"]', el).addEventListener('click', resolve, { once: true });
     });
+    el.dataset.closing = '1';
     UI().closeTopModal();
 
     // The sheet, the party rail and the hit point bars are all now stale —
