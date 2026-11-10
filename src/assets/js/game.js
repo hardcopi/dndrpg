@@ -649,46 +649,62 @@
       el.style.marginTop = '';
       const pin = el.querySelector('.paint-pin');
       if (pin) pin.style.height = '';
+      const lab = el.querySelector('.paint-label');
+      if (lab) lab.style.transform = '';
     });
     const labelOf = (el) => el.querySelector('.paint-label') || el;
-    const rel = (el, dy) => {
+    const rel = (el) => {
       const r = labelOf(el).getBoundingClientRect();
-      return { l: r.left - box.left, r: r.right - box.left, t: r.top - box.top + dy, b: r.bottom - box.top + dy };
+      return { l: r.left - box.left, r: r.right - box.left, t: r.top - box.top, b: r.bottom - box.top };
     };
     const hits = (a, b) => a.l < b.r + 2 && b.l < a.r + 2 && a.t < b.b + 2 && b.t < a.b + 2;
-    // Exits keep their place; everything else gives way to them, in order.
-    const rank = (el) => (el.classList.contains('exit') ? 0 : 1);
-    const ordered = spots.map((el, i) => ({ el, i })).sort((a, b) => rank(a.el) - rank(b.el) || a.i - b.i);
+    const inside = (r) => r.t >= 0 && r.b <= box.height && r.l >= 2 && r.r <= box.width - 2;
+    const move = (r, dx, dy) => ({ l: r.l + dx, r: r.r + dx, t: r.t + dy, b: r.b + dy });
     const placed = [];
-    ordered.forEach(({ el }) => {
-      const base = rel(el, 0);
-      // Exits go first, so an exit only ever gives way to another exit (two
-      // ways out painted close together, e.g. the Ford's mill and steading).
-      if (!placed.some((p) => hits(base, p))) {
-        placed.push(base);
-        return;
-      }
-      // A hotspot is anchored by its bottom edge — the dot — so the label can
-      // only move by changing the pin: longer to go up (any distance), shorter
-      // to come down (no further than the pin is long). An object label has no
-      // pin and no dot, and simply moves.
+    spots.forEach((el) => {
+      const base = rel(el);
       const pin = el.querySelector('.paint-pin');
+      const dot = el.querySelector('.paint-dot');
       const pinH = pin ? pin.offsetHeight : 0;
-      const maxDown = pin ? Math.max(0, pinH - 3) : LABEL_MAX_SHIFT;
-      let best = 0;
-      for (let d = LABEL_STEP; d <= LABEL_MAX_SHIFT && !best; d += LABEL_STEP) {
-        // Up first: a label on a longer stalk still reads as belonging to its dot.
-        best = [-d, d].find((dy) => {
-          if (dy > maxDown) return false;
-          const r = { ...base, t: base.t + dy, b: base.b + dy };
-          return r.t >= 0 && r.b <= box.height && !placed.some((p) => hits(r, p));
-        }) || 0;
+      const dotH = dot ? dot.offsetHeight : 0;
+      const h = base.b - base.t;
+      // A label wider than the room beside its dot (a long name near the
+      // edge, or any name on a phone) slides back inside the painting; the
+      // pin and the dot stay where they were painted.
+      let dx0 = 0;
+      if (base.r > box.width - 2) dx0 = box.width - 2 - base.r;
+      if (base.l + dx0 < 2) dx0 = 2 - base.l;
+      // Candidates, in order of preference. Above the dot on a longer or
+      // shorter pin (dy < 0 lengthens it) reads best; then the same height
+      // slid sideways; last, the label hangs under its dot, pin hidden.
+      const tries = [];
+      const xs = [0];
+      for (let d = LABEL_STEP; d <= box.width / 2; d += LABEL_STEP) xs.push(d, -d);
+      const ys = [0];
+      for (let d = LABEL_STEP; d <= LABEL_MAX_SHIFT; d += LABEL_STEP) ys.push(-d, d);
+      ys.forEach((dy) => { if (dy <= Math.max(0, pinH - 3)) tries.push({ dx: 0, dy }); });
+      xs.slice(1).forEach((sx) => tries.push({ dx: sx, dy: 0 }));
+      const under = pinH + dotH + h + 3;
+      xs.forEach((sx) => tries.push({ dx: sx, dy: under, below: true }));
+      const pick = tries.find(({ dx, dy }) => {
+        const r = move(base, dx0 + dx, dy);
+        return inside(r) && !placed.some((p) => hits(r, p));
+      }) || { dx: 0, dy: 0 };
+      const lab = el.querySelector('.paint-label');
+      const dx = dx0 + pick.dx;
+      if (pick.below) {
+        if (pin) pin.style.height = '0px';
+        // The pin is gone, so the label already sits on the dot; carry it the
+        // rest of the way under.
+        if (lab) lab.style.transform = `translate(${Math.round(dx)}px, ${Math.round(dotH + h + 3)}px)`;
+      } else {
+        if (pick.dy) {
+          if (pin) pin.style.height = `${pinH - pick.dy}px`;
+          else el.style.marginTop = `${pick.dy}px`;
+        }
+        if (lab && dx) lab.style.transform = `translateX(${Math.round(dx)}px)`;
       }
-      if (best) {
-        if (pin) pin.style.height = `${pinH - best}px`;
-        else el.style.marginTop = `${best}px`;
-      }
-      placed.push({ ...base, t: base.t + best, b: base.b + best });
+      placed.push(move(base, dx, pick.dy));
     });
   }
 
