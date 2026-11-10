@@ -2636,6 +2636,11 @@
             await shotFlies(ev);
           }
           if (ev.hit && dice && !quick && ev.natural > 0) await trayDamage(ev.damage_dice, ev.damage);
+          // A dart that cannot miss: no d20, just its die.
+          if (ev.mode === 'auto' && dice && !quick && ev.damage_dice) {
+            await trayRoll(0, '', 'is-hit', quick, true);
+            await trayDamage(ev.damage_dice, ev.damage);
+          }
           if (ev.hit) {
             flash(ev.target, ev.crit ? 'crit-flash' : 'hit-flash');
             boardHit(ev.target, ev.crit ? 'crit' : 'hit');
@@ -2651,6 +2656,9 @@
           if (dice && ev.natural > 0) {
             await trayRoll(ev.natural, `${String(ev.ability || '').toUpperCase()} ${sumLine(ev.natural, ev.total)} vs DC ${ev.dc}`,
               ev.passed ? 'is-hit' : 'is-miss', quick);
+            // A spell's damage, rolled whether the save passed or not (half on
+            // a success): the tray shows the dice; the log says what landed.
+            if (!quick && ev.damage_dice) await trayDamage(ev.damage_dice, null);
           }
           float(ev.actor, `${ev.ability.toUpperCase()} ${ev.total} vs ${ev.dc}`,
             ev.passed ? 'float-save-ok' : 'float-save-bad');
@@ -2948,9 +2956,18 @@
     const mod = Number(total) - Number(natural);
     return mod ? `${natural}${mod > 0 ? '+' : '−'}${Math.abs(mod)}=${total}` : String(total);
   }
-  async function trayRoll(natural, caption, tone, quick) {
+  async function trayRoll(natural, caption, tone, quick, empty = false) {
     const box = $('#cbt-map', root());
     if (!box || G().reducedMotion() || !window.Dice3D || !window.Dice3D.available()) return;
+    if (empty) {
+      // A fresh tray with no d20 in it, for damage that needed no roll to hit.
+      let t = box.querySelector('.cbt-dice-tray');
+      if (!t) { t = document.createElement('div'); t.setAttribute('aria-hidden', 'true'); box.appendChild(t); }
+      clearTimeout(trayTimer);
+      t.className = `cbt-dice-tray is-landed ${tone || ''}`;
+      t.innerHTML = '';
+      return;
+    }
     if (!(natural >= 1 && natural <= 20)) return;
     let tray = box.querySelector('.cbt-dice-tray');
     if (!tray) {
@@ -3002,7 +3019,9 @@
     tray.append(row, cap);
     await window.Dice3D.landAll(stages, { duration: 520, stagger: 60 });
     if (!tray.isConnected) return;
-    cap.textContent = `${amount} damage`;
+    cap.textContent = amount == null
+      ? `rolled ${rolls.reduce((a, b) => a + b, 0)}`
+      : `${amount} damage`;
     trayTimer = setTimeout(() => tray.classList.add('is-gone'), 1400);
     await new Promise((r) => setTimeout(r, 160));
   }

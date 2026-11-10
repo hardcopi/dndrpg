@@ -3922,6 +3922,17 @@ class CombatEngine
     }
 
     /** The die size in `2d6+3`, or 0 for an expression that rolls nothing. */
+    /**
+     * What the board's dice tray is told about a roll: the die and the faces.
+     * Display only.
+     *
+     * @return array{sides:int, rolls:int[]}
+     */
+    private static function trayDice(string $expr, array $rolled): array
+    {
+        return ['sides' => self::dieSides($expr), 'rolls' => array_map('intval', (array) ($rolled['rolls'] ?? []))];
+    }
+
     public static function dieSides(string $expr): int
     {
         return preg_match('/\dd(\d+)/', strtolower(str_replace(' ', '', $expr)), $m)
@@ -6698,7 +6709,15 @@ class CombatEngine
                 'natural' => $result['natural'], 'total' => $result['total'], 'passed' => $result['passed'],
             ]);
 
-            $raw = $dice === '' ? 0 : (int) Dice::rollDetailed($dice)['total'];
+            $rolled = $dice === '' ? null : Dice::rollDetailed($dice);
+            $raw = $rolled === null ? 0 : (int) $rolled['total'];
+            if ($rolled !== null) {
+                // The damage dice ride on the save event they follow, for the
+                // board's dice tray. Display only; set after the roll so the
+                // dice are drawn in the same order as before.
+                $last = count($state['events']) - 1;
+                $state['events'][$last]['damage_dice'] = self::trayDice($dice, $rolled);
+            }
             $amount = self::saveDamage(
                 $raw,
                 $result['passed'],
@@ -6768,7 +6787,8 @@ class CombatEngine
         }
 
         // 'auto' — Magic Missile and its kin.
-        $raw = $dice === '' ? 0 : (int) Dice::rollDetailed($dice)['total'];
+        $rolled = $dice === '' ? null : Dice::rollDetailed($dice);
+        $raw = $rolled === null ? 0 : (int) $rolled['total'];
         $after = Rules::damageAfterDefenses($raw, $damageType, $target);
         $state['log'][] = "{$spell['name']} strikes {$target['name']} for {$after['amount']} {$damageType} damage.";
         $state = $this->emit($state, [
@@ -6778,6 +6798,7 @@ class CombatEngine
             // there is no roll for a bonus to armour class to affect.
             'ac' => self::effectiveAc($target), 'damage' => $after['amount'], 'damage_type' => $damageType,
             'mode' => 'auto',
+            'damage_dice' => $rolled === null ? null : self::trayDice($dice, $rolled),
         ]);
         if ($condition !== null) {
             $state = $this->addCondition($state, $targetCid, [
