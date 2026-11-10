@@ -36,6 +36,11 @@
                     {
                         "flag": "costing_fate",
                         "equals": "whole"
+                    },
+                    {
+                        "not": {
+                            "flag": "room_sat"
+                        }
                     }
                 ],
                 "once": true,
@@ -56,6 +61,11 @@
                     {
                         "flag": "costing_fate",
                         "equals": "given"
+                    },
+                    {
+                        "not": {
+                            "flag": "room_sat"
+                        }
                     }
                 ],
                 "once": true,

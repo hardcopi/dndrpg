@@ -28,6 +28,11 @@
                     {
                         "flag": "costing_figure",
                         "equals": "circulated"
+                    },
+                    {
+                        "not": {
+                            "flag": "room_sat"
+                        }
                     }
                 ],
                 "once": true,
@@ -60,6 +65,11 @@
                     {
                         "flag": "costing_fate",
                         "equals": "whole"
+                    },
+                    {
+                        "not": {
+                            "flag": "room_sat"
+                        }
                     }
                 ],
                 "text": "\"Mrs Amsel came through this office on her way up,\" Corse says, \"and her count came back through it on the packet. The meeting sent its own assessor to count, and I am to cost what she counts.\" He lays a hand on a thick folder. \"Six heads. I have costed all six. It is the largest figure I have ever sent downriver, and the first I have sent without a recommendation. I could not think of one that was true.\"",
@@ -139,6 +149,11 @@
                 "conditions": [
                     {
                         "flag": "clearance_costed"
+                    },
+                    {
+                        "not": {
+                            "flag": "room_sat"
+                        }
                     }
                 ],
                 "once": true,

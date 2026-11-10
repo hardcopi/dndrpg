@@ -530,6 +530,11 @@
                         "not": {
                             "flag": "vote_aboard"
                         }
+                    },
+                    {
+                        "not": {
+                            "flag": "room_sat"
+                        }
                     }
                 ],
                 "text": "Pyke is chaining the Row again, start to finish, though nothing on it has moved. \"Habit,\" he says. \"Forty-three years. When I don't know what to do I measure something I already know the length of.\" He winds in the chain. \"Same as last week. Good.\"",

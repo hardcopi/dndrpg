@@ -33,6 +33,12 @@
                     {
                         "flag": "meeting_fate",
                         "equals": "costed"
+                    },
+                    {
+                        "not": {
+                            "quest": "the_costing",
+                            "status": "completed"
+                        }
                     }
                 ],
                 "once": true,
@@ -360,6 +366,11 @@
                     {
                         "not": {
                             "flag": "vote_aboard"
+                        }
+                    },
+                    {
+                        "not": {
+                            "flag": "room_sat"
                         }
                     }
                 ],

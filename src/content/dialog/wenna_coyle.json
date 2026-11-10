@@ -79,6 +79,12 @@
                         "not": {
                             "flag": "works_alarmed"
                         }
+                    },
+                    {
+                        "not": {
+                            "quest": "the_costing",
+                            "status": "completed"
+                        }
                     }
                 ],
                 "once": true,

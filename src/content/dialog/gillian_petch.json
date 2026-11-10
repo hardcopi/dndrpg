@@ -157,6 +157,12 @@
                     {
                         "flag": "meeting_fate",
                         "equals": "costed"
+                    },
+                    {
+                        "not": {
+                            "quest": "the_costing",
+                            "status": "completed"
+                        }
                     }
                 ],
                 "once": true,

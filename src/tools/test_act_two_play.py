@@ -385,6 +385,19 @@ def play(client, outcome, vote=None, costing='whole', figure='circulated', minut
            and not any(r.said('hollin_sare', x, mark) for x in ('costing is in hand', 'Next quarter, then')), str(r.lines[mark:])[:300])
         ok(f'{label}: and so does the secretary', r.said('minna_crale', 'not a line before', mark), str(r.lines[mark:])[:300])
         ok(f'{label}: the minute is not delivered', not any(k.startswith('minute_read') or k == 'vote_result' for k in r.flags()))
+        # Rivermark after the sitting: nobody is still waiting on the packet or still adding up the costing.
+        mark = len(r.lines)
+        for loc, npcs in (('market_square', ('market_jester', 'market_miner')), ('west_gate', ('serjeant_ballow',)),
+                          ('root_ash', ('osric_apothecary',)), ('the_anvil', ('brenna_smith',)), ('counting_house', ('tibald_ashe',))):
+            if r.travel(loc):
+                for n in npcs:
+                    for _ in range(3):
+                        r.open(n)
+        stale = ('still adding it up', 'Costing the town', 'not due back for a week', 'for after the quarter-day',
+                 'For whatever comes back up', 'something to help them sleep')
+        ok(f'{label}: Rivermark is not still waiting after the sitting', not any(r.said(n, x, mark) for n in
+           ('market_jester', 'market_miner', 'serjeant_ballow', 'osric_apothecary', 'brenna_smith', 'tibald_ashe') for x in stale),
+           str([t for _, t in r.lines[mark:] if t and any(x in t for x in stale)])[:300])
     # Every face drawn on the way has a picture: the bust, or the sprite the client falls back to.
     blank = [n for n, bust, img in r.faces
              if not any(u and os.path.isfile(os.path.join(SRC, u.split('?')[0].lstrip('/'))) for u in (bust, img))]
@@ -398,12 +411,20 @@ def play(client, outcome, vote=None, costing='whole', figure='circulated', minut
         for loc in os.environ['AFTER_VISIT'].split(','):
             if not r.travel(loc): continue
             for n in r.here().get('npcs', []):
-                node = r.open(n['npc_key'])
-                print(f"   [{loc}/{n['npc_key']}] {(node.get('text') or '')[:260]}")
-                for a2 in node.get('interjections') or []: print(f"      ({a2.get('companion')}) {a2.get('text','')[:200]}")
-                for _ in range(3):
-                    if not node or not node.get('choices'): break
-                    node = r.choose(n['npc_key'], node, node['choices'][-1]['label'])
+                seen = []
+                for _ in range(4):
+                    node = r.open(n['npc_key'])
+                    t = (node.get('text') or '')[:240]
+                    if t in seen:
+                        break
+                    seen.append(t)
+                    print(f"   [{loc}/{n['npc_key']}] {t}")
+                    for a2 in node.get('interjections') or []:
+                        print(f"      ({a2.get('companion')}) {a2.get('text', '')[:200]}")
+                    for _ in range(3):
+                        if not node or not node.get('choices'):
+                            break
+                        node = r.choose(n['npc_key'], node, node['choices'][-1]['label'])
     left = [k for k, q in r.quests().items() if q['status'] == 'active' and q.get('act') == 2]
     ok(f'{label}: no Act II quest left hanging', not left, str(left))
     ok(f'{label}: no blockers on the way', not r.problems, '\n         '.join(r.problems))

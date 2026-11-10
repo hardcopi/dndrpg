@@ -230,6 +230,11 @@
                         "not": {
                             "flag": "vote_aboard"
                         }
+                    },
+                    {
+                        "not": {
+                            "flag": "room_sat"
+                        }
                     }
                 ],
                 "text": "\"Walking it twice a day,\" Pyle says, with a hand on the stone. \"Folk stop me on the ridge and ask if there's news.\" He looks east, where the river is. \"I'm a watchman on a hill with a satchel. The news comes up on a boat. I tell them that, and they ask me again the next morning.\"",
