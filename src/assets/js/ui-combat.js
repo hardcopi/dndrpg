@@ -2068,8 +2068,12 @@
    * the same string the visible name does, so the tooltip and anything
    * reading the page aloud cannot drift from what is on the key.
    */
+  // The slot's name is its aria-label, so the line under it ("Select an enemy
+  // first", "Choose a spell") was never read: it rides as the description.
+  let slotSeq = 0;
   function slotHtml(b) {
     if (b.sep) return '<span class="act-sep" aria-hidden="true"></span>';
+    const whyId = b.end ? '' : `act-why-${++slotSeq}`;
     const cls = [
       b.end ? 'cbt-end-turn' : 'act-slot',
       b.bonus ? 'is-bonus' : '',
@@ -2078,14 +2082,15 @@
     return `<button type="button" class="${cls}" data-act="${esc(b.key)}"
       ${b.extra ? `data-extra="${esc(JSON.stringify(b.extra))}"` : ''}
       ${b.ok ? '' : 'disabled'}
-      data-label="${esc(b.label)}" data-why="${esc(b.why)}" aria-label="${esc(b.label)}">
+      data-label="${esc(b.label)}" data-why="${esc(b.why)}" aria-label="${esc(b.label)}"
+      ${whyId ? `aria-describedby="${whyId}"` : ''}>
       ${b.end ? '' : `<span class="act-num" aria-hidden="true">
         <svg class="act-icon"><use href="#${esc(b.icon || 'i-attack')}"></use></svg>
         ${b.count != null ? `<span class="act-count">${esc(b.count)}</span>` : ''}
       </span>
       <span class="act-text">
         <span class="act-name">${esc(b.label)}</span>
-        <span class="act-desc">${esc(b.why)}</span>
+        <span class="act-desc" id="${whyId}">${esc(b.why)}</span>
       </span>
       <span class="act-confirm" aria-hidden="true">Click again</span>`}
       ${b.end ? esc(b.label) : ''}
