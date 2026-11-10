@@ -3394,6 +3394,8 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .die8 .die-face { font-size: 1.7rem; }
 .die10 .die-face { font-size: 1.5rem; }
 .die12 .die-face { font-size: 1.3rem; }
+/* A tetrahedron's face is a big triangle with its numeral at the centroid. */
+.die4 .die-face { font-size: 1.9rem; }
 
 /* The dice the throw did not keep — 4d6 drop lowest, and the unkept die of an
    advantage pair. Dimmed and shrunk aside rather than removed, because the
@@ -6240,6 +6242,7 @@ body.bm-pan-ready .battlemap { cursor: grab; }
   transform: translate(-50%, -50%) scale(0.45);
 }
 .cbt-dmg-well.d6 .die-stage { transform: translate(-50%, -50%) scale(0.95); }
+.cbt-dmg-well.d4 .die-stage { transform: translate(-50%, -50%) scale(0.5); }
 .cbt-dice-tray .cbt-dice-cap.is-dmg { color: var(--danger-ink); }
 @media (max-width: 520px) {
   .cbt-dice-well { width: 56px; height: 56px; }
@@ -6247,6 +6250,7 @@ body.bm-pan-ready .battlemap { cursor: grab; }
   .cbt-dmg-well { width: 32px; height: 32px; }
   .cbt-dmg-well .die-stage { transform: translate(-50%, -50%) scale(0.33); }
   .cbt-dmg-well.d6 .die-stage { transform: translate(-50%, -50%) scale(0.7); }
+  .cbt-dmg-well.d4 .die-stage { transform: translate(-50%, -50%) scale(0.36); }
 }
 .bm-plane {
   position: relative;

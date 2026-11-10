@@ -71,6 +71,10 @@ D6_EDGE = 40.0
 D8_RADIUS = 56.5
 D10_RADIUS = 28.8
 D12_RADIUS = 48.0
+# The d4 is a tetrahedron, which has no opposite faces, so it is numbered in
+# face order (see numbered_frames' `paired`) and read by the face turned to the
+# viewer, like every other die here, rather than by the point at the top.
+D4_RADIUS = 52.0
 
 # Must match `perspective` on .die-stage in style.css. The projected silhouette
 # depends on it, so the two cannot be chosen independently.
@@ -182,6 +186,14 @@ def octahedron(radius: float):
              (0.0, 0.0, radius), (0.0, 0.0, -radius)]
     faces = [((sx * radius, 0.0, 0.0), (0.0, sy * radius, 0.0), (0.0, 0.0, sz * radius))
              for sx in (1, -1) for sy in (1, -1) for sz in (1, -1)]
+    return verts, faces
+
+
+def tetrahedron(radius: float):
+    """The 4 vertices and 4 triangular faces of a regular tetrahedron."""
+    k = radius / math.sqrt(3.0)
+    verts = [(k, k, k), (k, -k, -k), (-k, k, -k), (-k, -k, k)]
+    faces = [tuple(v for j, v in enumerate(verts) if j != i) for i in range(4)]
     return verts, faces
 
 
@@ -298,7 +310,7 @@ def order_corners(corners, centre, normal):
     )
 
 
-def numbered_frames(faces, sides: int, polar_up: bool = False):
+def numbered_frames(faces, sides: int, polar_up: bool = False, paired: bool = True):
     """
     Face frames in die order, numbered so opposite faces sum to sides + 1.
 
@@ -327,6 +339,12 @@ def numbered_frames(faces, sides: int, polar_up: bool = False):
         prepared.append((centre, n, sub(max(ordered, key=key), centre), ordered))
 
     prepared.sort(key=lambda f: (-round(f[0][1], 6), round(math.atan2(f[0][2], f[0][0]), 6)))
+    if not paired:
+        # A tetrahedron: every face is opposite a vertex, not a face, so there
+        # is no pair to sum. The deterministic sort above is the numbering.
+        if len(prepared) != sides:
+            raise ValueError(f"{len(prepared)} faces for a d{sides}")
+        return prepared
 
     numbered = [None] * sides
     used = [False] * len(prepared)
@@ -633,9 +651,9 @@ def rest_angles(frames):
     return [euler_xyz(inverse_rows(face_basis(c, n, u)[0])) for c, n, u in frames]
 
 
-def solid(sides: int, verts, faces, polar_up: bool = False):
+def solid(sides: int, verts, faces, polar_up: bool = False, paired: bool = True):
     """Everything the emitter needs about one die, measured once."""
-    frames = numbered_frames(faces, sides, polar_up)
+    frames = numbered_frames(faces, sides, polar_up, paired)
     rests = rest_angles([(c, n, u) for c, n, u, _ in frames])
     outline = face_outline(*frames[0][:3], frames[0][3])
     return {
@@ -713,6 +731,7 @@ def build():
     d8 = solid(8, *octahedron(D8_RADIUS))
     d10 = solid(10, *trapezohedron10(D10_RADIUS), polar_up=True)
     d12 = solid(12, *dodecahedron(D12_RADIUS))
+    d4 = solid(4, *tetrahedron(D4_RADIUS), paired=False)
 
     box = D20_EDGE * 2.0 / math.sqrt(3.0)
 
@@ -731,7 +750,7 @@ def build():
     w(f"  --die20-tumble: {d20_tumble}px;")
     w(f"  --die6-rest: {d6_extent}px;")
     w(f"  --die6-tumble: {d6_tumble}px;")
-    for die in (d8, d10, d12):
+    for die in (d4, d8, d10, d12):
         w(f"  --die{die['sides']}-rest: {die['rest_px']}px;")
         w(f"  --die{die['sides']}-tumble: {die['tumble_px']}px;")
     w("}")
@@ -800,9 +819,10 @@ def build():
     emit_solid(w, d8, "8 triangular faces of an octahedron")
     emit_solid(w, d10, "10 kite faces of a pentagonal trapezohedron")
     emit_solid(w, d12, "12 pentagonal faces of a dodecahedron")
+    emit_solid(w, d4, "4 triangular faces of a tetrahedron")
 
     return "\n".join(out) + "\n", build_js(
-        d20_rest, d6_rest, {d["sides"]: d["rests"] for d in (d8, d10, d12)}
+        d20_rest, d6_rest, {d["sides"]: d["rests"] for d in (d4, d8, d10, d12)}
     )
 
 
@@ -882,16 +902,17 @@ def self_check() -> int:
     # invariants that only matter once a shape is computed rather than written:
     # opposite faces have to sum to sides + 1, and every face has to carry the
     # identical outline or the one shared clip-path is wrong for most of them.
-    for label, sides, (verts, faces), polar in (
-        ("d8", 8, octahedron(D8_RADIUS), False),
-        ("d10", 10, trapezohedron10(D10_RADIUS), True),
-        ("d12", 12, dodecahedron(D12_RADIUS), False),
+    for label, sides, (verts, faces), polar, paired in (
+        ("d4", 4, tetrahedron(D4_RADIUS), False, False),
+        ("d8", 8, octahedron(D8_RADIUS), False, True),
+        ("d10", 10, trapezohedron10(D10_RADIUS), True, True),
+        ("d12", 12, dodecahedron(D12_RADIUS), False, True),
     ):
-        frames = numbered_frames(faces, sides, polar)
+        frames = numbered_frames(faces, sides, polar, paired)
         if len(frames) != sides:
             problems.append(f"{label}: {len(frames)} faces, expected {sides}")
 
-        for i, (centre, _, _, _) in enumerate(frames, start=1):
+        for i, (centre, _, _, _) in enumerate(frames if paired else [], start=1):
             opposite = frames[sides - i][0]
             if norm(add(centre, opposite)) > max(abs(x) for x in centre) * 1e-6:
                 problems.append(f"{label}: face {i} and face {sides + 1 - i} are not opposite")
@@ -912,7 +933,7 @@ def self_check() -> int:
             print("  FAIL " + p)
         print(f"\n{len(problems)} problems")
         return 1
-    print("geometry ok: d6 d8 d10 d12 d20, every show-N presents its face upright, "
+    print("geometry ok: d4 d6 d8 d10 d12 d20, every show-N presents its face upright, "
           "opposite faces sum correctly")
     return 0
 
