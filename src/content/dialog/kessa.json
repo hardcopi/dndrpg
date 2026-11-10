@@ -10,6 +10,40 @@
                         "status": "active"
                     },
                     {
+                        "flag": "mark_seen_paper"
+                    },
+                    {
+                        "flag": "act_two_open"
+                    }
+                ],
+                "once": true,
+                "text": "\"Black wax,\" Kessa says. \"Plumb-bob in a square, on the second assignment of my paper. Finch said it was usual.\" She spins the knife and catches it. \"It was on the canteen board down there, heading the column for against wages. A halfpenny dearer on every line, under my wax. Finch was right, it's usual. I'd rather it had been somebody's.\"",
+                "choices": [
+                    {
+                        "label": "Tell me about the debt.",
+                        "next": "the_debt_talk"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit down a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "kessa",
+                        "status": "active"
+                    },
+                    {
                         "flag": "kessa_favour_fate",
                         "equals": "signed"
                     }

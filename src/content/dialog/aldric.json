@@ -10,6 +10,129 @@
                         "status": "active"
                     },
                     {
+                        "flag": "indentured_fate",
+                        "equals": "bought"
+                    }
+                ],
+                "once": true,
+                "text": "\"A hundred and fifty gold,\" Aldric says, \"and the clerk thanked you for balancing the column.\" He turns his hat in his hands. \"I have been praying for Corrin Dale, and I find I have been praying for the clerk as well, and I do not know which is the harder prayer.\"",
+                "choices": [
+                    {
+                        "label": "Patch us up.",
+                        "effects": [
+                            {
+                                "heal": 8
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "What order were you in?",
+                        "next": "the_order"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit down a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "aldric",
+                        "status": "active"
+                    },
+                    {
+                        "flag": "indentured_fate",
+                        "equals": "read"
+                    }
+                ],
+                "once": true,
+                "text": "\"Sixty men heard the arithmetic,\" Aldric says, \"and one asked what he was supposed to do about it.\" He has plainly been carrying the question since. \"I have been trying to answer him. I think the answer is that he was owed being told, and he was told. That is not enough. It is not nothing either, and I have stopped being able to tell those two apart.\"",
+                "choices": [
+                    {
+                        "label": "Patch us up.",
+                        "effects": [
+                            {
+                                "heal": 8
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "What order were you in?",
+                        "next": "the_order"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit down a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "aldric",
+                        "status": "active"
+                    },
+                    {
+                        "flag": "indentured_fate",
+                        "equals": "left"
+                    }
+                ],
+                "once": true,
+                "text": "\"It is a contract,\" Aldric says, \"and they signed it, and every clause of it is fair.\" You can hear the wear on the sentence. \"I said it on the stair too. I would like you to know that, so you do not think you were the only one saying it.\"",
+                "choices": [
+                    {
+                        "label": "Patch us up.",
+                        "effects": [
+                            {
+                                "heal": 8
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "What order were you in?",
+                        "next": "the_order"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit down a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "aldric",
+                        "status": "active"
+                    },
+                    {
                         "flag": "meeting_fate",
                         "equals": "costed"
                     }
