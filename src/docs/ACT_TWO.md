@@ -62,7 +62,7 @@ Mara, Corse, Hollin Sare and Jory Kemp read the endings.
   costed, which raises the figure; it is not refused.
 - **Still open, on purpose:** what the quarry fell on (the meeting does not know
   either and says so; the Record Office holds only Corse's two letters); the
-  armour chain; the Deepworks dead; whether the Concern is wrong — no crime is
+  armour chain; the Deepworks dead (now counted, if the party chooses, but not where they lie); whether the Concern is wrong — no crime is
   discovered anywhere in the act.
 
 ## Side quest: `the_fenmoor_lot` (the armour chain)
@@ -230,6 +230,18 @@ end and names nobody.
   cost nothing. Corse has a once-only line for each `costing_fate` (given, whole)
   and `vote_fate`. He costs what Mrs Amsel counts, and sends the figure
   without a recommendation. How the quarter-day vote goes stays open.
+- **The Uncounted** (`the_uncounted`, hook item 5). After the meeting, if the
+  party has seen the Deepworks and the works are not alarmed, Osgar Tull has
+  copied two springs out of his book: 223 names, as given on the step. Wenna
+  Coyle lays it against her board. 204 are on it, 7 of her 211 came by the
+  warren side, and 19 are struck: 4 walked up the stair (2 of those since dead,
+  "not my column") and 15 are incidents (roof 6, water 4, fever 3, stair 2).
+  Each was paid to the day and "carried out". Where they were carried is
+  past the top tread and stays open, and no crime is found. Endings:
+  `read_out` in the canteen (pressure +1), `entered` at the Record Office by
+  Dorcas Fenn as a record, not a finding (pressure +1), or `kept`. Coyle,
+  Tull, Dorcas, Corrin Dale, Ilse, Aldric, Sera and Kessa react once. Fessick
+  in the undercut still hears nothing.
 - **Companions place the mark.** Once Act II is open, Ilse (`mark_seen_stone`),
   Kessa (`mark_seen_paper`) and Sera (`mark_seen_book`) each have one greeting
   that recognises the mark they saw in Act I as the house's mark: the ledge cuts,

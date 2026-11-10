@@ -6,6 +6,28 @@
             {
                 "conditions": [
                     {
+                        "flag": "uncounted_fate",
+                        "equals": "read"
+                    },
+                    {
+                        "not": {
+                            "flag": "indentured_fate",
+                            "equals": "bought"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"Peg sixty-one,\" Dale says, without looking up from his bowl. \"Fall of roof, number three face, the spring before I came. I sleep in his bunk.\" He eats. \"Nobody told me that. You'd think somebody would've told me that.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "meeting_fate",
                         "equals": "costed"
                     },

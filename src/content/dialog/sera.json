@@ -10,6 +10,50 @@
                         "status": "active"
                     },
                     {
+                        "any": [
+                            {
+                                "flag": "uncounted_fate",
+                                "equals": "read"
+                            },
+                            {
+                                "flag": "uncounted_fate",
+                                "equals": "entered"
+                            },
+                            {
+                                "flag": "uncounted_fate",
+                                "equals": "kept"
+                            }
+                        ]
+                    }
+                ],
+                "text": "\"Fifteen in three years,\" Sera says, \"two hundred men, in that dark, on that timber.\" She says it carefully, like a figure she has been asked to check. \"That's a good figure. I've seen worse on a canal, and the canal had a chapel.\" She does not look pleased to have said it. \"I could have written that day book. I would have paid them to the day as well.\"",
+                "once": true,
+                "choices": [
+                    {
+                        "label": "What did Marrow have on you?",
+                        "next": "the_leash_offer"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit down a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "sera",
+                        "status": "active"
+                    },
+                    {
                         "flag": "vote_fate",
                         "equals": "against"
                     }

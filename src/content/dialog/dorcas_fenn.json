@@ -6,6 +6,49 @@
             {
                 "conditions": [
                     {
+                        "quest": "the_uncounted",
+                        "stage": "to_the_record"
+                    }
+                ],
+                "text": "Dorcas Fenn reads Tull's page and the fifteen lines you copied from the day book, and then reads them again with her lips moving, which she does not usually do. \"There is no head for this,\" she says. \"Nobody has ever brought me one. I can enter it as given: a count, by a named party, on these sources.\" She uncaps the ink. \"It won't be a finding. It will be a record. They aren't the same thing, and I'd want you to know that before I write.\"",
+                "choices": [
+                    {
+                        "label": "Enter it as given.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_uncounted",
+                                    "stage": "entered"
+                                }
+                            }
+                        ],
+                        "next": "uncounted_entered"
+                    },
+                    {
+                        "label": "Not yet.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "uncounted_fate",
+                        "equals": "entered"
+                    }
+                ],
+                "once": true,
+                "text": "\"Somebody came in to read your entry,\" Dorcas says. \"A woman from Greyhythe, looking for a name. It wasn't there, or it was and it wasn't his.\" She straightens the ledger. \"She stayed an hour anyway. I didn't hurry her.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "quest": "a_record_is_not_the_thing",
                         "stage": "the_field_books"
                     }
@@ -779,6 +822,17 @@
         "minute_shelved": [
             {
                 "text": "Dorcas Fenn takes the volume back up the ladder and puts it where it goes, between the dividend and the drains. \"Anybody may read it,\" she says. \"That's what it's for.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "uncounted_entered": [
+            {
+                "text": "She writes it in her slow clerk's hand: the date, your name as informant, Tull and Coyle as sources, and then fifteen lines, peg, date, face, cause, and the name as given. At the head of the page, where an entry usually has its subject, she writes after a moment: The Deepworks. Dead. She blots it. \"There,\" she says. \"Now anybody can ask.\"",
                 "choices": [
                     {
                         "label": "Leave.",

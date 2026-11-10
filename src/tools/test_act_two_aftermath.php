@@ -455,6 +455,51 @@ try {
         talk($db, $p, 'ludo_corse', ['Leave']);
         ok("Corse says it once ($v)", stripos(greet($db, $p, 'ludo_corse'), $needle) === false);
     }
+    echo "== the uncounted ==\n";
+    $dw = $base + ['deepworks_known' => 1];
+    $p = party($db, $dw);
+    ok('no page before the meeting', !str_contains(greet($db, $p, 'osgar_tull'), 'copied it instead'));
+    $p = party($db, $dw + ['works_alarmed' => 1]); ended($db, $p, 'costed'); talk($db, $p, 'osgar_tull', ['Leave']);
+    ok('no page once the works are alarmed', !str_contains(greet($db, $p, 'osgar_tull'), 'copied it instead'));
+    $begin = function () use ($db, $dw) {
+        $p = party($db, $dw); ended($db, $p, 'costed');
+        talk($db, $p, 'osgar_tull', ['Leave']);
+        return $p;
+    };
+    $p = $begin();
+    ok('Tull has copied the page', str_contains(greet($db, $p, 'osgar_tull'), 'copied it instead'));
+    talk($db, $p, 'osgar_tull', ['take it down']);
+    ok('the uncounted starts', qstatus($db, $p, 'the_uncounted') === 'active');
+    ok('Coyle lays it against the board', str_contains(greet($db, $p, 'wenna_coyle'), 'Nineteen of his'));
+    $before = (int) flag($db, $p, 'concern_pressure');
+    talk($db, $p, 'wenna_coyle', ['Struck', 'And then', 'Read the fifteen']);
+    ok('read in the canteen', flag($db, $p, 'uncounted_fate') === 'read' && qstatus($db, $p, 'the_uncounted') === 'completed');
+    ok('reading them costs the house 1', (int) flag($db, $p, 'concern_pressure') === $before + 1);
+    ok('Coyle made a column', str_contains(greet($db, $p, 'wenna_coyle'), 'made a column'));
+    ok('Tull hears it', str_contains(greet($db, $p, 'osgar_tull'), 'canteen'));
+    ok('Dale sleeps in his bunk', str_contains(greet($db, $p, 'corrin_dale'), 'Peg sixty-one'));
+    $cs = new CompanionService($db); $cs->meet($p, 'kessa'); $cs->recruit($p, 'kessa'); $cs->meet($p, 'ilse'); $cs->recruit($p, 'ilse');
+    ok('Kessa on the names that were not names', str_contains(greet($db, $p, 'kessa'), 'John Stair'));
+    ok('Ilse on the tally', str_contains(greet($db, $p, 'ilse'), 'keep one on the men'));
+    ok('nothing names who asked', !preg_match('/who asked/i', file_get_contents(__DIR__ . '/../content/quests/the_uncounted.json')));
+
+    $p = $begin(); talk($db, $p, 'osgar_tull', ['take it down']);
+    talk($db, $p, 'wenna_coyle', ['Struck', 'And then', 'Record Office']);
+    ok('to the Record Office', qstatus($db, $p, 'the_uncounted') === 'active' && str_contains(greet($db, $p, 'dorcas_fenn'), 'no head for this'));
+    $before = (int) flag($db, $p, 'concern_pressure');
+    talk($db, $p, 'dorcas_fenn', ['Enter it']);
+    ok('entered as given', flag($db, $p, 'uncounted_fate') === 'entered' && (int) flag($db, $p, 'concern_pressure') === $before + 1);
+    ok('someone comes to read it', str_contains(greet($db, $p, 'dorcas_fenn'), 'looking for a name'));
+    $cs = new CompanionService($db); $cs->meet($p, 'aldric'); $cs->recruit($p, 'aldric');
+    ok('Aldric: like a parish', str_contains(greet($db, $p, 'aldric'), 'like a parish'));
+
+    $p = $begin(); talk($db, $p, 'osgar_tull', ['take it down']);
+    $before = (int) flag($db, $p, 'concern_pressure');
+    talk($db, $p, 'wenna_coyle', ['Struck', 'And then', 'Fold it away']);
+    ok('kept costs the house nothing', flag($db, $p, 'uncounted_fate') === 'kept' && (int) flag($db, $p, 'concern_pressure') === $before);
+    $cs = new CompanionService($db); $cs->meet($p, 'sera'); $cs->recruit($p, 'sera');
+    ok('Sera: worse on a canal', str_contains(greet($db, $p, 'sera'), 'canal'));
+    ok('Tull will not ask', str_contains(greet($db, $p, 'osgar_tull'), "I'll not ask"));
 } catch (Throwable $e) {
     ok('played without a dead end', false, $e->getMessage());
 } finally {

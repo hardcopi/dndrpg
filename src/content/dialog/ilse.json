@@ -10,6 +10,50 @@
                         "status": "active"
                     },
                     {
+                        "any": [
+                            {
+                                "flag": "uncounted_fate",
+                                "equals": "read"
+                            },
+                            {
+                                "flag": "uncounted_fate",
+                                "equals": "entered"
+                            }
+                        ]
+                    }
+                ],
+                "text": "\"Fifteen,\" Ilse says. \"I kept a tally on the goblins for two years and never once thought to keep one on the men pushing them.\" She turns a stone over in her fingers, and puts it in her pocket instead of throwing it. \"Somebody has now. That will have to do.\"",
+                "once": true,
+                "choices": [
+                    {
+                        "label": "Goblins.",
+                        "next": "the_count"
+                    },
+                    {
+                        "label": "Tell me about the deep warren.",
+                        "next": "the_deep"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit at the fire a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "ilse",
+                        "status": "active"
+                    },
+                    {
                         "flag": "vote_fate",
                         "equals": "proxy"
                     }

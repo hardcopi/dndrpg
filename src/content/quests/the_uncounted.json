@@ -1,0 +1,95 @@
+{
+    "quest_key": "the_uncounted",
+    "title": "The Uncounted",
+    "act": 2,
+    "description": "Two hundred and some men went up the river in two springs, Osgar Tull says, and none came back down on his boat. He said he would not add it up again. He has copied out the page instead.",
+    "giver": "osgar_tull",
+    "on_job_board": false,
+    "required_level": 1,
+    "rewards": {
+        "xp": 300,
+        "gold": 0
+    },
+    "stages": {
+        "the_book": {
+            "title": "Tull's page",
+            "objective": "Take Tull's page down to the timekeeper's hut in the Deepworks and lay it against Coyle's board.",
+            "journal": "Osgar Tull copied two springs out of his book for me: two hundred and twenty-three names, as given on the step. He would not add it up again. Wenna Coyle keeps a peg for every man in the Deepworks. Somebody should lay the one against the other.",
+            "target": {
+                "location": "timekeepers_hut"
+            }
+        },
+        "to_the_record": {
+            "title": "To be entered",
+            "objective": "Take the count to Dorcas Fenn at the Record Office.",
+            "journal": "Fifteen struck from Coyle's board in three years, each an incident in her day book, each paid to the day, each carried out. Nobody has ever entered them anywhere as dead. The Record Office keeps what it is given. I am going to give it this.",
+            "target": {
+                "location": "record_office"
+            }
+        },
+        "read_out": {
+            "terminal": true,
+            "resolution": "read_out",
+            "outcome": "success",
+            "title": "Read in the canteen",
+            "journal": "I read the fifteen in the canteen at the second bell, by peg and by the name each man gave on Tull's step. Nobody stopped eating. Nobody spoke over it either. Coyle wrote the time of it in the day book.",
+            "effects": [
+                {
+                    "set_flag": "uncounted_fate",
+                    "value": "read"
+                },
+                {
+                    "pressure": 1
+                },
+                {
+                    "approval": {
+                        "ilse": 4,
+                        "aldric": 4,
+                        "kessa": 2
+                    }
+                }
+            ]
+        },
+        "entered": {
+            "terminal": true,
+            "resolution": "entered",
+            "outcome": "success",
+            "title": "Entered",
+            "journal": "Dorcas Fenn entered the count in the Record Office as given: fifteen dead in the Deepworks in three years, by peg, by date, by cause, and by the name each man gave on Tull's step, which may not be his. It is not a finding. It is a record, and now there is one.",
+            "effects": [
+                {
+                    "set_flag": "uncounted_fate",
+                    "value": "entered"
+                },
+                {
+                    "pressure": 1
+                },
+                {
+                    "approval": {
+                        "aldric": 6,
+                        "ilse": 2
+                    }
+                }
+            ]
+        },
+        "kept": {
+            "terminal": true,
+            "resolution": "kept",
+            "outcome": "neutral",
+            "title": "Kept",
+            "journal": "I have the count: fifteen dead in three years, and two more of the four who walked. I have told nobody. It is folded in the back of my journal with Tull's page, and it is the only place in the valley where it is written down as what it is.",
+            "effects": [
+                {
+                    "set_flag": "uncounted_fate",
+                    "value": "kept"
+                },
+                {
+                    "approval": {
+                        "sera": 2,
+                        "aldric": -2
+                    }
+                }
+            ]
+        }
+    }
+}

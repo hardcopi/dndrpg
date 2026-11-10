@@ -253,6 +253,98 @@
                 ]
             },
             {
+                "conditions": [
+                    {
+                        "flag": "uncounted_fate",
+                        "equals": "read"
+                    }
+                ],
+                "once": true,
+                "text": "\"Read them out,\" Tull says. \"In their canteen.\" He coils, and does not look at you. \"Some of those names I wrote down myself and knew were lies while I wrote them. Doesn't matter. They were the names the men wanted.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "uncounted_fate",
+                        "equals": "entered"
+                    }
+                ],
+                "once": true,
+                "text": "\"Mrs Fenn's book,\" Tull says. \"So the next one who comes down the stair and asks me who I carried, I can send him to her.\" He considers that. \"I'd like that. I've never once had anywhere to send them.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "uncounted_fate",
+                        "equals": "kept"
+                    }
+                ],
+                "once": true,
+                "text": "Tull looks at your journal, where the page is, and then at the river. \"Yours now,\" he says. \"I'll not ask what's on it. I asked you not to make me add it, and you didn't.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_quarterly_meeting",
+                        "status": "completed"
+                    },
+                    {
+                        "flag": "deepworks_known"
+                    },
+                    {
+                        "not": {
+                            "flag": "works_alarmed"
+                        }
+                    },
+                    {
+                        "not": {
+                            "quest": "the_uncounted",
+                            "status": "active"
+                        }
+                    },
+                    {
+                        "not": {
+                            "quest": "the_uncounted",
+                            "status": "completed"
+                        }
+                    }
+                ],
+                "text": "Tull has his book open on his knee, which you have never seen, and a loose sheet beside it written in the same enormous hand. \"You asked me how many,\" he says. \"I said I'd not add it up again, and I haven't.\" He holds the sheet out. \"I've copied it instead. Two springs. Every name I wrote on this step going up, as the man gave it me.\" He does not let go of it quite yet. \"You've been down there. You add it.\"",
+                "choices": [
+                    {
+                        "label": "I'll take it down to them.",
+                        "effects": [
+                            {
+                                "start_quest": "the_uncounted"
+                            }
+                        ],
+                        "next": "tull_page_given"
+                    },
+                    {
+                        "label": "Not yet.",
+                        "end": true
+                    }
+                ]
+            },
+            {
                 "text": "The packet stair is green below the sixth step and dry above it, and there is a very large man sitting on the seventh with a rope in his hands he is not doing anything with. \"Second and the fifth,\" he says, without being asked. \"That's the sailing. Everyone comes down here to ask and it's chalked on the board behind me and nobody reads a board.\"",
                 "on_enter": [
                     {
@@ -441,6 +533,17 @@
         "she_goes_anyway": [
             {
                 "text": "\"She goes anyway,\" Tull says, entirely unbothered, and picks the rope back up. \"Nineteen years I've never had to persuade anybody twice. Either the valley's finished with a man or it isn't, and a man always knows which before I do.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "tull_page_given": [
+            {
+                "text": "He lets go of the sheet. \"Two hundred and twenty-three,\" he says, \"if you want the top of the column. I counted the names. I didn't count anything else.\" He picks up the rope. \"Second and the fifth. I'll be here when you've done it.\"",
                 "choices": [
                     {
                         "label": "Leave.",
