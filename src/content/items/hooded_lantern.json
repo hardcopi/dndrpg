@@ -1,0 +1,13 @@
+{
+  "item_key": "hooded_lantern",
+  "name": "Hooded Lantern",
+  "description": "Tin and horn, with a shutter that drops over the flame. A pint of oil burns six hours. Carters buy them in Rivermark before the cut, and buy another after.",
+  "item_type": "misc",
+  "rarity": "common",
+  "weight": 2,
+  "value_gp": 5,
+  "properties": {
+    "light": [30, 30]
+  },
+  "icon": "lantern"
+}

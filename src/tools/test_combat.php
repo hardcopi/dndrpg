@@ -1716,6 +1716,27 @@ try {
 } catch (InvalidArgumentException $e) { $threw = $e->getMessage(); }
 same('but can at the goblin in the torchlight', '', $threw);
 
+section('Monsters keep to the dark (battle map D)');
+$approach = new ReflectionMethod(CombatEngine::class, 'bestApproach');
+$approach->setAccessible(true);
+$aiEngine = (new ReflectionClass(CombatEngine::class))->newInstanceWithoutConstructor();
+$open = board();
+$victim = at('v', 'party', 2, 5, ['alive' => true, 'type' => 'monster', 'hp' => 10, 'light' => CombatEngine::TORCH, 'light_lit' => true]);
+$archer = at('a', 'foe', 8, 5, ['alive' => true, 'type' => 'monster', 'hp' => 7, 'dark_sight' => 60]);
+$bowRange = ['reach' => null, 'normal' => 60, 'long' => 60];
+$aiState = fn(array $g) => ['round' => 1, 'turn_index' => 0, 'order' => ['a', 'v'], 'status' => 'active',
+    'grid' => $g, 'log' => [], 'events' => [], 'combatants' => [$archer, $victim]];
+$aiReach = BattleGrid::reachable($open, [$archer, $victim], $archer, 30);
+$lit = $approach->invoke($aiEngine, $aiState(gridOf($open)), $archer, $victim, $bowRange, $aiReach, $open);
+$dk = $approach->invoke($aiEngine, $aiState(gridOf($open) + ['dark' => true]), $archer, $victim, $bowRange, $aiReach, $open);
+ok('on a lit board it takes the nearest spot that shoots', $lit !== null && empty($lit['shot']['hidden']));
+ok('in the dark it finds one the torchbearer cannot see', $dk !== null && !empty($dk['shot']['hidden']), json_encode($dk['dest'] ?? null));
+ok('and will walk no further than it must for it', $dk === null || $dk['cost'] >= $lit['cost']);
+$blind = $archer;
+unset($blind['dark_sight']);
+$bk = $approach->invoke($aiEngine, $aiState(gridOf($open) + ['dark' => true]), $blind, $victim, $bowRange, $aiReach, $open);
+ok('a monster that cannot see in the dark does not bother', $bk !== null && $bk['cost'] === $lit['cost']);
+
 // ---------------------------------------------------------------------------
 echo PHP_EOL . str_repeat('-', 52) . PHP_EOL;
 printf("%d passed, %d failed%s", $RESULTS['pass'], $RESULTS['fail'], PHP_EOL);

@@ -14,6 +14,10 @@
             "markup_pct": 110
         },
         {
+            "item": "hooded_lantern",
+            "stock": 3
+        },
+        {
             "item": "thieves_tools",
             "stock": 1,
             "markup_pct": 120
