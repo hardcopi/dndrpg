@@ -370,6 +370,46 @@
   // =========================================================================
 
   function render() {
+    const back = focusMemo();
+    renderNow();
+    restoreFocusMemo(back);
+  }
+
+  /**
+   * The scene, the rails and the verbs are all rebuilt by render(), so a
+   * keyboard player who had focus on one of them was dropped to the top of
+   * the page by every refresh — Make camp closed its window, handed focus
+   * back to Camp, and the refresh straight after threw that Camp away. Note
+   * what had focus as something a redraw will draw again, and find it after.
+   * Nothing inside a modal: those own their focus.
+   */
+  const MEMO_ATTRS = ['data-npc', 'data-map-node', 'data-door-to', 'data-act', 'data-cid', 'data-id'];
+  function focusMemo() {
+    const a = document.activeElement;
+    if (!a || a === document.body || !a.closest || a.closest('#modal-root, [role="dialog"]')) return null;
+    const verb = a.closest('#action-bar .action-btn');
+    if (verb) return { verb: verb.textContent.trim() };
+    const q = (v) => String(v).replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+    for (const attr of MEMO_ATTRS) {
+      const v = a.getAttribute(attr);
+      if (v == null) continue;
+      let sel = `${a.tagName.toLowerCase()}[${attr}="${q(v)}"]`;
+      if (attr === 'data-act' && a.hasAttribute('data-id')) sel += `[data-id="${q(a.getAttribute('data-id'))}"]`;
+      return { sel };
+    }
+    return a.id ? { sel: '#' + CSS.escape(a.id) } : null;
+  }
+  function restoreFocusMemo(back) {
+    if (!back) return;
+    const a = document.activeElement;
+    if (a && a !== document.body && a.isConnected) return;
+    const el = back.verb
+      ? [...document.querySelectorAll('#action-bar .action-btn')].find((b) => b.textContent.trim() === back.verb)
+      : document.querySelector(back.sel);
+    if (el && !el.disabled && el.getClientRects().length) el.focus({ preventScroll: true });
+  }
+
+  function renderNow() {
     const locRoot = $('#location-root');
     const combatRoot = $('#combat-root');
     const inCombat = state.mode === MODE.COMBAT;
@@ -1813,8 +1853,26 @@
 
       await mapFadeThrough(() => refreshAll());
       announceArrival();
+      landOnArrival();
       await handleEvents(r.events || []);
     });
+  }
+
+  /**
+   * The way you came in is gone with the place you left, so a keyboard player
+   * who walked by Enter was left nowhere — the next Tab started from the top
+   * of the page. Land them on the new place's name instead: a screen reader
+   * reads where they are, and Tab carries on into the scene. Only when focus
+   * really was lost, and never under a window.
+   */
+  function landOnArrival() {
+    const a = document.activeElement;
+    if ((a && a !== document.body && a.isConnected) || (window.UI && UI.overlayOpen && UI.overlayOpen())) return;
+    const h = [...document.querySelectorAll('#location-root .loc-name, #location-root h1, #location-root h2')]
+      .find((n) => n.getClientRects().length);
+    if (!h) return;
+    if (!h.hasAttribute('tabindex')) h.setAttribute('tabindex', '-1');
+    h.focus({ preventScroll: true });
   }
 
   /** The arrival line: the place, and its opening sentence. */
