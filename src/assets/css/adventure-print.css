@@ -764,3 +764,31 @@ p { margin: 0 0 0.07in; }
   width: 0.22in;
   color: var(--accent);
 }
+
+/* ------------------------------------------------------------------------ */
+/* Phones                                                                    */
+/* ------------------------------------------------------------------------ */
+
+/* The inch-for-inch preview above is right wherever a whole sheet fits. On a
+   screen narrower than the paper the browser can only fit it by zooming the
+   page out to about half size, which leaves body text near 6px. There, and
+   only there, the book reflows to the screen: one column, the page box
+   dropped, type at reading size. Print is untouched — this is screen-only,
+   and a phone that prints still gets @page and the rules above. */
+@media screen and (max-width: 8.6in) {
+  body { padding: 0; font-size: 11pt; text-align: left; hyphens: manual; }
+  .book-page {
+    width: auto;
+    min-height: 0;
+    margin: 0 0 6px;
+    padding: 18px 16px 24px;
+    box-shadow: none;
+  }
+  .cols { columns: 1; column-rule: 0; }
+  .cover, .handout { min-height: 0; padding: 12px 0; }
+  .cover-art { width: 100%; max-width: 5.4in; height: auto; }
+  .cover h1 { font-size: 24pt; }
+  .cards { grid-template-columns: 1fr; grid-template-rows: none; min-height: 0; }
+  .stat-abilities { grid-template-columns: repeat(3, 1fr); }
+  table { display: block; max-width: 100%; overflow-x: auto; }
+}
