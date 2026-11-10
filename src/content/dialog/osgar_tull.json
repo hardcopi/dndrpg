@@ -6,6 +6,35 @@
             {
                 "conditions": [
                     {
+                        "flag": "quarter_eve"
+                    },
+                    {
+                        "not": {
+                            "flag": "packet_gone"
+                        }
+                    },
+                    {
+                        "not": {
+                            "flag": "vote_fate",
+                            "equals": "kept"
+                        }
+                    }
+                ],
+                "text": "It is not quite light. Tull is on the seventh step with the rope actually doing something, and the packet is low in the water with paper. \"Last one that makes the quarter-day,\" he says. \"Full, for once. Town's business.\" He does not say whose.",
+                "choices": [
+                    {
+                        "label": "Watch them load.",
+                        "next": "packet_a"
+                    },
+                    {
+                        "label": "Not yet.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "passage_booked"
                     },
                     {
@@ -548,6 +577,130 @@
                     {
                         "label": "Leave.",
                         "end": true
+                    }
+                ]
+            }
+        ],
+        "packet_a": [
+            {
+                "conditions": [
+                    {
+                        "flag": "vote_fate",
+                        "equals": "proxy"
+                    }
+                ],
+                "text": "Reed comes down the stair in the good coat with the strongbox under one arm and the proxy inside it. She does not look back at the town. Tull writes her in the book without asking her name, which you have never seen him do for anybody.",
+                "choices": [
+                    {
+                        "label": "Go on.",
+                        "next": "packet_b"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "vote_fate",
+                        "equals": "against"
+                    }
+                ],
+                "text": "\"Your vote went down a fortnight since,\" Tull says. \"I carried it. Weighed nothing.\" He stows a sack. \"Funny how some paper you feel in the hold and some you don't.\"",
+                "choices": [
+                    {
+                        "label": "Go on.",
+                        "next": "packet_b"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "costing_figure",
+                        "equals": "read_first"
+                    }
+                ],
+                "text": "Hesper Amsel comes down the stair with her measuring book in oilcloth and takes the seat in the stern without being shown it. \"I am going to hear it read,\" she says to nobody, and settles her coat, and does not open the book once.",
+                "choices": [
+                    {
+                        "label": "Go on.",
+                        "next": "packet_b"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "walked_fate",
+                        "equals": "reasons"
+                    }
+                ],
+                "text": "Tull lifts a single letter off the top of the sack and holds it up to the grey light. Your hand. Care of Mrs Crale, to be read under item seven. He puts it back on top, not in the sack. \"That one rides with me,\" he says.",
+                "choices": [
+                    {
+                        "label": "Go on.",
+                        "next": "packet_b"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "minute_fate",
+                        "equals": "copied"
+                    }
+                ],
+                "text": "Somebody has pinned a copy of the copy to the packet's mast, the reader-list too, crosses and all. Tull looks at it, decides it is cargo, and leaves it there.",
+                "choices": [
+                    {
+                        "label": "Go on.",
+                        "next": "packet_b"
+                    }
+                ]
+            },
+            {
+                "text": "Sacks, a crate of chain, the quarter's post. Nobody you know goes aboard. Tull loads it all himself and writes it all down, the same hand, the same speed.",
+                "choices": [
+                    {
+                        "label": "Go on.",
+                        "next": "packet_b"
+                    }
+                ]
+            }
+        ],
+        "packet_b": [
+            {
+                "text": "\"Four days,\" Tull says, coiling the last of the rope onto the deck. \"Then it comes back up with whatever they said, and I'll carry that too. It'll weigh the same.\" He steps aboard and casts off. The packet slides out past the green steps into the current and goes round the second bend, and then there is only the river and the empty seventh step. Whatever they say down there, they have not said it yet.",
+                "choices": [
+                    {
+                        "label": "Watch it out of sight.",
+                        "effects": [
+                            {
+                                "set_flag": "packet_gone"
+                            }
+                        ],
+                        "end": true
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera, hands in her sleeves: \"Four days for paper to go somewhere I can't follow it. I've never once enjoyed it.\"",
+                        "once": true
+                    },
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric watches the bend long after the packet has gone round it.",
+                        "once": true
+                    },
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa skims a stone after it. It goes four bounces and sinks. \"Good enough,\" she says.",
+                        "once": true
+                    },
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse: \"Five days, then.\" She does not say until what.",
+                        "once": true
                     }
                 ]
             }

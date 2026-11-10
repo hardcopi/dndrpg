@@ -68,6 +68,21 @@
                 ]
             },
             {
+                "conditions": [
+                    {
+                        "flag": "mill_is_shelter"
+                    }
+                ],
+                "text": "\"Dry wall two miles up the road,\" the drover says, as if passing on a secret. \"The old mill. Hurdles and a slate over the fire-back.\" The ox shifts. \"Slept there Thursday with four others and the rain on the hurdles. Nobody knows whose it is now. Nobody asked me for a penny.\"",
+                "choices": [
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
                 "text": "Wagons won't run the east road till it's safe. My oxen agree with the wagons.",
                 "choices": [
                     {

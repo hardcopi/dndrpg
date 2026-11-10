@@ -216,7 +216,7 @@
                         ]
                     }
                 ],
-                "text": "\"Quarter-day tomorrow,\" Mara says. \"Downriver.\" She sets a cup at your usual table without being asked and does not go back behind the bar. \"Half the town's in tonight and pretending it isn't why. Sit.\"",
+                "text": "\"Last packet that makes the quarter-day goes at first light,\" Mara says. \"Four days down, and they sit the morning after.\" She sets a cup at your usual table without being asked and does not go back behind the bar. \"Half the town's in tonight and pretending it isn't why. Sit.\"",
                 "choices": [
                     {
                         "label": "Sit a while.",
@@ -2727,6 +2727,18 @@
                         "label": "Go on.",
                         "next": "eve_b"
                     }
+                ],
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera, low: \"One in twelve, chalked on a pub slate. Every chair in that room will have heard about this slate by the quarter-day, and not one of them will admit it.\"",
+                        "once": true
+                    },
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa reads SO FAR twice and goes and buys whoever wrote it a drink.",
+                        "once": true
+                    }
                 ]
             },
             {
@@ -2741,6 +2753,13 @@
                     {
                         "label": "Go on.",
                         "next": "eve_b"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera, approving into her cup: \"Good. Say nothing till you're in the chair. The only vote anybody fears is the one they can't count yet.\"",
+                        "once": true
                     }
                 ]
             },
@@ -2757,6 +2776,18 @@
                         "label": "Go on.",
                         "next": "eve_b"
                     }
+                ],
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse watches Reed go. \"She has never once in her life gone downriver for herself,\" she says. \"Only ever for this.\"",
+                        "once": true
+                    },
+                    {
+                        "companion": "sera",
+                        "text": "Sera, after a moment: \"She'll be the only person in that room who's ever been inside the thing they're costing.\"",
+                        "once": true
+                    }
                 ]
             },
             {
@@ -2771,6 +2802,13 @@
                     {
                         "label": "Go on.",
                         "next": "eve_b"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric reads the list of readers, crosses and all, and takes his hat off, and does not explain.",
+                        "once": true
                     }
                 ]
             },
@@ -2787,6 +2825,13 @@
                         "label": "Go on.",
                         "next": "eve_b"
                     }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric, quietly: \"They are both nearly right because it is written down. If it were not, they would both be entirely wrong, and nobody could ever show them.\"",
+                        "once": true
+                    }
                 ]
             },
             {
@@ -2801,6 +2846,13 @@
                     {
                         "label": "Go on.",
                         "next": "eve_b"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa raises her cup to the pencil before anyone else does, and is very pleased about it.",
+                        "once": true
                     }
                 ]
             },
@@ -2817,6 +2869,13 @@
                         "label": "Go on.",
                         "next": "eve_b"
                     }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric says nothing until Mara has gone, and then: \"Thank you for saying it to her first. Somebody should always hear a thing before the room does.\"",
+                        "once": true
+                    }
                 ]
             },
             {
@@ -2831,6 +2890,13 @@
                     {
                         "label": "Go on.",
                         "next": "eve_b"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa, to her cup: \"Clean.\" She seems to mean it.",
+                        "once": true
                     }
                 ]
             },
@@ -2847,6 +2913,18 @@
                         "label": "Go on.",
                         "next": "eve_b"
                     }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric watches the carter put the page down. \"That,\" he says, \"is what it was for.\"",
+                        "once": true
+                    },
+                    {
+                        "companion": "sera",
+                        "text": "Sera, reading upside down: \"They've had it a fortnight downriver. If anybody at that table was going to find it smaller, they've found it by now.\"",
+                        "once": true
+                    }
                 ]
             },
             {
@@ -2861,6 +2939,13 @@
                     {
                         "label": "Go on.",
                         "next": "eve_b"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera eyes the shut book. \"Nobody's seen the number and everybody's afraid of it. That's the best a number can do the night before.\"",
+                        "once": true
                     }
                 ]
             },
@@ -2888,6 +2973,13 @@
                         "label": "Go on.",
                         "next": "eve_c"
                     }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric, very low: \"A parish. He has made them a parish, and nobody here knows it.\"",
+                        "once": true
+                    }
                 ]
             },
             {
@@ -2902,6 +2994,13 @@
                     {
                         "label": "Go on.",
                         "next": "eve_c"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse, after a while: \"Fifteen.\" Then nothing else, which from Ilse is a great deal.",
+                        "once": true
                     }
                 ]
             },
@@ -2928,6 +3027,13 @@
                     {
                         "label": "Go on.",
                         "next": "eve_end"
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric laughs, once, at the lay brother, the first time you have heard him laugh at anything to do with Arden.",
+                        "once": true
                     }
                 ]
             },
@@ -2958,6 +3064,13 @@
                         "label": "Go on.",
                         "next": "eve_end"
                     }
+                ],
+                "interjections": [
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse listens to the drovers. \"Good,\" she says. \"Let them argue. A boundary that nobody argues about has already been moved.\"",
+                        "once": true
+                    }
                 ]
             },
             {
@@ -2972,7 +3085,7 @@
         ],
         "eve_end": [
             {
-                "text": "Mara bolts the door at ten and does not throw anybody out. Downriver, eleven chairs and a twelfth will sit tomorrow in a warm room and take up Rivermark under whatever item it has become. Whatever they decide has not been decided yet. For one more night everything this valley has done is written down somewhere, and still its own.",
+                "text": "Mara bolts the door at ten and does not throw anybody out. Four days downriver, eleven chairs and a twelfth will sit in a warm room and take up Rivermark under whatever item it has become. Whatever they decide has not been decided yet. For one more night everything this valley has done is written down somewhere, and still its own.",
                 "choices": [
                     {
                         "label": "Go up.",
@@ -2982,6 +3095,28 @@
                             }
                         ],
                         "end": true
+                    }
+                ],
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera, at the stair: \"Whatever they do in that room, they'll do it with your numbers in front of them. I used to think that was the most anybody could ask.\"",
+                        "once": true
+                    },
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric, at the stair, hat in his hands: \"I will say compline for the room. Not for what they decide. For the room.\"",
+                        "once": true
+                    },
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa, at the stair: \"Eleven people I've never met, deciding about a place I've slept in.\" A shrug. \"Same as always. Except they know we're here.\"",
+                        "once": true
+                    },
+                    {
+                        "companion": "ilse",
+                        "text": "Ilse, at the stair: \"I am going to sleep tonight. That is the only thing about the quarter-day I have decided.\"",
+                        "once": true
                     }
                 ]
             }

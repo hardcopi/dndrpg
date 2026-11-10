@@ -598,7 +598,7 @@ try {
     echo "== quarter-day eve ==\n";
     $eve = function (array $fl, string $fate) use ($db, $base, $seek) {
         $p = party($db, $base + $fl); ended($db, $p, $fate);
-        $found = $seek($p, 'mara_hearthstone', 'Quarter-day tomorrow');
+        $found = $seek($p, 'mara_hearthstone', 'Last packet that makes');
         $texts = [];
         if ($found) {
             $de = new DialogEngine($db); $n = $de->node($p, 'mara_hearthstone'); $key = (string) ($n['node_key'] ?? $n['key'] ?? 'greeting');
@@ -622,7 +622,7 @@ try {
         [$p, $f, $t] = $eve($fl, $fate);
         ok('eve: ' . implode(',', array_keys($fl)) . " → $needle", $f && str_contains($t, $needle), substr($t, 0, 160));
         ok('the vote is still open on the eve (' . implode(',', array_keys($fl)) . ')', str_contains($t, 'has not been decided yet') && flag($db, $p, 'quarter_eve') === '1');
-        ok('the eve happens once', !$seek($p, 'mara_hearthstone', 'Quarter-day tomorrow'));
+        ok('the eve happens once', !$seek($p, 'mara_hearthstone', 'Last packet that makes'));
     }
 
     echo "== later visitors ==\n";
@@ -638,6 +638,51 @@ try {
               ['warren_fed', 'serjeant_ballow', 'Eleven wagons'], ['ford_road_open', 'serjeant_ballow', 'laid stone'],
               ['fen_trade_on_paper', 'osric_apothecary', 'both sides meant'], ['fen_draining', 'osric_apothecary', 'beds are drying'],
               ['fen_road_open_paid', 'osric_apothecary', 'without a story'], ['mill_race_right_common', 'tibald_ashe', 'no longer one man']] as [$fl, $npc, $needle]) {
+        $p = party($db, $base + [$fl => 1]); ended($db, $p, 'walked');
+        ok("$npc reads $fl", $seek($p, $npc, $needle));
+        $n = (new DialogEngine($db))->node($p, $npc); talk($db, $p, $npc, [(string) end($n['choices'])['label']]);
+        ok("once ($fl)", !$seek($p, $npc, $needle));
+    }
+    echo "== companions on the eve; the packet at first light ==\n";
+    $play = function (int $p, string $npc, int $steps = 6) use ($db) {
+        $de = new DialogEngine($db); $n = $de->node($p, $npc); $key = (string) ($n['node_key'] ?? $n['key'] ?? 'greeting');
+        $out = []; $r = $de->choose($p, $npc, $key, 0);
+        for ($k = 0; $k < $steps && isset($r['node']); $k++) {
+            $out[] = (string) $r['node']['text'];
+            foreach ($r['node']['interjections'] ?? [] as $ij) $out[] = '[' . $ij['companion'] . '] ' . $ij['text'];
+            $nk = (string) ($r['node']['node_key'] ?? $r['node']['key'] ?? '');
+            $r = (new DialogEngine($db))->choose($p, $npc, $nk, 0);
+        }
+        return implode(' || ', $out);
+    };
+    foreach ([[['vote_fate' => 'against'], 'subscribed', ['sera', 'kessa'], ['[sera] Sera, low', '[kessa] Kessa reads SO FAR', '[sera] Sera, at the stair', '[kessa] Kessa, at the stair']],
+              [['vote_fate' => 'proxy'], 'subscribed', ['ilse', 'sera'], ['[ilse] Ilse watches Reed', 'only person in that room', '[ilse] Ilse, at the stair']],
+              [['minute_fate' => 'copied', 'uncounted_fate' => 'entered'], 'minuted', ['aldric'], ['takes his hat off', 'made them a parish', 'compline for the room']],
+              [['walked_fate' => 'stands', 'uncounted_fate' => 'read', 'mearing_recut' => 1], 'walked', ['kessa', 'ilse'], ['raises her cup to the pencil', '"Fifteen."', 'already been moved']],
+              [['costing_figure' => 'circulated', 'cartulary_deposited' => '1'], 'costed', ['aldric', 'sera'], ['what it was for', 'found it by now', 'laugh at anything to do with Arden']]] as [$fl, $fate, $cs, $needles]) {
+        $p = party($db, $base + $fl); ended($db, $p, $fate);
+        $c = new CompanionService($db); foreach ($cs as $k) { $c->meet($p, $k); $c->recruit($p, $k); }
+        $seek($p, 'mara_hearthstone', 'Last packet that makes');
+        $t = $play($p, 'mara_hearthstone');
+        foreach ($needles as $nd) ok("eve aside: $nd", str_contains($t, $nd), substr($t, 0, 140));
+        ok('no aside from a companion not in the party', !str_contains($t, '[' . (in_array('kessa', $cs) ? 'aldric' : 'kessa') . ']'));
+        ok('the eve still leaves it undecided', str_contains($t, 'has not been decided yet'));
+        // packet
+        $ok = $seek($p, 'osgar_tull', 'makes the quarter-day');
+        ok('packet at first light after the eve', $ok);
+        $t = $play($p, 'osgar_tull', 4);
+        ok('the packet goes and nothing is said yet', str_contains($t, 'have not said it yet') && flag($db, $p, 'packet_gone') === '1', substr($t, 0, 120));
+        if (($fl['vote_fate'] ?? '') === 'proxy') ok('Reed goes aboard with the proxy', str_contains($t, 'strongbox'));
+        ok('the packet goes once', !$seek($p, 'osgar_tull', 'makes the quarter-day'));
+    }
+    $p = party($db, $base + ['vote_fate' => 'kept', 'quarter_eve' => 1]); ended($db, $p, 'subscribed');
+    ok('a kept vote does not watch the packet go without it', !$seek($p, 'osgar_tull', 'makes the quarter-day'));
+    $p = party($db, $base + ['vote_fate' => 'against']); ended($db, $p, 'subscribed');
+    ok('no packet before the eve', !$seek($p, 'osgar_tull', 'makes the quarter-day'));
+
+    echo "== more of the valley is heard of ==\n";
+    foreach ([['mill_is_shelter', 'street_drover', 'Dry wall'], ['rivermark_mustering', 'serjeant_ballow', 'Muster list'],
+              ['stilt_camp_taken', 'osric_apothecary', 'across their planks'], ['stilt_camp_lost', 'captain_elowen', 'pulled the planks']] as [$fl, $npc, $needle]) {
         $p = party($db, $base + [$fl => 1]); ended($db, $p, 'walked');
         ok("$npc reads $fl", $seek($p, $npc, $needle));
         $n = (new DialogEngine($db))->node($p, $npc); talk($db, $p, $npc, [(string) end($n['choices'])['label']]);
