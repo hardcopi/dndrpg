@@ -763,8 +763,21 @@
 
   function toggleSceneMap() {
     if (!hasSceneMap()) return;
+    const a = document.activeElement;
+    const fromOutside = !paintedSceneNode || !paintedSceneNode.contains(a);
     paintedMapOpen = !paintedMapOpen;
     syncPaintedMap();
+    // The chart opens above the verbs, so from the Map verb (or the M key) the
+    // next Tab went on down into the rail and the chart was a long Shift+Tab
+    // back. Take focus to it; and off it again when it closes under focus.
+    const map = paintedSceneNode && paintedSceneNode.querySelector('.paint-map');
+    if (!map) return;
+    if (paintedMapOpen && fromOutside) {
+      const first = map.querySelector('[data-map-node], [data-npc], button, [tabindex="0"]');
+      if (first) first.focus({ preventScroll: true });
+    } else if (!paintedMapOpen && map.contains(a)) {
+      paintedSceneNode.querySelector('[data-scene-map]')?.focus({ preventScroll: true });
+    }
   }
 
   function syncPaintedMap() {
@@ -1868,8 +1881,10 @@
   function landOnArrival() {
     const a = document.activeElement;
     if ((a && a !== document.body && a.isConnected) || (window.UI && UI.overlayOpen && UI.overlayOpen())) return;
-    const h = [...document.querySelectorAll('#location-root .loc-name, #location-root h1, #location-root h2')]
-      .find((n) => n.getClientRects().length);
+    // The place's name first: the Actions h2 comes earlier in the page.
+    const seen = (n) => n.getClientRects().length;
+    const h = [...document.querySelectorAll('#location-root .loc-name')].find(seen)
+      || [...document.querySelectorAll('#location-root h1, #location-root h2')].find(seen);
     if (!h) return;
     if (!h.hasAttribute('tabindex')) h.setAttribute('tabindex', '-1');
     h.focus({ preventScroll: true });
