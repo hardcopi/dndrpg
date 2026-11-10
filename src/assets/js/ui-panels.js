@@ -1677,6 +1677,7 @@
       const on = n === first;
       return `<button type="button" class="sheet-spell-tab${on ? ' is-on' : ''}"
         role="tab" id="sheet-spell-tab-${n}" data-spell-tab="${n}"
+        aria-controls="sheet-spell-pane-${n}" tabindex="${on ? '0' : '-1'}"
         aria-selected="${on ? 'true' : 'false'}">${esc(spellLevelName(n))}</button>`;
     }).join('');
     const panes = levels.map((n) => {
@@ -1687,7 +1688,7 @@
           ${castRow(sp)}
         </div>`).join('');
       return `<div class="sheet-spells" role="tabpanel" data-spell-pane="${n}"
-        aria-labelledby="sheet-spell-tab-${n}"${n === first ? '' : ' hidden'}>${cards}</div>`;
+        id="sheet-spell-pane-${n}" aria-labelledby="sheet-spell-tab-${n}"${n === first ? '' : ' hidden'}>${cards}</div>`;
     }).join('');
     return `<div class="sheet-section">
       <h3>Spells</h3>
@@ -1809,18 +1810,38 @@
 
     const tablist = el.querySelector('.sheet-spell-tabs');
     if (tablist) {
-      tablist.addEventListener('click', (ev) => {
-        const btn = ev.target.closest('[data-spell-tab]');
-        if (!btn) return;
+      const pick = (btn) => {
         const n = btn.getAttribute('data-spell-tab');
         el.querySelectorAll('[data-spell-tab]').forEach((b) => {
           const on = b === btn;
           b.classList.toggle('is-on', on);
           b.setAttribute('aria-selected', on ? 'true' : 'false');
+          // One Tab stop for the row, as a tablist promises; the arrows move
+          // along it (below).
+          b.tabIndex = on ? 0 : -1;
         });
         el.querySelectorAll('[data-spell-pane]').forEach((p) => {
           p.hidden = p.getAttribute('data-spell-pane') !== n;
         });
+      };
+      tablist.addEventListener('click', (ev) => {
+        const btn = ev.target.closest('[data-spell-tab]');
+        if (btn) pick(btn);
+      });
+      // role="tab" tells a screen reader the arrows work, so they have to.
+      tablist.addEventListener('keydown', (ev) => {
+        const tabs = [...tablist.querySelectorAll('[data-spell-tab]')];
+        const i = tabs.indexOf(ev.target.closest('[data-spell-tab]'));
+        if (i < 0) return;
+        let j = null;
+        if (ev.key === 'ArrowRight' || ev.key === 'ArrowDown') j = (i + 1) % tabs.length;
+        else if (ev.key === 'ArrowLeft' || ev.key === 'ArrowUp') j = (i - 1 + tabs.length) % tabs.length;
+        else if (ev.key === 'Home') j = 0;
+        else if (ev.key === 'End') j = tabs.length - 1;
+        if (j === null) return;
+        ev.preventDefault();
+        pick(tabs[j]);
+        tabs[j].focus();
       });
     }
 
