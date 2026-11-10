@@ -6,6 +6,126 @@
             {
                 "conditions": [
                     {
+                        "flag": "meeting_fate",
+                        "equals": "costed"
+                    },
+                    {
+                        "not": {
+                            "quest": "the_seers_coin",
+                            "status": "active"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"I saw a word coming up the river,\" says Nan Vetch, before you have sat down. \"I'd have said it was cost. It was held.\" She shrugs under the shawl. \"Close enough for a copper. Close enough for the farmers, anyway. They've been asking me all week whether held comes as far as the ford.\"",
+                "choices": [
+                    {
+                        "label": "A copper, then. Read me.",
+                        "next": "the_reading"
+                    },
+                    {
+                        "label": "Why is your queue all farmers?",
+                        "next": "all_farmers"
+                    },
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "minuted"
+                    },
+                    {
+                        "not": {
+                            "quest": "the_seers_coin",
+                            "status": "active"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"Written in a book,\" says Nan. \"The cards said that.\" She turns one over without looking at it. \"The cards always say that. It's never once been wrong, which is why I keep it in the deck.\"",
+                "choices": [
+                    {
+                        "label": "A copper, then. Read me.",
+                        "next": "the_reading"
+                    },
+                    {
+                        "label": "Why is your queue all farmers?",
+                        "next": "all_farmers"
+                    },
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "subscribed"
+                    },
+                    {
+                        "not": {
+                            "quest": "the_seers_coin",
+                            "status": "active"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "Nan Vetch looks at your hands, then your face. \"You've bought a share,\" she says. \"I didn't see that one.\" She lays the cloth flat. \"I don't read for people who've already decided. There's no money in it, and no comfort either.\"",
+                "choices": [
+                    {
+                        "label": "A copper, then. Read me.",
+                        "next": "the_reading"
+                    },
+                    {
+                        "label": "Why is your queue all farmers?",
+                        "next": "all_farmers"
+                    },
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "walked"
+                    },
+                    {
+                        "not": {
+                            "quest": "the_seers_coin",
+                            "status": "active"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"You walked out,\" says Nan, very pleased. \"I saw that in the water a week ago and told nobody, because nobody would have paid me for it.\" She holds out her hand. \"You can pay me for it now.\"",
+                "choices": [
+                    {
+                        "label": "A copper, then. Read me.",
+                        "next": "the_reading"
+                    },
+                    {
+                        "label": "Why is your queue all farmers?",
+                        "next": "all_farmers"
+                    },
+                    {
+                        "label": "Leave them to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "seers_coin_fate",
                         "equals": "stopped"
                     }

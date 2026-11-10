@@ -6,6 +6,210 @@
             {
                 "conditions": [
                     {
+                        "flag": "meeting_fate",
+                        "equals": "costed"
+                    },
+                    {
+                        "not": {
+                            "quest": "tobins_consignment",
+                            "status": "active"
+                        }
+                    },
+                    {
+                        "not": {
+                            "flag": "town_standing",
+                            "equals": "fallen"
+                        }
+                    },
+                    {
+                        "not": {
+                            "quest": "first_night",
+                            "stage": "errand"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"Held,\" Tobin says, setting out mace-heads. \"Every carter through here this week has a different price for what held does to a street. One says it doubles it. One says it kills it.\" He shrugs, scales rasping. \"Mine is: nothing yet. Thirty-one years in trade and I've never once been sorry I waited for the second letter.\"",
+                "choices": [
+                    {
+                        "label": "Open shop.",
+                        "effects": [
+                            {
+                                "open_shop": "tobin"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "What's the town saying?",
+                        "next": "the_rumours"
+                    },
+                    {
+                        "label": "You have been staring at that invoice since I came in.",
+                        "next": "the_invoice"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "minuted"
+                    },
+                    {
+                        "not": {
+                            "quest": "tobins_consignment",
+                            "status": "active"
+                        }
+                    },
+                    {
+                        "not": {
+                            "flag": "town_standing",
+                            "equals": "fallen"
+                        }
+                    },
+                    {
+                        "not": {
+                            "quest": "first_night",
+                            "stage": "errand"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"Thirty-one years in trade,\" Tobin says, \"and I know exactly what an objection in a minute book is worth.\" He weighs a mace-head. \"The paper, and the time it takes somebody to find it again. Sometimes that's a great deal. I've been the somebody.\"",
+                "choices": [
+                    {
+                        "label": "Open shop.",
+                        "effects": [
+                            {
+                                "open_shop": "tobin"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "What's the town saying?",
+                        "next": "the_rumours"
+                    },
+                    {
+                        "label": "You have been staring at that invoice since I came in.",
+                        "next": "the_invoice"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "subscribed"
+                    },
+                    {
+                        "not": {
+                            "quest": "tobins_consignment",
+                            "status": "active"
+                        }
+                    },
+                    {
+                        "not": {
+                            "flag": "town_standing",
+                            "equals": "fallen"
+                        }
+                    },
+                    {
+                        "not": {
+                            "quest": "first_night",
+                            "stage": "errand"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"Shareholders,\" Tobin says, and looks you up and down as if pricing you. \"In the house downriver.\" He goes back to his crate. \"My prices stay where the road puts them. I'd only ask you to remember, when the house you own buys something on this street, who sold you your mace-heads.\"",
+                "choices": [
+                    {
+                        "label": "Open shop.",
+                        "effects": [
+                            {
+                                "open_shop": "tobin"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "What's the town saying?",
+                        "next": "the_rumours"
+                    },
+                    {
+                        "label": "You have been staring at that invoice since I came in.",
+                        "next": "the_invoice"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "walked"
+                    },
+                    {
+                        "not": {
+                            "quest": "tobins_consignment",
+                            "status": "active"
+                        }
+                    },
+                    {
+                        "not": {
+                            "flag": "town_standing",
+                            "equals": "fallen"
+                        }
+                    },
+                    {
+                        "not": {
+                            "quest": "first_night",
+                            "stage": "errand"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"Walked out on a room of buyers,\" Tobin says, with something like envy. \"I've never once done that. I've wanted to on about four hundred occasions.\" He lays out the last mace-head. \"Arms, armour and potions. Fair prices. The questions are on the house today.\"",
+                "choices": [
+                    {
+                        "label": "Open shop.",
+                        "effects": [
+                            {
+                                "open_shop": "tobin"
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "What's the town saying?",
+                        "next": "the_rumours"
+                    },
+                    {
+                        "label": "You have been staring at that invoice since I came in.",
+                        "next": "the_invoice"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "town_standing",
                         "equals": "fallen"
                     }

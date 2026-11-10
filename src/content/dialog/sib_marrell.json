@@ -6,6 +6,110 @@
             {
                 "conditions": [
                     {
+                        "flag": "meeting_fate",
+                        "equals": "costed"
+                    },
+                    {
+                        "not": {
+                            "quest": "night_soil",
+                            "status": "active"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"Held, up top,\" says Sib Marrell, from the bottom step. \"Granary Row and the Steps.\" He spits downwind. \"Down below nothing's held. Granary Row drains the same whoever owns it, and the same way, and into the same place. I'd like that in their costing. I doubt it is.\"",
+                "choices": [
+                    {
+                        "label": "You're not working.",
+                        "next": "why_not"
+                    },
+                    {
+                        "label": "Fair enough.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "minuted"
+                    },
+                    {
+                        "not": {
+                            "quest": "night_soil",
+                            "status": "active"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"Written down,\" says Sib. \"Twenty years I've been asking the council to write things down.\" He considers the river. \"Took them twenty years. Took you one afternoon. I don't know whether that's good news about you or bad news about the council.\"",
+                "choices": [
+                    {
+                        "label": "You're not working.",
+                        "next": "why_not"
+                    },
+                    {
+                        "label": "Fair enough.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "subscribed"
+                    },
+                    {
+                        "not": {
+                            "quest": "night_soil",
+                            "status": "active"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"Own a share of the Row now, I'm told,\" says Sib, not getting up. \"Then you own a share of what's under it.\" He grins for the first time. \"Nobody ever wants that part. I'll send you the bill.\"",
+                "choices": [
+                    {
+                        "label": "You're not working.",
+                        "next": "why_not"
+                    },
+                    {
+                        "label": "Fair enough.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "walked"
+                    },
+                    {
+                        "not": {
+                            "quest": "night_soil",
+                            "status": "active"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"Walked out,\" Sib says, approvingly. \"I walk out of most rooms. People open the windows after.\" He looks at you sideways. \"Did they open the windows?\"",
+                "choices": [
+                    {
+                        "label": "You're not working.",
+                        "next": "why_not"
+                    },
+                    {
+                        "label": "Fair enough.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "night_soil_fate",
                         "equals": "killed"
                     }

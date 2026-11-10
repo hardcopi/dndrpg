@@ -6,6 +6,110 @@
             {
                 "conditions": [
                     {
+                        "flag": "meeting_fate",
+                        "equals": "costed"
+                    },
+                    {
+                        "not": {
+                            "quest": "the_almoners_list",
+                            "status": "active"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"Held,\" says Ballow, eyes on the road. \"Captain read it out at the muster. Granary Row and the Steps.\" He is quiet for a while. \"I've watched families go out this gate all year with their beds on a cart. Nobody held anything for them. I don't say that against you. I say it because the west road is long and I've had a lot of time to look at it.\"",
+                "choices": [
+                    {
+                        "label": "Quiet posting.",
+                        "next": "quiet_posting"
+                    },
+                    {
+                        "label": "Thanks.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "minuted"
+                    },
+                    {
+                        "not": {
+                            "quest": "the_almoners_list",
+                            "status": "active"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"Objection entered,\" Ballow says. \"Twenty-two years on the watch, I've entered a few.\" He looks along the road. \"They sit in a book. Then one day somebody wants the book, and they're very glad it's there. That's the whole of the job and I'm told it's important.\"",
+                "choices": [
+                    {
+                        "label": "Quiet posting.",
+                        "next": "quiet_posting"
+                    },
+                    {
+                        "label": "Thanks.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "subscribed"
+                    },
+                    {
+                        "not": {
+                            "quest": "the_almoners_list",
+                            "status": "active"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "Ballow keeps his eyes on the road. \"Captain says you've bought in,\" he says. \"Owners.\" A cart goes by and he watches it all the way out. \"I don't say anything about it. I'm a serjeant on the west gate. Saying things is how a man gets to the west gate.\"",
+                "choices": [
+                    {
+                        "label": "Quiet posting.",
+                        "next": "quiet_posting"
+                    },
+                    {
+                        "label": "Thanks.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "walked"
+                    },
+                    {
+                        "not": {
+                            "quest": "the_almoners_list",
+                            "status": "active"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"Walked out,\" says Ballow. \"Good.\" It comes out before he has decided to say it, and he straightens. \"Somebody ought to walk out of something. West gate,\" he adds, to the road. \"Ford road out. Nobody stops anybody here.\"",
+                "choices": [
+                    {
+                        "label": "Quiet posting.",
+                        "next": "quiet_posting"
+                    },
+                    {
+                        "label": "Thanks.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "quest": "the_almoners_list",
                         "stage": "read_the_list"
                     }

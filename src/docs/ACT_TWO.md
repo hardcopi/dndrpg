@@ -128,6 +128,13 @@ Wat. Test: `tools/test_fenmoor_lot.php`.
     - **Pol Reddick** counts a quarter as thirteen weeks of weighing.
     - **Nell Quist** gives a seed cake to anybody who argues anyway (`minuted`),
       and charges subscribers full price.
+  - **The rest of the town**, with the same rules:
+    - **Brenna Coalwright** would like to be asked about her own forge.
+    - **Serjeant Ballow** has watched families leave by the west gate all year.
+    - **Tobin** waits for the second letter. He is skipped once the town has
+      fallen and he is at the milestone.
+    - **Sib Marrell** says the Row drains the same whoever owns it.
+    - **Nan Vetch** saw the word coming up the river and guessed it wrong.
   - None of them knows who asked for the Fenmoor crate. That thread stays open.
 - **Sera's second offer.** If Sera turned Corse down (`sera_post_fate` =
   `stayed`) and is in the party, Minna Crale offers her the empty second desk at
