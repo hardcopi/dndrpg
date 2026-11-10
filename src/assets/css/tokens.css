@@ -705,6 +705,7 @@
   --z-dialogue: 200;            /* .dialogue-theatre, over a fight */
   --z-modal: 300;               /* .modal-backdrop */
   --z-check: 400;               /* .check-root — the d20, over a modal */
+  --z-alert: 500;               /* .error-banner.is-floating — an error raised inside any of those */
 
   /*
    * WHAT IS DELIBERATELY NOT HERE.

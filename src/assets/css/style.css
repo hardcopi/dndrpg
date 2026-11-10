@@ -4404,6 +4404,19 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
    the fire had to say about it. One element and one modifier rather than two
    banners, so a message can never appear under an error that is still showing
    above it. */
+.error-banner.is-floating {
+  position: fixed;
+  top: var(--sp-12);
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: min(36rem, calc(100vw - 2 * var(--sp-12)));
+  z-index: var(--z-alert);
+  background: var(--bg);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.6);
+  font-size: var(--fs-md);
+  padding: var(--sp-10) var(--sp-16);
+}
 .error-banner.is-good {
   background: var(--gold-well);
   border-color: var(--gold-dim);
