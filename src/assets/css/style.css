@@ -4420,6 +4420,9 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   max-width: min(36rem, calc(100vw - 2 * var(--sp-12)));
   z-index: var(--z-alert);
   background: var(--bg);
+  /* On --bg rather than the danger well, --danger is 4.28:1; the ink tone
+     is the text shade of the same red. (.is-good, below, still wins.) */
+  color: var(--danger-ink);
   box-shadow: 0 4px 18px rgba(0, 0, 0, 0.6);
   font-size: var(--fs-md);
   padding: var(--sp-10) var(--sp-16);
