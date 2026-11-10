@@ -80,10 +80,25 @@
       const i = overlays.indexOf(entry);
       if (i >= 0) overlays.splice(i, 1);
       if (!overlays.length) document.body.classList.remove('overlay-open');
-      if (entry.restore && document.contains(entry.restore) && entry.restore.focus) {
-        entry.restore.focus();
-      }
+      const back = entry.restore && (document.contains(entry.restore) ? entry.restore : twinOf(entry.restore));
+      if (back && back.focus) back.focus();
     };
+  }
+
+  /**
+   * The control that replaced one a redraw threw away while an overlay was
+   * open — the verb bar and the rails are rebuilt by every refresh, so the
+   * Camp button that opened the fire is often not the one on screen when the
+   * fire closes. Same tag, class, label and title is the same control.
+   */
+  function twinOf(old) {
+    if (!old || old === document.body || !old.tagName) return null;
+    if (old.id) return document.getElementById(old.id);
+    const label = (old.textContent || '').trim();
+    return $$(old.tagName.toLowerCase()).find((n) => n.className === old.className
+      && (n.textContent || '').trim() === label
+      && (n.getAttribute('title') || '') === (old.getAttribute('title') || '')
+      && !n.disabled && n.getClientRects().length) || null;
   }
 
   function topOverlay() {
@@ -1382,6 +1397,11 @@
           await G().refreshAll();
           closeTopModal();
           openCamp();
+          // The fire is redrawn, so focus would start again at the first seat.
+          // Put it on the same companion's button, which now says the reverse.
+          const again = modals[modals.length - 1]?.el
+            .querySelector(`[data-march="${CSS.escape(b.dataset.march)}"]:not([disabled])`);
+          if (again) again.focus();
         } catch (err) {
           G().showError(err.message);
           b.disabled = false;
