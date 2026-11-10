@@ -6608,7 +6608,9 @@ body.bm-pan-ready .battlemap { cursor: grab; }
   border-radius: var(--r-md);
   pointer-events: none;
 }
-.cbt-card.is-downed { opacity: 0.5; filter: grayscale(0.8); }
+/* Greyed, not faded: a downed ally is still somebody you can heal, so the
+   name and the 0 HP have to stay readable (0.5 put them at 2.6–3.3:1). */
+.cbt-card.is-downed { opacity: 0.88; filter: grayscale(0.8); }
 /* The dead stay on the board until the next action: seeing what you killed is
    most of how a fight reads, and the death clip needs something to play over. */
 .cbt-card.is-dead { opacity: 0.3; filter: grayscale(1); cursor: default; }
