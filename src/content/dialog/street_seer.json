@@ -6,6 +6,44 @@
             {
                 "conditions": [
                     {
+                        "flag": "room_sat"
+                    },
+                    {
+                        "flag": "seers_coin_fate",
+                        "equals": "stopped"
+                    }
+                ],
+                "text": "\"They sit down and ask me what the room did,\" says Nan Vetch. \"I tell them rain by evening. They pay me for the rain and go off cross.\" She squares the deck. \"Rain by evening, mind. That one's true.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "room_sat"
+                    },
+                    {
+                        "flag": "seers_coin_fate",
+                        "equals": "turned"
+                    }
+                ],
+                "text": "\"Eleven of them asked me what the sheet means,\" says Nan Vetch, not looking up. \"I told them what we agreed. Tell me if what we agreed has changed, because they'll be back, and I'd rather not guess.\" She turns a card face down. \"I'm good at guessing. That's why I'd rather not.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "meeting_fate",
                         "equals": "costed"
                     },

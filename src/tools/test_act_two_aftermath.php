@@ -996,6 +996,26 @@ try {
         ok("once: $npc", !$seek($p, $npc, $nd));
         if ($not) { $p = party($db, $sat + $not); ended($db, $p, 'subscribed'); ok("not when gone: $npc", !$seek($p, $npc, $nd)); }
     }
+    echo "== the town's own errands after the sheet ==\n";
+    $sat = $base + ['vote_fate' => 'against', 'quarter_eve' => 1, 'packet_gone' => 1, 'days_waited' => 1, 'room_sat' => 1];
+    foreach ([['street_almoner', 'almoner_list_fate', 'fed', 'it comes'], ['street_almoner', 'almoner_list_fate', 'recorded', 'written down first'],
+              ['street_almoner', 'almoner_list_fate', 'work', 'whether you know or not'], ['street_seer', 'seers_coin_fate', 'stopped', 'rain by evening'],
+              ['street_seer', 'seers_coin_fate', 'turned', 'what we agreed'], ['tobin', 'consignment_fate', 'kept', 'Just stopping'],
+              ['market_baker', 'short_measure_fate', 'carter', 'what would I put'], ['market_baker', 'short_measure_fate', 'stone', 'how much it weighed']] as [$npc, $f, $v, $nd]) {
+        $p = party($db, $sat + [$f => $v]); ended($db, $p, 'subscribed');
+        ok("after the sheet: $npc $v", $seek($p, $npc, $nd));
+        $n = (new DialogEngine($db))->node($p, $npc); talk($db, $p, $npc, [(string) end($n['choices'])['label']]);
+        ok("once: $npc $v", !$seek($p, $npc, $nd));
+        $p = party($db, $base + ['vote_fate' => 'against', 'quarter_eve' => 1, 'packet_gone' => 1, $f => $v]); ended($db, $p, 'subscribed');
+        ok("not before the room sits: $npc $v", !$seek($p, $npc, $nd));
+    }
+    foreach ([['street_seer', 'seers_coin_fate', 'traced'], ['tobin', 'consignment_fate', 'watch'], ['tobin', 'consignment_fate', 'refused'],
+              ['market_baker', 'short_measure_fate', 'silence']] as [$npc, $f, $v]) {
+        $p = party($db, $sat + [$f => $v]); ended($db, $p, 'subscribed');
+        ok("no sheet line for $npc $v", !str_contains(greet($db, $p, $npc), 'room sat') && !str_contains(greet($db, $p, $npc), 'the sheet'));
+    }
+    $p = party($db, $sat + ['consignment_fate' => 'kept', 'town_standing' => 'fallen']); ended($db, $p, 'subscribed');
+    ok('no quay-book line without a stall', !$seek($p, 'tobin', 'Just stopping'));
 } catch (Throwable $e) {
     ok('played without a dead end', false, $e->getMessage());
 } finally {
