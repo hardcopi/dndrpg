@@ -1,0 +1,13 @@
+{
+    "npc_key": "hesper_amsel",
+    "name": "Hesper Amsel",
+    "role": "Assessor to the Meeting",
+    "description": "Came up the valley from Number Nine with a measuring book, a brass folding rule and five heads in Hollin Sare's hand. She is costing the removal of Rivermark, line by line, and she intends to get it right.",
+    "sprite_key": "hesper_amsel",
+    "is_quest_giver": true,
+    "dialog": "hesper_amsel",
+    "place": {
+        "location": "granary_row",
+        "conditions": [{"flag": "clearance_costed"}]
+    }
+}

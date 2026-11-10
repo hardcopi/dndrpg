@@ -440,6 +440,46 @@
             {
                 "conditions": [
                     {
+                        "flag": "costing_fate",
+                        "equals": "whole"
+                    }
+                ],
+                "once": true,
+                "text": "\"Mrs Amsel's costing came down on the packet,\" Minna Crale says, and lays a hand flat on a thick folder. \"Six heads. Mr Sare wrote five.\" Something that is not quite a smile happens and is filed. \"It goes before the meeting at the quarter-day, with the sixth head in it. I have checked the arithmetic. I was not asked to, and it is right.\"",
+                "choices": [
+                    {
+                        "label": "Who are the eleven?",
+                        "next": "the_eleven"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "costing_fate",
+                        "equals": "given"
+                    }
+                ],
+                "once": true,
+                "text": "\"Mrs Amsel's costing came down on the packet,\" Minna Crale says. \"Five heads, nine days, every line true.\" She files it. \"It goes before the meeting at the quarter-day. It will be read, and it will be believed, because it is correct.\"",
+                "choices": [
+                    {
+                        "label": "Who are the eleven?",
+                        "next": "the_eleven"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "quest": "the_quarterly_meeting",
                         "status": "completed"
                     }

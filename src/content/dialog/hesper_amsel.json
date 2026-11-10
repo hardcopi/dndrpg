@@ -1,0 +1,242 @@
+{
+    "npc_key": "hesper_amsel",
+    "start": "greeting",
+    "nodes": {
+        "greeting": [
+            {
+                "conditions": [
+                    {
+                        "flag": "costing_fate"
+                    },
+                    {
+                        "flag": "costing_padding_asked"
+                    }
+                ],
+                "once": true,
+                "text": "\"You asked me to double it, once,\" Hesper Amsel says, squaring the book. \"I have not put that down. It is not under any head.\" She looks at you over the spectacles she is not wearing. \"I would not ask anybody else. The next one may not be me.\"",
+                "choices": [
+                    {
+                        "label": "What happens now?",
+                        "next": "what_now"
+                    },
+                    {
+                        "label": "Leave her to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "costing_fate",
+                        "equals": "whole"
+                    }
+                ],
+                "text": "Hesper Amsel has the book shut on her knee and the rule folded on top of it, which is the first time you have seen either at rest. \"Six heads,\" she says. \"Mr Sare will have a view on the sixth. He will read it, though. He reads everything I send him, which is why I send him nothing I have not counted.\" She looks along the Row. \"It is a large figure. I was asked for an honest one. I was not asked to make it small.\"",
+                "choices": [
+                    {
+                        "label": "What happens now?",
+                        "next": "what_now"
+                    },
+                    {
+                        "label": "Leave her to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "costing_fate",
+                        "equals": "given"
+                    }
+                ],
+                "text": "\"Nine days,\" Hesper Amsel says, and squares the last page. \"Carts, roofs, wages, a year's bread, the burying ground. Every line is true.\" She caps the ink. \"Whether every line is there is a different question, and it was not the one I was sent to answer.\"",
+                "choices": [
+                    {
+                        "label": "What happens now?",
+                        "next": "what_now"
+                    },
+                    {
+                        "label": "Leave her to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_costing",
+                        "status": "active"
+                    }
+                ],
+                "text": "Hesper Amsel is on the granary steps with the measuring book open across her knee, ruling a column. \"Roofs,\" she says, without looking up. \"Thirty-eight on the Row, if a lean-to is a roof, and I have decided that a lean-to is a roof.\" She dips the pen. \"You were going to tell me what I am missing. Or not. Either is an answer.\"",
+                "choices": [
+                    {
+                        "label": "Some things aren't under any head.",
+                        "next": "missing"
+                    },
+                    {
+                        "label": "Put down double. Make it too dear to do.",
+                        "next": "padded",
+                        "effects": [
+                            {
+                                "set_flag": "costing_padding_asked"
+                            },
+                            {
+                                "approval": {
+                                    "aldric": -4,
+                                    "sera": -4,
+                                    "kessa": 2
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Count it your way.",
+                        "next": "given"
+                    },
+                    {
+                        "label": "Leave her to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "text": "A thin woman in a good charcoal coat is sitting on the granary steps with a measuring book open on her knee, a brass folding rule beside her and her spectacles pushed up into grey hair. She is counting the roofs on Granary Row, out loud, under her breath. \"Hesper Amsel,\" she says, when she has finished the row. \"Assessor, for the meeting at Number Nine. I am costing the removal of Rivermark.\" She looks at you properly. \"You'll be the party who asked where a cleared town goes. Nobody had. So here I am.\"",
+                "choices": [
+                    {
+                        "label": "What are you counting?",
+                        "next": "heads",
+                        "effects": [
+                            {
+                                "start_quest": "the_costing"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Leave her to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "heads": [
+            {
+                "text": "\"Five heads,\" Hesper Amsel says, and turns the book so you can see them, in a square, careful hand that is not hers. \"Carts. Roofs. Wages, for the season lost. A year's bread. The burying ground, moved. Mr Sare wrote them at the table.\" She turns it back. \"I count what is under each head, I put down what it costs, and I do not put down anything else. That is the whole of the job, and it is harder than it sounds.\"",
+                "interjections": [
+                    {
+                        "companion": "sera",
+                        "text": "Sera: \"Five heads and no sundries.\" Hesper Amsel: \"No.\" Sera: \"Nobody's ever costed anything without sundries.\" Hesper Amsel, after a moment: \"No. They haven't.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Some things aren't under any head.",
+                        "next": "missing"
+                    },
+                    {
+                        "label": "Put down double. Make it too dear to do.",
+                        "next": "padded",
+                        "effects": [
+                            {
+                                "set_flag": "costing_padding_asked"
+                            },
+                            {
+                                "approval": {
+                                    "aldric": -4,
+                                    "sera": -4,
+                                    "kessa": 2
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Count it your way.",
+                        "next": "given"
+                    },
+                    {
+                        "label": "Later.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "missing": [
+            {
+                "text": "\"Then they cost nothing,\" Hesper Amsel says, \"which is how a thing gets left behind.\" She stands and folds the rule. \"Show me.\"\n\nYou walk her round it. Osric Fen gives her a year's remedies, by weight, without being asked twice. Dagen Wyke shows her nine families in pencil. Pol Reddick tells her what his floor weighs in a season, and the fen-root beds are where they always were, which is the trouble with them. She writes it all down standing up.\n\nOn the steps again she rules a line under Mr Sare's five heads and writes a sixth in her own hand: Not otherwise provided for. Then she sits down to count under it.",
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric: \"Will it be read?\" Hesper Amsel: \"Every line. Whether it is heeded is the meeting's business. Mine is that it is there.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Leave her to count.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_costing",
+                                    "stage": "counted_whole"
+                                }
+                            }
+                        ],
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "padded": [
+            {
+                "text": "Hesper Amsel looks at you for long enough that a cart goes the length of the Row. \"If I put down one figure I did not count,\" she says, \"the meeting will strike the whole costing as the work of an interested party, and they will be right to. Then there is no figure. And no figure,\" she says, \"is cheaper than any figure I could write.\" She has not written anything. \"Shall we try again?\"",
+                "interjections": [
+                    {
+                        "companion": "kessa",
+                        "text": "Kessa: \"Worth asking.\" Hesper Amsel: \"It usually is. It is never worth doing.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Some things aren't under any head.",
+                        "next": "missing"
+                    },
+                    {
+                        "label": "Count it your way.",
+                        "next": "given"
+                    }
+                ]
+            }
+        ],
+        "given": [
+            {
+                "text": "\"Thank you,\" Hesper Amsel says, and means it, and goes back to the roofs. You leave her on the steps counting, under her breath, with the rule across her knee.",
+                "choices": [
+                    {
+                        "label": "Leave her to it.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_costing",
+                                    "stage": "counted_given"
+                                }
+                            }
+                        ],
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "what_now": [
+            {
+                "text": "\"It goes down on the packet to Mrs Crale,\" Hesper Amsel says, \"and Mrs Crale puts it in front of the meeting at the next quarter-day, and the meeting reads it.\" She considers. \"What they do then I could not tell you. I can tell you what it will cost them. That was the question.\"",
+                "choices": [
+                    {
+                        "label": "Leave her to it.",
+                        "end": true
+                    }
+                ]
+            }
+        ]
+    }
+}
