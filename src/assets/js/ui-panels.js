@@ -46,8 +46,12 @@
    */
   const overlays = [];
 
+  // `details > summary` because the browser tabs to a summary and this list
+  // did not know it: in the journal, where every quest is a <details>, the
+  // trap found only the close button, treated it as both first and last, and
+  // sent Tab straight back to it, so no quest could be opened from the keyboard.
   const FOCUSABLE = [
-    'a[href]', 'button:not([disabled])', 'input:not([disabled])',
+    'a[href]', 'button:not([disabled])', 'input:not([disabled])', 'details > summary',
     'select:not([disabled])', 'textarea:not([disabled])', '[tabindex]:not([tabindex="-1"])',
   ].join(',');
 
