@@ -1057,6 +1057,44 @@ ok('and passages rarely have to squeeze past each other',
     sprintf('%d of %d levels (%.1f%%), %d faces', $partitionLevels, $levels,
         100 * $partitionLevels / $levels, $partitions));
 
+section('a first floor always has a fight and a find');
+// stock() promises depth 1 a fight besides the stair's and a chest. It used
+// to keep the promise only when some room had rolled empty, so about one
+// first floor in a thousand (seed 946: five tricks, the entrance and the
+// stair) had a single fight on it — which is what made test_delve's "some
+// rooms are occupied" fail a Deploy now and then. Swept over fixed seeds so
+// it is the same check every run, with the seeds that used to leak in it.
+$walks = [];
+$noFind = [];
+foreach (array_merge([946, 1017, 1752, 2293, 2673], range(1, 6000)) as $seed) {
+    $level = DungeonGen::generate($seed, 1);
+    $fights = 0;
+    $finds = 0;
+    foreach ($level['rooms'] as $r) {
+        $role = $r['role'] ?? '';
+        // The stair's hoard is something to find (a floor of six monster
+        // rooms has nothing else, and needs nothing else), but its guardian
+        // is not the extra fight the promise is about.
+        if (in_array($r['kind'], ['treasure', 'hoard', 'boss'], true)) {
+            $finds++;
+        }
+        if ($role === 'stair' || $role === 'entrance') {
+            continue;
+        }
+        if (in_array($r['kind'], ['monster', 'hoard'], true)) {
+            $fights++;
+        }
+    }
+    if ($fights === 0) {
+        $walks[] = $seed;
+    }
+    if ($finds === 0) {
+        $noFind[] = $seed;
+    }
+}
+same('no first floor is a walk to the stair', [], array_slice($walks, 0, 5));
+same('and every first floor has something to find', [], array_slice($noFind, 0, 5));
+
 echo PHP_EOL . str_repeat('-', 52) . PHP_EOL;
 printf("%d passed, %d failed%s", $pass, $fail, PHP_EOL);
 exit($fail > 0 ? 1 : 0);
