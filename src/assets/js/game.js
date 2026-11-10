@@ -177,6 +177,14 @@
     const b = $('#error-banner');
     if (!b) return;
     b.textContent = msg;
+    // The banner sits in the scene's flow, so an error from inside a panel —
+    // the shop, the sheet, the camp, a conversation — landed under the dimmed
+    // backdrop, half-covered by the panel that caused it, and a fight's board
+    // hid it outright. Lift it over them.
+    const over = state.mode === MODE.COMBAT
+      || (window.UI && UI.overlayOpen && UI.overlayOpen())
+      || !!document.querySelector('#dialogue-root:not(.hidden), #check-root:not(.hidden)');
+    b.classList.toggle('is-floating', over);
     b.classList.remove('hidden');
     clearTimeout(errorTimer);
     errorTimer = setTimeout(() => b.classList.add('hidden'), 5000);
