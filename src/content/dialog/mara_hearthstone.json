@@ -3227,7 +3227,43 @@
                     {
                         "companion": "sera",
                         "text": "Sera, at the stair: \"Whatever they do in that room, they'll do it with your numbers in front of them. I used to think that was the most anybody could ask.\"",
-                        "once": true
+                        "once": true,
+                        "conditions": [
+                            {
+                                "flag": "meeting_fate",
+                                "equals": "costed"
+                            }
+                        ]
+                    },
+                    {
+                        "companion": "sera",
+                        "conditions": [
+                            {
+                                "flag": "meeting_fate",
+                                "equals": "minuted"
+                            }
+                        ],
+                        "text": "Sera, at the stair: \"Whatever they do in that room, they'll do it with your words in the book in front of them. I used to think a figure was the only thing anybody read.\""
+                    },
+                    {
+                        "companion": "sera",
+                        "conditions": [
+                            {
+                                "flag": "meeting_fate",
+                                "equals": "subscribed"
+                            }
+                        ],
+                        "text": "Sera, at the stair: \"Whatever they do in that room, there's a share in their book with your name against it. I used to think that was the most anybody could ask.\""
+                    },
+                    {
+                        "companion": "sera",
+                        "conditions": [
+                            {
+                                "flag": "meeting_fate",
+                                "equals": "walked"
+                            }
+                        ],
+                        "text": "Sera, at the stair: \"Whatever they do in that room, they'll do it without us in it. I've sat at tables like that. It is always easier for them that way.\""
                     },
                     {
                         "companion": "aldric",

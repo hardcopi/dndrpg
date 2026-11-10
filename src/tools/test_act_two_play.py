@@ -75,7 +75,7 @@ class Run:
     """One character's playthrough. Problems are collected, not raised, so one run reports all of them."""
 
     def __init__(self, client, label):
-        self.c = client; self.label = label; self.problems = []; self.lines = []
+        self.c = client; self.label = label; self.problems = []; self.lines = []; self.faces = set()
         name = 'Walker ' + ''.join(random.choice(string.ascii_lowercase) for _ in range(9)).title()
         m = self.c.req('character/create', {'name': name, 'race': 'Human', 'class': 'Fighter', 'method': 'standard',
                                             'abilities': {'strength': 15, 'dexterity': 14, 'constitution': 13, 'intelligence': 12, 'wisdom': 10, 'charisma': 8},
@@ -131,8 +131,16 @@ class Run:
                 self.problem('placement', f'{npc} is not at {here.get("key")}')
         r = self.c.req('dialogue/node', {'npc_key': npc})
         node = r.get('node') or {}
-        self.lines.append((npc, node.get('text', '')))
+        self.heard(npc, node)
         return node
+
+    def heard(self, npc, node):
+        self.lines.append((npc, node.get('text', '')))
+        for aside in node.get('interjections') or []:
+            self.lines.append((f"{aside.get('companion')}@{npc}", aside.get('text', '')))
+        sp = node.get('speaker') or {}
+        if sp:
+            self.faces.add((sp.get('name'), sp.get('bust'), sp.get('image_url')))
 
     def choose(self, npc, node, label):
         for i, ch in enumerate(node.get('choices', [])):
@@ -145,7 +153,7 @@ class Run:
                     self.problem('dialog', f'{npc} "{label}": {r.get("error")}')
                 nxt = r.get('node')
                 if nxt:
-                    self.lines.append((npc, nxt.get('text', '')))
+                    self.heard(npc, nxt)
                 return nxt
         return False
 
@@ -227,8 +235,13 @@ FATE_OF = {'costed': 'took', 'minuted': 'burned', 'subscribed': 'sold', 'walked'
 COMPANIONS = {'costed': ['aldric', 'ilse'], 'minuted': ['aldric', 'sera'], 'subscribed': ['sera', 'kessa'], 'walked': ['kessa', 'ilse']}
 
 
-def play(client, outcome, vote=None):
+def play(client, outcome, vote=None, costing='whole', figure='circulated', minute='copied', walked='reasons',
+         order='word', uncounted='read'):
     label = outcome + (f'/{vote}' if vote else '')
+    for k, v, d in (('given', costing, 'whole'), ('read_first', figure, 'circulated'), ('shelved', minute, 'copied'),
+                    (walked, walked, 'reasons'), (f'order:{order}', order, 'word'), (f'uncounted:{uncounted}', uncounted, 'read')):
+        if v != d:
+            label += f'/{k}'
     print(f'\n== {label} ==')
     r = Run(client, label)
     fate = FATE_OF[outcome]
@@ -263,16 +276,22 @@ def play(client, outcome, vote=None):
     # The ending's own follow-up.
     kept = vote in ('aboard', 'stair')
     if outcome == 'costed':
-        r.travel('granary_row'); r.talk('hesper_amsel', 'What are you counting', 'Some things', 'Leave her to count')
-        ok(f'{label}: the Costing', (r.qstatus('the_costing') or ('',))[0] == 'completed', str(r.qstatus('the_costing')))
+        r.travel('granary_row')
+        if costing == 'whole':
+            r.talk('hesper_amsel', 'What are you counting', 'Some things', 'Leave her to count')
+        else:
+            r.talk('hesper_amsel', 'What are you counting', 'Count it your way', 'Leave her to it')
+        ok(f'{label}: the Costing', r.qstatus('the_costing') == ('completed', f'counted_{costing}') and r.flags().get('costing_fate') == costing,
+           str(r.qstatus('the_costing')))
         journal = r.quests().get('the_costing', {}).get('current_journal') or ''
         ok(f'{label}: the Costing journal points back to Number Nine', 'Number Nine' in journal, journal[-120:])
-        r.travel('number_nine'); r.talk('minna_crale', 'Send it round')
-        ok(f'{label}: the figure is circulated', r.flags().get('costing_figure') == 'circulated')
+        r.travel('number_nine'); r.talk('minna_crale', 'Send it round' if figure == 'circulated' else 'Let it be read first')
+        ok(f'{label}: the figure is {figure}', r.flags().get('costing_figure') == figure)
         ok(f'{label}: Minna does not call the finished count commissioned', not r.said('minna_crale', 'is commissioned'))
     elif outcome == 'minuted':
-        r.travel('record_office'); r.talk('dorcas_fenn', 'Read it.', 'Copy it out')
-        ok(f'{label}: the Bound Minute', (r.qstatus('the_bound_minute') or ('',))[0] == 'completed' and r.flags().get('minute_fate') == 'copied')
+        r.travel('record_office'); r.talk('dorcas_fenn', 'Read it.', 'Copy it out' if minute == 'copied' else 'Leave it on the shelf')
+        ok(f'{label}: the Bound Minute', r.qstatus('the_bound_minute') == ('completed', minute) and r.flags().get('minute_fate') == minute,
+           str(r.qstatus('the_bound_minute')))
         ok(f'{label}: Dorcas does not promise the volume after offering it', not r.said('dorcas_fenn', "quarter's end"))
     elif outcome == 'subscribed':
         r.travel('number_nine')
@@ -280,14 +299,18 @@ def play(client, outcome, vote=None):
         ok(f'{label}: One Vote in Twelve', (r.qstatus('one_vote_in_twelve') or ('',))[0] == 'completed',
            str(r.qstatus('one_vote_in_twelve')))
     elif outcome == 'walked':
-        r.travel('flagon_common_room'); r.talk('mara_hearthstone', 'Write back and say why')
-        ok(f'{label}: Item Seven Adjourned', (r.qstatus('item_seven_adjourned') or ('',))[0] == 'completed' and r.flags().get('walked_fate') == 'reasons')
+        r.travel('flagon_common_room')
+        r.talk('mara_hearthstone', {'reasons': 'Write back and say why', 'withdrawn': 'Write back: withdrawn', 'stands': 'Let it stand'}[walked])
+        ok(f'{label}: Item Seven Adjourned', r.qstatus('item_seven_adjourned') == ('completed', walked) and r.flags().get('walked_fate') == walked,
+           str(r.qstatus('item_seven_adjourned')))
 
     # The eve and the packet.
     mark = len(r.lines)
     r.travel('flagon_common_room'); r.talk('mara_hearthstone', 'Sit a while', 'Go up')
     ok(f'{label}: the eve', r.flags().get('quarter_eve') == '1')
     ok(f'{label}: the eve does not put the room tomorrow', not r.said('mara_hearthstone', 'tomorrow', mark))
+    if outcome != 'costed':
+        ok(f'{label}: Sera does not credit the room with our numbers', not r.said('sera@mara_hearthstone', 'your numbers', mark))
     r.travel('packet_stair')
     if kept:
         r.talk('osgar_tull', 'Walk down to the plank', *(['Step aboard', 'Go below'] if vote == 'aboard' else ['Step back']))
@@ -325,16 +348,32 @@ def play(client, outcome, vote=None):
         # After the sheet.
         r.travel('deepworks_canteen'); r.talk('corrin_dale', "I'll bring a copy")
         r.travel('counting_house'); r.talk('tibald_ashe', 'Take it down to the canteen')
-        r.travel('deepworks_canteen'); r.talk('corrin_dale', 'Read it word for word')
+        r.travel('deepworks_canteen')
+        r.talk('corrin_dale', {'word': 'Read it word for word', 'meaning': 'Tell them what you think', 'notyet': "minute's not here yet"}[order])
+        stage = {'word': 'read_word_for_word', 'meaning': 'told_what_it_means', 'notyet': 'not_here_yet'}[order]
+        ok(f'{label}: In Its Order', r.qstatus('in_its_order') == ('completed', stage), str(r.qstatus('in_its_order')))
         ok(f'{label}: Dale is not still hearing of the costing after the sheet', not r.said('corrin_dale', 'costing the town', mark))
-        ok(f'{label}: In Its Order', r.qstatus('in_its_order') == ('completed', 'read_word_for_word'), str(r.qstatus('in_its_order')))
         r.travel('packet_stair'); r.talk('osgar_tull', "I'll take it down to them")
-        r.travel('timekeepers_hut'); r.talk('wenna_coyle', 'Struck', 'Read the fifteen')
-        ok(f'{label}: The Uncounted', r.qstatus('the_uncounted') == ('completed', 'read_out'), str(r.qstatus('the_uncounted')))
+        r.travel('timekeepers_hut')
+        r.talk('wenna_coyle', 'Struck', {'read': 'Read the fifteen', 'record': 'Record Office', 'kept': 'Fold it away'}[uncounted])
+        if uncounted == 'record':
+            ok(f'{label}: the count goes to the Record Office', r.qstatus('the_uncounted') == ('active', 'to_the_record'), str(r.qstatus('the_uncounted')))
+            r.travel('record_office'); r.talk('dorcas_fenn', 'Enter it as given')
+        stage = {'read': 'read_out', 'record': 'entered', 'kept': 'kept'}[uncounted]
+        ok(f'{label}: The Uncounted', r.qstatus('the_uncounted') == ('completed', stage), str(r.qstatus('the_uncounted')))
         ok(f'{label}: Tull no longer offers first light', not r.said('osgar_tull', "whether you're on the step", mark))
         stale = {'costed': 'carry the costing up', 'minuted': 'Word for word, Moss says', 'subscribed': 'owner aboard', 'walked': 'dropped his pen'}[outcome]
         ok(f'{label}: Tull\'s meeting line does not come after the sheet', not r.said('osgar_tull', stale, mark))
         ok(f'{label}: the minute is not delivered', not any(k.startswith('minute_read') or k == 'vote_result' for k in r.flags()))
+    # Every face drawn on the way has a picture: the bust, or the sprite the client falls back to.
+    blank = [n for n, bust, img in r.faces
+             if not any(u and os.path.isfile(os.path.join(SRC, u.split('?')[0].lstrip('/'))) for u in (bust, img))]
+    ok(f'{label}: every speaker has a face', not blank, str(blank))
+    if os.environ.get('TRANSCRIPTS'):
+        with open(os.path.join(os.environ['TRANSCRIPTS'], label.replace('/', '_').replace(':', '-') + '.txt'), 'w') as f:
+            for n, t in r.lines:
+                if t:
+                    f.write(f'[{n}] {t}\n\n')
     left = [k for k, q in r.quests().items() if q['status'] == 'active' and q.get('act') == 2]
     ok(f'{label}: no Act II quest left hanging', not left, str(left))
     ok(f'{label}: no blockers on the way', not r.problems, '\n         '.join(r.problems))
@@ -393,11 +432,17 @@ def main():
         only = os.environ.get('ONLY')
         if not only or only == 'presence':
             presence(client)
-        for outcome, vote in runs:
-            if only and only not in f'{outcome}/{vote}':
+        runs = [(o, v, {}) for o, v in runs] + [
+            ('costed', None, {'costing': 'given', 'figure': 'read_first', 'order': 'meaning', 'uncounted': 'record'}),
+            ('minuted', None, {'minute': 'shelved', 'order': 'notyet', 'uncounted': 'kept'}),
+            ('walked', None, {'walked': 'withdrawn', 'uncounted': 'record'}),
+            ('walked', None, {'walked': 'stands', 'order': 'meaning', 'uncounted': 'kept'}),
+        ]
+        for outcome, vote, opts in runs:
+            if only and only not in f'{outcome}/{vote}/' + '/'.join(map(str, opts.values())):
                 continue
             try:
-                play(client, outcome, vote)
+                play(client, outcome, vote, **opts)
             except Exception as e:  # one broken run should not hide the others
                 ok(f'{outcome}/{vote}: played without crashing', False, repr(e)[:300])
     finally:
