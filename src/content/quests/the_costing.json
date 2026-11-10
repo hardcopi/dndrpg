@@ -24,7 +24,7 @@
             "resolution": "counted_whole",
             "outcome": "success",
             "title": "Not otherwise provided for",
-            "journal": "I walked Hesper Amsel round everything that wasn't under a head: Osric's remedies, the nine families Dagen Wyke has in pencil, the fen-root beds, Pol's weighing floor. She wrote a sixth head at the foot of Mr Sare's list in her own hand, Not otherwise provided for, and counted under it for two days. The figure is honest and it is large. It is still a figure. The meeting will read it next quarter, and I do not know what they will decide.",
+            "journal": "I walked Hesper Amsel round everything that wasn't under a head: Osric's remedies, the nine families Dagen Wyke has in pencil, the fen-root beds, Pol's weighing floor. She wrote a sixth head at the foot of Mr Sare's list in her own hand, Not otherwise provided for, and counted under it for two days. The figure is honest and it is large. It is still a figure. The meeting will read it next quarter, and I do not know what they will decide. Her count goes down to Minna Crale at Number Nine on the next packet, and whatever the house makes of it will be waiting there.",
             "effects": [
                 {
                     "set_flag": "costing_fate",
@@ -47,7 +47,7 @@
             "resolution": "counted_given",
             "outcome": "neutral",
             "title": "Five heads, exactly",
-            "journal": "Hesper Amsel counted what was under the five heads, exactly, and nothing else. It took her nine days. The figure is honest about everything it counts.",
+            "journal": "Hesper Amsel counted what was under the five heads, exactly, and nothing else. It took her nine days. The figure is honest about everything it counts. Her count goes down to Minna Crale at Number Nine on the next packet, and whatever the house makes of it will be waiting there.",
             "effects": [
                 {
                     "set_flag": "costing_fate",

@@ -8,6 +8,25 @@
     "is_quest_giver": true,
     "dialog": "osgar_tull",
     "place": {
-        "location": "packet_stair"
+        "location": "packet_stair",
+        "conditions": [
+            {
+                "not": {
+                    "flag": "vote_aboard"
+                }
+            },
+            {
+                "any": [
+                    {
+                        "not": {
+                            "flag": "packet_gone"
+                        }
+                    },
+                    {
+                        "flag": "days_waited"
+                    }
+                ]
+            }
+        ]
     }
 }

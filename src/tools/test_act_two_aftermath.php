@@ -211,7 +211,7 @@ try {
     $river = [
         'minna_crale' => ['costed' => 'figure will be honest', 'minuted' => 'I found I liked it', 'subscribed' => 'liked the light', 'walked' => 'Seven words'],
         'abel_moss' => ['costed' => "I'll see it's right", 'minuted' => 'particular about that', 'subscribed' => 'Same as ever', 'walked' => 'point of it'],
-        'dorcas_fenn' => ['costed' => 'up the valley will ask', 'minuted' => 'kept a space on the shelf', 'subscribed' => "I've decided", 'walked' => 'short ones'],
+        'dorcas_fenn' => ['costed' => 'up the valley will ask', 'minuted' => 'space I kept on the shelf', 'subscribed' => "I've decided", 'walked' => 'short ones'],
         'osgar_tull' => ['costed' => 'I carry everything', 'minuted' => 'weighs the same', 'subscribed' => 'owner aboard', 'walked' => 'dropped his pen'],
         'jory_kemp' => ['costed' => 'named the place for that', 'minuted' => 'hoping for shouting', 'subscribed' => 'twelfth of it', 'walked' => "Don't tell Mrs Crale"],
         'gillian_petch' => ['costed' => 'stops being delighted', 'minuted' => 'Nobody told me not to', 'subscribed' => 'Do I curtsey', 'walked' => 'obviously has one'],
@@ -220,6 +220,8 @@ try {
         foreach ($lines as $fate => $needle) {
             $p = party($db, $base + ['meeting_fate' => $fate]);
             $db->prepare("INSERT INTO party_quests (party_id, quest_id, status) SELECT ?, id, 'completed' FROM quests WHERE quest_key='the_quarterly_meeting'")->execute([$p]);
+            // Dorcas speaks of the objection once the bound minute has come down to her.
+            if ($who === 'dorcas_fenn' && $fate === 'minuted') { (new Effects($db))->apply($p, [['start_quest' => 'the_bound_minute'], ['quest_stage' => ['quest' => 'the_bound_minute', 'stage' => 'copied']]]); }
             ok("$who: $fate", str_contains(greet($db, $p, $who), $needle), substr(greet($db, $p, $who), 0, 90));
             talk($db, $p, $who, [$who === 'gillian_petch' ? 'Nothing. Sorry' : 'Leave']);
             ok("$who says it once", !str_contains(greet($db, $p, $who), $needle));
@@ -297,7 +299,7 @@ try {
     ok('Osric heard he was written down', str_contains(greet($db, $p, 'osric_apothecary'), 'by weight'));
     ok('Dagen Wyke has the nine in ink', str_contains(greet($db, $p, 'street_almoner'), 'in ink now'));
     $db->prepare("INSERT INTO party_quests (party_id, quest_id, status) SELECT ?, id, 'completed' FROM quests WHERE quest_key='the_quarterly_meeting'")->execute([$p]);
-    talk($db, $p, 'minna_crale', ['Leave']);
+    ok('Minna no longer says the costing is still to come', !str_contains(greet($db, $p, 'minna_crale'), 'is commissioned'));
     ok('Minna Crale has the six heads', str_contains(greet($db, $p, 'minna_crale'), 'Six heads'), substr(greet($db, $p, 'minna_crale'), 0, 90));
     $p = party($db, $base + ['meeting_fate' => 'costed', 'clearance_costed' => 1]);
     $db->prepare("INSERT INTO party_quests (party_id, quest_id, status) SELECT ?, id, 'completed' FROM quests WHERE quest_key='the_quarterly_meeting'")->execute([$p]);
@@ -307,7 +309,6 @@ try {
     talk($db, $p, 'hesper_amsel', ['Leave']);
     ok('then the five-heads ending', str_contains(greet($db, $p, 'hesper_amsel'), 'Nine days'));
     ok('Dagen: no head for the families', str_contains(greet($db, $p, 'street_almoner'), 'still in pencil'));
-    talk($db, $p, 'minna_crale', ['Leave']);
     ok('Minna Crale: five heads, every line true', str_contains(greet($db, $p, 'minna_crale'), 'every line true'), substr(greet($db, $p, 'minna_crale'), 0, 90));
 
     echo "== the other three outcomes change things ==\n";
@@ -331,7 +332,7 @@ try {
 
     foreach (['copied' => 'Copy it out', 'shelved' => 'Leave it on the shelf'] as $fate => $label) {
         $p = party($db, $base + ['meeting_fate' => 'minuted']);
-        talk($db, $p, 'dorcas_fenn', ['Leave']);
+        ok('the objection is not promised for later before the volume is offered', !str_contains(greet($db, $p, 'dorcas_fenn'), "quarter's end"));
         ok("minuted: the bound volume is in ($fate)", str_contains(greet($db, $p, 'dorcas_fenn'), 'Bound this morning'), substr(greet($db, $p, 'dorcas_fenn'), 0, 90));
         $node = talk($db, $p, 'dorcas_fenn', ['Read it']);
         ok('the minute reads: noted, no resolution', str_contains((string) ($node['text'] ?? ''), 'No resolution was moved'));
@@ -1016,6 +1017,38 @@ try {
     }
     $p = party($db, $sat + ['consignment_fate' => 'kept', 'town_standing' => 'fallen']); ended($db, $p, 'subscribed');
     ok('no quay-book line without a stall', !$seek($p, 'tobin', 'Just stopping'));
+    echo "== found in the HTTP playthrough ==\n";
+    $gone = $base + ['vote_fate' => 'against', 'quarter_eve' => 1, 'packet_gone' => 1];
+    $p = party($db, $gone); ended($db, $p, 'costed');
+    ok('Tull is on the river while the town waits', !$placed($p, 'osgar_tull'));
+    ok('Mara has the waiting line', $seek($p, 'mara_hearthstone', 'facing east'));
+    talk($db, $p, 'mara_hearthstone', ['Leave']);
+    ok("Mara's waiting line passes the days", $flag($p, 'days_waited') === '1');
+    ok('and Tull is back on the stair with the sheet', $placed($p, 'osgar_tull') && str_contains(greet($db, $p, 'osgar_tull'), 'second bend'));
+    $p = party($db, $gone + ['vote_aboard' => 1]); ended($db, $p, 'subscribed');
+    ok('Tull is not on the stair for a party that went aboard', !$placed($p, 'osgar_tull'));
+    $p = party($db, $base + ['passage_fate' => 'booked', 'passage_booked' => 1]); ended($db, $p, 'costed');
+    ok('Tull does not offer first light after the meeting', !$seek($p, 'osgar_tull', 'whether you\'re on the step'));
+    $p = party($db, $gone + ['days_waited' => 1]); ended($db, $p, 'costed');
+    ok("Tull's meeting line is spent once the boat has gone", !$seek($p, 'osgar_tull', 'I carry everything'));
+    $p = party($db, $base + ['vote_fate' => 'against', 'quarter_eve' => 1]); ended($db, $p, 'subscribed');
+    $n = (new DialogEngine($db))->node($p, 'osgar_tull'); talk($db, $p, 'osgar_tull', ['Watch them load']);
+    $n = (new DialogEngine($db))->node($p, 'osgar_tull', 'packet_a');
+    ok('a lodged vote never rode with Tull', str_contains((string) $n['text'], 'Never rode with me'), substr((string) $n['text'], 0, 80));
+    $de = new DialogEngine($db);
+    foreach (['kept' => 'eve_a', 'against' => 'eve_a'] as $v => $node) {
+        $p = party($db, $base + ['vote_fate' => $v]); ended($db, $p, 'subscribed');
+        ok("the eve is days before the room ($v)", !str_contains((string) $de->node($p, 'mara_hearthstone', $node)['text'], 'tomorrow'));
+    }
+    $p = party($db, $base + ['walked_fate' => 'reasons']); ended($db, $p, 'walked');
+    ok('the eve is days before the room (letter)', !str_contains((string) $de->node($p, 'mara_hearthstone', 'eve_a')['text'], 'tomorrow'));
+    $p = party($db, $base + ['clearance_costed' => 1]); ended($db, $p, 'costed');
+    ok("Minna's circulated copies include the town's", str_contains((string) $de->node($p, 'minna_crale', 'figure_circulated')['text'], 'twelfth for the town'));
+    $q = json_decode((string) file_get_contents('/var/www/html/content/quests/the_costing.json'), true);
+    ok('the costing journal points back to Number Nine', str_contains($q['stages']['counted_whole']['journal'], 'Number Nine') && str_contains($q['stages']['counted_given']['journal'], 'Number Nine'));
+    $p = party($db, ['level' => 5]);
+    talk($db, $p, 'bael_rourke', ["looking at the works", "rack", 'Take the fair sheets']);
+    ok('taking the sheets from the rack talk finishes the office', qstatus($db, $p, 'the_overseers_office') === 'completed' && qstatus($db, $p, 'the_survey') === 'active', qstatus($db, $p, 'the_overseers_office') . '/' . qstatus($db, $p, 'the_survey'));
 } catch (Throwable $e) {
     ok('played without a dead end', false, $e->getMessage());
 } finally {

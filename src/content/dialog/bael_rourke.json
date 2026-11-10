@@ -203,9 +203,45 @@
                             {
                                 "give_item": "the_valley_survey",
                                 "quantity": 1
+                            },
+                            {
+                                "quest_stage": {
+                                    "quest": "the_overseers_office",
+                                    "stage": "talked_your_way_in"
+                                }
                             }
                         ],
-                        "next": "he_does_not_notice"
+                        "next": "he_does_not_notice",
+                        "conditions": [
+                            {
+                                "quest": "the_overseers_office",
+                                "stage": "the_ladder"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Take the fair sheets.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_survey",
+                                    "stage": "in_hand"
+                                }
+                            },
+                            {
+                                "give_item": "the_valley_survey",
+                                "quantity": 1
+                            }
+                        ],
+                        "next": "he_does_not_notice",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "quest": "the_overseers_office",
+                                    "stage": "the_ladder"
+                                }
+                            }
+                        ]
                     },
                     {
                         "label": "Read them here.",
@@ -608,6 +644,44 @@
                             {
                                 "quest": "the_survey",
                                 "stage": "the_rack"
+                            },
+                            {
+                                "quest": "the_overseers_office",
+                                "stage": "the_ladder"
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_survey",
+                                    "stage": "in_hand"
+                                }
+                            },
+                            {
+                                "give_item": "the_valley_survey",
+                                "quantity": 1
+                            },
+                            {
+                                "quest_stage": {
+                                    "quest": "the_overseers_office",
+                                    "stage": "talked_your_way_in"
+                                }
+                            }
+                        ],
+                        "next": "he_does_not_notice"
+                    },
+                    {
+                        "label": "Take the fair sheets.",
+                        "conditions": [
+                            {
+                                "quest": "the_survey",
+                                "stage": "the_rack"
+                            },
+                            {
+                                "not": {
+                                    "quest": "the_overseers_office",
+                                    "stage": "the_ladder"
+                                }
                             }
                         ],
                         "effects": [
@@ -754,9 +828,45 @@
                             {
                                 "give_item": "the_valley_survey",
                                 "quantity": 1
+                            },
+                            {
+                                "quest_stage": {
+                                    "quest": "the_overseers_office",
+                                    "stage": "talked_your_way_in"
+                                }
                             }
                         ],
-                        "next": "he_does_not_notice"
+                        "next": "he_does_not_notice",
+                        "conditions": [
+                            {
+                                "quest": "the_overseers_office",
+                                "stage": "the_ladder"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Take it.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_survey",
+                                    "stage": "in_hand"
+                                }
+                            },
+                            {
+                                "give_item": "the_valley_survey",
+                                "quantity": 1
+                            }
+                        ],
+                        "next": "he_does_not_notice",
+                        "conditions": [
+                            {
+                                "not": {
+                                    "quest": "the_overseers_office",
+                                    "stage": "the_ladder"
+                                }
+                            }
+                        ]
                     },
                     {
                         "label": "Put it back.",

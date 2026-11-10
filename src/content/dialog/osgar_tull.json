@@ -186,6 +186,12 @@
                     {
                         "flag": "passage_fate",
                         "equals": "booked"
+                    },
+                    {
+                        "not": {
+                            "quest": "the_quarterly_meeting",
+                            "status": "completed"
+                        }
                     }
                 ],
                 "once": true,
@@ -329,6 +335,11 @@
                     {
                         "flag": "meeting_fate",
                         "equals": "costed"
+                    },
+                    {
+                        "not": {
+                            "flag": "packet_gone"
+                        }
                     }
                 ],
                 "once": true,
@@ -345,6 +356,11 @@
                     {
                         "flag": "meeting_fate",
                         "equals": "minuted"
+                    },
+                    {
+                        "not": {
+                            "flag": "packet_gone"
+                        }
                     }
                 ],
                 "once": true,
@@ -361,6 +377,11 @@
                     {
                         "flag": "meeting_fate",
                         "equals": "subscribed"
+                    },
+                    {
+                        "not": {
+                            "flag": "packet_gone"
+                        }
                     }
                 ],
                 "once": true,
@@ -377,6 +398,11 @@
                     {
                         "flag": "meeting_fate",
                         "equals": "walked"
+                    },
+                    {
+                        "not": {
+                            "flag": "packet_gone"
+                        }
                     }
                 ],
                 "once": true,
@@ -733,7 +759,7 @@
                         "equals": "against"
                     }
                 ],
-                "text": "\"Your vote went down a fortnight since,\" Tull says. \"I carried it. Weighed nothing.\" He stows a sack. \"Funny how some paper you feel in the hold and some you don't.\"",
+                "text": "\"Your vote's been in Mrs Crale's book a fortnight,\" Tull says. \"Never rode with me. Weighed nothing.\" He stows a sack. \"Funny how some paper you feel in the hold and some you don't.\"",
                 "choices": [
                     {
                         "label": "Go on.",
