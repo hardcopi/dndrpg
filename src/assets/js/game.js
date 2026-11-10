@@ -2596,7 +2596,7 @@
     withTileVer, bodySpriteUrl, variantUrl, spriteArtUrl, classArtUrl,
     // state and flow
     refreshAll, render, renderLocation, mergeCharacter, setActiveCharacter,
-    loadAvatars, mapFadeThrough,
+    loadAvatars, mapFadeThrough, landOnArrival,
     // actions
     travelTo, talkTo, startCombat, handleEvents,
     search: doSearch, loot: doLoot, rest: doRest, camp: doCamp,
