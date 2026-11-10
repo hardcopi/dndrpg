@@ -339,7 +339,7 @@
           <div class="dlg-choices" id="dlg-choices"></div>
         </div>
         <button type="button" class="dlg-close btn btn-small" data-close
-                aria-label="End the conversation">Esc</button>
+                aria-label="Esc: end the conversation">Esc</button>
       </div>`;
     root().querySelector('[data-close]').onclick = () => close();
 
@@ -732,7 +732,7 @@
           <div class="dlg-choices" id="dlg-choices"></div>
         </div>
         <button type="button" class="dlg-close btn btn-small" data-close
-                aria-label="End the conversation">Esc</button>
+                aria-label="Esc: end the conversation">Esc</button>
       </div>`;
 
     root().querySelector('[data-close]').onclick = () => close();

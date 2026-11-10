@@ -186,8 +186,24 @@
       || !!document.querySelector('#dialogue-root:not(.hidden), #check-root:not(.hidden)');
     b.classList.toggle('is-floating', over);
     b.classList.remove('hidden');
+    // Five seconds whatever it said was too short for the two-sentence ones
+    // ("Nobody here is carrying tools for it." and longer) at a reading pace,
+    // and there is no other copy of the message. Scale with its length, and
+    // hold it while the pointer rests on it.
+    const hold = Math.min(15000, Math.max(5000, 3000 + 70 * String(msg || '').length));
+    armErrorTimer(b, hold);
+    if (!b.dataset.holdWired) {
+      b.dataset.holdWired = '1';
+      b.addEventListener('mouseenter', () => clearTimeout(errorTimer));
+      b.addEventListener('mouseleave', () => {
+        if (!b.classList.contains('hidden')) armErrorTimer(b, 3000);
+      });
+    }
+  }
+
+  function armErrorTimer(b, ms) {
     clearTimeout(errorTimer);
-    errorTimer = setTimeout(() => b.classList.add('hidden'), 5000);
+    errorTimer = setTimeout(() => b.classList.add('hidden'), ms);
   }
 
   // =========================================================================
