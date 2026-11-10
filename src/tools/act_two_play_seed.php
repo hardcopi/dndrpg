@@ -6,6 +6,7 @@
  *   php tools/act_two_play_seed.php flags <party_id>               the party's world flags, as JSON
  *   php tools/act_two_play_seed.php locations                      location_key => id, as JSON
  *   php tools/act_two_play_seed.php parley <character_id> <npc:node>  a finished fight that ended in a parley, where they stand
+ *   php tools/act_two_play_seed.php endfight <character_id>        stand down a random fight the dice would not let them flee
  *   php tools/act_two_play_seed.php cleanup <username>             remove the throwaway account and everything it made
  *
  * Only `seed` writes game state, and only what Act I would have left behind:
@@ -25,6 +26,11 @@ if ($cmd === 'flags') {
     $st = $db->prepare('SELECT flag_key, flag_value FROM world_flags WHERE party_id = ?');
     $st->execute([(int) $argv[2]]);
     echo json_encode($st->fetchAll(PDO::FETCH_KEY_PAIR) ?: new stdClass()), "\n";
+    exit(0);
+}
+if ($cmd === 'endfight') {
+    $db->prepare('UPDATE combat_sessions SET is_active = 0 WHERE character_id = ? AND is_active = 1')->execute([(int) $argv[2]]);
+    echo json_encode(['ok' => true]), "\n";
     exit(0);
 }
 if ($cmd === 'parley') {

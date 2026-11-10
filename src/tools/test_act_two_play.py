@@ -106,16 +106,21 @@ class Run:
         return (self.c.req('location/current').get('location') or {})
 
     def travel(self, key):
-        for _ in range(4):
+        """Walk there. A random fight on the way is fled; one that will not let go (a failed flee roll
+        after another) is ended by the seed tool, because the fights are not what this test is about,
+        and an unlucky die in CI is not a blocker in the act."""
+        r = {}
+        for _ in range(6):
             r = self.c.req('location/travel', {'location_id': LOCS[key]})
-            for _ in range(10):
-                s = self.c.req('location/current')
-                if not s.get('combat'):
+            for _ in range(12):
+                if not self.c.req('location/current').get('combat'):
                     break
                 self.c.req('combat/action', {'action': 'flee'})
+            else:
+                php('endfight', self.cid)
             if self.here().get('key') == key:
                 return True
-        self.problem('travel', f'could not reach {key} (at {self.here().get("key")}): {str(r.get("error") or "")[:120]}')
+        self.problem('travel', f'could not reach {key} (at {self.here().get("key")}): {str(r.get("error") or r.get("messages") or r.get("events") or "")[:200]}')
         return False
 
     # -- conversation ------------------------------------------------------
