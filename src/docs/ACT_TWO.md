@@ -135,7 +135,21 @@ Wat. Test: `tools/test_fenmoor_lot.php`.
       fallen and he is at the milestone.
     - **Sib Marrell** says the Row drains the same whoever owns it.
     - **Nan Vetch** saw the word coming up the river and guessed it wrong.
+    - **Alder Pyke** is asked to measure the Row for leaving with the same chain
+      (`costed`), and would take a rise from a subscriber but would not ask. He is
+      skipped once the house is answering (`concern_answering`), because by then
+      his chain is gone.
+    - **Osric Fen** points out that nobody costed a year's remedies, and asks a
+      subscriber to write down that the fen-root beds do not move.
+    - **A market farmer** whose bread was sold forward, **the minstrel** who
+      cannot find the next verse, and **the east gate guard** told to write down
+      anybody who comes to count roofs.
   - None of them knows who asked for the Fenmoor crate. That thread stays open.
+- **Companions place the mark.** Once Act II is open, Ilse (`mark_seen_stone`),
+  Kessa (`mark_seen_paper`) and Sera (`mark_seen_book`) each have one greeting
+  that recognises the mark they saw in Act I as the house's mark: the ledge cuts,
+  the wax heading the canteen's against-wages column, the survey's habits. Aldric
+  has one line per `indentured_fate`. They recognise the mark and go no further.
 - **Sera's second offer.** If Sera turned Corse down (`sera_post_fate` =
   `stayed`) and is in the party, Minna Crale offers her the empty second desk at
   Number Nine (sixty a year, rooms on House Street, read anything filed).

@@ -166,6 +166,25 @@ try {
     (new Effects($db))->apply($p, [['start_quest' => 'the_watch_payroll'], ['quest_stage' => ['quest' => 'the_watch_payroll', 'stage' => 'ask_the_clerk']]]);
     ok('a quest at the second desk still comes first', str_contains(greet($db, $p, 'tibald_ashe'), 'watch roll'));
 
+    echo "== the rest of the town, again ==\n";
+    $more = [
+        'alder_pyke' => ['costed' => 'same chain', 'minuted' => 'read the marks', 'subscribed' => 'one and threepence is yours', 'walked' => 'walked off a line'],
+        'osric_apothecary' => ['costed' => "year's remedies", 'minuted' => 'what went wrong', 'subscribed' => 'fen-root beds', 'walked' => 'other way round'],
+        'market_farmer' => ['costed' => 'paying themselves', 'minuted' => 'Lovely hand', 'subscribed' => 'price was poor', 'walked' => "I've looked"],
+        'street_minstrel' => ['costed' => 'invoice', 'minuted' => 'exact words kept', 'subscribed' => 'Ballad or comic', 'walked' => 'writes itself'],
+        'watch_gate' => ['costed' => 'count roofs', 'minuted' => 'miss it if it stopped', 'subscribed' => 'see your face', 'walked' => 'come up here'],
+    ];
+    foreach ($more as $who => $lines) {
+        foreach ($lines as $fate => $needle) {
+            $p = party($db, $base + ['meeting_fate' => $fate]);
+            ok("$who hears $fate", str_contains(greet($db, $p, $who), $needle), substr(greet($db, $p, $who), 0, 90));
+            talk($db, $p, $who, [$who === 'osric_apothecary' ? 'Another time' : 'Leave']);
+            ok("$who says it once", !str_contains(greet($db, $p, $who), $needle));
+        }
+    }
+    $p = party($db, $base + ['meeting_fate' => 'costed', 'concern_answering' => 1]);
+    ok("Pyke's chain is gone once the house is answering", !str_contains(greet($db, $p, 'alder_pyke'), 'same chain'));
+
     echo "== companions place the mark ==\n";
     $marks = [
         ['ilse', ['mark_seen_stone' => 1], 'only ever a surveyor'],

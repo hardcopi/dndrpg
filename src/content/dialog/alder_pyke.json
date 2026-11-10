@@ -6,6 +6,90 @@
             {
                 "conditions": [
                     {
+                        "flag": "meeting_fate",
+                        "equals": "costed"
+                    },
+                    {
+                        "not": {
+                            "flag": "concern_answering"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "Pyke has the chain out along Granary Row and is walking it slower than he usually does. \"They want the Row costed,\" he says. \"Carts, roofs, the burying ground. Somebody has to measure a thing before anybody can say what moving it costs, and the somebody is me, at one and threepence.\" He drops the pin. \"I've never been asked to measure a place for leaving before. It's the same chain.\"",
+                "choices": [
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "minuted"
+                    },
+                    {
+                        "not": {
+                            "flag": "concern_answering"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"Minuted,\" Pyke says. \"I had to ask the clerk what that meant. It means it's in a book.\" He winds in a few feet of chain. \"I've put marks on a great many things that are in books. Nobody reads the books. People do sometimes read the marks.\"",
+                "choices": [
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "subscribed"
+                    },
+                    {
+                        "not": {
+                            "flag": "concern_answering"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "Pyke looks at you sideways. \"They're saying you're one of the owners now.\" He doesn't seem to know whether to touch his hat. \"So some small part of my one and threepence is yours, I suppose.\" A pause. \"I'd take a rise, if one's going. I wouldn't ask for one.\"",
+                "choices": [
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "walked"
+                    },
+                    {
+                        "not": {
+                            "flag": "concern_answering"
+                        }
+                    }
+                ],
+                "once": true,
+                "text": "\"Walked out,\" Pyke says. \"In the middle.\" He thinks about it with the chain across his knees. \"Forty years and I've never walked off a line. You walk to the end and paint the mark, or the line's no good to anybody.\" He doesn't say it as a reproach. He seems to be trying the idea on.",
+                "choices": [
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "survey_fate",
                         "equals": "warned"
                     }
