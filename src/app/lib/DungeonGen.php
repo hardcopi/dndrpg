@@ -1573,7 +1573,13 @@ final class DungeonGen
         if ($depth <= 1) {
             $fight = false;
             $chest = false;
-            $empty = [];
+            // Rooms that may be given over, best first. An empty room costs
+            // the floor nothing; failing that a trick, then a trap. Without
+            // the fallback the guarantee leaked: a floor that rolled no empty
+            // room at all (five tricks and a treasure, say — about 1 floor in
+            // 1000) kept no fight but the stair, which is the walk to the
+            // stair this block exists to prevent.
+            $spare = ['empty' => [], 'trick' => [], 'trap' => []];
             foreach ($rooms as $i => $room) {
                 if ($i === $entrance || $i === $stair) {
                     continue;
@@ -1585,16 +1591,22 @@ final class DungeonGen
                 if ($kind === 'treasure' || $kind === 'hoard') {
                     $chest = true;
                 }
-                if ($kind === 'empty') {
-                    $empty[] = $i;
+                if (isset($spare[$kind])) {
+                    $spare[$kind][] = $i;
                 }
             }
-            if (!$fight && $empty) {
-                $i = array_shift($empty);
+            $giveUp = static function () use (&$spare): ?int {
+                foreach ($spare as $kind => $list) {
+                    if ($list) {
+                        return array_shift($spare[$kind]);
+                    }
+                }
+                return null;
+            };
+            if (!$fight && ($i = $giveUp()) !== null) {
                 $rooms[$i]['kind'] = 'monster';
             }
-            if (!$chest && $empty) {
-                $i = array_shift($empty);
+            if (!$chest && ($i = $giveUp()) !== null) {
                 $rooms[$i]['kind'] = 'treasure';
             }
         }
