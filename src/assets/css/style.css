@@ -223,7 +223,7 @@ input:focus, select:focus, textarea:focus { outline: 1px solid var(--gold-dim); 
   font-size: var(--fs-2xs);
   font-style: normal;
   letter-spacing: 0.06em;
-  color: var(--gold-dim);
+  color: var(--gold-ink);
 }
 .ability-box.is-secondary .ability-rank { color: var(--text-dim); }
 
@@ -233,7 +233,7 @@ input:focus, select:focus, textarea:focus { outline: 1px solid var(--gold-dim); 
 .wiz-advice {
   margin: 0 0 var(--sp-8);
   font-size: var(--fs-sm);
-  color: var(--gold-dim);
+  color: var(--gold-ink);
 }
 .wiz-advice:empty { display: none; }
 
@@ -3477,7 +3477,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   display: block;
   font-size: var(--fs-2xs);
   font-style: normal;
-  color: var(--gold-dim);
+  color: var(--gold-ink);
 }
 .review-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--sp-8); }
 .review-stat {
