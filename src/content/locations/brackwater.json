@@ -44,7 +44,8 @@
                 },
                 {
                     "to": "packet_stair",
-                    "label": "Take Tull's packet back upriver"
+                    "label": "Take Tull's packet back upriver",
+                    "conditions": [{"not": {"flag": "vote_aboard"}}]
                 }
             ]
         },

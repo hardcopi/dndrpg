@@ -5,6 +5,7 @@
  *   php tools/act_two_play_seed.php seed <character_id> '<json>'   Act I state the HTTP walk cannot reach in seconds
  *   php tools/act_two_play_seed.php flags <party_id>               the party's world flags, as JSON
  *   php tools/act_two_play_seed.php locations                      location_key => id, as JSON
+ *   php tools/act_two_play_seed.php parley <character_id> <npc:node>  a finished fight that ended in a parley, where they stand
  *   php tools/act_two_play_seed.php cleanup <username>             remove the throwaway account and everything it made
  *
  * Only `seed` writes game state, and only what Act I would have left behind:
@@ -24,6 +25,19 @@ if ($cmd === 'flags') {
     $st = $db->prepare('SELECT flag_key, flag_value FROM world_flags WHERE party_id = ?');
     $st->execute([(int) $argv[2]]);
     echo json_encode($st->fetchAll(PDO::FETCH_KEY_PAIR) ?: new stdClass()), "\n";
+    exit(0);
+}
+if ($cmd === 'parley') {
+    // What a fight that was talked down leaves behind: an inactive session whose
+    // state says parley. The fight itself is not what is under test.
+    $cid = (int) $argv[2];
+    $spec = (string) $argv[3];
+    $pid = (int) $db->query("SELECT party_id FROM character_party WHERE character_id = $cid LIMIT 1")->fetchColumn();
+    $enc = (int) $db->query("SELECT id FROM encounters WHERE parley_node = " . $db->quote($spec) . " LIMIT 1")->fetchColumn();
+    $db->prepare('INSERT INTO combat_sessions (character_id, location_id, encounter_id, party_id, current_turn, state_json, is_active)
+                  SELECT id, current_location_id, ?, ?, 0, ?, 0 FROM characters WHERE id = ?')
+       ->execute([$enc, $pid, json_encode(['status' => 'parley', 'parley_node' => $spec]), $cid]);
+    echo json_encode(['ok' => $enc > 0]), "\n";
     exit(0);
 }
 if ($cmd === 'cleanup') {

@@ -367,6 +367,79 @@ class LocationEngine
     }
 
     /**
+     * May this party talk to this person here?
+     *
+     * The dialogue route used to answer for anybody whose key you could type.
+     * The client only ever opened conversations with somebody on the rail, a
+     * companion or a fight that became a parley, but the request carries the
+     * key, so a forged one could reach any reply in the game from anywhere,
+     * including replies that set story flags.
+     *
+     * Allowed:
+     *  - somebody standing here under the same rule the people list uses
+     *    (`location_id` plus `place.conditions` against the party's state);
+     *  - a companion travelling with the party, who can be talked to anywhere;
+     *  - the speaker of the party's latest fight, if it ended in a parley here.
+     *
+     * The route separately allows a conversation that is already open to keep
+     * going. A reply can move the speaker on: Tull is not on the stair once
+     * you have stepped aboard his boat, but the reply that put you aboard
+     * still has a "Go below" after it.
+     */
+    /**
+     * The world flag naming the conversation this party has open and where it
+     * was opened, so a reply can follow a speaker who leaves mid-scene without
+     * opening the route to anybody anywhere.
+     */
+    public const TALK_FLAG = 'dlg:open';
+
+    /** The open-conversation marker: who, and where the party was standing. */
+    public function talkMarker(int $characterId, string $npcKey): string
+    {
+        return $npcKey . '@' . (int) ($this->getCharacterPosition($characterId)['current_location_id'] ?? 0);
+    }
+
+    public function canTalkTo(int $characterId, ?int $partyId, string $npcKey): bool
+    {
+        $stmt = $this->db->prepare('SELECT id, location_id, place_conditions_json FROM npcs WHERE npc_key = ?');
+        $stmt->execute([$npcKey]);
+        $npc = $stmt->fetch();
+        if (!$npc) {
+            // Unknown keys fall through so the engine reports them the way it
+            // always has.
+            return true;
+        }
+        if (isset($this->recruitedNpcIds($partyId)[(int) $npc['id']])) {
+            return true;
+        }
+        $here = (int) ($this->getCharacterPosition($characterId)['current_location_id'] ?? 0);
+        if ($npc['location_id'] !== null && (int) $npc['location_id'] === $here) {
+            $when = $npc['place_conditions_json'] !== null
+                ? json_decode((string) $npc['place_conditions_json'], true) : null;
+            if (!$partyId || !is_array($when)) {
+                return true;
+            }
+            $ctx = (new WorldState($this->db))->context($partyId, $characterId);
+            if (Requirements::pass($when, $ctx)) {
+                return true;
+            }
+        }
+        if ($partyId) {
+            $q = $this->db->prepare(
+                'SELECT state_json, location_id FROM combat_sessions WHERE party_id = ? ORDER BY id DESC LIMIT 1'
+            );
+            $q->execute([$partyId]);
+            $fight = $q->fetch() ?: [];
+            $state = json_decode((string) ($fight['state_json'] ?? ''), true);
+            if (is_array($state) && (int) ($fight['location_id'] ?? 0) === $here && ($state['status'] ?? '') === CombatStatus::PARLEY
+                && strtok((string) ($state['parley_node'] ?? ''), ':') === $npcKey) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * The people list. Authored characters lead; ambient townsfolk follow as
      * the crowd. An NPC the character has not met shows role only — the client
      * renders "A traveling merchant" until first talked to.

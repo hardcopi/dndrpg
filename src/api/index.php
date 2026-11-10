@@ -2775,6 +2775,17 @@ function handle_dialogue(string $action): void
         if ($life !== null && !LifeState::canTalk($life['life_state'])) {
             json_error("{$life['name']} is " . LifeState::describe($life['life_state']) . '.', 409);
         }
+        // Only somebody you could actually walk up to (see canTalkTo), or the
+        // person you are already talking to, moving to another node.
+        $world = new WorldState($db);
+        $marker = $map->talkMarker($id, $npcKey);
+        $talking = $world->get($partyId, LocationEngine::TALK_FLAG) === $marker;
+        if (!($talking && $nodeKey !== null) && !$map->canTalkTo($id, $partyId, $npcKey)) {
+            json_error('There is nobody of that name here to talk to.', 409);
+        }
+        if (!$talking) {
+            $world->set($partyId, LocationEngine::TALK_FLAG, $marker);
+        }
         // Meeting someone is what puts their name on the map, and it happens
         // by talking to them rather than by walking past.
         $npcId = (int) (db()->query(
@@ -2791,9 +2802,16 @@ function handle_dialogue(string $action): void
 
     if ($action === 'choose') {
         require_method('POST');
-        require_character_id();
+        $id = require_character_id();
         $partyId = require_party_id();
         $body = read_json_body();
+        // A reply belongs to the conversation that is open. The first route
+        // opens it; a reply to somebody else must pass the same presence test.
+        $npcKey = (string) ($body['npc_key'] ?? '');
+        if ((new WorldState($db))->get($partyId, LocationEngine::TALK_FLAG) !== $map->talkMarker($id, $npcKey)
+            && !$map->canTalkTo($id, $partyId, $npcKey)) {
+            json_error('There is nobody of that name here to talk to.', 409);
+        }
         json_response(['ok' => true] + (new DialogEngine($db))->choose(
             $partyId,
             (string) ($body['npc_key'] ?? ''),
