@@ -245,7 +245,7 @@ def play(client, outcome, vote=None, costing='whole', figure='circulated', minut
     print(f'\n== {label} ==')
     r = Run(client, label)
     fate = FATE_OF[outcome]
-    r.seed(level=5, gold=600 if outcome == 'subscribed' else 200, at='overseers_office', companions=COMPANIONS[outcome],
+    r.seed(level=5, gold=600 if outcome == 'subscribed' else 200, at='overseers_office', companions=(os.environ['PARTY'].split(',') if os.environ.get('PARTY') else COMPANIONS[outcome]),
            quests={'first_night': 'done'}, flags={'deepworks_known': 1, 'warren_floor_fate': 'sounded'})
 
     # The Survey, from the overseer's office.
@@ -275,6 +275,14 @@ def play(client, outcome, vote=None, costing='whole', figure='circulated', minut
 
     # The ending's own follow-up.
     kept = vote in ('aboard', 'stair')
+    if os.environ.get('SKIP_FOLLOWUP'):
+        mark = len(r.lines)
+        r.travel('flagon_common_room'); node = r.open('mara_hearthstone')
+        print('   eve offered without the follow-up?', [c.get('label') for c in node.get('choices', [])], (node.get('text') or '')[:200])
+        for _ in range(4):
+            if not node or not node.get('choices'): break
+            node = r.choose('mara_hearthstone', node, node['choices'][-1]['label'])
+        print('   quarter_eve:', r.flags().get('quarter_eve'), {k: v for k, v in r.quests().items() if v['status'] == 'active' and v.get('act') == 2}.keys())
     if outcome == 'costed':
         r.travel('granary_row')
         if costing == 'whole':
@@ -288,6 +296,8 @@ def play(client, outcome, vote=None, costing='whole', figure='circulated', minut
         r.travel('number_nine'); r.talk('minna_crale', 'Send it round' if figure == 'circulated' else 'Let it be read first')
         ok(f'{label}: the figure is {figure}', r.flags().get('costing_figure') == figure)
         ok(f'{label}: Minna does not call the finished count commissioned', not r.said('minna_crale', 'is commissioned'))
+        mark = len(r.lines); r.open('hollin_sare')
+        ok(f'{label}: nor the chair call it in hand', r.said('hollin_sare', 'count is on the table', mark), str(r.lines[mark:])[:200])
     elif outcome == 'minuted':
         r.travel('record_office'); r.talk('dorcas_fenn', 'Read it.', 'Copy it out' if minute == 'copied' else 'Leave it on the shelf')
         ok(f'{label}: the Bound Minute', r.qstatus('the_bound_minute') == ('completed', minute) and r.flags().get('minute_fate') == minute,
@@ -368,6 +378,12 @@ def play(client, outcome, vote=None, costing='whole', figure='circulated', minut
         ok(f'{label}: Tull no longer offers first light', not r.said('osgar_tull', "whether you're on the step", mark))
         stale = {'costed': 'carry the costing up', 'minuted': 'Word for word, Moss says', 'subscribed': 'owner aboard', 'walked': 'dropped his pen'}[outcome]
         ok(f'{label}: Tull\'s meeting line does not come after the sheet', not r.said('osgar_tull', stale, mark))
+        # Brackwater after the sitting: the chair and the secretary were in the room and say nothing of it.
+        mark = len(r.lines)
+        r.travel('number_nine'); r.open('hollin_sare'); r.open('minna_crale')
+        ok(f'{label}: the chair keeps the minute after the sitting', r.said('hollin_sare', 'with Mrs Crale for the fair copy', mark)
+           and not any(r.said('hollin_sare', x, mark) for x in ('costing is in hand', 'Next quarter, then')), str(r.lines[mark:])[:300])
+        ok(f'{label}: and so does the secretary', r.said('minna_crale', 'not a line before', mark), str(r.lines[mark:])[:300])
         ok(f'{label}: the minute is not delivered', not any(k.startswith('minute_read') or k == 'vote_result' for k in r.flags()))
     # Every face drawn on the way has a picture: the bust, or the sprite the client falls back to.
     blank = [n for n, bust, img in r.faces
@@ -378,6 +394,16 @@ def play(client, outcome, vote=None, costing='whole', figure='circulated', minut
             for n, t in r.lines:
                 if t:
                     f.write(f'[{n}] {t}\n\n')
+    if os.environ.get('AFTER_VISIT') and vote != 'aboard':
+        for loc in os.environ['AFTER_VISIT'].split(','):
+            if not r.travel(loc): continue
+            for n in r.here().get('npcs', []):
+                node = r.open(n['npc_key'])
+                print(f"   [{loc}/{n['npc_key']}] {(node.get('text') or '')[:260]}")
+                for a2 in node.get('interjections') or []: print(f"      ({a2.get('companion')}) {a2.get('text','')[:200]}")
+                for _ in range(3):
+                    if not node or not node.get('choices'): break
+                    node = r.choose(n['npc_key'], node, node['choices'][-1]['label'])
     left = [k for k, q in r.quests().items() if q['status'] == 'active' and q.get('act') == 2]
     ok(f'{label}: no Act II quest left hanging', not left, str(left))
     ok(f'{label}: no blockers on the way', not r.problems, '\n         '.join(r.problems))

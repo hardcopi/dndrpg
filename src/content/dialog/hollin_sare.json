@@ -210,6 +210,25 @@
             {
                 "conditions": [
                     {
+                        "flag": "room_sat"
+                    },
+                    {
+                        "not": {
+                            "flag": "vote_aboard"
+                        }
+                    }
+                ],
+                "text": "Hollin Sare is at the long table with the quarter's papers squared in front of him and his hands folded on top of them. \"The room has sat,\" he says. \"What it did is in the minute, and the minute is with Mrs Crale for the fair copy. I would not give it you a line at a time across a table.\" He inclines his head. \"It goes up the river when it is paper.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "meeting_fate",
                         "equals": "subscribed"
                     }
@@ -231,9 +250,34 @@
                     {
                         "flag": "meeting_fate",
                         "equals": "costed"
+                    },
+                    {
+                        "not": {
+                            "quest": "the_costing",
+                            "status": "completed"
+                        }
                     }
                 ],
                 "text": "\"The costing is in hand,\" Hollin Sare says, with something like approval. \"Carts, roofs, a year's bread, the burying ground. It is going to be a large figure. Mrs Crale thinks you meant it to be.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "costed"
+                    },
+                    {
+                        "quest": "the_costing",
+                        "status": "completed"
+                    }
+                ],
+                "text": "\"Mrs Amsel's count is on the table,\" Hollin Sare says, and lays a hand flat on it. \"Every line under its head. It is read at the head of the agenda on the quarter-day, before anything else is taken.\"",
                 "choices": [
                     {
                         "label": "Leave.",
