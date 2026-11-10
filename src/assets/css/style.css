@@ -5132,6 +5132,43 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
    the spacing scale. */
 .dlg-line { padding-right: 4.25rem; }
 
+/* On a phone, and placed after the rule above on purpose: the phone block
+   further up already said `.dlg-line { padding-right: 0 }`, and this file's
+   later desk rule outranked it, so every line on a phone stopped 68px short
+   of the edge for a button that is not beside it there.
+ *
+ * Two more things a long speech on a phone showed. Esc was absolute in a
+ * panel that scrolls, so it scrolled away with the first lines and left no
+ * way out but the replies. And the sticky speaker row stuck at the panel's
+ * padding edge, leaving a 12px strip where scrolled prose showed above the
+ * name. Esc now shares the speaker's grid cell and sticks with it, and the
+ * speaker row reaches up over the padding. */
+@media (max-width: 760px) {
+  .dlg-line { padding-right: 0; }
+  .dlg-speaker {
+    grid-row: 1;
+    grid-column: 1;
+    top: calc(-1 * var(--sp-12));
+    margin-top: calc(-1 * var(--sp-12));
+    padding-top: calc(var(--sp-2) + var(--sp-12));
+  }
+  .dlg-script { grid-row: 2; grid-column: 1; }
+  /* The camp panel lifts its children over the painting with
+     position: relative and one shared z-index, which would unstick both of
+     these and let the script, later in the source, paint over the name. */
+  .dlg-panel.is-camp > .dlg-speaker { position: sticky; z-index: 2; }
+  .dlg-panel.is-camp > .dlg-close { position: sticky; z-index: 3; }
+  .dlg-close {
+    position: sticky;
+    top: var(--sp-2);
+    grid-row: 1;
+    grid-column: 1;
+    justify-self: end;
+    align-self: start;
+    z-index: 3;
+  }
+}
+
 /* ====================================================================
    The d20 ceremony
    ==================================================================== */
