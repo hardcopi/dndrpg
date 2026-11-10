@@ -112,6 +112,26 @@
             {
                 "conditions": [
                     {
+                        "flag": "room_sat"
+                    },
+                    {
+                        "not": {
+                            "flag": "vote_aboard"
+                        }
+                    }
+                ],
+                "text": "\"The crane hasn't stopped,\" Petch says, pointing her tally board at it as if you might have missed it. \"Nobody's told me to stop it. Nobody tells a landing clerk to stop anything for a sheet.\" She lowers her voice to a whisper that carries the length of the quay. \"I'm still not to have an opinion.\"",
+                "choices": [
+                    {
+                        "label": "Nothing. Sorry.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "concern_answering"
                     }
                 ],

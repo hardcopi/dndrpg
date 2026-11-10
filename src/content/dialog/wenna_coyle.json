@@ -305,6 +305,21 @@
             {
                 "conditions": [
                     {
+                        "flag": "order_fate"
+                    }
+                ],
+                "text": "\"Second bell,\" Mrs Coyle says. \"The canteen stopped eating.\" She turns the day book round to show you the line: the time, and *a reading*, and nothing else. \"I write what happens on the board. That happened.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "room_sat"
                     },
                     {

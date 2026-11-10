@@ -6,6 +6,26 @@
             {
                 "conditions": [
                     {
+                        "flag": "room_sat"
+                    },
+                    {
+                        "not": {
+                            "flag": "vote_aboard"
+                        }
+                    }
+                ],
+                "text": "\"The sheet came to me as well,\" Corse says. \"Same four lines, same hand. I am a factor; I am told what the town is told, on the same boat.\" He squares it on the blotter. \"I will not pretend to you that I know what is in the minute. I would be guessing, and I make a point of not guessing in front of people who will remember what I guessed.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "costing_figure",
                         "equals": "circulated"
                     }

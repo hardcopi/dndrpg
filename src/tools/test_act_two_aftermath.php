@@ -872,6 +872,40 @@ try {
     }
     $p = party($db, $base + ['knows_corse_name' => 1, 'met_corse' => 1]); ended($db, $p, 'costed');
     ok('Pyke does not wonder about a man you have met', !$seek($p, 'alder_pyke', 'for his paper'));
+    echo "== in its order ==\n";
+    $sat = $base + ['vote_fate' => 'against', 'quarter_eve' => 1, 'packet_gone' => 1, 'days_waited' => 1, 'room_sat' => 1];
+    $p = party($db, $base + ['vote_fate' => 'against', 'packet_gone' => 1]); ended($db, $p, 'subscribed');
+    ok('Dale does not ask before the sheet', !$seek($p, 'corrin_dale', 'come up the river'));
+    $runs = [];
+    foreach (['Read it word for word' => ['read', 'Again', 'aldric'], 'Tell them what you think' => ['guessed', 'your voice on it', 'sera'], "minute's not here yet" => ['not_yet', 'honest one', 'sera']] as $label => [$fate, $nd, $c]) {
+        $p = party($db, $sat); ended($db, $p, 'subscribed');
+        $cs = new CompanionService($db); $cs->meet($p, $c); $cs->recruit($p, $c);
+        ok("Dale asks for the sheet ($fate)", $seek($p, 'corrin_dale', 'come up the river'));
+        talk($db, $p, 'corrin_dale', ['bring a copy']);
+        ok("started ($fate)", qstatus($db, $p, 'in_its_order') === 'active');
+        ok("Ashe copies it ($fate)", str_contains(greet($db, $p, 'tibald_ashe'), 'best hand'));
+        talk($db, $p, 'tibald_ashe', ['Take it down']);
+        ok("the canteen stops eating ($fate)", str_contains(greet($db, $p, 'corrin_dale'), 'sixty men have stopped eating'));
+        $n = talk($db, $p, 'corrin_dale', [$label]);
+        $t = (string) ($n['text'] ?? ''); $ij = implode(' ', array_map(fn ($i) => $i['text'], $n['interjections'] ?? []));
+        ok("$fate: $nd", str_contains($t, $nd), substr($t, 0, 100));
+        ok("$fate: a companion says so", $ij !== '', $ij);
+        ok("$fate: done, vote untouched", flag($db, $p, 'order_fate') === $fate && qstatus($db, $p, 'in_its_order') === 'completed' && flag($db, $p, 'vote_fate') === 'against');
+        foreach (['carried', 'passed', 'defeated', 'majority', 'in favour', 'rejected', 'adopted'] as $w) if (stripos($t, $w) !== false) ok("no outcome in the canteen ($w)", false);
+        $runs[$fate] = $p;
+    }
+    ok('Rourke hears the guess', $seek($runs['guessed'], 'bael_rourke', 'your voice'));
+    ok('Rourke hears the words', $seek($runs['read'], 'bael_rourke', 'down the shaft'));
+    ok('Coyle writes it in', $seek($runs['not_yet'], 'wenna_coyle', 'a reading'));
+    $p = party($db, $sat); ended($db, $p, 'subscribed');
+    talk($db, $p, 'corrin_dale', []); $seek($p, 'corrin_dale', 'come up the river'); talk($db, $p, 'corrin_dale', ['Not today']);
+    ok('the offer waits if you say not today', $seek($p, 'corrin_dale', 'come up the river'));
+    foreach ([['ludo_corse', 'same boat'], ['gillian_petch', "crane hasn't stopped"], ['gest_pyle', "minute's come"]] as [$npc, $nd]) {
+        $p = party($db, $sat); ended($db, $p, 'subscribed');
+        ok("after the sheet: $npc", $seek($p, $npc, $nd));
+        $n = (new DialogEngine($db))->node($p, $npc); talk($db, $p, $npc, [(string) end($n['choices'])['label']]);
+        ok("once: $npc", !$seek($p, $npc, $nd));
+    }
 } catch (Throwable $e) {
     ok('played without a dead end', false, $e->getMessage());
 } finally {

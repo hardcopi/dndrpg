@@ -349,6 +349,38 @@
             {
                 "conditions": [
                     {
+                        "flag": "order_fate",
+                        "equals": "guessed"
+                    }
+                ],
+                "text": "\"Somebody's been telling my men what the room did,\" Rourke says, not looking round. \"Nobody knows what the room did. It's in a minute in Brackwater.\" He makes a mark on the tally. \"Number four's slower. They've decided something, down there, and it's your voice they're quoting.\"",
+                "choices": [
+                    {
+                        "label": "Wrong hut. Sorry.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "order_fate",
+                        "equals": "read"
+                    }
+                ],
+                "text": "\"'Taken in its order,'\" Rourke says. \"They're saying it down the shaft. Saying it to the pumps.\" He almost smiles. \"Four words. Nobody knows what they mean. It's the most anybody's talked down there in a year.\"",
+                "choices": [
+                    {
+                        "label": "Wrong hut. Sorry.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "quest": "the_overseers_office",
                         "status": "active"
                     }
