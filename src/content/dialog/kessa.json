@@ -10,6 +10,38 @@
                         "status": "active"
                     },
                     {
+                        "flag": "uncounted_fate",
+                        "equals": "read"
+                    }
+                ],
+                "text": "\"You read the names that weren't names,\" Kessa says. \"Tom Peg. John Stair.\" She is not laughing. \"I gave a wrong name once, signing for something. If I'd died on it, that's what they'd have read out.\" A shrug. \"Good. Somebody should read it.\"",
+                "once": true,
+                "choices": [
+                    {
+                        "label": "Tell me about the debt.",
+                        "next": "the_debt_talk"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit down a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "kessa",
+                        "status": "active"
+                    },
+                    {
                         "flag": "walked_fate",
                         "equals": "withdrawn"
                     }

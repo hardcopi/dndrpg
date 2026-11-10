@@ -10,6 +10,47 @@
                         "status": "active"
                     },
                     {
+                        "flag": "uncounted_fate",
+                        "equals": "entered"
+                    }
+                ],
+                "text": "Aldric has his hat off, and puts it back on when he sees you looking. \"The Deepworks. Dead,\" he says. \"She wrote it at the head of the page like a parish.\" He is quiet. \"I have buried men with less said over them than that. It is not a funeral. It is a great deal more than they had.\"",
+                "once": true,
+                "choices": [
+                    {
+                        "label": "Patch us up.",
+                        "effects": [
+                            {
+                                "heal": 8
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "What order were you in?",
+                        "next": "the_order"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit down a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "aldric",
+                        "status": "active"
+                    },
+                    {
                         "flag": "minute_fate",
                         "equals": "copied"
                     }

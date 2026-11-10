@@ -6,6 +6,57 @@
             {
                 "conditions": [
                     {
+                        "quest": "the_uncounted",
+                        "stage": "the_book"
+                    }
+                ],
+                "text": "Coyle takes Tull's page without asking what it is and lays it beside the board book, edge to edge, as if they had been made to go together. She reads down both at once with a finger on each. It takes her nine minutes by the water clock and she does not speak once. \"Two hundred and twenty-three of his,\" she says at the end. \"Two hundred and four are on my board. Seven of mine came down by the warren side and were never on his boat. That's my two hundred and eleven.\" She lifts her finger. \"Nineteen of his are struck.\"",
+                "choices": [
+                    {
+                        "label": "Struck?",
+                        "next": "uncounted_struck"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "uncounted_fate",
+                        "equals": "read"
+                    }
+                ],
+                "once": true,
+                "text": "\"Second bell, the ninth,\" Coyle says, and turns the day book so you can see where she wrote it. \"Names read in canteen, fifteen, by a visitor. Nobody left the benches.\" She turns it back. \"I didn't know where to enter it. I made a column.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "uncounted_fate",
+                        "equals": "entered"
+                    }
+                ],
+                "once": true,
+                "text": "\"The Record Office,\" Coyle says. \"Good. That's the right column.\" She writes the time. \"Mine says struck. Theirs can say the other thing.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "meeting_fate",
                         "equals": "costed"
                     },
@@ -717,6 +768,71 @@
                 "choices": [
                     {
                         "label": "Go.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "uncounted_struck": [
+            {
+                "text": "\"Struck off the board,\" Coyle says. \"Four of the nineteen walked up the stair and never came back down. Two of those four are dead since, I'm told, of ordinary things, and that's not my column.\" She turns to the back of the day book, where the pages are ruled differently. \"Fifteen are incidents. Falls of roof, six. Water, four, the first winter, before the pumps. Fever, three. The stair, two. Each one dated, with the face and the peg. Each one paid to the day.\" She looks up. \"The house is very good about paying to the day.\"",
+                "choices": [
+                    {
+                        "label": "And then?",
+                        "next": "uncounted_carried"
+                    }
+                ]
+            }
+        ],
+        "uncounted_carried": [
+            {
+                "text": "\"Carried out,\" Coyle says. \"That's the last word in every line. Up the stair.\" She closes the book on her finger. \"Past the top tread it isn't the works and it isn't my column. I've never asked where. It's never once been put to me, and I'd have answered if it had.\" She dates the corner of Tull's page and hands it back. \"Nobody's ever laid the two side by side. It's not a trick. It's just that nobody had both.\"",
+                "choices": [
+                    {
+                        "label": "Read the fifteen out in the canteen. Peg and name.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_uncounted",
+                                    "stage": "read_out"
+                                }
+                            }
+                        ],
+                        "next": "uncounted_read"
+                    },
+                    {
+                        "label": "This goes to the Record Office, to be entered.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_uncounted",
+                                    "stage": "to_the_record"
+                                }
+                            }
+                        ],
+                        "end": true
+                    },
+                    {
+                        "label": "Fold it away. I'll keep the count.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_uncounted",
+                                    "stage": "kept"
+                                }
+                            }
+                        ],
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "uncounted_read": [
+            {
+                "text": "You read them at the second bell, standing by the copper, by peg and by the name each man gave on Tull's step. Some of the names are plainly not names. You read those too. Nobody stops eating, and nobody speaks over you, and at the end an old digger at the far trestle says \"Twelve,\" and somebody else says \"No, fifteen,\" and that is the whole of the argument.",
+                "choices": [
+                    {
+                        "label": "Leave.",
                         "end": true
                     }
                 ]
