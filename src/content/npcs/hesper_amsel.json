@@ -8,6 +8,25 @@
     "dialog": "hesper_amsel",
     "place": {
         "location": "granary_row",
-        "conditions": [{"flag": "clearance_costed"}]
+        "conditions": [
+            {
+                "flag": "clearance_costed"
+            },
+            {
+                "any": [
+                    {
+                        "not": {
+                            "flag": "packet_gone"
+                        }
+                    },
+                    {
+                        "not": {
+                            "flag": "costing_figure",
+                            "equals": "read_first"
+                        }
+                    }
+                ]
+            }
+        ]
     }
 }

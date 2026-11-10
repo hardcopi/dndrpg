@@ -177,6 +177,26 @@
             {
                 "conditions": [
                     {
+                        "flag": "packet_gone"
+                    },
+                    {
+                        "not": {
+                            "flag": "vote_aboard"
+                        }
+                    }
+                ],
+                "text": "Ashe has ruled a fresh page and written nothing on it. \"For whatever comes back up,\" he says. \"I don't know what heading to give it, so I have not given it one.\" He dips the pen, looks at the page, and puts the pen down again, which you have never seen him do.",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "concern_answering"
                     }
                 ],

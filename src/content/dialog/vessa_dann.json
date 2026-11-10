@@ -219,6 +219,21 @@
                 ]
             },
             {
+                "conditions": [
+                    {
+                        "flag": "pit_closed"
+                    }
+                ],
+                "text": "\"Nobody's bet a copper in this pit since you read that bond,\" Vessa says, without chalking anything. \"Forty people did the arithmetic and went home.\" The board is still off the wall. \"Somebody asked me last week who's champion. I hadn't a wall to write it on, and I found I didn't mind.\"",
+                "choices": [
+                    {
+                        "label": "I'll watch.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
                 "text": "A woman with a tally-board at the bottom of a twenty-foot cut, in the middle of forty or fifty people making the noise of three hundred. She looks you over, decides on a number, and does not tell you what it is.\n\n\"Vessa Dann,\" she says. \"I hold the board. You can watch for nothing and bet for anything and fight for what I say you're worth, and I'd think about which of those three you came down the ladder for.\"",
                 "on_enter": [
                     {

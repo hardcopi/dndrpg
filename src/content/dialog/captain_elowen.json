@@ -6,6 +6,30 @@
             {
                 "conditions": [
                     {
+                        "flag": "packet_gone"
+                    },
+                    {
+                        "flag": "vote_fate",
+                        "equals": "kept"
+                    },
+                    {
+                        "not": {
+                            "flag": "vote_aboard"
+                        }
+                    }
+                ],
+                "text": "\"You stayed,\" Reed says. She doesn't say it as a reproach; she says it as a fact she has written down. \"Your vote is still in your pocket, then, and the room's sitting without it.\" She signs a chit. \"That's a thing you're allowed to do. I'd have liked to know why, but you're allowed.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "costing_figure",
                         "equals": "circulated"
                     }

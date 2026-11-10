@@ -336,6 +336,26 @@
             {
                 "conditions": [
                     {
+                        "flag": "broken_floor_shored"
+                    },
+                    {
+                        "not": {
+                            "flag": "warlord_hall_taken"
+                        }
+                    }
+                ],
+                "text": "\"The gallery holds,\" Nakka says. \"Two days of our timber and our advice, and nothing has come up through it since.\" She raps the prop beside her with her knuckles, twice, the way her people do for luck. \"The rope is on our side of the hole. I check it every night. I have not had to pull it up yet.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "quest": "teeth_in_the_hills",
                         "status": "active"
                     }

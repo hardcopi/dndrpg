@@ -261,6 +261,21 @@
             {
                 "conditions": [
                     {
+                        "flag": "vote_aboard"
+                    }
+                ],
+                "once": true,
+                "text": "Minna Crale looks up from the small desk and, for once, does not look anywhere else first. \"You came down for it,\" she says. \"Your chair is kept. The room sits in the morning, at ten, and the costing of nothing has been circulated, and your name is on the list of members present in pencil until you sit.\" She caps the ink. \"I'll not ask how you mean to vote. Nobody will, before. That is the one courtesy the room has always kept.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "quest": "the_quarterly_meeting",
                         "status": "completed"
                     },

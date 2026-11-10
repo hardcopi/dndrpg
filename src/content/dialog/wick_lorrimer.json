@@ -272,6 +272,26 @@
                 ]
             },
             {
+                "conditions": [
+                    {
+                        "flag": "mill_pit_cleared"
+                    },
+                    {
+                        "not": {
+                            "flag": "wick_in_town"
+                        }
+                    }
+                ],
+                "text": "\"Pit's quiet,\" Wick says from the race, hooking out a weed. \"First time in four years the water down there is only water.\" He leans on the pole. \"I keep looking at it. You'd think a man would be glad, and I am, but mostly I keep looking.\"",
+                "choices": [
+                    {
+                        "label": "The road, then.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
                 "text": "There is a man in the wheel-pit, up to his knees in black water, working a weed-hook along a race that runs perfectly well past a building that has not needed it in four years.\n\n\"You'll want the road,\" he says. \"It's downstream.\"",
                 "on_enter": [
                     {

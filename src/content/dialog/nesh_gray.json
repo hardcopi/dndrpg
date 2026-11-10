@@ -175,6 +175,27 @@
                 ]
             },
             {
+                "conditions": [
+                    {
+                        "flag": "root_beds_cleared"
+                    },
+                    {
+                        "not": {
+                            "flag": "wardens_fate",
+                            "equals": "turned"
+                        }
+                    }
+                ],
+                "text": "\"Fourth bed's taking root again,\" Nesh Gray says, which from her is gratitude. \"Two seasons that thing sat in it the colour of the bed.\" She spits into the water. \"We'd stopped cutting the fourth. Nobody said why. Now somebody's said, and we cut it.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
                 "text": "Six platforms on piles, a stack of new faggot bundles taller than the camp could ever use, and about a dozen people looking down at you off plank walks that can all be pulled up in four seconds.\n\n\"You'll want to say what you are,\" the woman at the rail says, \"while everyone's still holding the planks down.\"",
                 "on_enter": [
                     {
