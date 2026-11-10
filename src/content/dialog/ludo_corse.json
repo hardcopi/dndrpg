@@ -6,6 +6,86 @@
             {
                 "conditions": [
                     {
+                        "flag": "costing_fate",
+                        "equals": "whole"
+                    }
+                ],
+                "text": "\"Mrs Amsel came through this office on her way up,\" Corse says, \"and her count came back through it on the packet. The meeting sent its own assessor to count, and I am to cost what she counts.\" He lays a hand on a thick folder. \"Six heads. I have costed all six. It is the largest figure I have ever sent downriver, and the first I have sent without a recommendation. I could not think of one that was true.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "costing_fate",
+                        "equals": "given"
+                    }
+                ],
+                "text": "\"Five heads, nine days,\" Corse says. \"Mrs Amsel counts like a surveyor and I have costed every line she sent.\" He squares the folder. \"It is a large number. It is not as large as the thing it describes. I have said so in the covering letter, which nobody is obliged to read.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "vote_fate",
+                        "equals": "against"
+                    }
+                ],
+                "text": "\"Your vote is lodged, I'm told,\" Corse says. \"Against.\" He does not say what he thinks of it. \"On the quarter-day I shall be instructed by the room, as always, and one twelfth of the room has already spoken. I wanted you to know I had read it.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "vote_fate",
+                        "equals": "kept"
+                    }
+                ],
+                "text": "\"You are keeping your vote for the day,\" Corse says. \"Sensible. It is the only power that chair has, and you have not yet spent it.\" He pours two glasses and does not drink his.",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "vote_fate",
+                        "equals": "proxy"
+                    }
+                ],
+                "text": "\"Captain Reed,\" Corse says. \"I have met her twice. She did not like me either time, and said so, and was right to.\" He looks out at the crane. \"She will be in the room I have never been in. I find I hope she wears the good coat.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "clearance_costed"
                     }
                 ],
