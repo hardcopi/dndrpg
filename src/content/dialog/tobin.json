@@ -6,6 +6,31 @@
             {
                 "conditions": [
                     {
+                        "flag": "room_sat"
+                    },
+                    {
+                        "flag": "consignment_fate",
+                        "equals": "kept"
+                    },
+                    {
+                        "not": {
+                            "flag": "town_standing",
+                            "equals": "fallen"
+                        }
+                    }
+                ],
+                "text": "\"My name's in that quay book,\" Tobin says. \"Since the room sat, every carter who comes up the stair reads down the page and stops at it. Not accusing. Just stopping.\" He sets a mace-head straight. \"A history. I did say.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "meeting_fate",
                         "equals": "costed"
                     },

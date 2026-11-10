@@ -6,6 +6,63 @@
             {
                 "conditions": [
                     {
+                        "flag": "room_sat"
+                    },
+                    {
+                        "flag": "almoner_list_fate",
+                        "equals": "fed"
+                    }
+                ],
+                "text": "\"The box is still fuller than it's been,\" Wyke says. \"They tell me the room sat. Eighty-one people asked me this morning what that means for the spring, and I told them what I always tell them about the spring: it comes.\" He turns a page. \"Your name's still in the front.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "room_sat"
+                    },
+                    {
+                        "flag": "almoner_list_fate",
+                        "equals": "recorded"
+                    }
+                ],
+                "text": "\"Thirty-six names in Reed's day book,\" Wyke says, \"dated before the room sat. Whatever it did in there, they were written down first.\" He closes his own book on a finger. \"That's the whole of what I've got, and I find I'm holding on to it.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "room_sat"
+                    },
+                    {
+                        "flag": "almoner_list_fate",
+                        "equals": "work"
+                    }
+                ],
+                "text": "\"Twenty-two of them on wages,\" Wyke says. \"They asked me if the room sitting changes the wages. I said I didn't know. They went to work anyway.\" He considers that. \"That's what wages are for, I suppose. You go whether you know or not.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "costing_fate",
                         "equals": "whole"
                     }

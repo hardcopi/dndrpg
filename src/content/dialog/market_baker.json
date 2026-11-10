@@ -6,6 +6,44 @@
             {
                 "conditions": [
                     {
+                        "flag": "room_sat"
+                    },
+                    {
+                        "flag": "short_measure_fate",
+                        "equals": "carter"
+                    }
+                ],
+                "text": "\"Board's still not chalked,\" Nell Quist says. \"Room sat, they tell me. I thought about chalking that.\" She knocks flour off her hands. \"Then I thought, what would I put next to it.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "room_sat"
+                    },
+                    {
+                        "flag": "short_measure_fate",
+                        "equals": "stone"
+                    }
+                ],
+                "text": "\"New stone, and the sacks come right,\" Nell says. \"So when they tell me the room's sat, I ask how much it weighed.\" Nobody at the stall laughs. Nell does. \"Somebody has to weigh something properly in this town.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "meeting_fate",
                         "equals": "costed"
                     },
