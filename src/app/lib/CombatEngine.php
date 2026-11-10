@@ -3261,6 +3261,11 @@ class CombatEngine
         $damaged = $this->featDamageRoll($state, $actorCid, $weapon, $crit);
         $state = $damaged['state'];
         $dmg = $damaged['roll'];
+        // The weapon's own dice, as rolled (feat rerolls included), for the
+        // board's dice tray. Taken before Savage Attacks, Sneak Attack and the
+        // rest add theirs, because those can be a different die and `rolls`
+        // does not say which is which. Display only; nothing reads it back.
+        $weaponDice = ['sides' => self::dieSides((string) $weapon['damage']), 'rolls' => array_map('intval', $dmg['rolls'])];
 
         // Savage Attacks: one more weapon die on a melee critical, into the
         // dice rather than the total for the same resistance reasoning as
@@ -3423,6 +3428,7 @@ class CombatEngine
             'damage_type' => $weapon['damage_type'], 'mode' => $mode,
             'target_hp' => max(0, (int) $target['hp'] - $amount),
             'target_max_hp' => (int) $target['max_hp'],
+            'damage_dice' => $weaponDice,
         ] + $geometry);
 
         // The crit travels with the blow: striking somebody who is already down
