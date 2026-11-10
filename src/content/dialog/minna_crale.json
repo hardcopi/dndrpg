@@ -377,6 +377,12 @@
                     {
                         "flag": "meeting_fate",
                         "equals": "costed"
+                    },
+                    {
+                        "not": {
+                            "quest": "the_costing",
+                            "status": "completed"
+                        }
                     }
                 ],
                 "once": true,
@@ -1132,7 +1138,7 @@
         ],
         "figure_circulated": [
             {
-                "text": "\"Eleven fair copies,\" Minna says, and takes out the paper for them there and then. \"They'll go by the morning post to the chairs at their own tables, with a covering line in my hand: for reading before the quarter-day.\" She writes the line once to see it. \"Nobody will be able to say in that room that they are hearing it for the first time.\"",
+                "text": "\"Eleven fair copies,\" Minna says, and takes out the paper for them there and then, \"and a twelfth for the town, for information.\" She writes as she talks. \"The chairs' go by the morning post to their own tables, with a covering line in my hand: for reading before the quarter-day.\" She writes the line once to see it. \"Nobody will be able to say in that room that they are hearing it for the first time.\"",
                 "choices": [
                     {
                         "label": "Leave.",

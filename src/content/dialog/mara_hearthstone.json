@@ -451,6 +451,9 @@
                         "effects": [
                             {
                                 "set_flag": "days_waited"
+                            },
+                            {
+                                "set_flag": "days_waited"
                             }
                         ]
                     }
@@ -2871,7 +2874,7 @@
                         "equals": "kept"
                     }
                 ],
-                "text": "Three people in the course of the evening ask you how you'll vote tomorrow. You tell none of them. The third buys you a drink for not telling, which you had not expected, and says he'd have done the same, which you doubt.",
+                "text": "Three people in the course of the evening ask you how you'll vote on the quarter-day. You tell none of them. The third buys you a drink for not telling, which you had not expected, and says he'd have done the same, which you doubt.",
                 "choices": [
                     {
                         "label": "Go on.",
@@ -2964,7 +2967,7 @@
                         "equals": "stands"
                     }
                 ],
-                "text": "Somebody has heard that your name will be read out tomorrow, in pencil, to an empty chair. The table by the window raises a cup to the chair. Then, because it is that kind of table, it raises another to the pencil.",
+                "text": "Somebody has heard that your name will be read out on the quarter-day, in pencil, to an empty chair. The table by the window raises a cup to the chair. Then, because it is that kind of table, it raises another to the pencil.",
                 "choices": [
                     {
                         "label": "Go on.",
@@ -2986,7 +2989,7 @@
                         "equals": "reasons"
                     }
                 ],
-                "text": "Your letter will be read aloud in the room tomorrow. Mara asks you to say it to her first, the way you wrote it. You do. She says nothing for a while, and then she says, \"Good,\" and then, \"They'll hate the bit about the warm room,\" and goes to see to the fire.",
+                "text": "Your letter will be read aloud in the room on the quarter-day. Mara asks you to say it to her first, the way you wrote it. You do. She says nothing for a while, and then she says, \"Good,\" and then, \"They'll hate the bit about the warm room,\" and goes to see to the fire.",
                 "choices": [
                     {
                         "label": "Go on.",

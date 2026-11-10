@@ -498,58 +498,6 @@
                 "conditions": [
                     {
                         "flag": "meeting_fate",
-                        "equals": "minuted"
-                    }
-                ],
-                "once": true,
-                "text": "\"Your objection,\" Dorcas Fenn says, coming down two rungs. \"It'll be bound with the quarter's minutes and come to me at the quarter's end. I've kept a space on the shelf.\" She taps it. \"Anybody may read it. That's what it's for. Mostly nobody does, which is not what it's for.\"",
-                "choices": [
-                    {
-                        "label": "I'm after a Greyhythe sale. An armourer's stock. The Fenmoor lot.",
-                        "conditions": [
-                            {
-                                "flag": "mark_seen_plate"
-                            },
-                            {
-                                "not": {
-                                    "quest": "the_fenmoor_lot",
-                                    "status": "active"
-                                }
-                            },
-                            {
-                                "not": {
-                                    "quest": "the_fenmoor_lot",
-                                    "status": "completed"
-                                }
-                            }
-                        ],
-                        "effects": [
-                            {
-                                "start_quest": "the_fenmoor_lot"
-                            },
-                            {
-                                "quest_stage": {
-                                    "quest": "the_fenmoor_lot",
-                                    "stage": "lot_forty_one"
-                                }
-                            }
-                        ],
-                        "next": "fenmoor_return"
-                    },
-                    {
-                        "label": "Anything?",
-                        "next": "read_anything"
-                    },
-                    {
-                        "label": "Leave.",
-                        "end": true
-                    }
-                ]
-            },
-            {
-                "conditions": [
-                    {
-                        "flag": "meeting_fate",
                         "equals": "subscribed"
                     }
                 ],
@@ -663,6 +611,62 @@
                     {
                         "label": "Leave.",
                         "end": true
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "minuted"
+                    },
+                    {
+                        "quest": "the_bound_minute",
+                        "status": "completed"
+                    }
+                ],
+                "once": true,
+                "text": "\"Your objection,\" Dorcas Fenn says, coming down two rungs. \"Bound with the quarter's minutes, in the space I kept on the shelf.\" She taps it. \"Anybody may read it. That's what it's for. Mostly nobody does, which is not what it's for.\"",
+                "choices": [
+                    {
+                        "label": "I'm after a Greyhythe sale. An armourer's stock. The Fenmoor lot.",
+                        "conditions": [
+                            {
+                                "flag": "mark_seen_plate"
+                            },
+                            {
+                                "not": {
+                                    "quest": "the_fenmoor_lot",
+                                    "status": "active"
+                                }
+                            },
+                            {
+                                "not": {
+                                    "quest": "the_fenmoor_lot",
+                                    "status": "completed"
+                                }
+                            }
+                        ],
+                        "effects": [
+                            {
+                                "start_quest": "the_fenmoor_lot"
+                            },
+                            {
+                                "quest_stage": {
+                                    "quest": "the_fenmoor_lot",
+                                    "stage": "lot_forty_one"
+                                }
+                            }
+                        ],
+                        "next": "fenmoor_return"
+                    },
+                    {
+                        "label": "Anything?",
+                        "next": "read_anything"
                     },
                     {
                         "label": "Leave.",
