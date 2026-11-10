@@ -1571,7 +1571,7 @@
   function bagHtml(inventory) {
     const pad = Math.max(BAG_MIN_SLOTS - inventory.length,
       (6 - (inventory.length % 6)) % 6);
-    return `<div class="bag-grid" role="list">
+    return `<div class="bag-grid" role="group" aria-label="Bag">
         ${inventory.map(bagTile).join('')}
         ${Array.from({ length: Math.max(0, pad) },
           () => '<span class="bag-slot is-empty" aria-hidden="true"></span>').join('')}

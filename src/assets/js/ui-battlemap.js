@@ -332,8 +332,10 @@
     }
     const deck = mode !== 'flat' ? deal(state, o, grid, turned) : null;
 
+    // role="group", not "img": an img's children are presentational, which
+    // took every combatant's role="button" out of the accessibility tree.
     const svg = `<svg class="battlemap" viewBox="0 0 ${W} ${H}"
-                 role="img" aria-label="The battlefield">
+                 role="group" aria-label="The battlefield">
       <defs>
         <clipPath id="bm-round"><circle cx="0" cy="0" r="0.34"/></clipPath>
         <pattern id="bm-hatch" width="0.5" height="0.5" patternUnits="userSpaceOnUse"

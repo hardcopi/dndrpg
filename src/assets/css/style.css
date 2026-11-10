@@ -50,7 +50,7 @@ a:hover { text-decoration: underline; }
    not get at all (WCAG 1.4.1; axe flagged the home, about and tour pages).
    Only bare links inside running text — buttons, chips and the site bar all
    carry a class or sit outside a p/li, and keep the hover-only underline. */
-:is(p, li) > a:not([class]) {
+:is(p, li, .footer-legal) > a:not([class]) {
   text-decoration: underline;
   text-decoration-thickness: from-font;
   text-underline-offset: 0.15em;
@@ -3185,7 +3185,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .wiz-reason {
   margin: 0;
   font-size: var(--fs-xs);
-  color: var(--gold-dim);
+  color: var(--gold-ink);   /* was --gold-dim (3.8:1), a mark and never text */
   text-align: right;
 }
 .field-note { margin: var(--sp-4) 0 var(--sp-10); font-size: var(--fs-xs); min-height: 1.1em; color: var(--text-dim); }
@@ -6610,7 +6610,7 @@ body.bm-pan-ready .battlemap { cursor: grab; }
 /* Legality, shown rather than discovered: melee reaches the opposing front
    rank only, until nobody is left standing in it. */
 .cbt-card.in-reach { border-color: var(--danger); }
-.cbt-card.behind-line { opacity: 0.72; border-style: dashed; }
+.cbt-card.behind-line { opacity: 0.8; border-style: dashed; }   /* 0.72 left its HP line at 4.2:1 */
 
 /* The one you have picked — what Attack will hit.
  *

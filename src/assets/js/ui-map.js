@@ -481,11 +481,14 @@
     // controls() is handed a root and nothing else — it has never seen the map
     // object — and how far a floor plan should open is a question about the
     // grid, not about the chart's dimensions.
+    // role="group" rather than "img" (as on the battle map): an img's
+    // children are presentational, so every role="button" place on the chart
+    // was missing from the accessibility tree.
     const pitch = ruling && ruling.dx > 0.01 ? ` data-plan-pitch="${round3(Math.min(ruling.dx, ruling.dy))}"` : '';
 
     return `<svg class="${cls}"${pitch}
                  viewBox="${-PAD_X} ${-PAD_TOP} ${VIEW_W + PAD_X * 2} ${VIEW_H + PAD_TOP + PAD_BOTTOM}"
-                 role="img" aria-label="Map of ${esc(map.name)}">
+                 role="group" aria-label="Map of ${esc(map.name)}">
       <defs>
         <filter id="wm-ink" x="-20%" y="-20%" width="140%" height="140%">
           <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7"/>
