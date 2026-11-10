@@ -325,6 +325,21 @@
             {
                 "conditions": [
                     {
+                        "flag": "stilt_camp_taken"
+                    }
+                ],
+                "text": "\"Gray's people came in by the back way for the first time in years,\" Osric says, \"to sell, and wouldn't stay to be paid.\" He weighs the root. \"They'd heard who came across their planks and won. They didn't say it to me. They said it to the scale.\"",
+                "choices": [
+                    {
+                        "label": "Another time.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "fen_road_open_paid"
                     }
                 ],

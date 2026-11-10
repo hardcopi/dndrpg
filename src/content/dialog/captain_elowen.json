@@ -200,6 +200,21 @@
             {
                 "conditions": [
                     {
+                        "flag": "stilt_camp_lost"
+                    }
+                ],
+                "text": "\"The fen camp pulled the planks on you,\" Reed says, not unkindly. \"Six platforms and four seconds. That's why I'd take boats.\" She signs a chit. \"Nobody's ever taken that camp by walking at it. I'd have told you if you'd asked.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "survey_fate",
                         "equals": "took"
                     }

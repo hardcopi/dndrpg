@@ -167,6 +167,25 @@
             {
                 "conditions": [
                     {
+                        "flag": "rivermark_mustering"
+                    }
+                ],
+                "text": "\"Eleven names on the Flagon door,\" Ballow says, eyes on the road. \"Muster list. I read it every morning on the way up.\" He adjusts his collar. \"I'm not on it. I'm the watch; I'm already counted. But I read it.\"",
+                "choices": [
+                    {
+                        "label": "Quiet posting.",
+                        "end": true
+                    },
+                    {
+                        "label": "Thanks.",
+                        "end": true
+                    }
+                ],
+                "once": true
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "watch_knows"
                     }
                 ],

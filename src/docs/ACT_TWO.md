@@ -292,7 +292,7 @@ end and names nobody.
 - **Quarter-day eve** (Mara, the Flagon). This needs the meeting to be over and
   at least one thing set up: a vote, a minute, an item-seven choice, a
   circulated or held figure, the Uncounted read or entered, or the cartulary
-  deposited. Mara sits the party down. Three beats then pick the first match:
+  deposited. Mara sits the party down on the night before the last packet that makes the quarter-day (four days down). Three beats then pick the first match:
   the outcome (the AGAINST — 1 / OF 12 / SO FAR slate, Reed in the good coat,
   the reader-list under the door copy, a cup raised to the pencil, Reed's
   twelfth copy open at the bread, Hesper's shut book like a coffin in the next
@@ -310,6 +310,29 @@ end and names nobody.
   (`fen_trade_on_paper`), the beds drying (`fen_draining`), root by the
   causeway "without a story" (`fen_road_open_paid`). Ashe: the common water
   right cannot be bought from one man (`mill_race_right_common`).
+- **Companions on the eve.** Once-only asides, matched to what was set up:
+  - Sera and Kessa on the AGAINST slate; Sera on a vote kept.
+  - Ilse and Sera on Reed going down with the proxy.
+  - Aldric on the door copy, the shelved minute, the reasons letter, the
+    Uncounted entered ("a parish") and the Arden lay brother.
+  - Kessa on the pencil and on a withdrawn item.
+  - Aldric and Sera on the circulated figure; Sera on the read-first figure.
+  - Ilse on the Uncounted read and on the stone argument.
+  - Each companion has one line at the stair.
+- **The packet at first light** (Tull, after `quarter_eve`). The last packet
+  that makes the quarter-day loads: Reed with the strongbox and proxy, the
+  lodged vote already carried, Hesper going down to hear it read, the reasons
+  letter riding on top, or the door copy pinned to the mast. Tull casts off
+  ("whatever they say down there, they have not said it yet") and sets
+  `packet_gone`. Companions have asides. A party keeping its vote for the day
+  doesn't get this scene, so the scene never decides whether they go.
+- **More of the valley is heard of.** The drover sleeps at the mill shelter
+  (`mill_is_shelter`). Ballow reads the Flagon muster list every morning
+  (`rivermark_mustering`). Gray's people come to Osric by the back way
+  (`stilt_camp_taken`). Reed: "Nobody's ever taken that camp by walking at it"
+  (`stilt_camp_lost`). `pool_dead_named` is skipped, as it would point at
+  where the dead lie. `sluice_wage_intercepted` is skipped, as it would point
+  at who pays.
 - **Companions place the mark.** Once Act II is open, Ilse (`mark_seen_stone`),
   Kessa (`mark_seen_paper`) and Sera (`mark_seen_book`) each have one greeting
   that recognises the mark they saw in Act I as the house's mark: the ledge cuts,
