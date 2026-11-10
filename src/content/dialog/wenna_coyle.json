@@ -279,6 +279,33 @@
                 "conditions": [
                     {
                         "flag": "concern_answering"
+                    },
+                    {
+                        "any": [
+                            {
+                                "flag": "uncounted_fate",
+                                "equals": "read"
+                            },
+                            {
+                                "flag": "uncounted_fate",
+                                "equals": "entered"
+                            }
+                        ]
+                    }
+                ],
+                "once": true,
+                "text": "\"I'm to send word if you come through the yard,\" Coyle says, and slides the form across: a space for the hour, a space for the purpose. Then she lays a second form beside it, the incident sheet, and puts her finger on a line at the bottom you have not seen before. Place of burial. \"That came down with the pegs on the fifth,\" she says. \"No letter with it. I'm to fill it in from now on.\" She does not look up. \"From now on. It doesn't say anything about the fifteen.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "concern_answering"
                     }
                 ],
                 "once": true,

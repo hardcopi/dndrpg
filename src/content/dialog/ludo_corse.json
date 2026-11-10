@@ -6,6 +6,38 @@
             {
                 "conditions": [
                     {
+                        "flag": "costing_figure",
+                        "equals": "circulated"
+                    }
+                ],
+                "once": true,
+                "text": "\"Mrs Crale sent my figure round to the chairs,\" Corse says. He has three letters on the desk, opened, squared. \"Three of them have written to me about it. To me.\" He touches the top one. \"Questions about the arithmetic. Good questions. Nobody at that table has ever written to me in nineteen years, and I find I don't know how to answer a question that isn't asking me to make a figure smaller.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "costing_figure",
+                        "equals": "read_first"
+                    }
+                ],
+                "once": true,
+                "text": "\"It will be read on the day, I hear,\" Corse says. \"Mrs Crale has a very clear reading voice. I have heard her read a revised figure of mine, once, through a door.\" He looks out at the crane. \"I hope she reads every line. There are a great many.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "costing_fate",
                         "equals": "whole"
                     }
@@ -394,6 +426,33 @@
                         "label": "What do you buy?",
                         "next": "what_i_buy"
                     },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "concern_answering"
+                    },
+                    {
+                        "any": [
+                            {
+                                "flag": "uncounted_fate",
+                                "equals": "read"
+                            },
+                            {
+                                "flag": "uncounted_fate",
+                                "equals": "entered"
+                            }
+                        ]
+                    }
+                ],
+                "once": true,
+                "text": "\"There is a letter about you,\" Corse says, and this time he turns it round. It is a list headed Conduct, in a clerk's hand, and the fourth item reads: A count of persons struck from the works' board, made public. \"It does not say the count is wrong,\" Corse says. \"I looked for that. It says unhelpful.\" He turns it back. \"I have been in this office nineteen years and I have never seen the house call a true figure unhelpful in writing. I would like you to understand that it is the closest thing to an admission you will ever get from them, and that it is not one.\"",
+                "choices": [
                     {
                         "label": "Leave.",
                         "end": true

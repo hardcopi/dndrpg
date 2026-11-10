@@ -225,6 +225,25 @@
                 "conditions": [
                     {
                         "flag": "concern_asking"
+                    },
+                    {
+                        "flag": "uncounted_fate",
+                        "equals": "read"
+                    }
+                ],
+                "once": true,
+                "text": "\"Somebody asked,\" Finch says. \"Down on the Tuesday boat, and wanted to know about a reading in a canteen. Fifteen names. Who read them, and whether anybody wrote them down while they were read.\" He closes the book. \"I said I collect, I do not attend. That was true. I did not say that I have since learned all fifteen by heart, which is also true.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "concern_asking"
                     }
                 ],
                 "once": true,
