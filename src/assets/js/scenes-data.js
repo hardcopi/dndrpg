@@ -1289,7 +1289,7 @@ window.RIVERMARK_SCENES = {
         "icon": "→"
       }
     },
-    "npcs": {},
+    "npcs": {"odger_vance": {"x": 30, "y": 68}, "wren_tallow": {"x": 68, "y": 66}},
     "objects": [
       {
         "label": "The communal fire",
@@ -1328,7 +1328,7 @@ window.RIVERMARK_SCENES = {
         "icon": "↓"
       }
     },
-    "npcs": {},
+    "npcs": {"marda_scole": {"x": 40, "y": 62}},
     "objects": [
       {
         "label": "The stove at the end",
@@ -1359,7 +1359,7 @@ window.RIVERMARK_SCENES = {
         "icon": "↩"
       }
     },
-    "npcs": {},
+    "npcs": {"dessa_kell": {"x": 25, "y": 52}},
     "objects": [
       {
         "label": "Fresh spoil",
@@ -1389,7 +1389,7 @@ window.RIVERMARK_SCENES = {
         "icon": "↩"
       }
     },
-    "npcs": {},
+    "npcs": {"orrin_bly": {"x": 65, "y": 70}},
     "objects": [
       {
         "label": "The lintel",
@@ -1437,7 +1437,7 @@ window.RIVERMARK_SCENES = {
         "icon": "→"
       }
     },
-    "npcs": {},
+    "npcs": {"hesta_orrow": {"x": 24, "y": 60}},
     "objects": [
       {
         "label": "The ox teams",
@@ -1571,7 +1571,7 @@ window.RIVERMARK_SCENES = {
         "icon": "→"
       }
     },
-    "npcs": {},
+    "npcs": {"hallow_carter": {"x": 74, "y": 64}},
     "objects": [
       {
         "label": "The rope stall",
@@ -1663,7 +1663,7 @@ window.RIVERMARK_SCENES = {
         "icon": "↓"
       }
     },
-    "npcs": {},
+    "npcs": {"oren_skeld": {"x": 26, "y": 50}},
     "objects": [
       {
         "label": "The duty board",
@@ -1740,7 +1740,7 @@ window.RIVERMARK_SCENES = {
         "icon": "→"
       }
     },
-    "npcs": {},
+    "npcs": {"corran_sedge": {"x": 59, "y": 52}},
     "objects": [
       {
         "label": "The box on the shelf",
@@ -1777,7 +1777,7 @@ window.RIVERMARK_SCENES = {
         "icon": "↓"
       }
     },
-    "npcs": {},
+    "npcs": {"halvard_stonecut": {"x": 64, "y": 45}},
     "objects": [
       {
         "label": "The bundle of letters",
@@ -1884,7 +1884,7 @@ window.RIVERMARK_SCENES = {
         "icon": "⌂"
       }
     },
-    "npcs": {},
+    "npcs": {"gedda_halloway": {"x": 35, "y": 65}},
     "objects": [
       {
         "label": "The hull frame",
@@ -1921,7 +1921,7 @@ window.RIVERMARK_SCENES = {
         "icon": "↓"
       }
     },
-    "npcs": {},
+    "npcs": {"bevis_culm": {"x": 66, "y": 68}},
     "objects": [
       {
         "label": "The strongroom door",
@@ -1997,7 +1997,7 @@ window.RIVERMARK_SCENES = {
         "icon": "↓"
       }
     },
-    "npcs": {},
+    "npcs": {"ione_brack": {"x": 44, "y": 64}},
     "objects": [
       {
         "label": "A drawer that shuts too easily",
@@ -2150,7 +2150,7 @@ window.RIVERMARK_SCENES = {
         "icon": "↓"
       }
     },
-    "npcs": {},
+    "npcs": {"vennik_tallowglass": {"x": 34, "y": 40}},
     "objects": [
       {
         "label": "The letter being sealed",
@@ -2224,7 +2224,7 @@ window.RIVERMARK_SCENES = {
         "icon": "↩"
       }
     },
-    "npcs": {},
+    "npcs": {"boom_drillman": {"x": 36, "y": 70}},
     "objects": [
       {
         "label": "The ratchet",
@@ -2277,7 +2277,7 @@ window.RIVERMARK_SCENES = {
         "icon": "↓"
       }
     },
-    "npcs": {},
+    "npcs": {"ilber_cass": {"x": 50, "y": 44}},
     "objects": [
       {
         "label": "Ilber's ledger",
@@ -2349,7 +2349,7 @@ window.RIVERMARK_SCENES = {
         "icon": "↓"
       }
     },
-    "npcs": {},
+    "npcs": {"doss_the_crane": {"x": 66, "y": 58}},
     "objects": [
       {
         "label": "The treadwheel",
@@ -2488,7 +2488,7 @@ window.RIVERMARK_SCENES = {
         "icon": "↓"
       }
     },
-    "npcs": {},
+    "npcs": {"reik_ollow": {"x": 22, "y": 60}},
     "objects": [
       {
         "label": "The canvas screen",
@@ -2533,7 +2533,7 @@ window.RIVERMARK_SCENES = {
         "icon": "↑"
       }
     },
-    "npcs": {},
+    "npcs": {"oakum_picker": {"x": 25, "y": 56}, "nessa_reth": {"x": 70, "y": 48}},
     "objects": [
       {
         "label": "The long bench",
@@ -2564,7 +2564,7 @@ window.RIVERMARK_SCENES = {
         "icon": "↓"
       }
     },
-    "npcs": {},
+    "npcs": {"mother_reth": {"x": 52, "y": 55}},
     "objects": [
       {
         "label": "A cauldron of pitch",
@@ -2640,7 +2640,7 @@ window.RIVERMARK_SCENES = {
         "icon": "↓"
       }
     },
-    "npcs": {},
+    "npcs": {"tar_gaol_prisoner": {"x": 88, "y": 58}},
     "objects": [
       {
         "label": "The cells",
@@ -2707,7 +2707,7 @@ window.RIVERMARK_SCENES = {
         "icon": "→"
       }
     },
-    "npcs": {},
+    "npcs": {"slip_sawyer": {"x": 75, "y": 86}},
     "objects": [
       {
         "label": "The chalked gable",
@@ -2752,7 +2752,7 @@ window.RIVERMARK_SCENES = {
         "icon": "↓"
       }
     },
-    "npcs": {},
+    "npcs": {"doren_ferrow": {"x": 28, "y": 55}},
     "objects": [
       {
         "label": "The masts on the beam",
@@ -2859,7 +2859,7 @@ window.RIVERMARK_SCENES = {
         "icon": "↓"
       }
     },
-    "npcs": {},
+    "npcs": {"tam_ryke": {"x": 70, "y": 46}},
     "objects": [
       {
         "label": "The quay below",
@@ -2945,7 +2945,7 @@ window.RIVERMARK_SCENES = {
         "icon": "→"
       }
     },
-    "npcs": {},
+    "npcs": {"waer_singer": {"x": 32, "y": 58}},
     "objects": [
       {
         "label": "The well",
@@ -3018,7 +3018,7 @@ window.RIVERMARK_SCENES = {
         "icon": "↓"
       }
     },
-    "npcs": {},
+    "npcs": {"ellsa_waer": {"x": 68, "y": 45}},
     "objects": [
       {
         "label": "The night's catch",
@@ -3057,7 +3057,7 @@ window.RIVERMARK_SCENES = {
         "icon": "↑"
       }
     },
-    "npcs": {},
+    "npcs": {"sister_nairn": {"x": 70, "y": 40}},
     "objects": [
       {
         "label": "The rail over the water",
@@ -3096,7 +3096,7 @@ window.RIVERMARK_SCENES = {
         "icon": "↩"
       }
     },
-    "npcs": {},
+    "npcs": {"nel_waer": {"x": 44, "y": 55}},
     "objects": [
       {
         "label": "The lantern",
@@ -3456,7 +3456,7 @@ window.RIVERMARK_SCENES = {
         "icon": "↓"
       }
     },
-    "npcs": {},
+    "npcs": {"aske_vorn": {"x": 55, "y": 55}},
     "objects": [
       {
         "label": "The map of the Wyrdpines",
@@ -3529,7 +3529,7 @@ window.RIVERMARK_SCENES = {
         "icon": "↓"
       }
     },
-    "npcs": {},
+    "npcs": {"yrsa": {"x": 25, "y": 58}, "bough_widow": {"x": 82, "y": 58}},
     "objects": [
       {
         "label": "The green bough",
@@ -3668,7 +3668,7 @@ window.RIVERMARK_SCENES = {
         "icon": "↓"
       }
     },
-    "npcs": {},
+    "npcs": {"prioress_hale": {"x": 40, "y": 70}},
     "objects": [
       {
         "label": "The glazed arcade",
@@ -3756,7 +3756,7 @@ window.RIVERMARK_SCENES = {
         "icon": "↩"
       }
     },
-    "npcs": {},
+    "npcs": {"almoner_venn": {"x": 45, "y": 75}},
     "objects": [
       {
         "label": "The cards",
@@ -3792,7 +3792,7 @@ window.RIVERMARK_SCENES = {
         "icon": "→"
       }
     },
-    "npcs": {},
+    "npcs": {"sister_ovid": {"x": 40, "y": 64}},
     "objects": [
       {
         "label": "The clear desk",
@@ -3888,7 +3888,7 @@ window.RIVERMARK_SCENES = {
         "icon": "↩"
       }
     },
-    "npcs": {},
+    "npcs": {"brother_teodor": {"x": 45, "y": 58}},
     "objects": [
       {
         "label": "The writing-board",
@@ -3940,7 +3940,7 @@ window.RIVERMARK_SCENES = {
         "icon": "←"
       }
     },
-    "npcs": {},
+    "npcs": {"cully_tench": {"x": 52, "y": 62}},
     "objects": [
       {
         "label": "The withies",
@@ -4148,7 +4148,7 @@ window.RIVERMARK_SCENES = {
         "icon": "←"
       }
     },
-    "npcs": {},
+    "npcs": {"nesh_gray": {"x": 45, "y": 58}},
     "objects": [
       {
         "label": "The faggot stack",
@@ -4246,7 +4246,7 @@ window.RIVERMARK_SCENES = {
         "icon": "→"
       }
     },
-    "npcs": {},
+    "npcs": {"gubb_wrayne": {"x": 62, "y": 56}},
     "objects": [
       {
         "label": "The screw-jack",
@@ -4359,7 +4359,7 @@ window.RIVERMARK_SCENES = {
         "icon": "←"
       }
     },
-    "npcs": {},
+    "npcs": {"dov_mudlark": {"x": 28, "y": 62}},
     "objects": [
       {
         "label": "The stopped drains",
@@ -4479,7 +4479,7 @@ window.RIVERMARK_SCENES = {
         "icon": "↩"
       }
     },
-    "npcs": {},
+    "npcs": {"wat_fenner": {"x": 78, "y": 68}},
     "objects": [
       {
         "label": "The wheel",
@@ -4538,7 +4538,7 @@ window.RIVERMARK_SCENES = {
         "icon": "↑"
       }
     },
-    "npcs": {},
+    "npcs": {"aggie_slate": {"x": 36, "y": 54}},
     "objects": [
       {
         "label": "The bench",
@@ -4724,7 +4724,7 @@ window.RIVERMARK_SCENES = {
         "icon": "↓"
       }
     },
-    "npcs": {},
+    "npcs": {"sella_carrow": {"x": 48, "y": 70}},
     "objects": [
       {
         "label": "The sign",
@@ -4772,7 +4772,7 @@ window.RIVERMARK_SCENES = {
         "icon": "→"
       }
     },
-    "npcs": {},
+    "npcs": {"quartermaster_oyle": {"x": 28, "y": 60}, "bram_ockley": {"x": 62, "y": 58}},
     "objects": [
       {
         "label": "The duty rosters",
@@ -4957,7 +4957,7 @@ window.RIVERMARK_SCENES = {
         "icon": "↓"
       }
     },
-    "npcs": {},
+    "npcs": {"foreman_dessel": {"x": 30, "y": 72}},
     "objects": [
       {
         "label": "The tool shed",
@@ -5153,7 +5153,7 @@ window.RIVERMARK_SCENES = {
         "icon": "↑"
       }
     },
-    "npcs": {},
+    "npcs": {"jimmy_able": {"x": 35, "y": 66}},
     "objects": [
       {
         "label": "The hammocks",
@@ -5399,7 +5399,7 @@ window.RIVERMARK_SCENES = {
         "icon": "↩"
       }
     },
-    "npcs": {},
+    "npcs": {"nell_carrow": {"x": 38, "y": 66}},
     "objects": [
       {
         "label": "The blade of light",
@@ -5749,7 +5749,7 @@ window.RIVERMARK_SCENES = {
         "icon": "↑"
       }
     },
-    "npcs": {},
+    "npcs": {"penned_boys": {"x": 80, "y": 60}},
     "objects": [
       {
         "label": "The cauldron",
