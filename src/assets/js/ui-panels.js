@@ -1094,7 +1094,7 @@
           await API.post('quest/track', { quest_key: b.dataset.track });
           closeTopModal();
           await G().refreshAll();
-          openJournal();
+          await reopenJournalAt(b.dataset.track);
         } catch (e) {
           G().showError(e.message);
         }
@@ -1112,12 +1112,28 @@
           if (r.message) G().log(r.message, 'important');
           closeTopModal();
           await G().refreshAll();
-          openJournal();
+          await reopenJournalAt(b.dataset.accept || r.quest_key || (r.quest && r.quest.quest_key));
         } catch (e) {
           G().showError(e.message);
         }
       };
     });
+  }
+
+  /**
+   * Draw the journal again after Track or Accept, open on the quest that was
+   * acted on. A redrawn journal starts shut with focus on its ×, so a keyboard
+   * player who tracked the third quest was sent back to the top with every
+   * entry closed. Open that quest and land on its Track button (or its line).
+   */
+  async function reopenJournalAt(key) {
+    await openJournal();
+    if (!key) return;
+    const m = modals[modals.length - 1]?.el;
+    const item = m && m.querySelector(`details[data-quest="${CSS.escape(String(key))}"]`);
+    if (!item) return;
+    item.open = true;
+    (item.querySelector('[data-track]') || item.querySelector('summary'))?.focus();
   }
 
   // =========================================================================
