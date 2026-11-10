@@ -294,10 +294,21 @@ def play(client, outcome, vote=None):
         r.travel('number_nine'); r.talk('hollin_sare', 'Leave')
         ok(f'{label}: the chair asks nothing the night before', r.said('hollin_sare', "shan't ask you anything"))
         ok(f'{label}: nothing reaches the room', not r.flags().get('room_sat'))
+        # The cliffhanger holds: no boat back up from the wharf once you have gone down on the quarter-day.
+        r.travel('brackwater_wharf')
+        exits = r.here().get('exits') or []
+        ok(f'{label}: no packet back upriver after stepping aboard',
+           all(e.get('locked') for e in exits if e.get('to_key') == 'packet_stair'), str([(e.get('label'), e.get('locked')) for e in exits]))
+        r.c.req('location/travel', {'location_id': LOCS['packet_stair']})
+        ok(f'{label}: and no route round to the stair', r.here().get('key') != 'packet_stair', r.here().get('key'))
     else:
         # Tull is on the river; the town waits.
         r.travel('packet_stair')
         ok(f'{label}: the stair is empty while the boat is away', 'osgar_tull' not in [n.get('npc_key') for n in r.here().get('npcs', [])])
+        if outcome == 'costed':
+            mark = len(r.lines)
+            r.travel('granary_row'); r.open('alder_pyke')
+            ok(f'{label}: Pyke is not still measuring the Row once the count is in', not r.said('alder_pyke', 'want the Row costed', mark))
         r.travel('flagon_common_room')
         ok(f'{label}: waiting at the Flagon passes the days', r.click_until('mara_hearthstone', 'days_waited'))
         r.travel('packet_stair'); r.talk('osgar_tull', 'Read the sheet', 'Go up into the town')
@@ -308,6 +319,7 @@ def play(client, outcome, vote=None):
         r.travel('deepworks_canteen'); r.talk('corrin_dale', "I'll bring a copy")
         r.travel('counting_house'); r.talk('tibald_ashe', 'Take it down to the canteen')
         r.travel('deepworks_canteen'); r.talk('corrin_dale', 'Read it word for word')
+        ok(f'{label}: Dale is not still hearing of the costing after the sheet', not r.said('corrin_dale', 'costing the town', mark))
         ok(f'{label}: In Its Order', r.qstatus('in_its_order') == ('completed', 'read_word_for_word'), str(r.qstatus('in_its_order')))
         r.travel('packet_stair'); r.talk('osgar_tull', "I'll take it down to them")
         r.travel('timekeepers_hut'); r.talk('wenna_coyle', 'Struck', 'Read the fifteen')
@@ -320,6 +332,28 @@ def play(client, outcome, vote=None):
     ok(f'{label}: no Act II quest left hanging', not left, str(left))
     ok(f'{label}: no blockers on the way', not r.problems, '\n         '.join(r.problems))
     return r
+
+
+def presence(client):
+    """The dialogue route answers only for somebody the party could walk up to."""
+    print('\n== presence ==')
+    r = Run(client, 'presence')
+    r.seed(level=5, at='overseers_office', companions=['sera', 'kessa'], quests={'first_night': 'done'})
+    far = r.c.req('dialogue/node', {'npc_key': 'osgar_tull'})
+    ok('presence: nobody across town can be opened', 'nobody of that name' in str(far.get('error')), str(far)[:160])
+    reply = r.c.req('dialogue/choose', {'npc_key': 'osgar_tull', 'node_key': 'greeting', 'choice': 0})
+    ok('presence: nor answered', 'nobody of that name' in str(reply.get('error')), str(reply)[:160])
+    ok('presence: somebody in the room can', bool(r.c.req('dialogue/node', {'npc_key': 'bael_rourke'}).get('node')))
+    ok('presence: a companion travelling with you can, anywhere', bool(r.c.req('dialogue/node', {'npc_key': 'sera'}).get('node')))
+    ok('presence: and at their camp node', bool(r.c.req('dialogue/node', {'npc_key': 'kessa', 'node_key': 'camp'}).get('node')))
+    ok('presence: a node key does not get round it', r.c.req('dialogue/node', {'npc_key': 'osgar_tull', 'node_key': 'greeting'}).get('ok') is False)
+    # A fight talked down hands over to its parley node, wherever the speaker is placed.
+    ok('presence: parley seeded', php('parley', r.cid, 'hesk_dray:call_them_off').get('ok') is True)
+    ok('presence: a parley opens its speaker where the fight was',
+       bool(r.c.req('dialogue/node', {'npc_key': 'hesk_dray', 'node_key': 'call_them_off'}).get('node')))
+    r.travel('flagon_common_room')
+    ok('presence: and not after walking away', r.c.req('dialogue/node', {'npc_key': 'hesk_dray', 'node_key': 'call_them_off'}).get('ok') is False)
+    ok('presence: no blockers on the way', not r.problems, '\n         '.join(r.problems))
 
 
 def free_port():
@@ -350,6 +384,8 @@ def main():
         runs = [('costed', None), ('minuted', None), ('walked', None), ('subscribed', 'against'),
                 ('subscribed', 'proxy'), ('subscribed', 'stair'), ('subscribed', 'aboard')]
         only = os.environ.get('ONLY')
+        if not only or only == 'presence':
+            presence(client)
         for outcome, vote in runs:
             if only and only not in f'{outcome}/{vote}':
                 continue

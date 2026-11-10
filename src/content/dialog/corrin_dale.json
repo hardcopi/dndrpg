@@ -104,6 +104,12 @@
                             "flag": "indentured_fate",
                             "equals": "bought"
                         }
+                    },
+                    {
+                        "not": {
+                            "quest": "the_costing",
+                            "status": "completed"
+                        }
                     }
                 ],
                 "once": true,
