@@ -514,6 +514,9 @@
       const hit = a.closest(sel);
       return hit ? `${sel.split('[')[0]}[${attr}="${cssEscape(hit.getAttribute(attr))}"]` : null;
     };
+    // The aiming banner goes when the spell lands or is called off; hand
+    // focus back to Cast (or the next open slot) rather than to nothing.
+    if (a.closest('.cbt-aiming')) return '#cbt-bar [data-act="cast"]';
     const slot = a.closest('#cbt-bar [data-act]');
     if (slot) {
       const extra = slot.getAttribute('data-extra');
@@ -1166,12 +1169,33 @@
 
   function startAiming(actor, spellId, name, castLevel, aim) {
     ui.placing = null;
+    const kb = keyboardDriven();
     ui.aiming = { spell_id: spellId, name, cast_level: castLevel, mode: aim.mode,
                   targets: aim.targets, actor: actor.cid };
     render();
     // A finger cannot hover, and on a phone the figures are small: the list
     // is the better first offer there. The board stays live behind it.
     if (window.matchMedia && window.matchMedia('(pointer: coarse)').matches) openAimList();
+    else if (kb) focusAimList();
+  }
+
+  /**
+   * Whether the player is driving with the keys: the browser only draws a
+   * focus ring (:focus-visible) for focus that came from the keyboard.
+   */
+  function keyboardDriven() {
+    const a = document.activeElement;
+    try { return !!(a && a !== document.body && a.matches(':focus-visible')); } catch (e) { return false; }
+  }
+
+  /**
+   * The banner's List, for somebody aiming from the keyboard. "Point at a
+   * glowing figure" means nothing without a pointer, and focus was left on
+   * Cast with the banner and the board behind it in the Tab order.
+   */
+  function focusAimList() {
+    const b = root() && root().querySelector('[data-aim-list]');
+    if (b) b.focus({ preventScroll: true });
   }
 
   function stopAiming() {
@@ -1324,8 +1348,10 @@
                   actor: actor.cid, origin: aim.origin, shape: aim.shape, ft: aim.ft,
                   range_ft: aim.range_ft, spots: aim.spots || {}, dirs: aim.dirs || {},
                   at: null, cursor: null, clamped: false };
+    const kb = keyboardDriven();
     render();
     if (coarsePointer()) openAreaList();
+    else if (kb) focusAimList();
   }
 
   function coarsePointer() {
