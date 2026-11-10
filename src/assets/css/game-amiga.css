@@ -1040,6 +1040,16 @@ body.in-dialogue .gw-actions { display: none; }
   body.game-page .scene .topbar { flex-wrap: wrap; row-gap: 0.2rem; }
   body.game-page .topbar-where { flex: 1 0 100%; }
 
+  /* Seven 44px plates and the divider come to about 330px, which a 320px
+     phone does not have: the last one, Main menu, was cut off past the frame.
+     Let the row wrap rather than shrink the plates under the tap floor. */
+  body.game-page .scene .topbar .topbar-actions {
+    flex-wrap: wrap;
+    row-gap: var(--sp-2);
+    min-width: 0;
+    max-width: 100%;
+  }
+
   body.game-page .rail-bottom .gw-actions { order: -1; }
 
   body.game-page .gw-actions .action-bar {
