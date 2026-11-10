@@ -1313,8 +1313,12 @@
       // Clickable only when it is somewhere to go. A passage two rooms away is
       // drawn — the level's shape is worth seeing — but travel is a click on
       // somewhere you can get to, and the rest of the chart pans under a drag.
+      // A focusable run needs a name of its own: the <title> is only drawn for
+      // a lit, named passage, so a glimpsed one was a button called nothing.
+      // The way's own label (the one on the button under the chart) first.
+      const name = (way && way.label) || (c.name && lit(c) ? c.name : 'A passage');
       const target = c.location_id != null && c.location_id !== hereId
-        ? ` data-map-node="${c.location_id}" role="button" tabindex="0"`
+        ? ` data-map-node="${c.location_id}" role="button" tabindex="0" aria-label="${esc(name)}"`
         : '';
       return `<g class="wm-hall-g"${target}>
         ${c.name && lit(c) ? `<title>${esc(c.name)}</title>` : ''}
