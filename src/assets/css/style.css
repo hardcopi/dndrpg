@@ -6803,7 +6803,7 @@ body.bm-pan-ready .battlemap { cursor: grab; }
   color: var(--danger);
   letter-spacing: var(--ls-wide);
 }
-.cbt-death.is-stable { color: var(--success); text-transform: uppercase; }
+.cbt-death.is-stable { color: var(--success-ink); text-transform: uppercase; }
 .cbt-death b { color: var(--text-dim); margin: 0 var(--sp-2); }
 .death-dot {
   width: 6px;
