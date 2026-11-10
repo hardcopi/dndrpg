@@ -1095,6 +1095,25 @@ foreach (array_merge([946, 1017, 1752, 2293, 2673], range(1, 6000)) as $seed) {
 same('no first floor is a walk to the stair', [], array_slice($walks, 0, 5));
 same('and every first floor has something to find', [], array_slice($noFind, 0, 5));
 
+section('a floor has at least as many rooms as its profile asks for');
+// placeRooms() throws rooms at random and gives up after a bounded number of
+// misses, which left about one first floor in 170 a room short of the upper
+// profile's seven (seed 315 drew six) and failed test_delve's "with rooms in
+// it" now and then. Deeper floors were short about one in 25 (seed 20 at
+// depth 2 drew seven of eight). It tops up to the floor now; swept over fixed
+// seeds at every profile, with the ones that used to come out short.
+$short = [];
+foreach (array_merge([315, 398, 547, 613, 20, 110, 132, 567], range(1, 3000)) as $seed) {
+    foreach ([1, 2, 3] as $depth) {
+        $level = DungeonGen::generate($seed, $depth);
+        $floor = DungeonGen::PROFILES[$level['profile']]['rooms'][0];
+        if (count($level['rooms']) < $floor) {
+            $short[] = "{$seed}@{$depth}: " . count($level['rooms']) . " < {$floor}";
+        }
+    }
+}
+same('no floor comes out short of rooms', [], array_slice($short, 0, 5));
+
 echo PHP_EOL . str_repeat('-', 52) . PHP_EOL;
 printf("%d passed, %d failed%s", $pass, $fail, PHP_EOL);
 exit($fail > 0 ? 1 : 0);
