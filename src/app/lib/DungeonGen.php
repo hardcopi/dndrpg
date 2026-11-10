@@ -1281,6 +1281,60 @@ final class DungeonGen
             ];
         }
 
+        // The random throws can run out with the plan still short of the
+        // profile's floor: two or three 2x2 rooms dropped early leave gaps no
+        // later throw happens to hit. About 1 upper floor in 170 and 1 deeper
+        // floor in 25 came out a room or two short that way, and test_delve
+        // failed on it now and then. So top up to the floor with single cells,
+        // tried in a shuffled order so the extra rooms do not all gather in
+        // one corner. A plan that was not short draws nothing more from $rng,
+        // so every level that was already full comes out exactly as before.
+        if (count($rooms) < $min) {
+            $cells = [];
+            for ($gy = 0; $gy < self::GRID_H; $gy++) {
+                for ($gx = 0; $gx < self::GRID_W; $gx++) {
+                    $cells[] = [$gx, $gy];
+                }
+            }
+            for ($i = count($cells) - 1; $i > 0; $i--) {
+                $j = self::rint($rng, 0, $i);
+                [$cells[$i], $cells[$j]] = [$cells[$j], $cells[$i]];
+            }
+            $topUp = function () use (&$rooms, $cells, $min): void {
+                foreach ($cells as [$gx, $gy]) {
+                    if (count($rooms) >= $min) {
+                        return;
+                    }
+                    if (self::fits($rooms, $gx, $gy, 1, 1)) {
+                        $rooms[] = [
+                            'id' => count($rooms), 'gx' => $gx, 'gy' => $gy, 'w' => 1, 'h' => 1,
+                            'x' => 0.0, 'y' => 0.0, 'kind' => 'empty', 'role' => 'room',
+                            'name' => '', 'description' => '',
+                        ];
+                    }
+                }
+            };
+            $topUp();
+            // Still short means the big rooms have the plan packed. Shrink
+            // them to one cell, largest first and where they stand, until the
+            // singles fit; a smaller footprint can never collide with more.
+            while (count($rooms) < $min) {
+                $big = null;
+                foreach ($rooms as $k => $r) {
+                    if ($r['w'] * $r['h'] > 1 && ($big === null
+                            || $r['w'] * $r['h'] > $rooms[$big]['w'] * $rooms[$big]['h'])) {
+                        $big = $k;
+                    }
+                }
+                if ($big === null) {
+                    break;
+                }
+                $rooms[$big]['w'] = 1;
+                $rooms[$big]['h'] = 1;
+                $topUp();
+            }
+        }
+
         // Project onto the chart's field. The centre of the room's plan
         // footprint becomes the node's position; project() is the only place
         // the conversion is written, and plan() reaches for the same one.
