@@ -2626,7 +2626,8 @@
           // says what it meant. Magic Missile (natural 0) has no die to show.
           if (dice && ev.natural > 0) {
             await trayRoll(ev.natural, `${sumLine(ev.natural, ev.total)} vs AC ${ev.ac}`,
-              ev.crit ? 'is-crit' : ev.natural === 1 ? 'is-fumble' : ev.hit ? 'is-hit' : 'is-miss', quick);
+              ev.crit ? 'is-crit' : ev.natural === 1 ? 'is-fumble' : ev.hit ? 'is-hit' : 'is-miss', quick,
+              false, [ev.actor, ev.target]);
           }
           // A shot crosses the board before it lands. Awaited rather than left
           // to run underneath, so the damage float does not appear over the
@@ -2638,7 +2639,7 @@
           if (ev.hit && dice && !quick && ev.natural > 0) await trayDamage(ev.damage_dice, ev.damage);
           // A dart that cannot miss: no d20, just its die.
           if (ev.mode === 'auto' && dice && !quick && ev.damage_dice) {
-            await trayRoll(0, '', 'is-hit', quick, true);
+            await trayRoll(0, '', 'is-hit', quick, true, [ev.actor, ev.target]);
             await trayDamage(ev.damage_dice, ev.damage);
           }
           if (ev.hit) {
@@ -2655,7 +2656,7 @@
         case 'save':
           if (dice && ev.natural > 0) {
             await trayRoll(ev.natural, `${String(ev.ability || '').toUpperCase()} ${sumLine(ev.natural, ev.total)} vs DC ${ev.dc}`,
-              ev.passed ? 'is-hit' : 'is-miss', quick);
+              ev.passed ? 'is-hit' : 'is-miss', quick, false, [ev.actor]);
             // A spell's damage, rolled whether the save passed or not (half on
             // a success): the tray shows the dice; the log says what landed.
             if (!quick && ev.damage_dice) await trayDamage(ev.damage_dice, null);
@@ -2689,7 +2690,7 @@
           // then the green number. The amount is what the server healed
           // (the dice plus the modifier, capped at full), so it is the caption.
           if (dice && !quick && ev.heal_dice) {
-            await trayRoll(0, '', 'is-heal', quick, true);
+            await trayRoll(0, '', 'is-heal', quick, true, [ev.target]);
             await trayDamage(ev.heal_dice, ev.amount, 'healed');
           }
           flash(ev.target, 'heal-flash');
@@ -2963,7 +2964,40 @@
     const mod = Number(total) - Number(natural);
     return mod ? `${natural}${mod > 0 ? '+' : '−'}${Math.abs(mod)}=${total}` : String(total);
   }
-  async function trayRoll(natural, caption, tone, quick, empty = false) {
+  /**
+   * Which corner of the board the tray sits in: the one furthest from the
+   * tokens the roll is about, so on a crowded phone board the die is not
+   * thrown on top of the blow it is explaining. The corner the zoom buttons
+   * own is never chosen. With nobody to avoid, top-left.
+   */
+  function placeTray(tray, box, cids) {
+    const b = box.getBoundingClientRect();
+    if (!b.width) return;
+    const pts = (cids || [])
+      .map((c) => c != null && box.querySelector(`.bm-token[data-cid="${CSS.escape(String(c))}"]`))
+      .filter(Boolean)
+      .map((g) => {
+        const r = g.getBoundingClientRect();
+        return [r.left + r.width / 2 - b.left, r.top + r.height / 2 - b.top];
+      });
+    const zoom = box.querySelector('.bm-zoom');
+    const z = zoom && zoom.getBoundingClientRect();
+    const zoomCorner = z && z.width
+      ? ((z.top + z.height / 2 - b.top) < b.height / 2 ? 't' : 'b')
+        + ((z.left + z.width / 2 - b.left) < b.width / 2 ? 'l' : 'r')
+      : null;
+    const corners = { tl: [0, 0], tr: [b.width, 0], bl: [0, b.height], br: [b.width, b.height] };
+    let best = 'tl';
+    let score = -1;
+    for (const [k, [x, y]] of Object.entries(corners)) {
+      if (k === zoomCorner) continue;
+      const d = pts.length ? Math.min(...pts.map(([px, py]) => Math.hypot(px - x, py - y))) : 0;
+      if (d > score) { score = d; best = k; }
+    }
+    tray.dataset.corner = best;
+  }
+
+  async function trayRoll(natural, caption, tone, quick, empty = false, who = null) {
     const box = $('#cbt-map', root());
     if (!box || G().reducedMotion() || !window.Dice3D || !window.Dice3D.available()) return;
     if (empty) {
@@ -2973,6 +3007,7 @@
       clearTimeout(trayTimer);
       t.className = `cbt-dice-tray is-landed ${tone || ''}`;
       t.innerHTML = '';
+      placeTray(t, box, who);
       return;
     }
     if (!(natural >= 1 && natural <= 20)) return;
@@ -2984,6 +3019,7 @@
     }
     clearTimeout(trayTimer);
     tray.className = 'cbt-dice-tray is-rolling';
+    placeTray(tray, box, who);
     tray.innerHTML = '<div class="cbt-dice-well"></div><div class="cbt-dice-cap"></div>';
     const stage = window.Dice3D.create(20, 1 + Math.floor(Math.random() * 20));
     tray.firstChild.appendChild(stage);

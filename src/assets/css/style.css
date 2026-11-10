@@ -6195,7 +6195,7 @@ body.bm-pan-ready .battlemap { cursor: grab; }
    (Top-left corner.) The die is the check ceremony's, scaled: 176px at rest, so 0.4 is ~70px. */
 .cbt-dice-tray {
   position: absolute;
-  /* Top-left: the zoom buttons own the top-right. */
+  /* Top-left by default; placeTray() may move it (data-corner). */
   top: var(--sp-6);
   left: var(--sp-6);
   z-index: 3;
@@ -6206,6 +6206,10 @@ body.bm-pan-ready .battlemap { cursor: grab; }
   transition: opacity var(--dur-slow) ease;
 }
 .cbt-dice-tray.is-gone { opacity: 0; }
+/* placeTray() picks the corner furthest from the tokens in the roll. */
+.cbt-dice-tray[data-corner="tr"] { left: auto; right: var(--sp-6); }
+.cbt-dice-tray[data-corner="bl"] { top: auto; bottom: var(--sp-6); }
+.cbt-dice-tray[data-corner="br"] { top: auto; bottom: var(--sp-6); left: auto; right: var(--sp-6); }
 .cbt-dice-well {
   position: relative;
   width: 74px;
@@ -6255,6 +6259,11 @@ body.bm-pan-ready .battlemap { cursor: grab; }
   .cbt-dmg-well .die-stage { transform: translate(-50%, -50%) scale(0.33); }
   .cbt-dmg-well.d6 .die-stage { transform: translate(-50%, -50%) scale(0.7); }
   .cbt-dmg-well.d4 .die-stage { transform: translate(-50%, -50%) scale(0.36); }
+}
+@media (max-width: 360px) {
+  .cbt-dice-well { width: 46px; height: 46px; }
+  .cbt-dice-well .die-stage { transform: translate(-50%, -50%) scale(0.25); }
+  .cbt-dice-cap { font-size: var(--fs-2xs); }
 }
 .bm-plane {
   position: relative;
