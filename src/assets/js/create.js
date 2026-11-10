@@ -227,7 +227,7 @@
     $('#wiz-reason').textContent = last ? '' : (why || '');
   }
 
-  function goToStep(i) {
+  function goToStep(i, { land = true } = {}) {
     if (i < 0 || i >= STEPS.length) return;
     state.step = i;
     state.reached = Math.max(state.reached, i);
@@ -243,6 +243,17 @@
     // Each step is its own screen, so start it at the top rather than wherever
     // the previous one happened to be scrolled to.
     $('.wiz-body').scrollTop = 0;
+    // Then take the keyboard to the new step's title. Focus used to stay on
+    // Next, below the step just drawn (or drop to <body>: from the rail, whose
+    // buttons the redraw replaces, and from Enter in the name field, which the
+    // step hides), so a keyboard player had to Shift+Tab back up through it
+    // and a screen reader was never told the step had changed. Not on the
+    // first draw at load, which has moved nobody anywhere.
+    if (land) {
+      const title = $('#wiz-title');
+      title.setAttribute('tabindex', '-1');
+      title.focus();
+    }
   }
 
   function wizardNext() {
@@ -262,9 +273,17 @@
     // Enter advances rather than submitting. A form with a submit button treats
     // Enter in a text field as "create the character", which on step one would
     // post a character with no class chosen and no face.
+    //
+    // Only from a text field, though. This used to catch Enter from anywhere
+    // in the form and cancel it, so Enter on Back went forward, Enter on a
+    // gift card or a step-rail pip or the Point Buy tab skipped to the next
+    // step instead of doing what the button says, and a keyboard player could
+    // not choose a gift at all except with Space. A button handles its own
+    // Enter; implicit submission only ever comes from a text input.
+    const TEXTISH = ['text', 'search', 'email', 'url', 'tel', 'number', 'password'];
     $('#create-form').addEventListener('keydown', (e) => {
       if (e.key !== 'Enter') return;
-      if (e.target.tagName === 'TEXTAREA') return;
+      if (e.target.tagName !== 'INPUT' || !TEXTISH.includes(e.target.type || 'text')) return;
       if (state.step === STEPS.length - 1) return; // let Review submit
       e.preventDefault();
       wizardNext();
@@ -449,7 +468,7 @@
       await enterRedressMode(params);
     } else {
       initWizard();
-      goToStep(0);
+      goToStep(0, { land: false });
       startLook();
     }
   }
@@ -1474,8 +1493,16 @@
       + state.originFeats.map((f) => card(f.key, f.name, f.description, f.partial || '')).join('');
     grid.querySelectorAll('[data-feat]').forEach((b) => {
       b.addEventListener('click', () => {
+        // The redraw replaces every card, the focused one included; put the
+        // focus back on the card just chosen so the keyboard is not dropped
+        // to <body> by choosing.
+        const hadFocus = document.activeElement === b;
         state.feat = b.dataset.feat;
         renderGiftGrid();
+        if (hadFocus) {
+          const again = grid.querySelector(`[data-feat="${CSS.escape(state.feat)}"]`);
+          if (again) again.focus();
+        }
       });
     });
   }
