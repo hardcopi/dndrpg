@@ -70,6 +70,115 @@
             {
                 "conditions": [
                     {
+                        "flag": "minute_fate",
+                        "equals": "copied"
+                    }
+                ],
+                "once": true,
+                "text": "Your copy of the minute is pinned on the Flagon door, next to the notice about the well. Mara has been watching people read it. \"Slowly,\" she says. \"Some of them twice. Old Pol read it out to the ones who can't, and then argued with it.\" She dries a cup. \"Nobody's taken it down. I'd have heard.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "walked"
+                    },
+                    {
+                        "not": {
+                            "quest": "item_seven_adjourned"
+                        }
+                    }
+                ],
+                "text": "\"Letter for you,\" Mara says, and takes it from behind the till, where she keeps things she has not read. \"Came up with the carrier from Greyhythe. Good paper.\" It is addressed to you care of the Golden Flagon in a small exact hand, and it says: Item seven stands adjourned in the minutes, the meeting not having been told that your matter was withdrawn. It will stand on the agenda of the next quarter-day in pencil unless I hear otherwise. If you wish it withdrawn, a line will do. If you wish it to stand, nothing need be done. M. Crale, Secretary.",
+                "choices": [
+                    {
+                        "label": "Write back: withdrawn.",
+                        "effects": [
+                            {
+                                "start_quest": "item_seven_adjourned"
+                            },
+                            {
+                                "quest_stage": {
+                                    "quest": "item_seven_adjourned",
+                                    "stage": "withdrawn"
+                                }
+                            }
+                        ],
+                        "next": "letter_sent"
+                    },
+                    {
+                        "label": "Write back and say why I walked out.",
+                        "effects": [
+                            {
+                                "start_quest": "item_seven_adjourned"
+                            },
+                            {
+                                "quest_stage": {
+                                    "quest": "item_seven_adjourned",
+                                    "stage": "reasons"
+                                }
+                            }
+                        ],
+                        "next": "letter_sent"
+                    },
+                    {
+                        "label": "Let it stand. Don't answer.",
+                        "effects": [
+                            {
+                                "start_quest": "item_seven_adjourned"
+                            },
+                            {
+                                "quest_stage": {
+                                    "quest": "item_seven_adjourned",
+                                    "stage": "stands"
+                                }
+                            }
+                        ],
+                        "next": "letter_kept"
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "vote_fate",
+                        "equals": "against"
+                    }
+                ],
+                "once": true,
+                "text": "\"Lodged it early, I hear,\" Mara says. \"Against.\" She sets a cup down harder than it needs. \"One in twelve. My father used to say one honest man on a jury of twelve is a hung jury or a hanged one, and you don't get to choose which.\" She picks the cup up again. \"Thank you, though.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "vote_fate",
+                        "equals": "kept"
+                    }
+                ],
+                "once": true,
+                "text": "\"You've a vote on us,\" Mara says, \"and you're keeping it in your pocket till the day.\" She wipes the bar in a slow circle. \"I'd do the same. I'd not like it done to me. Both of those are true.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "miller_fate",
                         "equals": "in"
                     }
@@ -2526,6 +2635,28 @@
                     {
                         "label": "Something else.",
                         "next": "greeting"
+                    }
+                ]
+            }
+        ],
+        "letter_sent": [
+            {
+                "text": "Mara finds you a pen that works and pretends to be busy at the far end of the bar while you write. \"Carrier goes down Thursday,\" she says, when you hand it over, and puts it behind the till with the things she has not read.",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "letter_kept": [
+            {
+                "text": "You fold the letter and put it away. Mara watches you do it. \"Not answering is an answer,\" she says. \"My mother used to say that about the rent.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
                     }
                 ]
             }

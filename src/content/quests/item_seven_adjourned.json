@@ -1,0 +1,80 @@
+{
+    "quest_key": "item_seven_adjourned",
+    "title": "Item Seven, Adjourned",
+    "act": 2,
+    "description": "You walked out of Number Nine in the middle of item seven. The meeting did not stop you, and it did not forget you either. A letter has come up the valley in the secretary's hand.",
+    "giver": "minna_crale",
+    "on_job_board": false,
+    "required_level": 1,
+    "rewards": {
+        "xp": 200,
+        "gold": 0
+    },
+    "stages": {
+        "the_letter": {
+            "title": "A letter care of the Flagon",
+            "objective": "Answer Minna Crale's letter, or don't.",
+            "journal": "Minna Crale has written, care of the Golden Flagon. Item seven stands adjourned in the minutes, the meeting not having been told my matter was withdrawn. It will be on the next quarter-day's agenda in pencil unless she hears otherwise. A line will withdraw it. Nothing need be done to let it stand.",
+            "target": {
+                "location": "flagon_common_room"
+            }
+        },
+        "withdrawn": {
+            "terminal": true,
+            "resolution": "withdrawn",
+            "outcome": "neutral",
+            "title": "Withdrawn",
+            "journal": "I wrote one line back: withdrawn. Minna Crale will ink it, and item seven will be closed, and the meeting will go on taking up Rivermark without me in the room, as it always did.",
+            "effects": [
+                {
+                    "set_flag": "walked_fate",
+                    "value": "withdrawn"
+                },
+                {
+                    "approval": {
+                        "kessa": 2,
+                        "aldric": -4
+                    }
+                }
+            ]
+        },
+        "stands": {
+            "terminal": true,
+            "resolution": "stands",
+            "outcome": "success",
+            "title": "Left standing",
+            "journal": "I did not answer. Item seven stands adjourned, in pencil, on the next quarter-day's agenda, with my name against it. Somebody at Number Nine will have to read it out and find the chair empty.",
+            "effects": [
+                {
+                    "set_flag": "walked_fate",
+                    "value": "stands"
+                },
+                {
+                    "approval": {
+                        "kessa": 2,
+                        "sera": 2
+                    }
+                }
+            ]
+        },
+        "reasons": {
+            "terminal": true,
+            "resolution": "reasons",
+            "outcome": "success",
+            "title": "Why I walked out",
+            "journal": "I wrote back and said why I walked out: that it was eleven people being reasonable in a warm room about a town they have never seen. Minna Crale will enter it as correspondence under item seven and read it to the meeting on the quarter-day. What they do with it is their business. It will have been said in the room.",
+            "effects": [
+                {
+                    "set_flag": "walked_fate",
+                    "value": "reasons"
+                },
+                {
+                    "approval": {
+                        "aldric": 6,
+                        "kessa": -2
+                    }
+                }
+            ]
+        }
+    }
+}

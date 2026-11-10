@@ -193,6 +193,23 @@ Wat. Test: `tools/test_fenmoor_lot.php`.
     Kessa +2). She mentions it once afterwards.
   - Osric, Dagen Wyke and Minna Crale read `costing_fate`. The costing goes before
     the meeting at the next quarter-day; what the meeting decides is left open.
+- **One Vote in Twelve** (`subscribed`). Minna Crale gives notice of the next
+  quarter-day: item four, Rivermark, sheet six, clearance, as revised. The chair
+  may lodge its vote early (`vote_fate` = `against`), keep it for the day
+  (`kept`), or give a written proxy to Captain Reed (`proxy`). Reed takes the
+  proxy without saying how she will cast it, and Mara reacts to the other two.
+  How the meeting votes is left for the quarter-day.
+- **The Bound Minute** (`minuted`). The quarter's minutes come down bound to
+  Dorcas Fenn's Record Office. Item seven reads: the objection word for word,
+  "The meeting noted the objection. No resolution was moved." The party can copy
+  it up the valley, where it is pinned on the Flagon door (`minute_fate` =
+  `copied`), or leave it on the shelf, where Abel Moss reads it on his dinner hour
+  (`shelved`).
+- **Item Seven, Adjourned** (`walked`). A letter from Minna Crale waits behind
+  Mara's till: item seven stands adjourned unless withdrawn. The party can
+  withdraw it, say why they walked out (to be read to the meeting as
+  correspondence), or let it stand in pencil on the next agenda (`walked_fate` =
+  `withdrawn` / `reasons` / `stands`). Minna reads all three back.
 - **Companions place the mark.** Once Act II is open, Ilse (`mark_seen_stone`),
   Kessa (`mark_seen_paper`) and Sera (`mark_seen_book`) each have one greeting
   that recognises the mark they saw in Act I as the house's mark: the ledge cuts,

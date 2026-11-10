@@ -480,6 +480,175 @@
             {
                 "conditions": [
                     {
+                        "flag": "walked_fate",
+                        "equals": "withdrawn"
+                    }
+                ],
+                "once": true,
+                "text": "\"Withdrawn,\" Minna Crale says, and shows you the agenda: item seven, inked through, with the date. \"It's the first matter anybody has ever withdrawn by letter. Usually they withdraw by not coming back.\" She files it. \"You did both. That's thorough.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "walked_fate",
+                        "equals": "stands"
+                    }
+                ],
+                "once": true,
+                "text": "Minna Crale turns the next quarter's agenda round for you. Item seven, adjourned, in pencil, and your name against it. \"It will be read out,\" she says. \"Mr Sare will look at the chair by the door. Then he will say, Any other business.\" She turns it back. \"I thought you should know exactly how it goes.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "walked_fate",
+                        "equals": "reasons"
+                    }
+                ],
+                "once": true,
+                "text": "\"Your letter is in the correspondence,\" Minna Crale says, \"under item seven. I shall read it to the meeting on the quarter-day, all of it, at the speed I read everything.\" She considers the folder. \"Eleven people being reasonable in a warm room. I shall not change a word. I may read that line slightly more slowly. That is within my discretion.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "subscribed"
+                    },
+                    {
+                        "not": {
+                            "quest": "one_vote_in_twelve"
+                        }
+                    }
+                ],
+                "text": "Minna Crale has a folded notice ready, in her own hand: Notice of the quarter-day. Number Nine, House Street, at ten. Item four: Rivermark. Sheet six, clearance, as revised. \"Every chair has one vote,\" she says. \"There are twelve chairs. You may cast yours in person on the day, lodge it with me in writing now, or name somebody in writing to cast it for you. The articles allow all three.\" She waits. \"Most people keep it. Nobody has ever lodged one early.\"",
+                "choices": [
+                    {
+                        "label": "Lodge it now. Against clearance.",
+                        "effects": [
+                            {
+                                "start_quest": "one_vote_in_twelve"
+                            },
+                            {
+                                "quest_stage": {
+                                    "quest": "one_vote_in_twelve",
+                                    "stage": "lodged_against"
+                                }
+                            }
+                        ],
+                        "next": "vote_lodged"
+                    },
+                    {
+                        "label": "I'll keep it, and come on the day.",
+                        "effects": [
+                            {
+                                "start_quest": "one_vote_in_twelve"
+                            },
+                            {
+                                "quest_stage": {
+                                    "quest": "one_vote_in_twelve",
+                                    "stage": "kept_vote"
+                                }
+                            }
+                        ],
+                        "next": "vote_kept"
+                    },
+                    {
+                        "label": "Write a proxy. Captain Reed of Rivermark casts it.",
+                        "effects": [
+                            {
+                                "start_quest": "one_vote_in_twelve"
+                            },
+                            {
+                                "quest_stage": {
+                                    "quest": "one_vote_in_twelve",
+                                    "stage": "proxy_to_reed"
+                                }
+                            }
+                        ],
+                        "next": "vote_proxy"
+                    },
+                    {
+                        "label": "Let me think about it.",
+                        "effects": [
+                            {
+                                "start_quest": "one_vote_in_twelve"
+                            }
+                        ],
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "one_vote_in_twelve",
+                        "status": "active"
+                    }
+                ],
+                "text": "\"Item four,\" Minna Crale says, tapping the notice on her own copy of the agenda. \"Rivermark. Your chair has not said how it stands, which it is entitled not to say until ten o'clock on the day.\"",
+                "choices": [
+                    {
+                        "label": "Lodge it now. Against clearance.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "one_vote_in_twelve",
+                                    "stage": "lodged_against"
+                                }
+                            }
+                        ],
+                        "next": "vote_lodged"
+                    },
+                    {
+                        "label": "I'll keep it, and come on the day.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "one_vote_in_twelve",
+                                    "stage": "kept_vote"
+                                }
+                            }
+                        ],
+                        "next": "vote_kept"
+                    },
+                    {
+                        "label": "Write a proxy. Captain Reed of Rivermark casts it.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "one_vote_in_twelve",
+                                    "stage": "proxy_to_reed"
+                                }
+                            }
+                        ],
+                        "next": "vote_proxy"
+                    },
+                    {
+                        "label": "Not yet.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "quest": "the_quarterly_meeting",
                         "status": "completed"
                     }
@@ -802,6 +971,39 @@
                     }
                 ],
                 "text": "\"I am standing right here,\" Sera says, quite quietly. Minna Crale picks the card up again without comment, as if it had never been put down. \"I would have said no,\" Sera tells you afterwards, on the stair. \"That is not the point. Nobody has ever answered for me who was not about to sell me.\" She goes down ahead of you.",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "vote_lodged": [
+            {
+                "text": "Minna Crale takes a fresh sheet, writes the date and the item, and then writes, against, in the same hand as everything else. She reads it back to you. \"One in twelve,\" she says, and blots it. \"Entered.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "vote_kept": [
+            {
+                "text": "\"Ten o'clock,\" Minna Crale says. \"The chair by the window. Mr Sare takes item four after the dividend.\" She writes in her book that notice was given, and nothing else.",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "vote_proxy": [
+            {
+                "text": "Minna Crale witnesses the proxy, sands it, and reads the name twice. \"Captain Reed, of Rivermark,\" she says. \"I have never seen a proxy given to the place under discussion.\" She files it with the agenda, not with the correspondence. \"It's in order. She will need to be here, or write.\"",
                 "choices": [
                     {
                         "label": "Leave.",

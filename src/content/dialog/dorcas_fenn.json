@@ -115,52 +115,6 @@
             {
                 "conditions": [
                     {
-                        "quest": "the_fenmoor_lot",
-                        "status": "completed"
-                    },
-                    {
-                        "flag": "armour_chain_fate",
-                        "equals": "kept"
-                    }
-                ],
-                "text": "Dorcas Fenn looks at the oilcloth bundle you are carrying and does not ask. \"Carters' books are never filed,\" she says. \"Twenty years of the river and none of it in here.\" She very nearly smiles. \"Don't let it get damp. That's all I ask of anybody.\"",
-                "choices": [
-                    {
-                        "label": "Anything?",
-                        "next": "read_anything"
-                    },
-                    {
-                        "label": "Leave.",
-                        "end": true
-                    }
-                ]
-            },
-            {
-                "conditions": [
-                    {
-                        "quest": "the_fenmoor_lot",
-                        "status": "completed"
-                    },
-                    {
-                        "flag": "armour_chain_fate",
-                        "equals": "left"
-                    }
-                ],
-                "text": "\"You left it with her,\" Dorcas Fenn says. It is not a question; somebody on the mud will have mentioned it, because somebody on the mud mentions everything. \"Good. Some paper's better where it is.\" She goes back up the ladder. \"Not much. Some.\"",
-                "choices": [
-                    {
-                        "label": "Anything?",
-                        "next": "read_anything"
-                    },
-                    {
-                        "label": "Leave.",
-                        "end": true
-                    }
-                ]
-            },
-            {
-                "conditions": [
-                    {
                         "flag": "sera_second_offer",
                         "equals": "took"
                     }
@@ -376,6 +330,125 @@
                         ],
                         "next": "fenmoor_return"
                     },
+                    {
+                        "label": "Anything?",
+                        "next": "read_anything"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "minute_fate",
+                        "equals": "shelved"
+                    }
+                ],
+                "once": true,
+                "text": "\"Mr Moss read your minute on his dinner hour,\" Dorcas Fenn says from the ladder. \"Said it was well put. He reads everything, so I can't tell you what that's worth, but he doesn't say it about everything.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "meeting_fate",
+                        "equals": "minuted"
+                    },
+                    {
+                        "not": {
+                            "quest": "the_bound_minute"
+                        }
+                    }
+                ],
+                "text": "\"Your quarter's come down,\" Dorcas Fenn says, and comes down the ladder with a new volume under her arm, the boards still stiff. \"Bound this morning. Mrs Crale is prompt.\" She sets it on the reading desk and opens it at a ribbon. \"Item seven. Penny a page. Read anything, take nothing.\"",
+                "choices": [
+                    {
+                        "label": "Read it.",
+                        "effects": [
+                            {
+                                "start_quest": "the_bound_minute"
+                            }
+                        ],
+                        "next": "the_minute"
+                    },
+                    {
+                        "label": "Not now.",
+                        "effects": [
+                            {
+                                "start_quest": "the_bound_minute"
+                            }
+                        ],
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_bound_minute",
+                        "status": "active"
+                    }
+                ],
+                "text": "The bound volume is still on the reading desk with the ribbon in it. \"Nobody's moved it,\" Dorcas Fenn says. \"Nobody's read it either, but I'd not take that personally.\"",
+                "choices": [
+                    {
+                        "label": "Read it.",
+                        "next": "the_minute"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_fenmoor_lot",
+                        "status": "completed"
+                    },
+                    {
+                        "flag": "armour_chain_fate",
+                        "equals": "kept"
+                    }
+                ],
+                "text": "Dorcas Fenn looks at the oilcloth bundle you are carrying and does not ask. \"Carters' books are never filed,\" she says. \"Twenty years of the river and none of it in here.\" She very nearly smiles. \"Don't let it get damp. That's all I ask of anybody.\"",
+                "choices": [
+                    {
+                        "label": "Anything?",
+                        "next": "read_anything"
+                    },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "quest": "the_fenmoor_lot",
+                        "status": "completed"
+                    },
+                    {
+                        "flag": "armour_chain_fate",
+                        "equals": "left"
+                    }
+                ],
+                "text": "\"You left it with her,\" Dorcas Fenn says. It is not a question; somebody on the mud will have mentioned it, because somebody on the mud mentions everything. \"Good. Some paper's better where it is.\" She goes back up the ladder. \"Not much. Some.\"",
+                "choices": [
                     {
                         "label": "Anything?",
                         "next": "read_anything"
@@ -623,6 +696,72 @@
                         ],
                         "end": true
                     },
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "the_minute": [
+            {
+                "text": "Item seven. Rivermark.\n\nA party from the valley, attending on business, objected to the entry for Rivermark on sheet six of the survey under the head clearance, and asked that its objection be entered word for word. The objection follows.\n\nAnd then your own words, exactly, in Minna Crale's hand, every one of them, including the two you would take back.\n\nThe meeting noted the objection. No resolution was moved.\n\nItem eight. Any other business. None.\n\n\"Two pages,\" Dorcas Fenn says from the ladder. \"Tuppence. It's the most anybody from up the valley has ever had in a bound volume. Mostly the valley is a figure.\"",
+                "interjections": [
+                    {
+                        "companion": "aldric",
+                        "text": "Aldric: \"It is there.\" He reads it again. \"It is all there. I said it was not nothing.\""
+                    }
+                ],
+                "choices": [
+                    {
+                        "label": "Copy it out. It's going up the valley.",
+                        "effects": [
+                            {
+                                "take_gold": 1
+                            },
+                            {
+                                "quest_stage": {
+                                    "quest": "the_bound_minute",
+                                    "stage": "copied"
+                                }
+                            }
+                        ],
+                        "next": "minute_copied"
+                    },
+                    {
+                        "label": "Leave it on the shelf, where anyone can read it.",
+                        "effects": [
+                            {
+                                "quest_stage": {
+                                    "quest": "the_bound_minute",
+                                    "stage": "shelved"
+                                }
+                            }
+                        ],
+                        "next": "minute_shelved"
+                    },
+                    {
+                        "label": "Not now.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "minute_copied": [
+            {
+                "text": "You copy it out at the reading desk, both pages, and Dorcas Fenn takes the pennies without comment and gives you a sheet of good paper for nothing, which you suspect she has never done before. \"Pin it somewhere it can be read,\" she says. \"That's the whole of the job.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            }
+        ],
+        "minute_shelved": [
+            {
+                "text": "Dorcas Fenn takes the volume back up the ladder and puts it where it goes, between the dividend and the drains. \"Anybody may read it,\" she says. \"That's what it's for.\"",
+                "choices": [
                     {
                         "label": "Leave.",
                         "end": true
