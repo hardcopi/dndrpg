@@ -10,6 +10,37 @@
                         "status": "active"
                     },
                     {
+                        "flag": "sold_to_the_polite_man"
+                    }
+                ],
+                "text": "\"The man who doesn't haggle,\" Sera says. \"You've sold to him now.\" She doesn't make anything of it. \"Everybody sells to him once, because the price is good and he says thank you. It's the second time that tells you what you are. I sold to men like him for years before I noticed I'd stopped counting.\"",
+                "once": true,
+                "choices": [
+                    {
+                        "label": "What did Marrow have on you?",
+                        "next": "the_leash_offer"
+                    },
+                    {
+                        "label": "What do you make of the others?",
+                        "next": "the_others"
+                    },
+                    {
+                        "label": "Sit down a while.",
+                        "next": "camp"
+                    },
+                    {
+                        "label": "Nothing.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "companion": "sera",
+                        "status": "active"
+                    },
+                    {
                         "flag": "costing_figure",
                         "equals": "read_first"
                     }

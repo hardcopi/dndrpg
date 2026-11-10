@@ -43,6 +43,22 @@
             {
                 "conditions": [
                     {
+                        "flag": "priory_fate",
+                        "equals": "unentered"
+                    }
+                ],
+                "once": true,
+                "text": "Ottilie Hale is at the herb bed again and does not stand up. \"You walked the whole house,\" she says, \"and stood in the infirmary door, and went down the track without asking.\" She pulls something that was not a weed. \"I had the answer ready. I have had it ready for four winters. I find I am not sure whether to thank you.\"",
+                "choices": [
+                    {
+                        "label": "Goodbye.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "quest": "the_order_that_threw_him_out",
                         "stage": "what_the_house_is_for"
                     }

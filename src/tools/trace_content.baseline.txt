@@ -26,7 +26,6 @@ flag: 'fen_road_known' is set in 1 place(s) and read nowhere — nothing in the 
 flag: 'fen_road_open_paid' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'fen_trade_on_paper' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'fen_water_rising' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
-flag: 'floats_fate' is set in 3 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'ford_ground_seen' is set in 3 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'ford_huts_known' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'ford_record' is set in 3 place(s) and read nowhere — nothing in the act changes because of it
@@ -39,7 +38,6 @@ flag: 'landing_read' is set in 2 place(s) and read nowhere — nothing in the ac
 flag: 'long_room_lost' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'long_room_open' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'mark_seen_writ' is set in 3 place(s) and read nowhere — nothing in the act changes because of it
-flag: 'mearing_recut' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'met_ackley' is set in 2 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'met_barrow' is set in 2 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'met_corse' is set in 4 place(s) and read nowhere — nothing in the act changes because of it
@@ -64,7 +62,6 @@ flag: 'met_venn' is set in 2 place(s) and read nowhere — nothing in the act ch
 flag: 'met_vessa' is set in 2 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'met_wick' is set in 2 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'met_wrayne' is set in 2 place(s) and read nowhere — nothing in the act changes because of it
-flag: 'mill_fate' is set in 3 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'mill_fire_was_set' is set in 2 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'mill_is_shelter' is set in 2 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'mill_loft_scorch' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
@@ -93,7 +90,6 @@ flag: 'pyke_did_the_sum' is set in 1 place(s) and read nowhere — nothing in th
 flag: 'pyke_read_it_out' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'pyke_turned_it_over' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'quarry_fell_upward' is set in 2 place(s) and read nowhere — nothing in the act changes because of it
-flag: 'quarry_writ_fate' is set in 3 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'reliquary_agents_beaten' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'rivermark_mustering' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'rivermark_valued' is set in 2 place(s) and read nowhere — nothing in the act changes because of it
@@ -105,7 +101,6 @@ flag: 'salt_wagons_taken' is set in 1 place(s) and read nowhere — nothing in t
 flag: 'saw_what_it_is' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'sluice_wage_intercepted' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'sluice_wage_known' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
-flag: 'sold_to_the_polite_man' is set in 2 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'stilt_camp_lost' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'stilt_camp_taken' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'tarrow_bravos_beaten' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
@@ -120,13 +115,3 @@ flag: 'warren_numbers_known' is set in 2 place(s) and read nowhere — nothing i
 flag: 'watch_beaten' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'watch_sandbox' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
 flag: 'writ_changed_hands' is set in 1 place(s) and read nowhere — nothing in the act changes because of it
-opening: floats_fate: no dialogue greeting reads 'buried', 'left', 'named' (0 of 3 values are read) — the ending happens and nobody looks up
-opening: ford_fate: no dialogue greeting reads 'left', 'named' (1 of 3 values are read) — the ending happens and nobody looks up
-opening: harrow_fate: no dialogue greeting reads 'brokered', 'sold' (1 of 3 values are read) — the ending happens and nobody looks up
-opening: mill_fate: no dialogue greeting reads 'cause', 'left', 'shelter' (0 of 3 values are read) — the ending happens and nobody looks up
-opening: miller_fate: no dialogue greeting reads 'in' (2 of 3 values are read) — the ending happens and nobody looks up
-opening: pit_fate: no dialogue greeting reads 'belt' (2 of 3 values are read) — the ending happens and nobody looks up
-opening: priory_fate: no dialogue greeting reads 'unentered' (2 of 3 values are read) — the ending happens and nobody looks up
-opening: quarry_writ_fate: no dialogue greeting reads 'filed', 'sold', 'stone' (0 of 3 values are read) — the ending happens and nobody looks up
-opening: reliquary_fate: no dialogue greeting reads 'paper', 'sold' (1 of 3 values are read) — the ending happens and nobody looks up
-opening: sealed_arch_fate: no dialogue greeting reads 'left' (2 of 3 values are read) — the ending happens and nobody looks up

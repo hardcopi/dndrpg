@@ -268,6 +268,27 @@ end and names nobody.
   - `sold`: the polite man looked at the stone and at Pyle, and had asked
     Ackley first.
   - Nobody says who holds the writ.
+- **The priory, the reliquary and the arch are heard of.** Each line plays once.
+  - **Priory:** when the party walked Arden and asked nothing
+    (`priory_fate` = `unentered`), the prior noticed. Aldric is grateful it was
+    not you who asked about the ford.
+  - **Reliquary:** Aldric speaks to `sold` ("eating its own memory a shelf at a
+    time") and to `paper`. In Act II a held cartulary can be deposited with
+    Dorcas Fenn, entered as Arden's and still the priory's to ask back
+    (`cartulary_deposited`). Venn then has "the first good letter in four
+    winters".
+  - **Sealed arch:** for `left`, Aggie asks whether the two counts are kept dry,
+    "now there are two".
+  - **Other readers:** Sera speaks to `sold_to_the_polite_man` ("it's the second
+    time that tells you what you are"). `mearing_recut` sends Pyke's
+    two-reading sheet to the Record Office, filed under Disputed.
+  - Nothing identifies the polite man, the buyer, or the first person to write
+    about the wall.
+- **The circulated figure goes up the valley.** Reed gets a twelfth copy "for
+  information" and reads it in the watch house. Hesper is written to by one
+  chair: is a sixth head usual (whole), or were five heads all there was
+  (given)? If the figure is to be read first, she would like to hear it read
+  uninterrupted.
 - **Companions place the mark.** Once Act II is open, Ilse (`mark_seen_stone`),
   Kessa (`mark_seen_paper`) and Sera (`mark_seen_book`) each have one greeting
   that recognises the mark they saw in Act I as the house's mark: the ledge cuts,

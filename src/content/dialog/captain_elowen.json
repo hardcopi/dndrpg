@@ -6,6 +6,22 @@
             {
                 "conditions": [
                     {
+                        "flag": "costing_figure",
+                        "equals": "circulated"
+                    }
+                ],
+                "once": true,
+                "text": "Reed has a fair copy on the desk in a secretary's hand, with a covering line: for information. \"Mrs Crale sent the town one,\" she says. \"A twelfth copy for a town with no chair.\" She turns a page, and another; there are a great many. \"I've read it out in the watch house to anyone who'd stand still. Two of my men went home and sat their families down and read them the bread.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "vote_fate",
                         "equals": "proxy"
                     }
