@@ -915,7 +915,7 @@ class CombatEngine
             case 'second_wind':
                 $roll = self::healingRoll($actor, '1d10+' . max(1, (int) ($actor['level'] ?? 1)));
                 $state['log'][] = "{$actor['name']} catches their breath — {$roll['total']} hit points.";
-                return $this->heal($state, (string) $actor['cid'], (int) $roll['total']);
+                return $this->heal($state, (string) $actor['cid'], (int) $roll['total'], self::trayDice('1d10', $roll));
 
             case 'rage':
                 // A boon, not a bare flag. addBoon() is what owns a timed
@@ -5806,9 +5806,10 @@ class CombatEngine
             // InventoryService::healExpression(). The drinker is the healer
             // here, which is the reading that makes Healer worth taking on
             // somebody who casts nothing.
-            $roll = self::healingRoll($actor, InventoryService::healExpression($item));
+            $healExpr = InventoryService::healExpression($item);
+            $roll = self::healingRoll($actor, $healExpr);
             $state['log'][] = "{$actor['name']} drinks {$item['name']}.";
-            $state = $this->heal($state, $actor['cid'], (int) $roll['total']);
+            $state = $this->heal($state, $actor['cid'], (int) $roll['total'], self::trayDice($healExpr, $roll));
         }
 
         if ((int) $item['quantity'] <= 1) {
@@ -6607,7 +6608,7 @@ class CombatEngine
                 && Rules::subclassFeature($caster, 'disciple_of_life')) {
                 $healed += 2 + (int) ($spell['cast_level'] ?? $spell['level']);
             }
-            return $this->heal($state, $targetCid, $healed);
+            return $this->heal($state, $targetCid, $healed, self::trayDice($expr, $roll));
         }
 
         // --- a buff: a condition, a cure, a boon, or any mix of the three ---
@@ -7110,7 +7111,11 @@ class CombatEngine
         ]);
     }
 
-    private function heal(array $state, string $cid, int $amount): array
+    /**
+     * @param array|null $dice  what the board's dice tray throws for this heal
+     *                          ({sides, rolls}); display only, never read back
+     */
+    private function heal(array $state, string $cid, int $amount, ?array $dice = null): array
     {
         $target = $this->getCombatant($state, $cid);
         if (!$target || $amount <= 0) {
@@ -7131,7 +7136,11 @@ class CombatEngine
                 ->execute([$newHp, (int) $target['character_id']]);
         }
         $state['log'][] = "{$target['name']} recovers {$amount} HP.";
-        $state = $this->emit($state, ['type' => 'heal', 'target' => $cid, 'amount' => $amount, 'hp' => $newHp]);
+        $event = ['type' => 'heal', 'target' => $cid, 'amount' => $amount, 'hp' => $newHp];
+        if ($dice !== null && $dice['sides'] > 0 && $dice['rolls'] !== []) {
+            $event['heal_dice'] = $dice;
+        }
+        $state = $this->emit($state, $event);
 
         // Healing a downed character puts them back on their feet, and wipes
         // the slate: the SRD's "regaining any hit points" ends the dying
