@@ -1756,9 +1756,13 @@
       const door = ev.target.closest && ev.target.closest('[data-door-to]');
       if (door) { ev.preventDefault(); openDoorMenu(+door.dataset.doorTo); return; }
       const node = ev.target.closest && ev.target.closest('[data-map-node]');
-      if (!node) return;
+      if (node) { ev.preventDefault(); travelTo(+node.dataset.mapNode); return; }
+      // A face on the chart is an SVG group too. Only the groups: a real
+      // <button data-npc> already clicks on Enter, and would talk twice.
+      const person = ev.target.closest && ev.target.closest('[data-npc]:not(button)');
+      if (!person) return;
       ev.preventDefault();
-      travelTo(+node.dataset.mapNode);
+      talkTo(+person.dataset.npc);
     });
   }
 
