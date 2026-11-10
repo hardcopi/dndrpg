@@ -24,6 +24,8 @@
   --die20-tumble: 194px;
   --die6-rest: 41px;
   --die6-tumble: 73px;
+  --die4-rest: 97px;
+  --die4-tumble: 111px;
   --die8-rest: 96px;
   --die8-tumble: 121px;
   --die10-rest: 96px;
@@ -221,4 +223,28 @@
 .die12.show-10 { transform: rotateX(90deg) rotateY(54deg) rotateZ(-58.28253deg); }
 .die12.show-11 { transform: rotateX(58.28253deg) rotateY(180deg) rotateZ(0deg); }
 .die12.show-12 { transform: rotateX(58.28253deg) rotateY(0deg) rotateZ(0deg); }
+
+/* --- d4: 4 triangular faces of a tetrahedron --- */
+/* 98.05214px faces draw a solid 97px across at rest, 111px mid-tumble. */
+.die4 { --die-box: 98.05214px; }
+.die4 .die-face {
+  width: 98.05214px;
+  height: 98.05214px;
+  /* Derived from the solid's own corners, so neighbouring faces meet
+     along a shared edge with no gutter between them. Every face of this
+     solid is congruent and identically oriented in its own element, which
+     is what lets one polygon serve all of them. */
+  clip-path: polygon(93.30127% 75%, 50% 0%, 6.69873% 75%);
+}
+.stage4 { width: var(--die4-rest); height: var(--die4-rest); }
+
+.die4 .die-face:nth-child(1) { transform: matrix3d(-0.70711, -0.70711, 0, 0, -0.40825, 0.40825, -0.8165, 0, 0.57735, -0.57735, -0.57735, 0, 10.0074, -10.0074, -10.0074, 1); }
+.die4 .die-face:nth-child(2) { transform: matrix3d(0, 0.70711, 0.70711, 0, -0.8165, 0.40825, -0.40825, 0, -0.57735, -0.57735, 0.57735, 0, -10.0074, -10.0074, 10.0074, 1); }
+.die4 .die-face:nth-child(3) { transform: matrix3d(-0.70711, 0, 0.70711, 0, 0.40825, 0.8165, 0.40825, 0, -0.57735, 0.57735, -0.57735, 0, -10.0074, 10.0074, -10.0074, 1); }
+.die4 .die-face:nth-child(4) { transform: matrix3d(0.70711, 0, -0.70711, 0, -0.40825, 0.8165, -0.40825, 0, 0.57735, 0.57735, 0.57735, 0, 10.0074, 10.0074, 10.0074, 1); }
+
+.die4.show-1 { transform: rotateX(125.26439deg) rotateY(0deg) rotateZ(135deg); }
+.die4.show-2 { transform: rotateX(35.26439deg) rotateY(45deg) rotateZ(-90deg); }
+.die4.show-3 { transform: rotateX(35.26439deg) rotateY(135deg) rotateZ(0deg); }
+.die4.show-4 { transform: rotateX(35.26439deg) rotateY(-45deg) rotateZ(0deg); }
 

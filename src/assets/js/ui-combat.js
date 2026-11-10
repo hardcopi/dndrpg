@@ -2976,9 +2976,9 @@
    * The damage dice, thrown under the d20 once it has hit. Only the weapon's
    * own dice (the server leaves Sneak Attack and the like out, since they can
    * be another die), so the total under them is the damage dealt and need not
-   * be their sum. Dice the geometry has no solid for (a d4) are skipped.
+   * be their sum. Dice the geometry has no solid for are skipped.
    */
-  const DAMAGE_SOLIDS = new Set([6, 8, 10, 12]);
+  const DAMAGE_SOLIDS = new Set([4, 6, 8, 10, 12]);
   async function trayDamage(dd, amount) {
     const box = $('#cbt-map', root());
     const tray = box && box.querySelector('.cbt-dice-tray');
