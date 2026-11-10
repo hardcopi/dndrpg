@@ -2685,6 +2685,13 @@
         }
 
         case 'heal':
+          // Healing Word, Cure Wounds, a potion, Second Wind: the dice first,
+          // then the green number. The amount is what the server healed
+          // (the dice plus the modifier, capped at full), so it is the caption.
+          if (dice && !quick && ev.heal_dice) {
+            await trayRoll(0, '', 'is-heal', quick, true);
+            await trayDamage(ev.heal_dice, ev.amount, 'healed');
+          }
           flash(ev.target, 'heal-flash');
           boardHit(ev.target, 'heal');
           float(ev.target, '+' + ev.amount, 'float-heal');
@@ -2996,7 +3003,7 @@
    * be their sum. Dice the geometry has no solid for are skipped.
    */
   const DAMAGE_SOLIDS = new Set([4, 6, 8, 10, 12]);
-  async function trayDamage(dd, amount) {
+  async function trayDamage(dd, amount, verb = 'damage') {
     const box = $('#cbt-map', root());
     const tray = box && box.querySelector('.cbt-dice-tray');
     if (!tray || !dd || !DAMAGE_SOLIDS.has(Number(dd.sides))) return;
@@ -3021,7 +3028,8 @@
     if (!tray.isConnected) return;
     cap.textContent = amount == null
       ? `rolled ${rolls.reduce((a, b) => a + b, 0)}`
-      : `${amount} damage`;
+      : verb === 'healed' ? `+${amount} healed` : `${amount} damage`;
+    if (verb === 'healed') cap.classList.add('is-heal');
     trayTimer = setTimeout(() => tray.classList.add('is-gone'), 1400);
     await new Promise((r) => setTimeout(r, 160));
   }
