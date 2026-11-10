@@ -335,7 +335,7 @@
     // role="group", not "img": an img's children are presentational, which
     // took every combatant's role="button" out of the accessibility tree.
     const svg = `<svg class="battlemap" viewBox="0 0 ${W} ${H}"
-                 role="group" aria-label="The battlefield">
+                 role="group" aria-label="The battlefield. Arrow keys move between squares.">
       <defs>
         <clipPath id="bm-round"><circle cx="0" cy="0" r="0.34"/></clipPath>
         <pattern id="bm-hatch" width="0.5" height="0.5" patternUnits="userSpaceOnUse"
@@ -820,8 +820,29 @@
    * a click position back into a cell with getScreenCTM would be arithmetic
    * that can be wrong.
    */
+  /**
+   * The one square that takes Tab, as "x,y". Every walkable square used to be
+   * its own Tab stop, so getting from the initiative cards to Attack or End
+   * turn was a hundred-odd presses through "open ground". It is one stop now
+   * (a roving tabindex), and the arrow keys walk the board from it. Kept at
+   * module scope so a redraw, which replaces every rect, puts the stop back
+   * where the player left it.
+   */
+  let rovingAt = null;
+  const isInert = (ch) => ch === '#' || ch === 'v';
+
   function cellsHtml(terrain) {
     let out = '';
+    let home = null;
+    for (let y = 0; y < H && !home; y++) {
+      for (let x = 0; x < W; x++) {
+        if (!isInert((terrain[y] || '')[x])) { home = `${x},${y}`; break; }
+      }
+    }
+    if (rovingAt) {
+      const [rx, ry] = rovingAt.split(',').map(Number);
+      if (rx < W && ry < H && !isInert((terrain[ry] || '')[rx])) home = rovingAt;
+    }
     for (let y = 0; y < H; y++) {
       const row = terrain[y] || '';
       for (let x = 0; x < W; x++) {
@@ -831,8 +852,9 @@
         // clickable (the pointer still gets their tooltip) but drop out of the
         // Tab order. They were a third of the stops between one card and the
         // next, each read aloud as "a wall, button".
-        const inert = row[x] === '#' || row[x] === 'v';
-        const focus = inert ? 'tabindex="-1" aria-hidden="true"' : 'tabindex="0" role="button"';
+        const inert = isInert(row[x]);
+        const focus = inert ? 'tabindex="-1" aria-hidden="true"'
+          : `tabindex="${`${x},${y}` === home ? 0 : -1}" role="button"`;
         out += `<rect class="bm-hit" data-bm-cell="${x},${y}" x="${x}" y="${y}"
           width="1" height="1" ${focus}><title>${esc(title)}</title></rect>`;
       }
@@ -2302,6 +2324,38 @@
       }
       const cell = cellOf(ev);
       if (cell && h.onCell) h.onCell(cell[0], cell[1]);
+    });
+
+    // Arrow keys from a focused square: move the one Tab stop to the next
+    // walkable square that way, stepping over walls and pits.
+    const STEP = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] };
+    svg.addEventListener('keydown', (ev) => {
+      const step = STEP[ev.key];
+      const here = ev.target && ev.target.dataset && ev.target.dataset.bmCell;
+      if (!step || !here || ev.altKey || ev.ctrlKey || ev.metaKey) return;
+      ev.preventDefault();
+      let [x, y] = here.split(',').map(Number);
+      for (;;) {
+        x += step[0];
+        y += step[1];
+        if (x < 0 || y < 0 || x >= W || y >= H) return;
+        const next = svg.querySelector(`.bm-hit[data-bm-cell="${x},${y}"]`);
+        if (next && next.getAttribute('aria-hidden') !== 'true') {
+          ev.target.setAttribute('tabindex', '-1');
+          next.setAttribute('tabindex', '0');
+          rovingAt = `${x},${y}`;
+          next.focus();
+          return;
+        }
+      }
+    });
+    // A click focuses a square too; the Tab stop follows it there.
+    svg.addEventListener('focusin', (ev) => {
+      const at = ev.target && ev.target.dataset && ev.target.dataset.bmCell;
+      if (!at || ev.target.getAttribute('aria-hidden') === 'true' || at === rovingAt) return;
+      svg.querySelectorAll('.bm-hit[tabindex="0"]').forEach((r) => r.setAttribute('tabindex', '-1'));
+      ev.target.setAttribute('tabindex', '0');
+      rovingAt = at;
     });
 
     svg.addEventListener('keydown', (ev) => {
