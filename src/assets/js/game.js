@@ -1995,6 +1995,11 @@
           })
         : true;
       if (go) await startCombat({ encounter_id: ev.encounter_id });
+      // Held back. After a walk, focus is already back on something real and
+      // this does nothing; on a fresh page load the prompt was opened from
+      // nothing, so closing it dropped focus on the page top. Land on the
+      // place's name, as an arrival does.
+      else landOnArrival();
       return;
     }
   }
