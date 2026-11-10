@@ -143,6 +143,25 @@
             {
                 "conditions": [
                     {
+                        "flag": "quarry_writ_fate",
+                        "equals": "filed"
+                    },
+                    {
+                        "flag": "act_two_open"
+                    }
+                ],
+                "once": true,
+                "text": "\"Twice this quarter,\" Ashe says, still writing, \"somebody has come to the second desk and asked when the east quarry stopped being the town's.\" He reaches the end of the line. \"Twice I have been able to turn to a page and give them a date. In nineteen years I have never before been asked a question about this town and had the answer already written down.\" He blots it. \"I didn't ask either of them why they wanted to know. It isn't my column.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "concern_answering"
                     }
                 ],

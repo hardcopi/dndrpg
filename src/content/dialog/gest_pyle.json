@@ -70,6 +70,54 @@
             {
                 "conditions": [
                     {
+                        "flag": "quarry_writ_fate",
+                        "equals": "stone"
+                    }
+                ],
+                "once": true,
+                "text": "\"Folk stop at the fourth face now,\" Pyle says, with his hand on top of the stone. \"Two drovers stood here an hour on Tuesday arguing which of them was lying, the stone or the paper. Never once argued about it while it was only wrong.\" He looks pleased in a way he does not seem to approve of. \"It's a bad repair. You can see it from the road.\"",
+                "choices": [
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "quarry_writ_fate",
+                        "equals": "sold"
+                    }
+                ],
+                "once": true,
+                "text": "\"A man came up to look at the stone after you'd gone,\" Pyle says. \"Polite. Didn't touch it. Stood a long while looking at the fourth face like a man checking his change.\" He winds the strap. \"Then he asked me how far I walk, and wrote nothing down, and thanked me by name. I never gave him it.\"",
+                "choices": [
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "quarry_writ_fate",
+                        "equals": "filed"
+                    }
+                ],
+                "once": true,
+                "text": "\"It's in the town's book, then,\" Pyle says. \"The face and the date.\" He looks at the stone as though it had been told off. \"Doesn't change who owns the hole. But I walk past it and I know somebody wrote it down, and that's more than I knew in the spring.\"",
+                "choices": [
+                    {
+                        "label": "Leave him to it.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "wardens_count_fate",
                         "equals": "true"
                     }

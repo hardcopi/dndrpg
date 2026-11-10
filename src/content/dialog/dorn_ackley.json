@@ -70,6 +70,54 @@
             {
                 "conditions": [
                     {
+                        "flag": "quarry_writ_fate",
+                        "equals": "filed"
+                    }
+                ],
+                "once": true,
+                "text": "\"In the town's book,\" Ackley says, facing north. \"When it stopped being ours.\" He is quiet for a while. \"Nobody wrote down when it stopped being anything else, eleven years ago. Somebody should do the whole lot, one day. Not me.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "quarry_writ_fate",
+                        "equals": "stone"
+                    }
+                ],
+                "once": true,
+                "text": "\"Cut it back,\" Ackley says. \"Bad hand, Pyle says.\" The blanket shifts, which may be a laugh. \"Good. Stone ought to look like somebody argued with it.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
+                        "flag": "quarry_writ_fate",
+                        "equals": "sold"
+                    }
+                ],
+                "once": true,
+                "text": "\"He came up here first, your polite man,\" Ackley says, without turning round. \"Asked what was on the stone. I told him to ask the stone.\" A pause. \"He said that was quite all right, he'd ask you, and he'd pay. He was right about both, wasn't he.\"",
+                "choices": [
+                    {
+                        "label": "Leave.",
+                        "end": true
+                    }
+                ]
+            },
+            {
+                "conditions": [
+                    {
                         "flag": "quarryman_fate",
                         "equals": "went"
                     }

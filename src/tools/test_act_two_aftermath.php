@@ -532,6 +532,25 @@ try {
         $cs = new CompanionService($db); $cs->meet($p, $c); $cs->recruit($p, $c);
         ok("$c on the figure ($fate)", str_contains(greet($db, $p, $c), $cl), substr(greet($db, $p, $c), 0, 80));
     }
+    echo "== the quarry endings ==\n";
+    $lines = ['filed' => [['gest_pyle', 'town\'s book'], ['dorn_ackley', 'stopped being ours'], ['tibald_ashe', 'east quarry']],
+              'stone' => [['gest_pyle', 'two drovers'], ['dorn_ackley', 'argued with it'], ['alder_pyke', 'argument on it']],
+              'sold'  => [['gest_pyle', 'checking his change'], ['dorn_ackley', 'ask the stone']]];
+    foreach ($lines as $fate => $who) foreach ($who as [$npc, $needle]) {
+        $p = party($db, $base + ['quarry_writ_fate' => $fate, 'mark_seen_writ' => 1]); ended($db, $p, 'walked');
+        $hit = false;
+        for ($k = 0; $k < 4; $k++) { if (stripos(greet($db, $p, $npc), $needle) !== false) { $hit = true; break; } $n = (new DialogEngine($db))->node($p, $npc); talk($db, $p, $npc, [(string) end($n['choices'])['label']]); }
+        ok("$npc reads quarry $fate", $hit);
+        if ($hit) { $n = (new DialogEngine($db))->node($p, $npc); talk($db, $p, $npc, [(string) end($n['choices'])['label']]); }
+        ok("$npc says it once ($fate)", stripos(greet($db, $p, $npc), $needle) === false);
+    }
+    foreach (['filed' => 'margin', 'stone' => 'two of it'] as $fate => $needle) {
+        $p = party($db, $base + ['quarry_writ_fate' => $fate, 'clearance_costed' => 1]); ended($db, $p, 'costed');
+        (new Effects($db))->apply($p, [['start_quest' => 'the_costing']]);
+        ok("Hesper counts the quarry ($fate)", stripos(greet($db, $p, 'hesper_amsel'), $needle) !== false, substr(greet($db, $p, 'hesper_amsel'), 0, 80));
+        talk($db, $p, 'hesper_amsel', ['Count it your way', 'Leave her to it']);
+        ok("and the costing still goes on ($fate)", flag($db, $p, 'costing_fate') === 'given');
+    }
 } catch (Throwable $e) {
     ok('played without a dead end', false, $e->getMessage());
 } finally {
