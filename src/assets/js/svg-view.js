@@ -54,16 +54,44 @@
     let panned = false;
 
     function apply() {
-      const w = base.w / view.z;
-      const h = base.h / view.z;
+      let w = base.w / view.z;
+      let h = base.h / view.z;
+      // Opt-in: shape the viewBox to the element. Left to the default
+      // `meet`, a box wider than the drawing's own shape is letterboxed, and
+      // the letterbox shows whatever lies past the clamp below — on the
+      // scene chart, a dark strip beside the art once the view is panned to
+      // an edge. Matching the shape means what is clamped is what is seen
+      // (and a screen point maps to the viewBox with no letterbox offset).
+      if (o.fitAspect) {
+        const r = svgEl.getBoundingClientRect();
+        if (r.width > 1 && r.height > 1) {
+          const shape = r.width / r.height;
+          if (shape > w / h) w = h * shape;
+          else h = w / shape;
+        }
+      }
       // Keep the view inside the drawing. At zoom 1 that pins it to the middle,
       // which is why the clamp is expressed as a range rather than a limit.
+      // A view bigger than the drawing on one axis is centred on it.
+      // `clamp` (optional, defaults to `base`) is the box the view may not
+      // leave — a caller whose base carries margin for labels can keep the
+      // view on the painted part once it is zoomed in.
+      const c = (o.clamp && o.clamp()) || base;
       const halfW = w / 2;
       const halfH = h / 2;
-      view.cx = Math.min(Math.max(view.cx, base.x + halfW), base.x + base.w - halfW);
-      view.cy = Math.min(Math.max(view.cy, base.y + halfH), base.y + base.h - halfH);
+      view.cx = w >= c.w ? c.x + c.w / 2
+        : Math.min(Math.max(view.cx, c.x + halfW), c.x + c.w - halfW);
+      view.cy = h >= c.h ? c.y + c.h / 2
+        : Math.min(Math.max(view.cy, c.y + halfH), c.y + c.h - halfH);
       svgEl.setAttribute('viewBox', `${view.cx - halfW} ${view.cy - halfH} ${w} ${h}`);
       onApply(view);
+    }
+    if (o.fitAspect && window.ResizeObserver) {
+      let t = null;
+      new ResizeObserver(() => {
+        clearTimeout(t);
+        t = setTimeout(() => { if (svgEl.isConnected) apply(); }, 60);
+      }).observe(svgEl);
     }
 
     /** A screen point in viewBox units. */
