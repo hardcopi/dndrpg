@@ -475,6 +475,7 @@
       </div>`;
 
     bindCards();
+    keepActorInView();
     bindEffects();
     bindMap(s, actor);
     renderInspector();
@@ -488,6 +489,23 @@
     if (actor && actor.type === 'pc' && !ui.sheets.has(Number(actor.character_id))) {
       ensureSheet(actor).then(() => render());
     }
+  }
+
+  /**
+   * On a phone the initiative is one scrolling row, and every render rebuilds
+   * it at scroll 0 — so the card whose turn it is could sit off the edge
+   * while the board waited on them. Centre it when the row overflows. Only
+   * the row scrolls (scrollLeft, not scrollIntoView), never the page; on
+   * desktop the list is a column and does not overflow, so nothing moves.
+   */
+  function keepActorInView() {
+    const list = root() && root().querySelector(".cbt-init-list");
+    const card = list && list.querySelector('.cbt-card.is-actor');
+    if (!card || list.scrollWidth <= list.clientWidth + 1) return;
+    const lr = list.getBoundingClientRect();
+    const cr = card.getBoundingClientRect();
+    const left = cr.left - lr.left + list.scrollLeft;
+    list.scrollLeft = Math.max(0, left - (list.clientWidth - cr.width) / 2);
   }
 
   /**
