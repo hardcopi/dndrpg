@@ -339,8 +339,11 @@
    * so nothing else has to know whether the panel is up.
    */
   function openRolls() {
+    // modalHead for the ×: this was the one panel with no close control at
+    // all, so on a phone (no Escape key) the backdrop was the only way out,
+    // and the keyboard's focus trap had nothing inside it to land on.
     showModal(
-      '<h2>Recent rolls</h2><div class="roll-list" id="roll-list">'
+      modalHead('Recent rolls') + '<div class="roll-list" id="roll-list">'
       + '<p class="help-hint">Loading…</p></div>',
       { slot: 'rolls', label: 'Recent rolls' }
     );
