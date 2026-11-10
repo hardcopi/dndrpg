@@ -4630,8 +4630,8 @@ window.RIVERMARK_SCENES = {
         "icon": "↩"
       },
       "low_court": {
-        "x": 18,
-        "y": 46,
+        "x": 26,
+        "y": 80,
         "icon": "↓"
       }
     },
