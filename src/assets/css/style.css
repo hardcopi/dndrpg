@@ -127,7 +127,8 @@ h1, h2, h3 { color: var(--gold); font-weight: var(--fw-semibold); letter-spacing
 .btn:has(svg) { display: inline-flex; align-items: center; gap: var(--sp-8); }
 .btn > svg { width: 0.85em; height: 0.85em; flex: 0 0 auto; }
 .btn > .btn-glyph { fill: currentColor; stroke: none; }
-.btn:disabled { opacity: 0.45; cursor: not-allowed; box-shadow: none; }
+.btn:disabled,
+.btn[aria-disabled="true"] { opacity: 0.45; cursor: not-allowed; box-shadow: none; }
 
 .panel {
   background: var(--bg-panel);

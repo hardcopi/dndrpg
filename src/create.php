@@ -327,7 +327,7 @@ require_signed_in_page();
     <footer class="wiz-nav">
       <button type="button" class="btn" id="wiz-back">← Back</button>
       <p class="wiz-reason" id="wiz-reason" aria-live="polite"></p>
-      <button type="button" class="btn btn-primary" id="wiz-next">Next →</button>
+      <button type="button" class="btn btn-primary" id="wiz-next" aria-describedby="wiz-reason">Next →</button>
       <button type="submit" class="btn btn-primary hidden" id="submit-btn">Create &amp; Enter Game</button>
     </footer>
   </form>

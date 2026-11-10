@@ -221,7 +221,11 @@
     $('#wiz-back').disabled = state.step === 0;
     $('#wiz-next').classList.toggle('hidden', last);
     $('#submit-btn').classList.toggle('hidden', !last);
-    $('#wiz-next').disabled = why !== null;
+    // aria-disabled rather than disabled: a disabled button drops out of the
+    // Tab order, so a keyboard player went from Back straight past Next and
+    // never met the line saying what was missing. This one stays reachable,
+    // names the reason, and wizardNext refuses the press.
+    $('#wiz-next').setAttribute('aria-disabled', String(why !== null));
     // On the last step there is nothing left to block, so the reason line is
     // free for the summary's own hint.
     $('#wiz-reason').textContent = last ? '' : (why || '');
