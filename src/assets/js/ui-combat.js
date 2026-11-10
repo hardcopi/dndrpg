@@ -470,7 +470,7 @@
                     aria-label="Zoom in">+</button>
             ${viewToggleHtml()}
           </div>
-          ${ui.placing ? `<div class="cbt-placing">Placing <strong>${esc(ui.placing.name)}</strong>
+          ${ui.placing ? `<div class="cbt-placing" role="status">Placing <strong>${esc(ui.placing.name)}</strong>
             — click the ground. <button type="button" class="btn btn-small" data-cancel-place>Cancel</button></div>` : ''}
           ${ui.aiming ? (ui.aiming.mode === 'area' ? areaBannerHtml(ui.aiming) : aimBannerHtml(ui.aiming)) : ''}
         </div>
@@ -516,7 +516,7 @@
     };
     // The aiming banner goes when the spell lands or is called off; hand
     // focus back to Cast (or the next open slot) rather than to nothing.
-    if (a.closest('.cbt-aiming')) return '#cbt-bar [data-act="cast"]';
+    if (a.closest('.cbt-aiming, .cbt-placing')) return '#cbt-bar [data-act="cast"]';
     const slot = a.closest('#cbt-bar [data-act]');
     if (slot) {
       const extra = slot.getAttribute('data-extra');
@@ -2318,7 +2318,11 @@
             : (b.querySelector('.spell-name')?.textContent || 'the spell');
           ui.placing = { spell_id: +b.dataset.spell, shape: area.shape, ft: area.ft, name,
                          cast_level: castLevel };
+          const kb = keyboardDriven();
           render();
+          // From the keys, land on the banner rather than behind it: its
+          // Cancel is the way out, and Tab goes on to the board's squares.
+          if (kb) root()?.querySelector('[data-cancel-place]')?.focus({ preventScroll: true });
           return;
         }
         const spellId = +b.dataset.spell;
