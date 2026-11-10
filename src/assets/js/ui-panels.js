@@ -609,6 +609,13 @@
           G().state.quests = r.mine || [];
           G().state.questMarkers = r.markers || [];
           renderQuestTracker();
+          // The tracker is redrawn with the picked quest at its head, and the
+          // button that was pressed is gone with the old one — land on the new
+          // head's way there, which is what picking a quest is for.
+          const a = document.activeElement;
+          if (!a || a === document.body || !a.isConnected) {
+            ($('.track-go', box) || $('[data-track]', box))?.focus();
+          }
         } catch (e) {
           G().showError(e.message);
         }
