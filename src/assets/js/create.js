@@ -269,13 +269,22 @@
     // Nothing here is kept until Create: Leave threw away a named, rolled,
     // half-dressed character on one click, a step from Back. Ask first — but
     // only once there is something to lose.
-    $('[data-wiz-leave]')?.addEventListener('click', (e) => {
+    //
+    // The site bar's doors (Shelf, Handbook… Sign out) leave the same way, so
+    // they ask the same way. Capture on the document so the question comes
+    // before the bar's own Sign-out handler, and a No stops that one too. A
+    // new-tab click (Ctrl/⌘/Shift/middle) loses nothing, so it is let through.
+    document.addEventListener('click', (e) => {
+      const a = e.target.closest('[data-wiz-leave], .site-bar a[href]');
+      if (!a || e.defaultPrevented) return;
+      if (e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
       const named = ($('#name')?.value || '').trim() !== '';
       if ((state.reached > 0 || named)
           && !window.confirm('Leave without making this character? Everything chosen so far will be lost.')) {
         e.preventDefault();
+        e.stopPropagation();
       }
-    });
+    }, true);
     $('#wiz-next').addEventListener('click', wizardNext);
     $('#wiz-back').addEventListener('click', () => goToStep(state.step - 1));
 
