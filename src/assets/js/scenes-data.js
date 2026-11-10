@@ -4286,5 +4286,428 @@ window.RIVERMARK_SCENES = {
         "intensity": 0.4
       }
     ]
+  },
+  sump_drain: {
+    "image": "assets/images/scenes/sump_drain.jpg",
+    "exits": {
+      "flagon_cellar": {
+        "x": 10,
+        "y": 50,
+        "icon": "↩"
+      },
+      "low_conduit": {
+        "x": 78,
+        "y": 32,
+        "icon": "↑"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The scuffed ledge",
+        "x": 40,
+        "y": 78,
+        "act": "search"
+      },
+      {
+        "label": "The channel",
+        "x": 66,
+        "y": 70,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "drip",
+        "x": 20,
+        "y": 0,
+        "w": 60,
+        "h": 70,
+        "intensity": 0.4
+      },
+      {
+        "type": "fog",
+        "x": 0,
+        "y": 60,
+        "w": 100,
+        "h": 40,
+        "intensity": 0.25
+      }
+    ]
+  },
+  low_conduit: {
+    "image": "assets/images/scenes/low_conduit.jpg",
+    "exits": {
+      "sump_drain": {
+        "x": 50,
+        "y": 92,
+        "icon": "↩"
+      },
+      "weir_chamber": {
+        "x": 48,
+        "y": 50,
+        "icon": "↑"
+      },
+      "drowned_counting_room": {
+        "x": 80,
+        "y": 62,
+        "icon": "→"
+      },
+      "low_court": {
+        "x": 12,
+        "y": 80,
+        "icon": "←"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The stopped drains",
+        "x": 10,
+        "y": 28,
+        "act": "search"
+      },
+      {
+        "label": "The water down the middle",
+        "x": 46,
+        "y": 80,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "water",
+        "x": 28,
+        "y": 60,
+        "w": 40,
+        "h": 40,
+        "intensity": 0.4,
+        "count": 12
+      },
+      {
+        "type": "drip",
+        "x": 20,
+        "y": 0,
+        "w": 60,
+        "h": 70,
+        "intensity": 0.4
+      },
+      {
+        "type": "fog",
+        "x": 0,
+        "y": 60,
+        "w": 100,
+        "h": 40,
+        "intensity": 0.2
+      }
+    ]
+  },
+  weir_chamber: {
+    "image": "assets/images/scenes/weir_chamber.jpg",
+    "exits": {
+      "low_conduit": {
+        "x": 50,
+        "y": 92,
+        "icon": "↩"
+      },
+      "flood_gate": {
+        "x": 80,
+        "y": 40,
+        "icon": "→"
+      },
+      "bricked_arch": {
+        "x": 14,
+        "y": 50,
+        "icon": "←"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The weir",
+        "x": 50,
+        "y": 62,
+        "act": "search"
+      },
+      {
+        "label": "The rail",
+        "x": 20,
+        "y": 40,
+        "act": "search"
+      },
+      {
+        "label": "The pool",
+        "x": 65,
+        "y": 82,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "water",
+        "x": 35,
+        "y": 70,
+        "w": 45,
+        "h": 25,
+        "intensity": 0.5,
+        "count": 16
+      },
+      {
+        "type": "drip",
+        "x": 30,
+        "y": 0,
+        "w": 50,
+        "h": 60,
+        "intensity": 0.4
+      },
+      {
+        "type": "fog",
+        "x": 0,
+        "y": 60,
+        "w": 100,
+        "h": 40,
+        "intensity": 0.25
+      }
+    ]
+  },
+  flood_gate: {
+    "image": "assets/images/scenes/flood_gate.jpg",
+    "exits": {
+      "weir_chamber": {
+        "x": 12,
+        "y": 88,
+        "icon": "↩"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The wheel",
+        "x": 61,
+        "y": 63,
+        "act": "search"
+      },
+      {
+        "label": "The greased screw",
+        "x": 53,
+        "y": 30,
+        "act": "search"
+      },
+      {
+        "label": "The new pintles",
+        "x": 36,
+        "y": 40,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "drip",
+        "x": 20,
+        "y": 0,
+        "w": 60,
+        "h": 70,
+        "intensity": 0.3
+      },
+      {
+        "type": "fog",
+        "x": 0,
+        "y": 65,
+        "w": 100,
+        "h": 35,
+        "intensity": 0.2
+      }
+    ]
+  },
+  low_court: {
+    "image": "assets/images/scenes/low_court.jpg",
+    "exits": {
+      "low_conduit": {
+        "x": 55,
+        "y": 48,
+        "icon": "↑"
+      },
+      "grain_stair": {
+        "x": 95,
+        "y": 62,
+        "icon": "→"
+      },
+      "bricked_arch": {
+        "x": 67,
+        "y": 38,
+        "icon": "↑"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The bench",
+        "x": 50,
+        "y": 66,
+        "act": "search"
+      },
+      {
+        "label": "The curtained bays",
+        "x": 12,
+        "y": 50,
+        "act": "search"
+      },
+      {
+        "label": "The lamps",
+        "x": 46,
+        "y": 20,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "dust",
+        "x": 25,
+        "y": 20,
+        "w": 50,
+        "h": 50,
+        "intensity": 0.25,
+        "count": 8
+      }
+    ]
+  },
+  drowned_counting_room: {
+    "image": "assets/images/scenes/drowned_counting_room.jpg",
+    "exits": {
+      "low_conduit": {
+        "x": 6,
+        "y": 82,
+        "icon": "↩"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The strongroom",
+        "x": 73,
+        "y": 48,
+        "act": "search"
+      },
+      {
+        "label": "The cornice",
+        "x": 30,
+        "y": 14,
+        "act": "search"
+      },
+      {
+        "label": "The box-plates",
+        "x": 71,
+        "y": 38,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "water",
+        "x": 0,
+        "y": 68,
+        "w": 100,
+        "h": 32,
+        "intensity": 0.35,
+        "count": 12
+      },
+      {
+        "type": "drip",
+        "x": 20,
+        "y": 0,
+        "w": 60,
+        "h": 60,
+        "intensity": 0.3
+      }
+    ]
+  },
+  bricked_arch: {
+    "image": "assets/images/scenes/bricked_arch.jpg",
+    "exits": {
+      "weir_chamber": {
+        "x": 50,
+        "y": 92,
+        "icon": "↩"
+      },
+      "low_court": {
+        "x": 18,
+        "y": 46,
+        "icon": "↓"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The grey fill",
+        "x": 69,
+        "y": 50,
+        "act": "search"
+      },
+      {
+        "label": "The old arch",
+        "x": 58,
+        "y": 22,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "drip",
+        "x": 20,
+        "y": 0,
+        "w": 60,
+        "h": 70,
+        "intensity": 0.3
+      },
+      {
+        "type": "fog",
+        "x": 0,
+        "y": 65,
+        "w": 100,
+        "h": 35,
+        "intensity": 0.2
+      }
+    ]
+  },
+  grain_stair: {
+    "image": "assets/images/scenes/grain_stair.jpg",
+    "exits": {
+      "low_court": {
+        "x": 8,
+        "y": 52,
+        "icon": "←"
+      },
+      "granary_row": {
+        "x": 72,
+        "y": 22,
+        "icon": "↑"
+      }
+    },
+    "npcs": {},
+    "objects": [
+      {
+        "label": "The broken barrow",
+        "x": 78,
+        "y": 80,
+        "act": "search"
+      },
+      {
+        "label": "The swept landing",
+        "x": 40,
+        "y": 84,
+        "act": "search"
+      }
+    ],
+    "fx": [
+      {
+        "type": "dust",
+        "x": 40,
+        "y": 10,
+        "w": 40,
+        "h": 50,
+        "intensity": 0.25,
+        "count": 8
+      }
+    ]
   }
 };
