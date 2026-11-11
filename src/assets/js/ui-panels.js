@@ -1871,6 +1871,7 @@
           target_character_id: targetId,
         });
         G().log(r.message);
+        if (r.message) G().showNotice(r.message);
         G().mergeCharacter(r.character);
         if (r.caster) G().mergeCharacter(r.caster);
         renderPartyRail();
@@ -2141,6 +2142,7 @@
       G().mergeCharacter(r.character);
       if (r.character?.id == G().state.character?.id) G().state.inventory = r.inventory;
       G().log(r.message, 'success');
+      if (r.message) G().showNotice(r.message);
       renderPartyRail();
       await reopenSheet(inventoryId);
     } catch (e) {
@@ -2244,6 +2246,7 @@
       try {
         const r = await API.post(route, { ...payload, character_id: G().state.character.id });
         G().log(r.message, 'success');
+        if (r.message) G().showNotice(r.message);
         G().mergeCharacter(r.character);
         G().state.inventory = r.inventory;
         renderPartyRail();
