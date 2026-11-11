@@ -2346,9 +2346,14 @@
   function doDescend() {
     return guarded(async () => {
       const r = await API.post('location/descend', {});
+      await refreshAll();
       if (r.message) log(r.message, 'important');
       if (r.depth) log(`Level ${r.depth}. ${r.rooms} rooms.`, '', 'story');
-      await refreshAll();
+      // The news belongs on the banner too: on a phone the log sits below
+      // the fold, the same gap the door and the chest had before #200.
+      const notice = [r.message, r.depth ? `Level ${r.depth}. ${r.rooms} rooms.` : '']
+        .filter(Boolean).join(' ');
+      if (notice) showError(notice, { good: true });
     });
   }
 
@@ -2356,8 +2361,8 @@
   function doLeaveDungeon() {
     return guarded(async () => {
       const r = await API.post('location/leave_dungeon', {});
-      if (r.message) log(r.message, 'success');
       await refreshAll();
+      announceLines(r.message ? [r.message] : [], 'success');
     });
   }
 
