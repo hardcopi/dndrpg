@@ -1451,12 +1451,12 @@
       e.target.disabled = true;
       try {
         const r = await API.post(route, {});
-        G().log(r.message, 'success');
         // Anyone who reached breaking point leaves at the fire, so the rest
-        // has more to report than "you feel better".
-        (r.messages || []).forEach((m) => G().log(m, 'story'));
+        // has more to report than "you feel better". The banner, not only
+        // the log: on a phone the log is below the fold once this closes.
         closeTopModal();
         await G().refreshAll();
+        G().announceRest(r);
       } catch (err) {
         G().showError(err.message);
         e.target.disabled = false;

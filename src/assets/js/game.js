@@ -209,6 +209,19 @@
     errorTimer = setTimeout(() => b.classList.add('hidden'), ms);
   }
 
+  /**
+   * A rest's news belongs on the banner, not only in the log. On a phone the
+   * log sits below the fold, so "the party wakes rested" — or that someone
+   * has left in the night — vanished the moment the camp closed, the same
+   * gap defeat and flight had before #175 / #176.
+   */
+  function announceRest(r, extraCls) {
+    if (r.message) log(r.message, 'success');
+    (r.messages || []).forEach((m) => log(m, extraCls || 'story'));
+    const notice = [r.message, ...(r.messages || [])].filter(Boolean).join(' ');
+    if (notice) showError(notice, { good: true });
+  }
+
   // =========================================================================
   // Portrait paths.
   //
@@ -2272,9 +2285,8 @@
   function doRest() {
     return guarded(async () => {
       const r = await API.post('location/rest', {});
-      if (r.message) log(r.message, 'success');
-      (r.messages || []).forEach((m) => log(m, 'important'));
       await refreshAll();
+      announceRest(r, 'important');
     });
   }
 
@@ -2298,9 +2310,8 @@
   function doCamp() {
     return guarded(async () => {
       const r = await API.post('location/camp', {});
-      if (r.message) log(r.message, 'success');
-      (r.messages || []).forEach((m) => log(m, 'important'));
       await refreshAll();
+      announceRest(r, 'important');
     });
   }
 
@@ -2341,8 +2352,8 @@
   function doShortRest() {
     return guarded(async () => {
       const r = await API.post('location/short_rest', {});
-      if (r.message) log(r.message, 'success');
       await refreshAll();
+      announceRest(r);
     });
   }
 
@@ -2638,6 +2649,7 @@
     esc, fmtMod, hpPct, hpBand, sleep, reducedMotion, isTypingTarget,
     log, showError,
     showNotice: (msg) => showError(msg, { good: true }),
+    announceRest,
     // portrait paths
     withTileVer, bodySpriteUrl, variantUrl, spriteArtUrl, classArtUrl,
     // state and flow
