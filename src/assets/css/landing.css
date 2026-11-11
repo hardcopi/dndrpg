@@ -460,3 +460,23 @@ body.lp .lp-btn-go { background: linear-gradient(#f3d898, #c9a45c 55%, #a07e3a);
 body.lp .lp-btn-go:hover, body.lp .lp-btn-go:focus-visible { background: linear-gradient(#fbe6b4, #d8b46a 55%, #b08c44); }
 body.lp a:not(.lp-btn) { color: var(--link); }
 body.lp .lp-close { background: radial-gradient(100% 120% at 50% 100%, #3a2a40 0%, transparent 60%), #140e19; border-top: 2px solid var(--border-strong); }
+
+/* --- about & legal ------------------------------------------------------ */
+
+/* about.php keeps its shared .panel/.legal-text markup; on the skin the
+   panels become plates and the text runs from the panel's own left edge.
+   .legal-text was centred in an 800px box inside a wider panel, which left a
+   blank gutter beside every paragraph. */
+body.lp-about .lp-hero { padding: var(--sp-48) 0 var(--sp-40); }
+body.lp-about .lp-hero h1 { font-size: var(--fs-3xl); }
+body.lp-about .container { max-width: 960px; padding-top: var(--sp-32); padding-bottom: var(--sp-32); }
+body.lp-about .panel {
+  background: linear-gradient(#2e2034, #21172a);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  box-shadow: 0 3px 10px #0007;
+}
+body.lp-about .panel h2 { font-family: 'Cinzel', serif; font-weight: 700; color: var(--gold); border-bottom-color: var(--border); }
+body.lp-about .legal-text { max-width: 72ch; margin: 0 0 var(--sp-12); font-size: 1rem; line-height: var(--lh-prose); }
+body.lp-about .panel ul { font-size: 1rem; }
+body.lp-about .footer-legal { border-top: 2px solid var(--border-strong); background: #140e19; }
