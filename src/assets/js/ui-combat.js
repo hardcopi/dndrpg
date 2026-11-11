@@ -1300,7 +1300,7 @@
       </button>`;
     };
     const el = window.UI.showModal(`
-      <h2>${esc(a.name)}: choose ${AIM_WORD[a.mode] || 'a target'}</h2>
+      ${window.UI.modalHead(`${a.name}: choose ${AIM_WORD[a.mode] || 'a target'}`)}
       <div class="spell-list aim-list">
         ${ok.map((c) => row(c, true)).join('') || '<p class="help-hint">Nobody is in reach — walk closer, or cancel.</p>'}
         ${no.length ? `<p class="help-hint aim-out">Out of reach</p>${no.map((c) => row(c, false)).join('')}` : ''}
@@ -1312,6 +1312,9 @@
     `, { size: 'wide', label: `Choose a target for ${a.name}` });
     el.querySelector('[data-aim-back]').onclick = window.UI.closeTopModal;
     el.querySelector('[data-aim-cancel]').onclick = () => { window.UI.closeTopModal(); stopAiming(); };
+    // The × is the first control, but opening the list is for picking:
+    // start the keys on the first target in reach, as before.
+    firstPick(el);
     $$('[data-aim-cid]', el).forEach((b) => {
       b.onclick = () => { window.UI.closeTopModal(); aimAt(b.dataset.aimCid); };
     });
@@ -1578,7 +1581,7 @@
       </button>`;
     }).join('');
     const el = window.UI.showModal(`
-      <h2>${esc(a.name)}: ${a.origin === 'point' ? 'where should it burst?' : 'which way?'}</h2>
+      ${window.UI.modalHead(`${a.name}: ${a.origin === 'point' ? 'where should it burst?' : 'which way?'}`)}
       <p class="help-hint">${a.origin === 'point'
         ? `A ${esc(a.ft)}-ft ${esc(SHAPE_WORD[a.shape] || a.shape)} anywhere within ${esc(a.range_ft)} ft that you can see. It catches everybody inside — your own side too.`
         : `A ${esc(a.ft)}-ft ${esc(SHAPE_WORD[a.shape] || a.shape)} from where you stand. It catches everybody inside — your own side too.`}
@@ -1591,6 +1594,7 @@
     `, { size: 'wide', label: `Place ${a.name}` });
     el.querySelector('[data-aim-back]').onclick = window.UI.closeTopModal;
     el.querySelector('[data-aim-cancel]').onclick = () => { window.UI.closeTopModal(); stopAiming(); };
+    firstPick(el);
     $$('[data-area-key]', el).forEach((b) => {
       b.onclick = () => {
         window.UI.closeTopModal();
