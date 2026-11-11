@@ -626,6 +626,11 @@ body.game-page .loc-inner.is-chart .loc-foot .loc-ways { margin: 0; padding: 0; 
      the first line of prose and reads as part of it ("The squarethe heart of
      Rivermark"). Here it gets its own line under the name instead. */
   body.game-page .loc-inner.scene-storybook .scene-subtitle { float: none; display: block; margin: 0 0 4px; }
+  /* Tasks / Log / People were a 30px strip, under the 44px tap floor.
+     Stretch the tabs to the floor. The panel stays 18rem, so when the
+     rail is scrolled into view the tab bar, the log filters, and the
+     collapse control still sit above the dock. */
+  body.game-page .rail-tab { min-height: var(--tap-min); padding-top: 0; padding-bottom: 0; }
   body.game-page:not(.in-combat) { --dock-h: 128px; }
   body.game-page:not(.in-combat) .gw-window { padding-bottom: calc(var(--dock-h) + env(safe-area-inset-bottom, 0px)); }
   body.game-page:not(.in-combat) .rail-right .rail-party,
