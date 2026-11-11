@@ -5365,7 +5365,14 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 }
 
 .check-boosts { margin-top: var(--sp-14); }
-.boost-list { display: flex; flex-direction: column; gap: var(--sp-4); }
+.boost-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  /* The four-column row is sized against this list, not the viewport:
+     the check panel is 620px on a desktop and much narrower on a phone. */
+  container-type: inline-size;
+}
 .boost-row {
   display: grid;
   grid-template-columns: minmax(6rem, auto) minmax(0, 1fr) auto auto;
@@ -5380,6 +5387,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   font-size: var(--fs-xs);
   text-align: left;
   cursor: pointer;
+  min-width: 0;
 }
 .boost-row:hover { border-color: var(--gold-dim); }
 .boost-row.on {
@@ -5388,13 +5396,42 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   color: var(--text);
   box-shadow: var(--sh-ring);
 }
-.boost-name { color: var(--gold); }
-.boost-detail { font-size: var(--fs-2xs); }
-.boost-adds { font-family: var(--mono); color: var(--accent); }
-.boost-cost { font-size: var(--fs-2xs); text-transform: uppercase; letter-spacing: var(--ls-wide); }
+.boost-name { color: var(--gold); min-width: 0; }
+.boost-detail { font-size: var(--fs-2xs); min-width: 0; }
+.boost-adds { font-family: var(--mono); color: var(--accent); white-space: nowrap; }
+.boost-cost {
+  font-size: var(--fs-2xs);
+  text-transform: uppercase;
+  letter-spacing: var(--ls-wide);
+  text-align: right;
+}
 .cost-free { color: var(--success); }
-.cost-use { color: var(--gold-dim); }
+/* --gold-dim is decorative only (2.48:1) and is never text; axe flags
+   "costs a use" at 3.78:1 on the check row. --gold-ink is the same hue,
+   already used as running gold. */
+.cost-use { color: var(--gold-ink); }
 .cost-concentration { color: var(--warn); }
+
+/* On a 320px or 390px phone the four columns have no room: Guidance's
+   +1d4 sits on "Pike, cantrip", "COSTS CONCENTRATION" is clipped, and
+   Halfling Lucky's "reroll a 1" covers its own detail. Stack name with
+   the effect, and the who-line with the cost, so each stays readable.
+   A 620px desktop panel is wider than 32rem and keeps the four columns. */
+@container (max-width: 32rem) {
+  .boost-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "name adds"
+      "detail cost";
+    align-items: start;
+    column-gap: var(--sp-12);
+    row-gap: var(--sp-2);
+  }
+  .boost-name { grid-area: name; }
+  .boost-detail { grid-area: detail; }
+  .boost-adds { grid-area: adds; justify-self: end; }
+  .boost-cost { grid-area: cost; justify-self: end; }
+}
 
 .check-actions {
   display: flex;
