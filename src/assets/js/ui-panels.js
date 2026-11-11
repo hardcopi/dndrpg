@@ -1324,9 +1324,12 @@
     const atRisk = here.filter((c) => approvalBand(c.approval, c).risk);
     const canReturn = away.some((c) => c.status === 'left');
 
+    // modalHead for the ×: with a few companions at the fire the only Close
+    // sat below the fold on a phone, same as the shop before #182. The
+    // bottom Close stays; Escape and the backdrop still close as they did.
     const el = showModal(`
+      ${modalHead('Camp')}
       <div class="camp-scene">
-        <h2 class="camp-head">Camp</h2>
         <p class="camp-intro">The fire is banked and the night is somebody
           else's problem for a few hours. Sit with someone.</p>
 
