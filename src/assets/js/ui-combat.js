@@ -2294,7 +2294,7 @@
     }).join('');
 
     const el = window.UI.showModal(`
-      <h2>Cast</h2>
+      ${window.UI.modalHead('Cast')}
       <p class="help-hint">Range is printed on every spell and now means what it says —
         walk closer if it will not carry.</p>
       <div class="spell-list">${rows || '<p class="help-hint">Nothing to cast.</p>'}</div>
@@ -2302,6 +2302,9 @@
     `, { size: 'wide', label: 'Cast a spell' });
 
     el.querySelector('[data-close]').onclick = window.UI.closeTopModal;
+    // The × in the title bar is the first control, but opening the list is
+    // for casting: start the keys on the first spell that can go, as before.
+    firstPick(el);
     $$('[data-spell]', el).forEach((b) => {
       b.onclick = () => {
         window.UI.closeTopModal();
@@ -2347,9 +2350,15 @@
     });
   }
 
+  /** Focus a picker's first live row (Cast, Use an item), past its title-bar ×. */
+  function firstPick(el) {
+    const row = el.querySelector('.spell-list button:not(:disabled)');
+    if (row) row.focus();
+  }
+
   function openItemPicker(actor, potions) {
     const el = window.UI.showModal(`
-      <h2>Use an item</h2>
+      ${window.UI.modalHead('Use an item')}
       <div class="spell-list">
         ${potions.map((p) => `<button type="button" class="spell-row" data-item="${esc(p.id)}">
           <span class="spell-name">${esc(p.name)}</span>
@@ -2361,6 +2370,7 @@
     `, { label: 'Use an item' });
 
     el.querySelector('[data-close]').onclick = window.UI.closeTopModal;
+    firstPick(el);
     $$('[data-item]', el).forEach((b) => {
       b.onclick = () => {
         window.UI.closeTopModal();

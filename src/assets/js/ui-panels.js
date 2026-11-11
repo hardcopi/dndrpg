@@ -2264,7 +2264,7 @@
     init,
     // overlays
     pushOverlay, overlayOpen,
-    showModal, closeTopModal, closeAllModals, confirm,
+    showModal, modalHead, closeTopModal, closeAllModals, confirm,
     // rails
     renderPartyRail, renderQuestTracker, renderActionBar, applyTutorialHints,
     appendLogLine, redrawLog, refreshRolls, selectRailTab,
