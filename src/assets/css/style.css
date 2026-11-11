@@ -7364,6 +7364,9 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
 .cbt-actions.is-stack .act-slot.is-armed .act-confirm { display: none; }
 .cbt-actions.is-stack .act-slot.is-armed .act-desc { color: var(--gold-bright); }
 
+/* Drawn from data-n rather than as text: the label already carries the count
+   ("Second Wind (1)"), and a text "1" here sat ahead of the name. */
+.act-count::before { content: attr(data-n); }
 .act-count {
   position: absolute;
   right: 2px;

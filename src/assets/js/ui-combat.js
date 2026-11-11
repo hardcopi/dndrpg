@@ -2080,16 +2080,26 @@
    *
    * The name is drawn now — the bar is a column, not a row of 34px keys, and
    * a column that wide can say Disengage instead of asking the player to
-   * remember which icon that was. `data-label` and `aria-label` still carry
-   * the same string the visible name does, so the tooltip and anything
-   * reading the page aloud cannot drift from what is on the key.
+   * remember which icon that was. `data-label` carries the same string the
+   * visible name does and `aria-label` starts with it, so the tooltip and
+   * anything reading the page aloud cannot drift from what is on the key.
    */
-  // The slot's name is its aria-label, so the line under it ("Select an enemy
-  // first", "Choose a spell") was never read: it rides as the description.
-  let slotSeq = 0;
+  // The line under the name ("Select an enemy first", "Choose a spell") is
+  // drawn on the slot too, so it belongs in the name: naming the slot only
+  // "Attack" while it showed "Attack / Select an enemy first" was axe
+  // label-content-name-mismatch on every slot of the desktop bar. The name is
+  // the slot's text as drawn, verb first, so "Attack" still starts it for
+  // voice control. It used to ride as aria-describedby as well; that is gone,
+  // or a screen reader would hear the line twice.
+  // The corner count on a budgeted slot (Second Wind's "1") is drawn by CSS
+  // from data-n: it repeats the "(1)" already in the label, and as text it put
+  // a stray "1" ahead of the name in what the slot showed.
+  function slotName(label, why) {
+    return why ? `${label} ${why}` : String(label || '');
+  }
+
   function slotHtml(b) {
     if (b.sep) return '<span class="act-sep" aria-hidden="true"></span>';
-    const whyId = b.end ? '' : `act-why-${++slotSeq}`;
     const cls = [
       b.end ? 'cbt-end-turn' : 'act-slot',
       b.bonus ? 'is-bonus' : '',
@@ -2098,15 +2108,15 @@
     return `<button type="button" class="${cls}" data-act="${esc(b.key)}"
       ${b.extra ? `data-extra="${esc(JSON.stringify(b.extra))}"` : ''}
       ${b.ok ? '' : 'disabled'}
-      data-label="${esc(b.label)}" data-why="${esc(b.why)}" aria-label="${esc(b.label)}"
-      ${whyId ? `aria-describedby="${whyId}"` : ''}>
+      data-label="${esc(b.label)}" data-why="${esc(b.why)}"
+      aria-label="${esc(b.end ? b.label : slotName(b.label, b.why))}">
       ${b.end ? '' : `<span class="act-num" aria-hidden="true">
         <svg class="act-icon"><use href="#${esc(b.icon || 'i-attack')}"></use></svg>
-        ${b.count != null ? `<span class="act-count">${esc(b.count)}</span>` : ''}
+        ${b.count != null ? `<span class="act-count" data-n="${esc(b.count)}"></span>` : ''}
       </span>
       <span class="act-text">
         <span class="act-name">${esc(b.label)}</span>
-        <span class="act-desc" id="${whyId}">${esc(b.why)}</span>
+        <span class="act-desc">${esc(b.why)}</span>
       </span>
       <span class="act-confirm" aria-hidden="true">Click again</span>`}
       ${b.end ? esc(b.label) : ''}
@@ -2186,7 +2196,7 @@
       desc.textContent = btn.dataset.descWas;
       delete btn.dataset.descWas;
     }
-    btn.setAttribute('aria-label', btn.dataset.label || '');
+    btn.setAttribute('aria-label', slotName(btn.dataset.label, btn.dataset.why));
   }
 
   function disarmAll(scope) {
