@@ -51,6 +51,20 @@ class DialogEngine
      */
     public function node(int $partyId, string $npcKey, ?string $nodeKey = null): array
     {
+        return self::forClient($this->openNode($partyId, $npcKey, $nodeKey));
+    }
+
+    /**
+     * Resolve a node, including any `on_enter` effects that ran.
+     *
+     * `node()` strips the bookkeeping before the browser sees it. `afterChoice`
+     * keeps the `_enter` result so the destination's authored messages can
+     * ride back with the reply that got you there — they used to be applied
+     * and then thrown away, which is how "Twenty is fine." started Something
+     * in the Cellar in silence.
+     */
+    private function openNode(int $partyId, string $npcKey, ?string $nodeKey = null): array
+    {
         $npc = $this->npc($npcKey);
         $tree = $npc['dialogue'];
 
@@ -89,7 +103,7 @@ class DialogEngine
             );
         }
 
-        return self::forClient($resolved);
+        return $resolved;
     }
 
     /**
@@ -107,7 +121,7 @@ class DialogEngine
      */
     private static function forClient(array $node): array
     {
-        unset($node['_variant']);
+        unset($node['_variant'], $node['_enter']);
         foreach ($node['choices'] ?? [] as $i => $choice) {
             unset($choice['_raw'], $choice['_authored']);
             $node['choices'][$i] = $choice;
@@ -300,7 +314,11 @@ class DialogEngine
         }
 
         if (!empty($raw['next'])) {
-            $out['node'] = $this->node($partyId, $npcKey, (string) $raw['next']);
+            $resolved = $this->openNode($partyId, $npcKey, (string) $raw['next']);
+            $out['node'] = self::forClient($resolved);
+            if (!empty($resolved['_enter'])) {
+                $out['result'] = Effects::merge($result, $resolved['_enter']);
+            }
             return $out;
         }
 
@@ -378,7 +396,7 @@ class DialogEngine
             // was the only place she says who she or her daughter are, it was
             // unrecoverable. It is spent in choose(), when a reply comes back.
             if (!empty($node['on_enter'])) {
-                $this->effects->apply($partyId, $node['on_enter'], [
+                $enter = $this->effects->apply($partyId, $node['on_enter'], [
                     'source' => "dialog:{$npcKey}:{$nodeKey}",
                 ]);
                 // Effects may have changed what the choices below should show —
@@ -402,6 +420,11 @@ class DialogEngine
             // Underscore-prefixed like `_raw` and `_authored` below, and
             // stripped by forClient() before any of this reaches the browser.
             '_variant'      => $node,
+            // Authored messages from on_enter, when this node was a destination.
+            // afterChoice folds them into the reply's result so they reach the
+            // log and the banner. Null when nothing ran (a validating pass, or
+            // a node with no on_enter).
+            '_enter'        => $enter ?? null,
             'npc_key'       => $npcKey,
             'node_key'      => $nodeKey,
             'speaker'       => [
