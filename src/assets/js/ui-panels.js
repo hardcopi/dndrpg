@@ -1947,7 +1947,9 @@
           rank: (c.combat_rank || 'front') === 'front' ? 'back' : 'front',
         });
         G().mergeCharacter(r.character);
-        G().log(`${r.character.name} will deploy at the ${r.character.combat_rank} of the line.`, 'success');
+        const ranked = `${r.character.name} will deploy at the ${r.character.combat_rank} of the line.`;
+        G().log(ranked, 'success');
+        G().showNotice(ranked);
         closeTopModal();
         await openCharacterSheet(c.id);
         sheetLandOn((m) => m.querySelector('[data-rank]'));
@@ -2061,7 +2063,9 @@
       G().mergeCharacter(r.character);
       G().mergeCharacter(r.recipient);
       if (r.character?.id == G().state.character?.id) G().state.inventory = r.inventory;
-      G().log(`${r.recipient.name} takes ${r.item}${r.moved > 1 ? ' ×' + r.moved : ''}.`, 'success');
+      const given = `${r.recipient.name} takes ${r.item}${r.moved > 1 ? ' ×' + r.moved : ''}.`;
+      G().log(given, 'success');
+      G().showNotice(given);
       renderPartyRail();
       await reopenSheet(inventoryId);
     } catch (e) {
@@ -2125,7 +2129,9 @@
       });
       G().mergeCharacter(r.character);
       if (r.character?.id == G().state.character?.id) G().state.inventory = r.inventory;
-      G().log(equip ? 'Equipped item.' : 'Unequipped item.');
+      const notice = equip ? 'Equipped item.' : 'Unequipped item.';
+      G().log(notice);
+      G().showNotice(notice);
       renderPartyRail();
       await reopenSheet(inventoryId);
     } catch (e) {
