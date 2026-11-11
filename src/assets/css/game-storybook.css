@@ -779,6 +779,15 @@ body.game-page .tut-hint {
   body.game-page:not(.in-combat) .scene { gap: var(--sp-2); }
   body.game-page:not(.in-combat) .loc-inner.scene-storybook .loc-text { gap: var(--sp-4); }
   body.game-page .loc-dock .action-list { gap: var(--sp-4); }
+  /* Eleven Weeks' five-line first visit at the Waerman's Rest still left
+     Take an hour under the dock at 320: "Rest at the inn (5 gp)" is too
+     wide to share a row, so the three plates stacked one per row. Two
+     plates to a row, with a long label free to wrap to a second line;
+     an odd last plate keeps the whole row. The 44px floor is unchanged. */
+  body.game-page .loc-dock .action-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); width: 100%; }
+  body.game-page .loc-dock .action-list > .loc-act:last-child:nth-child(odd) { grid-column: 1 / -1; }
+  body.game-page .loc-dock .act-slot.loc-act { min-width: 0; gap: 6px; padding: 4px 20px 4px 8px; }
+  body.game-page .loc-dock .act-slot.loc-act .loc-act-label { white-space: normal; letter-spacing: 0; }
   .gw-window { padding-top: 0.15rem; padding-bottom: 0.25rem; }
   .gw-window .game-shell { padding-top: 0.05rem; }
   .gw-plate { margin: 0.05rem 0 0.1rem; padding-top: 0.08rem; padding-bottom: 0.08rem; }
