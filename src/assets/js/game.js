@@ -1749,13 +1749,18 @@
     // Take an hour). The name has to contain that letter as it is drawn —
     // "Read the job board B", not "Read the job board (B)", which still
     // misses the visible string. A screen reader then hears the shortcut too.
-    const name = a.key ? `${a.label} ${a.key}` : a.label;
+    // Walking a floor in first person, W A S D walk and turn (bindKeys), so a
+    // plate that drew one of them — "Take the stair down (level 2) D" — named
+    // a key that turned the party instead. There the plate draws no letter;
+    // Enter and a click still take it.
+    const key = a.key && !(fpOn() && /^[wasd]$/i.test(a.key)) ? a.key : '';
+    const name = key ? `${a.label} ${key}` : a.label;
     return `<button type="button" class="${cls}"
         data-act="${esc(a.act)}"${a.id ? ` data-id="${a.id}"` : ''}
         title="${esc(tip)}" aria-label="${esc(name)}">
       <svg class="act-icon" aria-hidden="true"><use href="#${icon}"></use></svg>
       <span class="loc-act-label">${esc(a.label)}</span>
-      ${a.key ? `<kbd>${esc(a.key)}</kbd>` : ''}
+      ${key ? `<kbd>${esc(key)}</kbd>` : ''}
     </button>`;
   }
 
