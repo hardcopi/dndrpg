@@ -121,6 +121,10 @@ try {
         (quest('cellar_rats')['status'] ?? '') === 'active' && stageOf('first_night') === 'journal',
         json_encode([quest('cellar_rats'), quest('first_night')]));
     ok('and it says to write it down', str_contains(say($c['node']), 'journal'), say($c['node']));
+    $msgs = $c['result']['messages'] ?? [];
+    ok('and the destination on_enter tells the player the job started',
+        in_array('Quest started: Something in the Cellar', $msgs, true),
+        json_encode($msgs));
 
     $g = greet();
     ok('the next Mara line is the errand', str_contains(say($g), 'Tobin') && str_contains(say($g), 'lantern'), say($g));
@@ -197,8 +201,13 @@ try {
     $xp0 = xpOf($cid);
     pick(greet(), 'Show me how things go here.');
     $offer = dlg()->node($curParty, 'mara_hearthstone', 'fn_rats_offer');
-    pick($offer, 'Twenty is fine.');
+    $took = pick($offer, 'Twenty is fine.');
     ok('took the job', stageOf('first_night') === 'journal');
+    $msgs = $took['result']['messages'] ?? [];
+    ok('and the destination on_enter tells the player the job started',
+        in_array('Quest started: Something in the Cellar', $msgs, true)
+        && in_array('First Night at the Flagon: Write it down', $msgs, true),
+        json_encode($msgs));
     $g = greet();           // the errand line; the stage is now `errand`
     ok('standing at the errand', stageOf('first_night') === 'errand');
     $r = pick($g, "I've got it from here.");
