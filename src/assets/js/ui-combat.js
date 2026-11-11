@@ -423,6 +423,7 @@
     el.classList.remove('hidden');
 
     // Settle what we need to know about this fight while it is still here.
+    if ((G().state.combat?.id ?? null) !== ui.fightId) ui.landPending = true;
     noteFight();
 
     // The figure catalogue arrives once. A board drawn before it did is
@@ -450,7 +451,17 @@
     // Every render rebuilds the board and the bar, so whatever had keyboard
     // focus is thrown away with it. Note what it was, and hand focus back to
     // its replacement once the new one is drawn.
-    const back = focusKey(document.activeElement, el) || (isLost() ? ui.lostFocus : null);
+    //
+    // A fight that has just begun has nothing to hand back: the Fight button
+    // that started it is hidden with the scene (or gone, or it is a reload),
+    // and focus would sit on the page body. Wish for the bar instead —
+    // restoreFocus puts it on the first open verb of whoever is acting, closed
+    // ones skipped, and keeps the wish while nobody on the bar can act yet.
+    // Nothing gets a new Tab stop, and focus the player put somewhere they can
+    // see is never taken.
+    const unseen = () => isLost() || !document.activeElement.getClientRects().length;
+    const back = focusKey(document.activeElement, el) || (isLost() ? ui.lostFocus : null)
+      || (ui.landPending && unseen() ? '#cbt-bar [data-act]' : null);
 
     renderTop(s, actor);
 
@@ -486,6 +497,7 @@
     renderInspector();
     renderBar(s, actor);
     restoreFocus(back, el);
+    if (ui.landPending && !unseen()) ui.landPending = false;
 
     // The spell list, the slots and the potions belong to the acting character
     // and none of them are in combat state, so the sheet is fetched the first
@@ -539,7 +551,7 @@
    */
   function restoreFocus(key, el) {
     ui.lostFocus = null;
-    if (!key || !isLost()) return;
+    if (!key || !(isLost() || (ui.landPending && !document.activeElement.getClientRects().length))) return;
     const open = (n) => n && !n.disabled && n.getClientRects().length;
     let target = el.querySelector(key);
     if (!open(target) && key.startsWith('#cbt-bar')) {
