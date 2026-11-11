@@ -286,6 +286,64 @@ class LocationEngine
             'barricade'    => (new DoorEngine($this->db))
                 ->barricadeReport($partyId, (int) $location['id']),
             'job_board'    => (bool) ($location['has_job_board'] ?? 0),
+            // Which game this place belongs to, and where its board and its
+            // front door are, so the client's "go and find…" hints name a
+            // place in THIS game. They were written for Rivermark and sent
+            // The Undervault and Eleven Weeks to the Golden Flagon.
+            'module'       => $this->moduleFacts((int) $location['region_id']),
+        ];
+    }
+
+    /** @var array<int, ?array> moduleFacts() per region, for this request. */
+    private array $moduleFactsCache = [];
+
+    /**
+     * The module this region belongs to, by key, with the name of its job
+     * board and its haven (the module's own start, which is also where a
+     * beaten party wakes). Null for a region with no module.
+     *
+     * @return array{key: string, board: ?string, haven: ?array{name: string, camp: bool, inn: bool}}|null
+     */
+    private function moduleFacts(int $regionId): ?array
+    {
+        if (array_key_exists($regionId, $this->moduleFactsCache)) {
+            return $this->moduleFactsCache[$regionId];
+        }
+        $stmt = $this->db->prepare(
+            'SELECT m.id, m.module_key, m.start_location_key
+               FROM regions r
+               INNER JOIN modules m ON m.id = r.module_id
+              WHERE r.id = ?'
+        );
+        $stmt->execute([$regionId]);
+        $m = $stmt->fetch();
+        if (!$m) {
+            return $this->moduleFactsCache[$regionId] = null;
+        }
+        $board = $this->db->prepare(
+            'SELECT l.name FROM locations l
+               INNER JOIN regions r ON r.id = l.region_id
+              WHERE r.module_id = ? AND l.has_job_board = 1
+              ORDER BY l.id LIMIT 1'
+        );
+        $board->execute([(int) $m['id']]);
+        $boardName = $board->fetchColumn();
+        $haven = $this->db->prepare(
+            'SELECT l.name, l.allow_camp, l.inn_cost FROM locations l
+               INNER JOIN regions r ON r.id = l.region_id
+              WHERE r.module_id = ? AND l.location_key = ?
+              LIMIT 1'
+        );
+        $haven->execute([(int) $m['id'], (string) $m['start_location_key']]);
+        $h = $haven->fetch();
+        return $this->moduleFactsCache[$regionId] = [
+            'key'   => (string) $m['module_key'],
+            'board' => $boardName !== false ? (string) $boardName : null,
+            'haven' => $h ? [
+                'name' => (string) $h['name'],
+                'camp' => (bool) $h['allow_camp'],
+                'inn'  => $h['inn_cost'] !== null,
+            ] : null,
         ];
     }
 
