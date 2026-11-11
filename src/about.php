@@ -7,13 +7,17 @@ require_once __DIR__ . '/app/bootstrap.php';
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>About / Legal — Rivermark Chronicles</title>
+  <link rel="stylesheet" href="<?= asset('assets/css/fonts.css') ?>">
   <link rel="stylesheet" href="<?= asset('assets/css/style.css') ?>">
+  <link rel="stylesheet" href="<?= asset('assets/css/landing.css') ?>">
 </head>
-<body>
+<body class="lp lp-about">
   <?php require APP_PATH . '/inc/site_bar.php'; ?>
-  <header class="hero" style="padding:1.5rem 1rem">
-    <h1>About &amp; Legal</h1>
-    <p>Open game content, attribution, and license text.</p>
+  <header class="lp-hero">
+    <div class="lp-wrap">
+      <h1>About &amp; Legal</h1>
+      <p class="lp-lead">Open game content, attribution, and license text.</p>
+    </div>
   </header>
 
   <main class="container">
