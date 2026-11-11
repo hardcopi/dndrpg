@@ -2539,10 +2539,17 @@
     ui.sheets.clear();
     await G().refreshAll();
     if (status === 'defeat') {
-      G().log('You wake at the Golden Flagon…', 'danger', 'combat');
+      // Where the server actually woke them (CombatEngine moves a beaten
+      // party to its own module's haven), not the Rivermark inn: this said
+      // "the Golden Flagon" on The Undervault and in Eleven Weeks too, where
+      // the party comes round at the Delvers' Camp or the Waerman's Rest.
+      const wokeAt = String((G().state.location && G().state.location.name) || '')
+        .replace(/^The /, 'the ');
+      const woke = wokeAt ? `You wake at ${wokeAt}…` : 'You come round where you fell…';
+      G().log(woke, 'danger', 'combat');
       // The log is below the fold on a phone, so a defeat used to end with the
       // party simply standing in the inn and nothing on screen saying why.
-      if (G().showNotice) G().showNotice('Defeated. You wake at the Golden Flagon…');
+      if (G().showNotice) G().showNotice(`Defeated. ${woke}`);
     } else if (status === 'fled' && G().showNotice) {
       // A flight leaves straight from the roll: no outcome bar, no Continue,
       // the board just goes. Say what happened where a phone can see it.
