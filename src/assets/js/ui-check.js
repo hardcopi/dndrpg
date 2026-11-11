@@ -212,6 +212,11 @@
       panel.setAttribute('aria-label', `${check.label} check, DC ${check.dc}`);
       release = window.UI.pushOverlay(panel, () => finish(null));
       current = { finish };
+      // The title-bar × is now the first control; opening has always
+      // landed on the first boost, or on Roll the die when there is
+      // nothing to spend, not on Close.
+      const first = $('.boost-row', root) || $('[data-roll]', root);
+      if (first) first.focus();
 
       const readout = () => {
         const list = [...chosen.values()];
@@ -243,6 +248,7 @@
       readout();
 
       $('[data-cancel]', root)?.addEventListener('click', () => finish(null));
+      $('[data-modal-close]', root)?.addEventListener('click', () => finish(null));
 
       $('[data-roll]', root).addEventListener('click', async () => {
         $$('button', root).forEach((b) => { b.disabled = true; });
@@ -291,12 +297,20 @@
       </div>`
       : '<p class="help-hint">Nothing to spend on this one.</p>';
 
+    // modalHead for the ×: Step back and the check heading sit below
+    // the fold on a 320px phone once a few boosts are offered, the
+    // same gap the shop, camp, sheet, level-up, and ambush confirm
+    // had before #182 / #195 / #199 / #215 / #216. The in-body
+    // heading is gone because the title bar already says it. Phase
+    // two (the die and the verdict) is left alone and replaces this
+    // markup when the die is thrown.
     return `<div class="check-panel">
+      ${window.UI.modalHead(check.label)}
+      <div class="check-scroll">
       <div class="check-head">
         <img class="check-bust" src="${esc(bust)}" alt="">
         <div class="check-title">
           <div class="check-who">${esc(check.character?.name || '')}</div>
-          <h2>${esc(check.label)}</h2>
           <div class="check-mode mode-normal">One die</div>
           ${reasons}
         </div>
@@ -330,6 +344,7 @@
       <div class="check-actions">
         <button type="button" class="btn btn-primary" data-roll>Roll the die</button>
         <button type="button" class="btn" data-cancel>Step back</button>
+      </div>
       </div>
     </div>`;
   }
