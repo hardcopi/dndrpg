@@ -22,6 +22,7 @@ $moduleKey = preg_replace('/[^a-z0-9_]/', '', (string) ($_GET['module'] ?? ''));
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <?= csrf_meta() ?>
   <title>Studio — Rivermark Chronicles</title>
+  <?= favicon_links() ?>
   <link rel="stylesheet" href="<?= asset('assets/css/style.css') ?>">
 </head>
 <body class="studio-page">

@@ -23,6 +23,7 @@ require_signed_in_page();
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <?= csrf_meta() ?>
   <title>Your parties — Rivermark Chronicles</title>
+  <?= favicon_links() ?>
   <link rel="stylesheet" href="<?= asset('assets/css/style.css') ?>">
 </head>
 <body>

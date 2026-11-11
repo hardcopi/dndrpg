@@ -70,6 +70,7 @@ function levelLabel(int $n): string
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>The Player's Handbook — Rivermark Chronicles</title>
+  <?= favicon_links() ?>
   <link rel="stylesheet" href="<?= e(asset('assets/css/adventure-print.css')) ?>">
   <?php if (!$autoPrint) { ?>
   <link rel="stylesheet" href="<?= e(asset('assets/css/fonts.css')) ?>">

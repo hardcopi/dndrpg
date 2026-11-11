@@ -13,6 +13,7 @@ if (!session_character_id()) {
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <?= csrf_meta() ?>
   <title>Adventure — Rivermark Chronicles</title>
+  <?= favicon_links() ?>
   <script>
     // The player's text size, before the first paint so nothing jumps.
     try { var t = localStorage.getItem('rm-text'); if (t === 'large' || t === 'larger') document.documentElement.dataset.text = t; } catch (e) {}

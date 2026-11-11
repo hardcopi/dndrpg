@@ -41,7 +41,7 @@ function sheet_refuse(int $status, string $heading, string $detail): void
     http_response_code($status);
     echo '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">'
         . '<meta name="viewport" content="width=device-width, initial-scale=1">'
-        . '<title>No such sheet — Rivermark Chronicles</title>'
+        . '<title>No such sheet — Rivermark Chronicles</title>' . favicon_links()
         . '<link rel="stylesheet" href="' . asset('assets/css/style.css') . '"></head>'
         . '<body class="auth-page"><main class="auth-card">'
         . '<h1>' . htmlspecialchars($heading, ENT_QUOTES) . '</h1>'
@@ -146,6 +146,7 @@ $xp = $c['xp_progress'] ?? null;
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title><?= esc($c['name']) ?> — Character Sheet</title>
+  <?= favicon_links() ?>
   <link rel="stylesheet" href="<?= asset('assets/css/sheet-print.css') ?>">
 </head>
 <body>

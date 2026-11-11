@@ -287,6 +287,7 @@ function public_head(string $title, string $description): void
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title><?= e($title) ?> — Rivermark Chronicles</title>
+  <?= favicon_links() ?>
   <meta name="description" content="<?= e($description) ?>">
   <link rel="stylesheet" href="<?= asset('assets/css/fonts.css') ?>">
   <link rel="stylesheet" href="<?= asset('assets/css/style.css') ?>">

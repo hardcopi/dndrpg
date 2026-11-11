@@ -48,7 +48,7 @@ function require_admin_page(): array
         http_response_code(403);
         echo '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">'
             . '<meta name="viewport" content="width=device-width, initial-scale=1">'
-            . '<title>Not for you — Rivermark Chronicles</title>'
+            . '<title>Not for you — Rivermark Chronicles</title>' . favicon_links()
             . '<link rel="stylesheet" href="assets/css/style.css"></head>'
             . '<body class="auth-page"><main class="auth-card">'
             . '<h1>That is for administrators</h1>'

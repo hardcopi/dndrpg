@@ -23,6 +23,7 @@ $characterId = (int) ($_GET['character_id'] ?? 0);
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Character embed — Rivermark Chronicles</title>
+  <?= favicon_links() ?>
   <link rel="stylesheet" href="<?= asset('assets/css/style.css') ?>">
   <style>
     .embed-grid { display: grid; gap: 1.5rem; grid-template-columns: 1fr; }

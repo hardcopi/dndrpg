@@ -17,6 +17,7 @@ $me = require_admin_page();
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <?= csrf_meta() ?>
   <title>Accounts — Rivermark Chronicles</title>
+  <?= favicon_links() ?>
   <link rel="stylesheet" href="<?= asset('assets/css/style.css') ?>">
 </head>
 <body class="admin-page">

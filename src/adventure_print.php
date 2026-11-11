@@ -124,6 +124,7 @@ if ($moduleKey === '') {
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <title>Export an adventure — Rivermark Chronicles</title>
+  <?= favicon_links() ?>
       <link rel="stylesheet" href="<?= asset('assets/css/style.css') ?>">
     </head>
     <body class="admin-page">
@@ -177,7 +178,7 @@ $data = $book->build($moduleKey, $delveSeed);
 if ($data === null) {
     http_response_code(404);
     echo '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">'
-        . '<title>No such adventure — Rivermark Chronicles</title>'
+        . '<title>No such adventure — Rivermark Chronicles</title>' . favicon_links()
         . '<link rel="stylesheet" href="' . asset('assets/css/style.css') . '"></head>'
         . '<body class="auth-page"><main class="auth-card">'
         . '<h1>No such adventure</h1>'
@@ -196,6 +197,7 @@ $cover = art('assets/images/modules/' . $module['module_key'] . '.jpg');
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title><?= esc($module['name']) ?> — the adventure</title>
+  <?= favicon_links() ?>
   <link rel="stylesheet" href="<?= esc(asset('assets/css/adventure-print.css')) ?>">
 </head>
 <body>
