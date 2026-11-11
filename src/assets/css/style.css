@@ -9710,6 +9710,13 @@ body.studio-page > .site-bar {
     min-height: var(--tap-min);
   }
 
+  /* A conversation's answers were 35px when they fit on one line ("A bed,
+     please.", "Back to it.") — the one row of buttons a phone player has
+     to hit to get anywhere in a talk, and under the floor. */
+  .dlg-choice {
+    min-height: var(--tap-min);
+  }
+
   /* Buy and Sell in a shop, and Equip / Use / Give under an item in the bag,
      were 29px: the buttons that spend gold or change what a hero carries,
      under the floor. Flex only to keep the word centred in the taller box. */
