@@ -345,7 +345,9 @@
     try {
       await API.post('session/select', { character_id: characterId });
       await refreshAll();
-      log(`${state.character.name} is now the active character.`, 'important');
+      // The log sits below the fold on a phone — same gap a walk's arrival
+      // had before #202. Keep the existing line and raise it on the banner.
+      announceLines([`${state.character.name} is now the active character.`], 'important');
     } catch (e) {
       showError(e.message);
     }
