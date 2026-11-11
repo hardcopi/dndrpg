@@ -7627,7 +7627,7 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
   text-transform: uppercase;
   color: var(--gold);
 }
-.levelup-title { margin: var(--sp-4) 0 0; font-size: var(--fs-xl); }
+.levelup-title { margin: 0; font-size: var(--fs-xl); }
 .levelup-sub { margin: var(--sp-2) 0 0; color: var(--text-dim); font-size: var(--fs-sm); }
 
 .levelup-step h3 { margin: 0 0 var(--sp-6); font-size: var(--fs-lg); }

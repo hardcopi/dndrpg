@@ -174,10 +174,14 @@
   // =========================================================================
 
   function shell(c) {
+    // modalHead for the ×: the ceremony had no close control, only Escape
+    // and the backdrop. On a 320px phone the feat-step Confirm sits below
+    // the fold, the same gap the shop, camp, and sheet had before #182 /
+    // #195 / #199. The in-body eyebrow is gone: the title bar says it.
     return `
+      ${UI().modalHead('Level up')}
       <div class="levelup" data-pending="${c.pending_id}">
         <header class="levelup-head">
-          <p class="levelup-eyebrow">Level up</p>
           <h2 class="levelup-title">${esc(c.character.name)}</h2>
           <p class="levelup-sub">${esc(c.character.class)} &mdash; level ${c.new_level}</p>
         </header>
@@ -213,8 +217,11 @@
       // The heading only ever holds focus because this put it there while
       // there was no button to take it, so a button arriving takes it back.
       // The dialog itself counts too: that is where the overlay puts focus
-      // when the panel opens before its first step has drawn.
-      const parked = now === el || (now && now.matches && now.matches('.levelup-step h3'));
+      // when the panel opens before its first step has drawn. The title-bar
+      // × is the same: it is the first control, and opening has always
+      // landed on the step (Roll the die, Choose a feat), not on Close.
+      const parked = now === el || (now && now.matches
+        && now.matches('.levelup-step h3, .modal-x, [data-modal-close]'));
       if (now && now !== document.body && el.contains(now) && !parked) return;
       if (now && now !== document.body && !el.contains(now) && now.isConnected) return;
       const btn = $('.levelup-actions .btn-primary:not([disabled])', el);
