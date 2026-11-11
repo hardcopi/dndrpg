@@ -913,7 +913,10 @@ body.has-modal { overflow: hidden; }
     height: auto;
     min-height: 0;
     margin: 0.3rem;
-    padding: 0.1rem 0.4rem 0.4rem;
+    /* The iron corner caps are 36px, 7px in from the edge, and drawn over the
+       content (z-index 4): with 0.4rem under the last row they sat on it —
+       the end of the bag read "il of Embers". Clear them. */
+    padding: 0.1rem 0.4rem 2.75rem;
   }
 
   .picker-page .picker {
