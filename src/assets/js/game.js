@@ -2756,7 +2756,22 @@
           e.preventDefault();
           if (window.UI && window.UI.openJournal) window.UI.openJournal();
           break;
-        default: break;
+        default: {
+          // Every letter drawn on an action plate works. The plates for the
+          // stair (D, U), a short rest (H) and a furnishing (O) printed their
+          // key and put it in the accessible name, but nothing above answered
+          // it, so "Go down the stair D" was a promise the keyboard broke —
+          // and on The Undervault the stair is the game. The plate is the
+          // source of truth: press its letter and the plate is clicked, so
+          // whatever gate drew it (or disabled it) is the gate the key obeys.
+          const k = e.key.length === 1 ? e.key.toUpperCase() : '';
+          if (!k) break;
+          const plate = [...document.querySelectorAll('#location-root .loc-act')]
+            .find((b) => !b.disabled && b.offsetParent !== null
+              && ((b.querySelector('kbd') || {}).textContent || '').trim() === k);
+          if (plate) { e.preventDefault(); plate.click(); }
+          break;
+        }
       }
     });
   }
