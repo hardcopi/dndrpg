@@ -222,6 +222,18 @@
   }
 
   /**
+   * Several log lines, as one banner, without changing the authored wording.
+   *
+   * A space-join ran them together ("Quest started: A Short Measure A Short
+   * Measure: Weigh a sack"). A line break keeps each line a sentence of its
+   * own, including titles that do not end in a period, and stays readable
+   * on a 320px phone. The banner uses white-space: pre-line to show them.
+   */
+  function joinNotice(lines) {
+    return (lines || []).map((s) => String(s).trim()).filter(Boolean).join('\n');
+  }
+
+  /**
    * A rest's news belongs on the banner, not only in the log. On a phone the
    * log sits below the fold, so "the party wakes rested" — or that someone
    * has left in the night — vanished the moment the camp closed, the same
@@ -230,7 +242,7 @@
   function announceRest(r, extraCls) {
     if (r.message) log(r.message, 'success');
     (r.messages || []).forEach((m) => log(m, extraCls || 'story'));
-    const notice = [r.message, ...(r.messages || [])].filter(Boolean).join(' ');
+    const notice = joinNotice([r.message, ...(r.messages || [])]);
     if (notice) showError(notice, { good: true });
   }
 
@@ -243,7 +255,7 @@
   function announceLines(messages, logCls) {
     const lines = (messages || []).filter(Boolean);
     lines.forEach((m) => log(m, logCls));
-    if (lines.length) showError(lines.join(' '), { good: true });
+    if (lines.length) showError(joinNotice(lines), { good: true });
   }
 
   // =========================================================================
@@ -1988,7 +2000,7 @@
         lines.push(opener);
       }
     }
-    const notice = [...(prefix || []), ...lines].filter(Boolean).join(' ');
+    const notice = joinNotice([...(prefix || []), ...lines]);
     if (notice) showError(notice, { good: true });
   }
 
@@ -2386,8 +2398,7 @@
       if (r.depth) log(`Level ${r.depth}. ${r.rooms} rooms.`, '', 'story');
       // The news belongs on the banner too: on a phone the log sits below
       // the fold, the same gap the door and the chest had before #200.
-      const notice = [r.message, r.depth ? `Level ${r.depth}. ${r.rooms} rooms.` : '']
-        .filter(Boolean).join(' ');
+      const notice = joinNotice([r.message, r.depth ? `Level ${r.depth}. ${r.rooms} rooms.` : '']);
       if (notice) showError(notice, { good: true });
     });
   }
@@ -2702,6 +2713,7 @@
     esc, fmtMod, hpPct, hpBand, sleep, reducedMotion, isTypingTarget,
     log, showError,
     showNotice: (msg) => showError(msg, { good: true }),
+    joinNotice,
     syncBanner,
     announceRest,
     // portrait paths
