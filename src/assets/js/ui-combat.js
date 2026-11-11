@@ -2500,7 +2500,12 @@
     ui.hovered = null;
     ui.sheets.clear();
     await G().refreshAll();
-    if (status === 'defeat') G().log('You wake at the Golden Flagon…', 'danger', 'combat');
+    if (status === 'defeat') {
+      G().log('You wake at the Golden Flagon…', 'danger', 'combat');
+      // The log is below the fold on a phone, so a defeat used to end with the
+      // party simply standing in the inn and nothing on screen saying why.
+      if (G().showNotice) G().showNotice('Defeated. You wake at the Golden Flagon…');
+    }
 
     // Whatever the outcome bar did not already claim. A won fight offers the
     // ceremony on the bar itself; a fight that ended in a parley or a flight

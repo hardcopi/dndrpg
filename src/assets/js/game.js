@@ -173,10 +173,13 @@
 
   let errorTimer = null;
 
-  function showError(msg) {
+  function showError(msg, opts = {}) {
     const b = $('#error-banner');
     if (!b) return;
     b.textContent = msg;
+    // The same strip for news that is not a failure (`is-good`, gold): one
+    // element, so a notice can never sit under a still-showing error.
+    b.classList.toggle('is-good', !!opts.good);
     // The banner sits in the scene's flow, so an error from inside a panel —
     // the shop, the sheet, the camp, a conversation — landed under the dimmed
     // backdrop, half-covered by the panel that caused it, and a fight's board
@@ -2634,6 +2637,7 @@
     // utilities the other modules are written against
     esc, fmtMod, hpPct, hpBand, sleep, reducedMotion, isTypingTarget,
     log, showError,
+    showNotice: (msg) => showError(msg, { good: true }),
     // portrait paths
     withTileVer, bodySpriteUrl, variantUrl, spriteArtUrl, classArtUrl,
     // state and flow
