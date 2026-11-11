@@ -1032,8 +1032,13 @@
 
   function fpToggle(title, label) {
     if (!fpAvailable()) return '';
+    // The word on the chip is Look or Map. Naming it only with the longer
+    // tooltip ("Walk it in first person (V)") left that word out of the
+    // accessible name — axe label-content-name-mismatch on every dungeon
+    // floor. The tooltip still carries the hint and the shortcut; V is
+    // unchanged.
     return `<button type="button" class="icon-btn map-look" id="scene-look"
-              title="${esc(title)}" aria-label="${esc(title)}">${esc(label)}</button>`;
+              title="${esc(title)}" aria-label="${esc(label)}">${esc(label)}</button>`;
   }
 
   /**
