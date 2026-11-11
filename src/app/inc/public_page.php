@@ -288,6 +288,7 @@ function public_head(string $title, string $description): void
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title><?= e($title) ?> — Rivermark Chronicles</title>
   <meta name="description" content="<?= e($description) ?>">
+  <link rel="stylesheet" href="<?= asset('assets/css/fonts.css') ?>">
   <link rel="stylesheet" href="<?= asset('assets/css/style.css') ?>">
   <link rel="stylesheet" href="<?= asset('assets/css/landing.css') ?>">
 </head>

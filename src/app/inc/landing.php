@@ -44,10 +44,14 @@ public_head(
 );
 ?>
 
-<header class="lp-hero">
+<header class="lp-hero lp-hero-logo">
   <div class="lp-wrap">
     <p class="lp-eyebrow">Open 5e SRD · single player · no download</p>
-    <h1>Rivermark Chronicles</h1>
+    <h1><img class="lp-logo"
+             src="<?= asset('assets/images/login/logo.webp') ?>"
+             srcset="<?= asset('assets/images/login/logo-1x.webp') ?> 577w, <?= asset('assets/images/login/logo.webp') ?> 1154w"
+             sizes="(max-width: 40rem) 86vw, 460px"
+             width="577" height="228" alt="Rivermark Chronicles"></h1>
     <p class="lp-lead">
       <?= (int) $nCampaigns ?> campaigns. Roll somebody up, choose which one they walk
       into, and the party stays there — its own map, its own people, and its own
