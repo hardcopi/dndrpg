@@ -2122,6 +2122,15 @@
     if (!h) return;
     if (!h.hasAttribute('tabindex')) h.setAttribute('tabindex', '-1');
     h.focus({ preventScroll: true });
+    // On a phone the Ways out list sits under the parchment, so taking one
+    // left the page scrolled to the bottom of the new place: the arrival
+    // banner, the painting and the name were all above the screen, and the
+    // banner times out unseen. Bring the news (or the scene's top) back into
+    // view — only when it is above the screen, so nothing moves otherwise.
+    const ban = $('#error-banner');
+    const top = (ban && !ban.classList.contains('hidden') && !ban.classList.contains('is-floating') && ban.getClientRects().length)
+      ? ban : $('#location-root');
+    if (top && top.getBoundingClientRect().top < 0) top.scrollIntoView({ block: 'start' });
   }
 
   /**
