@@ -9747,11 +9747,16 @@ body.studio-page > .site-bar {
    Bring along, were 26–29px on a phone: the buttons that take a job, pin it,
    or change who walks with the party. Phones only (≤600px, where the dock
    is); desktop and the tablet band keep the compact row. Combat's List /
-   Cancel and the printable sheet's Print / Close are not in this rule. */
+   Cancel and the printable sheet's Print / Close are not in this rule.
+   Camp's Make camp / Take a room and its Close were 40px (plain .btn) — the
+   same floor, scoped to the camp panel so other dialogs' footers are as they
+   were. */
 @media (max-width: 600px) {
   .quest-item .btn-small,
   .camp-talk,
-  .camp-march {
+  .camp-march,
+  .camp-rest-actions .btn,
+  [role="dialog"]:has(.camp-rest) .modal-actions .btn {
     min-height: var(--tap-min);
     display: inline-flex;
     align-items: center;
