@@ -1152,6 +1152,11 @@ require_signed_in_page();
         // First press: arm it, and say so on the button itself.
         state.arming = id;
         await showSheet(id);
+        // The redraw replaced the button under the keyboard: focus fell to
+        // <body>, and the second press was a Tab walk away. Put it back on
+        // "Really retire?".
+        const armed = document.querySelector(`[data-retire="${id}"]`);
+        if (armed) armed.focus();
         return;
       }
       state.arming = null;
@@ -1184,6 +1189,16 @@ require_signed_in_page();
         await showSheet(Number(next.id));
       } else {
         renderShelf('Start your first adventure');
+      }
+      // The button that was pressed went with the sheet it was on, and focus
+      // fell to <body>: land the keyboard on whoever the page shows now, or on
+      // the first thing on the shelf when nobody is left.
+      const a = document.activeElement;
+      if (!a || a === document.body) {
+        const land = next
+          ? document.querySelector(`.rail-pick[data-pick="${Number(next.id)}"]`)
+          : document.querySelector('#detail a[href], #detail button');
+        if (land) land.focus();
       }
       showNotice(message);
     }
