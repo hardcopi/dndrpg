@@ -925,6 +925,12 @@ body.game-page .modal-head {
   background: linear-gradient(180deg, #3d3428 0%, #1c1814 55%, #2a241c 100%);
   border-bottom: 1px solid #8a7044;
 }
+/* An opaque mid-tone under the usual title-bar gradient, so the oak
+   panel cannot show through the bar at the rounded corners. */
+body.game-page .check-panel .modal-head {
+  background-color: #1c1814;
+  background-image: linear-gradient(180deg, #3d3428 0%, #1c1814 55%, #2a241c 100%);
+}
 
 body.game-page .modal-head h2 {
   color: var(--gw-brass-0);

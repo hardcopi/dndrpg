@@ -5257,6 +5257,22 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   border-radius: var(--r-lg);
   box-shadow: var(--sh-4);
 }
+/* The panel gives up its own top padding to the bar, as .modal does,
+   so sticky is measured from the scrollport's edge and content cannot
+   slide through a gap above it. */
+.check-panel:has(.modal-head) {
+  padding-top: 0;
+  display: flex;
+  flex-direction: column;
+  /* The title bar sits outside the scrollport, so a long boost list
+     cannot slide under it (sticky inside this panel was not enough). */
+  overflow: hidden;
+}
+.check-scroll {
+  overflow-y: auto;
+  flex: 1 1 auto;
+  min-height: 0;
+}
 
 .check-head {
   display: grid;
