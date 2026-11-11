@@ -5060,10 +5060,16 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 }
 
 /* An aside is somebody leaning in: same panel, same portrait treatment, but
-   set apart so it never reads as the NPC still talking. */
+   set apart so it never reads as the NPC still talking. The approval band is
+   the left rule only. The same ap-high / ap-mid / ap-bad classes also paint
+   the small badges on the party rail, and those wells (and .ap-risk's
+   all-sides border) would otherwise fill the paragraph — mid is --bg-panel
+   under the parchment ink, which measured about 1:1. */
 .dlg-line.is-aside {
   font-style: italic;
   color: var(--text-dim);
+  background: none;
+  border: 0;
   border-left: 2px solid var(--accent);
   padding-left: var(--sp-14);
 }
@@ -5091,10 +5097,13 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 }
 
 /* A companion's aside: indented, italic, and hung off a rule, so it reads as
-   somebody leaning in rather than as part of what the NPC said. */
+   somebody leaning in rather than as part of what the NPC said. Background
+   and border reset for the same .ap-* badge leak as .dlg-line.is-aside. */
 .dlg-aside {
   margin: var(--sp-8) 0 0 var(--sp-20);
   padding-left: var(--sp-12);
+  background: none;
+  border: 0;
   border-left: 2px solid var(--accent);
   color: var(--text-dim);
   font-style: italic;
