@@ -1,0 +1,146 @@
+/*
+ * On-screen chrome for the handbook and the bestiary.
+ *
+ * Loaded only when the page is not ?print=1. adventure-print.css still
+ * paints the paper; this file paints the desk and the doors around it, in
+ * the same plum and brass as the rest of the public site (landing.css's
+ * body.lp tokens, restated here so this sheet does not have to load
+ * style.css — which would restyle the book). Print is untouched: this
+ * stylesheet is not linked for ?print=1, and @media print hides the
+ * chrome so a Print press from the screen view still yields the same book.
+ */
+
+@media screen {
+  body.book-screen {
+    --bg: #1a1220;
+    --bg-panel: #2a1d30;
+    --bg-inset: #140e19;
+    --bg-raised: #3a2a40;
+    --border: #5a3e22;
+    --border-soft: #3a2a2c;
+    --border-strong: #a8742a;
+    --text: #f5e6c4;
+    --text-dim: #dcc9a4;
+    --text-faint: #b9a888;
+    --gold: #e8b44a;
+    --gold-bright: #f3d898;
+    --ink-on-gold: #24160d;
+    --link: #f3d898;
+    background: radial-gradient(ellipse at 30% 0%, #3a2a40, #1a1220 60rem) #1a1220;
+  }
+
+  /* book-shell is the tall parent sticky needs; book-chrome is just the
+     two bars. On a desk they travel together. On a phone the wrapper
+     dissolves (display: contents) so the print strip can stick on its
+     own while the site bar, which wraps to two or three rows, scrolls
+     away with the page. */
+  .book-chrome {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+  }
+  .book-chrome .site-bar,
+  .book-chrome .book-bar { position: static; }
+
+  .book-screen .site-bar {
+    border-bottom: 1px solid var(--border-soft);
+    background: var(--bg-inset);
+    font-family: 'Alegreya', 'Iowan Old Style', Palatino, Georgia, serif;
+    font-size: 0.8125rem;
+    line-height: 1.3;
+    text-align: left;
+    hyphens: manual;
+  }
+  .book-screen .site-bar-in {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0.5rem 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem 1rem;
+    justify-content: flex-end;
+  }
+  .book-screen .site-who {
+    color: var(--text-faint);
+    margin-right: auto;
+  }
+  .book-screen .site-who strong {
+    color: var(--text-dim);
+    font-weight: 600;
+  }
+  .book-screen .site-bar a {
+    color: var(--text-dim);
+    text-decoration: none;
+  }
+  .book-screen .site-bar a:hover { color: var(--gold); }
+  .book-screen .site-bar a[aria-current="page"] { color: var(--text); }
+  .book-screen .site-bar a:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+  }
+  html:has(.book-shell) { scroll-padding-top: 6rem; }
+
+  .book-screen .book-bar {
+    background: var(--bg-panel);
+    color: var(--text-dim);
+    border-bottom: 1px solid var(--border);
+    font-family: 'Alegreya', 'Iowan Old Style', Palatino, Georgia, serif;
+    font-size: 0.875rem;
+    padding: 0.4rem 1rem;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    text-align: left;
+    hyphens: manual;
+  }
+  .book-screen .book-bar b {
+    color: var(--gold);
+    font-weight: 700;
+  }
+  .book-screen .book-bar a,
+  .book-screen .book-bar button {
+    font-family: 'Cinzel', Palatino, Georgia, serif;
+    font-weight: 700;
+    font-size: 0.78rem;
+    color: var(--text);
+    background: linear-gradient(#7a2a38, #561a26);
+    border: 1px solid var(--border-strong);
+    border-radius: 3px;
+    padding: 0.28rem 0.7rem;
+    text-decoration: none;
+  }
+  .book-screen .book-bar a:hover,
+  .book-screen .book-bar button:hover,
+  .book-screen .book-bar a:focus-visible,
+  .book-screen .book-bar button:focus-visible {
+    border-color: var(--gold-bright);
+    background: linear-gradient(#8a3442, #63202d);
+  }
+  .book-screen .book-bar a:focus-visible,
+  .book-screen .book-bar button:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+  }
+
+  @media (max-width: 40rem) {
+    .book-chrome { display: contents; }
+    .book-screen .book-bar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+    /* The print strip wraps (title + button), ~71px at 390 and ~90px at 320. */
+    html:has(.book-shell) { scroll-padding-top: 7.5rem; }
+  }
+}
+
+@media print {
+  .book-chrome .site-bar { display: none; }
+  .book-chrome { display: contents; }
+  /* adventure-print.css already hides .book-bar and lays out the paper.
+     Reset the desk so it does not ink the page. */
+  body.book-screen {
+    background: #fff;
+    padding: 0;
+  }
+}
