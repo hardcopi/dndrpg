@@ -8004,6 +8004,17 @@ body.home-page > main { flex: 1 0 auto; padding-top: var(--sp-32); }
 .site-bar a { color: var(--text-dim); }
 .site-bar a:hover { color: var(--gold); text-decoration: none; }
 .site-bar a[aria-current="page"] { color: var(--text); }
+/* The bar is sticky, so anything scrolled to the top of the page — a heading
+   brought into view, a link reached with Shift+Tab — landed under it. Leave
+   its height clear at the top of every scroll that lands on something. */
+html:has(.site-bar) { scroll-padding-top: 3.5rem; }
+/* On a phone the bar wraps to two or three rows: 82px of a 640px screen, kept
+   over everything you scroll. There it scrolls away with the page instead —
+   it is the first thing on every page, one swipe up. */
+@media (max-width: 40rem) {
+  .site-bar { position: static; }
+  html:has(.site-bar) { scroll-padding-top: 0; }
+}
 
 /* Admin and studio pages pad and centre the body. The bar has to sit on the
    viewport, not in that column, or it would be a 62-rem strip with the page's
