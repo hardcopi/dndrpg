@@ -22,7 +22,9 @@
  * hundred ordinary creatures were never the problem.
  *
  * The layout lives in assets/css/adventure-print.css; this file is structure
- * and data, and Bestiary is where the gathering happens. Nothing here
+ * and data, and Bestiary is where the gathering happens. On screen (not
+ * `?print=1`) fonts.css and book-screen.css add the public site bar and the
+ * plum desk; the paper itself and `?print=1` are unchanged. Nothing here
  * queries anything except through that class.
  *
  *   /bestiary.php              the book
@@ -62,8 +64,12 @@ foreach ($bySource as $src => $rows) {
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>The Bestiary — Rivermark Chronicles</title>
   <link rel="stylesheet" href="<?= esc(asset('assets/css/adventure-print.css')) ?>">
+  <?php if (!$autoPrint) { ?>
+  <link rel="stylesheet" href="<?= esc(asset('assets/css/fonts.css')) ?>">
+  <link rel="stylesheet" href="<?= esc(asset('assets/css/book-screen.css')) ?>">
+  <?php } ?>
 </head>
-<body>
+<body<?= $autoPrint ? '' : ' class="book-screen"' ?>>
 
 <?php
 // The bar's own doors, which stopped being one set when the book stopped being
@@ -73,9 +79,15 @@ foreach ($bySource as $src => $rows) {
 // back to the front; an admin also keeps the two they had.
 $admin = auth()->isAdmin();
 ?>
+<?php if (!$autoPrint) { ?>
+<div class="book-shell">
+<div class="book-chrome">
+  <?php require APP_PATH . '/inc/site_bar.php'; ?>
+<?php } ?>
 <div class="book-bar">
   <span><b>The Bestiary</b> · <?= esc(count($monsters)) ?> creatures</span>
   <button type="button" onclick="window.print()">Print / Save as PDF</button>
+  <?php if ($autoPrint) { ?>
   <a href="index.php">Home</a>
   <a href="handbook.php">Handbook</a>
   <a href="about.php">About &amp; licence</a>
@@ -83,7 +95,11 @@ $admin = auth()->isAdmin();
     <a href="adventure_print.php">Adventure books</a>
     <a href="content.php">Back to content</a>
   <?php } ?>
+  <?php } ?>
 </div>
+<?php if (!$autoPrint) { ?>
+</div>
+<?php } ?>
 
 <!-- ------------------------------------------------------------------ Cover -->
 <div class="book-page">
@@ -155,6 +171,9 @@ $admin = auth()->isAdmin();
   </div>
 </div>
 
+<?php if (!$autoPrint) { ?>
+</div>
+<?php } ?>
 <?php if ($autoPrint) { ?>
   <script>window.addEventListener('load', () => window.print());</script>
 <?php } ?>

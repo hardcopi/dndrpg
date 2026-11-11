@@ -14,7 +14,9 @@
  * engine's own constants, and there is no session to need.
  *
  * The layout is `assets/css/adventure-print.css`, shared with the other two
- * books, so the three print as a set. This file is structure; Handbook is where
+ * books, so the three print as a set. On screen (not `?print=1`) fonts.css and
+ * book-screen.css add the public site bar and the plum desk; the paper itself
+ * and `?print=1` are unchanged. This file is structure; Handbook is where
  * the gathering happens and nothing here queries anything except through it.
  *
  * NO NUMBER IN THIS FILE IS TYPED. Every one comes from the thing that enforces
@@ -69,6 +71,10 @@ function levelLabel(int $n): string
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>The Player's Handbook — Rivermark Chronicles</title>
   <link rel="stylesheet" href="<?= e(asset('assets/css/adventure-print.css')) ?>">
+  <?php if (!$autoPrint) { ?>
+  <link rel="stylesheet" href="<?= e(asset('assets/css/fonts.css')) ?>">
+  <link rel="stylesheet" href="<?= e(asset('assets/css/book-screen.css')) ?>">
+  <?php } ?>
   <style>
     /* The three tables this book adds to the shared print skin. They are the
        only thing here adventure-print.css has no rule for, because neither of
@@ -109,20 +115,30 @@ function levelLabel(int $n): string
     .hb-meta { display: block; font-size: 0.78rem; opacity: 0.75; }
   </style>
 </head>
-<body>
+<body<?= $autoPrint ? '' : ' class="book-screen"' ?>>
 
 <?php $admin = auth()->isAdmin(); ?>
+<?php if (!$autoPrint) { ?>
+<div class="book-shell">
+<div class="book-chrome">
+  <?php require APP_PATH . '/inc/site_bar.php'; ?>
+<?php } ?>
 <div class="book-bar">
   <span><b>The Player's Handbook</b> · <?= e((string) count($callings)) ?> callings ·
     <?= e((string) count($raceNames)) ?> peoples · <?= e((string) $spellCount) ?> spells</span>
   <button type="button" onclick="window.print()">Print / Save as PDF</button>
+  <?php if ($autoPrint) { ?>
   <a href="index.php">Home</a>
   <a href="bestiary.php">Bestiary</a>
   <a href="about.php">About &amp; licence</a>
   <?php if ($admin) { ?>
     <a href="adventure_print.php">Adventure books</a>
   <?php } ?>
+  <?php } ?>
 </div>
+<?php if (!$autoPrint) { ?>
+</div>
+<?php } ?>
 
 <!-- ------------------------------------------------------------------ Cover -->
 <div class="book-page">
@@ -464,6 +480,9 @@ function levelLabel(int $n): string
   </div>
 </div>
 
+<?php if (!$autoPrint) { ?>
+</div>
+<?php } ?>
 <?php if ($autoPrint) { ?>
   <script>window.addEventListener('load', () => window.print());</script>
 <?php } ?>

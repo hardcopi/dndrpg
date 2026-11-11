@@ -4,8 +4,10 @@
  *
  * One include so the doors cannot drift: a new admin tool that is only linked
  * from the shelf is a tool nobody finds from Content. The game is excluded on
- * purpose — its chrome is the party rail — and so are the printed books, which
- * are paper and have a bar of their own.
+ * purpose — its chrome is the party rail. The printed books (`?print=1` and
+ * @media print) stay paper and keep a bar of their own. On screen, handbook.php
+ * and bestiary.php include this bar so they belong with the rest of the public
+ * pages; the paper itself is unchanged.
  *
  * Sign-out lives here rather than on each page. It used to be an `<a href="#">`
  * with a listener only on the shelf, so every other copy scrolled to the top
