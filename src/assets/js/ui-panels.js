@@ -2178,14 +2178,19 @@
     const buyBlock = (it) => (it.stock !== null && it.stock !== undefined && +it.stock <= 0 ? 'Sold out'
       : +it.price > gold ? 'Not enough gold' : '');
     const buyLabel = (it) => `Buy ${it.name} for ${it.price} gp` + (buyBlock(it) ? ` (${buyBlock(it).toLowerCase()})` : '');
+    // "(0 left)" beside a greyed Buy read as a typo; say what it means.
     const stockLabel = (it) =>
-      it.stock === null || it.stock === undefined ? '' : ` <span class="help-hint">(${esc(it.stock)} left)</span>`;
+      it.stock === null || it.stock === undefined ? ''
+        : ` <span class="help-hint">(${+it.stock <= 0 ? 'sold out' : `${esc(it.stock)} left`})</span>`;
     // Who is selling, as the scene names them: the name once you know it, the
     // role until then — never a name the player has not been told.
     const who = (G().state.location?.npcs || []).find((n) => n && n.npc_key === npcKey);
     const title = who && who.known && who.name ? `Trading with ${who.name}` : ((who && who.role) || 'Merchant');
+    // The title bar and its ×, like the journal's: the shop is the longest
+    // panel in the game, and its only Close was under the last thing for sale
+    // — a long scroll on a phone. The Close at the bottom stays.
     const el = showModal(`
-      <h2>${esc(title)}</h2>
+      ${modalHead(title)}
       <p class="help-hint">Your gold: <strong>${esc(gold)} gp</strong></p>
       <div class="sheet-section"><h3>For sale</h3>
         <div class="shop-list">
