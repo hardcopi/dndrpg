@@ -566,6 +566,22 @@
     if (t.top) mark(document.querySelector(t.top), t.text);
   }
 
+  /**
+   * The game this place belongs to, from the location payload: its key, the
+   * name of its job board, and its haven. The hints below were written for
+   * Rivermark, and sent The Undervault and Eleven Weeks to the Golden Flagon.
+   * Rivermark (and an older payload with no module) keeps its own wording.
+   */
+  function campaign() {
+    const m = (G().state.location || {}).module;
+    return m && m.key && m.key !== 'rivermark' ? m : null;
+  }
+
+  /** "The Delvers' Camp" as it reads mid-sentence: "the Delvers' Camp". */
+  function midSentence(name) {
+    return String(name || '').replace(/^The /, 'the ');
+  }
+
   function renderQuestTracker() {
     const box = $('#quest-tracker');
     if (!box) return;
@@ -576,7 +592,7 @@
       box.innerHTML = `<h2>Tasks</h2>
         <div class="track-body">
           <p class="help-hint">Nothing on the go. Take work from Available work
-            in your journal (J), or ask around — most people in Rivermark want
+            in your journal (J), or ask around — most people ${campaign() ? 'here' : 'in Rivermark'} want
             something.</p>
         </div>`;
       return;
@@ -1087,8 +1103,13 @@
             ? `<button type="button" class="btn btn-small btn-primary" data-accept="${esc(q.quest_key)}">Accept</button>`
             : `<button type="button" class="btn btn-small btn-primary" data-accept-id="${esc(q.id)}">Accept</button>`}
         </div>`).join('')
-      : `<p class="help-hint">Nothing new posted. Work goes up on the job board
-          by the door of the Golden Flagon — read it there and it lands here.</p>`;
+      : !campaign()
+        ? `<p class="help-hint">Nothing new posted. Work goes up on the job board
+          by the door of the Golden Flagon — read it there and it lands here.</p>`
+        : campaign().board
+          ? `<p class="help-hint">Nothing new posted. Work goes up on the job board
+          at ${esc(midSentence(campaign().board))} — read it there and it lands here.</p>`
+          : '<p class="help-hint">Nothing new posted.</p>';
 
     const el = showModal(`
       ${modalHead('Journal')}
@@ -1333,8 +1354,13 @@
     // charges for, which is why nobody bought a room.
     const canCamp = !!loc.allow_camp;
     const gold = Number(st.character?.gold ?? 0);
-    const campHint = 'The road east out of Rivermark has open ground, '
-      + 'and the Golden Flagon has beds.';
+    const haven = campaign() && campaign().haven;
+    const campHint = !campaign()
+      ? 'The road east out of Rivermark has open ground, '
+        + 'and the Golden Flagon has beds.'
+      : haven && (haven.camp || haven.inn)
+        ? `${haven.name} has ${haven.camp ? 'open ground' : 'beds'}.`
+        : '';
 
     // Making camp is what resolves a companion who has had enough, so the
     // warning has to be on this screen and above the button that fires it.

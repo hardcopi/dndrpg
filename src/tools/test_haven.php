@@ -67,6 +67,26 @@ $mod = $db->query(
 )->fetchColumn();
 ok('and the haven is the free-play module', $mod === FREE_PLAY_MODULE, 'module ' . var_export($mod, true));
 
+// The client's "go and find…" hints (an empty job board, nowhere to sleep)
+// read the module off the location payload. They used to name the Golden
+// Flagon in every game, so each module's own start must report its own board
+// and haven, and the haven must be somewhere a party can actually rest.
+$facts = new ReflectionMethod(LocationEngine::class, 'moduleFacts');
+$eng = new LocationEngine($db);
+foreach ([
+    'rivermark'  => ['flagon_common_room', 'The Golden Flagon'],
+    'undervault' => ['uv_camp', "The Delvers' Camp"],
+    'waerhaven'  => ['waermans_rest', "The Waerman's Rest"],
+] as $mod => [$start, $name]) {
+    $rid = (int) $db->query("SELECT region_id FROM locations WHERE location_key = " . $db->quote($start))->fetchColumn();
+    $f = $facts->invoke($eng, $rid);
+    ok("$mod payload names its own module", ($f['key'] ?? null) === $mod, json_encode($f));
+    ok("$mod job board is $name", ($f['board'] ?? null) === $name, json_encode($f));
+    ok("$mod haven is $name and somewhere to sleep",
+        ($f['haven']['name'] ?? null) === $name && (($f['haven']['camp'] ?? false) || ($f['haven']['inn'] ?? false)),
+        json_encode($f));
+}
+
 foreach ($made as $p) { $db->prepare('DELETE FROM parties WHERE id=?')->execute([$p]); }
 echo "\n$pass passed, $fail failed\n";
 exit($fail ? 1 : 0);
