@@ -543,6 +543,111 @@
    * Where can I go is the chart, which highlights the places you can walk to
    * from here.
    */
+
+  // A chart room's prose is a short, scrollable window when a first look
+  // runs long. Keyboard users cannot scroll a region they cannot focus,
+  // and axe flags that (scrollable-region-focusable) on a 320px phone.
+  // Only become a tab stop when the text actually overflows: a standing
+  // tabindex on every room would add a stop for a box that often fits.
+  // Painted scenes leave overflow visible, so they stay out of the order.
+  let locReadRo = null;
+  let locReadResizeBound = false;
+
+  function locReadOverflows(el) {
+    const cs = getComputedStyle(el);
+    const y = /(auto|scroll)/.test(cs.overflowY) && el.scrollHeight > el.clientHeight + 1;
+    const x = /(auto|scroll)/.test(cs.overflowX) && el.scrollWidth > el.clientWidth + 1;
+    return y || x;
+  }
+
+  function syncLocReadFocus() {
+    document.querySelectorAll('.loc-read').forEach((el) => {
+      if (locReadOverflows(el)) {
+        el.setAttribute('tabindex', '0');
+        el.setAttribute('role', 'region');
+        const heading = el.closest('.loc-sheet') && el.closest('.loc-sheet').querySelector('.loc-name');
+        if (heading) {
+          if (!heading.id) heading.id = 'loc-name-heading';
+          el.setAttribute('aria-labelledby', heading.id);
+        }
+      } else if (document.activeElement === el) {
+        // Leave the stop under the caret until they leave it, so a resize
+        // mid-scroll does not dump focus onto the body.
+        el.addEventListener('blur', syncLocReadFocus, { once: true });
+      } else {
+        el.removeAttribute('tabindex');
+        el.removeAttribute('role');
+        el.removeAttribute('aria-labelledby');
+      }
+    });
+  }
+
+  function onLocReadKey(e) {
+    // Native arrow-scroll on a focused overflow box is unreliable under
+    // synthesized key events, and first-person walking would also take
+    // the arrows. Move the prose ourselves when this region can scroll.
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    const el = e.currentTarget;
+    if (!locReadOverflows(el)) return;
+    const page = Math.max(24, el.clientHeight - 32);
+    const line = 24;
+    let delta = 0;
+    let axis = 'top';
+    switch (e.key) {
+      case 'ArrowDown': delta = line; break;
+      case 'ArrowUp': delta = -line; break;
+      case 'ArrowRight': delta = line; axis = 'left'; break;
+      case 'ArrowLeft': delta = -line; axis = 'left'; break;
+      case 'PageDown': delta = page; break;
+      case 'PageUp': delta = -page; break;
+      case 'Home':
+        if (el.scrollTop > 0) { el.scrollTop = 0; e.preventDefault(); }
+        return;
+      case 'End':
+        if (el.scrollTop < el.scrollHeight - el.clientHeight) {
+          el.scrollTop = el.scrollHeight;
+          e.preventDefault();
+        }
+        return;
+      case ' ':
+        delta = e.shiftKey ? -page : page;
+        break;
+      default:
+        return;
+    }
+    const prop = axis === 'left' ? 'scrollLeft' : 'scrollTop';
+    const max = axis === 'left'
+      ? Math.max(0, el.scrollWidth - el.clientWidth)
+      : Math.max(0, el.scrollHeight - el.clientHeight);
+    const next = Math.max(0, Math.min(max, el[prop] + delta));
+    if (next !== el[prop]) {
+      el[prop] = next;
+      e.preventDefault();
+    }
+  }
+
+  function watchLocRead() {
+    syncLocReadFocus();
+    if (locReadRo) {
+      locReadRo.disconnect();
+      locReadRo = null;
+    }
+    const el = document.querySelector('.loc-read');
+    if (!el) return;
+    el.addEventListener('keydown', onLocReadKey);
+    if (window.ResizeObserver) {
+      locReadRo = new ResizeObserver(() => syncLocReadFocus());
+      locReadRo.observe(el);
+    }
+    if (!locReadResizeBound) {
+      locReadResizeBound = true;
+      window.addEventListener('resize', syncLocReadFocus);
+    }
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(() => syncLocReadFocus());
+    }
+  }
+
   function renderLocation() {
     const root = $('#location-root');
     if (!root) return;
@@ -612,6 +717,7 @@
     else paintedMapOpen = false;
     if (!painted) mountSceneMap();
     renderPeopleRail();
+    watchLocRead();
   }
 
   function mountPaintedScene(painted) {
@@ -2515,6 +2621,12 @@
     document.addEventListener('keydown', (e) => {
       if (isTypingTarget(e.target)) return;
       if (e.ctrlKey || e.metaKey || e.altKey) return;
+      // An overflowing loc-read that has focus owns the keys that scroll
+      // it. Otherwise first-person walking (and the page) would take them.
+      if (e.target && e.target.closest && e.target.closest('.loc-read')
+          && /^(Arrow(Up|Down|Left|Right)|Page(Up|Down)|Home|End| )$/.test(e.key)) {
+        return;
+      }
       if (state.mode === MODE.COMBAT) return;
       // A conversation, a die prompt or a modal owns the keyboard while it is
       // open; the scene underneath must not also answer.

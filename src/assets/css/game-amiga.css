@@ -512,6 +512,13 @@ body.game-page .loc-read {
   scrollbar-width: thin;
 }
 
+/* Inside the box so overflow:auto does not clip the ring, and so the
+   unfocused parchment is unchanged. */
+body.game-page .loc-read:focus-visible {
+  outline: 2px solid var(--gw-focus);
+  outline-offset: -2px;
+}
+
 body.game-page .loc-read .loc-prose p,
 body.game-page .loc-read .loc-first {
   color: var(--gw-cream);
