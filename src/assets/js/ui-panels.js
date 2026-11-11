@@ -1619,10 +1619,16 @@
       ? `<img class="bag-art" src="${esc(it.image_url)}" alt="" onerror="this.remove()">`
       : `<svg class="bag-glyph" aria-hidden="true"><use href="#${
           BAG_GLYPH[it.item_type] || 'i-hands'}"></use></svg>`;
+    // The tile's border is its rarity (green uncommon, blue rare) and the dot
+    // is "worn" — both drawn, neither said. Say them in the name and the
+    // tooltip, so the colour is not the only place the rarity lives.
+    const rare = it.rarity && it.rarity !== 'common' ? String(it.rarity).replace(/_/g, ' ') : '';
+    const named = it.name + (it.quantity > 1 ? ` ×${it.quantity}` : '') + (rare ? ` (${rare})` : '');
     return `<button type="button" class="bag-slot is-${esc(it.rarity || 'common')}
         ${it.is_equipped == 1 ? 'is-equipped' : ''}"
         data-inv-id="${esc(it.id)}"
-        title="${esc(it.name)}${it.quantity > 1 ? ' ×' + esc(it.quantity) : ''}">
+        aria-label="${esc(named + (it.is_equipped == 1 ? ', equipped' : ''))}"
+        title="${esc(named)}">
       ${art}
       <span class="bag-label">${esc(it.name)}</span>
       ${it.quantity > 1 ? `<span class="bag-qty">${esc(it.quantity)}</span>` : ''}
