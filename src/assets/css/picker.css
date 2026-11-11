@@ -898,9 +898,15 @@ body.has-modal { overflow: hidden; }
     --cs-plate: 2.3rem;
   }
 
-  .picker-page .site-bar-in {
-    flex-wrap: nowrap;
-    overflow-x: auto;
+  /* The account bar wraps on a phone, as it does on every other page. It used
+     to be forced onto one line (`nowrap` + `overflow-x: auto`), but with the
+     bar's `justify-content: flex-end` the overflow ran off the LEFT edge, where
+     no scrollbar reaches: at 320px "Signed in as …" sat 112px off-screen and
+     could not be scrolled to, and the doors were squeezed until "About &
+     legal" broke over three lines. A one-line scroller would hide Sign out
+     behind a swipe instead, so it wraps. Each door stays whole. */
+  .picker-page .site-bar-in > a {
+    white-space: nowrap;
   }
 
   .picker-page > .cs-stage {
