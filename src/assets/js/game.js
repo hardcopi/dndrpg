@@ -503,7 +503,10 @@
       if (v == null) continue;
       let sel = `${a.tagName.toLowerCase()}[${attr}="${q(v)}"]`;
       if (attr === 'data-act' && a.hasAttribute('data-id')) sel += `[data-id="${q(a.getAttribute('data-id'))}"]`;
-      return { sel };
+      // A person can leave the scene in the conversation the button opened —
+      // recruited, they walk out of the people list and onto the party rail —
+      // so the redraw has no button to give back, and focus fell to the page.
+      return attr === 'data-npc' ? { sel, gone: true } : { sel };
     }
     return a.id ? { sel: '#' + CSS.escape(a.id) } : null;
   }
@@ -516,6 +519,7 @@
       ? [...document.querySelectorAll('#action-bar .action-btn')].find((b) => b.textContent.trim() === back.verb)
       : document.querySelector(back.sel);
     if (el && !el.disabled && el.getClientRects().length) el.focus({ preventScroll: true });
+    else if (back.gone) landOnArrival();
   }
 
   function renderNow() {
