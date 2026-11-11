@@ -223,10 +223,10 @@
   }
 
   /**
-   * Search and loot news belong on the banner, not only in the log. On a
-   * phone the log sits below the fold, so a found way or a picked-up item
-   * vanished the moment they were written — the same gap defeat, flight,
-   * and rest had before #175 / #176 / #196.
+   * Scene news belongs on the banner, not only in the log. On a phone the
+   * log sits below the fold, so a found way, a picked-up item, or what
+   * happened at a door or a chest vanished the moment it was written —
+   * the same gap defeat, flight, and rest had before #175 / #176 / #196.
    */
   function announceLines(messages, logCls) {
     const lines = (messages || []).filter(Boolean);
@@ -2060,10 +2060,10 @@
         },
       });
       if (!rolled || !after) return;
-      (after.messages || []).forEach((m) => log(m, after.opened ? 'success' : 'danger'));
       // Opened: the exit's condition now passes, so the scene and the chart
       // both need re-reading either way — the map redraws the way unlocked.
       await refreshAll();
+      announceLines(after.messages, after.opened ? 'success' : 'danger');
       await handleEvents(after.events || []);
     });
   }
@@ -2088,8 +2088,8 @@
         },
       });
       if (!rolled || !after) return;
-      (after.messages || []).forEach((m) => log(m, after.opened ? 'success' : 'danger'));
       await refreshAll();
+      announceLines(after.messages, after.opened ? 'success' : 'danger');
       await handleEvents(after.events || []);
     });
   }
@@ -2193,8 +2193,8 @@
   function doFurnishingInspect() {
     return guarded(async () => {
       const r = await API.post('location/furnishing_inspect', {});
-      (r.messages || []).forEach((m) => log(m, r.found ? 'important' : 'story'));
       await refreshAll();
+      announceLines(r.messages, r.found ? 'important' : 'story');
     });
   }
 
@@ -2206,8 +2206,8 @@
   function doFurnishingOpen() {
     return guarded(async () => {
       const r = await API.post('location/furnishing_open', {});
-      (r.messages || []).forEach((m) => log(m, r.sprung ? 'danger' : 'success'));
       await refreshAll();
+      announceLines(r.messages, r.sprung ? 'danger' : 'success');
       await handleEvents(r.events || []);
     });
   }
@@ -2225,8 +2225,8 @@
         },
       });
       if (!rolled || !after) return;
-      (after.messages || []).forEach((m) => log(m, tone(after)));
       await refreshAll();
+      announceLines(after.messages, tone(after));
       await handleEvents(after.events || []);
     });
   }
@@ -2250,16 +2250,16 @@
   function doDoorInspect(exitId) {
     return guarded(async () => {
       const r = await API.post('location/door_inspect', { exit_id: exitId });
-      (r.messages || []).forEach((m) => log(m, r.found ? 'important' : 'story'));
       await refreshAll();
+      announceLines(r.messages, r.found ? 'important' : 'story');
     });
   }
 
   function doDoorClear(exitId) {
     return guarded(async () => {
       const r = await API.post('location/door_clear', { exit_id: exitId });
-      (r.messages || []).forEach((m) => log(m, 'story'));
       await refreshAll();
+      announceLines(r.messages, 'story');
     });
   }
 
@@ -2279,8 +2279,8 @@
         },
       });
       if (!rolled || !after) return;
-      (after.messages || []).forEach((m) => log(m, tone(after)));
       await refreshAll();
+      announceLines(after.messages, tone(after));
       await handleEvents(after.events || []);
     });
   }
