@@ -493,6 +493,10 @@
     if (!a || a === document.body || !a.closest || a.closest('#modal-root, [role="dialog"]')) return null;
     const verb = a.closest('#action-bar .action-btn');
     if (verb) return { verb: verb.textContent.trim() };
+    // The place's name is where arriving puts focus (landOnArrival), so it is
+    // the first thing S answers from — and a Search that finds a way redraws
+    // the scene and threw the name away. Land on the new one.
+    if (a.matches('#location-root .loc-name')) return { name: true };
     const q = (v) => String(v).replace(/\\/g, '\\\\').replace(/"/g, '\\"');
     for (const attr of MEMO_ATTRS) {
       const v = a.getAttribute(attr);
@@ -507,6 +511,7 @@
     if (!back) return;
     const a = document.activeElement;
     if (a && a !== document.body && a.isConnected) return;
+    if (back.name) { landOnArrival(); return; }
     const el = back.verb
       ? [...document.querySelectorAll('#action-bar .action-btn')].find((b) => b.textContent.trim() === back.verb)
       : document.querySelector(back.sel);
@@ -1744,13 +1749,18 @@
     // Take an hour). The name has to contain that letter as it is drawn —
     // "Read the job board B", not "Read the job board (B)", which still
     // misses the visible string. A screen reader then hears the shortcut too.
-    const name = a.key ? `${a.label} ${a.key}` : a.label;
+    // Walking a floor in first person, W A S D walk and turn (bindKeys), so a
+    // plate that drew one of them — "Take the stair down (level 2) D" — named
+    // a key that turned the party instead. There the plate draws no letter;
+    // Enter and a click still take it.
+    const key = a.key && !(fpOn() && /^[wasd]$/i.test(a.key)) ? a.key : '';
+    const name = key ? `${a.label} ${key}` : a.label;
     return `<button type="button" class="${cls}"
         data-act="${esc(a.act)}"${a.id ? ` data-id="${a.id}"` : ''}
         title="${esc(tip)}" aria-label="${esc(name)}">
       <svg class="act-icon" aria-hidden="true"><use href="#${icon}"></use></svg>
       <span class="loc-act-label">${esc(a.label)}</span>
-      ${a.key ? `<kbd>${esc(a.key)}</kbd>` : ''}
+      ${key ? `<kbd>${esc(key)}</kbd>` : ''}
     </button>`;
   }
 
