@@ -2046,13 +2046,17 @@
       // rolled and the damage taken server-side, mid-hop. This is the telling,
       // not the asking.
       if (ev.type === 'trap') {
-        log(`${ev.name}!`, 'danger', 'combat');
-        if (ev.text) log(ev.text, 'danger', 'story');
+        // The log sits below the fold on a phone — same gap a walk's arrival
+        // had before #202. Keep the existing lines and raise them on the banner.
         const s = ev.save || {};
         const verdict = s.success ? 'holds' : 'fails';
-        log(`${ev.victim} — ${String(s.ability || '').toUpperCase()} save ${s.total} against DC ${s.dc} ${verdict}`
-          + (ev.damage > 0 ? ` — ${ev.damage} damage` : ' — unhurt'),
-          s.success ? 'info' : 'danger', 'combat');
+        const saveLine = `${ev.victim} — ${String(s.ability || '').toUpperCase()} save ${s.total} against DC ${s.dc} ${verdict}`
+          + (ev.damage > 0 ? ` — ${ev.damage} damage` : ' — unhurt');
+        log(`${ev.name}!`, 'danger', 'combat');
+        if (ev.text) log(ev.text, 'danger', 'story');
+        log(saveLine, s.success ? 'info' : 'danger', 'combat');
+        const notice = joinNotice([`${ev.name}!`, ev.text, saveLine]);
+        if (notice) showError(notice, { good: true });
         continue;
       }
       if (ev.type !== 'encounter') continue;
