@@ -493,6 +493,10 @@
     if (!a || a === document.body || !a.closest || a.closest('#modal-root, [role="dialog"]')) return null;
     const verb = a.closest('#action-bar .action-btn');
     if (verb) return { verb: verb.textContent.trim() };
+    // The place's name is where arriving puts focus (landOnArrival), so it is
+    // the first thing S answers from — and a Search that finds a way redraws
+    // the scene and threw the name away. Land on the new one.
+    if (a.matches('#location-root .loc-name')) return { name: true };
     const q = (v) => String(v).replace(/\\/g, '\\\\').replace(/"/g, '\\"');
     for (const attr of MEMO_ATTRS) {
       const v = a.getAttribute(attr);
@@ -507,6 +511,7 @@
     if (!back) return;
     const a = document.activeElement;
     if (a && a !== document.body && a.isConnected) return;
+    if (back.name) { landOnArrival(); return; }
     const el = back.verb
       ? [...document.querySelectorAll('#action-bar .action-btn')].find((b) => b.textContent.trim() === back.verb)
       : document.querySelector(back.sel);
