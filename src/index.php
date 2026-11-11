@@ -1028,6 +1028,14 @@ require_signed_in_page();
       const rows = items.map((it) => {
         const worn = Number(it.is_equipped) === 1;
         const potion = it.item_type === 'potion';
+        // A scroll of a healing spell reads out here as it does from the
+        // game's own bag (InventoryService::usePotion takes both); only the
+        // Drink was ever drawn, so the scroll sat in the bag with no button.
+        // Antitoxin and the oils stay button-less: their edge is for a fight
+        // and the server refuses them here.
+        let props = it.properties;
+        if (typeof props === 'string') { try { props = JSON.parse(props); } catch (e) { props = null; } }
+        const scroll = it.item_type === 'scroll' && !!(props && props.use_effect && props.use_effect.cast);
         return `<li class="bag-row${worn ? ' is-worn' : ''}">
           <span class="bag-name">${esc(it.name)}${it.quantity > 1
             ? ` <span class="stat-note">×${esc(it.quantity)}</span>` : ''}</span>
@@ -1037,6 +1045,8 @@ require_signed_in_page();
           <span class="bag-acts">
             ${potion
               ? `<button type="button" class="btn btn-small" data-use="${esc(it.id)}">Drink</button>`
+              : scroll
+              ? `<button type="button" class="btn btn-small" data-use="${esc(it.id)}">Read</button>`
               : ''}
             ${it.equip_slot
               ? `<button type="button" class="btn btn-small" data-equip="${esc(it.id)}"
@@ -1387,7 +1397,7 @@ require_signed_in_page();
           await afterTrade(state.selected, r.message);
         } catch (err) {
           drink.disabled = false;
-          showError(err.message || 'That could not be drunk.');
+          showError(err.message || 'That could not be used.');
         }
         return;
       }
