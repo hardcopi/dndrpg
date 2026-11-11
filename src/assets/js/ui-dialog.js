@@ -134,7 +134,9 @@
         // in the log, rather than showing them the engine's own words in a
         // red banner.
         if (opts.camp) {
-          G().log(`${opts.name || 'They'} have nothing to say tonight.`, '', 'story');
+          const quiet = `${opts.name || 'They'} have nothing to say tonight.`;
+          G().log(quiet, '', 'story');
+          if (G().showNotice) G().showNotice(quiet);
           // But say WHY somewhere a developer can read it. This catch is a
           // catch-all: a missing node, a network failure, a 500 and a genuine
           // "nothing matched tonight" all arrive here and all used to produce
@@ -676,12 +678,22 @@
     if (!result) return;
     (result.messages || []).forEach((m) => G().log(m, 'important'));
     (result.notes || []).forEach((n) => G().log('(' + n + ')', 'danger'));
-    (result.level_ups || []).forEach((l) => G().log(`${l.name} reaches level ${l.level}!`, 'success'));
+    const levelLines = (result.level_ups || []).map((l) => `${l.name} reaches level ${l.level}!`);
+    levelLines.forEach((m) => G().log(m, 'success'));
+    const approvalLines = [];
     Object.entries(result.approval || {}).forEach(([key, delta]) => {
       if (!delta) return;
-      G().log(`${companionName(key)} ${delta > 0 ? 'approves' : 'disapproves'}.`,
-        delta > 0 ? 'success' : 'danger');
+      const line = `${companionName(key)} ${delta > 0 ? 'approves' : 'disapproves'}.`;
+      approvalLines.push(line);
+      G().log(line, delta > 0 ? 'success' : 'danger');
     });
+    const notice = [
+      ...(result.messages || []),
+      ...(result.notes || []).map((n) => '(' + n + ')'),
+      ...levelLines,
+      ...approvalLines,
+    ].filter(Boolean).join(' ');
+    if (notice) G().showNotice(notice);
   }
 
   // =========================================================================
@@ -766,6 +778,7 @@
         await window.UI.openShop(npc.npc_key);
       } else {
         if (r.message) G().log(r.message, 'success');
+        if (r.message) G().showNotice(r.message);
         if (r.character) G().mergeCharacter(r.character);
         await G().refreshAll();
       }
