@@ -9753,13 +9753,16 @@ body.studio-page > .site-bar {
    Cancel and the printable sheet's Print / Close are not in this rule.
    Camp's Make camp / Take a room and its Close were 40px (plain .btn) — the
    same floor, scoped to the camp panel so other dialogs' footers are as they
-   were. */
+   were. The yes/no question (UI.confirm: Fight / Hold back on arrival, and
+   whatever else asks yes or no through it) drew its pair at 40px too. */
 @media (max-width: 600px) {
   .quest-item .btn-small,
   .camp-talk,
   .camp-march,
   .camp-rest-actions .btn,
-  [role="dialog"]:has(.camp-rest) .modal-actions .btn {
+  [role="dialog"]:has(.camp-rest) .modal-actions .btn,
+  .modal-actions [data-yes],
+  .modal-actions [data-no] {
     min-height: var(--tap-min);
     display: inline-flex;
     align-items: center;
