@@ -1112,6 +1112,7 @@
         try {
           const r = await API.post('quest/accept', body);
           if (r.message) G().log(r.message, 'important');
+          if (r.message) G().showNotice(r.message);
           closeTopModal();
           await G().refreshAll();
           await reopenJournalAt(b.dataset.accept || r.quest_key || (r.quest && r.quest.quest_key));
@@ -1431,8 +1432,14 @@
           : 'character/companion_dismiss';
         try {
           const r = await API.post(route, { companion_key: b.dataset.march });
-          ((r.result || {}).messages || []).forEach((m) => G().log(m, 'important'));
-          ((r.result || {}).notes || []).forEach((n) => G().log('(' + n + ')', 'danger'));
+          const res = r.result || {};
+          (res.messages || []).forEach((m) => G().log(m, 'important'));
+          (res.notes || []).forEach((n) => G().log('(' + n + ')', 'danger'));
+          const notice = [
+            ...(res.messages || []),
+            ...(res.notes || []).map((n) => '(' + n + ')'),
+          ].filter(Boolean).join(' ');
+          if (notice) G().showNotice(notice);
           await G().refreshAll();
           closeTopModal();
           openCamp();

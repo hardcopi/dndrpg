@@ -2420,9 +2420,9 @@
     return guarded(async () => {
       const r = await API.post('quest/board', {});
       const posted = r.board || [];
-      log(posted.length
+      announceLines([posted.length
         ? `The board has ${posted.length} job${posted.length === 1 ? '' : 's'} on it.`
-        : 'The board is bare. Somebody has taken everything worth taking.', 'important');
+        : 'The board is bare. Somebody has taken everything worth taking.'], 'important');
       await refreshAll();
       if (posted.length && window.UI && window.UI.openJournal) window.UI.openJournal();
     });
