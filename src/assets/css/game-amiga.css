@@ -1053,9 +1053,12 @@ body.in-dialogue .gw-actions { display: none; }
   body.game-page .scene .topbar { flex-wrap: wrap; row-gap: 0.2rem; }
   body.game-page .topbar-where { flex: 1 0 100%; }
 
-  /* Seven 44px plates and the divider come to about 330px, which a 320px
+  /* Seven 44px plates and the divider come to about 330px, which a 360px
      phone does not have: the last one, Main menu, was cut off past the frame.
-     Let the row wrap rather than shrink the plates under the tap floor. */
+     Between 361px and this fold, wrap rather than shrink the plates under
+     the tap floor. At 360px and below, a tighter rule below keeps them on
+     one row without going under 44px — a wrapped row buries the scene's
+     action plates under the phone dock. */
   body.game-page .scene .topbar .topbar-actions {
     flex-wrap: wrap;
     row-gap: var(--sp-2);
@@ -1079,4 +1082,34 @@ body.in-dialogue .gw-actions { display: none; }
   /* The speaker row is sticky and was painted with the old panel colour.
      Keep it opaque so the parchment does not show through the name. */
   body.game-page .dlg-speaker { background: var(--dlg-panel-top); }
+}
+
+/* At 360px the wrapped Main menu costs a second 44px row, and on a 320px
+   phone that row plus the arrival banner buries Read the job board, Rest,
+   and Take an hour under the dock. Keep every plate at the 44px tap floor
+   and recover the width from padding and gaps so the seven still fit on
+   one row: 7×44 plus a 4px divider is 312, which a 320px window can spare
+   once the frame's side padding is down to a couple of pixels. */
+@media (max-width: 360px) {
+  .gw-window { padding-left: 2px; padding-right: 2px; }
+  .gw-window .game-shell { padding-left: 0; padding-right: 0; }
+  body.game-page .scene .topbar { padding-left: 2px; padding-right: 2px; }
+  body.game-page .scene .topbar .hud-icons { gap: 0; }
+  body.game-page .scene .topbar .icon-sep { margin: 0 2px; }
+  body.game-page .scene .topbar .icon-btn { flex-shrink: 0; }
+  body.game-page .scene .topbar .topbar-actions {
+    flex-wrap: nowrap;
+    gap: 0;
+    min-width: 0;
+    max-width: 100%;
+  }
+}
+
+/* 320px is 8px tighter than 360: the 2px frame padding left the seven
+   44px plates a pixel short, and they shrank to 43. Drop the window
+   padding and keep a 4px inset on the bar itself so 7×44 plus the
+   divider land exactly. */
+@media (max-width: 330px) {
+  .gw-window { padding-left: 0; padding-right: 0; }
+  body.game-page .scene .topbar { padding-left: 4px; padding-right: 4px; }
 }

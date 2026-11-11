@@ -733,3 +733,28 @@ body.game-page .tut-hint {
   50%      { box-shadow: 0 0 0 6px rgba(232, 180, 74, .32), 0 0 18px rgba(232, 180, 74, .7); }
 }
 @media (prefers-reduced-motion: reduce) { body.game-page .tut-hint { animation: none; } }
+
+/* The six dock verbs share the 320px row equally, and "Character" is the
+   one word that does not fit: at 9.5px Cinzel it wants 55px in a 44px
+   span and reads "CHARA…". Keep the word; tighten the tracking and the
+   size just enough that all six labels stay whole. */
+@media (max-width: 360px) {
+  body.game-page:not(.in-combat) .rail-right .gw-actions .action-btn {
+    font-size: 8px;
+    letter-spacing: -0.05em;
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+/* A 320×640 phone with the arrival banner up has no room left above the
+   dock for the scene's action plates once the painting is a 16:9 strip.
+   A slightly wider painting, tighter scene padding, and a slightly
+   closer banner recover the fold without changing the copy or the dock. */
+@media (max-width: 360px) and (max-height: 700px) {
+  body.game-page:not(.in-combat) .loc-inner.scene-storybook { padding: 4px 8px 6px; }
+  body.game-page:not(.in-combat) .loc-inner.scene-storybook .scene-paint { aspect-ratio: 2.8 / 1; }
+  body.game-page .error-banner:not(.is-floating) { padding: 4px 8px; }
+  body.game-page .loc-dock .loc-actions { padding-bottom: 2px; gap: 4px; }
+  body.game-page .loc-dock-head { padding-top: 0.12rem; padding-bottom: 0.12rem; }
+}
