@@ -1601,9 +1601,16 @@
     // The word is on the plate. The tooltip is the longer hint, and falls
     // back to the label only when a verb has nothing else to say.
     const tip = a.hint || a.label;
+    // The letter key is also on the plate. Naming only the verb left the
+    // visible "B" / "R" / "H" out of the accessible name (axe
+    // label-content-name-mismatch on the job board, Rest at the inn, and
+    // Take an hour). The name has to contain that letter as it is drawn —
+    // "Read the job board B", not "Read the job board (B)", which still
+    // misses the visible string. A screen reader then hears the shortcut too.
+    const name = a.key ? `${a.label} ${a.key}` : a.label;
     return `<button type="button" class="${cls}"
         data-act="${esc(a.act)}"${a.id ? ` data-id="${a.id}"` : ''}
-        title="${esc(tip)}" aria-label="${esc(a.label)}">
+        title="${esc(tip)}" aria-label="${esc(name)}">
       <svg class="act-icon" aria-hidden="true"><use href="#${icon}"></use></svg>
       <span class="loc-act-label">${esc(a.label)}</span>
       ${a.key ? `<kbd>${esc(a.key)}</kbd>` : ''}
