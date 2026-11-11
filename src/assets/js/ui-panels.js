@@ -1735,6 +1735,7 @@
     const spellHtml = spellsHtml(spells, castRow);
 
     const el = showModal(`
+      ${modalHead(c.name)}
       <div class="sheet-header">
         <img class="sheet-bust" src="${esc(G().classArtUrl(c, '_bust'))}" alt="">
         <div class="sheet-ident">
@@ -1816,6 +1817,12 @@
       closeTopModal();
       await G().setActiveCharacter(c.id);
     });
+    // The × is the first control, but opening the sheet has always landed
+    // on Print. Keep that, so a keyboard open is unchanged. The header
+    // Close still works; the sticky × is the one that stays on screen
+    // once the header has scrolled away.
+    const land = el.querySelector('.sheet-header-actions a, .sheet-header-actions button');
+    if (land) land.focus();
 
     const tablist = el.querySelector('.sheet-spell-tabs');
     if (tablist) {
