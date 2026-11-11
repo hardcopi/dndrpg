@@ -764,5 +764,17 @@ body.game-page .tut-hint {
   body.game-page:not(.in-combat) .loc-inner.scene-storybook .scene-paint.map-open { aspect-ratio: 4 / 3; }
   body.game-page .error-banner:not(.is-floating) { padding: 4px 8px; }
   body.game-page .loc-dock .loc-actions { padding-bottom: 2px; gap: 4px; }
-  body.game-page .loc-dock-head { padding-top: 0.12rem; padding-bottom: 0.12rem; }
+  /* The long first-visit arrival still left Take an hour under the dock
+     at 320 (~20px) and at 360 (~32px, because the same 2.8:1 painting
+     is taller). Close leftover gaps around the banner, the painting,
+     and the plates, tighten the Actions heading and the window plate,
+     and leave the 2.8:1 painting, the open-map 4:3, and the 44px tap
+     floor alone. */
+  body.game-page .loc-dock-head { padding-top: 0; padding-bottom: 0; }
+  body.game-page:not(.in-combat) .scene { gap: var(--sp-2); }
+  body.game-page:not(.in-combat) .loc-inner.scene-storybook .loc-text { gap: var(--sp-4); }
+  body.game-page .loc-dock .action-list { gap: var(--sp-4); }
+  .gw-window { padding-top: 0.15rem; padding-bottom: 0.25rem; }
+  .gw-window .game-shell { padding-top: 0.05rem; }
+  .gw-plate { margin: 0.05rem 0 0.1rem; padding-top: 0.08rem; padding-bottom: 0.08rem; }
 }
