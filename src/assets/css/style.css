@@ -4384,6 +4384,9 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   font-size: var(--fs-sm);
   white-space: pre-wrap;
 }
+/* A bare URL is one long word: at 320px the SRD link ran 14px out of the
+   card. Let a link break where it must. */
+.legal-text a { overflow-wrap: anywhere; }
 
 .badge {
   display: inline-block;
@@ -8931,7 +8934,7 @@ body.studio-page > .site-bar {
   text-transform: uppercase;
   color: var(--text-faint);
   font-weight: var(--fw-semibold);
-  padding-bottom: var(--sp-4);
+  padding: 0 var(--sp-8) var(--sp-4) 0;
   border-bottom: 1px solid var(--border-soft);
 }
 .sheet-table td {
@@ -8941,6 +8944,12 @@ body.studio-page > .site-bar {
 }
 .sheet-table tr:last-child td { border-bottom: none; }
 .sheet-table tr.is-equipped td { color: var(--text); }
+/* The notes column ("versatile 1d10", "finesse, light, thrown 20/60") is a
+   .stat-note, which never wraps — right beside a name, but in the last column
+   of a table it pushed the table past its card: 28px over at 320px wide. */
+.sheet-table .stat-note { white-space: normal; }
+.sheet-table th:last-child,
+.sheet-table td:last-child { padding-right: 0; }
 
 /* ------------------------------------------------------------------ *
    characters.php — one module's parties
