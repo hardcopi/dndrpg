@@ -9730,9 +9730,12 @@ body.studio-page > .site-bar {
 
   /* Buy and Sell in a shop, and Equip / Use / Give under an item in the bag,
      were 29px: the buttons that spend gold or change what a hero carries,
-     under the floor. Flex only to keep the word centred in the taller box. */
+     under the floor. Flex only to keep the word centred in the taller box.
+     A healing spell's Cast / Cast… on the sheet (out of combat) is the same
+     29px row, so it joins them. The sheet header's Print / Close do not. */
   .shop-item .btn-small,
-  .sheet-item-actions .btn-small {
+  .sheet-item-actions .btn-small,
+  .sheet-cast-row .btn-small {
     min-height: var(--tap-min);
     display: inline-flex;
     align-items: center;
