@@ -145,8 +145,20 @@ body.game-page .dlg-script {
   background-size: auto, 180px, auto;
   background-blend-mode: normal, multiply, normal;
 }
+/* What people SAY is prose, so it is set in the prose face — the Alegreya
+   the place descriptions already use — not in Cinzel, which has no lower
+   case: a hundred-word speech in bold capitals was the hardest reading in the
+   game. Cinzel keeps the speaker's name (.dlg-name) and the headings.
+   pre-line, because the dialogue is authored in paragraphs ("\n\n") and the
+   speech ran them all together into one block. */
 body.game-page .dlg-line,
-body.game-page .dlg-aside { font-weight: 700; }
+body.game-page .dlg-aside {
+  font-family: 'Alegreya', serif;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 1.42;
+  white-space: pre-line;
+}
 
 /* At camp the companion's painting fills the panel, and the line sat on it in
    the parchment's dark ink over a dark floor: Amiga's ink colour outranked
