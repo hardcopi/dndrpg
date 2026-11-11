@@ -2356,6 +2356,29 @@
     if (row) row.focus();
   }
 
+  /**
+   * What an item in the Use list does, read off its own properties — the same
+   * fields CombatEngine::usePotion acts on. The row used to be a name and a
+   * count, so antitoxin and an oil were a guess until drunk.
+   */
+  function itemNote(p) {
+    let props = p.properties;
+    if (typeof props === 'string') { try { props = JSON.parse(props); } catch (e) { props = null; } }
+    if (!props || typeof props !== 'object') return '';
+    const use = props.use_effect && typeof props.use_effect === 'object' ? props.use_effect : null;
+    if (props.heals) return `heals ${props.heals}`;
+    if (use && use.cast) return `casts ${String(use.cast).replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())} on you`;
+    if (use && use.boon && typeof use.boon === 'object') {
+      const rounds = Math.max(1, Number(use.rounds) || 10);
+      const b = use.boon;
+      const what = b.on_hit ? `+${b.on_hit} on every hit`
+        : b.save_advantage_vs ? `advantage on saves vs ${b.save_advantage_vs}`
+        : '';
+      return what ? `${what} · ${rounds} rounds` : '';
+    }
+    return '';
+  }
+
   function openItemPicker(actor, potions) {
     const el = window.UI.showModal(`
       ${window.UI.modalHead('Use an item')}
@@ -2364,6 +2387,7 @@
           <span class="spell-name">${esc(p.name)}</span>
           <span class="pill">×${esc(p.quantity)}</span>
           ${p.damage_dice ? `<span class="spell-dice">${esc(p.damage_dice)}</span>` : ''}
+          ${itemNote(p) ? `<span class="spell-note">${esc(itemNote(p))}</span>` : ''}
         </button>`).join('')}
       </div>
       <div class="modal-actions"><button type="button" class="btn" data-close>Back</button></div>
