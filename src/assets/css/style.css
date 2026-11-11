@@ -3740,6 +3740,11 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   justify-content: center;
   z-index: var(--z-modal);
   padding: var(--sp-16);
+  /* --banner-reserve is the floating news strip's bottom plus air, set
+     by syncBanner. A long arrival used to sit on top of a tall panel
+     (the level-up heading, a title-bar close). Pad the overlay instead,
+     and cap the panel so it still fits in what is left. */
+  padding-top: max(var(--sp-16), var(--banner-reserve, 0px));
 }
 .modal-backdrop.hidden { display: none; }
 
@@ -3757,20 +3762,23 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   border-radius: var(--r-lg);
   max-width: 560px;
   width: 100%;
-  max-height: 86vh;
+  max-height: min(86vh, calc(100vh - max(var(--sp-16), var(--banner-reserve, 0px)) - var(--sp-16)));
   overflow-y: auto;
   padding: var(--sp-20);
   box-shadow: var(--sh-4);
 }
 .modal.modal-wide { max-width: 780px; }
-.modal.modal-tall { max-width: 620px; max-height: 92vh; }
+.modal.modal-tall {
+  max-width: 620px;
+  max-height: min(92vh, calc(100vh - max(var(--sp-16), var(--banner-reserve, 0px)) - var(--sp-16)));
+}
 
 /* The chart, opened up. Nearly the whole window, because the reason to open it
    at all is that the rail copy is too small to read place names on — and it is
    a drawing, so the more of it there is the better it works. */
 .modal.modal-map {
   max-width: min(1200px, 94vw);
-  height: 94vh;
+  height: min(94vh, calc(100vh - max(var(--sp-16), var(--banner-reserve, 0px)) - var(--sp-16)));
   padding: var(--sp-14) var(--sp-16) var(--sp-16);
   display: flex;
   flex-direction: column;
@@ -4909,6 +4917,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   display: grid;
   place-items: center;
   padding: var(--sp-24);
+  padding-top: max(var(--sp-24), var(--banner-reserve, 0px));
   background: rgba(8, 6, 5, 0.72);
   -webkit-backdrop-filter: blur(3px);
   backdrop-filter: blur(3px);
@@ -4931,7 +4940,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
    * The calc() is the theatre's own 1.5rem of padding, top and bottom, so the
    * panel cannot be told to be taller than the space it is being centred in.
    * Identical to a flat 90vh on anything above about 480px tall. */
-  max-height: min(90vh, calc(100vh - 3rem));
+  max-height: min(90vh, calc(100vh - max(var(--sp-24), var(--banner-reserve, 0px)) - var(--sp-24)));
   padding: var(--sp-20) var(--sp-20);
   overflow-y: auto;
   background: linear-gradient(180deg, var(--dlg-panel-top), var(--dlg-panel-bottom));
@@ -5003,12 +5012,16 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   /* The theatre's own padding is a frame around the panel, and on a phone it
      is 48px of the 360 spent on air outside the thing being read. Half of it
      back is four more characters a line. */
-  .dialogue-theatre { padding: var(--sp-12); }
+  .dialogue-theatre {
+    padding: var(--sp-12);
+    padding-top: max(var(--sp-12), var(--banner-reserve, 0px));
+  }
 
   .dlg-panel {
     grid-template-columns: minmax(0, 1fr);
     gap: var(--sp-12);
     padding: var(--sp-12);
+    max-height: min(90vh, calc(100vh - max(var(--sp-12), var(--banner-reserve, 0px)) - var(--sp-12)));
   }
 
   /* Sticky, and therefore opaque: the panel's own gradient starts here, so
@@ -5228,6 +5241,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   align-items: center;
   justify-content: center;
   padding: var(--sp-16);
+  padding-top: max(var(--sp-16), var(--banner-reserve, 0px));
   background: rgba(6, 4, 2, 0.82);
 }
 .check-root.hidden { display: none; }
@@ -5235,7 +5249,7 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
 .check-panel {
   width: 100%;
   max-width: 620px;
-  max-height: 92vh;
+  max-height: min(92vh, calc(100vh - max(var(--sp-16), var(--banner-reserve, 0px)) - var(--sp-16)));
   overflow-y: auto;
   padding: var(--sp-16) var(--sp-20) var(--sp-20);
   background: var(--bg-panel);

@@ -178,14 +178,35 @@
    * when the news is first raised, but a walk's arrival is often followed
    * by the ambush prompt, which opens after the banner is already in the
    * flow and would cover it on a phone.
+   *
+   * Floating it (z-alert, above the panel) is how the news stays readable.
+   * It also used to sit on top of the panel: a long arrival over a tall
+   * ceremony hid the level-up heading, and would hide a title-bar close
+   * the same way. --banner-reserve is the bottom of the strip plus a
+   * little air, and the overlays pad themselves below it so the news and
+   * the panel are both on screen. Combat is unchanged: the board is not
+   * a centred panel, and the banner already floats over it on purpose.
    */
+  let bannerResizeWired = false;
   function syncBanner() {
     const b = $('#error-banner');
-    if (!b || b.classList.contains('hidden')) return;
-    const over = state.mode === MODE.COMBAT
+    if (!b) return;
+    const over = !b.classList.contains('hidden') && (
+      state.mode === MODE.COMBAT
       || (window.UI && UI.overlayOpen && UI.overlayOpen())
-      || !!document.querySelector('#dialogue-root:not(.hidden), #check-root:not(.hidden)');
+      || !!document.querySelector('#dialogue-root:not(.hidden), #check-root:not(.hidden)')
+    );
     b.classList.toggle('is-floating', over);
+    // Measure after the class takes effect: floating changes the width
+    // and the type size, which changes how many lines the news occupies.
+    const reserve = over
+      ? Math.ceil(b.getBoundingClientRect().bottom + 8)
+      : 0;
+    document.documentElement.style.setProperty('--banner-reserve', reserve + 'px');
+    if (!bannerResizeWired) {
+      bannerResizeWired = true;
+      window.addEventListener('resize', syncBanner);
+    }
   }
 
   function showError(msg, opts = {}) {
@@ -218,7 +239,12 @@
 
   function armErrorTimer(b, ms) {
     clearTimeout(errorTimer);
-    errorTimer = setTimeout(() => b.classList.add('hidden'), ms);
+    errorTimer = setTimeout(() => {
+      b.classList.add('hidden');
+      // The reserve has to drop when the strip goes, or a panel that
+      // opened under it would stay padded after the news had left.
+      syncBanner();
+    }, ms);
   }
 
   /**
