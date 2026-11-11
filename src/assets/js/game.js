@@ -222,6 +222,18 @@
     if (notice) showError(notice, { good: true });
   }
 
+  /**
+   * Search and loot news belong on the banner, not only in the log. On a
+   * phone the log sits below the fold, so a found way or a picked-up item
+   * vanished the moment they were written — the same gap defeat, flight,
+   * and rest had before #175 / #176 / #196.
+   */
+  function announceLines(messages, logCls) {
+    const lines = (messages || []).filter(Boolean);
+    lines.forEach((m) => log(m, logCls));
+    if (lines.length) showError(lines.join(' '), { good: true });
+  }
+
   // =========================================================================
   // Portrait paths.
   //
@@ -2023,10 +2035,10 @@
   function doSearch() {
     return guarded(async () => {
       const r = await API.post('location/search', {});
-      (r.messages || []).forEach((m) => log(m));
       // A found exit changes the scene, so redraw rather than leaving the
       // player to work out that the menu is now stale.
       if (r.found_exits) await refreshAll();
+      announceLines(r.messages);
     });
   }
 
@@ -2276,9 +2288,9 @@
   function doLoot(locationItemId) {
     return guarded(async () => {
       const r = await API.post('location/loot', { location_item_id: locationItemId });
-      (r.messages || []).forEach((m) => log(m, 'success'));
       if (r.character) mergeCharacter(r.character);
       await refreshAll();
+      announceLines(r.messages, 'success');
     });
   }
 
