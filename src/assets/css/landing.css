@@ -381,3 +381,82 @@ figure.lp-figure figcaption {
 @media (prefers-reduced-motion: reduce) {
   .lp-btn { transition: none; }
 }
+
+/* --- the storybook skin ------------------------------------------------- */
+
+/* The game itself moved to warm materials — plum ground, brass frames, wine
+   buttons, Cinzel on the plates, Alegreya for prose (game-storybook.css,
+   login.css, picker.css). These pages were still in the cold grey chrome of
+   tokens.css, so the pitch looked like a different product from the screen it
+   sells. Restating the tokens here retints every rule above without touching
+   one of them. Contrast: --text on --bg-raised is 10.7:1, --text-dim 8.2:1,
+   --gold 9.6:1 on --bg. */
+body.lp {
+  --bg: #1a1220;
+  --bg-panel: #2a1d30;
+  --bg-panel-2: #35263c;
+  --bg-inset: #140e19;
+  --bg-raised: #3a2a40;
+  --border: #5a3e22;
+  --border-soft: #3a2a2c;
+  --border-strong: #a8742a;
+  --text: #f5e6c4;
+  --text-dim: #dcc9a4;
+  --gold: #e8b44a;
+  --gold-bright: #f3d898;
+  --gold-ink: #e8b44a;
+  --gold-dim: #a8742a;
+  --gold-well: #3a2a40;
+  --ink-on-gold: #24160d;
+  --link: #f3d898;
+  background: radial-gradient(ellipse at 30% 0%, #3a2a40, #1a1220 60rem) #1a1220;
+  color: var(--text);
+  font-family: 'Alegreya', var(--font-display);
+}
+body.lp .lp p,
+body.lp .lp-points li { font-size: 1.0625rem; }
+body.lp .lp-card p,
+body.lp .lp-feats li,
+body.lp .lp-stats { font-size: 1rem; }
+
+/* The painted river behind every hero, dimmed until the words read on it. */
+body.lp .lp-hero {
+  background:
+    linear-gradient(180deg, #1a1220d9 0%, #1a1220c4 45%, #1a1220 100%),
+    url("../images/login/login-bg.webp") center 38% / cover no-repeat,
+    #1a1220;
+  border-bottom: 2px solid var(--border-strong);
+}
+body.lp .lp-hero h1,
+body.lp .lp-fig b { font-family: 'Cinzel', serif; font-weight: 700; letter-spacing: 0.02em; }
+body.lp .lp-hero h1 { text-shadow: 0 2px 10px #000c; }
+body.lp .lp-hero .lp-lead { text-shadow: 0 1px 6px #000; }
+body.lp .lp-hero-logo h1 { margin-bottom: var(--sp-8); line-height: 0; }
+.lp-logo { display: inline-block; width: min(460px, 86vw); height: auto; filter: drop-shadow(0 6px 14px #000a); }
+
+body.lp .lp-eyebrow,
+body.lp .lp-card-sub,
+body.lp .lp-fig span,
+body.lp .lp-stats dt { font-family: 'Cinzel', serif; font-weight: 600; color: var(--gold); }
+
+/* Plates: the same plum panel and brass edge as the game's panes. */
+body.lp .lp-card,
+body.lp .lp-fig { background: linear-gradient(#2e2034, #21172a); border-color: var(--border); box-shadow: 0 3px 10px #0007; }
+body.lp .lp-band-inset { background: #140e19b3; }
+body.lp .lp-shot { border: 3px solid #08070a; outline: 2px solid var(--border-strong); border-radius: 2px; box-shadow: 0 5px 18px #0009; }
+
+/* Buttons: brass for the one that starts an account, wine for the rest —
+   the game's own pair. */
+body.lp .lp-btn {
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  border-radius: 3px;
+  color: var(--text);
+  background: linear-gradient(#7a2a38, #561a26);
+  border-color: var(--border-strong);
+}
+body.lp .lp-btn:hover, body.lp .lp-btn:focus-visible { border-color: var(--gold-bright); background: linear-gradient(#8a3442, #63202d); }
+body.lp .lp-btn-go { background: linear-gradient(#f3d898, #c9a45c 55%, #a07e3a); border-color: #f3d898; color: var(--ink-on-gold); }
+body.lp .lp-btn-go:hover, body.lp .lp-btn-go:focus-visible { background: linear-gradient(#fbe6b4, #d8b46a 55%, #b08c44); }
+body.lp a:not(.lp-btn) { color: var(--link); }
+body.lp .lp-close { background: radial-gradient(100% 120% at 50% 100%, #3a2a40 0%, transparent 60%), #140e19; border-top: 2px solid var(--border-strong); }
