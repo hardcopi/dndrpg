@@ -9678,6 +9678,17 @@ body.studio-page > .site-bar {
   /* The glyph does not grow with its target — a 44px button exists to be hit,
      not to shout. Kept at the size it reads best and simply given more room. */
   .icon-btn-sm svg { width: 1.1rem; height: 1.1rem; }
+  /* The chart's zoom cluster (−, ⌂, +) sized its buttons at 1.15rem with a
+     more specific selector, so on a generated floor the only zoom a phone has
+     was 18px. Give it the floor too. #scene-info (already 44px here) stays
+     where it is in the corner; the taller cluster steps left of it (44px and
+     a 6px gap) instead of growing down over it. */
+  .loc-map .map-zoom .icon-btn {
+    width: var(--tap-min);
+    min-width: var(--tap-min);
+    height: var(--tap-min);
+  }
+  .loc-map .map-zoom { right: calc(0.35rem + var(--tap-min) + 6px); }
 
   /* Rows, which grow by their padding rather than by a height: the label has to
      stay vertically centred against a portrait that is not changing size. */
