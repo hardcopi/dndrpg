@@ -2505,6 +2505,10 @@
       // The log is below the fold on a phone, so a defeat used to end with the
       // party simply standing in the inn and nothing on screen saying why.
       if (G().showNotice) G().showNotice('Defeated. You wake at the Golden Flagon…');
+    } else if (status === 'fled' && G().showNotice) {
+      // A flight leaves straight from the roll: no outcome bar, no Continue,
+      // the board just goes. Say what happened where a phone can see it.
+      G().showNotice('You broke off and got away.');
     }
 
     // Whatever the outcome bar did not already claim. A won fight offers the
