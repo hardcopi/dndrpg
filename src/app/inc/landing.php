@@ -113,12 +113,12 @@ public_head(
       </div>
       <figure class="lp-figure">
         <img class="lp-shot" src="<?= asset('assets/images/site/shot-combat.jpg') ?>"
-             width="1200" height="568" loading="lazy"
-             alt="A fight in progress: initiative order down the left, four adventurers
-                  and two gremlins on a five-foot grid with threatened squares hatched
-                  in red, and an action list on the right showing which actions are
-                  available and why the others are not.">
-        <figcaption>A fight on the five-foot grid, with a gremlin selected.</figcaption>
+             width="1440" height="810" loading="lazy"
+             alt="A fight in progress: initiative order down the left, two adventurers,
+                  an ogre and a worg on a five-foot grid with the worg's squares marked
+                  in red, and an action list showing which actions are available and why
+                  the others are not.">
+        <figcaption>A fight on the five-foot grid, with a worg selected.</figcaption>
       </figure>
     </div>
 
@@ -147,10 +147,10 @@ public_head(
       </div>
       <figure class="lp-figure">
         <img class="lp-shot" src="<?= asset('assets/images/site/shot-sheet.jpg') ?>"
-             width="1246" height="571" loading="lazy"
-             alt="The character screen: a Sarsen fighter's sheet with portrait, party
-                  tabs, hit points, armour class, experience bar and ability scores,
-                  beside a rail listing the account's other characters.">
+             width="1440" height="774" loading="lazy"
+             alt="The character screen: a fighter's full-length portrait, hit points,
+                  experience and ability scores on a parchment beside it, the party
+                  underneath, and a rail listing the account's characters.">
         <figcaption>Your characters on the right, whoever you pick on the left.</figcaption>
       </figure>
     </div>
@@ -177,10 +177,10 @@ public_head(
       </div>
       <figure class="lp-figure">
         <img class="lp-shot" src="<?= asset('assets/images/site/shot-delve-plan.jpg') ?>"
-             width="1082" height="570" loading="lazy"
+             width="1440" height="810" loading="lazy"
              alt="A generated dungeon floor drawn on graph paper: one lit room with the
-                  party token inside it, rubble hatching around the walls, two doors
-                  marked, and the rest of the level still dark.">
+                  party's tokens inside it, rubble hatching around the walls, and the
+                  rest of the level still dark.">
         <figcaption>A generated floor. One room is lit. Everything else is still dark.</figcaption>
       </figure>
     </div>
@@ -204,10 +204,10 @@ public_head(
       </div>
       <figure class="lp-figure">
         <img class="lp-shot" src="<?= asset('assets/images/site/shot-delve-view.jpg') ?>"
-             width="1082" height="570" loading="lazy"
+             width="1440" height="810" loading="lazy"
              alt="The first-person view of the same dungeon floor: flat-shaded walls in
-                  brown and gold receding into darkness, with a FACING NORTH label and
-                  step and turn controls.">
+                  brown and gold receding into darkness, with a FACING NORTH label, a
+                  small map in the corner, and step and turn controls.">
         <figcaption>The first-person view, facing north.</figcaption>
       </figure>
     </div>
