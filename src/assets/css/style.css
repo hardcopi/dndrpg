@@ -7419,6 +7419,17 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
 .spell-cost.gone { color: var(--danger); }
 .spell-dice { font-family: var(--mono); font-size: var(--fs-2xs); color: var(--text-dim); }
 .spell-note { font-size: var(--fs-2xs); color: var(--text-dim); }
+/* On a phone a spell row had six things in one line: "Self (15-foot cone)"
+   stood four words tall and Thunderwave's note ran out past the row's border.
+   Let the row wrap, keep each figure whole, and give the note a line of its
+   own under them. Target pickers (.aim-row) keep their own layout. */
+@media (max-width: 36rem) {
+  .spell-row:not(.aim-row) { flex-wrap: wrap; row-gap: var(--sp-4); }
+  .spell-row:not(.aim-row) .spell-cost,
+  .spell-row:not(.aim-row) .spell-range,
+  .spell-row:not(.aim-row) .spell-dice { white-space: nowrap; }
+  .spell-row:not(.aim-row) .spell-note { flex: 1 1 100%; }
+}
 
 /* --- combat feedback --- */
 
