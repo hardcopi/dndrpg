@@ -632,6 +632,12 @@ body.game-page .loc-inner.is-chart .loc-foot .loc-ways { margin: 0; padding: 0; 
      collapse control still sit above the dock. */
   body.game-page .rail-tab { min-height: var(--tap-min); padding-top: 0; padding-bottom: 0; }
   body.game-page:not(.in-combat) { --dock-h: 128px; }
+  /* The dock is fixed over the bottom of the page, so Tab to a Ways out
+     line or a plate low on a dungeon floor scrolled it just into the
+     viewport — under the dock, focused and unseen. Keep what the browser
+     scrolls to for focus above it. (The root cannot read --dock-h, which
+     lives on body: the same 128px.) */
+  html:has(body.game-page:not(.in-combat)) { scroll-padding-bottom: calc(128px + env(safe-area-inset-bottom, 0px) + 8px); }
   body.game-page:not(.in-combat) .gw-window { padding-bottom: calc(var(--dock-h) + env(safe-area-inset-bottom, 0px)); }
   body.game-page:not(.in-combat) .rail-right .rail-party,
   body.game-page:not(.in-combat) .rail-right .gw-actions {
