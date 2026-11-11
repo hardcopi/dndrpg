@@ -70,7 +70,7 @@ public_head(
     </ul>
     <figure class="lp-figure">
       <img class="lp-shot lp-shot-wide" src="<?= asset('assets/images/site/shot-calling.jpg') ?>"
-           width="1250" height="575" loading="lazy"
+           width="1440" height="774" loading="lazy"
            alt="The Calling step of character creation: a class dropdown showing Barbarian,
                 with hit die, primary ability, saving throws, features, starting gear and
                 subclass listed underneath, and a background and alignment picker.">
@@ -108,8 +108,8 @@ public_head(
       </div>
       <figure class="lp-figure">
         <img class="lp-shot" src="<?= asset('assets/images/site/shot-combat.jpg') ?>"
-             width="1200" height="568" loading="lazy"
-             alt="The combat screen with a gremlin selected: its portrait, hit points,
+             width="1440" height="810" loading="lazy"
+             alt="The combat screen with a worg selected: its portrait, hit points,
                   armour class and challenge rating on the right, and the action list
                   showing greyed-out actions each with the reason it is unavailable.">
         <figcaption>Select a target and the action list explains itself.</figcaption>
@@ -195,10 +195,10 @@ public_head(
       </div>
       <figure class="lp-figure">
         <img class="lp-shot" src="<?= asset('assets/images/site/shot-delve-plan.jpg') ?>"
-             width="1082" height="570" loading="lazy"
-             alt="A generated floor on graph paper with one room lit, the party token
-                  inside it, doors marked on the threshold, and a task list on the right
-                  naming the floor's errand.">
+             width="1440" height="810" loading="lazy"
+             alt="A generated floor on graph paper with one room lit and the party's
+                  tokens inside it, the room described on parchment above, and the ways
+                  out and actions listed underneath.">
         <figcaption>The floor plan fills in as you find it.</figcaption>
       </figure>
     </div>
@@ -215,9 +215,10 @@ public_head(
       </div>
       <figure class="lp-figure">
         <img class="lp-shot" src="<?= asset('assets/images/site/shot-delve-view.jpg') ?>"
-             width="1082" height="570" loading="lazy"
+             width="1440" height="810" loading="lazy"
              alt="The first-person dungeon view: flat-shaded walls receding into darkness
-                  with a FACING NORTH label and step and turn controls.">
+                  with a FACING NORTH label, a small map in the corner, and step and turn
+                  controls.">
         <figcaption>Turn in place, step forward, and look at what is there.</figcaption>
       </figure>
     </div>
@@ -249,11 +250,11 @@ public_head(
       </div>
       <figure class="lp-figure">
         <img class="lp-shot" src="<?= asset('assets/images/site/shot-sheet.jpg') ?>"
-             width="1246" height="571" loading="lazy"
-             alt="The character screen showing a fighter's full sheet — portrait, party
-                  tabs, hit points, armour class, speed, proficiency, experience bar,
-                  ability scores, saving throws and skills — with the account's other
-                  characters listed down the right.">
+             width="1440" height="774" loading="lazy"
+             alt="The character screen: a fighter's full-length portrait between two
+                  banners, hit points, experience and ability scores on a parchment
+                  beside it, the party underneath, and the account's characters listed
+                  down the right.">
         <figcaption>Everything the engine knows about somebody, on one page.</figcaption>
       </figure>
     </div>
