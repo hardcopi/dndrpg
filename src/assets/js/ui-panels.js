@@ -261,8 +261,16 @@
         answered = true;
         resolve(v);
       };
+      // modalHead for the ×: the ambush confirm had no close in the
+      // corner, only Fight, Hold back, Escape, and the backdrop. A
+      // long arrival banner, or a roster of several species, can
+      // push the heading or the buttons off a 320px phone — the same
+      // gap the shop, camp, sheet, and level-up had before #182 /
+      // #195 / #199 / #215. Opening still lands on the first real
+      // choice (Fight), not on Close: pushOverlay would otherwise
+      // focus the new ×, because it is now the first control.
       showModal(`
-        <h2>${esc(opts.title || 'Are you sure?')}</h2>
+        ${modalHead(opts.title || 'Are you sure?')}
         <p class="modal-body">${esc(opts.body || '')}</p>
         ${opts.bodyHtml || ''}
         <div class="modal-actions">
@@ -275,6 +283,8 @@
       const el = modals[modals.length - 1].el;
       el.querySelector('[data-yes]').onclick = () => { done(true); closeTopModal(); };
       el.querySelector('[data-no]').onclick = () => { done(false); closeTopModal(); };
+      const choice = el.querySelector('[data-yes]');
+      if (choice) choice.focus();
     });
   }
 
