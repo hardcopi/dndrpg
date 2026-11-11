@@ -137,6 +137,12 @@
                 "conditions": [
                     {
                         "flag": "cellar_rats_beaten"
+                    },
+                    {
+                        "not": {
+                            "quest": "the_carters_cellar",
+                            "stage": "the_drain"
+                        }
                     }
                 ],
                 "text": "\"I heard it through the floor,\" Hesta says. \"The whole room heard it through the floor and went very quiet and then very loud. Are they done?\"",

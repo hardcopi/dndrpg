@@ -167,6 +167,7 @@ if [ "$PHP_MODE" != none ]; then
     run "test_visemes"        phprun test_visemes.php
     run "test_watch"          phprun test_watch.php
     run "test_dialogue_once"  phprun test_dialogue_once.php
+    run "test_hesta_report"   phprun test_hesta_report.php
     run "test_dialogue_lint"  phprun test_dialogue_lint.php
     run "test_content_export" phprun test_content_export.php
     run "test_item_editor"    phprun test_item_editor.php
