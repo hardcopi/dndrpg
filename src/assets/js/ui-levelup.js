@@ -126,7 +126,14 @@
           // Closed on the summary: the level is already taken, so this is
           // Onward without the button — the world still needs its refresh.
           const taken = !!el.querySelector('[data-act="close"]');
-          if (!taken) G().log('Level-up put aside — it opens again when the world next refreshes.', 'important');
+          if (!taken) {
+            const putAside = 'Level-up put aside — it opens again when the world next refreshes.';
+            G().log(putAside, 'important');
+            // The log sits below the fold on a phone — same gap dialogue
+            // results had before #206. Keep the existing line and raise it
+            // on the gold banner.
+            if (G().showNotice) G().showNotice(putAside);
+          }
           else if ((!opts || opts.refresh !== false) && G().refreshAll) await G().refreshAll();
           return taken ? 'done' : 'dismissed';
         }
