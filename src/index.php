@@ -1025,6 +1025,21 @@ require_signed_in_page();
            </label>`
         : '';
 
+      // What a consumable does, from its own properties — the same reading as
+      // the fight's Use list. "misc" alone said nothing about an antitoxin.
+      const useNote = (props) => {
+        if (!props || typeof props !== 'object') return '';
+        const use = props.use_effect && typeof props.use_effect === 'object' ? props.use_effect : null;
+        if (props.heals) return `heals ${props.heals}`;
+        if (use && use.cast) return `casts ${String(use.cast).replace(/_/g, ' ')} on you`;
+        if (use && use.boon && typeof use.boon === 'object') {
+          const b = use.boon;
+          const what = b.on_hit ? `+${b.on_hit} on every hit`
+            : b.save_advantage_vs ? `advantage on saves vs ${b.save_advantage_vs}` : '';
+          return what ? `${what} · in a fight` : 'in a fight';
+        }
+        return '';
+      };
       const rows = items.map((it) => {
         const worn = Number(it.is_equipped) === 1;
         const potion = it.item_type === 'potion';
@@ -1039,7 +1054,8 @@ require_signed_in_page();
         return `<li class="bag-row${worn ? ' is-worn' : ''}">
           <span class="bag-name">${esc(it.name)}${it.quantity > 1
             ? ` <span class="stat-note">×${esc(it.quantity)}</span>` : ''}</span>
-          <span class="stat-note">${esc(it.item_type)}${it.damage_dice
+          <span class="stat-note">${esc(it.item_type)}${useNote(props)
+            ? ' · ' + esc(useNote(props)) : ''}${it.damage_dice
             ? ' · ' + esc(it.damage_dice) + ' ' + esc(it.damage_type || '') : ''}${it.armor_bonus
             ? ' · AC ' + esc(it.armor_bonus) : ''}</span>
           <span class="bag-acts">

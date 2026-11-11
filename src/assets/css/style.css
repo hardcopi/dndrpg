@@ -8757,6 +8757,15 @@ body.studio-page > .site-bar {
 }
 .bag-row:last-child { border-bottom: none; }
 .bag-name { flex: 1; min-width: 0; color: var(--text); }
+/* The middle column says what the thing does now ("misc · advantage on saves
+   vs poison · in a fight"), longer than one phone line: let it wrap rather
+   than push the buttons out past the frame. */
+.bag-row > .stat-note { white-space: normal; text-align: right; flex: 0 1 auto; min-width: 0; }
+/* And when the three will not share one line (320px), the name keeps a line
+   of its own instead of being squeezed under its neighbour. */
+.bag-row { flex-wrap: wrap; row-gap: var(--sp-4); }
+.bag-row > .bag-name { flex: 1 1 8rem; }
+.bag-row > .bag-acts { margin-left: auto; }
 .bag-acts {
   display: flex;
   align-items: center;
