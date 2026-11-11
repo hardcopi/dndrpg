@@ -542,6 +542,9 @@ body.game-page .loc-inner.is-chart .loc-sheet .loc-name {
   color: #6e2230; font: 700 16px 'Cinzel', serif; letter-spacing: 2px; text-shadow: none; text-transform: uppercase;
 }
 body.game-page .loc-inner.is-chart .loc-read { padding: 0 4px 0 0; background: transparent; color: #2a1a10; scrollbar-width: thin; scrollbar-color: #a8742a transparent; }
+/* The amiga ring is pale gold, drawn for a dark well. On the parchment
+   it disappears; the brass already used for the scroll thumb does not. */
+body.game-page .loc-inner.is-chart .loc-read:focus-visible { outline-color: #a8742a; }
 body.game-page .loc-inner.is-chart .loc-read .loc-prose p,
 body.game-page .loc-inner.is-chart .loc-read .loc-first { color: #2a1a10; font: 400 17px/1.32 'Alegreya', serif; margin: 0 0 4px; }
 body.game-page .loc-inner.is-chart .loc-read .loc-first,
