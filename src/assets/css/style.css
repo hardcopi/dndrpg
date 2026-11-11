@@ -9720,6 +9720,13 @@ body.studio-page > .site-bar {
   .party-add {
     min-height: var(--tap-min);
   }
+
+  /* A conversation's answers were 35px when they fit on one line ("A bed,
+     please.", "Back to it.") — the one row of buttons a phone player has
+     to hit to get anywhere in a talk, and under the floor. */
+  .dlg-choice {
+    min-height: var(--tap-min);
+  }
 }
 
 /* ===========================================================================
