@@ -729,6 +729,9 @@ body.game-page .loc-inner.is-chart .loc-foot .loc-ways { margin: 0; padding: 0; 
     transform: scale(.7); transform-origin: bottom right; opacity: .92;
   }
   body.in-combat .cbt-panel { position: static; }
+  /* End turn was 41px; the phone floor is 44. The zoom cluster above stays at
+     .7 — unscaled it would sit over a third of the board's bottom rows. */
+  body.in-combat .cbt-end-turn { min-height: var(--tap-min); }
   body.in-combat .cbt-actions.is-stack .cbt-act-group {
     display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px;
   }
