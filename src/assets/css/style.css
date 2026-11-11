@@ -9709,6 +9709,17 @@ body.studio-page > .site-bar {
   .party-add {
     min-height: var(--tap-min);
   }
+
+  /* Buy and Sell in a shop, and Equip / Use / Give under an item in the bag,
+     were 29px: the buttons that spend gold or change what a hero carries,
+     under the floor. Flex only to keep the word centred in the taller box. */
+  .shop-item .btn-small,
+  .sheet-item-actions .btn-small {
+    min-height: var(--tap-min);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
 
 /* ===========================================================================
