@@ -173,6 +173,21 @@
 
   let errorTimer = null;
 
+  /**
+   * Keep a visible banner over a modal or a fight. showError decides this
+   * when the news is first raised, but a walk's arrival is often followed
+   * by the ambush prompt, which opens after the banner is already in the
+   * flow and would cover it on a phone.
+   */
+  function syncBanner() {
+    const b = $('#error-banner');
+    if (!b || b.classList.contains('hidden')) return;
+    const over = state.mode === MODE.COMBAT
+      || (window.UI && UI.overlayOpen && UI.overlayOpen())
+      || !!document.querySelector('#dialogue-root:not(.hidden), #check-root:not(.hidden)');
+    b.classList.toggle('is-floating', over);
+  }
+
   function showError(msg, opts = {}) {
     const b = $('#error-banner');
     if (!b) return;
@@ -184,11 +199,8 @@
     // the shop, the sheet, the camp, a conversation — landed under the dimmed
     // backdrop, half-covered by the panel that caused it, and a fight's board
     // hid it outright. Lift it over them.
-    const over = state.mode === MODE.COMBAT
-      || (window.UI && UI.overlayOpen && UI.overlayOpen())
-      || !!document.querySelector('#dialogue-root:not(.hidden), #check-root:not(.hidden)');
-    b.classList.toggle('is-floating', over);
     b.classList.remove('hidden');
+    syncBanner();
     // Five seconds whatever it said was too short for the two-sentence ones
     // ("Nobody here is carrying tools for it." and longer) at a reading pace,
     // and there is no other copy of the message. Scale with its length, and
@@ -1915,11 +1927,21 @@
         log(`${step.label} — ${step.to_name}`, 'travel', 'story');
         if (!reducedMotion() && steps.length > 1) await sleep(STEP_PACE);
       }
-      (r.messages || []).forEach((m) => log(m, 'important'));
-      if (r.interrupted) log('Something stops you on the way.', 'danger', 'combat');
+      const travelNews = [];
+      (r.messages || []).forEach((m) => {
+        log(m, 'important');
+        travelNews.push(m);
+      });
+      if (r.interrupted) {
+        log('Something stops you on the way.', 'danger', 'combat');
+        travelNews.push('Something stops you on the way.');
+      }
 
       await mapFadeThrough(() => refreshAll());
-      announceArrival();
+      // The walk's news, and the arrival, belong on the banner too: on a
+      // phone the log sits below the fold, the same gap the stair had
+      // before #201.
+      announceArrival(travelNews);
       landOnArrival();
       await handleEvents(r.events || []);
     });
@@ -1944,17 +1966,30 @@
     h.focus({ preventScroll: true });
   }
 
-  /** The arrival line: the place, and its opening sentence. */
-  function announceArrival() {
+  /**
+   * The arrival line: the place, and its opening sentence. The same news
+   * belongs on the banner, not only in the log: on a phone the log sits
+   * below the fold, the same gap the stair had before #201. `prefix` is
+   * news from the walk itself — a quest note, a sprung trap, or that
+   * something stopped the party on the way — so one banner can carry both.
+   */
+  function announceArrival(prefix) {
     const loc = state.location;
     if (!loc) return;
+    const lines = [`— ${loc.name} —`];
     log(`— ${loc.name} —`, 'important');
     if (loc.first_visit && loc.first_visit_text) {
       log(loc.first_visit_text);
-      return;
+      lines.push(loc.first_visit_text);
+    } else {
+      const opener = String(loc.description || '').split(/(?<=[.!?])\s/)[0];
+      if (opener) {
+        log(opener);
+        lines.push(opener);
+      }
     }
-    const opener = String(loc.description || '').split(/(?<=[.!?])\s/)[0];
-    if (opener) log(opener);
+    const notice = [...(prefix || []), ...lines].filter(Boolean).join(' ');
+    if (notice) showError(notice, { good: true });
   }
 
   /**
@@ -2420,6 +2455,7 @@
       state.combat = r.combat;
       state.mode = MODE.COMBAT;
       render();
+      syncBanner();
     } catch (e) {
       showError(e.message);
     }
@@ -2666,6 +2702,7 @@
     esc, fmtMod, hpPct, hpBand, sleep, reducedMotion, isTypingTarget,
     log, showError,
     showNotice: (msg) => showError(msg, { good: true }),
+    syncBanner,
     announceRest,
     // portrait paths
     withTileVer, bodySpriteUrl, variantUrl, spriteArtUrl, classArtUrl,

@@ -68,6 +68,7 @@
     const entry = { el, onEsc, restore: restore || document.activeElement };
     overlays.push(entry);
     document.body.classList.add('overlay-open');
+    if (G().syncBanner) G().syncBanner();
     // Focus the first control, or the panel itself if it has none yet.
     const first = el.querySelector(FOCUSABLE);
     if (first) {
