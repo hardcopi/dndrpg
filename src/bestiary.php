@@ -63,6 +63,7 @@ foreach ($bySource as $src => $rows) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>The Bestiary — Rivermark Chronicles</title>
+  <?= favicon_links() ?>
   <link rel="stylesheet" href="<?= esc(asset('assets/css/adventure-print.css')) ?>">
   <?php if (!$autoPrint) { ?>
   <link rel="stylesheet" href="<?= esc(asset('assets/css/fonts.css')) ?>">

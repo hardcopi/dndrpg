@@ -136,7 +136,7 @@ function page_exception_handler(Throwable $e): void
             while (ob_get_level() > 0) {
                 ob_end_clean();
             }
-            echo '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Error</title></head><body><p>' . $message . '</p></body></html>';
+            echo '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Error</title>' . favicon_links() . '</head><body><p>' . $message . '</p></body></html>';
         } else {
             echo '<p>' . $message . '</p>';
         }
@@ -144,7 +144,7 @@ function page_exception_handler(Throwable $e): void
     }
     http_response_code(500);
     header('Content-Type: text/html; charset=utf-8');
-    echo '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Error — Rivermark Chronicles</title></head>'
+    echo '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Error — Rivermark Chronicles</title>' . favicon_links() . '</head>'
         . '<body><p>' . $message . '</p>'
         . '<p><a href="/">Back to the front page</a></p></body></html>';
 }
@@ -614,4 +614,21 @@ function asset(string $path): string
     }
 
     return $path . '?v=' . $v;
+}
+
+/**
+ * The tab icon, derived from the Rivermark wordmark's letter R and the
+ * plaque's navy and gold.
+ *
+ * Linked from every page so the browser does not have to guess. /favicon.ico
+ * also sits at the site root, because a browser that has not read the page
+ * yet (or never will) still asks for that path on its own — and without a
+ * file there, nginx's try_files hands the request to index.php and the tab
+ * receives text/html.
+ */
+function favicon_links(): string
+{
+    return '<link rel="icon" href="' . htmlspecialchars(asset('assets/images/site/favicon.svg'), ENT_QUOTES, 'UTF-8') . '" type="image/svg+xml">' . "\n"
+        . '  <link rel="icon" href="' . htmlspecialchars(asset('favicon.ico'), ENT_QUOTES, 'UTF-8') . '" sizes="16x16 32x32 48x48">' . "\n"
+        . '  <link rel="apple-touch-icon" href="' . htmlspecialchars(asset('assets/images/site/apple-touch-icon.png'), ENT_QUOTES, 'UTF-8') . '">' . "\n";
 }

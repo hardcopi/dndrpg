@@ -42,6 +42,7 @@ $mode = ($_GET['mode'] ?? '') === 'register' && $registrationOpen ? 'register' :
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <?= csrf_meta() ?>
   <title><?= $mode === 'register' ? 'Create an account' : 'Sign in' ?> — Rivermark Chronicles</title>
+  <?= favicon_links() ?>
   <link rel="stylesheet" href="<?= asset('assets/css/style.css') ?>">
   <link rel="stylesheet" href="<?= asset('assets/css/login.css') ?>">
 </head>
