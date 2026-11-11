@@ -638,6 +638,10 @@ body.game-page .loc-inner.is-chart .loc-foot .loc-ways { margin: 0; padding: 0; 
      scrolls to for focus above it. (The root cannot read --dock-h, which
      lives on body: the same 128px.) */
   html:has(body.game-page:not(.in-combat)) { scroll-padding-bottom: calc(128px + env(safe-area-inset-bottom, 0px) + 8px); }
+  /* A place's action plates (Rest at the inn, Take an hour, Make camp…) were
+     43.2px on a phone: the dock's own 2.7rem beat the 44px tap floor in
+     game-amiga.css on specificity. Same floor, at this rule's weight. */
+  body.game-page .loc-dock .act-slot.loc-act { min-height: var(--tap-min); }
   body.game-page:not(.in-combat) .gw-window { padding-bottom: calc(var(--dock-h) + env(safe-area-inset-bottom, 0px)); }
   body.game-page:not(.in-combat) .rail-right .rail-party,
   body.game-page:not(.in-combat) .rail-right .gw-actions {
