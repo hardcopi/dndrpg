@@ -2496,7 +2496,24 @@
       const r = await API.post('location/rest', {});
       await refreshAll();
       announceRest(r, 'important');
+      backToPlate('rest');
     });
+  }
+
+  /**
+   * A rest re-draws the scene, and the plate that was pressed is replaced by
+   * its twin, so a keyboard player was dropped to the body and the next Tab
+   * started at the top bar. Put them back on the same plate when it is still
+   * there, or on the place's name. Only when focus was actually lost: an
+   * open modal or the level-up ceremony keeps what it has.
+   */
+  function backToPlate(act) {
+    const a = document.activeElement;
+    if ((a && a !== document.body && a.isConnected) || (window.UI && UI.overlayOpen && UI.overlayOpen())) return;
+    const again = [...document.querySelectorAll(`#location-root .loc-act[data-act="${act}"]`)]
+      .find((b) => !b.disabled && b.getClientRects().length);
+    if (again) again.focus({ preventScroll: true });
+    else landOnArrival();
   }
 
   /**
@@ -2550,6 +2567,10 @@
       // the fold, the same gap the door and the chest had before #200.
       const notice = joinNotice([r.message, r.depth ? `Level ${r.depth}. ${r.rooms} rooms.` : '']);
       if (notice) showError(notice, { good: true });
+      // The plate that was pressed went with the Mouth, so focus fell to the
+      // body and the next Tab started at the top bar. Land on the new floor,
+      // as a walk does.
+      landOnArrival();
     });
   }
 
@@ -2559,6 +2580,7 @@
       const r = await API.post('location/leave_dungeon', {});
       await refreshAll();
       announceLines(r.message ? [r.message] : [], 'success');
+      landOnArrival();
     });
   }
 
@@ -2567,6 +2589,7 @@
       const r = await API.post('location/short_rest', {});
       await refreshAll();
       announceRest(r);
+      backToPlate('short_rest');
     });
   }
 
