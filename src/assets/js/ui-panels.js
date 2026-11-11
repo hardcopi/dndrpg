@@ -1111,8 +1111,13 @@
           : { quest_id: +b.dataset.acceptId };
         try {
           const r = await API.post('quest/accept', body);
-          if (r.message) G().log(r.message, 'important');
-          if (r.message) G().showNotice(r.message);
+          const lines = (r.messages && r.messages.length) ? r.messages : [];
+          const notes = (r.notes || []).map((n) => '(' + n + ')');
+          if (!lines.length && !notes.length && r.message) lines.push(r.message);
+          lines.forEach((m) => G().log(m, 'important'));
+          notes.forEach((n) => G().log(n, 'danger'));
+          const notice = G().joinNotice([...lines, ...notes]);
+          if (notice) G().showNotice(notice);
           closeTopModal();
           await G().refreshAll();
           await reopenJournalAt(b.dataset.accept || r.quest_key || (r.quest && r.quest.quest_key));
@@ -1435,10 +1440,10 @@
           const res = r.result || {};
           (res.messages || []).forEach((m) => G().log(m, 'important'));
           (res.notes || []).forEach((n) => G().log('(' + n + ')', 'danger'));
-          const notice = [
+          const notice = G().joinNotice([
             ...(res.messages || []),
             ...(res.notes || []).map((n) => '(' + n + ')'),
-          ].filter(Boolean).join(' ');
+          ]);
           if (notice) G().showNotice(notice);
           await G().refreshAll();
           closeTopModal();

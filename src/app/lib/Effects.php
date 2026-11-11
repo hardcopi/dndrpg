@@ -128,6 +128,26 @@ class Effects
     }
 
     /**
+     * Several player-facing lines, as one banner string, without changing
+     * the authored wording.
+     *
+     * A space-join ran them together ("Quest started: A Short Measure A
+     * Short Measure: Weigh a sack"). A line break keeps each line a
+     * sentence of its own. The client shows this with white-space: pre-line.
+     */
+    public static function joinNotice(array $lines): string
+    {
+        $parts = [];
+        foreach ($lines as $line) {
+            $line = trim((string) $line);
+            if ($line !== '') {
+                $parts[] = $line;
+            }
+        }
+        return implode("\n", $parts);
+    }
+
+    /**
      * Apply a list of effects to a party.
      *
      * `$opts` carries who is acting: `character_id` receives items and pays or

@@ -687,12 +687,12 @@
       approvalLines.push(line);
       G().log(line, delta > 0 ? 'success' : 'danger');
     });
-    const notice = [
+    const notice = G().joinNotice([
       ...(result.messages || []),
       ...(result.notes || []).map((n) => '(' + n + ')'),
       ...levelLines,
       ...approvalLines,
-    ].filter(Boolean).join(' ');
+    ]);
     if (notice) G().showNotice(notice);
   }
 

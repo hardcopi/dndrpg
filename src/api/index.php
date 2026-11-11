@@ -2453,7 +2453,7 @@ function handle_quest(string $action): void
             json_error('No quest named.');
         }
         $result = $qs->start($partyId, $key);
-        json_response($result + ['message' => implode(' ', $result['messages'] ?: $result['notes'])]);
+        json_response($result + ['message' => Effects::joinNotice($result['messages'] ?: $result['notes'] ?? [])]);
     }
 
     if ($action === 'track') {

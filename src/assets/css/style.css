@@ -4409,6 +4409,9 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   padding: var(--sp-10) var(--sp-12);
   border-radius: var(--r-md);
   margin-bottom: var(--sp-12);
+  /* joinNotice separates several log lines with a line break; without this
+     they collapse to a space and run together again. */
+  white-space: pre-line;
 }
 /* The same strip, for something that went right — a night's sleep, and whatever
    the fire had to say about it. One element and one modifier rather than two
