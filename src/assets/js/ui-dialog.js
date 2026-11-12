@@ -571,6 +571,23 @@
     return b;
   }
 
+  /**
+   * Give the replies back after a send that did not go through (refused, or
+   * the die walked away from). Not all of them: a tried check and work the
+   * party is too green for were drawn disabled and stay that way — enabling
+   * every button let Enter or a click send a reply the client had greyed out.
+   */
+  function releaseReplies() {
+    $$('.dlg-choice', root()).forEach((x) => {
+      x.disabled = x.classList.contains('is-spent') || x.classList.contains('is-locked');
+    });
+    // Disabling the focused reply for the send dropped focus on the page body;
+    // put it back on a reply that can be taken, unless it already went
+    // somewhere real.
+    const a = document.activeElement;
+    if (!a || a === document.body) focusFirstChoice();
+  }
+
   function focusFirstChoice() {
     // The first reply that can be taken. A check already failed (tried) or work
     // the party is too green for stays on the list disabled, and focus() on a
@@ -601,7 +618,7 @@
       // Re-enable the replies rather than leaving a dead panel: a rejected
       // choice usually means a condition changed, not that the conversation is
       // over.
-      $$('.dlg-choice', root()).forEach((x) => { x.disabled = false; });
+      releaseReplies();
     }
   }
 
@@ -635,7 +652,7 @@
       if (!result || !next) {
         // Walked away from the die: the check was never claimed, so the
         // conversation is exactly where it was.
-        $$('.dlg-choice', root()).forEach((x) => { x.disabled = false; });
+        releaseReplies();
         return;
       }
       await applyOutcome(next);
@@ -791,7 +808,7 @@
       if (session) showLegacyNode(npc, legacyStartKey(npc));
     } catch (e) {
       G().showError(e.message);
-      $$('.dlg-choice', root()).forEach((x) => { x.disabled = false; });
+      releaseReplies();
     }
   }
 
