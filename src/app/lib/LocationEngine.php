@@ -37,6 +37,15 @@ class LocationEngine
      * door per floor would only pile up.
      */
     public const FOUND_EXIT_PREFIX = 'found_exit_';
+    /**
+     * Flags the engine sets when the party stands in a room — the room itself
+     * is the evidence, so no reply or search has to say so. What Goes Out reads
+     * deep_store_seen at Doss, Tam Ryke, Gedda and Bevis; it used to be set only
+     * by Doss's own reply behind that gate, so nobody could ever open it.
+     */
+    public const DEEP_STORE_FLAG = 'deep_store_seen';
+    private const ARRIVAL_FLAGS = ['the_deep_store' => self::DEEP_STORE_FLAG];
+
     public const FOUND_EXIT_FLAGS = [
         'found_exit_sump_drain',
         // Rats and Better: Mara hears about the grain stair once the party has
@@ -178,6 +187,10 @@ class LocationEngine
         if ($partyId) {
             (new QuestService($this->db))->arriveAt($partyId, $locationId);
             WatchJobs::onArrive($this->db, $partyId, $locationId);
+            $arrivalFlag = self::ARRIVAL_FLAGS[(string) ($location['location_key'] ?? '')] ?? null;
+            if ($arrivalFlag !== null) {
+                (new WorldState($this->db))->set($partyId, $arrivalFlag);
+            }
         }
 
         return [

@@ -55,6 +55,7 @@ ENGINE_FLAG_CONSTANTS = (
     ("app/lib/ConcernPressure.php", "FLAG"),
     ("app/lib/ConcernPressure.php", "THRESHOLDS"),
     ("app/lib/LocationEngine.php", "FOUND_EXIT_FLAGS"),
+    ("app/lib/LocationEngine.php", "DEEP_STORE_FLAG"),
 )
 
 # The subset of those that the engine keeps for itself: written by PHP and read

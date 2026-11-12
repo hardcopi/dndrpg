@@ -85,6 +85,7 @@ class DialogueLint
         ConcernPressure::FLAG,
         ...ConcernPressure::THRESHOLDS,
         ...LocationEngine::FOUND_EXIT_FLAGS,
+        LocationEngine::DEEP_STORE_FLAG,
     ];
 
     /**

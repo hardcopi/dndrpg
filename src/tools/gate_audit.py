@@ -69,10 +69,8 @@ INACTIVE_MODULES = {"old_city"}
 # Known dead gates, each waiting on a story decision (Rich). Keyed by what the
 # condition asks for: a flag name, or "Q:<quest>:<stage>" for a quest stage.
 ALLOWED = {
-    # What Goes Out (waerhaven). The only setter is Doss's `whose_grain` node
-    # (dialog/doss_the_crane.json), which sits behind the flag it sets. Blocks
-    # Doss/Tam Ryke/Gedda/Bevis lines and the the_deep_store / whose_grain stages.
-    "deep_store_seen": "What Goes Out: set only behind itself (Doss whose_grain)",
+    # Empty: the three loops found on Nov 11 (What Goes Out, Nine Masts, Rats
+    # and Better) were fixed in content and the engine the same night.
 }
 
 
