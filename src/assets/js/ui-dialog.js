@@ -581,6 +581,11 @@
     $$('.dlg-choice', root()).forEach((x) => {
       x.disabled = x.classList.contains('is-spent') || x.classList.contains('is-locked');
     });
+    // Disabling the focused reply for the send dropped focus on the page body;
+    // put it back on a reply that can be taken, unless it already went
+    // somewhere real.
+    const a = document.activeElement;
+    if (!a || a === document.body) focusFirstChoice();
   }
 
   function focusFirstChoice() {
