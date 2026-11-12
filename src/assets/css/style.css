@@ -4489,7 +4489,10 @@ body.in-combat .rail-right .hud-log .log { flex: 1 1 auto; min-height: 0; max-he
   border-radius: var(--r-sm);
   border: 1px solid var(--danger);
   background: var(--danger-well);
-  color: var(--danger);
+  /* --danger-ink, not --danger: --danger is the mark colour (2.80), and as
+     the 12px letters on --danger-well it was 3.98:1. The ink is the token
+     for danger text (6.41:1 here); the border keeps the mark. */
+  color: var(--danger-ink);
   font-family: var(--mono);
   font-size: var(--fs-2xs);
   text-align: center;
