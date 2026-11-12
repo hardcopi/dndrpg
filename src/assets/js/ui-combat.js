@@ -1702,7 +1702,13 @@
       </div>`;
       const b = bar.querySelector('[data-dismiss]');
       b.onclick = () => leaveCombat(s.status);
-      b.focus();
+      // Not from under an open dialog. The board redraws several times on
+      // its way to this bar, and the level-up below opens over it: a redraw
+      // after the ceremony opened pulled focus out of it onto Continue,
+      // behind the overlay, and Enter there left the fight with the ceremony
+      // still up and focus on the page body. The overlay hands focus back
+      // to Continue when it closes.
+      if (!(window.UI && UI.overlayOpen && UI.overlayOpen())) b.focus();
       // Level up before the fight is packed away, not after.
       //
       // The experience is already banked: CombatEngine grants it inside the
