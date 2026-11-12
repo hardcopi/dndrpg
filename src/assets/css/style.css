@@ -9754,8 +9754,11 @@ body.studio-page > .site-bar {
    Camp's Make camp / Take a room and its Close were 40px (plain .btn) — the
    same floor, scoped to the camp panel so other dialogs' footers are as they
    were. The yes/no question (UI.confirm: Fight / Hold back on arrival, and
-   whatever else asks yes or no through it) drew its pair at 40px too. */
+   whatever else asks yes or no through it) drew its pair at 40px too.
+   The level-up ceremony's step button (Roll the die, Continue, Confirm,
+   Onward) was 40px as well. */
 @media (max-width: 600px) {
+  .levelup-actions .btn,
   .quest-item .btn-small,
   .camp-talk,
   .camp-march,
