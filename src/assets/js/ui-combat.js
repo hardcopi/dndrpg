@@ -557,8 +557,16 @@
     if (!open(target) && key.startsWith('#cbt-bar')) {
       target = [...el.querySelectorAll('#cbt-bar [data-act]')].find(open) || null;
     }
-    if (open(target)) target.focus({ preventScroll: true });
-    else ui.lostFocus = key;
+    if (open(target)) {
+      target.focus({ preventScroll: true });
+      // preventScroll keeps a redraw from jerking the page about, but on a
+      // phone the bar runs past the fold: once Attack is spent, focus went to
+      // the first open slot (Douse torch, Ready…) and sat below the screen
+      // edge. Bring it just into view — only when it is out of it, and only as
+      // far as it takes ('nearest'); a slot already on screen moves nothing.
+      const r = target.getBoundingClientRect();
+      if (r.bottom > window.innerHeight || r.top < 0) target.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    } else ui.lostFocus = key;
   }
 
   /**
