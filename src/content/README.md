@@ -9,6 +9,7 @@ Validate everything before committing:
 ```bash
 python3 tools/load_content.py --check      # strict: dangling refs, dead nodes
 python3 tools/trace_content.py             # reachability + the flag ledger
+python3 tools/gate_audit.py                # gates nobody can reach (dead / circular)
 python3 tools/load_content.py              # writes sql/content.sql
 ```
 
@@ -90,6 +91,21 @@ choice. Three shapes are used and they are not mixed:
 
 `tools/trace_content.py` fails if any flag is set and never read, or read and
 never set, so this table cannot drift without the build saying so.
+
+`tools/gate_audit.py` (in verify.sh as `content_gates`) asks the next
+question: is the flag or quest stage a condition needs set somewhere a player
+can actually **reach**? It walks every dialogue from its start (and `camp`, and
+any `npc:node` named elsewhere), quest stages, encounter outcomes and location
+effects to a fixpoint, and fails on any gate whose only setters sit behind that
+gate or behind another unreachable one — `deep_store_seen` was the first: set
+by one reply inside the conversation it unlocked. Flags the engine writes are
+recognised by their quoted name in the PHP; `old_city` and Rich's deliberately
+skipped flags are out of scope (`SKIPPED_FLAGS` in the script). Known dead gates
+waiting on a story decision are in `ALLOWED` at the top of the script, each with
+what it blocks. To accept one on purpose, add it there with a comment, in its
+own commit; when a listed gate becomes reachable the check prints `FIXED?` —
+delete the entry then. `python3 tools/gate_audit.py --why npc:node` shows what
+keeps one dialogue node out of reach.
 
 ### Presence — who you have met
 

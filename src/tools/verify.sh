@@ -50,6 +50,10 @@ run "lint_php"        python3 tools/lint_php.py
 run "lint_js"         python3 tools/lint_js.py
 run "content_valid"   python3 tools/load_content.py --check
 run "content_trace"   python3 tools/trace_content.py --check
+# A gate on a flag or quest stage that is set somewhere no player can reach —
+# behind itself, or behind another such gate. Known ones (waiting on a story
+# decision) are listed with reasons in ALLOWED inside the script.
+run "content_gates"   python3 tools/gate_audit.py --check
 # Proves the icosahedron and cube geometry, and that the generated files on disk
 # match what the generator would produce now. The browser's agreement with those
 # numbers is a separate claim and needs a browser: /tools/dice_preview.html.
