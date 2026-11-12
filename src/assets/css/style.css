@@ -7109,7 +7109,10 @@ body.in-combat .cbt-inspector.is-idle { justify-content: center; color: var(--te
 /* A buff reads as help, not harm — the condition pips are all warnings. */
 .pip-boon { border-color: var(--success); background: rgba(60, 140, 70, 0.18); color: var(--success); }
 /* The round counter tucked into a pip, so a glance at the board carries it. */
-.pip > em { font-style: normal; font-size: 0.85em; opacity: 0.8; margin-left: 0.1em; }
+/* The round count rides at full strength: at 0.85em and 0.8 opacity it fell
+   to 3.62:1 on a boon pip and 4.21:1 on an invisible one. Smaller is enough
+   to tell it from the letters. */
+.pip > em { font-style: normal; font-size: 0.85em; margin-left: 0.1em; }
 
 .cbt-bar {
   flex: 1 1 auto;
