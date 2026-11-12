@@ -477,6 +477,11 @@ nobody sets, and every gate on it reads as a dead scene. Both now know about it
 — `DialogueLint::ENGINE_FLAGS`, and `engine_flags()` in `tools/trace_content.py`,
 which greps the constant out of the PHP rather than copying the string so that
 renaming it cannot leave a checker quietly agreeing with nothing.
+`tools/gate_audit.py` (verify.sh `content_gates`) is the reachability half:
+a gate whose setters are all behind it, or behind another such gate, fails CI.
+Engine flags count as set when their quoted name appears in the PHP. Known
+dead gates are allowlisted, with reasons, in `ALLOWED` in the script — see
+`src/content/README.md` before adding one.
 
 **Nothing else about a delve leaks upwards, and nothing should.** The engine
 knows no quest keys; it writes one number and content decides what that is
