@@ -572,7 +572,11 @@
   }
 
   function focusFirstChoice() {
-    const first = $('.dlg-choice', root());
+    // The first reply that can be taken. A check already failed (tried) or work
+    // the party is too green for stays on the list disabled, and focus() on a
+    // disabled button does nothing: when it led the list, focus fell to the
+    // page body, so Enter and Tab started from behind the conversation.
+    const first = $('.dlg-choice:not(:disabled)', root()) || $('.dlg-choice', root());
     if (first) first.focus();
   }
 
