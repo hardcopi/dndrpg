@@ -247,9 +247,6 @@
             "text": "Doss is quiet for long enough that the three men still in the drum start asking him things.\n\n\"League grain,\" he says at last. \"League sacking, Lathmere's stencil, off the barges, before it ever reaches the granary. Taken off the top of every consignment for six years and put somewhere the Factor's seals are not.\"\n\n\"And here is the part you will not want. It is not stolen. Look at the room. Dunnaged off the floor, aired, swept, turned. Nobody keeps stolen grain like that. You keep stolen grain until you can sell it.\"\n\nHe looks at you.\n\n\"That is a granary. Somebody has been building this city a second granary for six years, out of the first one, and not telling it.\"",
             "on_enter": [
                 {
-                    "set_flag": "deep_store_seen"
-                },
-                {
                     "quest_stage": {
                         "quest": "what_goes_out",
                         "stage": "the_deep_store"
