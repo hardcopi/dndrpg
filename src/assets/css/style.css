@@ -9762,9 +9762,12 @@ body.studio-page > .site-bar {
    were. The yes/no question (UI.confirm: Fight / Hold back on arrival, and
    whatever else asks yes or no through it) drew its pair at 40px too.
    The level-up ceremony's step button (Roll the die, Continue, Confirm,
-   Onward) was 40px as well. */
+   Onward) was 40px as well, and so were a skill check's Roll the die / Step
+   back and, after the throw, Go on (the buttons only; the ceremony is as it
+   was). */
 @media (max-width: 600px) {
   .levelup-actions .btn,
+  .check-actions .btn,
   .quest-item .btn-small,
   .camp-talk,
   .camp-march,
