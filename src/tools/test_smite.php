@@ -163,22 +163,35 @@ same('and the hold survives it', 1, (int) $shotAt['combatants'][0]['smite']);
 
 echo "\n== the undead take it worse ==\n";
 $reset();
-$rolls = [];
-for ($i = 0; $i < 60; $i++) {
-    $b = board($cid, ['smite' => 1], ['creature_type' => 'undead']);
-    $r = $invoke('resolveAttack', $b, 'pc_1', 'mon_1', $SWORD, null, $shot($b));
-    $rolls[] = 400 - (int) $r['combatants'][1]['hp'];
-    $reset();
-}
 // Misses are dropped before the floor is measured. A natural 1 is a miss
-// whatever the bonus, so about three of sixty swings land nothing at all —
+// whatever the bonus, so about one swing in twenty lands nothing at all —
 // the first version of this asserted on the raw minimum and reported "lowest
 // was 0", which was the fumble rule working, not the smite failing.
-$landed = array_values(array_filter($rolls, static fn ($d) => $d > 0));
-ok('most swings landed, so the sample means something', count($landed) > 50,
-    count($landed) . ' of 60');
+//
+// Swing until sixty have landed, at most eighty swings. The dice stay real
+// (nothing scripted: the floor below is about what the damage dice can do).
+// The old shape — sixty swings, more than fifty must land — failed whenever
+// ten or more of sixty came up a natural 1: about one run in 1,350 at a 1-in-20
+// fumble, and it did fail a Deploy. Now the sample is always sixty landed
+// blows, and failing needs 21+ fumbles in 80 swings (about 3 in 10^10). It
+// still fails if landing gets broken: a hit rate below 75% cannot make sixty.
+$rolls = [];
+$landed = [];
+for ($i = 0; $i < 80 && count($landed) < 60; $i++) {
+    $b = board($cid, ['smite' => 1], ['creature_type' => 'undead']);
+    $r = $invoke('resolveAttack', $b, 'pc_1', 'mon_1', $SWORD, null, $shot($b));
+    $d = 400 - (int) $r['combatants'][1]['hp'];
+    $rolls[] = $d;
+    if ($d > 0) {
+        $landed[] = $d;
+    }
+    $reset();
+}
+ok('sixty swings landed within eighty, so the sample means something', count($landed) === 60,
+    count($landed) . ' landed of ' . count($rolls) . ' swings');
 // 1d8+3 weapon plus 3d8 radiant against the undead: the floor is 1+3+3.
-ok('a smite on the undead rolls an extra die', min($landed) >= 7, 'lowest was ' . min($landed));
+ok('a smite on the undead rolls an extra die', $landed && min($landed) >= 7,
+    'lowest was ' . ($landed ? min($landed) : 'none landed'));
 
 echo "\n== it does not survive the turn ==\n";
 $carried = board($cid, ['smite' => 2]);
