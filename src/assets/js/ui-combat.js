@@ -741,9 +741,12 @@
       ? rows.map((r) => {
           const dur = when(r);
           const on = ui.selected === r.cid ? ' is-on' : '';
+          // Named by what it draws (who, the condition, how long, and the
+          // note where the note shows), not by an aria-label of its own: the
+          // label left the note out, so on a desktop the spoken name and the
+          // drawn row did not match (axe label-content-name-mismatch).
           return `<button type="button" class="cbt-fx-row is-${esc(r.kind)}${on}"
-            data-cid="${esc(r.cid)}"
-            aria-label="${esc(r.who)} · ${esc(r.label)}${dur ? ' · ' + dur : ''}">
+            data-cid="${esc(r.cid)}">
             <i class="cbt-fx-dot" aria-hidden="true"></i>
             <span class="cbt-fx-body">
               <span class="cbt-fx-who">${esc(r.who)}</span>
