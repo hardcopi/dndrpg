@@ -536,6 +536,10 @@
         + (extra ? `[data-extra="${cssEscape(extra)}"]` : '');
     }
     return pick('.cbt-card[data-cid]', 'data-cid')
+      // A Conditions / Effects row selects its person, and that render
+      // rebuilds the list: without a key, Enter on a row dropped focus on
+      // the page body.
+      || pick('.cbt-fx-row[data-cid]', 'data-cid')
       || pick('.bm-token[data-cid]', 'data-cid')
       || pick('[data-bm-cell]', 'data-bm-cell')
       || pick('[data-zoom]', 'data-zoom')
