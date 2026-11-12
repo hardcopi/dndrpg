@@ -420,8 +420,23 @@
             {
                 "conditions": [
                     {
-                        "quest": "rats_and_better",
-                        "stage": "the_grain_stair"
+                        "any": [
+                            {
+                                "quest": "rats_and_better",
+                                "stage": "the_grain_stair"
+                            },
+                            {
+                                "all": [
+                                    {
+                                        "quest": "rats_and_better",
+                                        "stage": "the_way_in"
+                                    },
+                                    {
+                                        "flag": "found_exit_grain_stair"
+                                    }
+                                ]
+                            }
+                        ]
                     }
                 ],
                 "text": "Mara sets both hands on the bar and leaves the cups alone for once.\n\n\"Say it slowly,\" she says.",

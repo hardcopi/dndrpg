@@ -73,23 +73,6 @@ ALLOWED = {
     # (dialog/doss_the_crane.json), which sits behind the flag it sets. Blocks
     # Doss/Tam Ryke/Gedda/Bevis lines and the the_deep_store / whose_grain stages.
     "deep_store_seen": "What Goes Out: set only behind itself (Doss whose_grain)",
-
-    # Nine Masts (waerhaven). After Doren enters the_beam_in_the_masts, Gedda's
-    # only ways into what_she_does / not_from_you / the_covered_report (the
-    # nodes that enter `found` / `covered`, which set masts_fate) are greeting
-    # variants that need masts_fate. The quest cannot end; the tenth-hull
-    # thread hangs off the same loop.
-    "masts_fate": "Nine Masts: masts_fate is set only by stages entered behind it (Gedda greeting)",
-    "tenth_hull_known": "Nine Masts loop: set in Gedda will_she_build, reachable only behind masts_fate",
-    "tenth_hull_laid_down": "Nine Masts loop: set in Gedda the_hull_and_the_north, behind masts_fate",
-
-    # Rats and Better (rivermark). Mara's greeting variant gated on the stage
-    # is the only way into the_route_explained, which enters it. Authored
-    # stages do not advance on arrival (QuestService::arriveAt), so walking to
-    # grain_stair does nothing. All three endings, and grain_route_fate, hang
-    # off it.
-    "Q:rats_and_better:the_grain_stair": "Rats and Better: the_grain_stair is entered only behind itself (Mara greeting)",
-    "grain_route_fate": "Rats and Better loop: set only by the endings behind the_grain_stair",
 }
 
 
