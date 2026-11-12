@@ -208,8 +208,25 @@
             {
                 "conditions": [
                     {
-                        "flag": "masts_fate",
-                        "equals": "found"
+                        "any": [
+                            {
+                                "flag": "masts_fate",
+                                "equals": "found"
+                            },
+                            {
+                                "all": [
+                                    {
+                                        "quest": "nine_masts",
+                                        "stage": "the_beam_in_the_masts"
+                                    },
+                                    {
+                                        "not": {
+                                            "flag": "masts_fate"
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
                     }
                 ],
                 "expression": 3,

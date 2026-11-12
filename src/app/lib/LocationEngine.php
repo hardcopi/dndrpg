@@ -39,6 +39,9 @@ class LocationEngine
     public const FOUND_EXIT_PREFIX = 'found_exit_';
     public const FOUND_EXIT_FLAGS = [
         'found_exit_sump_drain',
+        // Rats and Better: Mara hears about the grain stair once the party has
+        // found the way down to it from Granary Row.
+        'found_exit_grain_stair',
     ];
 
     private PDO $db;
